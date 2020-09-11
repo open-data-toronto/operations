@@ -1,0 +1,10 @@
+environments:
+  dev:
+    address:
+    apikey:
+  qa:
+    address:
+    apikey:
+  prod:
+    address:
+    apikey:
