@@ -1,14 +1,15 @@
+import json
+import logging
+import os
+import sys
+import traceback
+from datetime import datetime
+from datetime import timezone
+from pathlib import Path
+
 import ckanapi
 import pandas as pd
-from datetime import datetime
 import requests
-import os
-from pathlib import Path
-import traceback
-import json
-from datetime import datetime, timezone
-import logging
-import sys
 
 PATH = Path(os.path.dirname(os.path.abspath(__file__)))
 

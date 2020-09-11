@@ -1,15 +1,18 @@
-from datetime import datetime, timedelta, time, timezone
-from dateutil import parser
-from typing import List
-from time import sleep
-import requests
-import logging
 import json
-import pytz
+import logging
 import sys
 import traceback
+from datetime import datetime
+from datetime import time
+from datetime import timedelta
+from datetime import timezone
+from time import sleep
+from typing import List
 
 import ckanapi
+import pytz
+import requests
+from dateutil import parser
 
 
 def setup_custom_logger(name):
@@ -98,8 +101,7 @@ LOGGER = setup_custom_logger("refresher")
 
 EST = pytz.timezone("America/Toronto")
 
-PROD = ckanapi.RemoteCKAN(
-)
+PROD = ckanapi.RemoteCKAN()
 
 try:
     with open("files.json", "r") as f:
@@ -126,4 +128,3 @@ except:
 requests.get(
     "https://wirepusher.com/send", {"id": "kjmfmpgjD", "title": "Refresher", **params}
 )
-
