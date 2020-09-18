@@ -1,4 +1,4 @@
-environments:
+ckan:
   dev:
     address:
     apikey:
@@ -8,3 +8,11 @@ environments:
   prod:
     address:
     apikey:
+
+active_env:
+
+notifications:
+  wirepusher:
+    id: 
+  slack:
+    webhook_url:

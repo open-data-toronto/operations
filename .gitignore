@@ -4,6 +4,8 @@
 *.ipynb
 config.yaml
 .vscode/
+backups/**
+staging/**
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

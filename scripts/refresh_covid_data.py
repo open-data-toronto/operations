@@ -1,49 +1,28 @@
-import json
-import logging
 import os
-import sys
 import traceback
 from datetime import datetime
 from datetime import timezone
 from pathlib import Path
+from utils import common
+from utils import ckan_helper
 
 import ckanapi
 import pandas as pd
-import requests
-
-PATH = Path(os.path.dirname(os.path.abspath(__file__)))
 
 
-def setup_custom_logger(name):
-    formatter = logging.Formatter(
-        fmt="%(asctime)s %(levelname)s %(name)-8s %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
-    handler = logging.FileHandler(PATH / "logs.log", mode="a")
-    handler.setFormatter(formatter)
-    screen_handler = logging.StreamHandler(stream=sys.stdout)
-    screen_handler.setFormatter(formatter)
-    logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(handler)
-    logger.addHandler(screen_handler)
+PATH = Path(os.path.abspath(__file__))
+TOOLS = common.Helper(PATH)
 
-    return logger
+LOGGER, CREDS, DIRS = TOOLS.get_all()
+CKAN = ckanapi.RemoteCKAN(**CREDS)
 
-
-LOGGER = setup_custom_logger("covid_refresher")
 PACKAGE_NAME = "covid-19-cases-in-toronto"
-NEW_DATA_FILE = PATH / "covid19cases.csv"
-TMP = PATH / "tmp"
-FIELDS_FILE = TMP / "fields.json"
-RECORDS_FILE = TMP / "records.parquet"
+NEW_DATA_FILE = "covid19cases.csv"
 
 try:
-    ckan = ckanapi.RemoteCKAN()
+    LOGGER.info(f"Started for: {CKAN.address}")
 
-    LOGGER.info(f"Refreshing COVID data: {ckan.address}")
-
-    package = ckan.action.package_show(id=PACKAGE_NAME)
+    package = CKAN.action.package_show(id=PACKAGE_NAME)
     LOGGER.info(f"Using Package ID: {PACKAGE_NAME}")
 
     datastore_resources = [
@@ -59,65 +38,63 @@ try:
     resource = datastore_resources[0]
     rid = resource["id"]
 
-    current = ckan.action.datastore_search(id=rid, limit=10000000)
-
     # backup
-    fields = [f for f in current["fields"] if f["id"] != "_id"]
+    backup_results = ckan_helper.backup_datastore_resource(
+        ckan=CKAN,
+        resource_id=resource["id"],
+        dest_path=DIRS["backups"],
+        backup_fields=True,
+    )
 
-    with open(FIELDS_FILE, "w") as f:
-        json.dump(fields, f)
-
-    backup_data = pd.DataFrame(current["records"]).drop("_id", axis=1)
-    backup_data.to_parquet(RECORDS_FILE)
     LOGGER.info(
-        f"Created backup files for fields ({len(fields)}) and records({backup_data.shape[0]}) in {TMP}"
+        "Backed up {columns} columns and {records} records:\n {data}\n {fields}".format(
+            **backup_results
+        )
     )
 
-    # read
-    data = pd.read_csv(NEW_DATA_FILE)
+    # read new data
+    data = pd.read_csv(DIRS["staging"] / NEW_DATA_FILE)
 
-    data["Episode Date"] = (pd.to_datetime(data["Episode Date"])).dt.strftime(
-        "%Y-%m-%d"
-    )
-    data["Reported Date"] = (pd.to_datetime(data["Reported Date"])).dt.strftime(
-        "%Y-%m-%d"
-    )
+    for date_field in ["Episode Date", "Reported Date"]:
+        data[date_field] = (pd.to_datetime(data["Episode Date"])).dt.strftime(
+            "%Y-%m-%d"
+        )
+
     records = data.sort_values(by="Assigned_ID").to_dict(orient="records")
-    LOGGER.info(f"Read new data {data.shape} from {NEW_DATA_FILE}")
+    LOGGER.info(
+        f"Loaded {NEW_DATA_FILE}: {data.shape[0]} columns,  {data.shape[1]} rows"
+    )
 
-    # delete
-    delete = ckan.action.datastore_delete(id=rid, filters={})
-    LOGGER.info(f"Deleted datastore records")
+    CKAN.action.datastore_delete(id=resource["id"], filters={})
+    LOGGER.info("Deleted datastore records")
 
-    # insert
-    recreate = ckan.action.datastore_create(id=rid, records=records)
-    LOGGER.info(f"Inserted new datastore resources")
+    CKAN.action.datastore_create(id=resource["id"], records=records)
+    LOGGER.info("Inserted new datastore resources")
 
     # update timestamp
-    utcnow = datetime.now(timezone.utc)
-    modified = utcnow.strftime("%Y-%m-%dT%H:%M:%S.%f")
-    last_modified = ckan.action.resource_patch(id=rid, last_modified=modified)
-    LOGGER.info(
-        f"Updated resource last_modified date: from {resource['last_modified']} to {modified}"
+    update_response = ckan_helper.update_resource_last_modified(
+        ckan=CKAN,
+        resource_id=resource["id"],
+        new_last_modified=datetime.now(timezone.utc),
     )
 
-    # delete backups
-    os.remove(FIELDS_FILE)
-    os.remove(RECORDS_FILE)
-    LOGGER.info(f"Cleaned up temporary files")
-    LOGGER.info(f"Finished refreshing data")
+    LOGGER.info(f"Set last_modified timestamp to {update_response['last_modified']}")
 
-    params = {"type": "success", "message": f"{ckan.address}: {data.shape}"}
+    os.remove(DIRS["staging"] / NEW_DATA_FILE)
 
-except:
+    notification = {
+        "message_type": "success",
+        "msg": f"COVID data refreshed: {data.shape[1]} records",
+    }
+
+    LOGGER.info("Finished")
+
+except Exception:
     err = traceback.format_exc()
-
     LOGGER.error(err)
-    params = {"type": "error", "message": err}
+    notification = {
+        "message_type": "error",
+        "msg": err,
+    }
 
-requests.get(
-    "https://wirepusher.com/send",
-    {"id": "kjmfmpgjD", "title": "COVID Data Refresh", **params},
-)
-
-LOGGER.info(f"Sent notification")
+TOOLS.send_notifications(**notification)
