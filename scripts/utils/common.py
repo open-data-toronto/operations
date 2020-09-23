@@ -1,11 +1,11 @@
+import argparse
+import json
 import logging
 import sys
 from pathlib import Path
-import yaml
-import argparse
+
 import requests
-from typing import List
-import json
+import yaml
 
 
 class Helper:
@@ -70,9 +70,7 @@ class Helper:
     def get_ckan_credentials(self):
         return self.__config["ckan"][self.active_env]
 
-    def send_notifications(
-        self, msg: str, message_type: str
-    ) -> List[requests.Response]:
+    def send_notifications(self, msg: str, message_type: str):
         responses = []
 
         notification_configs = self.__config["notifications"]

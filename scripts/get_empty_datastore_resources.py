@@ -1,24 +1,16 @@
-import logging
-import sys
+import os
 import traceback
+from pathlib import Path
 
-import requests
+import ckanapi
+from utils import ckan_helper
+from utils import common
 
+PATH = Path(os.path.abspath(__file__))
+TOOLS = common.Helper(PATH)
 
-def setup_custom_logger(name):
-    formatter = logging.Formatter(
-        fmt="%(asctime)s %(levelname)s %(name)-8s %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
-    handler = logging.FileHandler("./logs.log", mode="a")
-    handler.setFormatter(formatter)
-    screen_handler = logging.StreamHandler(stream=sys.stdout)
-    screen_handler.setFormatter(formatter)
-    logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(handler)
-    logger.addHandler(screen_handler)
-    return logger
+LOGGER, CREDS, DIRS = TOOLS.get_all()
+CKAN = ckanapi.RemoteCKAN(**CREDS)
 
 
 def pprint_2d_list(matrix):
@@ -30,46 +22,37 @@ def pprint_2d_list(matrix):
 
 
 def check():
-    LOGGER = setup_custom_logger("datastore_checker")
-
-    url = "https://ckanadmin0.intra.prod-toronto.ca/api/3/action"
-
-    package_list = requests.get(f"{url}/package_list").json()["result"]
-
-    packages = requests.get(
-        f"{url}/package_search", params={"rows": len(package_list)}
-    ).json()["result"]["results"]
-
+    packages = ckan_helper.get_all_packages(CKAN)
+    LOGGER.info(f"Retrieved {len(packages)} packages")
     datastore_resources = []
 
-    LOGGER.info(f"Getting row count for datastore resources")
-
-    for p in packages:
-        for r in p["resources"]:
-            if r["url_type"] != "datastore":
+    LOGGER.info("Identifying datastore resources")
+    for package in packages:
+        for resource in package["resources"]:
+            if resource["url_type"] != "datastore":
                 continue
-            #         print(p["title"], "|||", r["name"] , "|||", r["id"])
-            response = requests.get(
-                f"{url}/datastore_search?", params={"id": r["id"], "limit": 0}
-            ).json()["result"]
+            response = CKAN.action.datastore_search(id=resource["id"], limit=0)
 
             datastore_resources.append(
                 {
-                    "package_id": p["title"],
-                    "resource_id": r["id"],
-                    "resource_name": r["name"],
-                    "extract_job": r["extract_job"],
+                    "package_id": package["title"],
+                    "resource_id": resource["id"],
+                    "resource_name": resource["name"],
+                    "extract_job": resource["extract_job"],
                     "row_count": response["total"],
                     "fields": response["fields"],
                 }
             )
 
-    LOGGER.info(f"TOTAL datastore resources found: {len(datastore_resources)}")
+            LOGGER.debug(
+                f'{package["name"]}: {resource["name"]} - {response["total"]} records'
+            )
+
+    LOGGER.info(f"Identified {len(datastore_resources)} datastore resources")
 
     empties = [r for r in datastore_resources if r["row_count"] == 0]
 
     if not len(empties):
-        logger.info("No empty resources found")
         return False
 
     empties = sorted(empties, key=lambda i: i["package_id"])
@@ -80,32 +63,36 @@ def check():
         string.extend([r[f] for f in ["package_id", "extract_job"] if r[f]])
         matrix.append(string)
 
-    if len(empties):
-        LOGGER.error(
-            f"Empty resources found: {len(empties)}\n```\n{pprint_2d_list(matrix)}\n```"
-        )
-
     return pprint_2d_list(matrix)
 
 
 try:
+    LOGGER.info(f"Started for: {CKAN.address}")
     empties = check()
 
-    if empties:
-        params = {
-            "type": "warning",
-            "message": f"""EMPTIES FOUND:
+    if not empties:
+        LOGGER.info("No empty resources found")
+        notification = {"message_type": "success", "msg": "No empties"}
+    else:
+        LOGGER.warning(f"Empty resources found:\n```\n{empties}\n```")
+
+        notification = {
+            "message_type": "warning",
+            "msg": f"""EMPTIES FOUND:
 ```
 {empties}
 ```""",
         }
 
-    else:
-        params = {"type": "success", "message": "No empties"}
-except:
-    params = {"type": "error", "message": traceback.format_exc()}
+    LOGGER.info("Finished")
 
-requests.get(
-    "https://wirepusher.com/send",
-    {"id": "kjmfmpgjD", "title": "Datastore Checker", **params},
-)
+except Exception:
+    error = traceback.format_exc()
+    message_content = error
+    LOGGER.error(error)
+    notification = {
+        "message_type": "error",
+        "msg": message_content,
+    }
+
+TOOLS.send_notifications(**notification)

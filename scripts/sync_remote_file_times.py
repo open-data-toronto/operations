@@ -1,14 +1,14 @@
+import os
 import traceback
+from pathlib import Path
 from typing import List
 
 import ckanapi
 import requests
-from dateutil import parser
-from utils import common
-from utils import ckan_helper
-from pathlib import Path
-import os
 import yaml
+from dateutil import parser
+from utils import ckan_helper
+from utils import common
 
 PATH = Path(os.path.abspath(__file__))
 TOOLS = common.Helper(PATH)
@@ -145,11 +145,9 @@ try:
 
 except Exception:
     error = traceback.format_exc()
-    message_content = error
-
     notification = {
         "message_type": "error",
-        "msg": message_content,
+        "msg": error,
     }
 
     TOOLS.send_notifications(**notification)

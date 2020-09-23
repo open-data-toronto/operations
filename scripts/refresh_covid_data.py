@@ -3,11 +3,11 @@ import traceback
 from datetime import datetime
 from datetime import timezone
 from pathlib import Path
-from utils import common
-from utils import ckan_helper
 
 import ckanapi
 import pandas as pd
+from utils import ckan_helper
+from utils import common
 
 
 PATH = Path(os.path.abspath(__file__))

@@ -13,6 +13,6 @@ active_env:
 
 notifications:
   wirepusher:
-    id: 
+    id:
   slack:
-    webhook_url:
+    webhook_url:  https://hooks.slack.com/services/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

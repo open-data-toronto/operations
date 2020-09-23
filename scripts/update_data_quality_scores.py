@@ -1,9 +1,7 @@
 import json
-import logging
 import math
 import os
 import re
-import sys
 import traceback
 from datetime import datetime as dt
 from pathlib import Path
@@ -19,30 +17,15 @@ from nltk.corpus import wordnet
 from shapely.geometry import shape
 from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
+from utils import common
 
 nltk.download("wordnet")
 
-path = Path(os.path.dirname(os.path.abspath(__file__)))
+PATH = Path(os.path.abspath(__file__))
+TOOLS = common.Helper(PATH)
 
-
-def setup_custom_logger(name):
-    formatter = logging.Formatter(
-        fmt="%(asctime)s %(levelname)s %(name)-8s %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-    )
-    handler = logging.FileHandler(path / "logs.log", mode="a")
-    handler.setFormatter(formatter)
-    screen_handler = logging.StreamHandler(stream=sys.stdout)
-    screen_handler.setFormatter(formatter)
-    logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(handler)
-    logger.addHandler(screen_handler)
-
-    return logger
-
-
-LOGGER = setup_custom_logger("dqs")
+LOGGER, CREDS, DIRS = TOOLS.get_all()
+CKAN = ckanapi.RemoteCKAN(**CREDS)
 
 EST = pytz.timezone("America/Toronto")
 
@@ -57,13 +40,11 @@ TIME_MAP = {
     "annually": 365,
 }
 
-
-CKAN = ckanapi.RemoteCKAN()
-
 RESOURCE_MODEL = "scoring-models"
 MODEL_VERSION = "v0.1.0"
 
 RESOURCE_SCORES = "catalogue-scorecard"
+PACKAGE_DQS = "catalogue-quality-scores"
 
 DIMENSIONS = [
     "usability",
@@ -78,17 +59,16 @@ BINS = {
     "Silver": 0.8,
     "Gold": 1,
 }
-PACKAGE_DQS = "catalogue-quality-scores"
 
 
 def read_datastore(ckan, rid, rows=10000):
     records = []
 
-    is_geospatial = False
+    # is_geospatial = False
 
     has_more = True
     while has_more:
-        result = ckan.action.datastore_search(id=rid, limit=rows, offset=len(records))
+        result = CKAN.action.datastore_search(id=rid, limit=rows, offset=len(records))
 
         records += result["records"]
         has_more = len(records) < result["total"]
@@ -105,7 +85,8 @@ def read_datastore(ckan, rid, rows=10000):
 
 def get_framework(ckan, pid=PACKAGE_DQS):
     try:
-        framework = ckan.action.package_show(id=pid)
+        framework = CKAN.action.package_show(id=pid)
+        LOGGER.debug(f"Found package to use for data quality scores: {PACKAGE_DQS}")
     except ckanapi.NotAuthorized:
         raise Exception("Permission required to search for the framework package")
     except ckanapi.NotFound:
@@ -117,9 +98,7 @@ def get_framework(ckan, pid=PACKAGE_DQS):
 def build_response(code, message=""):
     response = {
         "statusCode": code,
-        "headers": {
-            "Access-Control-Allow-Origin": "*",
-        },
+        "headers": {"Access-Control-Allow-Origin": "*"},
     }
 
     if message:
@@ -143,9 +122,10 @@ def score_usability(columns, data):
             "([a-z0-9])([A-Z])", r"\1_\2", re.sub("(.)([A-Z][a-z]+)", r"\1_\2", s)
         ).lower()
 
-        return camel_to_snake == s, [
-            x for x in re.split("-|_|\s", camel_to_snake) if len(x)
-        ]
+        return (
+            camel_to_snake == s,
+            [x for x in re.split(r"-|_|\s", camel_to_snake) if len(x)],
+        )
 
     metrics = {
         "col_names": 0,  # Are the column names easy to understand?
@@ -278,8 +258,6 @@ def calculate_weights(dimensions, method="sr"):
 
 
 def score_catalogue(event={}, context={}):
-    ckan = CKAN
-
     weights = calculate_weights(DIMENSIONS)
     fw = {
         "aggregation_methods": {
@@ -287,44 +265,42 @@ def score_catalogue(event={}, context={}):
             "dimensions_to_score": "sum_and_reciprocal",
         },
         "dimensions": [
-            {
-                "name": dim,
-                "rank": i + 1,
-                "weights": wgt,
-            }
+            {"name": dim, "rank": i + 1, "weights": wgt}
             for i, (dim, wgt) in enumerate(zip(DIMENSIONS, weights))
         ],
         "bins": BINS,
     }
 
-    packages = ckan.action.current_package_list_with_resources(limit=500)
+    packages = CKAN.action.current_package_list_with_resources(limit=500)
 
-    storage = get_framework(ckan)
+    storage = get_framework(CKAN)
 
     data = []
     for p in tqdm(packages, "Datasets Scored"):
         for r in p["resources"]:
-            if not "datastore_active" in r or not r["datastore_active"]:
+            if "datastore_active" not in r or not r["datastore_active"]:
                 continue
 
-            content, fields = read_datastore(ckan, r["id"])
+            content, fields = read_datastore(CKAN, r["id"])
 
-            data.append(
-                {
-                    "package": p["name"],
-                    "resource": r["name"],
-                    "usability": score_usability(fields, content),
-                    "metadata": score_metadata(p, fields),
-                    "freshness": score_freshness(p),
-                    "completeness": score_completeness(content),
-                    "accessibility": score_accessibility(r),
-                }
-            )
+            records = {
+                "package": p["name"],
+                "resource": r["name"],
+                "usability": score_usability(fields, content),
+                "metadata": score_metadata(p, fields),
+                "freshness": score_freshness(p),
+                "completeness": score_completeness(content),
+                "accessibility": score_accessibility(r),
+            }
 
-    # create JSON resource to capture scoring model details, if not already in storage
-    if not RESOURCE_MODEL in storage and ckan.apikey:
+            data.append(records)
+
+            LOGGER.debug(f"{p['name']}: {r['name']} - {len(content)} records")
+
+    if RESOURCE_MODEL not in storage and CKAN.apikey:
+        LOGGER.info(f" {PACKAGE_DQS}: Creating resource {RESOURCE_MODEL} to keep model")
         r = requests.post(
-            "{0}/api/3/action/resource_create".format(ckan.address),
+            "{0}/api/3/action/resource_create".format(CKAN.address),
             data={
                 "package_id": PACKAGE_DQS,
                 "name": RESOURCE_MODEL,
@@ -332,23 +308,23 @@ def score_catalogue(event={}, context={}):
                 "is_preview": False,
                 "is_zipped": False,
             },
-            headers={"Authorization": ckan.apikey},
+            headers={"Authorization": CKAN.apikey},
             files={"upload": ("{0}.json".format(RESOURCE_MODEL), json.dumps({}))},
         )
 
         storage[RESOURCE_MODEL] = json.loads(r.content)["result"]
 
     r = requests.get(
-        storage[RESOURCE_MODEL]["url"], headers={"Authorization": ckan.apikey}
+        storage[RESOURCE_MODEL]["url"], headers={"Authorization": CKAN.apikey}
     )
 
     scoring_methods = json.loads(r.content)
     scoring_methods[MODEL_VERSION] = fw
 
     r = requests.post(
-        "{0}/api/3/action/resource_patch".format(ckan.address),
+        "{0}/api/3/action/resource_patch".format(CKAN.address),
         data={"id": storage[RESOURCE_MODEL]["id"]},
-        headers={"Authorization": ckan.apikey},
+        headers={"Authorization": CKAN.apikey},
         files={
             "upload": ("{0}.json".format(RESOURCE_MODEL), json.dumps(scoring_methods))
         },
@@ -381,11 +357,14 @@ def score_catalogue(event={}, context={}):
     df = df.reset_index()
     df = df.round(2)
 
-    if not ckan.apikey:
+    if not CKAN.apikey:
         return df
 
-    if not RESOURCE_SCORES in storage:
-        storage[RESOURCE_SCORES] = ckan.action.datastore_create(
+    if RESOURCE_SCORES not in storage:
+        LOGGER.info(
+            f" {PACKAGE_DQS}: Creating resource {RESOURCE_SCORES} to keep scores"
+        )
+        storage[RESOURCE_SCORES] = CKAN.action.datastore_create(
             resource={
                 "package_id": PACKAGE_DQS,
                 "name": RESOURCE_SCORES,
@@ -397,7 +376,8 @@ def score_catalogue(event={}, context={}):
             records=df.to_dict(orient="row"),
         )
     else:
-        ckan.action.datastore_upsert(
+        LOGGER.info(f"Loading results to resource: {RESOURCE_SCORES}")
+        CKAN.action.datastore_upsert(
             method="insert",
             resource_id=storage[RESOURCE_SCORES]["id"],
             records=df.to_dict(orient="row"),
@@ -409,20 +389,21 @@ def score_catalogue(event={}, context={}):
 
 try:
     LOGGER.info("Scoring catalogue: {address}".format(**CREDS))
-    score_catalogue()
-    LOGGER.info("Finished scoring")
+    df = score_catalogue()
 
-    params = {
-        "type": "success",
-        "message": CREDS["address"],
+    notification = {
+        "message_type": "success",
+        "msg": f"Data quality scores calculated for {df.shape[0]} packages",
+    }
+    TOOLS.send_notifications(**notification)
+    LOGGER.info("Finished")
+
+except Exception:
+    error = traceback.format_exc()
+    notification = {
+        "message_type": "error",
+        "msg": error,
     }
 
-except:
-    params = {
-        "type": "error",
-        "message": "{0}\n\n{1}".format(CREDS["address"], traceback.format_exc()),
-    }
-
-requests.get(
-    "https://wirepusher.com/send", {"id": "kjmfmpgjD", "title": "DQS", **params}
-)
+    TOOLS.send_notifications(**notification)
+    LOGGER.error(error)

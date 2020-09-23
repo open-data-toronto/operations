@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-import ast
 import csv
-import io
 import json
 import sys
 from datetime import datetime
