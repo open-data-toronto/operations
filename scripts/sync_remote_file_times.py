@@ -68,7 +68,7 @@ def sync_resource_timestamps(package: dict, remote_files: list):
             continue
 
         resp = ckan_helper.update_resource_last_modified(
-            ckan=CKAN, id=resource["id"], new_last_modified=file_last_modified
+            ckan=CKAN, resource_id=resource["id"], new_last_modified=file_last_modified
         )
 
         LOGGER.info(f'{resource["id"]}: Last modified set to {resp["last_modified"]}')
