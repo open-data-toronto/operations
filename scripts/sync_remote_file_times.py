@@ -88,18 +88,18 @@ def build_notification_message(sync_results: dict):
         )
 
         lines = [
-            "*{}\tpackages: {}\tresources: {}*".format(
+            "*{} - packages: {}\tresources: {}*".format(
                 result_type, len(result_type_packages), len(result_type_resources),
             )
         ]
 
-        pkg = None
         for index, r in enumerate(result_type_resources):
             if result_type == "unchanged":
                 continue
 
-            if pkg != r["package_name"]:
-                lines.append(r["package_name"])
+            if result_type == "error":
+                lines.append("{}. {} ".format(index + 1, r["package_name"]))
+                continue
 
             lines.append(
                 "{}. _{}_: `{}`".format(
