@@ -1,11 +1,16 @@
 *.bat
 *.csv
+*.json
+*.xml
 **/tmp/**
 *.ipynb
 config.yaml
 .vscode/
 backups/**
 staging/**
+logs/**
+.DS_Store
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

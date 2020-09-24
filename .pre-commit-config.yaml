@@ -17,8 +17,6 @@ repos:
         args: [--branch, main]
       - id: requirements-txt-fixer
       - id: sort-simple-yaml
-      - id: pretty-format-json
-        args: [--autofix]
   - repo: https://github.com/asottile/reorder_python_imports
     rev: v2.3.0
     hooks:
