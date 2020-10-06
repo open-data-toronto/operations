@@ -34,27 +34,21 @@ In addition to the standard MIT file and this README, the following files are al
    * **backups**, **staging**, **logs**: temporary directories mentioned above
 1. `.pre-commit-config.yaml`: configuration file for managing git pre-commit hooks; essentially, before code can be committed to the repository checks in this file are performed - more details on this below.
 
-## configs
+## Configs
 
 `config.yaml.template`: used by the scripts for configuration values, such as login information. Copy and paste into the same directory, renaming it to `config.yaml`, as expected by the scripts.
 
 `remote_files.yaml`: list of files in the GCC server that CKAN resources link to
 
-## environment
+## Environment
 
-`conda.yaml`
-https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+`conda.yaml`: conda environment file to create a virtual conda environment for running all programs in this repo. [Learn more about conda environments here](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html)
 
-`requirements.txt`
+`requirements.txt`: standard python environment file  because there are certain libraries only installable through pip. [Learn more about requirements file here](https://blog.usejournal.com/why-and-how-to-make-a-requirements-txt-f329c685181e)
 
+`requirements_dev.txt`: same as above, except for libraries only use for development purposes.
 
-`requirements_dev.txt`
-
-```
-https://blog.usejournal.com/why-and-how-to-make-a-requirements-txt-f329c685181e
-```
-
-## scripts
+## Scripts
 
 ### get_empty_datastore_resources.py
 
@@ -138,7 +132,7 @@ This is a much more involved methodology; here are the steps at the high-level, 
 1. Load score results into datastore resource `catalogue-scorecard`
 
 
-#### additional resources
+#### Additional resources
 
 * [Medium article: Towards a data quality score in Open Data: Part 2](https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-2-3f193eb9e21d)
 * [Medium article: Towards a data quality score in Open Data: Part 1](https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-1-525e59f729e9)
