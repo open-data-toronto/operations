@@ -380,7 +380,7 @@ def score_catalogue(event={}, context={}):
         CKAN.action.datastore_upsert(
             method="insert",
             resource_id=storage[RESOURCE_SCORES]["id"],
-            records=df.to_dict(orient="row"),
+            records=df.to_dict(orient="records"),
         )
 
     # build_response(200, message='')
