@@ -78,7 +78,7 @@ def read_datastore(ckan, rid, rows=10000):
     if "geometry" in df.columns:
         df["geometry"] = df["geometry"].apply(lambda x: shape(json.loads(x)))
 
-        df = gpd.GeoDataFrame(df, crs={"init": "epsg:4326"})
+        df = gpd.GeoDataFrame(df, crs="epsg:4326")
 
     return df, [x for x in result["fields"] if x["id"] != "_id"]
 
