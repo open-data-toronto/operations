@@ -10,8 +10,8 @@ At a high level, the project contains the following directories:
 
 1. **scripts**: home for all scripts running operationally, eg. frequent, basis; also includes some utility functions to facilitate ad-hoc work. These are all written in Python 3.7
 1. **environment**: files needed to set up a virtual environment to execute the scripts above, including Python runtime environment as well as library dependencies
-1. **configs**:  files with configuration values used by the scripts, such as environment to run against or list of files to sync
-1. **tasks**:  contains file to be executed by the when running scripts operationally via scheduled tasks such as cronjobs or the Windows Task Manager, `sh` or `bat` formats respectively, named the same as its corresponding Python script.
+1. **configs**: files with configuration values used by the scripts, such as environment to run against or list of files to sync
+1. **tasks**: contains file to be executed by the when running scripts operationally via scheduled tasks such as cronjobs or the Windows Task Manager, `sh` or `bat` formats respectively, named the same as its corresponding Python script.
 
 The following directories are not checked in because they are temporary but needed by at least one of the scripts:
 
@@ -24,14 +24,14 @@ The following directories are not checked in because they are temporary but need
 In addition to the standard MIT file and this README, the following files are also hosted in the root directory:
 
 1. `.gitignore`: to control the files that can be checked into the repo. Started from a common template for Python projects, plus the following blobs:
-   * `.bat`: Windows execution files similar to _shell_ for creating schedulable Windows tasks. May decide to include them in the future.
-   * `.csv`, `.json`, `.xml`: common data file formats that could be checked into the repository by mistake, but are not used by the codebase - configuration files are written in `yaml`.
-   * `.ipynb`: Jupyter Notebook file format, excluded because (For the purposes of this repo) these files are more for prototyping and cannot be operationalized easily (hence why we opt for the Python files instead). They can also be difficult to deal in version control due to saving state execution along with the code.
-   * **tmp** directories: common naming convention for ephemeral directories containing files that should not be checked into the repo
-   * `config.yaml`: configuration file used by the scripts that contain sensitive information, such as login information, that should not be checked into the repo
-   * `.vscode/`: Visual Studio Code configuration files
-   * `.DS_Store`: MacOS Finder file in every directory
-   * **backups**, **staging**, **logs**: temporary directories mentioned above
+   - `.bat`: Windows execution files similar to _shell_ for creating schedulable Windows tasks. May decide to include them in the future.
+   - `.csv`, `.json`, `.xml`: common data file formats that could be checked into the repository by mistake, but are not used by the codebase - configuration files are written in `yaml`.
+   - `.ipynb`: Jupyter Notebook file format, excluded because (For the purposes of this repo) these files are more for prototyping and cannot be operationalized easily (hence why we opt for the Python files instead). They can also be difficult to deal in version control due to saving state execution along with the code.
+   - **tmp** directories: common naming convention for ephemeral directories containing files that should not be checked into the repo
+   - `config.yaml`: configuration file used by the scripts that contain sensitive information, such as login information, that should not be checked into the repo
+   - `.vscode/`: Visual Studio Code configuration files
+   - `.DS_Store`: MacOS Finder file in every directory
+   - **backups**, **staging**, **logs**: temporary directories mentioned above
 1. `.pre-commit-config.yaml`: configuration file for managing git pre-commit hooks; essentially, before code can be committed to the repository checks in this file are performed - more details on this below.
 
 ## Configs
@@ -44,7 +44,7 @@ In addition to the standard MIT file and this README, the following files are al
 
 `conda.yaml`: conda environment file to create a virtual conda environment for running all programs in this repo. [Learn more about conda environments here](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html)
 
-`requirements.txt`: standard python environment file  because there are certain libraries only installable through pip. [Learn more about requirements file here](https://blog.usejournal.com/why-and-how-to-make-a-requirements-txt-f329c685181e)
+`requirements.txt`: standard python environment file because there are certain libraries only installable through pip. [Learn more about requirements file here](https://blog.usejournal.com/why-and-how-to-make-a-requirements-txt-f329c685181e)
 
 `requirements_dev.txt`: same as above, except for libraries only use for development purposes.
 
@@ -74,25 +74,25 @@ Refresh COVID-19 data with new CSV file
 
 1. Get COVID-19 package name: _covid-19-cases-in-toronto_
 1. Confirm there is a single datastore resource in the package
-1. Backup existing resource for recovery 
-  1. Read current covid datastore resource
-  1. Create a unique identifier (hash) from the data
-  1. Store data in the **backups** directory, under filename: `covid-19-cases-in-toronto_<resource name>_<hash>_data.parquet`
-  1. Store fields in the **backups** directory, under filename: `covid-19-cases-in-toronto_<resource name>_<hash>_fields.json`
+1. Backup existing resource for recovery
+1. Read current covid datastore resource
+1. Create a unique identifier (hash) from the data
+1. Store data in the **backups** directory, under filename: `covid-19-cases-in-toronto_<resource name>_<hash>_data.parquet`
+1. Store fields in the **backups** directory, under filename: `covid-19-cases-in-toronto_<resource name>_<hash>_fields.json`
 1. Prep new data
-  1. Read new data file, `covid19cases.csv` from **staging** directory
-  1. Convert _Episode Date_ and _Reported Date_ fields to datetime type
-  1. Order records by _Assigned/_ID_ in descending order
+1. Read new data file, `covid19cases.csv` from **staging** directory
+1. Convert _Episode Date_ and _Reported Date_ fields to datetime type
+1. Order records by _Assigned/\_ID_ in descending order
 1. Delete records in resource
 1. Insert new records in resource
-1. Update resource _last/_modified_ timestamp
+1. Update resource _last/\_modified_ timestamp
 1. Send notification
 
 ### sync_remote_file_times.py
 
 #### purpose
 
-Compare timestamp of files stored outside of CKAN with the _last/_modified_ date of its corresponding resource, and update accordingly
+Compare timestamp of files stored outside of CKAN with the _last/\_modified_ date of its corresponding resource, and update accordingly
 
 #### logic
 
@@ -101,11 +101,11 @@ Compare timestamp of files stored outside of CKAN with the _last/_modified_ date
 1. Loop through each package to be synced
 1. Loop through each package's resources
    1. Make sure file URL is in list of package resource URLs
-   1. Get resource _last/_modified_ timestamp
+   1. Get resource _last/\_modified_ timestamp
    1. Get file _Last-Modified_ timestamp
    1. Calculate time difference between timestamps
    1. If `difference=0` continue
-   1. Otherwise, patch resource _last/_modified_ timestamp with file _Last-Modified_ timestamp
+   1. Otherwise, patch resource _last/\_modified_ timestamp with file _Last-Modified_ timestamp
 1. Send notification
 
 ### update_data_quality_scores.py
@@ -131,11 +131,10 @@ This is a much more involved methodology; here are the steps at the high-level, 
 1. Create datastore resource `catalogue-scorecard`, if it does not exist, to store the score results
 1. Load score results into datastore resource `catalogue-scorecard`
 
-
 #### Additional resources
 
-* [Medium article: Towards a data quality score in Open Data: Part 1](https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-1-525e59f729e9)
-* [Medium article: Towards a data quality score in Open Data: Part 2](https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-2-3f193eb9e21d)
+- [Medium article: Towards a data quality score in Open Data: Part 1](https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-1-525e59f729e9)
+- [Medium article: Towards a data quality score in Open Data: Part 2](https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-2-3f193eb9e21d)
 
 ### transform_agol_to_datastore.py
 
@@ -143,6 +142,6 @@ This is a much more involved methodology; here are the steps at the high-level, 
 
 ## Coding standards and consistency: pre-commit, black & flake8
 
-* [Pre-commit](https://pre-commit.com/): A framework for running various (configurable) checks on the code prior to commiting it into the repo. 
-* [Black](https://github.com/psf/black): Opinionated Python code formatter to ensure consistency in styling, and enhancing readability, across developers
-* [Flake8](https://flake8.pycqa.org/en/latest/): Another tool for code formatting and styling, catches areas that Black misses. Used in combination with VS Code for live linting while coding (eg. syntax error)
+- [Pre-commit](https://pre-commit.com/): A framework for running various (configurable) checks on the code prior to commiting it into the repo.
+- [Black](https://github.com/psf/black): Opinionated Python code formatter to ensure consistency in styling, and enhancing readability, across developers
+- [Flake8](https://flake8.pycqa.org/en/latest/): Another tool for code formatting and styling, catches areas that Black misses. Used in combination with VS Code for live linting while coding (eg. syntax error)

@@ -89,7 +89,9 @@ def build_notification_message(sync_results: dict):
 
         lines = [
             "*{} - packages: {}\tresources: {}*".format(
-                result_type, len(result_type_packages), len(result_type_resources),
+                result_type,
+                len(result_type_packages),
+                len(result_type_resources),
             )
         ]
 
@@ -103,7 +105,9 @@ def build_notification_message(sync_results: dict):
 
             lines.append(
                 "{}. _{}_: `{}`".format(
-                    index + 1, r["resource_name"], r["file_last_modified"],
+                    index + 1,
+                    r["resource_name"],
+                    r["file_last_modified"],
                 )
             )
 

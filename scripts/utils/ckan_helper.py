@@ -63,7 +63,8 @@ def update_resource_last_modified(
     ckan: ckanapi.RemoteCKAN, resource_id: str, new_last_modified: datetime
 ):
     return ckan.action.resource_patch(
-        id=resource_id, last_modified=new_last_modified.strftime("%Y-%m-%dT%H:%M:%S"),
+        id=resource_id,
+        last_modified=new_last_modified.strftime("%Y-%m-%dT%H:%M:%S"),
     )
 
 
