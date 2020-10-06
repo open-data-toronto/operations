@@ -134,8 +134,8 @@ This is a much more involved methodology; here are the steps at the high-level, 
 
 #### Additional resources
 
-* [Medium article: Towards a data quality score in Open Data: Part 2](https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-2-3f193eb9e21d)
 * [Medium article: Towards a data quality score in Open Data: Part 1](https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-1-525e59f729e9)
+* [Medium article: Towards a data quality score in Open Data: Part 2](https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-2-3f193eb9e21d)
 
 ### transform_agol_to_datastore.py
 
