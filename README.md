@@ -101,11 +101,11 @@ Compare timestamp of files stored outside of CKAN with the _last\_modified_ date
 1. Loop through each package to be synced
 1. Loop through each package's resources
    1. Make sure file URL is in list of package resource URLs
-   1. Get resource _last/\_modified_ timestamp
+   1. Get resource _last\_modified_ timestamp
    1. Get file _Last-Modified_ timestamp
    1. Calculate time difference between timestamps
    1. If `difference=0` continue
-   1. Otherwise, patch resource _last/\_modified_ timestamp with file _Last-Modified_ timestamp
+   1. Otherwise, patch resource _last\_modified_ timestamp with file _Last-Modified_ timestamp
 1. Send notification
 
 ### update_data_quality_scores.py
