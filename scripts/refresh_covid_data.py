@@ -56,9 +56,7 @@ try:
     data = pd.read_csv(DIRS["staging"] / NEW_DATA_FILE)
 
     for date_field in ["Episode Date", "Reported Date"]:
-        data[date_field] = (pd.to_datetime(data["Episode Date"])).dt.strftime(
-            "%Y-%m-%d"
-        )
+        data[date_field] = (pd.to_datetime(data[date_field])).dt.strftime("%Y-%m-%d")
 
     records = data.sort_values(by="Assigned_ID").to_dict(orient="records")
     LOGGER.info(
@@ -84,7 +82,7 @@ try:
 
     notification = {
         "message_type": "success",
-        "msg": f"COVID data refreshed: {data.shape[1]} records",
+        "msg": f"COVID data refreshed: {data.shape[0]} records",
     }
 
     LOGGER.info("Finished")
