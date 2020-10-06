@@ -61,21 +61,97 @@ https://blog.usejournal.com/why-and-how-to-make-a-requirements-txt-f329c685181e
 
 ### get_empty_datastore_resources.py
 
+#### purpose
+
+Get list of empty datastore resources
+
+#### logic
+
+1. Loop through packages
+1. Loop through each package's resources
+1. If resource has `url_type="datastore"`, get record count
+1. Return list of datastore resources with 0 records
+1. Send notification
+
 ### refresh_covid_data.py
+
+#### purpose
+
+Refresh COVID-19 data with new CSV file
+
+#### logic
+
+1. Get COVID-19 package name: _covid-19-cases-in-toronto_
+1. Confirm there is a single datastore resource in the package
+1. Backup existing resource for recovery 
+  1. Read current covid datastore resource
+  1. Create a unique identifier (hash) from the data
+  1. Store data in the **backups** directory, under filename: `covid-19-cases-in-toronto_<resource name>_<hash>_data.parquet`
+  1. Store fields in the **backups** directory, under filename: `covid-19-cases-in-toronto_<resource name>_<hash>_fields.json`
+1. Prep new data
+  1. Read new data file, `covid19cases.csv` from **staging** directory
+  1. Convert _Episode Date_ and _Reported Date_ fields to datetime type
+  1. Order records by _Assigned/_ID_ in descending order
+1. Delete records in resource
+1. Insert new records in resource
+1. Update resource _last/_modified_ timestamp
+1. Send notification
 
 ### sync_remote_file_times.py
 
-### transform_agol_to_datastore.py
+#### purpose
+
+Compare timestamp of files stored outside of CKAN with the _last/_modified_ date of its corresponding resource, and update accordingly
+
+#### logic
+
+1. Read `remote_files.yaml` from the `configs` directory, which contains file URLs to be synced per package
+1. Extract subset of packages to be synced from all packages in the catalogue
+1. Loop through each package to be synced
+1. Loop through each package's resources
+   1. Make sure file URL is in list of package resource URLs
+   1. Get resource _last/_modified_ timestamp
+   1. Get file _Last-Modified_ timestamp
+   1. Calculate time difference between timestamps
+   1. If `difference=0` continue
+   1. Otherwise, patch resource _last/_modified_ timestamp with file _Last-Modified_ timestamp
+1. Send notification
 
 ### update_data_quality_scores.py
 
-https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-1-525e59f729e9
+#### purpose
 
-https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-2-3f193eb9e21d
+Calculate Data Quality Scores for entire catalogue
+
+#### logic
+
+This is a much more involved methodology; here are the steps at the high-level, followed with additional resources for more details on the actual calculation of the score
+
+1. Calculate weights of dimensions based on their rankings (defaulted to the _sum and reciprocal_ rank weighting method)
+1. Get all packages
+1. Get resources from DQS package _catalogue-quality-scores_
+1. Loop through packages
+1. Loop through each package's resources
+1. If resource is in the datastore, calculate weight for each quality dimension: `usability`, `metadata`, `freshness`, `completeness`, and `accessibility`
+1. Create resource _scoring-models_ in DQS package, if it does not exist, to store the model parameters
+1. Get resource `scoring-models` to load model parameters
+1. Calculate aggregate scores and normalize using min-max scale
+1. Add timestamp and model version
+1. Create datastore resource `catalogue-scorecard`, if it does not exist, to store the score results
+1. Load score results into datastore resource `catalogue-scorecard`
+
+
+#### additional resources
+
+* [Medium article: Towards a data quality score in Open Data: Part 2](https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-2-3f193eb9e21d)
+* [Medium article: Towards a data quality score in Open Data: Part 1](https://medium.com/open-data-toronto/towards-a-data-quality-score-in-open-data-part-1-525e59f729e9)
+
+### transform_agol_to_datastore.py
 
 ## Additional information
 
 ## Coding standards and consistency: pre-commit, black & flake8
-https://pre-commit.com/
-https://github.com/psf/black
-https://flake8.pycqa.org/en/latest/
+
+* [Pre-commit](https://pre-commit.com/): A framework for running various (configurable) checks on the code prior to commiting it into the repo. 
+* [Black](https://github.com/psf/black): Opinionated Python code formatter to ensure consistency in styling, and enhancing readability, across developers
+* [Flake8](https://flake8.pycqa.org/en/latest/): Another tool for code formatting and styling, catches areas that Black misses. Used in combination with VS Code for live linting while coding (eg. syntax error)
