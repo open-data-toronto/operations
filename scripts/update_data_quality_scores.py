@@ -276,7 +276,7 @@ def score_catalogue(event={}, context={}):
     storage = get_framework(CKAN)
 
     data = []
-    for p in tqdm(packages, "Datasets Scored"):
+    for p in tqdm(packages, "Datasets scored"):
         for r in p["resources"]:
             if "datastore_active" not in r or not r["datastore_active"]:
                 continue
