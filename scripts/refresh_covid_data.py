@@ -38,7 +38,6 @@ try:
     resource = datastore_resources[0]
     rid = resource["id"]
 
-    # backup
     backup_results = ckan_helper.backup_datastore_resource(
         ckan=CKAN,
         resource_id=resource["id"],
@@ -52,7 +51,6 @@ try:
         )
     )
 
-    # read new data
     data = pd.read_csv(DIRS["staging"] / NEW_DATA_FILE)
 
     for date_field in ["Episode Date", "Reported Date"]:
@@ -69,7 +67,6 @@ try:
     CKAN.action.datastore_create(id=resource["id"], records=records)
     LOGGER.info("Inserted new datastore resources")
 
-    # update timestamp
     update_response = ckan_helper.update_resource_last_modified(
         ckan=CKAN,
         resource_id=resource["id"],
