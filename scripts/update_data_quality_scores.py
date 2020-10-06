@@ -373,7 +373,7 @@ def score_catalogue(event={}, context={}):
                 "is_zipped": True,
             },
             fields=[{"id": x} for x in df.columns.values],
-            records=df.to_dict(orient="row"),
+            records=df.to_dict(orient="records"),
         )
     else:
         LOGGER.info(f"Loading results to resource: {RESOURCE_SCORES}")
