@@ -82,17 +82,17 @@ Refresh COVID-19 data with new CSV file
 1. Prep new data
 1. Read new data file, `covid19cases.csv` from **staging** directory
 1. Convert _Episode Date_ and _Reported Date_ fields to datetime type
-1. Order records by _Assigned/\_ID_ in descending order
+1. Order records by _Assigned\_ID_ in descending order
 1. Delete records in resource
 1. Insert new records in resource
-1. Update resource _last/\_modified_ timestamp
+1. Update resource _last\_modified_ timestamp
 1. Send notification
 
 ### sync_remote_file_times.py
 
 #### purpose
 
-Compare timestamp of files stored outside of CKAN with the _last/\_modified_ date of its corresponding resource, and update accordingly
+Compare timestamp of files stored outside of CKAN with the _last\_modified_ date of its corresponding resource, and update accordingly
 
 #### logic
 
