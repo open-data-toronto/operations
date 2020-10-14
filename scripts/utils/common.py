@@ -3,6 +3,8 @@ import json
 import logging
 import sys
 from pathlib import Path
+import math
+from time import sleep
 
 import requests
 import yaml
@@ -83,26 +85,54 @@ class Helper:
             if message_type.lower() == "error":
                 header = header.upper()
 
-            blocks = [
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "*{}*: {} | {}".format(
-                            self.name, self.get_ckan_credentials()["address"], header
-                        ),
-                    },
-                },
-                {"type": "section", "text": {"type": "mrkdwn", "text": msg}},
-            ]
-
-            response = requests.post(
-                notification_configs["slack"]["webhook_url"],
-                data=json.dumps({"blocks": blocks}),
-                headers={"Content-Type": "application/json"},
+            msg_title = "*{}*: {} | {}".format(
+                self.name, self.get_ckan_credentials()["address"], header
             )
 
-            responses.append({"slack": response})
+            head = {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": msg_title},
+            }
+
+            max_block_length = 3000 - len(msg_title)
+            number_of_blocks = math.ceil(len(msg) / max_block_length)
+
+            lines = msg.split("\n")
+            slack_responses = []
+            for n in range(number_of_blocks):
+                block_lines = []
+
+                if n > 0:
+                    sleep(1)
+
+                for i, l in enumerate(lines):
+                    if len("\n".join(block_lines)) > max_block_length:
+                        lines = lines[i:]
+                        break
+                    block_lines.append(l)
+
+                response = requests.post(
+                    notification_configs["slack"]["webhook_url"],
+                    data=json.dumps(
+                        {
+                            "blocks": [
+                                head,
+                                {
+                                    "type": "section",
+                                    "text": {
+                                        "type": "mrkdwn",
+                                        "text": "\n".join(block_lines),
+                                    },
+                                },
+                            ]
+                        }
+                    ),
+                    headers={"Content-Type": "application/json"},
+                )
+
+                slack_responses.append(response)
+
+            responses.append({"slack": slack_responses})
 
         if (
             "wirepusher" in notification_configs
