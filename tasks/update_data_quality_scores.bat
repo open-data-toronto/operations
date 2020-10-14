@@ -1,2 +1,2 @@
 call activate operations
-python "..\scripts\update_data_quality_scores.py"
+python %~dp0..\scripts\update_data_quality_scores.py

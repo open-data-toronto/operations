@@ -1,2 +1,2 @@
 call activate operations
-python "..\scripts\get_empty_datastore_resources.py"
+python %~dp0..\scripts\get_empty_datastore_resources.py

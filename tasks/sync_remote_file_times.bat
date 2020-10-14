@@ -1,2 +1,2 @@
 call activate operations
-python "..\scripts\sync_remote_file_times.py"
+python %~dp0..\scripts\sync_remote_file_times.py
