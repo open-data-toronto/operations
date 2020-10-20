@@ -48,6 +48,7 @@ try:
             details = {
                 "name": p["name"],
                 "email": p["owner_email"],
+                "publisher": p["owner_division"],
                 "rate": refresh_rate,
                 "last": last_refreshed.strftime("%Y-%m-%d"),
                 "next": next_refreshed.strftime("%Y-%m-%d"),
