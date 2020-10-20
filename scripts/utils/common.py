@@ -106,7 +106,14 @@ class Helper:
                     sleep(1)
 
                 for i, l in enumerate(lines):
-                    if len("\n".join(block_lines)) > max_block_length:
+                    if any(
+                        [
+                            n > 0 and len("\n".join(block_lines)) > max_block_length,
+                            n == 0
+                            and len("\n".join(block_lines)) + len(json.dumps(head))
+                            > max_block_length,
+                        ]
+                    ):
                         lines = lines[i:]
                         break
                     block_lines.append(l)
