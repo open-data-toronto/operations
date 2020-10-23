@@ -117,9 +117,8 @@
 - package_id: municipal-licensing-and-standards-investigation-activity
   files:
     - http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/investigation_readme.xlsx
-    - http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/investigation_csv.zip
-    - http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/investigation.zip
-    - http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/investigation.xsd
+    - http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_csv.zip
+    - http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_json.zip
 - package_id: web-analytics
   files:
     - http://opendata.toronto.ca/city.clerks.office/web-analytics/web_analytics_readme.xlsx
