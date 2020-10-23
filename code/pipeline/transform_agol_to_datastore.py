@@ -1,15 +1,16 @@
 #!home/nifi/nifienv/bin/python
 # activate_this = "/Users/hjavaid/devtools/nifi-1.9.0/home/nifi/nifienv/bin/activate"
 # exec(open(activate_this).read())
-import sys
-import geopandas as gpd
-import pandas as pd
-import json
-import numpy as np
 import csv
+import json
+import sys
 from datetime import datetime
-from shapely.geometry import mapping
 from io import StringIO
+
+import geopandas as gpd
+import numpy as np
+import pandas as pd
+from shapely.geometry import mapping
 
 
 def tuple_to_list(record):

@@ -3,7 +3,7 @@ use strict;
 use JSON;
 #use Data::Dumper;
 use Date::Calc qw(Add_Delta_Days Today Days_in_Month);
-my($year,$month,$lastday,$startdate,$enddate,$path,$datapath)=($ARGV[0],$ARGV[1],"","","",'/opendata/web/water/rain.gauge/','/home/water/rain.gauge/data/');  
+my($year,$month,$lastday,$startdate,$enddate,$path,$datapath)=($ARGV[0],$ARGV[1],"","","",'/opendata/web/water/rain.gauge/','/home/water/rain.gauge/data/');
 if($month){
   $lastday=Days_in_Month($year,$month);
 }
@@ -25,7 +25,7 @@ my $full_site_list = decode_json $all_site_detail;#hash->array->hash
 my @finaljson=();
 $csv='"id","name","date","rainfall"'."\n";
 for my $site_details (@{$full_site_list->{sites}}){
-	my $site_specific_data= cleandata('site/'.$site_details->{id});#gives site details ID,Lat,Long,Name and channel 
+	my $site_specific_data= cleandata('site/'.$site_details->{id});#gives site details ID,Lat,Long,Name and channel
 	my @allchannels= split(/},{/,$site_specific_data);
 	for (@allchannels){
          	if ($_ =~ /Rainfall/ && $_ !~ /Daily/){
@@ -44,10 +44,10 @@ for my $site_details (@{$full_site_list->{sites}}){
 }
 
 my $completejson="[".join(',',@finaljson)."]";#create complete json
-my ($jsonrainfallfile, $jsonsitesfile, $csvrainfallfile, $csvsitesfile, $jsonzip, $csvzip, 
-$noteszip) = ($datapath."rainfall$year$month.json", 
-$datapath."sites$year$month.json", 
-$datapath."rainfall$year$month.csv", $datapath."sites$year$month.csv", $path."rainfall$year"."_json.zip", $path."rainfall$year"."_csv.zip", 
+my ($jsonrainfallfile, $jsonsitesfile, $csvrainfallfile, $csvsitesfile, $jsonzip, $csvzip,
+$noteszip) = ($datapath."rainfall$year$month.json",
+$datapath."sites$year$month.json",
+$datapath."rainfall$year$month.csv", $datapath."sites$year$month.csv", $path."rainfall$year"."_json.zip", $path."rainfall$year"."_csv.zip",
 $path."raingaugenotes.zip");
 
 
@@ -68,5 +68,3 @@ sub cleandata{
 	$datafromurl =~ s/\,\"channels\"\:null//g;
 	return $datafromurl;
 }
-
-

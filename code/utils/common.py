@@ -1,15 +1,14 @@
 import argparse
 import json
 import logging
+import math
+import os
 import sys
 from pathlib import Path
-import math
 from time import sleep
 
 import requests
 import yaml
-
-import os
 
 PATH = Path(os.path.abspath(__file__))
 

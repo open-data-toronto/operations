@@ -1,19 +1,18 @@
-import requests
-import ckanapi
-from dateutil import parser
-from datetime import datetime, timedelta
 import calendar
-import pandas as pd
-from io import BytesIO
+import os
+import sys
 import tempfile
+import traceback
+from datetime import datetime
+from datetime import timedelta
+from io import BytesIO
 from pathlib import Path
 from time import sleep
-import os
 
-import os
-import traceback
-from pathlib import Path
-import sys
+import ckanapi
+import pandas as pd
+import requests
+from dateutil import parser
 
 sys.path.append("../..")
 from utils import common
