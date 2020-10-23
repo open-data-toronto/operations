@@ -1,3 +1,7 @@
+import sys
+
+sys.path.append("../..")
+
 import os
 import traceback
 from pathlib import Path

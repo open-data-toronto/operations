@@ -39,7 +39,7 @@ class Helper:
 
         self.log_level = log_level.upper()
 
-        self.name = script.name.replace(".py", "")
+        self.name = script.parent.name
 
         self.logs = self.logs_dir / f"{self.name}-{self.log_level.lower()}.log"
 

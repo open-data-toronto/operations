@@ -1,3 +1,6 @@
+import sys
+
+sys.path.append("../..")
 import os
 import traceback
 from pathlib import Path
@@ -7,6 +10,7 @@ import ckanapi
 import requests
 import yaml
 from dateutil import parser
+
 from utils import ckan_helper
 from utils import common
 
@@ -91,7 +95,7 @@ def build_notification_message(sync_results: dict):
             continue
 
         lines = [
-            "{} - packages: {}\tresources: {}".format(
+            "{} - packages: {}\tresources: {}\n".format(
                 result_type, len(result_type_packages), len(result_type_resources),
             )
         ]
@@ -117,7 +121,8 @@ def build_notification_message(sync_results: dict):
 
 try:
     LOGGER.info(f"Started for: {CKAN.address}")
-    with open(DIRS["configs"] / "remote_files.yaml", "r") as f:
+
+    with open("files.yaml", "r") as f:
         REFRESH_LIST = yaml.load(f, yaml.SafeLoader)
         LOGGER.debug("Loaded remote_files.yaml")
 
