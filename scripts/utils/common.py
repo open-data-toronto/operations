@@ -9,12 +9,17 @@ from time import sleep
 import requests
 import yaml
 
+import os
+
+PATH = Path(os.path.abspath(__file__))
+
 
 class Helper:
     def __init__(
         self, script: Path, log_level: str = "DEBUG", make_directories: bool = True
     ):
-        self.root_dir = script.parent.parent
+        self.root_dir = PATH.parent.parent.parent
+        print(f"root_dir: {self.root_dir}, PATH: {PATH}")
 
         self.configs_dir = self.root_dir / "configs"
         self.config = self.configs_dir / "config.yaml"

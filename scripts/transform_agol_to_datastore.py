@@ -1,14 +1,15 @@
-#!/usr/bin/env python
-import csv
-import json
+#!home/nifi/nifienv/bin/python
+# activate_this = "/Users/hjavaid/devtools/nifi-1.9.0/home/nifi/nifienv/bin/activate"
+# exec(open(activate_this).read())
 import sys
-from datetime import datetime
-from io import StringIO
-
 import geopandas as gpd
-import numpy as np
 import pandas as pd
+import json
+import numpy as np
+import csv
+from datetime import datetime
 from shapely.geometry import mapping
+from io import StringIO
 
 
 def tuple_to_list(record):
@@ -43,7 +44,6 @@ results = json.loads(result)
 crs = {"init": "EPSG:4326"}
 
 data = gpd.GeoDataFrame.from_features(results["features"], crs=crs).to_crs(epsg=4326)
-
 # data=data.drop(columns=['X','Y'])
 drop_columns = [
     column for column in data.columns.values if column.lower() in REMOVE_COLUMNS
@@ -53,7 +53,6 @@ data["geometry"] = data["geometry"].apply(lambda x: geometry_to_record(x))
 # drop_columns=[column for column in data.columns.values if column.lower() in REMOVE_COLUMNS]
 # data=data.drop(drop_columns,axis=1)
 # map column types
-
 columns = {}
 for col in ["TIMESTAMP", "INT", "FLOAT", "TEXT"]:
     columns[col] = [field["id"] for field in fields if field["type"].upper() == col]
