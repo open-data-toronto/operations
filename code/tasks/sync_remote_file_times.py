@@ -111,7 +111,7 @@ def run(logger, utils, ckan, configs):
 
         return "\n".join(message_lines)
 
-    sync_list = configs["sustainment"]["remote files"]
+    sync_list = configs[PATH.parent.name][PATH.name[:-3]]
 
     logger.debug("Loaded remote_files.yaml")
     packages = get_packages_to_sync(sync_list)

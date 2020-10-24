@@ -4,7 +4,7 @@ from pathlib import Path
 
 import ckanapi
 from utils import common as utils
-import sustainment
+import tasks
 import datasets
 import argparse
 
@@ -30,8 +30,8 @@ def parse_args():
     args = parser.parse_args()
 
     assert any(
-        [hasattr(datasets, args.job), hasattr(sustainment, args.job)]
-    ), f"No script for job '{args.job}' in datasets, sustainment"
+        [hasattr(datasets, args.job), hasattr(tasks, args.job)]
+    ), f"No script for job '{args.job}' in datasets or tasks"
 
     return args
 
@@ -39,17 +39,19 @@ def parse_args():
 args = parse_args()
 
 configs = utils.load_yaml(filepath=args.config_file)
+
+for folder, relative_path in configs["directories"].items():
+    configs["directories"][folder] = ROOT_DIR / configs["directories"][relative_path]
+
 utils.make_dirs_if_new(config_filepath=args.config_file, configs=configs)
 
 active_env = configs["active_env"] if args.active_env is None else args.active_env
 name = args.job
 
-job = getattr(datasets, name) if hasattr(datasets, name) else getattr(sustainment, name)
+job = getattr(datasets, name) if hasattr(datasets, name) else getattr(tasks, name)
 
 logger = utils.make_logger(
-    log_level=args.log_level,
-    name=name,
-    logs_dir=ROOT_DIR / configs["directories"]["logs"],
+    log_level=args.log_level, name=name, logs_dir=configs["directories"]["logs"],
 )
 
 try:
