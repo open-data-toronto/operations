@@ -14,13 +14,13 @@ PACKAGE_ID = PATH.name.replace("_", "-")
 
 
 def run(logger, utils, ckan, configs):
-    APIKEY = configs[PATH.parent.name][PATH.name[:-3]]["credentials"]
+    apikey = configs[PATH.parent.name][PATH.name[:-3]]["credentials"]
 
     def api_request(path, key):
         logger.debug(f"API call: {path}")
 
         req = requests.get(
-            f"https://developers.flowworks.com/fwapi/v1/{APIKEY}/{path}"
+            f"https://developers.flowworks.com/fwapi/v1/{apikey}/{path}"
         ).json()
         assert "request ok" in req["msg"].lower(), f"{path}: {req['msg']}"
 
