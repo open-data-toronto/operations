@@ -21,10 +21,9 @@ PATH = Path(os.path.abspath(__file__))
 TOOLS = common.Helper(PATH)
 
 LOGGER, CREDS, DIRS = TOOLS.get_all()
-CKAN = ckanapi.RemoteCKAN(**CREDS)
+CKAN = ckanapi.RemoteCKAN(**CREDS["ckan"])
 
 PACKAGE_ID = PATH.name
 
-APIKEY = "E8EF5292-F128-468D-BFBC-AEC1BE7AB8AC"
+print(CREDS)
 
-print({"path": PATH, "package_id": PACKAGE_ID, "apikey": APIKEY})

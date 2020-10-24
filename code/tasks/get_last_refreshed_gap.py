@@ -1,22 +1,4 @@
-import sys
-
-sys.path.append("../..")
-
-import os
-import traceback
-from pathlib import Path
-
-import ckanapi
-from utils import ckan_helper
-from utils import common
-from datetime import datetime as dt
-from datetime import timedelta
-
-PATH = Path(os.path.abspath(__file__))
-TOOLS = common.Helper(PATH)
-
-LOGGER, CREDS, DIRS = TOOLS.get_all()
-CKAN = ckanapi.RemoteCKAN(**CREDS)
+from datetime import datetime, timedelta
 
 TIME_MAP = {
     "daily": 1,
@@ -27,15 +9,15 @@ TIME_MAP = {
     "annually": 365,
 }
 
-try:
-    LOGGER.info("Started")
-    packages = ckan_helper.get_all_packages(CKAN)
 
-    run_time = dt.utcnow()
+def run(logger, utils, ckan, configs=None):
+    packages = utils.get_all_packages(ckan)
+
+    run_time = datetime.utcnow()
 
     packages_behind = []
 
-    LOGGER.info("Looping through packages")
+    logger.info("Looping through packages")
     for p in packages:
         refresh_rate = p.pop("refresh_rate").lower()
 
@@ -43,7 +25,7 @@ try:
             continue
 
         last_refreshed = p.pop("last_refreshed")
-        last_refreshed = dt.strptime(last_refreshed, "%Y-%m-%dT%H:%M:%S.%f")
+        last_refreshed = datetime.strptime(last_refreshed, "%Y-%m-%dT%H:%M:%S.%f")
 
         days_behind = (run_time - last_refreshed).days
         next_refreshed = last_refreshed + timedelta(days=TIME_MAP[refresh_rate])
@@ -59,7 +41,7 @@ try:
                 "days": days_behind,
             }
             packages_behind.append(details)
-            LOGGER.debug(
+            logger.debug(
                 f"{details['name']}: Behind {details['days']} days. {details['email']}"
             )
 
@@ -72,21 +54,7 @@ try:
 
     lines = [f"{i+1}. {l}" for i, l in enumerate(lines)]
 
-    notification = {
+    return {
         "message_type": "success",
         "msg": "\n".join(lines),
     }
-
-    TOOLS.send_notifications(**notification)
-
-except Exception:
-    error = traceback.format_exc()
-    notification = {
-        "message_type": "error",
-        "msg": error,
-    }
-
-    TOOLS.send_notifications(**notification)
-    LOGGER.error(error)
-
-LOGGER.info("Finished")

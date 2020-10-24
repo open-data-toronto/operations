@@ -1,202 +1,187 @@
-import argparse
 import json
 import logging
 import math
-import os
 import sys
-from pathlib import Path
 from time import sleep
+import hashlib
 
+import pandas as pd
 import requests
 import yaml
 
-PATH = Path(os.path.abspath(__file__))
+
+def make_dirs_if_new(config_filepath, configs):
+    for directory in configs["directories"].values():
+        file_dir = config_filepath.parent.parent / directory
+        file_dir.mkdir(parents=True, exist_ok=True)
 
 
-class Helper:
-    def __init__(
-        self, script: Path, log_level: str = "DEBUG", make_directories: bool = True
+def load_yaml(filepath):
+    with open(filepath, "r") as f:
+        config = yaml.load(f, yaml.SafeLoader)
+
+    return config
+
+
+def make_logger(log_level, name, logs_dir):
+    formatter = logging.Formatter(
+        fmt="%(asctime)s %(levelname)s %(name)-8s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+
+    logs_file = logs_dir / f"{name}-{log_level.lower()}.log"
+
+    handler = logging.FileHandler(logs_file, mode="a+")
+    handler.setFormatter(formatter)
+
+    screen_handler = logging.StreamHandler(stream=sys.stdout)
+    screen_handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(log_level)
+
+    logger.addHandler(handler)
+    logger.addHandler(screen_handler)
+
+    return logger
+
+
+def send_notifications(name, msg, message_type, configs, ckan_url):
+    responses = []
+
+    notification_configs = configs["notifications"]
+
+    if (
+        "slack" in notification_configs
+        and "webhook_url" in notification_configs["slack"]
     ):
-        self.root_dir = PATH.parent.parent.parent
-        print(f"root_dir: {self.root_dir}, PATH: {PATH}")
+        header = f"{message_type}\n"
+        if message_type.lower() == "error":
+            header = header.upper()
 
-        self.configs_dir = self.root_dir / "configs"
-        self.config = self.configs_dir / "config.yaml"
-        self.__config = self.__get_config()
+        msg_title = "*{}*: {} | {}".format(name, ckan_url, header)
 
-        args = self.__parse_runtime_args()
-        self.backups_dir = args.backups_dir
-        self.staging_dir = args.staging_dir
-        self.logs_dir = args.logs_dir
-        self.active_env = args.active_env
-
-        if make_directories:
-            self.__make_directories()
-
-        log_levels = ["DEBUG", "INFO", "WARN", "ERROR"]
-        assert log_level.upper() in log_levels, f"Log level must be in: {log_levels}"
-
-        self.log_level = log_level.upper()
-
-        self.name = script.parent.name
-
-        self.logs = self.logs_dir / f"{self.name}-{self.log_level.lower()}.log"
-
-    def get_all(self):
-        return self.get_logger(), self.get_ckan_credentials(), self.get_directories()
-
-    def get_logger(self):
-        formatter = logging.Formatter(
-            fmt="%(asctime)s %(levelname)s %(name)-8s %(message)s",
-            datefmt="%Y-%m-%d %H:%M:%S",
-        )
-
-        handler = logging.FileHandler(self.logs, mode="a+")
-        handler.setFormatter(formatter)
-
-        screen_handler = logging.StreamHandler(stream=sys.stdout)
-        screen_handler.setFormatter(formatter)
-
-        logger = logging.getLogger(self.name)
-        logger.setLevel(self.log_level)
-
-        logger.addHandler(handler)
-        logger.addHandler(screen_handler)
-
-        return logger
-
-    def get_directories(self):
-        return {
-            "backups": self.backups_dir,
-            "staging": self.staging_dir,
-            "logs": self.logs_dir,
-            "configs": self.configs_dir,
+        head = {
+            "type": "section",
+            "text": {"type": "mrkdwn", "text": msg_title},
         }
 
-    def get_ckan_credentials(self):
-        return self.__config["ckan"][self.active_env]
+        max_block_length = 3000 - len(msg_title)
+        number_of_blocks = math.ceil(len(msg) / max_block_length)
 
-    def send_notifications(self, msg: str, message_type: str):
-        responses = []
+        lines = msg.split("\n")
+        slack_responses = []
+        for n in range(number_of_blocks):
+            block_lines = []
 
-        notification_configs = self.__config["notifications"]
+            if n > 0:
+                sleep(1)
 
-        if (
-            "slack" in notification_configs
-            and "webhook_url" in notification_configs["slack"]
-        ):
-            header = f"{message_type}\n"
-            if message_type.lower() == "error":
-                header = header.upper()
+            for i, l in enumerate(lines):
+                if any(
+                    [
+                        n > 0 and len("\n".join(block_lines)) > max_block_length,
+                        n == 0
+                        and len("\n".join(block_lines)) + len(json.dumps(head))
+                        > max_block_length,
+                    ]
+                ):
+                    lines = lines[i:]
+                    break
+                block_lines.append(l)
 
-            msg_title = "*{}*: {} | {}".format(
-                self.name, self.get_ckan_credentials()["address"], header
-            )
-
-            head = {
-                "type": "section",
-                "text": {"type": "mrkdwn", "text": msg_title},
-            }
-
-            max_block_length = 3000 - len(msg_title)
-            number_of_blocks = math.ceil(len(msg) / max_block_length)
-
-            lines = msg.split("\n")
-            slack_responses = []
-            for n in range(number_of_blocks):
-                block_lines = []
-
-                if n > 0:
-                    sleep(1)
-
-                for i, l in enumerate(lines):
-                    if any(
-                        [
-                            n > 0 and len("\n".join(block_lines)) > max_block_length,
-                            n == 0
-                            and len("\n".join(block_lines)) + len(json.dumps(head))
-                            > max_block_length,
-                        ]
-                    ):
-                        lines = lines[i:]
-                        break
-                    block_lines.append(l)
-
-                response = requests.post(
-                    notification_configs["slack"]["webhook_url"],
-                    data=json.dumps(
-                        {
-                            "blocks": [
-                                head,
-                                {
-                                    "type": "section",
-                                    "text": {
-                                        "type": "mrkdwn",
-                                        "text": "\n".join(block_lines),
-                                    },
-                                },
-                            ]
-                        }
-                    ),
-                    headers={"Content-Type": "application/json"},
-                )
-
-                slack_responses.append(response)
-
-            responses.append({"slack": slack_responses})
-
-        if (
-            "wirepusher" in notification_configs
-            and "id" in notification_configs["wirepusher"]
-            and isinstance(msg, str)
-        ):
             response = requests.post(
-                "https://wirepusher.com/send",
-                data={
-                    "id": notification_configs["wirepusher"]["id"],
-                    "title": self.name,
-                    "message": msg,
-                    "type": message_type,
-                },
+                notification_configs["slack"]["webhook_url"],
+                data=json.dumps(
+                    {
+                        "blocks": [
+                            head,
+                            {
+                                "type": "section",
+                                "text": {
+                                    "type": "mrkdwn",
+                                    "text": "\n".join(block_lines),
+                                },
+                            },
+                        ]
+                    }
+                ),
+                headers={"Content-Type": "application/json"},
             )
 
-            responses.append({"wirepusher": response})
+            slack_responses.append(response)
 
-        return responses
+        responses.append({"slack": slack_responses})
 
-    def __make_directories(self):
-        for directory in [self.backups_dir, self.staging_dir, self.logs_dir]:
-            directory.mkdir(parents=True, exist_ok=True)
-
-    def __parse_runtime_args(self):
-        parser = argparse.ArgumentParser()
-        parser.add_argument(
-            "--active_env", nargs="?", default=self.__config["active_env"], type=str
+    if (
+        "wirepusher" in notification_configs
+        and "id" in notification_configs["wirepusher"]
+        and isinstance(msg, str)
+    ):
+        response = requests.post(
+            "https://wirepusher.com/send",
+            data={
+                "id": notification_configs["wirepusher"]["id"],
+                "title": name,
+                "message": msg,
+                "type": message_type,
+            },
         )
-        parser.add_argument(
-            "--backups_dir",
-            nargs="?",
-            default=self.root_dir / self.__config["directories"]["backups"],
-            type=str,
-        )
-        parser.add_argument(
-            "--staging_dir",
-            nargs="?",
-            default=self.root_dir / self.__config["directories"]["staging"],
-            type=str,
-        )
-        parser.add_argument(
-            "--logs_dir",
-            nargs="?",
-            default=self.root_dir / self.__config["directories"]["logs"],
-            type=str,
-        )
-        args = parser.parse_args()
 
-        return args
+        responses.append({"wirepusher": response})
 
-    def __get_config(self):
-        with open(self.config, "r") as f:
-            config = yaml.load(f, yaml.SafeLoader)
+    return responses
 
-        return config
+
+def backup_datastore_resource(ckan, resource_id, dest_path, backup_fields):
+    resource = ckan.action.resource_show(id=resource_id)
+    package = ckan.action.package_show(id=resource["package_id"])
+
+    record_count = ckan.action.datastore_search(id=resource_id, limit=0)["total"]
+
+    datastore_response = ckan.action.datastore_search(
+        id=resource_id, limit=record_count
+    )
+
+    prefix_parts = [package["name"], resource["name"]]
+
+    results = {}
+
+    data = pd.DataFrame(datastore_response["records"]).drop("_id", axis=1)
+
+    data_hash = hashlib.md5()
+    data_hash.update(data.to_csv(index=False).encode("utf-8"))
+    prefix_parts.append(data_hash.hexdigest())
+
+    data_path = dest_path / "__".join(prefix_parts + ["data.parquet"])
+    if not data_path.exists():
+        data.to_parquet(data_path)
+
+    results["data"] = data_path
+    results["records"] = data.shape[0]
+    results["columns"] = data.shape[1]
+
+    if backup_fields:
+        fields = [f for f in datastore_response["fields"] if f["id"] != "_id"]
+
+        fields_path = dest_path / "__".join(prefix_parts + ["fields.json"])
+        if not fields_path.exists():
+            with open(fields_path, "w") as f:
+                json.dump(fields, f)
+
+        results["fields"] = fields_path
+
+    return results
+
+
+def update_resource_last_modified(ckan, resource_id, new_last_modified):
+    return ckan.action.resource_patch(
+        id=resource_id, last_modified=new_last_modified.strftime("%Y-%m-%dT%H:%M:%S"),
+    )
+
+
+def get_all_packages(ckan):
+    catalogue_size = len(ckan.action.package_list())
+    packages = ckan.action.package_search(rows=catalogue_size)["results"]
+
+    return packages
