@@ -12,7 +12,10 @@ tasks = {
         schedule.every().monday.at("16:00"),
         schedule.every().thursday.at("16:00"),
     ],
-    "get_last_refreshed_gap": [schedule.every().thursday.at("11:00")],
+    "get_last_refreshed_gap": [
+        schedule.every().monday.at("11:00"),
+        schedule.every().thursday.at("11:00"),
+    ],
     "sync_remote_file_times": [schedule.every(2).hours],
 }
 
