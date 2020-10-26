@@ -7,7 +7,7 @@ from utils import common as utils
 import tasks
 import datasets
 import argparse
-import scheduler
+import schedules
 
 PATH = Path(os.path.abspath(__file__))
 ROOT_DIR = PATH.parent.parent
@@ -26,7 +26,7 @@ def parse_args():
         nargs="?",
         type=str,
         default=ROOT_DIR / "configs" / "config.yaml",
-        help="Location of config file (OPTIONAL). Defaults to root directory configs folder.",
+        help="Config file path (OPTIONAL). Defaults to root directory configs folder.",
     )
     parser.add_argument(
         "--active_env",
@@ -38,8 +38,6 @@ def parse_args():
         "--schedule", default=False, action="store_true", help="Run in schedule mode."
     )
     args = parser.parse_args()
-
-    print(args.schedule)
 
     assert (
         args.schedule is False or args.job is None
@@ -102,7 +100,12 @@ elif args.schedule:
         name="scheduler", logs_dir=configs["directories"]["logs"],
     )
     logger.debug("Running schedule")
-    schedule = scheduler.get_job_schedule(get_job, configs)
+
+    schedule = schedules.get_schedules(job=get_job, configs=configs, get_tasks=True)
+    logger.debug("Running all tasks due to initialization")
+    schedule.run_all()
+
+    schedule = schedules.get_schedules(job=get_job, configs=configs, get_datasets=True)
 
     for job in schedule.jobs:
         logger.debug(f"Scheduler job: {job}")
@@ -112,5 +115,3 @@ elif args.schedule:
             schedule.run_pending()
     except Exception:
         logger.error(traceback.format_exc())
-
-    print("finishing up")
