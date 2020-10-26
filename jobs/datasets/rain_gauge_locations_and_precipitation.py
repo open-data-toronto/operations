@@ -10,7 +10,7 @@ from dateutil import parser
 from copy import deepcopy
 
 PATH = Path(os.path.abspath(__file__))
-PACKAGE_ID = PATH.name.replace("_", "-")
+PACKAGE_ID = PATH.name.replace("_", "-")[:-3]
 
 
 def run(logger, utils, ckan, configs):

@@ -6,10 +6,11 @@ import pandas as pd
 
 
 PATH = Path(os.path.abspath(__file__))
-PACKAGE_ID = PATH.name.replace("_", "-")
+PACKAGE_ID = PATH.name.replace("_", "-")[:-3]
 
 
 def run(logger, utils, ckan, configs):
+    print(PACKAGE_ID)
     file_name = configs[PATH.parent.name][PATH.name[:-3]]["file_name"]
     directories = configs["directories"]
     package = ckan.action.package_show(id=PACKAGE_ID)
