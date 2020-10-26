@@ -7,7 +7,10 @@ datasets = {
 }
 
 tasks = {
-    "get_empty_datastore_resources": [schedule.every().day.at("09:00")],
+    "get_empty_datastore_resources": [
+        schedule.every().day.at("09:00"),
+        schedule.every().day.at("15:00"),
+    ],
     "update_data_quality_scores": [
         schedule.every().monday.at("16:00"),
         schedule.every().thursday.at("16:00"),
