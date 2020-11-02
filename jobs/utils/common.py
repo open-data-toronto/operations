@@ -23,13 +23,13 @@ def load_yaml(filepath):
     return config
 
 
-def make_logger(name, logs_dir, log_level="DEBUG"):
+def make_logger(name, logs_dir, active_env, log_level="DEBUG"):
     formatter = logging.Formatter(
         fmt="%(asctime)s %(levelname)s %(name)-8s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
-    logs_file = logs_dir / f"{name}.log"
+    logs_file = logs_dir / f"{active_env.upper()}.{name}.log"
 
     handler = logging.FileHandler(logs_file, mode="a+")
     handler.setFormatter(formatter)

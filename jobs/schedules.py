@@ -26,7 +26,9 @@ tasks = {
 def initialize_schedules(job, configs, run_tasks_on_start=False):
     for job_name, intervals in {**tasks, **datasets}.items():
         logger = utils.make_logger(
-            name=job_name, logs_dir=configs["directories"]["logs"]
+            name=job_name,
+            logs_dir=configs["directories"]["logs"],
+            active_env=configs["active_env"],
         )
 
         for idx, run in enumerate(intervals):

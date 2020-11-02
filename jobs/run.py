@@ -73,6 +73,7 @@ for folder, relative_path in configs["directories"].items():
 utils.make_dirs_if_new(config_filepath=args.config_file, configs=configs)
 
 active_env = configs["active_env"] if args.active_env is None else args.active_env
+configs["active_env"] = active_env
 
 
 def get_job(name, logger):
@@ -104,12 +105,18 @@ if args.schedule is False and args.job is not None:
     name = args.job
     get_job(
         name,
-        logger=utils.make_logger(name=name, logs_dir=configs["directories"]["logs"],),
+        logger=utils.make_logger(
+            name=name,
+            logs_dir=configs["directories"]["logs"],
+            active_env=configs["active_env"],
+        ),
     )
 
 elif args.schedule:
     logger = utils.make_logger(
-        name="scheduler", logs_dir=configs["directories"]["logs"],
+        name="scheduler",
+        logs_dir=configs["directories"]["logs"],
+        active_env=configs["active_env"],
     )
     logger.debug("Running schedule")
 
