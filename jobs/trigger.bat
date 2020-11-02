@@ -1,2 +1,2 @@
 call activate operations
-pythonw %~dp0run.py --job %1
+python %~dp0run.py %1 %2

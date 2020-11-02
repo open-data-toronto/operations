@@ -3,7 +3,7 @@ import schedule
 
 datasets = {
     "rain_gauge_locations_and_precipitation": [schedule.every().day.at("10:00")],
-    "covid_19_cases_in_toronto": [schedule.every().tuesday.at("09:59")],
+    "covid_19_cases_in_toronto": [schedule.every().wednesday.at("09:59")],
 }
 
 tasks = {
@@ -23,15 +23,15 @@ tasks = {
 }
 
 
-def get_schedules(job, configs, get_tasks=False, get_datasets=False):
-    dataset_schedules = datasets if get_datasets else {}
-    tasks_schedules = tasks if get_tasks else {}
-
-    for job_name, intervals in {**tasks_schedules, **dataset_schedules}.items():
+def initialize_schedules(job, configs, run_tasks_on_start=False):
+    for job_name, intervals in {**tasks, **datasets}.items():
         logger = utils.make_logger(
             name=job_name, logs_dir=configs["directories"]["logs"]
         )
 
-        [run.do(job, name=job_name, logger=logger) for run in intervals]
+        for idx, run in enumerate(intervals):
+            scheduled_job = run.do(job, name=job_name, logger=logger)
+            if idx == 0 and job_name in tasks and run_tasks_on_start:
+                scheduled_job.run()
 
     return schedule

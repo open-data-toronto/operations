@@ -8,6 +8,7 @@ import tasks
 import datasets
 import argparse
 import schedules
+import calendar
 
 PATH = Path(os.path.abspath(__file__))
 ROOT_DIR = PATH.parent.parent
@@ -35,13 +36,24 @@ def parse_args():
         help="Override of environment in config file (OPTIONAL). Values: dev, qa, prod",
     )
     parser.add_argument(
-        "--schedule", default=False, action="store_true", help="Run in schedule mode."
+        "--schedule", default=False, action="store_true", help="Run schedule"
     )
+    parser.add_argument(
+        "--run_tasks_on_start",
+        default=False,
+        action="store_true",
+        help="If running schedule, whether to run tasks when it initializes",
+    )
+
     args = parser.parse_args()
 
     assert (
         args.schedule is False or args.job is None
     ), "Can either run in schedule mode or a single job, not both."
+
+    assert (args.run_tasks_on_start is not True and args.job is not None) or (
+        args.job is None
+    ), "Cannot pass run_tasks_on_start and a job at the same time"
 
     if args.job is not None:
         assert any(
@@ -101,14 +113,43 @@ elif args.schedule:
     )
     logger.debug("Running schedule")
 
-    schedule = schedules.get_schedules(job=get_job, configs=configs, get_tasks=True)
-    logger.debug("Running all tasks due to initialization")
-    schedule.run_all()
+    schedule = schedules.initialize_schedules(
+        job=get_job, configs=configs, run_tasks_on_start=args.run_tasks_on_start
+    )
 
-    schedule = schedules.get_schedules(job=get_job, configs=configs, get_datasets=True)
-
+    lines = {}
     for job in schedule.jobs:
-        logger.debug(f"Scheduler job: {job}")
+        halves = str(job).split(",")[0].split("do")
+
+        interval = (
+            halves[0]
+            .strip()
+            .replace("Every", "")
+            .replace("1 day", "Daily")
+            .replace("1 week", f"{calendar.day_name[job.next_run.weekday()]}s")
+            .strip()
+        )
+
+        name = halves[1].lower().replace("get_job(name=", "").replace("'", "").strip()
+
+        if interval.endswith(":00"):
+            interval = interval[:-3]
+        if name not in lines:
+            lines[name] = []
+
+        lines[name].append(interval)
+
+    message_lines = []
+    for job_name, intervals in lines.items():
+        message_lines.append(f"- *{job_name}*: {', '.join(intervals)}")
+
+    utils.send_notifications(
+        name="scheduler",
+        configs=configs,
+        ckan_url=configs["ckan"][active_env]["address"],
+        message_type="success",
+        msg="Schedule started for jobs:\n{}".format("\n".join(message_lines)),
+    )
 
     try:
         while True:
