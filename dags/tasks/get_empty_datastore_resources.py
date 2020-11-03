@@ -33,9 +33,9 @@ default_args = {
 }
 
 dag = DAG(
-    'tutorial',
+    'get_empty_datastore_resources',
     default_args=default_args,
-    description='A simple tutorial DAG',
+    description='Pipe to identify empty datastore resources and send them to Slack',
     schedule_interval=timedelta(minutes=10),
 )
 
