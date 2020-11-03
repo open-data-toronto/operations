@@ -23,7 +23,10 @@ def load_yaml(filepath):
     return config
 
 
-def make_logger(name, logs_dir, active_env, print_logs_in_screen, log_level="DEBUG"):
+def make_logger(name, logs_dir, active_env, is_airflow_run, log_level="DEBUG"):
+    if is_airflow_run:
+        return logging
+
     formatter = logging.Formatter(
         fmt="%(asctime)s %(levelname)s %(name)-8s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
@@ -37,13 +40,11 @@ def make_logger(name, logs_dir, active_env, print_logs_in_screen, log_level="DEB
     handler = logging.FileHandler(logs_file, mode="a+")
     handler.setFormatter(formatter)
 
+    screen_handler = logging.StreamHandler(stream=sys.stdout)
+    screen_handler.setFormatter(formatter)
+
+    logger.addHandler(screen_handler)
     logger.addHandler(handler)
-
-    if print_logs_in_screen:
-        screen_handler = logging.StreamHandler(stream=sys.stdout)
-        screen_handler.setFormatter(formatter)
-
-        logger.addHandler(screen_handler)
 
     return logger
 
