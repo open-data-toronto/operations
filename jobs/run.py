@@ -4,7 +4,7 @@ from pathlib import Path
 
 import ckanapi
 import jobs.utils.common as utils
-import jobs.tasks as tasks
+import jobs.sustainment as tasks
 import jobs.datasets as datasets
 import argparse
 
