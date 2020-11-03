@@ -23,22 +23,25 @@ def load_yaml(filepath):
     return config
 
 
-def make_logger(name, logs_dir, active_env, log_level="DEBUG"):
+def make_logger(name, logs_dir, active_env, keep_local_logs, log_level="DEBUG"):
     formatter = logging.Formatter(
         fmt="%(asctime)s %(levelname)s %(name)-8s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
+    if keep_local_logs is False:
+        return logging
+
     logs_file = logs_dir / f"{active_env.upper()}.{name}.log"
+
+    logger = logging.getLogger(name)
+    logger.setLevel(log_level)
 
     handler = logging.FileHandler(logs_file, mode="a+")
     handler.setFormatter(formatter)
 
     screen_handler = logging.StreamHandler(stream=sys.stdout)
     screen_handler.setFormatter(formatter)
-
-    logger = logging.getLogger(name)
-    logger.setLevel(log_level)
 
     logger.addHandler(handler)
     logger.addHandler(screen_handler)
@@ -176,7 +179,8 @@ def backup_datastore_resource(ckan, resource_id, dest_path, backup_fields):
 
 def update_resource_last_modified(ckan, resource_id, new_last_modified):
     return ckan.action.resource_patch(
-        id=resource_id, last_modified=new_last_modified.strftime("%Y-%m-%dT%H:%M:%S"),
+        id=resource_id,
+        last_modified=new_last_modified.strftime("%Y-%m-%dT%H:%M:%S"),
     )
 
 

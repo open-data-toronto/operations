@@ -32,6 +32,12 @@ def parse_args(args_list):
         type=str,
         help="Override of environment in config file (OPTIONAL). Values: dev, qa, prod",
     )
+    parser.add_argument(
+        "--keep_local_logs",
+        default=False,
+        action="store_true",
+        help="Whether to save local log files",
+    )
 
     args = parser.parse_args() if args_list is None else parser.parse_args(args_list)
 
@@ -48,6 +54,9 @@ def run(args_list=None, **kwargs):
     configs = utils.load_yaml(filepath=args.config_file)
 
     for folder, relative_path in configs["directories"].items():
+        if folder == "logs" and args.keep_local_logs if False:
+            continue
+
         configs["directories"][folder] = (
             ROOT_DIR / configs["directories"][relative_path]
         )
@@ -90,6 +99,7 @@ def run(args_list=None, **kwargs):
             name=name,
             logs_dir=configs["directories"]["logs"],
             active_env=configs["active_env"],
+            keep_local_logs=args.keep_local_logs
         ),
     )
 
