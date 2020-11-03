@@ -7,7 +7,6 @@ import jobs.utils.common as utils
 import jobs.tasks as tasks
 import jobs.datasets as datasets
 import argparse
-import schedules
 import calendar
 
 PATH = Path(os.path.abspath(__file__))
