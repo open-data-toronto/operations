@@ -54,9 +54,6 @@ def run(args_list=None, **kwargs):
     configs = utils.load_yaml(filepath=args.config_file)
 
     for folder, relative_path in configs["directories"].items():
-        if folder == "logs" and args.keep_local_logs is False:
-            continue
-
         configs["directories"][folder] = (
             ROOT_DIR / configs["directories"][relative_path]
         )
