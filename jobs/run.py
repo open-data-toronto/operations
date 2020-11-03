@@ -33,10 +33,10 @@ def parse_args(args_list):
         help="Override of environment in config file (OPTIONAL). Values: dev, qa, prod",
     )
     parser.add_argument(
-        "--is_airflow_run",
-        default=True,
+        "--keep_local_log_files",
+        default=False,
         action="store_true",
-        help="Whether run is in airflow, to use built-loggers",
+        help="Whether to keep local log files",
     )
 
     args = parser.parse_args() if args_list is None else parser.parse_args(args_list)
@@ -54,7 +54,7 @@ def run(args_list=None, **kwargs):
     configs = utils.load_yaml(filepath=args.config_file)
 
     for folder, relative_path in configs["directories"].items():
-        if folder == "logs" and args.is_airflow_run is True:
+        if folder == "logs" and args.keep_local_log_files is False:
             continue
 
         configs["directories"][folder] = (
@@ -99,7 +99,7 @@ def run(args_list=None, **kwargs):
             name=name,
             logs_dir=configs["directories"]["logs"],
             active_env=configs["active_env"],
-            is_airflow_run=args.is_airflow_run,
+            keep_local_log_files=args.keep_local_log_files,
         ),
     )
 

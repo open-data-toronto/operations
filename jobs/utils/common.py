@@ -23,8 +23,8 @@ def load_yaml(filepath):
     return config
 
 
-def make_logger(name, logs_dir, active_env, is_airflow_run, log_level="DEBUG"):
-    if is_airflow_run:
+def make_logger(name, logs_dir, active_env, keep_local_log_files, log_level="DEBUG"):
+    if keep_local_log_files is False:
         return logging
 
     formatter = logging.Formatter(
