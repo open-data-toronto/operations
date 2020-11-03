@@ -23,14 +23,11 @@ def load_yaml(filepath):
     return config
 
 
-def make_logger(name, logs_dir, active_env, keep_local_logs, log_level="DEBUG"):
+def make_logger(name, logs_dir, active_env, local_run, log_level="DEBUG"):
     formatter = logging.Formatter(
         fmt="%(asctime)s %(levelname)s %(name)-8s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
-
-    if keep_local_logs is False:
-        return logging
 
     logs_file = logs_dir / f"{active_env.upper()}.{name}.log"
 
@@ -40,11 +37,13 @@ def make_logger(name, logs_dir, active_env, keep_local_logs, log_level="DEBUG"):
     handler = logging.FileHandler(logs_file, mode="a+")
     handler.setFormatter(formatter)
 
-    screen_handler = logging.StreamHandler(stream=sys.stdout)
-    screen_handler.setFormatter(formatter)
-
     logger.addHandler(handler)
-    logger.addHandler(screen_handler)
+    
+    if local_run:
+        screen_handler = logging.StreamHandler(stream=sys.stdout)
+        screen_handler.setFormatter(formatter)
+
+        logger.addHandler(screen_handler)
 
     return logger
 
