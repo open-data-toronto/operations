@@ -54,7 +54,7 @@ def run(args_list=None, **kwargs):
     configs = utils.load_yaml(filepath=args.config_file)
 
     for folder, relative_path in configs["directories"].items():
-        if folder == "logs" and args.keep_local_logs if False:
+        if folder == "logs" and args.keep_local_logs is False:
             continue
 
         configs["directories"][folder] = (
@@ -99,7 +99,7 @@ def run(args_list=None, **kwargs):
             name=name,
             logs_dir=configs["directories"]["logs"],
             active_env=configs["active_env"],
-            keep_local_logs=args.keep_local_logs
+            keep_local_logs=args.keep_local_logs,
         ),
     )
 
