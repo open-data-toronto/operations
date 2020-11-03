@@ -33,7 +33,7 @@ def parse_args(args_list):
         help="Override of environment in config file (OPTIONAL). Values: dev, qa, prod",
     )
     parser.add_argument(
-        "--keep_local_logs",
+        "--print_logs_in_screen",
         default=False,
         action="store_true",
         help="Whether to save local log files",
@@ -99,7 +99,7 @@ def run(args_list=None, **kwargs):
             name=name,
             logs_dir=configs["directories"]["logs"],
             active_env=configs["active_env"],
-            keep_local_logs=args.keep_local_logs,
+            print_logs_in_screen=args.print_logs_in_screen,
         ),
     )
 
