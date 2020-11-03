@@ -7,7 +7,6 @@ import jobs.utils.common as utils
 import jobs.tasks as tasks
 import jobs.datasets as datasets
 import argparse
-import calendar
 
 PATH = Path(os.path.abspath(__file__))
 ROOT_DIR = PATH.parent.parent
@@ -84,10 +83,11 @@ def run(args_list=None, **kwargs):
 
         logger.info("Finished")
 
+    name = args.job
     get_job(
         name,
         logger=utils.make_logger(
-            name=args.job,
+            name=name,
             logs_dir=configs["directories"]["logs"],
             active_env=configs["active_env"],
         ),
