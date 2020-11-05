@@ -29,7 +29,7 @@ def run(logger, utils, ckan, configs=None):
                 }
             )
 
-            logger.debug(
+            logger.info(
                 f'{package["name"]}: {resource["name"]} - {response["total"]} records'
             )
 

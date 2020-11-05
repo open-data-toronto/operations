@@ -78,7 +78,7 @@ def run(logger, utils, ckan, configs=None):
     def get_framework(ckan, pid=PACKAGE_DQS):
         try:
             framework = ckan.action.package_show(id=pid)
-            logger.debug(f"Found package to use for data quality scores: {PACKAGE_DQS}")
+            logger.info(f"Found package to use for data quality scores: {PACKAGE_DQS}")
         except ckanapi.NotAuthorized:
             raise Exception("Permission required to search for the framework package")
         except ckanapi.NotFound:
@@ -286,7 +286,7 @@ def run(logger, utils, ckan, configs=None):
 
                 data.append(records)
 
-                logger.debug(f"{p['name']}: {r['name']} - {len(content)} records")
+                logger.info(f"{p['name']}: {r['name']} - {len(content)} records")
 
         if RESOURCE_MODEL not in storage and ckan.apikey:
             logger.info(

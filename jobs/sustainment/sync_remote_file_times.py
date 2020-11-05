@@ -27,7 +27,7 @@ def run(logger, utils, ckan, configs):
             resource_last_modified = resource["last_modified"]
             if not resource["last_modified"]:
                 resource_last_modified = resource["created"]
-                logger.debug(f"{resource['id']}: No last_modified, using created.")
+                logger.info(f"{resource['id']}: No last_modified, using created.")
 
             resource_last_modified = parser.parse(f"{resource_last_modified} UTC")
 
@@ -47,7 +47,7 @@ def run(logger, utils, ckan, configs):
             }
 
             if difference_in_seconds == 0:
-                logger.debug(f"Up to date: {resource['id']} | {f}")
+                logger.info(f"Up to date: {resource['id']} | {f}")
                 package_sync_results.append({**record, "result": "unchanged"})
                 continue
 
@@ -89,7 +89,9 @@ def run(logger, utils, ckan, configs):
 
             lines = [
                 "\n{} - packages: {}\tresources: {}".format(
-                    result_type, len(result_type_packages), len(result_type_resources),
+                    result_type,
+                    len(result_type_packages),
+                    len(result_type_resources),
                 )
             ]
 
@@ -103,7 +105,9 @@ def run(logger, utils, ckan, configs):
 
                 lines.append(
                     "{}. _{}_: `{}`".format(
-                        index + 1, r["resource_name"], r["file_last_modified"],
+                        index + 1,
+                        r["resource_name"],
+                        r["file_last_modified"],
                     )
                 )
 
@@ -113,14 +117,14 @@ def run(logger, utils, ckan, configs):
 
     sync_list = configs[PATH.parent.name][PATH.name[:-3]]
 
-    logger.debug("Loaded remote_files.yaml")
+    logger.info("Loaded remote_files.yaml")
     packages = get_packages_to_sync(sync_list)
-    logger.debug(f"Retrieved {len(packages)} to sync")
+    logger.info(f"Retrieved {len(packages)} to sync")
 
     sync_results = []
     for package in packages:
         name = package["name"]
-        logger.debug(name)
+        logger.info(name)
 
         try:
             results = sync_resource_timestamps(package, sync_list)

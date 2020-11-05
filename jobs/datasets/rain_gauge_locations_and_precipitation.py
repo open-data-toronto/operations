@@ -17,7 +17,7 @@ def run(logger, utils, ckan, configs):
     apikey = configs[PATH.parent.name][PATH.name[:-3]]["credentials"]
 
     def api_request(path, key):
-        logger.debug(f"API call: {path}")
+        logger.info(f"API call: {path}")
 
         req = requests.get(
             f"https://developers.flowworks.com/fwapi/v1/{apikey}/{path}"
@@ -55,7 +55,7 @@ def run(logger, utils, ckan, configs):
             ),
             "datapoints",
         )
-        logger.debug(
+        logger.info(
             "Site: {} / Channel: {} / Records: {}".format(
                 site["name"], channel["id"], len(datapoints)
             )
@@ -69,14 +69,14 @@ def run(logger, utils, ckan, configs):
     package = ckan.action.package_show(id=PACKAGE_ID)
 
     resource = get_latest_resource(package)
-    logger.debug(f"using resource: {resource['name']}")
+    logger.info(f"using resource: {resource['name']}")
 
     file_content = requests.get(resource["url"]).content
     resource_data = pd.read_csv(BytesIO(file_content))
 
     time_lastest_loaded = parser.parse(resource_data["date"].max())
     time_now = datetime.now()
-    logger.debug(f"latest record is from {time_lastest_loaded}")
+    logger.info(f"latest record is from {time_lastest_loaded}")
 
     start_date = (time_lastest_loaded + timedelta(seconds=1)).strftime("%Y%m%d%H%M%S")
     to_date = time_now.strftime("%Y%m%d%H%M%S")
@@ -112,7 +112,7 @@ def run(logger, utils, ckan, configs):
             year_data.to_csv(path, index=False)
 
             if resource_id is None:
-                logger.debug(f"resource does not exist for {year}")
+                logger.info(f"resource does not exist for {year}")
                 new_resource = ckan.action.resource_create(
                     package_id=package["id"],
                     name=resource_name,
@@ -123,9 +123,10 @@ def run(logger, utils, ckan, configs):
                     f"created {new_resource['name']} with {data_to_load.shape[0]} rows"
                 )
             else:
-                logger.debug("resource for the year exists")
+                logger.info("resource for the year exists")
                 ckan.action.resource_patch(
-                    id=resource_id, upload=open(path, "rb"),
+                    id=resource_id,
+                    upload=open(path, "rb"),
                 )
                 logger.info(f"updated resource: {r['name']}")
 

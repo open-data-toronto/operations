@@ -14,7 +14,7 @@ def run(logger, utils, ckan, configs):
     file_name = configs[PATH.parent.name][PATH.name[:-3]]["file_name"]
     directories = configs["directories"]
     package = ckan.action.package_show(id=PACKAGE_ID)
-    logger.debug(f"using Package: {PACKAGE_ID}")
+    logger.info(f"using Package: {PACKAGE_ID}")
 
     datastore_resources = [
         r

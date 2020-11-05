@@ -41,7 +41,7 @@ def run(logger, utils, ckan, configs=None):
                 "days": days_behind,
             }
             packages_behind.append(details)
-            logger.debug(
+            logger.info(
                 f"{details['name']}: Behind {details['days']} days. {details['email']}"
             )
 
