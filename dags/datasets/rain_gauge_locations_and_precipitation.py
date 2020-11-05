@@ -3,8 +3,11 @@ from datetime import timedelta
 from airflow.utils.dates import days_ago
 from pathlib import Path
 from airflow import DAG
-import jobs.run as job
 import os
+import sys
+
+sys.path.append("/data/operations")
+import jobs.run as job
 
 PATH = Path(os.path.abspath(__file__))
 JOB = PATH.name[:-3]
