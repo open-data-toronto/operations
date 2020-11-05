@@ -9,7 +9,7 @@ notifications:
   wirepusher:
     id:
   slack:
-    webhook_url:  https://hooks.slack.com/services/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
+    webhook_url: 
 
 ckan:
   dev:
