@@ -7,7 +7,7 @@ import os
 import sys
 
 sys.path.append("/data/operations")
-import jobs.run as job
+import jobs.run as job  # noqa: E402
 
 PATH = Path(os.path.abspath(__file__))
 JOB = PATH.name[:-3]

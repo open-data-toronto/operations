@@ -7,7 +7,7 @@ import os
 import sys
 
 sys.path.append("/data/operations")
-import jobs.run as job
+import jobs.run as job  # noqa: E402
 
 PATH = Path(os.path.abspath(__file__))
 JOB = PATH.name[:-3]
@@ -15,7 +15,7 @@ JOB = PATH.name[:-3]
 default_args = {
     "owner": "Carlos",
     "depends_on_past": False,
-    "start_date": days_ago(2),
+    "start_date": days_ago(0),
     "email": ["carlos.hernandez@toronto.ca"],
     "email_on_failure": False,
     "email_on_retry": False,
@@ -40,7 +40,7 @@ dag = DAG(
     JOB,
     default_args=default_args,
     description="Pipe to identify empty datastore resources and send them to Slack",
-    schedule_interval=timedelta(minutes=10),
+    schedule_interval="15 15,23 * * *",
 )
 
 run = PythonOperator(
