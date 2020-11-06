@@ -38,11 +38,11 @@ def send_success_msg(**kwargs):
     )
 
 
-def send_failure_msg():
+def send_failure_msg(self):
     airflow_utils.message_slack(
         name=job_name,
         message_type="error",
-        msg="",
+        msg="Job not finished",
     )
 
 

@@ -54,7 +54,7 @@ def message_slack(name, msg, message_type):
     if message_type.lower() == "error":
         header = header.upper()
 
-    msg_title = "*{}*: {} | {}".format(name, active_env, header)
+    msg_title = "{}: *{}* | {}".format(active_env.upper(), name, header)
 
     head = {
         "type": "section",
