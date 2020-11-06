@@ -26,6 +26,15 @@ active_env = Variable.get("active_env")
 ckan_creds = Variable.get("ckan_credentials", deserialize_json=True)
 ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
 
+TIME_MAP = {
+    "daily": 1,
+    "weekly": 7,
+    "monthly": 30,
+    "quarterly": 52 * 7 / 4,
+    "semi-annually": 52 * 7 / 2,
+    "annually": 365,
+}
+
 
 def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
