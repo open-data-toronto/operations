@@ -38,7 +38,7 @@ TIME_MAP = {
 
 def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
-    airflow_utils.message_slack(name=job_name, ckan_url=ckan.address, **msg)
+    airflow_utils.message_slack(name=job_name, **msg)
 
 
 def send_failure_msg(self):
