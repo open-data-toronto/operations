@@ -101,7 +101,7 @@ def build_notification_message(**kwargs):
 default_args = airflow_utils.get_default_args(
     {
         "on_failure_callback": send_failure_msg,
-        "start_time": job_settings["start_time"],
+        "start_date": job_settings["start_date"],
     }
 )
 

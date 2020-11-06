@@ -79,6 +79,6 @@ for number, job in enumerate(jobs):
         description=settings["description"],
         schedule=settings["schedule"],
         default_args=airflow_utils.get_default_args(
-            {"start_time": settings["start_time"]}
+            {"start_date": settings["start_date"]}
         ),
     )
