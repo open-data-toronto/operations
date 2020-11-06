@@ -11,9 +11,9 @@ from dateutil import parser
 import requests
 import traceback
 
-sys.path.append(Variable.get("repo_dir"))
-import dags.utils as airflow_utils  # noqa: E402
-import jobs.utils.common as common_utils  # noqa: E402
+sys.path.append(Variable.get("repo_dir")    )
+from dags import utils as airflow_utils  # noqa: E402
+from jobs import utils.common as common_utils  # noqa: E402
 
 job_settings = {
     "description": "Syncs last modified times between CKAN and files in GCC server",
