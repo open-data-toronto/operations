@@ -7,6 +7,7 @@ from pathlib import Path
 import os
 import sys
 import logging
+import json
 
 sys.path.append(Variable.get("repo_dir"))
 from dags import utils as airflow_utils  # noqa: E402
@@ -28,6 +29,7 @@ ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
 
 def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="run_job")
+    logging.info(f"Message to send: {json.dumps(msg)}")
     airflow_utils.message_slack(
         name=job_name,
         ckan_url=ckan.address,
