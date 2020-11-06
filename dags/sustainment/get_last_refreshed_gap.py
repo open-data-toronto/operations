@@ -10,7 +10,7 @@ import sys
 import os
 
 sys.path.append(Variable.get("repo_dir"))
-import dags.utils as airflow_utils  # noqa: E402
+from dags import utils as airflow_utils  # noqa: E402
 import jobs.utils.common as common_utils  # noqa: E402
 
 job_settings = {
