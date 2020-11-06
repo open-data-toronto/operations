@@ -38,7 +38,7 @@ def send_success_msg(**kwargs):
     )
 
 
-def send_failure_msg():
+def send_failure_msg(**kwargs):
     airflow_utils.message_slack(
         name=job_name,
         message_type="error",

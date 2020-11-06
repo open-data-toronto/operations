@@ -31,7 +31,7 @@ def create_dag(name, schedule, description, dag_number, default_args):
             **kwargs["ti"].xcom_pull(task_ids="run_job"),
         )
 
-    def send_failure_msg():
+    def send_failure_msg(**kwargs):
         airflow_utils.message_slack(
             name=name,
             ckan_url=ckan.address,
