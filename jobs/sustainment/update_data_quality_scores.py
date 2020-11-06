@@ -2,6 +2,7 @@ import json
 import math
 import re
 from datetime import datetime as dt
+import logging
 
 import ckanapi
 import nltk
@@ -51,7 +52,9 @@ BINS = {
 }
 
 
-def run(logger, utils, ckan, configs=None):
+def run(**kwargs):
+    ckan = kwargs.pop("ckan")
+
     def read_datastore(ckan, rid, rows=10000):
         records = []
 
@@ -78,7 +81,7 @@ def run(logger, utils, ckan, configs=None):
     def get_framework(ckan, pid=PACKAGE_DQS):
         try:
             framework = ckan.action.package_show(id=pid)
-            logger.info(f"Found package to use for data quality scores: {PACKAGE_DQS}")
+            logging.info(f"Found package to use for data quality scores: {PACKAGE_DQS}")
         except ckanapi.NotAuthorized:
             raise Exception("Permission required to search for the framework package")
         except ckanapi.NotFound:
@@ -286,10 +289,10 @@ def run(logger, utils, ckan, configs=None):
 
                 data.append(records)
 
-                logger.info(f"{p['name']}: {r['name']} - {len(content)} records")
+                logging.info(f"{p['name']}: {r['name']} - {len(content)} records")
 
         if RESOURCE_MODEL not in storage and ckan.apikey:
-            logger.info(
+            logging.info(
                 f" {PACKAGE_DQS}: Creating resource {RESOURCE_MODEL} to keep model"
             )
             r = requests.post(
@@ -357,7 +360,7 @@ def run(logger, utils, ckan, configs=None):
             return df
 
         if RESOURCE_SCORES not in storage:
-            logger.info(
+            logging.info(
                 f" {PACKAGE_DQS}: Creating resource {RESOURCE_SCORES} to keep scores"
             )
             storage[RESOURCE_SCORES] = ckan.action.datastore_create(
@@ -372,7 +375,7 @@ def run(logger, utils, ckan, configs=None):
                 records=df.to_dict(orient="records"),
             )
         else:
-            logger.info(f"Loading results to resource: {RESOURCE_SCORES}")
+            logging.info(f"Loading results to resource: {RESOURCE_SCORES}")
             ckan.action.datastore_upsert(
                 method="insert",
                 resource_id=storage[RESOURCE_SCORES]["id"],

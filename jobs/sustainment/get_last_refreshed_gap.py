@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+import jobs.utils.common as utils
+import logging
 
 TIME_MAP = {
     "daily": 1,
@@ -10,14 +12,15 @@ TIME_MAP = {
 }
 
 
-def run(logger, utils, ckan, configs=None):
+def run(**kwargs):
+    ckan = kwargs.pop("ckan")
     packages = utils.get_all_packages(ckan)
 
     run_time = datetime.utcnow()
 
     packages_behind = []
 
-    logger.info("Looping through packages")
+    logging.info("Looping through packages")
     for p in packages:
         refresh_rate = p.pop("refresh_rate").lower()
 
@@ -41,7 +44,7 @@ def run(logger, utils, ckan, configs=None):
                 "days": days_behind,
             }
             packages_behind.append(details)
-            logger.info(
+            logging.info(
                 f"{details['name']}: Behind {details['days']} days. {details['email']}"
             )
 
