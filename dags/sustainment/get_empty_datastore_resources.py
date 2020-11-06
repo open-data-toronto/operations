@@ -37,7 +37,7 @@ def send_success_msg(**kwargs):
     )
 
 
-def send_failure_msg(**kwargs):
+def send_failure_msg(context):
     airflow_utils.message_slack(
         name=job_name,
         ckan_url=ckan.address,
