@@ -9,8 +9,8 @@ import sys
 import logging
 
 sys.path.append(Variable.get("repo_dir"))
-import dags.utils as airflow_utils  # noqa: E402
-import jobs.utils.common as common_utils  # noqa: E402
+from dags import utils as airflow_utils  # noqa: E402
+from jobs.utils import common as common_utils  # noqa: E402
 
 job_settings = {
     "description": "Identifies empty datastore resources and send to Slack",
