@@ -32,7 +32,6 @@ def send_success_msg(**kwargs):
     logging.info(f"Message to send: {json.dumps(msg)}")
     airflow_utils.message_slack(
         name=job_name,
-        ckan_url=ckan.address,
         **msg
     )
 

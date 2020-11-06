@@ -14,7 +14,7 @@ import dags.utils as airflow_utils  # noqa: E402
 import jobs.utils.common as common_utils  # noqa: E402
 
 job_settings = {
-    "description": "Gets datasets behind published refresh rate and by how long",
+    "description": "Gets datasets behind expected refresh date",
     "schedule": "0 16 * * 3",
     "start_date": days_ago(0),
 }
@@ -66,37 +66,34 @@ def get_packages_behind_refresh(**kwargs):
         if refresh_rate not in TIME_MAP.keys() or p["is_retired"]:
             continue
 
-        last_refreshed = p.pop("last_refreshed")
-        last_refreshed = datetime.strptime(last_refreshed, "%Y-%m-%dT%H:%M:%S.%f")
+        last = p.pop("last_refreshed")
+        last = datetime.strptime(last, "%Y-%m-%dT%H:%M:%S.%f")
 
-        days_behind = (run_time - last_refreshed).days
-        next_refreshed = last_refreshed + timedelta(days=TIME_MAP[refresh_rate])
+        days_behind = (run_time - last).days
+        next_refreshed = last + timedelta(days=TIME_MAP[refresh_rate])
 
         if days_behind > TIME_MAP[refresh_rate]:
-            details = {
+            row = {
                 "name": p["name"],
                 "email": p["owner_email"],
                 "publisher": p["owner_division"],
                 "rate": refresh_rate,
-                "last": last_refreshed.strftime("%Y-%m-%d"),
+                "last": last.strftime("%Y-%m-%d"),
                 "next": next_refreshed.strftime("%Y-%m-%d"),
                 "days": days_behind,
             }
-            packages_behind.append(details)
-            logging.info(
-                f"{details['name']}: Behind {details['days']} days. {details['email']}"
-            )
+            packages_behind.append(row)
+            logging.info("{name}: Behind {days} days. {email}".format(**row))
 
     return packages_behind
 
 
 def build_notification_message(**kwargs):
-    packages_behind = kwargs.pop("ti").xcom_pull(task_ids="get_packages_behind")
+    ti = kwargs.pop("ti")
+    packages_behind = ti.xcom_pull(task_ids="get_packages_behind")
 
     lines = [
-        "_{name}_ ({rate}): refreshed `{last}`. Behind *{days} days*. {email}".format(
-            **p
-        )
+        "_{name}_ ({rate}): `{last}`. Behind {days} days. {email}".format(**p)
         for p in sorted(packages_behind, key=lambda x: -x["days"])
     ]
 
@@ -120,7 +117,7 @@ with DAG(
     default_args=default_args,
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
-    tags=["sustainment"]
+    tags=["sustainment"],
 ) as dag:
 
     get_packages = PythonOperator(
