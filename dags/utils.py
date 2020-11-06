@@ -3,6 +3,7 @@ from datetime import timedelta
 from pathlib import Path
 from time import sleep
 import requests
+import logging
 import yaml
 import math
 import json
@@ -81,7 +82,7 @@ def message_slack(name, msg, message_type, ckan_url):
                 break
             block_lines.append(l)
 
-        requests.post(
+        res = requests.post(
             Variable.get("slack_webhook"),
             data=json.dumps(
                 {
@@ -99,3 +100,5 @@ def message_slack(name, msg, message_type, ckan_url):
             ),
             headers={"Content-Type": "application/json"},
         )
+
+        logging.info(f"Status code: {res.status_code}: {res.reason}")
