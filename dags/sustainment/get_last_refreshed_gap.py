@@ -16,7 +16,7 @@ import jobs.utils.common as common_utils  # noqa: E402
 job_settings = {
     "description": "Gets datasets behind published refresh rate and by how long",
     "schedule": "0 16 * * 2,4",
-    "start_date": days_ago(1),
+    "start_date": days_ago(0),
 }
 
 job_file = Path(os.path.abspath(__file__))

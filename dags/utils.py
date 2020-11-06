@@ -47,12 +47,14 @@ def get_default_args(args={}):
     }
 
 
-def message_slack(name, msg, message_type, ckan_url):
+def message_slack(name, msg, message_type):
+    active_env = Variable.get("active_env")
+
     header = f"{message_type}\n"
     if message_type.lower() == "error":
         header = header.upper()
 
-    msg_title = "*{}*: {} | {}".format(name, ckan_url, header)
+    msg_title = "*{}*: {} | {}".format(name, active_env, header)
 
     head = {
         "type": "section",
@@ -101,4 +103,4 @@ def message_slack(name, msg, message_type, ckan_url):
             headers={"Content-Type": "application/json"},
         )
 
-        logging.info(f"Status code: {res.status_code}: {res.reason}")
+        assert res.status_code == 200, f"Request NOT OK - Status code: {res.status_code}: {res.reason}"

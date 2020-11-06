@@ -33,7 +33,6 @@ def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
     airflow_utils.message_slack(
         name=job_name,
-        ckan_url=ckan.address,
         message_type="success",
         msg=msg,
     )
@@ -42,7 +41,6 @@ def send_success_msg(**kwargs):
 def send_failure_msg():
     airflow_utils.message_slack(
         name=job_name,
-        ckan_url=ckan.address,
         message_type="error",
         msg="",
     )
