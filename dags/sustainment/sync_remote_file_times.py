@@ -17,7 +17,7 @@ from jobs.utils import common as common_utils  # noqa: E402
 
 job_settings = {
     "description": "Syncs last modified times between CKAN and files in GCC server",
-    "schedule": "@hourly",
+    "schedule": "0 0,3,6,9,12,15,18,21 * * *",
     "start_date": days_ago(0),
 }
 
