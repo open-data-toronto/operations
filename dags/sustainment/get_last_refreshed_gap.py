@@ -1,6 +1,7 @@
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
 from airflow.models import Variable
+from datetime import datetime
 from airflow import DAG
 from pathlib import Path
 import ckanapi
