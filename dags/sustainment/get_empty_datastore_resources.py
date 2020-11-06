@@ -110,7 +110,6 @@ def run():
 
 default_args = airflow_utils.get_default_args(
     {
-        "start_time": job_settings["start_time"],
         "on_failure_callback": send_failure_msg,
     }
 )
@@ -119,6 +118,7 @@ default_args = airflow_utils.get_default_args(
 with DAG(
     job_name,
     default_args=default_args,
+    start_time=job_settings["start_time"],
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
 ) as dag:

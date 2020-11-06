@@ -42,6 +42,7 @@ def create_dag(name, schedule, description, dag_number, default_args):
     with DAG(
         name,
         default_args={**default_args, "on_failure_callback": send_failure_msg},
+        start_time=job_settings["start_time"],
         description=description,
         schedule_interval=schedule,
     ) as dag:
