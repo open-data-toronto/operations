@@ -58,6 +58,7 @@ def create_dag(name, schedule, description, dag_number, default_args):
         default_args={**default_args, "on_failure_callback": send_failure_msg},
         description=description,
         schedule_interval=schedule,
+    tags=["sustainment"]
     ) as dag:
         job = (
             getattr(datasets, name)

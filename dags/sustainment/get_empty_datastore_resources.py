@@ -121,6 +121,7 @@ with DAG(
     default_args=default_args,
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
+    tags=["sustainment"]
 ) as dag:
     run_job = PythonOperator(
         task_id="run_job",
