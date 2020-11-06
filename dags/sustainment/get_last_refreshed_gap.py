@@ -15,7 +15,7 @@ import jobs.utils.common as common_utils  # noqa: E402
 
 job_settings = {
     "description": "Gets datasets behind published refresh rate and by how long",
-    "schedule": "0 16 * * 2,4",
+    "schedule": "0 16 * * 3",
     "start_date": days_ago(0),
 }
 
