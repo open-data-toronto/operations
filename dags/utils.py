@@ -61,7 +61,7 @@ def message_slack(name, msg, message_type):
         "text": {"type": "mrkdwn", "text": msg_title},
     }
 
-    max_block_length = 3000 - len(msg_title)
+    max_block_length = 2995 - len(msg_title)
     number_of_blocks = math.ceil(len(msg) / max_block_length)
 
     lines = msg.split("\n")
