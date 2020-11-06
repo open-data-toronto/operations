@@ -34,7 +34,6 @@ def create_dag(name, schedule, description, dag_number, default_args):
     def send_failure_msg():
         airflow_utils.message_slack(
             name=name,
-            ckan_url=ckan.address,
             message_type="error",
             msg="",
         )
