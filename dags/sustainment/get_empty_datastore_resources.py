@@ -15,7 +15,7 @@ from jobs.utils import common as common_utils  # noqa: E402
 job_settings = {
     "description": "Identifies empty datastore resources and send to Slack",
     "schedule": "15 15,23 * * *",
-    "start_time": days_ago(1),
+    "start_date": days_ago(1),
 }
 
 job_file = Path(os.path.abspath(__file__))

@@ -14,7 +14,7 @@ jobs = {
     "update_data_quality_scores": {
         "description": "Recalculates data quality scores across catalogue",
         "schedule": "0 16 * * 2,4",
-        "start_time": days_ago(1),
+        "start_date": days_ago(1),
     },
 }
 
