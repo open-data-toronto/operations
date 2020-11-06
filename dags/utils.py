@@ -82,7 +82,7 @@ def message_slack(name, msg, message_type, ckan_url):
             block_lines.append(l)
 
         requests.post(
-            active_env=Variable.get("slack_webhook"),
+            Variable.get("slack_webhook"),
             data=json.dumps(
                 {
                     "blocks": [
