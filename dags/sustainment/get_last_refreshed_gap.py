@@ -1,7 +1,7 @@
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
+from datetime import datetime, timedelta
 from airflow.models import Variable
-from datetime import datetime
 from pathlib import Path
 from airflow import DAG
 import logging
