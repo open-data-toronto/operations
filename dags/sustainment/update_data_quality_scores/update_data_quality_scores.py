@@ -312,12 +312,11 @@ with DAG(
     dqs_package_resources >> framework_resource
     [framework_resource, model_weights] >> add_run_model
     [packages, tmp_dir] >> raw_scores
-    [raw_scores, model_weights, tmp_dir] >> final_scores
+    [raw_scores, model_weights] >> final_scores
     final_scores >> scores_resource
     final_scores >> delete_raw_scores_tmp_file
     [add_run_model, final_scores] >> upload_models
     [
-        final_scores,
         upload_models,
         scores_resource,
     ] >> add_scores
