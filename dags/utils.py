@@ -110,6 +110,8 @@ def message_slack(name, msg, message_type):
             res.status_code == 200
         ), f"Request NOT OK - Status code: {res.status_code}: {res.reason} | {data}"
 
+        sleep(2)
+
 
 def create_tmp_data_dir(**kwargs):
     dag_id = kwargs.pop("dag_id")
