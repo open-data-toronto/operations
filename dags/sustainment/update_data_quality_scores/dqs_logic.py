@@ -103,7 +103,7 @@ def prepare_and_normalize_scores(**kwargs):
     df = df.round(2)
 
     filename = "final_scores"
-    filepath = tmp_dir / filename / ".parquet"
+    filepath = tmp_dir / f"{filename}.parquet"
 
     df.to_parquet(filepath)
 
@@ -120,7 +120,7 @@ def score_catalogue(**kwargs):
     ckan = kwargs.pop("ckan")
 
     filename = "raw_scores"
-    filepath = tmp_dir / filename / ".parquet"
+    filepath = tmp_dir / f"{filename}.parquet"
 
     def score_usability(columns, data):
         """
