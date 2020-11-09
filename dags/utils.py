@@ -65,7 +65,7 @@ def message_slack(name, msg, message_type):
     max_block_length = 3000 - len(msg_title)
     number_of_blocks = math.ceil(len(msg) / max_block_length)
 
-    lines = msg.split("\n")
+    lines = msg.splitlines()
     for n in range(number_of_blocks):
         block_lines = []
 
@@ -73,14 +73,7 @@ def message_slack(name, msg, message_type):
             sleep(1)
 
         for i, l in enumerate(lines):
-            if any(
-                [
-                    n > 0 and len("\n".join(block_lines)) > max_block_length,
-                    n == 0
-                    and len("\n".join(block_lines)) + len(json.dumps(head))
-                    > max_block_length,
-                ]
-            ):
+            if len("\n".join(block_lines)) + len(json.dumps(head)) > max_block_length):
                 lines = lines[i:]
                 break
             block_lines.append(l)
@@ -109,8 +102,6 @@ def message_slack(name, msg, message_type):
         assert (
             res.status_code == 200
         ), f"Request NOT OK - Status code: {res.status_code}: {res.reason} | {data}"
-
-        sleep(2)
 
 
 def create_tmp_data_dir(**kwargs):
