@@ -11,7 +11,7 @@ import sys
 import os
 
 sys.path.append(Variable.get("repo_dir"))
-from dags import utils as airflow_utils  # noqa: E402
+import dags.utils as airflow_utils  # noqa: E402
 import jobs.utils.common as common_utils  # noqa: E402
 import dags.sustainment.update_data_quality_scores.dqs_logic as dqs_logic  # noqa: E402
 
@@ -25,9 +25,9 @@ job_settings = {
 job_file = Path(os.path.abspath(__file__))
 job_name = job_file.name[:-3]
 
-active_env = Variable.get("active_env")
-ckan_creds = Variable.get("ckan_credentials", deserialize_json=True)
-ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
+ACTIVE_ENV = Variable.get("active_env")
+CKAN_CREDS = Variable.get("ckan_credentials", deserialize_json=True)
+CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 
 METADATA_FIELDS = ["collection_method", "limitations", "topics", "owner_email"]
@@ -75,9 +75,9 @@ def send_failure_msg(self):
     )
 
 
-def get_dqs_package_resources(ckan=ckan, pid=PACKAGE_DQS):
+def get_dqs_package_resources():
     try:
-        framework = ckan.action.package_show(id=pid)
+        framework = CKAN.action.package_show(id=PACKAGE_DQS)
         logging.info(f"Found DQS Package: {PACKAGE_DQS}")
     except ckanapi.NotAuthorized:
         raise Exception("Not authorized to search for packages")
@@ -91,10 +91,10 @@ def create_model_resource(**kwargs):
     ti = kwargs.pop("ti")
     resources = ti.xcom_pull(task_ids="get_dqs_package_resources")
 
-    if RESOURCE_MODEL not in resources and ckan.apikey:
+    if RESOURCE_MODEL not in resources and CKAN.apikey:
         logging.info(f"Creating resource for model: {RESOURCE_MODEL}")
         r = requests.post(
-            f"{ckan.address}/api/3/action/resource_create",
+            f"{CKAN.address}/api/3/action/resource_create",
             data={
                 "package_id": PACKAGE_DQS,
                 "name": RESOURCE_MODEL,
@@ -102,13 +102,13 @@ def create_model_resource(**kwargs):
                 "is_preview": False,
                 "is_zipped": False,
             },
-            headers={"Authorization": ckan.apikey},
+            headers={"Authorization": CKAN.apikey},
             files={"upload": (f"{RESOURCE_MODEL}.json", json.dumps({}))},
         )
 
         resources[RESOURCE_MODEL] = r.json()["result"]
 
-    headers = {"Authorization": ckan.apikey}
+    headers = {"Authorization": CKAN.apikey}
 
     models = requests.get(resources[RESOURCE_MODEL]["url"], headers=headers)
 
@@ -140,9 +140,9 @@ def upload_model(**kwargs):
     models = ti.xcom_pull(task_ids="add_model")
 
     requests.post(
-        f"{ckan.address}/api/3/action/resource_patch",
+        f"{CKAN.address}/api/3/action/resource_patch",
         data={"id": models[RESOURCE_MODEL]["id"]},
-        headers={"Authorization": ckan.apikey},
+        headers={"Authorization": CKAN.apikey},
         files={
             "upload": (
                 f"{RESOURCE_MODEL}.json",
@@ -158,7 +158,7 @@ def create_scores_resource(**kwargs):
 
     if RESOURCE_SCORES not in resources:
         logging.info(f"Creating scores resource: {RESOURCE_SCORES}")
-        resources[RESOURCE_SCORES] = ckan.action.datastore_create(
+        resources[RESOURCE_SCORES] = CKAN.action.datastore_create(
             resource={
                 "package_id": PACKAGE_DQS,
                 "name": RESOURCE_SCORES,
@@ -181,7 +181,7 @@ def insert_scores(**kwargs):
     datastore_resource = ti.xcom_pull(task_ids="create_scores_resource")
 
     logging.info(f"Inserting to datastore_resource: {RESOURCE_SCORES}")
-    ckan.action.datastore_upsert(
+    CKAN.action.datastore_upsert(
         method="insert",
         resource_id=datastore_resource["resource_id"],
         records=df.to_dict(orient="records"),
@@ -218,7 +218,7 @@ with DAG(
     packages = PythonOperator(
         task_id="get_packages",
         python_callable=common_utils.get_all_packages,
-        op_args=[ckan],
+        op_args=[CKAN],
     )
 
     dqs_package_resources = PythonOperator(
@@ -248,7 +248,7 @@ with DAG(
         task_id="score_catalogue",
         python_callable=dqs_logic.score_catalogue,
         op_kwargs={
-            "ckan": ckan,
+            "ckan": CKAN,
             "METADATA_FIELDS": METADATA_FIELDS,
             "TIME_MAP": TIME_MAP,
         },
@@ -259,11 +259,23 @@ with DAG(
         task_id="prepare_and_normalize_scores",
         python_callable=dqs_logic.prepare_and_normalize_scores,
         op_kwargs={
-            "ckan": ckan,
+            "ckan": CKAN,
             "DIMENSIONS": DIMENSIONS,
             "BINS": BINS,
             "MODEL_VERSION": MODEL_VERSION,
         },
+        provide_context=True,
+    )
+
+    scores_resource = PythonOperator(
+        task_id="create_scores_resource",
+        python_callable=create_scores_resource,
+        provide_context=True,
+    )
+
+    add_scores = PythonOperator(
+        task_id="insert_scores",
+        python_callable=insert_scores,
         provide_context=True,
     )
 
@@ -272,3 +284,11 @@ with DAG(
         provide_context=True,
         python_callable=send_success_msg,
     )
+
+    [packages, model_weights, dqs_package_resources] >> framework_resource >> [
+        add_run_model,
+        raw_scores,
+    ] >> final_scores >> scores_resource >> [
+        add_scores,
+        upload_models,
+    ] >> send_notification
