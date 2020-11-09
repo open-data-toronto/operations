@@ -62,7 +62,7 @@ def message_slack(name, msg, message_type):
         "text": {"type": "mrkdwn", "text": msg_title},
     }
 
-    max_block_length = 2995 - len(msg_title)
+    max_block_length = 3000 - len(msg_title)
     number_of_blocks = math.ceil(len(msg) / max_block_length)
 
     lines = msg.split("\n")
@@ -85,28 +85,30 @@ def message_slack(name, msg, message_type):
                 break
             block_lines.append(l)
 
+        data = json.dumps(
+            {
+                "blocks": [
+                    head,
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "\n".join(block_lines),
+                        },
+                    },
+                ]
+            }
+        )
+
         res = requests.post(
             Variable.get("slack_webhook"),
-            data=json.dumps(
-                {
-                    "blocks": [
-                        head,
-                        {
-                            "type": "section",
-                            "text": {
-                                "type": "mrkdwn",
-                                "text": "\n".join(block_lines),
-                            },
-                        },
-                    ]
-                }
-            ),
+            data=data,
             headers={"Content-Type": "application/json"},
         )
 
         assert (
             res.status_code == 200
-        ), f"Request NOT OK - Status code: {res.status_code}: {res.reason}"
+        ), f"Request NOT OK - Status code: {res.status_code}: {res.reason} | {data}"
 
 
 def create_tmp_data_dir(**kwargs):
