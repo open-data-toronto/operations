@@ -288,7 +288,7 @@ with DAG(
 
     job_completed = DummyOperator(task_id="job_completed")
 
-    get_dqs_package_resources >> framework_resource
+    dqs_package_resources >> framework_resource
     [framework_resource, model_weights] >> add_run_model
     packages >> raw_scores
     [raw_scores, model_weights] >> [final_scores, scores_resource]
