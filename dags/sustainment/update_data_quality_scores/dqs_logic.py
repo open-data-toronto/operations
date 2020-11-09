@@ -67,7 +67,7 @@ def calculate_weights(method="sr", **kwargs):
 
 def prepare_and_normalize_scores(**kwargs):
     ti = kwargs.pop("ti")
-    data = ti.xcom_pull(task_ids="add_framework_to_storage")
+    data = ti.xcom_pull(task_ids="score_catalogue")
     weights = ti.xcom_pull(task_ids="calculate_weights")
     BINS = kwargs.pop("BINS")
     MODEL_VERSION = kwargs.pop("MODEL_VERSION")

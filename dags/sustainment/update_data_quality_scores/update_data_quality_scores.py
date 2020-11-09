@@ -1,4 +1,5 @@
 from airflow.operators.python_operator import PythonOperator
+from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.dates import days_ago
 from airflow.models import Variable
 from airflow import DAG
@@ -285,10 +286,13 @@ with DAG(
         python_callable=send_success_msg,
     )
 
-    [packages, model_weights, dqs_package_resources] >> framework_resource >> [
-        add_run_model,
-        raw_scores,
-    ] >> final_scores >> scores_resource >> [
-        add_scores,
-        upload_models,
-    ] >> send_notification
+    job_completed = DummyOperator(task_id="job_completed")
+
+    get_dqs_package_resources >> framework_resource
+    [framework_resource, model_weights] >> add_run_model
+    packages >> raw_scores
+    [raw_scores, model_weights] >> [final_scores, scores_resource]
+    [add_run_model, final_scores] >> upload_models
+    [final_scores, upload_models, scores_resource] >> add_scores
+    [add_scores, upload_models] >> send_notification
+    send_notification >> job_completed
