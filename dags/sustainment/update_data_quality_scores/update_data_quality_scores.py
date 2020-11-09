@@ -76,7 +76,7 @@ def send_failure_msg(self):
     )
 
 
-def get_dqs_package_resources():
+def get_dqs_dataset_resources():
     try:
         framework = CKAN.action.package_show(id=PACKAGE_DQS)
         logging.info(f"Found DQS Package: {PACKAGE_DQS}")
@@ -88,9 +88,9 @@ def get_dqs_package_resources():
     return {r["name"]: r for r in framework.pop("resources")}
 
 
-def create_model_resource(**kwargs):
+def create_resource_for_model(**kwargs):
     ti = kwargs.pop("ti")
-    resources = ti.xcom_pull(task_ids="get_dqs_package_resources")
+    resources = ti.xcom_pull(task_ids="get_dqs_dataset_resources")
 
     if RESOURCE_MODEL not in resources and CKAN.apikey:
         logging.info(f"Creating resource for model: {RESOURCE_MODEL}")
@@ -116,10 +116,10 @@ def create_model_resource(**kwargs):
     return {"models": models.json(), "resource": resources[RESOURCE_MODEL]}
 
 
-def add_model(**kwargs):
+def add_model_to_resource(**kwargs):
     ti = kwargs.pop("ti")
-    model_resource = ti.xcom_pull(task_ids="create_model_resource")
-    weights = ti.xcom_pull(task_ids="calculate_weights")
+    model_resource = ti.xcom_pull(task_ids="create_resource_for_model")
+    weights = ti.xcom_pull(task_ids="calculate_model_weights")
 
     model_resource["models"][MODEL_VERSION] = {
         "aggregation_methods": {
@@ -136,9 +136,9 @@ def add_model(**kwargs):
     return model_resource
 
 
-def upload_model(**kwargs):
+def upload_models_to_resource(**kwargs):
     ti = kwargs.pop("ti")
-    model_resource = ti.xcom_pull(task_ids="add_model")
+    model_resource = ti.xcom_pull(task_ids="add_model_to_resource")
 
     requests.post(
         f"{CKAN.address}/api/3/action/resource_patch",
@@ -212,37 +212,37 @@ with DAG(
 ) as dag:
 
     model_weights = PythonOperator(
-        task_id="calculate_weights",
-        python_callable=dqs_logic.calculate_weights,
+        task_id="calculate_model_weights",
+        python_callable=dqs_logic.calculate_model_weights,
         op_kwargs={"dimensions": DIMENSIONS},
     )
 
     packages = PythonOperator(
-        task_id="get_packages",
+        task_id="get_all_packages",
         python_callable=common_utils.get_all_packages,
         op_args=[CKAN],
     )
 
     dqs_package_resources = PythonOperator(
-        task_id="get_dqs_package_resources",
-        python_callable=get_dqs_package_resources,
+        task_id="get_dqs_dataset_resources",
+        python_callable=get_dqs_dataset_resources,
     )
 
     framework_resource = PythonOperator(
-        task_id="create_model_resource",
-        python_callable=create_model_resource,
+        task_id="create_resource_for_model",
+        python_callable=create_resource_for_model,
         provide_context=True,
     )
 
     add_run_model = PythonOperator(
-        task_id="add_model",
-        python_callable=add_model,
+        task_id="add_model_to_resource",
+        python_callable=add_model_to_resource,
         provide_context=True,
     )
 
     upload_models = PythonOperator(
-        task_id="upload_model",
-        python_callable=upload_model,
+        task_id="upload_models_to_resource",
+        python_callable=upload_models_to_resource,
         provide_context=True,
     )
 
