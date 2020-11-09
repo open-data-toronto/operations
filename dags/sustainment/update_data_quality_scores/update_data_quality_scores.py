@@ -65,7 +65,7 @@ BINS = {
 
 
 def send_success_msg(**kwargs):
-    msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
+    msg = kwargs.pop("ti").xcom_pull(task_ids="insert_scores")
     airflow_utils.message_slack(name=job_name, **msg)
 
 
@@ -324,4 +324,8 @@ with DAG(
     ] >> add_scores
     [add_scores, upload_models] >> delete_final_scores_tmp_file
     add_scores >> send_notification
-    [send_notification, delete_final_scores_tmp_file] >> job_completed
+    [
+        send_notification,
+        delete_final_scores_tmp_file,
+        delete_raw_scores_tmp_file,
+    ] >> job_completed
