@@ -180,7 +180,7 @@ def create_scores_resource(**kwargs):
 
 def insert_scores(**kwargs):
     ti = kwargs.pop("ti")
-    final_scores_path = Path(ti.xcom_pull(task_ids="insert_scores"))
+    final_scores_path = Path(ti.xcom_pull(task_ids="prepare_and_normalize_scores"))
     datastore_resource = ti.xcom_pull(task_ids="create_scores_resource")
 
     df = pd.read_parquet(final_scores_path)
