@@ -113,15 +113,15 @@ def create_model_resource(**kwargs):
 
     models = requests.get(resources[RESOURCE_MODEL]["url"], headers=headers)
 
-    return models.json()
+    return {"models": models.json(), "resource": resources[RESOURCE_MODEL]}
 
 
 def add_model(**kwargs):
     ti = kwargs.pop("ti")
-    models = ti.xcom_pull(task_ids="create_model_resource")
+    model_resource = ti.xcom_pull(task_ids="create_model_resource")
     weights = ti.xcom_pull(task_ids="calculate_weights")
 
-    models[MODEL_VERSION] = {
+    model_resource["models"][MODEL_VERSION] = {
         "aggregation_methods": {
             "metrics_to_dimension": "avg",
             "dimensions_to_score": "sum_and_reciprocal",
@@ -133,7 +133,7 @@ def add_model(**kwargs):
         "bins": BINS,
     }
 
-    return models
+    return model_resource
 
 
 def upload_model(**kwargs):
@@ -142,20 +142,21 @@ def upload_model(**kwargs):
 
     requests.post(
         f"{CKAN.address}/api/3/action/resource_patch",
-        data={"id": models[RESOURCE_MODEL]["id"]},
+        data={"id": model_resource["resource"]["id"]},
         headers={"Authorization": CKAN.apikey},
         files={
             "upload": (
                 f"{RESOURCE_MODEL}.json",
-                json.dumps(models),
+                json.dumps(model_resource["models"]),
             )
         },
     )
 
 
 def create_scores_resource(**kwargs):
-    resources = kwargs.pop("ti").xcom_pull(task_ids="get_dqs_resources")
-    df = kwargs.pop("ti").xcom_pull(task_ids="score_catalogue")
+    ti = kwargs.pop("ti")
+    resources = ti.xcom_pull(task_ids="get_dqs_resources")
+    df = ti.xcom_pull(task_ids="score_catalogue")
 
     if RESOURCE_SCORES not in resources:
         logging.info(f"Creating scores resource: {RESOURCE_SCORES}")
