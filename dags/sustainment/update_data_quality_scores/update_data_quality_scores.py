@@ -291,7 +291,8 @@ with DAG(
     dqs_package_resources >> framework_resource
     [framework_resource, model_weights] >> add_run_model
     packages >> raw_scores
-    [raw_scores, model_weights] >> [final_scores, scores_resource]
+    [raw_scores, model_weights] >> final_scores
+    [raw_scores, model_weights] >> scores_resource
     [add_run_model, final_scores] >> upload_models
     [final_scores, upload_models, scores_resource] >> add_scores
     [add_scores, upload_models] >> send_notification
