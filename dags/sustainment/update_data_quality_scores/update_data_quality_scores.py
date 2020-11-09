@@ -321,5 +321,5 @@ with DAG(
         scores_resource,
     ] >> add_scores
     [add_scores, upload_models] >> delete_final_scores_tmp_file
-    [add_scores, upload_models] >> send_notification
-    send_notification >> job_completed
+    add_scores >> send_notification
+    [send_notification, delete_final_scores_tmp_file] >> job_completed
