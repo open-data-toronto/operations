@@ -318,12 +318,9 @@ with DAG(
     final_scores >> scores_resource
     final_scores >> delete_raw_scores_tmp_file
     [add_run_model, final_scores] >> upload_models
-    [
-        upload_models,
-        scores_resource,
-    ] >> add_scores
-    [add_scores, upload_models] >> delete_final_scores_tmp_file
-    add_scores >> send_notification
+    scores_resource >> add_scores
+    add_scores >> delete_final_scores_tmp_file
+    [upload_models, add_scores] >> send_notification
     [
         send_notification,
         delete_final_scores_tmp_file,
