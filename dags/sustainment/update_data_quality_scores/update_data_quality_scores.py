@@ -155,7 +155,7 @@ def upload_models_to_resource(**kwargs):
 
 def create_scores_resource(**kwargs):
     ti = kwargs.pop("ti")
-    resources = ti.xcom_pull(task_ids="get_dqs_resources")
+    resources = ti.xcom_pull(task_ids="get_dqs_dataset_resources")
     df = ti.xcom_pull(task_ids="score_catalogue")
 
     if RESOURCE_SCORES not in resources:
