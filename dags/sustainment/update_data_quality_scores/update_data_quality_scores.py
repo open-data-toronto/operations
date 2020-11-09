@@ -141,7 +141,7 @@ def upload_models_to_resource(**kwargs):
     ti = kwargs.pop("ti")
     model_resource = ti.xcom_pull(task_ids="add_model_to_resource")
 
-    requests.post(
+    res = requests.post(
         f"{CKAN.address}/api/3/action/resource_patch",
         data={"id": model_resource["resource"]["id"]},
         headers={"Authorization": CKAN.apikey},
@@ -152,6 +152,8 @@ def upload_models_to_resource(**kwargs):
             )
         },
     )
+
+    return res.json()
 
 
 def create_scores_resource(**kwargs):
@@ -193,7 +195,7 @@ def insert_scores(**kwargs):
 
     return {
         "message_type": "success",
-        "msg": f"Data quality scores calculated for {df.shape[0]} packages",
+        "msg": f"Data quality scores calculated for {df.shape[0]} datasets",
     }
 
 
@@ -317,7 +319,7 @@ with DAG(
     [raw_scores, model_weights] >> final_scores
     final_scores >> scores_resource
     final_scores >> delete_raw_scores_tmp_file
-    [add_run_model, final_scores] >> upload_models
+    add_run_model >> upload_models
     scores_resource >> add_scores
     add_scores >> delete_final_scores_tmp_file
     [upload_models, add_scores] >> send_notification
