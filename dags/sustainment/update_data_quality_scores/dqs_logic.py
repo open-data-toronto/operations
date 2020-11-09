@@ -11,6 +11,7 @@ from geopandas import gpd
 from nltk.corpus import wordnet
 from shapely.geometry import shape
 from sklearn.preprocessing import MinMaxScaler
+from pathlib import Path
 
 nltk.download("wordnet")
 
@@ -67,13 +68,14 @@ def calculate_model_weights(method="sr", **kwargs):
 
 def prepare_and_normalize_scores(**kwargs):
     ti = kwargs.pop("ti")
-    data = ti.xcom_pull(task_ids="score_catalogue")
+    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+    raw_scores_path = Path(ti.xcom_pull(task_ids="score_catalogue"))
     weights = ti.xcom_pull(task_ids="calculate_model_weights")
     BINS = kwargs.pop("BINS")
     MODEL_VERSION = kwargs.pop("MODEL_VERSION")
     DIMENSIONS = kwargs.pop("DIMENSIONS")
 
-    df = pd.DataFrame(data).set_index(["package", "resource"])
+    df = pd.read_parquet(raw_scores_path).set_index(["package", "resource"], drop=True)
 
     scores = pd.DataFrame([weights] * len(df.index))
     scores.index = df.index
@@ -100,14 +102,25 @@ def prepare_and_normalize_scores(**kwargs):
     df = df.reset_index()
     df = df.round(2)
 
-    return df
+    filename = "final_scores"
+    filepath = tmp_dir / filename / ".parquet"
+
+    df.to_parquet(filepath)
+
+    return str(filepath)
 
 
 def score_catalogue(**kwargs):
-    packages = kwargs.pop("ti").xcom_pull(task_ids="get_all_packages")
+    ti = kwargs.pop("ti")
+    packages = ti.xcom_pull(task_ids="get_all_packages")
+    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
     METADATA_FIELDS = kwargs.pop("METADATA_FIELDS")
     TIME_MAP = kwargs.pop("TIME_MAP")
+
     ckan = kwargs.pop("ckan")
+
+    filename = "raw_scores"
+    filepath = tmp_dir / filename / ".parquet"
 
     def score_usability(columns, data):
         """
@@ -247,4 +260,6 @@ def score_catalogue(**kwargs):
 
             logging.info(f"{p['name']}: {r['name']} - {len(content)} records")
 
-    return data
+    pd.DataFrame(data).to_parquet(filepath)
+
+    return str(filepath)

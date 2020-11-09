@@ -211,6 +211,12 @@ with DAG(
     tags=["sustainment"],
 ) as dag:
 
+    tmp_dir = PythonOperator(
+        task_id="create_tmp_data_dir",
+        python_callable=airflow_utils.create_tmp_data_dir,
+        op_kwargs={"dag_id": job_name},
+    )
+
     model_weights = PythonOperator(
         task_id="calculate_model_weights",
         python_callable=dqs_logic.calculate_model_weights,
@@ -269,6 +275,13 @@ with DAG(
         provide_context=True,
     )
 
+    delete_raw_scores_tmp_file = PythonOperator(
+        task_id="delete_raw_scores_tmp_file",
+        python_callable=airflow_utils.delete_file,
+        op_kwargs={"task_id": "score_catalogue"},
+        provide_context=True,
+    )
+
     scores_resource = PythonOperator(
         task_id="create_scores_resource",
         python_callable=create_scores_resource,
@@ -278,6 +291,13 @@ with DAG(
     add_scores = PythonOperator(
         task_id="insert_scores",
         python_callable=insert_scores,
+        provide_context=True,
+    )
+
+    delete_final_scores_tmp_file = PythonOperator(
+        task_id="delete_final_scores_tmp_file",
+        python_callable=airflow_utils.delete_file,
+        op_kwargs={"task_id": "prepare_and_normalize_scores"},
         provide_context=True,
     )
 
@@ -291,10 +311,16 @@ with DAG(
 
     dqs_package_resources >> framework_resource
     [framework_resource, model_weights] >> add_run_model
-    packages >> raw_scores
-    [raw_scores, model_weights] >> final_scores
+    [packages, tmp_dir] >> raw_scores
+    [raw_scores, model_weights, tmp_dir] >> final_scores
     final_scores >> scores_resource
+    final_scores >> delete_raw_scores_tmp_file
     [add_run_model, final_scores] >> upload_models
-    [final_scores, upload_models, scores_resource] >> add_scores
+    [
+        final_scores,
+        upload_models,
+        scores_resource,
+    ] >> add_scores
+    [add_scores, upload_models] >> delete_final_scores_tmp_file
     [add_scores, upload_models] >> send_notification
     send_notification >> job_completed

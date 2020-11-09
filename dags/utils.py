@@ -3,13 +3,14 @@ from datetime import timedelta
 from pathlib import Path
 from time import sleep
 import requests
-import logging
 import yaml
 import math
 import json
 import sys
+import os
 
 repo_dir = Variable.get("repo_dir")
+files_dir = Variable.get("files_dir")
 
 sys.path.append(repo_dir)
 
@@ -103,4 +104,24 @@ def message_slack(name, msg, message_type):
             headers={"Content-Type": "application/json"},
         )
 
-        assert res.status_code == 200, f"Request NOT OK - Status code: {res.status_code}: {res.reason}"
+        assert (
+            res.status_code == 200
+        ), f"Request NOT OK - Status code: {res.status_code}: {res.reason}"
+
+
+def create_tmp_data_dir(**kwargs):
+    dag_id = kwargs.pop("dag_id")
+
+    files_dir_path = Path(files_dir)
+    dag_tmp_dir = files_dir_path / dag_id
+
+    dag_tmp_dir.mkdir(parents=True, exist_ok=True)
+
+    return str(dag_tmp_dir)
+
+
+def delete_file(**kwargs):
+    task_id = kwargs.pop("task_id")
+    filepath = kwargs.pop("ti").xcom_pull(task_ids=task_id)
+
+    os.remove(filepath)
