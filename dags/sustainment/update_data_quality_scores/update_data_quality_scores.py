@@ -185,7 +185,7 @@ def insert_scores(**kwargs):
     logging.info(f"Inserting to datastore_resource: {RESOURCE_SCORES}")
     CKAN.action.datastore_upsert(
         method="insert",
-        resource_id=datastore_resource["resource_id"],
+        resource_id=datastore_resource["id"],
         records=df.to_dict(orient="records"),
     )
 
