@@ -4,6 +4,7 @@ from airflow.utils.dates import days_ago
 from airflow.models import Variable
 from airflow import DAG
 from pathlib import Path
+import pandas as pd
 import requests
 import logging
 import ckanapi
@@ -179,9 +180,10 @@ def create_scores_resource(**kwargs):
 
 def insert_scores(**kwargs):
     ti = kwargs.pop("ti")
-    df = ti.xcom_pull(task_ids="score_catalogue")
+    final_scores_path = Path(ti.xcom_pull(task_ids="insert_scores"))
     datastore_resource = ti.xcom_pull(task_ids="create_scores_resource")
 
+    df = pd.read_parquet(final_scores_path)
     logging.info(f"Inserting to datastore_resource: {RESOURCE_SCORES}")
     CKAN.action.datastore_upsert(
         method="insert",
