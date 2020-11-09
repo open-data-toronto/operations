@@ -138,7 +138,7 @@ def add_model(**kwargs):
 
 def upload_model(**kwargs):
     ti = kwargs.pop("ti")
-    models = ti.xcom_pull(task_ids="add_model")
+    model_resource = ti.xcom_pull(task_ids="add_model")
 
     requests.post(
         f"{CKAN.address}/api/3/action/resource_patch",
