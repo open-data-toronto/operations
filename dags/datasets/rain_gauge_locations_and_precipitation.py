@@ -341,6 +341,7 @@ with DAG(
         python_callable=airflow_utils.delete_file,
         op_kwargs={"task_ids": ["get_resource_data"]},
         provide_context=True,
+        trigger_rule="one_success",
     )
 
     delete_new_records_tmp = PythonOperator(
