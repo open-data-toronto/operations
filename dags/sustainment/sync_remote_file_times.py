@@ -18,7 +18,7 @@ from jobs.utils import common as common_utils  # noqa: E402
 job_settings = {
     "description": "Syncs last modified times between CKAN and files in GCC server",
     "schedule": "0 0,3,6,9,12,15,18,21 * * *",
-    "start_date": datetime(2011, 11, 9, 0, 30, 0),
+    "start_date": datetime(2020, 11, 9, 0, 30, 0),
 }
 
 job_file = Path(os.path.abspath(__file__))
