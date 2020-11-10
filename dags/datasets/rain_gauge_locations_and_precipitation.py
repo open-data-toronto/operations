@@ -21,8 +21,8 @@ from jobs.utils import common as common_utils  # noqa: E402
 
 job_settings = {
     "description": "Get rain gauge data from the last time it was loaded to now",
-    "schedule": "@daily",
-    "start_date": datetime(2020, 11, 10, 14, 15, 0),
+    "schedule": "@hourly",
+    "start_date": datetime(2020, 11, 10, 14, 20, 0),
 }
 
 JOB_FILE = Path(os.path.abspath(__file__))
@@ -223,6 +223,18 @@ def load_yearly_resources(**kwargs):
                 logging.info(f"updated resource: {r['name']}")
 
 
+def build_message(**kwargs):
+    ti = kwargs.pop("ti")
+    datapoints_fp = ti.xcom_pull(task_ids="get_site_datapoints")
+    datapoints = pd.read_csv(datapoints_fp)
+    start_date = ti.xcom_pull(task_ids="get_from_timestamp")
+    time_lastest_loaded = datetime.strptime(start_date, "%Y%m%d%H%M%S").strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+    return f"{datapoints.shape[0]} new records found since {time_lastest_loaded}"
+
+
 def return_branch(**kwargs):
     filepath = kwargs.pop("ti").xcom_pull(task_ids="get_site_datapoints")
     df = pd.read_csv(filepath)
@@ -312,6 +324,18 @@ with DAG(
         provide_context=True,
     )
 
+    msg = PythonOperator(
+        task_id="build_message",
+        python_callable=build_message,
+        provide_context=True,
+    )
+
+    send_notification = PythonOperator(
+        task_id="send_success_msg",
+        python_callable=send_success_msg,
+        provide_context=True,
+    )
+
     no_notification = DummyOperator(task_id="no_need_for_notification")
 
     [package, tmp_dir] >> newest_resource >> resource
@@ -320,4 +344,4 @@ with DAG(
     [from_timestamp, to_timestamp, rain_gauge_sites] >> datapoints
     datapoints >> branching
     branching >> no_notification
-    branching >> update_data >> load_resources
+    branching >> update_data >> load_resources >> msg >> send_notification
