@@ -265,7 +265,7 @@ with DAG(
         python_callable=common_utils.get_package,
     )
 
-    tmp_dir = PythonOperator(
+    create_tmp_dir = PythonOperator(
         task_id="create_tmp_data_dir",
         python_callable=airflow_utils.create_tmp_data_dir,
         op_kwargs={"dag_id": JOB_NAME},
@@ -358,9 +358,15 @@ with DAG(
         provide_context=True,
     )
 
+    delete_tmp_dir = PythonOperator(
+        task_id="delete_tmp_data_dir",
+        python_callable=airflow_utils.delete_tmp_data_dir,
+        op_kwargs={"dag_id": JOB_NAME},
+    )
+
     no_notification = DummyOperator(task_id="no_need_for_notification")
 
-    [package, tmp_dir] >> newest_resource >> resource
+    [package, create_tmp_dir] >> newest_resource >> resource
     resource >> from_timestamp
     resource >> to_timestamp
     [from_timestamp, to_timestamp, rain_gauge_sites] >> datapoints
@@ -372,3 +378,9 @@ with DAG(
     update_data >> delete_original_resource_tmp
     load_resources >> delete_new_resource_tmp
     msg >> delete_new_records_tmp
+
+    [
+        delete_original_resource_tmp,
+        delete_new_resource_tmp,
+        delete_new_records_tmp,
+    ] >> delete_tmp_dir

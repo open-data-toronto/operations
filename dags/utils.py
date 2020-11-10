@@ -115,6 +115,15 @@ def create_tmp_data_dir(**kwargs):
     return str(dag_tmp_dir)
 
 
+def delete_tmp_data_dir(**kwargs):
+    dag_id = kwargs.pop("dag_id")
+
+    files_dir_path = Path(files_dir)
+    dag_tmp_dir = files_dir_path / dag_id
+
+    os.removedirs(str(dag_tmp_dir))
+
+
 def delete_file(**kwargs):
     task_ids = kwargs.pop("task_ids")
     ti = kwargs.pop("ti")

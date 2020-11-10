@@ -1,5 +1,4 @@
 from airflow.operators.python_operator import PythonOperator
-from airflow.operators.dummy_operator import DummyOperator
 from datetime import datetime
 from airflow.models import Variable
 from airflow import DAG
@@ -215,7 +214,7 @@ with DAG(
     tags=["sustainment"],
 ) as dag:
 
-    tmp_dir = PythonOperator(
+    create_tmp_dir = PythonOperator(
         task_id="create_tmp_data_dir",
         python_callable=airflow_utils.create_tmp_data_dir,
         op_kwargs={"dag_id": JOB_NAME},
@@ -311,11 +310,15 @@ with DAG(
         python_callable=send_success_msg,
     )
 
-    job_completed = DummyOperator(task_id="job_completed")
+    delete_tmp_dir = PythonOperator(
+        task_id="delete_tmp_data_dir",
+        python_callable=airflow_utils.delete_tmp_data_dir,
+        op_kwargs={"dag_id": JOB_NAME},
+    )
 
     dqs_package_resources >> framework_resource
     [framework_resource, model_weights] >> add_run_model
-    [packages, tmp_dir] >> raw_scores
+    [packages, create_tmp_dir] >> raw_scores
     [raw_scores, model_weights] >> final_scores
     final_scores >> scores_resource
     final_scores >> delete_raw_scores_tmp_file
@@ -324,7 +327,6 @@ with DAG(
     add_scores >> delete_final_scores_tmp_file
     [upload_models, add_scores] >> send_notification
     [
-        send_notification,
         delete_final_scores_tmp_file,
         delete_raw_scores_tmp_file,
-    ] >> job_completed
+    ] >> delete_tmp_dir
