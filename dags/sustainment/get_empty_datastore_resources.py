@@ -22,7 +22,7 @@ job_settings = {
 job_file = Path(os.path.abspath(__file__))
 job_name = job_file.name[:-3]
 
-ACTIVE_ENV = Variable.get("ACTIVE_ENV")
+ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials", deserialize_json=True)
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
