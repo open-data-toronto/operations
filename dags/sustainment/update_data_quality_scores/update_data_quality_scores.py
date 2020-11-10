@@ -1,6 +1,6 @@
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
-from airflow.utils.dates import days_ago
+from datetime import datetime
 from airflow.models import Variable
 from airflow import DAG
 from pathlib import Path
@@ -21,7 +21,7 @@ import dags.sustainment.update_data_quality_scores.dqs_logic as dqs_logic  # noq
 job_settings = {
     "description": "Calculates DQ scores across the catalogue",
     "schedule": "0 16 * * 2,4",
-    "start_date": days_ago(1),
+    "start_date": datetime(2020, 11, 9, 0, 30, 0),
 }
 
 job_file = Path(os.path.abspath(__file__))

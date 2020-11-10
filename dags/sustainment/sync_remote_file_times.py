@@ -1,5 +1,5 @@
 from airflow.operators.python_operator import PythonOperator
-from airflow.utils.dates import days_ago
+from datetime import datetime
 from airflow.models import Variable
 from airflow import DAG
 import ckanapi
@@ -18,7 +18,7 @@ from jobs.utils import common as common_utils  # noqa: E402
 job_settings = {
     "description": "Syncs last modified times between CKAN and files in GCC server",
     "schedule": "0 0,3,6,9,12,15,18,21 * * *",
-    "start_date": days_ago(0),
+    "start_date": datetime(2011, 11, 9, 0, 30, 0),
 }
 
 job_file = Path(os.path.abspath(__file__))
@@ -194,7 +194,7 @@ with DAG(
     default_args=default_args,
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
-    tags=["sustainment"]
+    tags=["sustainment"],
 ) as dag:
 
     load_files = PythonOperator(

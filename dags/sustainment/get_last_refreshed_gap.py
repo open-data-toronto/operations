@@ -1,5 +1,4 @@
 from airflow.operators.python_operator import PythonOperator
-from airflow.utils.dates import days_ago
 from datetime import datetime, timedelta
 from airflow.models import Variable
 from pathlib import Path
@@ -16,7 +15,7 @@ import jobs.utils.common as common_utils  # noqa: E402
 job_settings = {
     "description": "Gets datasets behind expected refresh date",
     "schedule": "0 16 * * 3",
-    "start_date": days_ago(0),
+    "start_date": datetime(2020, 11, 9, 0, 30, 0),
 }
 
 job_file = Path(os.path.abspath(__file__))

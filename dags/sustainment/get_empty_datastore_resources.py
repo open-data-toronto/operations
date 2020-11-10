@@ -1,13 +1,12 @@
 from airflow.operators.python_operator import PythonOperator
-from airflow.utils.dates import days_ago
 from airflow.models import Variable
+from datetime import datetime
 from airflow import DAG
 import ckanapi
 from pathlib import Path
 import os
 import sys
 import logging
-import json
 
 sys.path.append(Variable.get("repo_dir"))
 from dags import utils as airflow_utils  # noqa: E402
@@ -16,7 +15,7 @@ from jobs.utils import common as common_utils  # noqa: E402
 job_settings = {
     "description": "Identifies empty datastore resources and send to Slack",
     "schedule": "15 15,23 * * *",
-    "start_date": days_ago(1),
+    "start_date": datetime(2020, 11, 9, 0, 30, 0),
 }
 
 job_file = Path(os.path.abspath(__file__))
