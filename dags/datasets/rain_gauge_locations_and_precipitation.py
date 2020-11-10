@@ -87,9 +87,9 @@ def get_resource_data(**kwargs):
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
     file_content = requests.get(resource["url"]).content
     filename = "resource_data"
-    filepath = tmp_dir / f"{filename}.parquet"
+    filepath = tmp_dir / f"{filename}.csv"
 
-    pd.read_csv(BytesIO(file_content)).to_parquet(filepath)
+    pd.read_csv(BytesIO(file_content)).to_csv(filepath, index=False)
 
     return str(filepath)
 
@@ -97,7 +97,7 @@ def get_resource_data(**kwargs):
 def get_from_timestamp(**kwargs):
     ti = kwargs.pop("ti")
     filepath = ti.xcom_pull(task_ids="get_resource_data")
-    resource_data = pd.read_parquet(filepath)
+    resource_data = pd.read_csv(filepath)
 
     time_lastest_loaded = parser.parse(resource_data["date"].max())
 
@@ -118,7 +118,7 @@ def get_site_datapoints(**kwargs):
     to_date = ti.xcom_pull(task_ids="get_to_timestamp")
 
     filename = "site_datapoints"
-    filepath = tmp_dir / f"{filename}.parquet"
+    filepath = tmp_dir / f"{filename}.csv"
 
     def get_datapoints(site):
         site = deepcopy(site)
@@ -152,7 +152,7 @@ def get_site_datapoints(**kwargs):
     for site in rain_gauge_sites:
         records_to_load.extend(get_datapoints(site=site))
 
-    pd.DataFrame(records_to_load).to_parquet(filepath)
+    pd.DataFrame(records_to_load).to_csv(filepath, index=False)
 
     return str(filepath)
 
@@ -163,14 +163,14 @@ def update_resource_data(**kwargs):
     datapoints_fp = ti.xcom_pull(task_ids="get_site_datapoints")
     resource_data_fp = ti.xcom_pull(task_ids="get_resource_data")
     filename = "data_to_load"
-    filepath = tmp_dir / f"{filename}.parquet"
+    filepath = tmp_dir / f"{filename}.csv"
 
-    datapoints = pd.read_parquet(datapoints_fp)
-    resource_data = pd.read_parquet(resource_data_fp)
+    datapoints = pd.read_csv(datapoints_fp)
+    resource_data = pd.read_csv(resource_data_fp)
 
     data_to_load = resource_data.append(datapoints)
 
-    data_to_load.to_parquet(filepath)
+    data_to_load.to_csv(filepath, index=False)
 
     return filepath
 
@@ -181,7 +181,7 @@ def load_yearly_resources(**kwargs):
     to_date = ti.xcom_pull(task_ids="get_to_timestamp")
     data_to_load_fp = ti.xcom_pull(task_ids="update_resource_data")
 
-    data_to_load = pd.read_parquet(data_to_load_fp)
+    data_to_load = pd.read_csv(data_to_load_fp)
     time_lastest_loaded = datetime.strptime(start_date, "%Y%m%d%H%M%S")
     time_now = datetime.strptime(to_date, "%Y%m%d%H%M%S")
 
@@ -224,7 +224,7 @@ def load_yearly_resources(**kwargs):
 
 def return_branch(**kwargs):
     filepath = kwargs.pop("ti").xcom_pull(task_ids="get_site_datapoints")
-    df = pd.read_parquet(filepath)
+    df = pd.read_csv(filepath)
 
     if df.shape[0] == 0:
         return "no_need_for_notification"
