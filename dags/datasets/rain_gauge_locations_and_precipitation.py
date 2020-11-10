@@ -123,7 +123,7 @@ def get_site_datapoints(**kwargs):
     def get_datapoints(site):
         site = deepcopy(site)
         del site["channels"]
-        channels = api_request(f"site/{site['id']}", "sites")[0]["channels"]
+        channels = api_request(path=f"site/{site['id']}", key="sites")[0]["channels"]
         rainfall_channels = [c for c in channels if c["name"].lower() == "rainfall"]
 
         assert len(rainfall_channels) == 1, "{} rainfall channels".format(
