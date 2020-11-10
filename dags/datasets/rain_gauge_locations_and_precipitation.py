@@ -368,5 +368,6 @@ with DAG(
     branching >> update_data >> load_resources >> msg >> send_notification
 
     no_notification >> delete_original_resource_tmp
+    update_data >> delete_original_resource_tmp
     load_resources >> delete_new_resource_tmp
     msg >> delete_new_records_tmp
