@@ -1,4 +1,4 @@
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 from airflow.operators.dummy_operator import DummyOperator
 from datetime import datetime
 from airflow.models import Variable
@@ -174,9 +174,12 @@ def confirm_data_is_new(**kwargs):
 
     unique_ids = list(set(data_files))
 
-    assert (
-        data_to_load_unique_id not in unique_ids
-    ), f"Data has already been loaded, ID: {data_to_load_unique_id}"
+    if data_to_load_unique_id not in unique_ids:
+        return "delete_old_records"
+
+    logging.info(f"Data has already been loaded, ID: {data_to_load_unique_id}")
+
+    return "build_loaded_message"
 
 
 def delete_old_records(**kwargs):
@@ -215,6 +218,11 @@ def return_branch(**kwargs):
 def build_message(**kwargs):
     ti = kwargs.pop("ti")
     backup_details = ti.xcom_pull(task_ids="backup_previous_data")
+    if "already_loaded" in kwargs:
+        return "COVID data already loaded: {} records, and unique ID: {}".format(
+            backup_details["records"], backup_details["unique_id"]
+        )
+
     previous_data_records = backup_details["records"]
 
     new_data_fp = ti.xcom_pull(task_ids="prep_data")
@@ -274,7 +282,7 @@ with DAG(
         provide_context=True,
     )
 
-    data_is_new = PythonOperator(
+    data_is_new = BranchPythonOperator(
         task_id="confirm_data_is_new",
         python_callable=confirm_data_is_new,
         provide_context=True,
@@ -292,10 +300,16 @@ with DAG(
         provide_context=True,
     )
 
-    msg = PythonOperator(
+    loaded_msg = PythonOperator(
         task_id="build_message",
         python_callable=build_message,
         provide_context=True,
+    )
+
+    nothing_to_load_msg = PythonOperator(
+        task_id="build_loaded_message",
+        python_callable=build_message,
+        op_kwargs={"already_loaded": True},
     )
 
     send_notification = PythonOperator(
@@ -308,8 +322,10 @@ with DAG(
 
     create_tmp_dir >> source_data >> prepare_data >> new_data_unique_id >> data_is_new
 
-    [data_is_new, backup_previous] >> delete_old >> insert_new >> msg
+    [data_is_new, backup_previous] >> delete_old >> insert_new >> loaded_msg
 
-    msg >> send_notification
+    loaded_msg >> send_notification
+
+    data_is_new >> nothing_to_load_msg >> send_notification
 
     target_package >> backup_previous
