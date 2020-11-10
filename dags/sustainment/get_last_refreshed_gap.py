@@ -22,9 +22,9 @@ job_settings = {
 job_file = Path(os.path.abspath(__file__))
 job_name = job_file.name[:-3]
 
-active_env = Variable.get("active_env")
-ckan_creds = Variable.get("ckan_credentials", deserialize_json=True)
-ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
+ACTIVE_ENV = Variable.get("ACTIVE_ENV")
+CKAN_CREDS = Variable.get("ckan_credentials", deserialize_json=True)
+CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 TIME_MAP = {
     "daily": 1,
@@ -47,10 +47,6 @@ def send_failure_msg(self):
         message_type="error",
         msg="Job not finished",
     )
-
-
-def get_package_list():
-    return common_utils.get_all_packages(ckan)
 
 
 def get_packages_behind_refresh(**kwargs):
@@ -120,9 +116,10 @@ with DAG(
     tags=["sustainment"],
 ) as dag:
 
-    get_packages = PythonOperator(
+    packages = PythonOperator(
         task_id="get_packages",
-        python_callable=get_package_list,
+        python_callable=common_utils.get_all_packages,
+        op_args=[CKAN],
     )
 
     get_packages_behind = PythonOperator(
@@ -143,4 +140,4 @@ with DAG(
         python_callable=send_success_msg,
     )
 
-    get_packages >> get_packages_behind >> build_message >> send_notification
+    packages >> get_packages_behind >> build_message >> send_notification

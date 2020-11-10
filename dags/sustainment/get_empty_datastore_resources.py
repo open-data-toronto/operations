@@ -22,18 +22,15 @@ job_settings = {
 job_file = Path(os.path.abspath(__file__))
 job_name = job_file.name[:-3]
 
-active_env = Variable.get("active_env")
-ckan_creds = Variable.get("ckan_credentials", deserialize_json=True)
-ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
+ACTIVE_ENV = Variable.get("ACTIVE_ENV")
+CKAN_CREDS = Variable.get("ckan_credentials", deserialize_json=True)
+CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 
 def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="run_job")
     logging.info(f"Message to send: {json.dumps(msg)}")
-    airflow_utils.message_slack(
-        name=job_name,
-        **msg
-    )
+    airflow_utils.message_slack(name=job_name, **msg)
 
 
 def send_failure_msg(self):
@@ -52,17 +49,15 @@ def pprint_2d_list(matrix):
     return "\n".join(table)
 
 
-def run():
-    packages = common_utils.get_all_packages(ckan)
-    logging.info(f"Retrieved {len(packages)} packages")
+def get_record_counts(**kwargs):
+    packages = kwargs.pop("ti").xcom_pull(task_ids="get_packages")
     datastore_resources = []
 
-    logging.info("Identifying datastore resources")
     for package in packages:
         for resource in package["resources"]:
             if resource["url_type"] != "datastore":
                 continue
-            response = ckan.action.datastore_search(id=resource["id"], limit=0)
+            response = CKAN.action.datastore_search(id=resource["id"], limit=0)
 
             datastore_resources.append(
                 {
@@ -83,6 +78,11 @@ def run():
 
     empties = [r for r in datastore_resources if r["row_count"] == 0]
 
+    return empties
+
+
+def identify_empties(**kwargs):
+    empties = kwargs.pop("ti").xcom_pull(task_ids="get_record_counts")
     if not len(empties):
         logging.info("No empty resources found")
         return {"message_type": "success", "msg": "No empties"}
@@ -120,11 +120,25 @@ with DAG(
     default_args=default_args,
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
-    tags=["sustainment"]
+    tags=["sustainment"],
 ) as dag:
-    run_job = PythonOperator(
-        task_id="run_job",
-        python_callable=run,
+
+    packages = PythonOperator(
+        task_id="get_all_packages",
+        python_callable=common_utils.get_all_packages,
+        op_args=[CKAN],
+    )
+
+    record_counts = PythonOperator(
+        task_id="get_record_counts",
+        provide_context=True,
+        python_callable=get_record_counts,
+    )
+
+    empties = PythonOperator(
+        task_id="identify_empties",
+        provide_context=True,
+        python_callable=identify_empties,
     )
 
     send_notification = PythonOperator(
@@ -133,4 +147,4 @@ with DAG(
         python_callable=send_success_msg,
     )
 
-    run_job >> send_notification
+    packages >> record_counts >> empties >> send_notification
