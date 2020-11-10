@@ -144,6 +144,8 @@ def prep_data(**kwargs):
     filename = "ready_to_load"
     filepath = tmp_dir / f"{filename}.parquet"
 
+    data.to_parquet(filepath)
+
     return filepath
 
 
