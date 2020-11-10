@@ -180,6 +180,7 @@ def load_yearly_resources(**kwargs):
     start_date = ti.xcom_pull(task_ids="get_from_timestamp")
     to_date = ti.xcom_pull(task_ids="get_to_timestamp")
     data_to_load_fp = ti.xcom_pull(task_ids="update_resource_data")
+    package = ti.xcom_pull(task_ids="get_package")
 
     data_to_load = pd.read_csv(data_to_load_fp)
     time_lastest_loaded = datetime.strptime(start_date, "%Y%m%d%H%M%S")
