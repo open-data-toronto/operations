@@ -281,8 +281,8 @@ with DAG(
 
     no_notification = DummyOperator(task_id="no_need_for_notification")
 
-    create_tmp_dir >> source_data >> prepare_data >> new_data_unique_id
+    create_tmp_dir >> source_data >> prepare_data >> new_data_unique_id >> data_is_new
 
-    [new_data_unique_id, backup_previous] >> delete_old >> insert_new
+    [data_is_new, backup_previous] >> delete_old >> insert_new
 
     target_package >> backup_previous
