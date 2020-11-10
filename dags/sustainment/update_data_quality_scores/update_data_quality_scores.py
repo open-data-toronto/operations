@@ -20,8 +20,8 @@ import dags.sustainment.update_data_quality_scores.dqs_logic as dqs_logic  # noq
 
 job_settings = {
     "description": "Calculates DQ scores across the catalogue",
-    "schedule": "0 16 * * 2,4",
-    "start_date": datetime(2020, 11, 9, 0, 30, 0),
+    "schedule": "@daily",
+    "start_date": datetime(2020, 11, 10, 0, 0, 0),
 }
 
 job_file = Path(os.path.abspath(__file__))
