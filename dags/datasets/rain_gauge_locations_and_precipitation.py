@@ -132,10 +132,10 @@ def get_site_datapoints(**kwargs):
         channel = rainfall_channels[0]
 
         datapoints = api_request(
-            "site/{}/channel/{}/data/startdate/{}/todate/{}".format(
+            path="site/{}/channel/{}/data/startdate/{}/todate/{}".format(
                 site["id"], channel["id"], start_date, to_date
             ),
-            "datapoints",
+            key="datapoints",
         )
         logging.info(
             "Site: {} / Channel: {} / Records: {}".format(
