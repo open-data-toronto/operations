@@ -27,7 +27,7 @@ job_settings = {
 
 JOB_FILE = Path(os.path.abspath(__file__))
 JOB_NAME = JOB_FILE.name[:-3]
-PACKAGE_ID = JOB_NAME.replace("_", "-")[:-3]
+PACKAGE_ID = JOB_NAME.replace("_", "-")
 
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials", deserialize_json=True)
