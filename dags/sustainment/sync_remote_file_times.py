@@ -1,4 +1,5 @@
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
+from airflow.operators.dummy_operator import DummyOperator
 from datetime import datetime
 from airflow.models import Variable
 from airflow import DAG
@@ -179,7 +180,21 @@ def build_notification_message(**kwargs):
 
         message_lines.extend(lines)
 
+    notification_msg = "\n".join(message_lines)
+
+    if all(["error" not in notification_msg, "synced" not in notification_msg]):
+        return None
+
     return "\n".join(message_lines)
+
+
+def return_branch(**kwargs):
+    msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
+
+    if msg is None:
+        return "no_need_for_notification"
+
+    return "send_notification"
 
 
 default_args = airflow_utils.get_default_args(
@@ -220,10 +235,20 @@ with DAG(
         python_callable=build_notification_message,
     )
 
+    branching = BranchPythonOperator(
+        task_id="branching",
+        provide_context=True,
+        python_callable=return_branch,
+    )
+
     send_notification = PythonOperator(
         task_id="send_notification",
         provide_context=True,
         python_callable=send_success_msg,
     )
 
-    load_files >> get_packages >> sync_timestamps >> build_message >> send_notification
+    no_notification = DummyOperator(task_id="no_need_for_notification")
+
+    load_files >> get_packages >> sync_timestamps >> build_message >> branching
+    branching >> send_notification
+    branching >> no_notification
