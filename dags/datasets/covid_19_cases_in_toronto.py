@@ -149,7 +149,7 @@ def prep_data(**kwargs):
 
 def get_unique_id(**kwargs):
     ti = kwargs.pop("ti")
-    data_fp = Path(ti.xcom_pull(task_ids="prep_date_fields"))
+    data_fp = Path(ti.xcom_pull(task_ids="prep_data"))
     data = pd.read_parquet(data_fp).sort_values(by="Assigned_ID")
 
     data_hash = hashlib.md5()
