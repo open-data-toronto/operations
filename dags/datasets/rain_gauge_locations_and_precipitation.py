@@ -22,7 +22,7 @@ from jobs.utils import common as common_utils  # noqa: E402
 job_settings = {
     "description": "Get rain gauge data from the last time it was loaded to now",
     "schedule": "@daily",
-    "start_date": datetime(2020, 11, 10, 1, 30, 0),
+    "start_date": datetime(2020, 11, 10, 14, 15, 0),
 }
 
 JOB_FILE = Path(os.path.abspath(__file__))
