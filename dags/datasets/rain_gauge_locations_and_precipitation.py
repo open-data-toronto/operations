@@ -243,8 +243,8 @@ default_args = airflow_utils.get_default_args(
 with DAG(
     JOB_NAME,
     default_args=default_args,
-    description="Get rain gauge data from the last time it was loaded to now",
-    schedule_interval="@hourly",
+    description=job_settings["description"],
+    schedule_interval=job_settings["schedule"],
 ) as dag:
 
     package = PythonOperator(
