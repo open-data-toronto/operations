@@ -1,4 +1,4 @@
-from airflow.operators.python_operator import PythonOperator, 
+from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
 from datetime import datetime
 from airflow.models import Variable
