@@ -190,3 +190,12 @@ def get_all_packages(ckan):
     logging.info(f"Retrieved {len(packages)} packages")
 
     return packages
+
+
+def get_package(**kwargs):
+    ckan = kwargs.pop("ckan")
+    package_id = kwargs.pop("package_id")
+
+    package = ckan.action.package_show(id=package_id)
+
+    return package

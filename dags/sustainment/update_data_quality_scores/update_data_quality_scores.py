@@ -24,8 +24,8 @@ job_settings = {
     "start_date": datetime(2020, 11, 10, 0, 0, 0),
 }
 
-job_file = Path(os.path.abspath(__file__))
-job_name = job_file.name[:-3]
+JOB_FILE = Path(os.path.abspath(__file__))
+JOB_NAME = JOB_FILE.name[:-3]
 
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials", deserialize_json=True)
@@ -66,12 +66,12 @@ BINS = {
 
 def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="insert_scores")
-    airflow_utils.message_slack(name=job_name, **msg)
+    airflow_utils.message_slack(name=JOB_NAME, **msg)
 
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=job_name,
+        name=JOB_NAME,
         message_type="error",
         msg="Job not finished",
     )
@@ -208,7 +208,7 @@ default_args = airflow_utils.get_default_args(
 
 
 with DAG(
-    job_name,
+    JOB_NAME,
     default_args=default_args,
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
@@ -218,7 +218,7 @@ with DAG(
     tmp_dir = PythonOperator(
         task_id="create_tmp_data_dir",
         python_callable=airflow_utils.create_tmp_data_dir,
-        op_kwargs={"dag_id": job_name},
+        op_kwargs={"dag_id": JOB_NAME},
     )
 
     model_weights = PythonOperator(

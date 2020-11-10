@@ -1,39 +1,322 @@
-from airflow.operators.python_operator import PythonOperator
-from datetime import timedelta
-from airflow.utils.dates import days_ago
+from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
+from airflow.operators.dummy_operator import DummyOperator
+from datetime import datetime, timedelta
+from airflow.models import Variable
+import pandas as pd
+from copy import deepcopy
+import ckanapi
+import logging
+from io import BytesIO
 from pathlib import Path
+from dateutil import parser
 from airflow import DAG
+import tempfile
+import requests
 import os
 import sys
 
-sys.path.append("/data/operations")
-import jobs.run as job  # noqa: E402
+sys.path.append(Variable.get("repo_dir"))
+from dags import utils as airflow_utils  # noqa: E402
+from jobs.utils import common as common_utils  # noqa: E402
 
-PATH = Path(os.path.abspath(__file__))
-JOB = PATH.name[:-3]
-
-default_args = {
-    "owner": "Carlos",
-    "depends_on_past": False,
-    "start_date": days_ago(0),
-    "email": ["carlos.hernandez@toronto.ca"],
-    "email_on_failure": False,
-    "email_on_retry": False,
-    "retries": 3,
-    "retry_delay": timedelta(minutes=20),
+job_settings = {
+    "description": "Get rain gauge data from the last time it was loaded to now",
+    "schedule": "@hourly",
+    "start_date": datetime(2020, 11, 10, 1, 30, 0),
 }
 
-dag = DAG(
-    JOB,
+JOB_FILE = Path(os.path.abspath(__file__))
+JOB_NAME = JOB_FILE.name[:-3]
+PACKAGE_ID = JOB_NAME.replace("_", "-")[:-3]
+
+ACTIVE_ENV = Variable.get("active_env")
+CKAN_CREDS = Variable.get("ckan_credentials", deserialize_json=True)
+CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
+APIKEY = Variable.get("flowworks_apikey")
+
+
+def send_success_msg(**kwargs):
+    msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
+    airflow_utils.message_slack(
+        name=JOB_NAME,
+        message_type="success",
+        msg=msg,
+    )
+
+
+def send_failure_msg(self):
+    airflow_utils.message_slack(
+        name=JOB_NAME,
+        message_type="error",
+        msg="Job not finished",
+    )
+
+
+def api_request(**kwargs):
+    path = kwargs.pop("path")
+    key = kwargs.pop("key")
+
+    logging.info(f"API call: {path}")
+
+    req = requests.get(
+        f"https://developers.flowworks.com/fwapi/v1/{APIKEY}/{path}"
+    ).json()
+
+    assert "request ok" in req["msg"].lower(), f"{path}: {req['msg']}"
+
+    return req[key]
+
+
+def identify_newest_resource(**kwargs):
+    package = kwargs.pop("ti").xcom_pull(task_ids="get_package")
+    resources = [r for r in package["resources"] if r["format"].lower() == "csv"]
+
+    resource_years = []
+    for r in resources:
+        year = "".join([s for s in r["name"] if s.isdigit()])
+        resource_years.append(int(year))
+
+    resource = [r for r in resources if str(max(resource_years)) in r["name"]][0]
+
+    return resource
+
+
+def get_resource_data(**kwargs):
+    ti = kwargs.pop("ti")
+    resource = ti.xcom_pull(task_ids="identify_newest_resource")
+    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+    file_content = requests.get(resource["url"]).content
+    filename = "resource_data"
+    filepath = tmp_dir / f"{filename}.parquet"
+
+    pd.read_csv(BytesIO(file_content)).to_parquet(filepath)
+
+    return str(filepath)
+
+
+def get_from_timestamp(**kwargs):
+    ti = kwargs.pop("ti")
+    filepath = ti.xcom_pull(task_ids="get_resource_data")
+    resource_data = pd.read_parquet(filepath)
+
+    time_lastest_loaded = parser.parse(resource_data["date"].max())
+
+    start_date = (time_lastest_loaded + timedelta(seconds=1)).strftime("%Y%m%d%H%M%S")
+
+    return start_date
+
+
+def get_to_timestamp():
+    return datetime.now().strftime("%Y%m%d%H%M%S")
+
+
+def get_site_datapoints(**kwargs):
+    ti = kwargs.pop("ti")
+    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+    rain_gauge_sites = ti.xcom_pull(task_ids="get_rain_gauge_sites")
+    start_date = ti.xcom_pull(task_ids="get_from_timestamp")
+    to_date = ti.xcom_pull(task_ids="get_to_timestamp")
+
+    filename = "site_datapoints"
+    filepath = tmp_dir / f"{filename}.parquet"
+
+    def get_datapoints(site):
+        site = deepcopy(site)
+        del site["channels"]
+        channels = api_request(f"site/{site['id']}", "sites")[0]["channels"]
+        rainfall_channels = [c for c in channels if c["name"].lower() == "rainfall"]
+
+        assert len(rainfall_channels) == 1, "{} rainfall channels".format(
+            len(rainfall_channels)
+        )
+        channel = rainfall_channels[0]
+
+        datapoints = api_request(
+            "site/{}/channel/{}/data/startdate/{}/todate/{}".format(
+                site["id"], channel["id"], start_date, to_date
+            ),
+            "datapoints",
+        )
+        logging.info(
+            "Site: {} / Channel: {} / Records: {}".format(
+                site["name"], channel["id"], len(datapoints)
+            )
+        )
+        for d in datapoints:
+            d.update(site)
+            d["rainfall"] = d.pop("value")
+
+        return datapoints
+
+    records_to_load = []
+    for site in rain_gauge_sites:
+        records_to_load.extend(get_datapoints(site=site))
+
+    pd.DataFrame(records_to_load).to_parquet(filepath)
+
+    return str(filepath)
+
+
+def update_resource_data(**kwargs):
+    ti = kwargs.pop("ti")
+    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+    datapoints_fp = ti.xcom_pull(task_ids="get_site_datapoints")
+    resource_data_fp = ti.xcom_pull(task_ids="get_resource_data")
+    filename = "data_to_load"
+    filepath = tmp_dir / f"{filename}.parquet"
+
+    datapoints = pd.read_parquet(datapoints_fp)
+    resource_data = pd.read_parquet(resource_data_fp)
+
+    data_to_load = resource_data.append(datapoints)
+
+    data_to_load.to_parquet(filepath)
+
+    return filepath
+
+
+def load_yearly_resources(**kwargs):
+    ti = kwargs.pop("ti")
+    start_date = ti.xcom_pull(task_ids="get_from_timestamp")
+    to_date = ti.xcom_pull(task_ids="get_to_timestamp")
+    data_to_load_fp = ti.xcom_pull(task_ids="update_resource_data")
+
+    data_to_load = pd.read_parquet(data_to_load_fp)
+    time_lastest_loaded = datetime.strptime(start_date, "%Y%m%d%H%M%S")
+    time_now = datetime.strptime(to_date, "%Y%m%d%H%M%S")
+
+    years_to_load = [str(x) for x in range(time_lastest_loaded.year, time_now.year + 1)]
+
+    for year in years_to_load:
+        year_data = data_to_load[data_to_load["date"].str.startswith(year)]
+        resource_name = f"precipitation-data-{year}"
+
+        resource_id = None
+        for r in package["resources"]:
+            if r["name"] == resource_name:
+                resource_id = r["id"]
+                break
+
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            path = folder / f"{resource_name}.csv"
+            year_data.to_csv(path, index=False)
+
+            if resource_id is None:
+                logging.info(f"resource does not exist for {year}")
+                new_resource = CKAN.action.resource_create(
+                    package_id=package["id"],
+                    name=resource_name,
+                    format="csv",
+                    upload=open(path, "rb"),
+                )
+                logging.info(
+                    f"created {new_resource['name']} with {data_to_load.shape[0]} rows"
+                )
+            else:
+                logging.info("resource for the year exists")
+                CKAN.action.resource_patch(
+                    id=resource_id,
+                    upload=open(path, "rb"),
+                )
+                logging.info(f"updated resource: {r['name']}")
+
+
+def return_branch(**kwargs):
+    filepath = kwargs.pop("ti").xcom_pull(task_ids="get_site_datapoints")
+    df = pd.read_parquet(filepath)
+
+    if df.shape[0] == 0:
+        return "no_need_for_notification"
+
+    return "update_resource_data"
+
+
+default_args = airflow_utils.get_default_args(
+    {
+        "on_failure_callback": send_failure_msg,
+        "start_date": job_settings["start_date"],
+    }
+)
+
+with DAG(
+    JOB_NAME,
     default_args=default_args,
     description="Get rain gauge data from the last time it was loaded to now",
     schedule_interval="@hourly",
-)
+) as dag:
 
-run = PythonOperator(
-    task_id="run",
-    provide_context=True,
-    op_kwargs={"args_list": ["--job", JOB]},
-    python_callable=job.run,
-    dag=dag,
-)
+    package = PythonOperator(
+        task_id="get_package",
+        op_kwargs={"ckan": CKAN, "package_id": PACKAGE_ID},
+        python_callable=common_utils.get_package,
+    )
+
+    tmp_dir = PythonOperator(
+        task_id="create_tmp_data_dir",
+        python_callable=airflow_utils.create_tmp_data_dir,
+        op_kwargs={"dag_id": JOB_NAME},
+    )
+
+    newest_resource = PythonOperator(
+        task_id="identify_newest_resource",
+        python_callable=identify_newest_resource,
+        provide_context=True,
+    )
+
+    resource = PythonOperator(
+        task_id="get_resource_data",
+        python_callable=get_resource_data,
+        provide_context=True,
+    )
+
+    from_timestamp = PythonOperator(
+        task_id="get_from_timestamp",
+        python_callable=get_from_timestamp,
+        provide_context=True,
+    )
+
+    to_timestamp = PythonOperator(
+        task_id="get_to_timestamp",
+        python_callable=get_to_timestamp,
+    )
+
+    rain_gauge_sites = PythonOperator(
+        task_id="get_rain_gauge_sites",
+        python_callable=api_request,
+        op_args={"path": "sites", "key": "sites"},
+    )
+
+    datapoints = PythonOperator(
+        task_id="get_site_datapoints",
+        python_callable=get_site_datapoints,
+        provide_context=True,
+    )
+
+    branching = BranchPythonOperator(
+        task_id="branching",
+        provide_context=True,
+        python_callable=return_branch,
+    )
+
+    update_data = PythonOperator(
+        task_id="update_resource_data",
+        python_callable=update_resource_data,
+        provide_context=True,
+    )
+
+    load_resources = PythonOperator(
+        task_id="load_yearly_resources",
+        python_callable=load_yearly_resources,
+        provide_context=True,
+    )
+
+    no_notification = DummyOperator(task_id="no_need_for_notification")
+
+    [package, tmp_dir] >> newest_resource >> resource
+    resource >> from_timestamp
+    resource >> to_timestamp
+    [from_timestamp, to_timestamp, rain_gauge_sites] >> datapoints
+    datapoints >> branching
+    branching >> no_notification
+    branching >> update_resource_data >> load_resources
