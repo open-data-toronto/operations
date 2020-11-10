@@ -131,7 +131,7 @@ def get_target_package():
     return package
 
 
-def prep_date_fields(**kwargs):
+def prep_data(**kwargs):
     ti = kwargs.pop("ti")
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
     new_data_fp = Path(ti.xcom_pull(task_ids="get_new_data"))
@@ -212,6 +212,19 @@ def return_branch(**kwargs):
     return "read_new_data"
 
 
+def build_message(**kwargs):
+    ti = kwargs.pop("ti")
+    backup_details = ti.xcom_pull(task_ids="backup_previous_data")
+    previous_data_records = backup_details["records"]
+
+    new_data_fp = ti.xcom_pull(task_ids="prep_data")
+    new_data = pd.read_parquet(new_data_fp)
+
+    return "COVID data refreshed: from {} to {} records".format(
+        previous_data_records, new_data.shape[0]
+    )
+
+
 default_args = airflow_utils.get_default_args(
     {
         "on_failure_callback": send_failure_msg,
@@ -250,8 +263,8 @@ with DAG(
     )
 
     prepare_data = PythonOperator(
-        task_id="prep_date_fields",
-        python_callable=prep_date_fields,
+        task_id="prep_data",
+        python_callable=prep_data,
         provide_context=True,
     )
 
@@ -279,10 +292,24 @@ with DAG(
         provide_context=True,
     )
 
+    msg = PythonOperator(
+        task_id="build_message",
+        python_callable=build_message,
+        provide_context=True,
+    )
+
+    send_notification = PythonOperator(
+        task_id="send_success_msg",
+        python_callable=send_success_msg,
+        provide_context=True,
+    )
+
     no_notification = DummyOperator(task_id="no_need_for_notification")
 
     create_tmp_dir >> source_data >> prepare_data >> new_data_unique_id >> data_is_new
 
-    [data_is_new, backup_previous] >> delete_old >> insert_new
+    [data_is_new, backup_previous] >> delete_old >> insert_new >> msg
+
+    msg >> send_notification
 
     target_package >> backup_previous
