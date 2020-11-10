@@ -175,7 +175,7 @@ def update_resource_data(**kwargs):
     return filepath
 
 
-def load_yearly_resources(**kwargs):
+def upload_yearly_resources(**kwargs):
     ti = kwargs.pop("ti")
     start_date = ti.xcom_pull(task_ids="get_from_timestamp")
     to_date = ti.xcom_pull(task_ids="get_to_timestamp")
@@ -318,9 +318,9 @@ with DAG(
         provide_context=True,
     )
 
-    load_resources = PythonOperator(
-        task_id="load_yearly_resources",
-        python_callable=load_yearly_resources,
+    upload_resources = PythonOperator(
+        task_id="upload_yearly_resources",
+        python_callable=upload_yearly_resources,
         provide_context=True,
     )
 
@@ -372,11 +372,11 @@ with DAG(
     [from_timestamp, to_timestamp, rain_gauge_sites] >> datapoints
     datapoints >> branching
     branching >> no_notification
-    branching >> update_data >> load_resources >> msg >> send_notification
+    branching >> update_data >> upload_resources >> msg >> send_notification
 
     no_notification >> delete_original_resource_tmp
     update_data >> delete_original_resource_tmp
-    load_resources >> delete_new_resource_tmp
+    upload_resources >> delete_new_resource_tmp
     msg >> delete_new_records_tmp
 
     [
