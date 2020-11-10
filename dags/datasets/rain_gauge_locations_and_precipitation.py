@@ -284,7 +284,7 @@ with DAG(
     rain_gauge_sites = PythonOperator(
         task_id="get_rain_gauge_sites",
         python_callable=api_request,
-        op_args={"path": "sites", "key": "sites"},
+        op_kwargs={"path": "sites", "key": "sites"},
     )
 
     datapoints = PythonOperator(
