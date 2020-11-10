@@ -21,7 +21,7 @@ from jobs.utils import common as common_utils  # noqa: E402
 
 job_settings = {
     "description": "Get rain gauge data from the last time it was loaded to now",
-    "schedule": "@hourly",
+    "schedule": "30 14 * * *",
     "start_date": datetime(2020, 11, 10, 13, 35, 0),
 }
 
@@ -91,7 +91,7 @@ def get_resource_data(**kwargs):
 
     pd.read_csv(BytesIO(file_content)).to_csv(filepath, index=False)
 
-    return str(filepath)
+    return filepath
 
 
 def get_from_timestamp(**kwargs):
@@ -154,7 +154,7 @@ def get_site_datapoints(**kwargs):
 
     pd.DataFrame(records_to_load).to_csv(filepath, index=False)
 
-    return str(filepath)
+    return filepath
 
 
 def update_resource_data(**kwargs):
@@ -336,6 +336,27 @@ with DAG(
         provide_context=True,
     )
 
+    delete_original_resource_tmp = PythonOperator(
+        task_id="delete_original_resource_tmp_file",
+        python_callable=airflow_utils.delete_file,
+        op_kwargs={"task_ids": ["get_resource_data"]},
+        provide_context=True,
+    )
+
+    delete_new_records_tmp = PythonOperator(
+        task_id="delete_new_records_tmp_file",
+        python_callable=airflow_utils.delete_file,
+        op_kwargs={"task_ids": ["get_site_datapoints"]},
+        provide_context=True,
+    )
+
+    delete_new_resource_tmp = PythonOperator(
+        task_id="delete_new_resource_tmp",
+        python_callable=airflow_utils.delete_file,
+        op_kwargs={"task_ids": ["update_resource_data"]},
+        provide_context=True,
+    )
+
     no_notification = DummyOperator(task_id="no_need_for_notification")
 
     [package, tmp_dir] >> newest_resource >> resource
@@ -345,3 +366,7 @@ with DAG(
     datapoints >> branching
     branching >> no_notification
     branching >> update_data >> load_resources >> msg >> send_notification
+
+    no_notification >> delete_original_resource_tmp
+    update_data >> delete_new_records_tmp
+    load_resources >> delete_new_resource_tmp

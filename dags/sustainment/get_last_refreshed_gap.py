@@ -14,7 +14,7 @@ import jobs.utils.common as common_utils  # noqa: E402
 
 job_settings = {
     "description": "Gets datasets behind expected refresh date",
-    "schedule": "0 16 * * 3",
+    "schedule": "30 04 * * 3",
     "start_date": datetime(2020, 11, 9, 0, 30, 0),
 }
 

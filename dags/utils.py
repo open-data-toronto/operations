@@ -116,7 +116,9 @@ def create_tmp_data_dir(**kwargs):
 
 
 def delete_file(**kwargs):
-    task_id = kwargs.pop("task_id")
-    filepath = kwargs.pop("ti").xcom_pull(task_ids=task_id)
+    task_ids = kwargs.pop("task_ids")
+    ti = kwargs.pop("ti")
 
-    os.remove(filepath)
+    for task_id in task_ids:
+        filepath = ti.xcom_pull(task_ids=task_id)
+        os.remove(filepath)

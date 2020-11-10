@@ -282,7 +282,7 @@ with DAG(
     delete_raw_scores_tmp_file = PythonOperator(
         task_id="delete_raw_scores_tmp_file",
         python_callable=airflow_utils.delete_file,
-        op_kwargs={"task_id": "score_catalogue"},
+        op_kwargs={"task_ids": ["score_catalogue"]},
         provide_context=True,
     )
 
@@ -301,7 +301,7 @@ with DAG(
     delete_final_scores_tmp_file = PythonOperator(
         task_id="delete_final_scores_tmp_file",
         python_callable=airflow_utils.delete_file,
-        op_kwargs={"task_id": "prepare_and_normalize_scores"},
+        op_kwargs={"task_ids": ["prepare_and_normalize_scores"]},
         provide_context=True,
     )
 
