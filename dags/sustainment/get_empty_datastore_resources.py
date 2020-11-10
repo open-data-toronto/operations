@@ -50,7 +50,7 @@ def pprint_2d_list(matrix):
 
 
 def get_record_counts(**kwargs):
-    packages = kwargs.pop("ti").xcom_pull(task_ids="get_packages")
+    packages = kwargs.pop("ti").xcom_pull(task_ids="get_all_packages")
     datastore_resources = []
 
     for package in packages:
