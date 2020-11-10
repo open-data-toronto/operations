@@ -121,7 +121,7 @@ def delete_tmp_data_dir(**kwargs):
     files_dir_path = Path(files_dir)
     dag_tmp_dir = files_dir_path / dag_id
 
-    os.removedirs(str(dag_tmp_dir))
+    os.rmdir(dag_tmp_dir)
 
 
 def delete_file(**kwargs):
