@@ -319,4 +319,4 @@ with DAG(
     [from_timestamp, to_timestamp, rain_gauge_sites] >> datapoints
     datapoints >> branching
     branching >> no_notification
-    branching >> update_resource_data >> load_resources
+    branching >> update_data >> load_resources
