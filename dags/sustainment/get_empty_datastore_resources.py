@@ -28,8 +28,7 @@ CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 
 def send_success_msg(**kwargs):
-    msg = kwargs.pop("ti").xcom_pull(task_ids="run_job")
-    logging.info(f"Message to send: {json.dumps(msg)}")
+    msg = kwargs.pop("ti").xcom_pull(task_ids="identify_empties")
     airflow_utils.message_slack(name=job_name, **msg)
 
 
