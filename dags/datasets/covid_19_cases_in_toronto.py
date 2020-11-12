@@ -91,7 +91,6 @@ def backup_previous_data(**kwargs):
         "data": data_path,
         "records": data.shape[0],
         "columns": data.shape[1],
-        "unique_id": unique_id,
     }
 
 
