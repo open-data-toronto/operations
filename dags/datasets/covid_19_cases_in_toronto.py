@@ -1,4 +1,5 @@
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
+from airflow.operators.dummy_operator import DummyOperator
 from datetime import datetime
 from airflow.models import Variable
 import pandas as pd
@@ -15,6 +16,7 @@ import sys
 
 sys.path.append(Variable.get("repo_dir"))
 from dags import utils as airflow_utils  # noqa: E402
+from jobs.utils import common as common_utils  # noqa: E402
 
 job_settings = {
     "description": "Take COVID19 data from QA (filestore) and put in PROD (datastore)",
@@ -227,6 +229,19 @@ def delete_source_resource(**kwargs):
     logging.info(res)
 
 
+def update_resource_last_modified(**kwargs):
+    ti = kwargs.pop("ti")
+    package = ti.xcom_pull(task_ids="get_target_package")
+    resource = package["resources"][0]
+
+    res = common_utils.update_resource_last_modified(
+        id=resource["id"],
+        last_modified=datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+    )
+
+    return res
+
+
 default_args = airflow_utils.get_default_args(
     {
         "on_failure_callback": send_failure_msg,
@@ -347,13 +362,24 @@ with DAG(
         python_callable=delete_source_resource,
     )
 
+    begin_cleanup = DummyOperator(
+        task_id="begin_cleanup",
+        trigger_rule="one_success",
+    )
+
+    update_timestamp = PythonOperator(
+        task_id="update_resource_last_modified",
+        python_callable=update_resource_last_modified,
+        provide_context=True,
+    )
+
     create_tmp_dir >> source_data >> prepare_data >> new_data_unique_id >> data_is_new
 
-    delete_old >> insert_new >> loaded_msg
+    backup_previous >> data_is_new
+
+    delete_old >> insert_new >> update_timestamp >> loaded_msg
 
     data_is_new >> delete_old
-
-    backup_previous >> data_is_new
 
     target_package >> create_backups_dir >> backup_previous
 
@@ -361,12 +387,8 @@ with DAG(
 
     data_is_new >> nothing_to_load_msg >> send_nothing_to_load_notification
 
-    send_nothing_to_load_notification >> delete_tmp_files
+    [send_nothing_to_load_notification, send_loaded_notification] >> begin_cleanup
 
-    send_loaded_notification >> delete_tmp_files
+    begin_cleanup >> delete_tmp_files >> delete_tmp_dir
 
-    delete_tmp_files >> delete_tmp_dir
-
-    send_nothing_to_load_notification >> delete_source
-
-    send_loaded_notification >> delete_source
+    begin_cleanup >> delete_source
