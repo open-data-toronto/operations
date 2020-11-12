@@ -13,8 +13,8 @@ import requests
 import traceback
 
 sys.path.append(Variable.get("repo_dir"))
-from dags import utils as airflow_utils  # noqa: E402
-from jobs.utils import common as common_utils  # noqa: E402
+from utils import airflow as airflow_utils  # noqa: E402
+from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
     "description": "Syncs last modified times between CKAN and files in GCC server",
@@ -110,7 +110,7 @@ def sync_resource_timestamps(**kwargs):
                 package_sync_results.append({**record, "result": "unchanged"})
                 continue
 
-            resp = common_utils.update_resource_last_modified(
+            resp = ckan_utils.update_resource_last_modified(
                 ckan=ckan,
                 resource_id=resource["id"],
                 new_last_modified=file_last_modified,

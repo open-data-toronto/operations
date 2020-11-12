@@ -16,8 +16,8 @@ import os
 import sys
 
 sys.path.append(Variable.get("repo_dir"))
-from dags import utils as airflow_utils  # noqa: E402
-from jobs.utils import common as common_utils  # noqa: E402
+from utils import airflow as airflow_utils  # noqa: E402
+from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
     "description": "Get rain gauge data from the last time it was loaded to now",
@@ -262,7 +262,7 @@ with DAG(
     package = PythonOperator(
         task_id="get_package",
         op_kwargs={"ckan": CKAN, "package_id": PACKAGE_ID},
-        python_callable=common_utils.get_package,
+        python_callable=ckan_utils.get_package,
     )
 
     create_tmp_dir = PythonOperator(

@@ -9,8 +9,8 @@ import sys
 import os
 
 sys.path.append(Variable.get("repo_dir"))
-from dags import utils as airflow_utils  # noqa: E402
-import jobs.utils.common as common_utils  # noqa: E402
+from utils import airflow as airflow_utils  # noqa: E402
+from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
     "description": "Gets datasets behind expected refresh date",
@@ -117,7 +117,7 @@ with DAG(
 
     packages = PythonOperator(
         task_id="get_packages",
-        python_callable=common_utils.get_all_packages,
+        python_callable=ckan_utils.get_all_packages,
         op_args=[CKAN],
     )
 

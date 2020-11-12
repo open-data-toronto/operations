@@ -51,7 +51,7 @@ drop_columns = [
 ]
 data = data.drop(drop_columns, axis=1)
 data["geometry"] = data["geometry"].apply(lambda x: geometry_to_record(x))
-# drop_columns=[column for column in data.columns.values if column.lower() in REMOVE_COLUMNS]
+# drop_columns=[c for c in data.columns.values if c.lower() in REMOVE_COLUMNS]
 # data=data.drop(drop_columns,axis=1)
 # map column types
 columns = {}

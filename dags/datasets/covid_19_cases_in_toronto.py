@@ -15,8 +15,8 @@ import os
 import sys
 
 sys.path.append(Variable.get("repo_dir"))
-from dags import utils as airflow_utils  # noqa: E402
-from jobs.utils import common as common_utils  # noqa: E402
+from utils import airflow as airflow_utils  # noqa: E402
+from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
     "description": "Take COVID19 data from QA (filestore) and put in PROD (datastore)",
@@ -234,7 +234,7 @@ def update_resource_last_modified(**kwargs):
     package = ti.xcom_pull(task_ids="get_target_package")
     resource = package["resources"][0]
 
-    res = common_utils.update_resource_last_modified(
+    res = ckan_utils.update_resource_last_modified(
         ckan=TARGET_CKAN,
         resource_id=resource["id"],
         new_last_modified=datetime.now(),
