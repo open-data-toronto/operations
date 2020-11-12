@@ -214,7 +214,7 @@ def build_message(**kwargs):
     unique_id = ti.xcom_pull(task_ids="get_unique_id")
 
     if "already_loaded" in kwargs:
-        return "COVID data already loaded, UID: {unique_id}"
+        return f"COVID data already loaded, UID: {unique_id}"
 
     backup_details = ti.xcom_pull(task_ids="backup_previous_data")
     previous_data_records = backup_details["records"]
