@@ -337,3 +337,5 @@ with DAG(
     data_is_new >> nothing_to_load_msg >> send_notification
 
     target_package >> create_backups_dir >> backup_previous
+
+    create_backups_dir >> data_is_new
