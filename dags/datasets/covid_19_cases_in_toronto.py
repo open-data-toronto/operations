@@ -173,11 +173,10 @@ def confirm_data_is_new(**kwargs):
 
     for f in os.listdir(backups):
         if os.path.isfile(backups / f) and data_to_load_unique_id in f:
-            logging.info(f, type(f))
             logging.info(f"Data has already been loaded, ID: {data_to_load_unique_id}")
             return "build_nothing_to_load_message"
 
-    return "create_backups_dir"
+    return "delete_old_records"
 
 
 def delete_old_records(**kwargs):
@@ -219,6 +218,13 @@ def build_message(**kwargs):
     return "COVID data refreshed: from {} to {} records".format(
         previous_data_records, new_data.shape[0]
     )
+
+
+def delete_source_resource(**kwargs):
+    package = SOURCE_CKAN.action.package_show(id=PACKAGE_ID)
+    resource = [r for r in package["resources"] if r == SOURCE_FILE_NAME][0]
+    res = SOURCE_CKAN.action.delete_resource(id=resource["id"])
+    logging.info(res)
 
 
 default_args = airflow_utils.get_default_args(
@@ -321,15 +327,44 @@ with DAG(
         provide_context=True,
         op_kwargs={"msg_task_id": "build_nothing_to_load_message"},
     )
-    # get_unique_id
+
+    delete_tmp_files = PythonOperator(
+        task_id="delete_new_resource_tmp",
+        python_callable=airflow_utils.delete_file,
+        op_kwargs={"task_ids": ["get_new_data", "prep_data"]},
+        provide_context=True,
+        trigger_rule="one_success",
+    )
+
+    delete_tmp_dir = PythonOperator(
+        task_id="delete_tmp_data_dir",
+        python_callable=airflow_utils.delete_tmp_data_dir,
+        op_kwargs={"dag_id": JOB_NAME},
+    )
+
+    delete_source = PythonOperator(
+        task_id="delete_source_resource",
+        python_callable=delete_source_resource,
+    )
+
     create_tmp_dir >> source_data >> prepare_data >> new_data_unique_id >> data_is_new
 
     backup_previous >> delete_old >> insert_new >> loaded_msg
 
-    loaded_msg >> send_loaded_notification
+    data_is_new >> delete_old
 
-    data_is_new >> create_backups_dir
+    target_package >> create_backups_dir >> backup_previous
+
+    loaded_msg >> send_loaded_notification
 
     data_is_new >> nothing_to_load_msg >> send_nothing_to_load_notification
 
-    target_package >> create_backups_dir >> backup_previous
+    send_nothing_to_load_notification >> delete_tmp_files
+
+    send_loaded_notification >> delete_tmp_files
+
+    delete_tmp_files >> delete_tmp_dir
+
+    send_nothing_to_load_notification >> delete_source
+
+    send_loaded_notification >> delete_source
