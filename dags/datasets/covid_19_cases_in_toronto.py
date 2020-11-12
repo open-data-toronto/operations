@@ -176,7 +176,7 @@ def confirm_data_is_new(**kwargs):
     for f in os.listdir(backups):
         if os.path.isfile(backups / f) and data_to_load_unique_id in f:
             logging.info(f"Data has already been loaded, ID: {data_to_load_unique_id}")
-            return "build_nothing_to_load_message"
+            return "build_nothing_to_load_msg"
 
     return "delete_old_records"
 
@@ -323,7 +323,7 @@ with DAG(
     )
 
     nothing_to_load_msg = PythonOperator(
-        task_id="build_nothing_to_load_message",
+        task_id="build_nothing_to_load_msg",
         python_callable=build_message,
         op_kwargs={"already_loaded": True},
         provide_context=True,
@@ -341,7 +341,7 @@ with DAG(
         task_id="send_nothing_to_load_msg",
         python_callable=send_success_msg,
         provide_context=True,
-        op_kwargs={"msg_task_id": "build_nothing_to_load_message"},
+        op_kwargs={"msg_task_id": "build_nothing_to_load_msg"},
     )
 
     delete_tmp_files = PythonOperator(
