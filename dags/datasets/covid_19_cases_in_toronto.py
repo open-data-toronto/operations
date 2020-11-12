@@ -36,7 +36,10 @@ SOURCE_FILE_NAME = "covid19cases.csv"
 
 
 def send_success_msg(**kwargs):
-    msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
+    ti = kwargs.pop("ti")
+    msg_task_id = ti.xcom_pull(task_ids="msg_task_id")
+    msg = ti.xcom_pull(task_ids=msg_task_id)
+
     airflow_utils.message_slack(
         name=JOB_NAME,
         message_type="success",
@@ -171,7 +174,7 @@ def confirm_data_is_new(**kwargs):
     for f in os.listdir(backups):
         if data_to_load_unique_id in f:
             logging.info(f"Data has already been loaded, ID: {data_to_load_unique_id}")
-            return "build_loaded_message"
+            return "build_nothing_to_load_message"
 
     return "delete_old_records"
 
@@ -301,23 +304,31 @@ with DAG(
     )
 
     loaded_msg = PythonOperator(
-        task_id="build_message",
+        task_id="build_loaded_msg",
         python_callable=build_message,
         provide_context=True,
     )
 
     nothing_to_load_msg = PythonOperator(
-        task_id="build_loaded_message",
+        task_id="build_nothing_to_load_message",
         python_callable=build_message,
         op_kwargs={"already_loaded": True},
         provide_context=True,
     )
 
-    send_notification = PythonOperator(
+    send_loaded_notification = PythonOperator(
         task_id="send_success_msg",
         python_callable=send_success_msg,
         provide_context=True,
         trigger_rule="one_success",
+        op_kwargs={"msg_task_id": "build_loaded_msg"},
+    )
+
+    send_nothing_to_load_notification = PythonOperator(
+        task_id="send_nothing_to_load_notification",
+        python_callable=send_success_msg,
+        provide_context=True,
+        op_kwargs={"msg_task_id": "build_nothing_to_load_message"},
     )
     # get_unique_id
     create_tmp_dir >> source_data >> prepare_data >> new_data_unique_id >> data_is_new
@@ -326,7 +337,8 @@ with DAG(
 
     loaded_msg >> send_notification
 
-    data_is_new >> nothing_to_load_msg >> send_notification
     data_is_new >> create_backups_dir
+
+    data_is_new >> nothing_to_load_msg >> send_nothing_to_load_notification
 
     target_package >> create_backups_dir >> backup_previous
