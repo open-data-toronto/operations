@@ -235,8 +235,9 @@ def update_resource_last_modified(**kwargs):
     resource = package["resources"][0]
 
     res = common_utils.update_resource_last_modified(
-        id=resource["id"],
-        last_modified=datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+        ckan=TARGET_CKAN,
+        resource_id=resource["id"],
+        new_last_modified=datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
     )
 
     return res
