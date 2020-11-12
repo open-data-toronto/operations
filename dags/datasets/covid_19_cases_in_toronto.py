@@ -224,7 +224,7 @@ def build_message(**kwargs):
 
 def delete_source_resource(**kwargs):
     package = SOURCE_CKAN.action.package_show(id=PACKAGE_ID)
-    resource = [r for r in package["resources"] if r == SOURCE_FILE_NAME][0]
+    resource = [r for r in package["resources"] if r["name"] == SOURCE_FILE_NAME][0]
     res = SOURCE_CKAN.action.delete_resource(id=resource["id"])
     logging.info(res)
 
