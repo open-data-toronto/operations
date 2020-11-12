@@ -211,14 +211,12 @@ def return_branch(**kwargs):
 
 def build_message(**kwargs):
     ti = kwargs.pop("ti")
-    backup_details = ti.xcom_pull(task_ids="backup_previous_data")
     unique_id = ti.xcom_pull(task_ids="get_unique_id")
 
     if "already_loaded" in kwargs:
-        return "COVID data already loaded: {} records, and unique ID: {}".format(
-            backup_details["records"], unique_id
-        )
+        return "COVID data already loaded, UID: {unique_id}"
 
+    backup_details = ti.xcom_pull(task_ids="backup_previous_data")
     previous_data_records = backup_details["records"]
 
     new_data_fp = ti.xcom_pull(task_ids="prep_data")
