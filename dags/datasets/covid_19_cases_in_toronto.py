@@ -335,7 +335,7 @@ with DAG(
 
     backup_previous >> delete_old >> insert_new >> loaded_msg
 
-    loaded_msg >> send_notification
+    loaded_msg >> send_loaded_notification
 
     data_is_new >> create_backups_dir
 
