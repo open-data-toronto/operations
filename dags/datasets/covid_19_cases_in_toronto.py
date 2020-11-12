@@ -329,7 +329,7 @@ with DAG(
     )
 
     delete_tmp_files = PythonOperator(
-        task_id="delete_new_resource_tmp",
+        task_id="delete_tmp_files",
         python_callable=airflow_utils.delete_file,
         op_kwargs={"task_ids": ["get_new_data", "prep_data"]},
         provide_context=True,
@@ -349,9 +349,11 @@ with DAG(
 
     create_tmp_dir >> source_data >> prepare_data >> new_data_unique_id >> data_is_new
 
-    backup_previous >> delete_old >> insert_new >> loaded_msg
+    delete_old >> insert_new >> loaded_msg
 
     data_is_new >> delete_old
+
+    backup_previous >> data_is_new
 
     target_package >> create_backups_dir >> backup_previous
 
