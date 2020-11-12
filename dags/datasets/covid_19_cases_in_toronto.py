@@ -28,8 +28,7 @@ JOB_FILE = Path(os.path.abspath(__file__))
 JOB_NAME = JOB_FILE.name[:-3]
 PACKAGE_ID = JOB_NAME.replace("_", "-")
 
-# ACTIVE_ENV = Variable.get("active_env")
-ACTIVE_ENV = "dev"
+ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials", deserialize_json=True)
 TARGET_CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 SOURCE_CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS["qa"])
