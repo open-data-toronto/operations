@@ -10,7 +10,11 @@ import sys
 import os
 
 repo_dir = Variable.get("repo_dir")
-files_dir = Variable.get("files_dir")
+
+dirs = {
+    "tmp": Variable.get("tmp_dir"),
+    "backups": Variable.get("backups_dir"),
+}
 
 sys.path.append(repo_dir)
 
@@ -104,24 +108,15 @@ def message_slack(name, msg, message_type):
         ), f"Request NOT OK - Status code: {res.status_code}: {res.reason} | {data}"
 
 
-def create_tmp_data_dir(**kwargs):
+def create_dir_with_dag_name(**kwargs):
     dag_id = kwargs.pop("dag_id")
+    dir_variable_name = kwargs.pop("dir_variable_name")
+    files_dir = Variable.get(dir_variable_name)
 
-    files_dir_path = Path(files_dir)
-    dag_tmp_dir = files_dir_path / dag_id
+    dir_with_dag_name = Path(files_dir) / dag_id
+    dir_with_dag_name.mkdir(parents=True, exist_ok=True)
 
-    dag_tmp_dir.mkdir(parents=True, exist_ok=True)
-
-    return str(dag_tmp_dir)
-
-
-def delete_tmp_data_dir(**kwargs):
-    dag_id = kwargs.pop("dag_id")
-
-    files_dir_path = Path(files_dir)
-    dag_tmp_dir = files_dir_path / dag_id
-
-    os.rmdir(dag_tmp_dir)
+    return dir_with_dag_name
 
 
 def delete_file(**kwargs):

@@ -251,8 +251,14 @@ with DAG(
 
     create_tmp_dir = PythonOperator(
         task_id="create_tmp_data_dir",
-        python_callable=airflow_utils.create_tmp_data_dir,
-        op_kwargs={"dag_id": JOB_NAME},
+        python_callable=airflow_utils.create_dir_with_dag_name,
+        op_kwargs={"dag_id": JOB_NAME, "dir_variable_name": "tmp_dir"},
+    )
+
+    create_backups_dir = PythonOperator(
+        task_id="create_tmp_data_dir",
+        python_callable=airflow_utils.create_dir_with_dag_name,
+        op_kwargs={"dag_id": JOB_NAME, "dir_variable_name": "backups_dir"},
     )
 
     source_data = PythonOperator(
@@ -330,4 +336,4 @@ with DAG(
 
     data_is_new >> nothing_to_load_msg >> send_notification
 
-    target_package >> backup_previous
+    target_package >> create_backups_dir >> backup_previous

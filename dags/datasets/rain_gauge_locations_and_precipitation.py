@@ -267,8 +267,8 @@ with DAG(
 
     create_tmp_dir = PythonOperator(
         task_id="create_tmp_data_dir",
-        python_callable=airflow_utils.create_tmp_data_dir,
-        op_kwargs={"dag_id": JOB_NAME},
+        python_callable=airflow_utils.create_dir_with_dag_name,
+        op_kwargs={"dag_id": JOB_NAME, "dir_variable_name": "tmp_dir"},
     )
 
     newest_resource = PythonOperator(
