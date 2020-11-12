@@ -165,26 +165,15 @@ def get_unique_id(**kwargs):
 
 def confirm_data_is_new(**kwargs):
     ti = kwargs.pop("ti")
-    data_to_load_unique_id = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+    data_to_load_unique_id = ti.xcom_pull(task_ids="get_unique_id")
     backups = Path(Variable.get("backups_dir")) / JOB_NAME
 
-    data_files = []
     for f in os.listdir(backups):
-        if os.path.isfile(backups / f):
-            parts = f.split(".")
-            unique_id = [
-                p for p in parts if p not in ["parquet", "json", "fields", "data"]
-            ][0]
-            data_files.append(unique_id)
+        if data_to_load_unique_id in f:
+            logging.info(f"Data has already been loaded, ID: {data_to_load_unique_id}")
+            return "build_loaded_message"
 
-    unique_ids = list(set(data_files))
-
-    if data_to_load_unique_id not in unique_ids:
-        return "delete_old_records"
-
-    logging.info(f"Data has already been loaded, ID: {data_to_load_unique_id}")
-
-    return "build_loaded_message"
+    return "delete_old_records"
 
 
 def delete_old_records(**kwargs):
@@ -331,15 +320,14 @@ with DAG(
         provide_context=True,
         trigger_rule="one_success",
     )
-
+    # get_unique_id
     create_tmp_dir >> source_data >> prepare_data >> new_data_unique_id >> data_is_new
 
-    [data_is_new, backup_previous] >> delete_old >> insert_new >> loaded_msg
+    backup_previous >> delete_old >> insert_new >> loaded_msg
 
     loaded_msg >> send_notification
 
     data_is_new >> nothing_to_load_msg >> send_notification
+    data_is_new >> create_backups_dir
 
     target_package >> create_backups_dir >> backup_previous
-
-    create_backups_dir >> data_is_new
