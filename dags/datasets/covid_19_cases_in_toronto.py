@@ -173,6 +173,7 @@ def confirm_data_is_new(**kwargs):
 
     for f in os.listdir(backups):
         if data_to_load_unique_id in f:
+            logging.info(f, type(f))
             logging.info(f"Data has already been loaded, ID: {data_to_load_unique_id}")
             return "build_nothing_to_load_message"
 
