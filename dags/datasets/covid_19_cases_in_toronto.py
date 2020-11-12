@@ -72,7 +72,9 @@ def backup_previous_data(**kwargs):
         data = data.drop("_id", axis=1)
 
     data_hash = hashlib.md5()
-    data_hash.update(data.to_csv(index=False).encode("utf-8"))
+    data_hash.update(
+        data.sort_values(by="Assigned_ID").to_csv(index=False).encode("utf-8")
+    )
     unique_id = data_hash.hexdigest()
 
     data_path = backups / f"data.{unique_id}.parquet"
