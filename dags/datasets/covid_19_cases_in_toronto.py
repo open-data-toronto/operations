@@ -57,7 +57,7 @@ def send_failure_msg(self):
     )
 
 
-def backup_previous_data(**kwargs):
+def backup_old_data(**kwargs):
     ti = kwargs.pop("ti")
     package = ti.xcom_pull(task_ids="get_target_package")
     backups = Path(Variable.get("backups_dir")) / JOB_NAME
@@ -103,7 +103,7 @@ def backup_previous_data(**kwargs):
 
 def get_new_data(**kwargs):
     ti = kwargs.pop("ti")
-    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
     package = SOURCE_CKAN.action.package_show(id=PACKAGE_ID)
 
     resource = [r for r in package["resources"] if r["name"] == SOURCE_FILE_NAME][0]
@@ -139,9 +139,9 @@ def get_target_package():
     return package
 
 
-def prep_data(**kwargs):
+def prep_new_data(**kwargs):
     ti = kwargs.pop("ti")
-    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
     new_data_fp = Path(ti.xcom_pull(task_ids="get_new_data"))
 
     data = pd.read_parquet(new_data_fp)
@@ -157,9 +157,9 @@ def prep_data(**kwargs):
     return filepath
 
 
-def get_unique_id(**kwargs):
+def get_new_data_unique_id(**kwargs):
     ti = kwargs.pop("ti")
-    data_fp = Path(ti.xcom_pull(task_ids="prep_data"))
+    data_fp = Path(ti.xcom_pull(task_ids="prep_new_data"))
     data = pd.read_parquet(data_fp).sort_values(by="Assigned_ID")
 
     data_hash = hashlib.md5()
@@ -170,7 +170,7 @@ def get_unique_id(**kwargs):
 
 def confirm_data_is_new(**kwargs):
     ti = kwargs.pop("ti")
-    data_to_load_unique_id = ti.xcom_pull(task_ids="get_unique_id")
+    data_to_load_unique_id = ti.xcom_pull(task_ids="get_new_data_unique_id")
     backups = Path(Variable.get("backups_dir")) / JOB_NAME
 
     for f in os.listdir(backups):
@@ -195,7 +195,7 @@ def insert_new_records(**kwargs):
     package = ti.xcom_pull(task_ids="get_target_package")
     resource = package["resources"][0]
 
-    data_fp = Path(ti.xcom_pull(task_ids="prep_data"))
+    data_fp = Path(ti.xcom_pull(task_ids="prep_new_data"))
     data = pd.read_parquet(data_fp).sort_values(by="Assigned_ID")
     records = data.to_dict(orient="records")
 
@@ -206,15 +206,15 @@ def insert_new_records(**kwargs):
 
 def build_message(**kwargs):
     ti = kwargs.pop("ti")
-    unique_id = ti.xcom_pull(task_ids="get_unique_id")
+    unique_id = ti.xcom_pull(task_ids="get_new_data_unique_id")
 
     if "already_loaded" in kwargs:
         return f"Data is not new, UID of backup files: {unique_id}. Nothing to load."
 
-    backup_details = ti.xcom_pull(task_ids="backup_previous_data")
+    backup_details = ti.xcom_pull(task_ids="backup_old_data")
     previous_data_records = backup_details["records"]
 
-    new_data_fp = ti.xcom_pull(task_ids="prep_data")
+    new_data_fp = ti.xcom_pull(task_ids="prep_new_data")
     new_data = pd.read_parquet(new_data_fp)
 
     return "COVID data refreshed: from {} to {} records".format(
@@ -225,7 +225,7 @@ def build_message(**kwargs):
 def delete_source_resource(**kwargs):
     package = SOURCE_CKAN.action.package_show(id=PACKAGE_ID)
     resource = [r for r in package["resources"] if r["name"] == SOURCE_FILE_NAME][0]
-    res = SOURCE_CKAN.action.delete_resource(id=resource["id"])
+    res = SOURCE_CKAN.action.resource_delete(id=resource["id"])
     logging.info(res)
 
 
@@ -258,7 +258,7 @@ with DAG(
 ) as dag:
 
     create_tmp_dir = PythonOperator(
-        task_id="create_tmp_data_dir",
+        task_id="create_tmp_dir",
         python_callable=airflow_utils.create_dir_with_dag_name,
         op_kwargs={"dag_id": JOB_NAME, "dir_variable_name": "tmp_dir"},
     )
@@ -280,21 +280,21 @@ with DAG(
         python_callable=get_target_package,
     )
 
-    backup_previous = PythonOperator(
-        task_id="backup_previous_data",
-        python_callable=backup_previous_data,
+    old_data = PythonOperator(
+        task_id="backup_old_data",
+        python_callable=backup_old_data,
         provide_context=True,
     )
 
     prepare_data = PythonOperator(
-        task_id="prep_data",
-        python_callable=prep_data,
+        task_id="prep_new_data",
+        python_callable=prep_new_data,
         provide_context=True,
     )
 
     new_data_unique_id = PythonOperator(
-        task_id="get_unique_id",
-        python_callable=get_unique_id,
+        task_id="get_new_data_unique_id",
+        python_callable=get_new_data_unique_id,
         provide_context=True,
     )
 
@@ -347,7 +347,7 @@ with DAG(
     delete_tmp_files = PythonOperator(
         task_id="delete_tmp_files",
         python_callable=airflow_utils.delete_file,
-        op_kwargs={"task_ids": ["get_new_data", "prep_data"]},
+        op_kwargs={"task_ids": ["get_new_data", "prep_new_data"]},
         provide_context=True,
         trigger_rule="one_success",
     )
@@ -376,13 +376,13 @@ with DAG(
 
     create_tmp_dir >> source_data >> prepare_data >> new_data_unique_id >> data_is_new
 
-    backup_previous >> data_is_new
+    old_data >> data_is_new
 
     delete_old >> insert_new >> update_timestamp >> loaded_msg
 
     data_is_new >> delete_old
 
-    target_package >> create_backups_dir >> backup_previous
+    target_package >> create_backups_dir >> old_data
 
     loaded_msg >> send_loaded_notification
 
