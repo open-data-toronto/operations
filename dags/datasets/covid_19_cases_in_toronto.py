@@ -223,9 +223,11 @@ def return_branch(**kwargs):
 def build_message(**kwargs):
     ti = kwargs.pop("ti")
     backup_details = ti.xcom_pull(task_ids="backup_previous_data")
+    unique_id = ti.xcom_pull(task_ids="get_unique_id")
+
     if "already_loaded" in kwargs:
         return "COVID data already loaded: {} records, and unique ID: {}".format(
-            backup_details["records"], backup_details["unique_id"]
+            backup_details["records"], unique_id
         )
 
     previous_data_records = backup_details["records"]
@@ -327,9 +329,8 @@ with DAG(
         task_id="send_success_msg",
         python_callable=send_success_msg,
         provide_context=True,
+        trigger_rule="one_success",
     )
-
-    no_notification = DummyOperator(task_id="no_need_for_notification")
 
     create_tmp_dir >> source_data >> prepare_data >> new_data_unique_id >> data_is_new
 
