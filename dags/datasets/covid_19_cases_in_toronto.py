@@ -172,7 +172,7 @@ def confirm_data_is_new(**kwargs):
     backups = Path(Variable.get("backups_dir")) / JOB_NAME
 
     for f in os.listdir(backups):
-        if data_to_load_unique_id in f:
+        if os.path.isfile(backups / f) and data_to_load_unique_id in f:
             logging.info(f, type(f))
             logging.info(f"Data has already been loaded, ID: {data_to_load_unique_id}")
             return "build_nothing_to_load_message"
