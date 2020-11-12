@@ -198,7 +198,7 @@ def insert_new_records(**kwargs):
     package = ti.xcom_pull(task_ids="get_target_package")
     resource = package["resources"][0]
 
-    data_fp = Path(ti.xcom_pull(task_ids="prep_date_fields"))
+    data_fp = Path(ti.xcom_pull(task_ids="prep_data"))
     data = pd.read_parquet(data_fp).sort_values(by="Assigned_ID")
     records = data.to_dict(orient="records")
 
