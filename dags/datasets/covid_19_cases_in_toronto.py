@@ -176,7 +176,7 @@ def confirm_data_is_new(**kwargs):
             logging.info(f"Data has already been loaded, ID: {data_to_load_unique_id}")
             return "build_nothing_to_load_message"
 
-    return "delete_old_records"
+    return "create_backups_dir"
 
 
 def delete_old_records(**kwargs):
@@ -200,16 +200,6 @@ def insert_new_records(**kwargs):
     res = TARGET_CKAN.action.datastore_create(id=resource["id"], records=records)
 
     return res
-
-
-def return_branch(**kwargs):
-    ti = kwargs.pop("ti")
-    resource = ti.xcom_pull(task_ids="read_staging_ckan")
-
-    if resource is None:
-        return "no_need_for_notification"
-
-    return "read_new_data"
 
 
 def build_message(**kwargs):
