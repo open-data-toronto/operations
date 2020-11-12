@@ -17,7 +17,7 @@ sys.path.append(Variable.get("repo_dir"))
 from dags import utils as airflow_utils  # noqa: E402
 
 job_settings = {
-    "description": "Replace COVID 19 cases data in PROD with CSV file from TPH loaded in QA",
+    "description": "Take COVID19 data from QA (filestore) and put in PROD (datastore)",
     "schedule": "59 14 * * 3",
     "start_date": datetime(2020, 11, 10, 13, 35, 0),
 }
@@ -217,7 +217,7 @@ def build_message(**kwargs):
     unique_id = ti.xcom_pull(task_ids="get_unique_id")
 
     if "already_loaded" in kwargs:
-        return f"COVID data already loaded, UID: {unique_id}"
+        return f"Data is not new, UID of backup files: {unique_id}. Nothing to load."
 
     backup_details = ti.xcom_pull(task_ids="backup_previous_data")
     previous_data_records = backup_details["records"]
