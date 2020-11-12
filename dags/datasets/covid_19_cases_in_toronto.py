@@ -237,7 +237,7 @@ def update_resource_last_modified(**kwargs):
     res = common_utils.update_resource_last_modified(
         ckan=TARGET_CKAN,
         resource_id=resource["id"],
-        new_last_modified=datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+        new_last_modified=datetime.now(),
     )
 
     return res
@@ -337,8 +337,8 @@ with DAG(
         op_kwargs={"msg_task_id": "build_loaded_msg"},
     )
 
-    send_nothing_to_load_notification = PythonOperator(
-        task_id="send_nothing_to_load_notification",
+    build_nothing_to_load_msg = PythonOperator(
+        task_id="build_nothing_to_load_msg",
         python_callable=send_success_msg,
         provide_context=True,
         op_kwargs={"msg_task_id": "build_nothing_to_load_message"},
@@ -386,9 +386,9 @@ with DAG(
 
     loaded_msg >> send_loaded_notification
 
-    data_is_new >> nothing_to_load_msg >> send_nothing_to_load_notification
+    data_is_new >> nothing_to_load_msg >> build_nothing_to_load_msg
 
-    [send_nothing_to_load_notification, send_loaded_notification] >> begin_cleanup
+    [build_nothing_to_load_msg, send_loaded_notification] >> begin_cleanup
 
     begin_cleanup >> delete_tmp_files >> delete_tmp_dir
 
