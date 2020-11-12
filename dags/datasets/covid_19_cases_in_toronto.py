@@ -312,6 +312,7 @@ with DAG(
         task_id="build_loaded_message",
         python_callable=build_message,
         op_kwargs={"already_loaded": True},
+        provide_context=True,
     )
 
     send_notification = PythonOperator(
