@@ -353,7 +353,7 @@ with DAG(
     )
 
     delete_tmp_dir = PythonOperator(
-        task_id="delete_tmp_data_dir",
+        task_id="delete_tmp_dir",
         python_callable=airflow_utils.delete_tmp_data_dir,
         op_kwargs={"dag_id": JOB_NAME},
     )
