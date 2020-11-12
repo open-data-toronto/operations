@@ -111,7 +111,7 @@ def get_new_data(**kwargs):
     file_content = requests.get(resource["url"]).content
     data = pd.read_csv(BytesIO(file_content))
 
-    filename = "raw_data"
+    filename = "new_data_raw"
     filepath = tmp_dir / f"{filename}.parquet"
 
     data.to_parquet(filepath)
@@ -149,7 +149,7 @@ def prep_data(**kwargs):
     for date_field in ["Episode Date", "Reported Date"]:
         data[date_field] = (pd.to_datetime(data[date_field])).dt.strftime("%Y-%m-%d")
 
-    filename = "ready_to_load"
+    filename = "new_data_prepared"
     filepath = tmp_dir / f"{filename}.parquet"
 
     data.to_parquet(filepath)
