@@ -67,7 +67,10 @@ def backup_previous_data(**kwargs):
         id=resource["id"], limit=record_count
     )
 
-    data = pd.DataFrame(datastore_response["records"]).drop("_id", axis=1)
+    data = pd.DataFrame(datastore_response["records"])
+
+    if "_id" in data.columns.values:
+        data = data.drop("_id", axis=1)
 
     data_hash = hashlib.md5()
     data_hash.update(data.to_csv(index=False).encode("utf-8"))
