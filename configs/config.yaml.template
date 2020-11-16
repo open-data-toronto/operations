@@ -23,12 +23,12 @@ ckan:
     apikey:
     
 datasets:
-  rain_gauge_locationn_and_precipitation:
+  rain_gauge_locations_and_precipitation:
     credentials: 
   covid_19_cases_in_toronto:
     file_name: covid19cases.csv
 
-tasks:
+sustainment:
   sync_remote_file_times:
     - package_id: toronto-economic-bulletin
       files:
