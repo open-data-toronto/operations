@@ -335,7 +335,7 @@ def create_dag(dag_id, entry):
         with open(data_fp, "r") as f:
             records = json.load(f)
 
-        chunk_size = Variable.get("ckan_insert_chunk_size")
+        chunk_size = int(Variable.get("ckan_insert_chunk_size"))
 
         ckan_utils.insert_datastore_records(
             ckan=CKAN, resource_id=resource_id, records=records, chunk_size=chunk_size
