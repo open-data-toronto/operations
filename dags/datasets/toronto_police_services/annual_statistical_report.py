@@ -291,7 +291,7 @@ def create_dag(dag_id, entry):
 
     def check_if_new_resource(**kwargs):
         ti = kwargs.pop("ti")
-        package = Path(ti.xcom_pull(task_ids="get_package"))
+        package = ti.xcom_pull(task_ids="get_package")
 
         is_new = resource_name not in [r["name"] for r in package["resources"]]
 
