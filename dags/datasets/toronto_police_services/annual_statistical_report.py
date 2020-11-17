@@ -1,18 +1,14 @@
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy_operator import DummyOperator
-from datetime import datetime, timedelta
+
+# from airflow.operators.dummy_operator import DummyOperator
+from datetime import datetime
 from airflow.models import Variable
 import pandas as pd
-from copy import deepcopy
 import ckanapi
-import logging
-from io import BytesIO
+
+# import logging
 from pathlib import Path
-from dateutil import parser
 from airflow import DAG
-import tempfile
-import requests
-import os
 import sys
 import json
 
@@ -214,17 +210,17 @@ def create_dag(dag_id, entry):
     fields_to_capture = entry.pop("fields")
     resource_name = f"{entry['package_id']}-data"
 
-    def send_success_msg(**kwargs):
-        msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
-        airflow_utils.message_slack(
-            name=dag_id,
-            message_type="success",
-            msg=msg,
-        )
+    # def send_success_msg(**kwargs):
+    #     msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
+    #     airflow_utils.message_slack(
+    #         name=dag_id,
+    #         message_type="success",
+    #         msg=msg,
+    #     )
 
     def send_failure_msg(self):
         airflow_utils.message_slack(
-            name=JOB_NAME,
+            name=dag_id,
             message_type="error",
             msg="Job not finished",
         )
@@ -283,16 +279,16 @@ def create_dag(dag_id, entry):
 
         return ckan_fields_fp
 
-    def build_message(**kwargs):
-        ti = kwargs.pop("ti")
-        datapoints_fp = ti.xcom_pull(task_ids="get_site_datapoints")
-        datapoints = pd.read_csv(datapoints_fp)
-        start_date = ti.xcom_pull(task_ids="get_from_timestamp")
-        time_lastest_loaded = datetime.strptime(start_date, "%Y%m%d%H%M%S").strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
+    # def build_message(**kwargs):
+    #     ti = kwargs.pop("ti")
+    #     datapoints_fp = ti.xcom_pull(task_ids="get_site_datapoints")
+    #     datapoints = pd.read_csv(datapoints_fp)
+    #     start_date = ti.xcom_pull(task_ids="get_from_timestamp")
+    #     time_lastest_loaded = datetime.strptime(start_date, "%Y%m%d%H%M%S").strftime(
+    #         "%Y-%m-%d %H:%M:%S"
+    #     )
 
-        return f"{datapoints.shape[0]} new records found since {time_lastest_loaded}"
+    #     return f"{datapoints.shape[0]} new records found since {time_lastest_loaded}"
 
     def check_if_new_resource(**kwargs):
         ti = kwargs.pop("ti")
