@@ -406,6 +406,7 @@ def create_dag(dag_id, entry):
         resource_is_new = BranchPythonOperator(
             task_id="resource_is_new",
             python_callable=check_if_new_resource,
+            provide_context=True,
         )
 
         insert = PythonOperator(
