@@ -23,3 +23,28 @@ def get_package(**kwargs):
     package = ckan.action.package_show(id=package_id)
 
     return package
+
+
+def create_resource_if_new(**kwargs):
+    ckan = kwargs.pop("ckan")
+    package = kwargs.pop("package")
+    resource = kwargs.pop("resource")
+
+    resources = package["resources"]
+
+    is_new = resource["name"] not in [r["name"] for r in resources]
+
+    if is_new:
+        res = ckan.action.resource_create(**resource)
+        return res
+
+    return [r for r in resources if r["name"] == resource["name"]][0]
+
+
+def insert_datastore_records(ckan, resource_id, records, chunk_size=20000):
+
+    chunks = [records[i : i + chunk_size] for i in range(0, len(records), chunk_size)]
+
+    for chunk in chunks:
+        logging.info(f"Inserting {len(chunk)} records")
+        ckan.action.datastore_create(id=resource_id, records=chunk)
