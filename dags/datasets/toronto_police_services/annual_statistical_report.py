@@ -430,7 +430,9 @@ def create_dag(dag_id, entry):
         is_resource_new >> resource_is_not_new
 
         resource_is_new >> agol_fields >> ckan_data_dict >> new_resource
-        [resource_is_not_new, new_resource] >> resource_id
+        resource_is_not_new >> resource_id
+
+        new_resource >> resource_id
         [resource_id, data] >> insert
 
     return dag
