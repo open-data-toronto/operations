@@ -295,7 +295,7 @@ def create_dag(dag_id, entry):
         is_new = resource_name not in [r["name"] for r in package["resources"]]
 
         if is_new:
-            return "create_datastore_resource"
+            return "create_new_resource"
 
         return "resource_is_not_new"
 
