@@ -399,6 +399,7 @@ def create_dag(dag_id, entry):
         resource_id = PythonOperator(
             task_id="get_resource_id",
             python_callable=get_resource_id,
+            trigger_rule="one_success",
         )
 
         is_resource_new = BranchPythonOperator(
@@ -419,7 +420,6 @@ def create_dag(dag_id, entry):
             task_id="insert_records",
             python_callable=insert_records,
             provide_context=True,
-            trigger_rule="one_success",
         )
 
         api_endpoint >> [data, agol_fields]
