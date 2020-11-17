@@ -401,14 +401,18 @@ def create_dag(dag_id, entry):
             python_callable=get_resource_id,
         )
 
-        resource_is_new = BranchPythonOperator(
-            task_id="resource_is_new",
+        is_resource_new = BranchPythonOperator(
+            task_id="is_resource_new",
             python_callable=check_if_new_resource,
             provide_context=True,
         )
 
         resource_is_not_new = DummyOperator(
             task_id="resource_is_not_new",
+        )
+
+        resource_is_new = DummyOperator(
+            task_id="resource_is_new",
         )
 
         insert = PythonOperator(
@@ -421,10 +425,11 @@ def create_dag(dag_id, entry):
         api_endpoint >> [data, agol_fields]
         create_tmp_dir >> [data, agol_fields]
 
-        package >> resource_is_new
-        resource_is_new >> agol_fields >> ckan_data_dict >> new_resource
-        resource_is_new >> resource_is_not_new
+        package >> is_resource_new
+        is_resource_new >> resource_is_new
+        is_resource_new >> resource_is_not_new
 
+        resource_is_new >> agol_fields >> ckan_data_dict >> new_resource
         [resource_is_not_new, new_resource] >> resource_id
         [resource_id, data] >> insert
 
