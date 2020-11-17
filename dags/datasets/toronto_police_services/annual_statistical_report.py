@@ -1,6 +1,5 @@
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
-
-# from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.dummy_operator import DummyOperator
 from datetime import datetime
 from airflow.models import Variable
 import ckanapi
@@ -298,7 +297,7 @@ def create_dag(dag_id, entry):
         if is_new:
             return "create_datastore_resource"
 
-        return "get_agol_fields"
+        return "resource_is_not_new"
 
     def create_new_resource(**kwargs):
         ti = kwargs.pop("ti")
@@ -408,10 +407,15 @@ def create_dag(dag_id, entry):
             provide_context=True,
         )
 
+        resource_is_not_new = DummyOperator(
+            task_id="resource_is_not_new",
+        )
+
         insert = PythonOperator(
             task_id="insert_records",
             python_callable=insert_records,
             provide_context=True,
+            trigger_rule="one_success",
         )
 
         api_endpoint >> [data, agol_fields]
@@ -419,8 +423,9 @@ def create_dag(dag_id, entry):
 
         package >> resource_is_new
         resource_is_new >> agol_fields >> ckan_data_dict >> new_resource >> resource_id
-        resource_is_new >> resource_id
+        resource_is_new >> resource_is_not_new
 
+        [resource_is_not_new, resource_is_new] >> resource_id
         [resource_id, data] >> insert
 
     return dag
