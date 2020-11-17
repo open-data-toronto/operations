@@ -422,10 +422,10 @@ def create_dag(dag_id, entry):
         create_tmp_dir >> [data, agol_fields]
 
         package >> resource_is_new
-        resource_is_new >> agol_fields >> ckan_data_dict >> new_resource >> resource_id
+        resource_is_new >> agol_fields >> ckan_data_dict
         resource_is_new >> resource_is_not_new
 
-        [resource_is_not_new, resource_is_new] >> resource_id
+        [resource_is_not_new, new_resource] >> resource_id
         [resource_id, data] >> insert
 
     return dag
