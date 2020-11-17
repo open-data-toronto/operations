@@ -298,7 +298,7 @@ def create_dag(dag_id, entry):
         if is_new:
             return "create_datastore_resource"
 
-        return "get_resource_id"
+        return "get_agol_fields"
 
     def create_new_resource(**kwargs):
         ti = kwargs.pop("ti")
@@ -415,14 +415,12 @@ def create_dag(dag_id, entry):
 
         api_endpoint >> [data, agol_fields]
         create_tmp_dir >> [data, agol_fields]
-        agol_fields >> ckan_data_dict
 
         package >> resource_is_new
-        resource_is_new >> ckan_data_dict >> new_resource >> resource_id
+        resource_is_new >> agol_fields >> ckan_data_dict >> new_resource >> resource_id
         resource_is_new >> resource_id
 
-        resource_id >> insert
-        data >> insert
+        [resource_id, data] >> insert
 
     return dag
 
