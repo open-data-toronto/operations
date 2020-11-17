@@ -3,7 +3,6 @@ from airflow.operators.python_operator import PythonOperator, BranchPythonOperat
 # from airflow.operators.dummy_operator import DummyOperator
 from datetime import datetime
 from airflow.models import Variable
-import pandas as pd
 import ckanapi
 
 # import logging
@@ -241,7 +240,7 @@ def create_dag(dag_id, entry):
     def get_data(**kwargs):
         ti = kwargs.pop("ti")
         api_endpoint = ti.xcom_pull(task_ids="build_api_endpoint")
-        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
         filepath = tmp_dir / "data.json"
 
         data = agol_utils.get_data(api_endpoint)
@@ -254,7 +253,7 @@ def create_dag(dag_id, entry):
     def get_agol_fields(**kwargs):
         ti = kwargs.pop("ti")
         api_endpoint = ti.xcom_pull(task_ids="build_api_endpoint")
-        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
         filepath = tmp_dir / "agol_fields.json"
 
         data = agol_utils.get_fields(api_endpoint)
@@ -267,7 +266,7 @@ def create_dag(dag_id, entry):
     def create_ckan_data_dict(**kwargs):
         ti = kwargs.pop("ti")
         agol_fields_fp = Path(ti.xcom_pull(task_ids="get_agol_fields"))
-        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
         ckan_fields_fp = tmp_dir / "ckan_fields.json"
 
         with open(agol_fields_fp, "r") as f:
@@ -317,9 +316,8 @@ def create_dag(dag_id, entry):
 
         CKAN.action.datastore_create(resource=resource, records=[], fields=fields)
 
-    def get_resource_id(**kwargs):
-        ti = kwargs.pop("ti")
-        package = Path(ti.xcom_pull(task_ids="get_package"))
+    def get_resource_id():
+        package = ckan_utils.get_package(ckan=CKAN, package_id=entry["package_id"])
         resources = package["resources"]
 
         resource = [r for r in resources if r["name"] == resource_name][0]
@@ -402,7 +400,6 @@ def create_dag(dag_id, entry):
         resource_id = PythonOperator(
             task_id="get_resource_id",
             python_callable=get_resource_id,
-            provide_context=True,
         )
 
         resource_is_new = BranchPythonOperator(
@@ -421,10 +418,11 @@ def create_dag(dag_id, entry):
         agol_fields >> ckan_data_dict
 
         package >> resource_is_new
-        resource_is_new >> new_resource
+        resource_is_new >> ckan_data_dict >> new_resource >> resource_id
         resource_is_new >> resource_id
 
         resource_id >> insert
+        data >> insert
 
     return dag
 
