@@ -254,6 +254,7 @@ with DAG(
     default_args=default_args,
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
+    catchup=False
 ) as dag:
 
     create_tmp_dir = PythonOperator(

@@ -210,6 +210,7 @@ with DAG(
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
     tags=["sustainment"],
+    catchup=False,
 ) as dag:
 
     load_files = PythonOperator(
