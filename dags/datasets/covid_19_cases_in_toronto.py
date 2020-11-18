@@ -1,6 +1,6 @@
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 from airflow.operators.dummy_operator import DummyOperator
-from datetime import datetime
+from datetime import datetime, timedelta
 from airflow.models import Variable
 import pandas as pd
 import ckanapi
@@ -246,6 +246,8 @@ default_args = airflow_utils.get_default_args(
     {
         "on_failure_callback": send_failure_msg,
         "start_date": job_settings["start_date"],
+        "retries": 3,
+        "retry_delay": timedelta(minutes=3),
     }
 )
 
@@ -254,7 +256,7 @@ with DAG(
     default_args=default_args,
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
-    catchup=False
+    catchup=False,
 ) as dag:
 
     create_tmp_dir = PythonOperator(
@@ -333,7 +335,6 @@ with DAG(
         task_id="send_success_msg",
         python_callable=send_success_msg,
         provide_context=True,
-        trigger_rule="one_success",
         op_kwargs={"msg_task_id": "build_loaded_msg"},
     )
 
