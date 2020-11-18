@@ -17,8 +17,8 @@ from utils import ckan as ckan_utils  # noqa: E402
 
 common_job_settings = {
     "description": "Toronto Police Service - Annual Services Report for dataset",
-    "start_date": datetime(2020, 11, 15, 0, 0, 0),
-    "schedule": "0 0 15 11 *",
+    "start_date": datetime(2021, 11, 15, 0, 0, 0),
+    "schedule": "@once",
 }
 
 extracts = [
