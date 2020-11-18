@@ -366,7 +366,7 @@ with DAG(
 
     begin_cleanup = DummyOperator(
         task_id="begin_cleanup",
-        trigger_rule="one_success",
+        trigger_rule="none_failed",
     )
 
     update_timestamp = PythonOperator(
