@@ -23,7 +23,7 @@ common_job_settings = {
 
 extracts = [
     {
-        "package_id": "asr-reported-crimes",
+        "package_id": "police-annual-statistical-report-reported-crimes",
         "tps_table_code": "ASR-RC-TBL-001",
         "agol_dataset": "Reported_Crimes_ASR_RC_TBL_001",
         "fields": [
@@ -37,7 +37,20 @@ extracts = [
         ],
     },
     {
-        "package_id": "asr-victims-of-crime",
+        "package_id": "police-annual-statistical-report-traffic-collisions",
+        "tps_table_code": "ASR-T-TBL-001",
+        "agol_dataset": "Traffic_Collisions_ASR_T_TBL_001",
+        "fields": [
+            "Index_",
+            "OccurredYear",
+            "GeoDivision",
+            "Category",
+            "Subtype",
+            "Count_",
+        ],
+    },
+    {
+        "package_id": "police-annual-statistical-report-victims-of-crime",
         "tps_table_code": "ASR-VC-TBL-001",
         "agol_dataset": "Victims_of_Crime_ASR_VC_TBL_001",
         "fields": [
@@ -53,7 +66,7 @@ extracts = [
         ],
     },
     {
-        "package_id": "asr-search-of-persons",
+        "package_id": "police-annual-statistical-report-search-of-persons",
         "tps_table_code": "ASR-SP-TBL-001",
         "agol_dataset": "Search_of_Persons_ASR_SP_TBL_001",
         "fields": [
@@ -69,25 +82,25 @@ extracts = [
         ],
     },
     {
-        "package_id": "asr-firearms-top-5-calibres",
+        "package_id": "police-annual-statistical-report-firearms-top-5-calibres",
         "tps_table_code": "ASR-F-TBL-001",
         "agol_dataset": "Firearms_Top_5_Calibres_ASR_F_TBL_001",
         "fields": ["Index_", "Year", "Firearm_Type", "Calibre"],
     },
     {
-        "package_id": "asr-top-20-offences-of-firearms-seizures",
+        "package_id": "police-annual-statistical-report-top-20-offences-of-firearms-seizures",
         "tps_table_code": "ASR-F-TBL-002",
         "agol_dataset": "Top_20_Offences_of_Firearm_Seizures_ASR_F_TBL_002",
         "fields": ["SeizedYear", "Rank", "offence"],
     },
     {
-        "package_id": "asr-miscellaneous-firearms",
+        "package_id": "police-annual-statistical-report-miscellaneous-firearms",
         "tps_table_code": "ASR-F-TBL-003",
         "agol_dataset": "Miscellaneous_Firearms_ASR_F_TBL_003",
         "fields": ["Index_", "Year", "Category", "Type", "Count_"],
     },
     {
-        "package_id": "asr-gross-expenditures-by-division",
+        "package_id": "police-annual-statistical-report-gross-expenditures-by-division",
         "tps_table_code": "ASR-PB-TBL-001",
         "api_endpoint": "&outSR=4326&f=json",
         "agol_dataset": "Gross_Expenditures_by_Division_ASR_PB_TBL_001",
@@ -101,13 +114,13 @@ extracts = [
         ],
     },
     {
-        "package_id": "asr-personnel-by-rank",
+        "package_id": "police-annual-statistical-report-personnel-by-rank",
         "tps_table_code": "ASR-PB-TBL-002",
         "agol_dataset": "Personnel_by_Rank_ASR_PB_TBL_002",
         "fields": ["Index_", "Year", "Rank", "Classification", "Count_"],
     },
     {
-        "package_id": "asr-personnel-by-rank-by-division",
+        "package_id": "police-annual-statistical-report-personnel-by-rank-by-division",
         "tps_table_code": "ASR-PB-TBL-003",
         "api_endpoint": "&outSR=4326&f=json",
         "agol_dataset": "Personnel_by_Rank_by_Division_ASR_PB_TBL_003",
@@ -122,73 +135,73 @@ extracts = [
         ],
     },
     {
-        "package_id": "asr-personnel-by-command",
+        "package_id": "police-annual-statistical-report-personnel-by-command",
         "tps_table_code": "ASR-PB-TBL-004",
         "agol_dataset": "Personnel_by_Command_ASR_PB_TBL_004",
         "fields": ["Index_", "Year", "Command", "Count_"],
     },
     {
-        "package_id": "asr-gross-operating-budget",
+        "package_id": "police-annual-statistical-report-gross-operating-budget",
         "tps_table_code": "ASR-PB-TBL-005",
         "agol_dataset": "Gross_Operating_Budget_ASR_PB_TBL_005",
         "fields": ["Index_", "Year", "Section", "Category", "Subtype", "Count_"],
     },
     {
-        "package_id": "asr-dispatched-calls-by-division",
+        "package_id": "police-annual-statistical-report-dispatched-calls-by-division",
         "tps_table_code": "ASR-CS-TBL-001",
         "agol_dataset": "Dispatched_Calls_by_Division_ASR_CS_TBL_001",
         "fields": ["Index_", "Year", "Category", "Unit", "Command", "Count_"],
     },
     {
-        "package_id": "asr-miscellaneous-calls-for-service",
+        "package_id": "police-annual-statistical-report-miscellaneous-calls-for-service",
         "tps_table_code": "ASR-CS-TBL-002",
         "agol_dataset": "Miscellaneous_Calls_for_Service_ASR_CS_TBL_002",
         "fields": ["Index_", "Year", "Category", "Type", "Count_"],
     },
     {
-        "package_id": "asr-total-public-complaints",
+        "package_id": "police-annual-statistical-report-total-public-complaints",
         "tps_table_code": "ASR-PCF-TBL-001",
         "agol_dataset": "ASR_PCF_TBL_001",
         "fields": ["Index_", "Year", "Type", "Subtype", "Count_"],
     },
     {
-        "package_id": "asr-investigated-alleged-complaints",
+        "package_id": "police-annual-statistical-report-investigated-alleged-complaints",
         "tps_table_code": "ASR-PCF-TBL-002",
         "agol_dataset": "Investigated_Alleged_Misconduct_ASR_PCF_TBL_002",
         "fields": ["Index_", "Year", "Type", "Subtype", "Count_"],
     },
     {
-        "package_id": "asr-dispositions",
+        "package_id": "police-annual-statistical-report-dispositions",
         "tps_table_code": "ASR-PCF-TBL-003",
         "agol_dataset": "Complaint_Dispositions_ASR_PCF_TBL_003",
         "fields": ["Index_", "Year", "Type", "Subtype", "Count_"],
     },
     {
-        "package_id": "asr-regulated-interactions",
+        "package_id": "police-annual-statistical-report-regulated-interactions",
         "tps_table_code": "ASR-RI-TBL-001",
         "agol_dataset": "Regulated_Interactions_ASR_RI_TBL_001",
         "fields": ["Index_", "Year", "Category", "Count_"],
     },
     {
-        "package_id": "asr-regulated-interactions-demographics",
-        "tps_table_code": "	ASR-RI-TBL-002",
+        "package_id": "police-annual-statistical-report-regulated-interactions-demographics",
+        "tps_table_code": "ASR-RI-TBL-002",
         "agol_dataset": "Regulated_Interactions_Demographics_ASR_RI_TBL_002",
         "fields": ["Index_", "Year", "Category", "Subtype", "Count_"],
     },
     {
-        "package_id": "asr-administrative",
+        "package_id": "police-annual-statistical-report-administrative",
         "tps_table_code": "ASR-AD-TBL-001",
         "agol_dataset": "Administrative_ASR_AD_TBL_001",
         "fields": ["Index_", "Year", "Section", "Category", "Subtype", "Count_"],
     },
     {
-        "package_id": "asr-miscellaneous-data",
+        "package_id": "police-annual-statistical-report-miscellaneous-data",
         "tps_table_code": "ASR-MISC-TBL-001",
         "agol_dataset": "Miscellaneous_Data_ASR_MISC_TBL_001",
         "fields": ["Index_", "Year", "Section", "Category", "Subtype", "Count_"],
     },
     {
-        "package_id": "asr-shooting-occurrences",
+        "package_id": "police-annual-statistical-report-shooting-occurrences",
         "tps_table_code": "ASR-SH-TBL-001",
         "agol_dataset": "Shooting_Occurrence_ASR_SH_TBL_001",
         "fields": ["Index_", "OccurredYear", "GeoDivision", "Category", "Count_"],
