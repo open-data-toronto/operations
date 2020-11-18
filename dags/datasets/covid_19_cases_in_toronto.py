@@ -21,7 +21,7 @@ from utils import ckan as ckan_utils  # noqa: E402
 job_settings = {
     "description": "Take COVID19 data from QA (filestore) and put in PROD (datastore)",
     "schedule": "59 14 * * 3",
-    "start_date": datetime(2020, 11, 10, 13, 35, 0),
+    "start_date": datetime(2020, 11, 24, 13, 35, 0),
 }
 
 JOB_FILE = Path(os.path.abspath(__file__))
