@@ -81,7 +81,7 @@ def sync_resource_timestamps(**kwargs):
             resources_with_url = [r for r in resources if r["url"] == f]
 
             assert len(resources_with_url) == 1, logging.error(
-                f"{package['name']}: No resource for file: {f}"
+                f"{package['name']}: {len(resources_with_url)} resource(s) for file: {f}"
             )
 
             resource = resources_with_url[0]
