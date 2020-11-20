@@ -1,22 +1,22 @@
 toronto-economic-bulletin:
-  - http://opendata.toronto.ca/economic.development.culture/toronto-economic-bulletin/bulletin_opendata.xlsx
+    - http://opendata.toronto.ca/economic.development.culture/toronto-economic-bulletin/bulletin_opendata.xlsx
 outbreaks-in-toronto-healthcare-institutions:
-  - http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/outbreaks-in-toronto-readme.xlsx
-  - http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2020.xls
-  - http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2019.xls
-  - http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2018.xls
-  - http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2017.xls
-  - http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2016.xls
+    - http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/outbreaks-in-toronto-readme.xlsx
+    - http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2020.xls
+    - http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2019.xls
+    - http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2018.xls
+    - http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2017.xls
+    - http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2016.xls
 building-permits-active-permits:
-  - http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits_csv.zip
-  - http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits.zip
-  - http://opendata.toronto.ca/toronto.building/building-permits-active-permits/BuildingPermitsActiveReadme.xls
+    - http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits_csv.zip
+    - http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits.zip
+    - http://opendata.toronto.ca/toronto.building/building-permits-active-permits/BuildingPermitsActiveReadme.xls
 building-permits-cleared-permits-current-year:
-  - http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits2020.zip
-  - http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits2020_csv.zip
-  - http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/BuildingPermitsClearedReadme.xls
+    - http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits2020.zip
+    - http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits2020_csv.zip
+    - http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/BuildingPermitsClearedReadme.xls
 lobbyist-registry:
-  - http://opendata.toronto.ca/lobbyist.registrar/lobbyist-registry/lobbyactivity.zip
+    - http://opendata.toronto.ca/lobbyist.registrar/lobbyist-registry/lobbyactivity.zip
 municipal-licensing-and-standards-business-licences-and-permits:
     - http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
 labour-force-survey:
@@ -64,21 +64,6 @@ address-points-municipal-toronto-one-address-repository:
     - http://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/ADDRESS_POINT_WGS84_geojson.zip
 registered-programs-and-drop-in-courses-offering:
     - http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/program_offering.zip
-rain-gauge-locations-and-precipitation:
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2020_csv.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2020_json.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2019_json.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2019_csv.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2018_json.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2018_csv.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2017_json.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2017_csv.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2016_json.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2016_csv.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2015_json.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2015_csv.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/raingaugenotes.zip
-    - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/readme.docx
 committee-of-adjustment-applications:
     - http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/active.zip
     - http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2017.zip
