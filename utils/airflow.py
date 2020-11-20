@@ -3,7 +3,6 @@ from datetime import timedelta
 from pathlib import Path
 from time import sleep
 import requests
-import yaml
 import math
 import json
 import sys
@@ -17,13 +16,6 @@ dirs = {
 }
 
 sys.path.append(repo_dir)
-
-
-def load_configs():
-    with open(Path(repo_dir) / "configs" / "config.yaml", "r") as f:
-        config = yaml.load(f, yaml.SafeLoader)
-
-    return config
 
 
 def get_default_args(args={}):

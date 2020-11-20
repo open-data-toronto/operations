@@ -6,6 +6,7 @@ from airflow import DAG
 import ckanapi
 import logging
 from pathlib import Path
+import yaml
 import os
 import sys
 from dateutil import parser
@@ -48,14 +49,17 @@ def send_failure_msg(self):
 
 
 def load_remote_files():
-    return airflow_utils.load_configs()["sustainment"][job_name]
+    with open(job_file.parent / "config.yaml", "r") as f:
+        config = yaml.load(f, yaml.SafeLoader)
+
+    return config
 
 
 def get_packages_to_sync(**kwargs):
     remote_files = kwargs.pop("ti").xcom_pull(task_ids="load_files")
 
     all_packages = ckan.action.package_search(rows=10000)["results"]
-    to_sync = [p["package_id"] for p in remote_files]
+    to_sync = list(remote_files.keys())
 
     packages = [p for p in all_packages if p["name"] in to_sync]
 
@@ -68,9 +72,7 @@ def sync_resource_timestamps(**kwargs):
     packages = ti.xcom_pull(task_ids="get_packages")
 
     def sync(package, remote_files):
-        files = [p for p in remote_files if p["package_id"] == package["name"]][0][
-            "files"
-        ]
+        files = remote_files[package["name"]]
         resources = package["resources"]
 
         package_sync_results = []
@@ -147,20 +149,11 @@ def build_notification_message(**kwargs):
 
     for result_type in ["synced", "error", "unchanged"]:
         result_type_resources = [r for r in sync_results if r["result"] == result_type]
-        result_type_packages = set(
-            [r["package_name"] for r in sync_results if r["result"] == result_type]
-        )
 
         if len(result_type_resources) == 0:
             continue
 
-        lines = [
-            "\n{} - packages: {}\tresources: {}".format(
-                result_type,
-                len(result_type_packages),
-                len(result_type_resources),
-            )
-        ]
+        lines = [result_type]
 
         for index, r in enumerate(result_type_resources):
             if result_type == "unchanged":
@@ -171,8 +164,7 @@ def build_notification_message(**kwargs):
                 continue
 
             lines.append(
-                "{}. _{}_: `{}`".format(
-                    index + 1,
+                "{}: `{}`".format(
                     r["resource_name"],
                     r["file_last_modified"],
                 )
