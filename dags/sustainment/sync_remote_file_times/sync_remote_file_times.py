@@ -77,6 +77,7 @@ def sync_resource_timestamps(**kwargs):
 
         package_sync_results = []
         for f in files:
+            logging.info(f"Attempting: {f}")
             resources_with_url = [r for r in resources if r["url"] == f]
 
             assert len(resources_with_url) == 1, logging.error(
@@ -153,11 +154,13 @@ def build_notification_message(**kwargs):
         if len(result_type_resources) == 0:
             continue
 
-        lines = [result_type]
+        lines = []
 
         for index, r in enumerate(result_type_resources):
             if result_type == "unchanged":
                 continue
+
+            lines.append(result_type)
 
             if result_type == "error":
                 lines.append("{}. {} ".format(index + 1, r["package_name"]))
