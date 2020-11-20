@@ -103,9 +103,11 @@ sustainment:
     - package_id: property-boundaries
       files:
         - http://opendata.toronto.ca/technology.services/property-boundaries/property_bnds_gcc_wgs84.zip
+        - http://opendata.toronto.ca/technology.services/property-boundaries/PROPERTY_BOUNDARIES_WGS84_geojson.zip
     - package_id: address-points-municipal-toronto-one-address-repository
       files:
         - http://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/municipal-address-points-wgs84-latitude-longitude.zip
+        - http://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/ADDRESS_POINT_WGS84_geojson.zip
     - package_id: registered-programs-and-drop-in-courses-offering
       files:
         - http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/program_offering.zip
@@ -205,3 +207,7 @@ sustainment:
         - http://opendata.toronto.ca/water/lead.sampling/NonRegulatedLeadSampling2011-2013.zip
         - http://opendata.toronto.ca/water/lead.sampling/leadsampling_csv.zip
         - http://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
+    - package_id: toronto-centreline-tcl
+      files:
+        - http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/centreline_wgs84.zip​
+        - http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/centreline_wgs84_geojson.zip
