@@ -130,5 +130,5 @@ non-regulated-lead-sample:
     - http://opendata.toronto.ca/water/lead.sampling/leadsampling_csv.zip
     - http://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
 toronto-centreline-tcl:
-    - http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/centreline_wgs84.zip​
+    - http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/centreline_wgs84.zip
     - http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/centreline_wgs84_geojson.zip
