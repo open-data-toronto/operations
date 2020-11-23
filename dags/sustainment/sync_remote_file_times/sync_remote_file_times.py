@@ -82,7 +82,7 @@ def sync_resource_timestamps(**kwargs):
             resources_with_url = [r for r in resources if r["url"] == f]
 
             assert len(resources_with_url) == 1, logging.error(
-                f"{package['name']}: {len(resources_with_url)} resource(s) for file: {f}. pkg: {json.dumps(package)}"
+                f"{package['name']}: {len(resources_with_url)} resource(s) for: '{f}'. pkg: {json.dumps(package)}"
             )
 
             resource = resources_with_url[0]
@@ -156,12 +156,12 @@ def build_notification_message(**kwargs):
             continue
 
         lines = []
+        if result_type != "unchanged":
+            lines = [f"*{result_type}*"]
 
         for index, r in enumerate(result_type_resources):
             if result_type == "unchanged":
                 continue
-
-            lines.append(result_type)
 
             if result_type == "error":
                 lines.append("{}. {} ".format(index + 1, r["package_name"]))
