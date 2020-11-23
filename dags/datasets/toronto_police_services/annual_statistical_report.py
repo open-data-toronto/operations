@@ -210,7 +210,7 @@ extracts = [
 
 # ACTIVE_ENV = Variable.get("active_env")
 ACTIVE_ENV = "qa"
-CKAN_CREDS = Variable.get("ckan_credentials", deserialize_json=True)
+CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 APIKEY = Variable.get("flowworks_apikey")
 

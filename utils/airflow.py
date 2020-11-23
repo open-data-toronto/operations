@@ -90,7 +90,7 @@ def message_slack(name, msg, message_type):
         )
 
         res = requests.post(
-            Variable.get("slack_webhook"),
+            Variable.get("slack_webhook_secret"),
             data=data,
             headers={"Content-Type": "application/json"},
         )

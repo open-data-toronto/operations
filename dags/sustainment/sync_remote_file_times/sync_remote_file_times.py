@@ -29,7 +29,7 @@ job_file = Path(os.path.abspath(__file__))
 job_name = job_file.name[:-3]
 
 active_env = Variable.get("active_env")
-ckan_creds = Variable.get("ckan_credentials", deserialize_json=True)
+ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
 ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
 
 
