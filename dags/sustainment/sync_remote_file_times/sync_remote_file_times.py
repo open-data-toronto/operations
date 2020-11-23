@@ -84,7 +84,10 @@ def sync_resource_timestamps(**kwargs):
             resources_with_url = [r for r in resources if r["url"] == f]
 
             logging.info(
-                f"resources_with_url: {[ r['url'] for r in resources if r['url'] == f ]}"
+                f"resources_with_url if url == f: {[ r['url'] for r in resources if r['url'] == f ]}"
+            )
+            logging.info(
+                f"resources_with_url all files: {[ r['url'] for r in resources ]}"
             )
 
             assert len(resources_with_url) == 1, logging.error(
