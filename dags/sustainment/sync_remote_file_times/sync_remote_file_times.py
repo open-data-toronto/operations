@@ -1,7 +1,6 @@
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 from airflow.operators.dummy_operator import DummyOperator
 from datetime import datetime
-from copy import deepcopy
 from airflow.models import Variable
 from airflow import DAG
 import ckanapi
@@ -74,13 +73,12 @@ def sync_resource_timestamps(**kwargs):
     packages = ti.xcom_pull(task_ids="get_packages")
 
     def sync(package, remote_files):
-        package = deepcopy(package)
         files = remote_files[package["name"]]
         resources = package["resources"]
 
         package_sync_results = []
         for f in files:
-            logging.info(f"Attempting: {f}")
+            logging.info(f"Attempting: '{f}'")
             resources_with_url = [
                 r for r in resources if r["url"].encode("utf-8") == f.encode("utf-8")
             ]
@@ -90,6 +88,13 @@ def sync_resource_timestamps(**kwargs):
             )
             logging.info(
                 f"resources_with_url all files: {[ r['url'] for r in resources ]}"
+            )
+            assert len(resources_with_url) == 1, logging.error(
+                "{0} ({1}) | {2}".format(
+                    f,
+                    type(f),
+                    [f"-{r['url']}- type: {type(r['url'])} ..." for r in resources],
+                )
             )
 
             assert len(resources_with_url) == 1, logging.error(
