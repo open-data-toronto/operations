@@ -78,27 +78,17 @@ def sync_resource_timestamps(**kwargs):
 
         package_sync_results = []
         for f in files:
+            f = f.replace("\u200b", "")
+
             logging.info(f"Attempting: '{f}'")
             resources_with_url = [
                 r for r in resources if r["url"].encode("utf-8") == f.encode("utf-8")
             ]
 
-            logging.info(
-                f"resources_with_url if url == f: {[ r['url'] for r in resources if r['url'] == f ]}"
-            )
-            logging.info(
-                f"resources_with_url all files: {[ r['url'] for r in resources ]}"
-            )
             assert len(resources_with_url) == 1, logging.error(
-                "{0} ({1}) | {2}".format(
-                    f,
-                    type(f),
-                    [f"-{r['url']}- type: {type(r['url'])} ..." for r in resources],
+                "{}: {} resource(s), expected 1. Package: {}".format(
+                    package["name"], {len(resources_with_url)}, json.dumps(package)
                 )
-            )
-
-            assert len(resources_with_url) == 1, logging.error(
-                f"{package['name']}: {len(resources_with_url)} resource(s) for: '{f}'. pkg: {json.dumps(package)}, resources: {json.dumps(resources)}"
             )
 
             resource = resources_with_url[0]
