@@ -12,6 +12,7 @@ import sys
 from dateutil import parser
 import requests
 import traceback
+import json
 
 sys.path.append(Variable.get("repo_dir"))
 from utils import airflow as airflow_utils  # noqa: E402
@@ -81,7 +82,7 @@ def sync_resource_timestamps(**kwargs):
             resources_with_url = [r for r in resources if r["url"] == f]
 
             assert len(resources_with_url) == 1, logging.error(
-                f"{package['name']}: {len(resources_with_url)} resource(s) for file: {f}"
+                f"{package['name']}: {len(resources_with_url)} resource(s) for file: {f}. pkg: {json.dumps(package)}"
             )
 
             resource = resources_with_url[0]
