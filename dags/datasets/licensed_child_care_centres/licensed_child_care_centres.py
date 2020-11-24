@@ -139,9 +139,9 @@ def backup_old_data(**kwargs):
     data_hash.update(data.sort_values(by="LOC_ID").to_csv(index=False).encode("utf-8"))
     unique_id = data_hash.hexdigest()
 
-    data_path = backups / f"data.{unique_id}.parquet"
+    data_path = backups / f"data.{unique_id}.csv"
     if not data_path.exists():
-        data.to_parquet(data_path)
+        data.to_csv(data_path)
 
     fields = [f for f in datastore_response["fields"] if f["id"] != "_id"]
 
