@@ -175,10 +175,15 @@ def is_data_new(**kwargs):
     backups = Path(Variable.get("backups_dir")) / JOB_NAME
 
     for f in os.listdir(backups):
+        if not os.path.isfile(backups / f):
+            continue
+        logging.info(f"File in backups: {f}")
+
         if os.path.isfile(backups / f) and data_to_load_unique_id in f:
             logging.info(f"Data has already been loaded, ID: {data_to_load_unique_id}")
             return "data_is_not_new"
 
+    logging.info(f"Data has not been loaded, new ID: {data_to_load_unique_id}")
     return "data_is_new"
 
 
