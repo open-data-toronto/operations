@@ -1,6 +1,6 @@
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 from airflow.operators.dummy_operator import DummyOperator
-from datetime import datetime, timedelta
+from datetime import datetime
 from airflow.models import Variable
 import pandas as pd
 import ckanapi
@@ -33,7 +33,7 @@ PACKAGE_ID = JOB_NAME.replace("_", "-")
 ACTIVE_ENV = "dev"
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
-SOURCE_CSV = "http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv"
+SOURCE_CSV = "http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv"  # noqa: E501
 RESOURCE_NAME = "Day-care centres"
 
 
@@ -203,13 +203,6 @@ def build_message(**kwargs):
     return "Licensed child care centres refreshed: from {} to {} records".format(
         previous_data_records, new_data.shape[0]
     )
-
-
-def delete_source_resource(**kwargs):
-    package = SOURCE_CKAN.action.package_show(id=PACKAGE_ID)
-    resource = [r for r in package["resources"] if r["name"] == SOURCE_FILE_NAME][0]
-    res = SOURCE_CKAN.action.resource_delete(id=resource["id"])
-    logging.info(res)
 
 
 def update_resource_last_modified(**kwargs):
