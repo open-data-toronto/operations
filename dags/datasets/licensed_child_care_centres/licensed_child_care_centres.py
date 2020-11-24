@@ -113,8 +113,10 @@ def get_resource_id():
 
 def backup_old_data(**kwargs):
     ti = kwargs.pop("ti")
-    resource_id = ti.xcom_pull(task_ids="get_resource_id")
+    package = ti.xcom_pull(task_ids="get_package")
     backups = Path(Variable.get("backups_dir")) / JOB_NAME
+
+    resource_id = [r for r in r["resources"] if r["name"] == RESOURCE_NAME][0]["id"]
 
     record_count = CKAN.action.datastore_search(id=resource_id, limit=0)["total"]
 
