@@ -131,9 +131,9 @@ def backup_old_data(**kwargs):
     data_hash.update(data.sort_values(by="LOC_ID").to_csv(index=False).encode("utf-8"))
     unique_id = data_hash.hexdigest()
 
-    data_path = backups / f"data.{unique_id}.parquet"
+    data_path = backups / f"data.{unique_id}.csv"
     if not data_path.exists():
-        data.to_parquet(data_path)
+        data.to_csv(data_path)
 
     fields = [f for f in datastore_response["fields"] if f["id"] != "_id"]
 
@@ -185,7 +185,7 @@ def insert_new_records(**kwargs):
     resource_id = ti.xcom_pull(task_ids="get_resource_id")
     data_fp = Path(ti.xcom_pull(task_ids="get_data_file"))
 
-    data = pd.read_parquet(data_fp)
+    data = pd.read_csv(data_fp)
     records = data.to_dict(orient="records")
 
     return CKAN.action.datastore_create(id=resource_id, records=records)
@@ -202,7 +202,7 @@ def build_message(**kwargs):
     previous_data_records = backup_details["records"]
 
     new_data_fp = ti.xcom_pull(task_ids="prep_new_data")
-    new_data = pd.read_parquet(new_data_fp)
+    new_data = pd.read_csv(new_data_fp)
 
     return "Licensed child care centres refreshed: from {} to {} records".format(
         previous_data_records, new_data.shape[0]
