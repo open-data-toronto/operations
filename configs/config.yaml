@@ -1,4 +1,4 @@
-active_env:
+active_env: prod
 
 directories:
   backups: backups
@@ -6,25 +6,25 @@ directories:
   logs: logs
 
 notifications:
-  wirepusher:
-    id:
+  # wirepusher:
+  #   id: kjmfmpgjD
   slack:
-    webhook_url: 
+    webhook_url: https://hooks.slack.com/services/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
 
 ckan:
   dev:
-    address:
-    apikey:
+    address: https://ckanadmin0.intra.dev-toronto.ca/
+    apikey: 784f11cc-b170-4377-83a3-38ba28662b16
   qa:
-    address:
-    apikey:
+    address: https://ckanadmin0.intra.qa-toronto.ca/
+    apikey: 8a661d0a-309a-4f3c-8d79-8a714a6152a5
   prod:
-    address:
-    apikey:
-    
+    address: https://ckanadmin0.intra.prod-toronto.ca/
+    apikey: 8b99d4cd-b37e-4090-8c1a-f21e71d690bb
+
 datasets:
   rain_gauge_locations_and_precipitation:
-    credentials: 
+    credentials: E8EF5292-F128-468D-BFBC-AEC1BE7AB8AC
   covid_19_cases_in_toronto:
     file_name: covid19cases.csv
 
@@ -103,30 +103,12 @@ sustainment:
     - package_id: property-boundaries
       files:
         - http://opendata.toronto.ca/technology.services/property-boundaries/property_bnds_gcc_wgs84.zip
-        - http://opendata.toronto.ca/technology.services/property-boundaries/PROPERTY_BOUNDARIES_WGS84_geojson.zip
     - package_id: address-points-municipal-toronto-one-address-repository
       files:
         - http://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/municipal-address-points-wgs84-latitude-longitude.zip
-        - http://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/ADDRESS_POINT_WGS84_geojson.zip
     - package_id: registered-programs-and-drop-in-courses-offering
       files:
         - http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/program_offering.zip
-    - package_id: rain-gauge-locations-and-precipitation
-      files:
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2020_csv.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2020_json.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2019_json.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2019_csv.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2018_json.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2018_csv.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2017_json.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2017_csv.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2016_json.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2016_csv.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2015_json.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/rainfall2015_csv.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/raingaugenotes.zip
-        - http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/readme.docx
     - package_id: committee-of-adjustment-applications
       files:
         - http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/active.zip
@@ -207,7 +189,3 @@ sustainment:
         - http://opendata.toronto.ca/water/lead.sampling/NonRegulatedLeadSampling2011-2013.zip
         - http://opendata.toronto.ca/water/lead.sampling/leadsampling_csv.zip
         - http://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
-    - package_id: toronto-centreline-tcl
-      files:
-        - http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/centreline_wgs84.zip​
-        - http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/centreline_wgs84_geojson.zip

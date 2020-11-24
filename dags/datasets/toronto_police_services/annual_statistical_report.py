@@ -88,7 +88,7 @@ extracts = [
         "fields": ["Index_", "Year", "Firearm_Type", "Calibre"],
     },
     {
-        "package_id": "police-annual-statistical-report-top-20-offences-of-firearms-seizures",
+        "package_id": "police-annual-statistical-report-top-20-offences-of-firearms-seizures",  # noqa: E501
         "tps_table_code": "ASR-F-TBL-002",
         "agol_dataset": "Top_20_Offences_of_Firearm_Seizures_ASR_F_TBL_002",
         "fields": ["SeizedYear", "Rank", "offence"],
@@ -153,7 +153,7 @@ extracts = [
         "fields": ["Index_", "Year", "Category", "Unit", "Command", "Count_"],
     },
     {
-        "package_id": "police-annual-statistical-report-miscellaneous-calls-for-service",
+        "package_id": "police-annual-statistical-report-miscellaneous-calls-for-service",  # noqa: E501
         "tps_table_code": "ASR-CS-TBL-002",
         "agol_dataset": "Miscellaneous_Calls_for_Service_ASR_CS_TBL_002",
         "fields": ["Index_", "Year", "Category", "Type", "Count_"],
@@ -165,7 +165,7 @@ extracts = [
         "fields": ["Index_", "Year", "Type", "Subtype", "Count_"],
     },
     {
-        "package_id": "police-annual-statistical-report-investigated-alleged-complaints",
+        "package_id": "police-annual-statistical-report-investigated-alleged-complaints",  # noqa: E501
         "tps_table_code": "ASR-PCF-TBL-002",
         "agol_dataset": "Investigated_Alleged_Misconduct_ASR_PCF_TBL_002",
         "fields": ["Index_", "Year", "Type", "Subtype", "Count_"],
@@ -183,7 +183,7 @@ extracts = [
         "fields": ["Index_", "Year", "Category", "Count_"],
     },
     {
-        "package_id": "police-annual-statistical-report-regulated-interactions-demographics",
+        "package_id": "police-annual-statistical-report-regulated-interactions-demographics",  # noqa: E501
         "tps_table_code": "ASR-RI-TBL-002",
         "agol_dataset": "Regulated_Interactions_Demographics_ASR_RI_TBL_002",
         "fields": ["Index_", "Year", "Category", "Subtype", "Count_"],
