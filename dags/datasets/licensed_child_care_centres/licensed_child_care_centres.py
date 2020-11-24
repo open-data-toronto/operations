@@ -201,6 +201,12 @@ def insert_new_records(**kwargs):
     data = pd.read_parquet(data_fp)
     records = data.to_dict(orient="records")
 
+    ckan_utils.insert_datastore_records(
+        ckan=CKAN,
+        resource_id=resource_id,
+        records=records,
+        chunk_size=int(Variable.get("ckan_insert_chunk_size")),
+    )
     return CKAN.action.datastore_create(id=resource_id, records=records)
 
 
