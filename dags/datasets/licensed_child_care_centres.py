@@ -102,14 +102,13 @@ def get_resource_id():
 
 def backup_old_data(**kwargs):
     ti = kwargs.pop("ti")
-    package = ti.xcom_pull(task_ids="get_package")
+    resource_id = ti.xcom_pull(task_ids="get_resource_id")
     backups = Path(Variable.get("backups_dir")) / JOB_NAME
 
-    resource = [r for r in package["resources"] if r["name"] == RESOURCE_NAME][0]
-    record_count = CKAN.action.datastore_search(id=resource["id"], limit=0)["total"]
+    record_count = CKAN.action.datastore_search(id=resource_id, limit=0)["total"]
 
     datastore_response = CKAN.action.datastore_search(
-        id=resource["id"], limit=record_count
+        id=resource_id, limit=record_count
     )
 
     data = pd.DataFrame(datastore_response["records"])
@@ -381,13 +380,15 @@ with DAG(
 
     create_tmp_dir >> source_data >> new_data_unique_id >> is_data_new_branch
 
-    [create_backups_dir, package] >> old_data >> is_data_new_branch
+    # create_backups_dir >> old_data >> is_data_new_branch
 
     package >> is_resource_new_branch
 
     is_resource_new_branch >> resource_is_new >> new_resource >> resource_id
 
-    is_resource_new_branch >> resource_is_not_new >> resource_id
+    is_resource_new_branch >> resource_is_not_new >> resource_id >> old_data
+
+    resource_id >> is_data_new_branch
 
     resource_id >> is_data_new_branch
 
