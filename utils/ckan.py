@@ -52,7 +52,7 @@ def insert_datastore_records(ckan, resource_id, records, chunk_size=20000):
             logging.info(f"Removing NaNs and inserting {len(chunk)} records")
             record = {}
             for key, value in r:
-                if value == value:
+                if value == value and value != "NaN":
                     record[key] = value
             clean_records.append(record)
 
