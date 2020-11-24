@@ -116,15 +116,21 @@ def backup_old_data(**kwargs):
     package = ti.xcom_pull(task_ids="get_package")
     backups = Path(Variable.get("backups_dir")) / JOB_NAME
 
-    resource_id = [r for r in r["resources"] if r["name"] == RESOURCE_NAME][0]["id"]
+    resource_id = [r for r in package["resources"] if r["name"] == RESOURCE_NAME][0][
+        "id"
+    ]
+    logging.info(f"Resource ID: {resource_id}")
 
     record_count = CKAN.action.datastore_search(id=resource_id, limit=0)["total"]
 
     datastore_response = CKAN.action.datastore_search(
         id=resource_id, limit=record_count
     )
+    records = datastore_response["records"]
+    logging.info(f"Example record retrieved: {json.dumps(records[0])}")
 
-    data = pd.DataFrame(datastore_response["records"])
+    data = pd.DataFrame(records)
+    logging.info(f"Columns: {data.columns.values}")
 
     if "_id" in data.columns.values:
         data = data.drop("_id", axis=1)
