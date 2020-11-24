@@ -46,7 +46,7 @@ def send_success_msg(**kwargs):
         name=JOB_NAME,
         message_type="success",
         msg=msg,
-        prod_webhook=False,
+        prod_webhook=ACTIVE_ENV == "prod",
         active_env=ACTIVE_ENV,
     )
 
@@ -56,6 +56,8 @@ def send_failure_msg(self):
         name=JOB_NAME,
         message_type="error",
         msg="Job not finished",
+        active_env=ACTIVE_ENV,
+        prod_webhook=ACTIVE_ENV == "prod",
     )
 
 
