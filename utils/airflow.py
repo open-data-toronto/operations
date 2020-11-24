@@ -44,8 +44,9 @@ def get_default_args(args={}):
     }
 
 
-def message_slack(name, msg, message_type):
-    active_env = Variable.get("active_env")
+def message_slack(name, msg, message_type, prod_webhook=True, active_env=None):
+    if active_env is None:
+        active_env = Variable.get("active_env")
 
     header = f"{message_type}\n"
     if message_type.lower() == "error":
@@ -89,8 +90,12 @@ def message_slack(name, msg, message_type):
             }
         )
 
+        webhook_url = (
+            "slack_webhook_secret" if prod_webhook else "slack_dev_webhook_secret"
+        )
+
         res = requests.post(
-            Variable.get("slack_webhook_secret"),
+            Variable.get(webhook_url),
             data=data,
             headers={"Content-Type": "application/json"},
         )

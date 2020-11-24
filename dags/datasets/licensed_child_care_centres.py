@@ -46,6 +46,8 @@ def send_success_msg(**kwargs):
         name=JOB_NAME,
         message_type="success",
         msg=msg,
+        prod_webhook=False,
+        active_env=ACTIVE_ENV,
     )
 
 
