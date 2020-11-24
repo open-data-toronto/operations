@@ -353,23 +353,18 @@ with DAG(
         op_kwargs={"msg_task_id": "build_nothing_to_load_msg"},
     )
 
-    # delete_tmp_files = PythonOperator(
-    #     task_id="delete_tmp_files",
-    #     python_callable=airflow_utils.delete_file,
-    #     op_kwargs={"task_ids": ["get_new_data", "prep_new_data"]},
-    #     provide_context=True,
-    #     trigger_rule="one_success",
-    # )
-
-    # delete_tmp_dir = PythonOperator(
-    #     task_id="delete_tmp_dir",
-    #     python_callable=airflow_utils.delete_tmp_data_dir,
-    #     op_kwargs={"dag_id": JOB_NAME},
-    # )
-
-    begin_cleanup = DummyOperator(
-        task_id="begin_cleanup",
+    delete_tmp_files = PythonOperator(
+        task_id="delete_tmp_files",
+        python_callable=airflow_utils.delete_file,
+        op_kwargs={"task_ids": ["get_new_data"]},
+        provide_context=True,
         trigger_rule="none_failed",
+    )
+
+    delete_tmp_dir = PythonOperator(
+        task_id="delete_tmp_dir",
+        python_callable=airflow_utils.delete_tmp_data_dir,
+        op_kwargs={"dag_id": JOB_NAME},
     )
 
     update_timestamp = PythonOperator(
@@ -394,8 +389,7 @@ with DAG(
     is_data_new_branch >> data_is_not_new >> nothing_to_load_msg
     nothing_to_load_msg >> send_nothing_to_load_msg
 
-    [send_nothing_to_load_msg, send_loaded_notification] >> begin_cleanup
-
-    # begin_cleanup >> delete_tmp_files >> delete_tmp_dir
-
-    # begin_cleanup >> delete_source
+    [
+        send_nothing_to_load_msg,
+        send_loaded_notification,
+    ] >> delete_tmp_files >> delete_tmp_dir
