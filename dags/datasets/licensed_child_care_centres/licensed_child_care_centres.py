@@ -222,6 +222,35 @@ def update_resource_last_modified(**kwargs):
     )
 
 
+def build_data_dict(**kwargs):
+    ti = kwargs.pop("ti")
+    data_fp = Path(ti.xcom_pull(task_ids="get_data_file"))
+    data = pd.read_parquet(data_fp)
+
+    fields = []
+
+    for field, dtype in data.dtypes.iteritems():
+        ckan_type_map = {"int64": "int", "object": "text", "float64": "float"}
+        fields.append({"type": ckan_type_map[dtype.name], "id": field})
+
+    return fields
+
+
+def create_new_resource(**kwargs):
+    fields = kwargs.pop("ti").xcom_pull(task_ids="build_data_dict")
+
+    CKAN.action.datastore_create(
+        resource={
+            "package_id": PACKAGE_ID,
+            "name": RESOURCE_NAME,
+            "format": "csv",
+            "is_preview": True,
+        },
+        fields=fields,
+        records=[],
+    )
+
+
 default_args = airflow_utils.get_default_args(
     {
         "on_failure_callback": send_failure_msg,
@@ -264,16 +293,8 @@ with DAG(
 
     new_resource = PythonOperator(
         task_id="create_new_resource",
-        python_callable=CKAN.action.datastore_create,
-        op_kwargs={
-            "resource": {
-                "package_id": PACKAGE_ID,
-                "name": RESOURCE_NAME,
-                "format": "csv",
-                "is_preview": True,
-            },
-            "records": [],
-        },
+        python_callable=create_new_resource,
+        provide_context=True,
     )
 
     package = PythonOperator(
@@ -285,6 +306,12 @@ with DAG(
     old_data = PythonOperator(
         task_id="backup_old_data",
         python_callable=backup_old_data,
+        provide_context=True,
+    )
+
+    data_dict = PythonOperator(
+        task_id="build_data_dict",
+        python_callable=build_data_dict,
         provide_context=True,
     )
 
@@ -391,7 +418,7 @@ with DAG(
 
     package >> is_resource_new_branch
 
-    is_resource_new_branch >> resource_is_new >> new_resource >> resource_id
+    is_resource_new_branch >> resource_is_new >> data_dict >> new_resource >> resource_id
 
     is_resource_new_branch >> resource_is_not_new >> old_data >> resource_id
 
