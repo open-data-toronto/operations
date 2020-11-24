@@ -190,7 +190,11 @@ def is_data_new(**kwargs):
 def delete_old_records(**kwargs):
     resource_id = kwargs.pop("ti").xcom_pull(task_ids="get_resource_id")
 
-    return CKAN.action.datastore_delete(id=resource_id, filters={})
+    CKAN.action.datastore_delete(id=resource_id, filters={})
+
+    record_count = CKAN.action.datastore_search(id=resource_id, limit=0)["total"]
+
+    logging.info(f"Records in resource after cleanup: {record_count}")
 
 
 def insert_new_records(**kwargs):
