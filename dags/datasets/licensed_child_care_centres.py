@@ -183,7 +183,7 @@ def delete_old_records(**kwargs):
 def insert_new_records(**kwargs):
     ti = kwargs.pop("ti")
     resource_id = ti.xcom_pull(task_ids="get_resource_id")
-    data_fp = Path(ti.xcom_pull(task_ids="prep_new_data"))
+    data_fp = Path(ti.xcom_pull(task_ids="get_data_file"))
 
     data = pd.read_parquet(data_fp)
     records = data.to_dict(orient="records")
