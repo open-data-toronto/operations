@@ -13,6 +13,7 @@ import requests
 import json
 import os
 import sys
+from dateutil import parser
 
 sys.path.append(Variable.get("repo_dir"))
 from utils import airflow as airflow_utils  # noqa: E402
@@ -56,7 +57,11 @@ def send_failure_msg(self):
     )
 
 
-def get_new_data(**kwargs):
+def get_file_last_modified():
+    return requests.head(SOURCE_CSV).headers["Last-Modified"]
+
+
+def get_data_file(**kwargs):
     ti = kwargs.pop("ti")
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
 
@@ -141,7 +146,7 @@ def backup_old_data(**kwargs):
 
 def get_new_data_unique_id(**kwargs):
     ti = kwargs.pop("ti")
-    data_fp = Path(ti.xcom_pull(task_ids="get_new_data"))
+    data_fp = Path(ti.xcom_pull(task_ids="get_data_file"))
     data = pd.read_csv(data_fp)
 
     data_hash = hashlib.md5()
@@ -206,12 +211,15 @@ def delete_source_resource(**kwargs):
 
 
 def update_resource_last_modified(**kwargs):
-    resource_id = kwargs.pop("ti").xcom_pull(task_ids="get_resource_id")
+    ti = kwargs.pop("ti")
+    resource_id = ti.xcom_pull(task_ids="get_resource_id")
+    last_modified_string = ti.xcom_pull(task_ids="get_file_last_modified")
+    last_modified = parser.parse(last_modified_string)
 
     return ckan_utils.update_resource_last_modified(
         ckan=CKAN,
         resource_id=resource_id,
-        new_last_modified=datetime.now(),
+        new_last_modified=last_modified,
     )
 
 
@@ -219,8 +227,8 @@ default_args = airflow_utils.get_default_args(
     {
         "on_failure_callback": send_failure_msg,
         "start_date": job_settings["start_date"],
-        "retries": 3,
-        "retry_delay": timedelta(minutes=3),
+        "retries": 0,
+        # "retry_delay": timedelta(minutes=3),
     }
 )
 
@@ -245,9 +253,14 @@ with DAG(
     )
 
     source_data = PythonOperator(
-        task_id="get_new_data",
-        python_callable=get_new_data,
+        task_id="get_data_file",
+        python_callable=get_data_file,
         provide_context=True,
+    )
+
+    last_modified = PythonOperator(
+        task_id="get_file_last_modified",
+        python_callable=get_file_last_modified,
     )
 
     new_resource = PythonOperator(
@@ -356,7 +369,7 @@ with DAG(
     delete_tmp_files = PythonOperator(
         task_id="delete_tmp_files",
         python_callable=airflow_utils.delete_file,
-        op_kwargs={"task_ids": ["get_new_data"]},
+        op_kwargs={"task_ids": ["get_data_file"]},
         provide_context=True,
         trigger_rule="none_failed",
     )
@@ -385,6 +398,9 @@ with DAG(
 
     is_data_new_branch >> data_is_new >> delete_old >> insert_new
     insert_new >> update_timestamp >> loaded_msg >> send_loaded_notification
+
+    # data_is_new >> last_modified
+    last_modified >> update_timestamp
 
     is_data_new_branch >> data_is_not_new >> nothing_to_load_msg
     nothing_to_load_msg >> send_nothing_to_load_msg
