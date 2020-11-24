@@ -46,5 +46,13 @@ def insert_datastore_records(ckan, resource_id, records, chunk_size=20000):
     chunks = [records[i : i + chunk_size] for i in range(0, len(records), chunk_size)]
 
     for chunk in chunks:
-        logging.info(f"Inserting {len(chunk)} records")
-        ckan.action.datastore_create(id=resource_id, records=chunk)
+        clean_records = []
+        for r in chunk:
+            logging.info(f"Removing NaNs and inserting {len(chunk)} records")
+                record = {}
+                for key, value in r:
+                    if value == value and value is not None:
+                        record[key] = value
+                clean_records.append(record)
+
+    ckan.action.datastore_create(id=resource_id, records=chunk)
