@@ -20,7 +20,7 @@ from utils import airflow as airflow_utils  # noqa: E402
 from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
-    "description": "Take COVID19 data from QA (filestore) and put in PROD (datastore)",
+    "description": "Take data from opendata.toronto.ca (CSV) and put in PROD (datastore)",
     "schedule": "@once",
     "start_date": datetime(2020, 11, 24, 13, 35, 0),
 }
