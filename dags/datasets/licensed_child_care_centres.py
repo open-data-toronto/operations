@@ -34,7 +34,7 @@ ACTIVE_ENV = "dev"
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 SOURCE_CSV = "http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv"  # noqa: E501
-RESOURCE_NAME = "Day-care centres"
+RESOURCE_NAME = "Child care centres"
 
 
 def send_success_msg(**kwargs):
@@ -85,6 +85,8 @@ def get_package():
 def is_resource_new(**kwargs):
     ti = kwargs.pop("ti")
     package = ti.xcom_pull(task_ids="get_package")
+
+    logging.info(f"resources found: {[r['name'] for r in package['resources']]}")
 
     is_new = RESOURCE_NAME not in [r["name"] for r in package["resources"]]
 
@@ -157,7 +159,7 @@ def get_new_data_unique_id(**kwargs):
     return data_hash.hexdigest()
 
 
-def confirm_data_is_new(**kwargs):
+def is_data_new(**kwargs):
     ti = kwargs.pop("ti")
     data_to_load_unique_id = ti.xcom_pull(task_ids="get_new_data_unique_id")
     backups = Path(Variable.get("backups_dir")) / JOB_NAME
@@ -291,8 +293,8 @@ with DAG(
     )
 
     is_data_new_branch = BranchPythonOperator(
-        task_id="confirm_data_is_new",
-        python_callable=confirm_data_is_new,
+        task_id="is_data_new",
+        python_callable=is_data_new,
         provide_context=True,
     )
 
