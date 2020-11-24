@@ -216,7 +216,7 @@ def build_message(**kwargs):
     new_data_fp = ti.xcom_pull(task_ids="prep_new_data")
     new_data = pd.read_parquet(new_data_fp)
 
-    return "COVID data refreshed: from {} to {} records".format(
+    return "COVID data refreshed: from {} to {} cases".format(
         previous_data_records, new_data.shape[0]
     )
 
