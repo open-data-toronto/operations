@@ -73,9 +73,9 @@ def get_data_file(**kwargs):
     data = pd.read_csv(BytesIO(file_content), encoding="latin1")
 
     filename = "new_data_raw"
-    filepath = tmp_dir / f"{filename}.parquet"
+    filepath = tmp_dir / f"{filename}.csv"
 
-    data.to_parquet(filepath)
+    data.to_csv(filepath)
 
     return filepath
 
@@ -139,9 +139,9 @@ def backup_old_data(**kwargs):
     data_hash.update(data.sort_values(by="LOC_ID").to_csv(index=False).encode("utf-8"))
     unique_id = data_hash.hexdigest()
 
-    data_path = backups / f"data.{unique_id}.parquet"
+    data_path = backups / f"data.{unique_id}.csv"
     if not data_path.exists():
-        data.to_parquet(data_path)
+        data.to_csv(data_path)
 
     fields = [f for f in datastore_response["fields"] if f["id"] != "_id"]
 
@@ -161,7 +161,7 @@ def backup_old_data(**kwargs):
 def get_new_data_unique_id(**kwargs):
     ti = kwargs.pop("ti")
     data_fp = Path(ti.xcom_pull(task_ids="get_data_file"))
-    data = pd.read_parquet(data_fp)
+    data = pd.read_csv(data_fp)
 
     data_hash = hashlib.md5()
     data_hash.update(data.sort_values(by="LOC_ID").to_csv(index=False).encode("utf-8"))
@@ -198,7 +198,7 @@ def insert_new_records(**kwargs):
     resource_id = ti.xcom_pull(task_ids="get_resource_id")
     data_fp = Path(ti.xcom_pull(task_ids="get_data_file"))
 
-    data = pd.read_parquet(data_fp)
+    data = pd.read_csv(data_fp)
     records = data.to_dict(orient="records")
 
     ckan_utils.insert_datastore_records(
@@ -218,7 +218,7 @@ def build_message(**kwargs):
         return f"Data is not new, UID of backup files: {unique_id}. Nothing to load."
 
     new_data_fp = ti.xcom_pull(task_ids="get_data_file")
-    new_data = pd.read_parquet(new_data_fp)
+    new_data = pd.read_csv(new_data_fp)
 
     return f"Refreshed: {new_data.shape[0]} records"
 
@@ -239,7 +239,7 @@ def update_resource_last_modified(**kwargs):
 def build_data_dict(**kwargs):
     ti = kwargs.pop("ti")
     data_fp = Path(ti.xcom_pull(task_ids="get_data_file"))
-    data = pd.read_parquet(data_fp)
+    data = pd.read_csv(data_fp)
 
     fields = []
 
