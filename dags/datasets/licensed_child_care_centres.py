@@ -395,6 +395,8 @@ with DAG(
 
     is_resource_new_branch >> resource_is_not_new >> old_data >> resource_id
 
+    resource_id >> is_data_new_branch
+
     is_data_new_branch >> data_is_new >> delete_old >> insert_new
     insert_new >> update_timestamp >> loaded_msg >> send_loaded_notification
 
