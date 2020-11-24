@@ -1,4 +1,5 @@
 import logging
+import math
 
 
 def update_resource_last_modified(ckan, resource_id, new_last_modified):
@@ -51,8 +52,8 @@ def insert_datastore_records(ckan, resource_id, records, chunk_size=20000):
             logging.info(f"Removing NaNs and inserting {len(chunk)} records")
             record = {}
             for key, value in r:
-                if value == value and value is not None:
+                if value == value:
                     record[key] = value
             clean_records.append(record)
 
-    ckan.action.datastore_create(id=resource_id, records=chunk)
+        ckan.action.datastore_create(id=resource_id, records=clean_records)
