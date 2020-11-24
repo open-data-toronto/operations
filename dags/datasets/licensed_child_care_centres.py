@@ -387,7 +387,7 @@ with DAG(
 
     create_tmp_dir >> source_data >> new_data_unique_id >> is_data_new_branch
 
-    create_backups_dir >> old_data >> is_data_new_branch
+    create_backups_dir >> old_data
 
     package >> is_resource_new_branch
 
