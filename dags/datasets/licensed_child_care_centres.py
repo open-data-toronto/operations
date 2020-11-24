@@ -21,7 +21,7 @@ from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
     "description": "Take COVID19 data from QA (filestore) and put in PROD (datastore)",
-    "schedule": "59 14 * * 3",
+    "schedule": "@once",
     "start_date": datetime(2020, 11, 24, 13, 35, 0),
 }
 
@@ -399,8 +399,7 @@ with DAG(
     is_data_new_branch >> data_is_new >> delete_old >> insert_new
     insert_new >> update_timestamp >> loaded_msg >> send_loaded_notification
 
-    # data_is_new >> last_modified
-    last_modified >> update_timestamp
+    data_is_new >> last_modified >> update_timestamp
 
     is_data_new_branch >> data_is_not_new >> nothing_to_load_msg
     nothing_to_load_msg >> send_nothing_to_load_msg
