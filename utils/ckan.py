@@ -54,6 +54,7 @@ def insert_datastore_records(ckan, resource_id, records, chunk_size=20000):
             for key, value in r:
                 if value == value and value != "NaN":
                     record[key] = value
+            logging.info(record)
             clean_records.append(record)
 
         ckan.action.datastore_create(id=resource_id, records=clean_records)
