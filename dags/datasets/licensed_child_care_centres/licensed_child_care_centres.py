@@ -75,7 +75,7 @@ def get_data_file(**kwargs):
     filename = "new_data_raw"
     filepath = tmp_dir / f"{filename}.csv"
 
-    data.to_csv(filepath)
+    data.to_csv(filepath, index=False)
 
     return filepath
 
@@ -141,7 +141,7 @@ def backup_old_data(**kwargs):
 
     data_path = backups / f"data.{unique_id}.csv"
     if not data_path.exists():
-        data.to_csv(data_path)
+        data.to_csv(data_path, index=False)
 
     fields = [f for f in datastore_response["fields"] if f["id"] != "_id"]
 
