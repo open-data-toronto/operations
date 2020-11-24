@@ -206,8 +206,6 @@ def build_message(**kwargs):
     if "already_loaded" in kwargs:
         return f"Data is not new, UID of backup files: {unique_id}. Nothing to load."
 
-    backup_details = ti.xcom_pull(task_ids="backup_old_data")
-
     new_data_fp = ti.xcom_pull(task_ids="get_data_file")
     new_data = pd.read_parquet(new_data_fp)
 
