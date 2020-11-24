@@ -207,14 +207,11 @@ def build_message(**kwargs):
         return f"Data is not new, UID of backup files: {unique_id}. Nothing to load."
 
     backup_details = ti.xcom_pull(task_ids="backup_old_data")
-    previous_data_records = backup_details["records"]
 
     new_data_fp = ti.xcom_pull(task_ids="get_data_file")
     new_data = pd.read_parquet(new_data_fp)
 
-    return "Licensed child care centres refreshed: from {} to {} records".format(
-        previous_data_records, new_data.shape[0]
-    )
+    return f"Refreshed: {new_data.shape[0]} records"
 
 
 def update_resource_last_modified(**kwargs):
