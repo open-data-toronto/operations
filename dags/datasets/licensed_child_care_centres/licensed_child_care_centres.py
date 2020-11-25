@@ -106,10 +106,6 @@ def get_resource_id():
 
     resource = [r for r in resources if r["name"] == RESOURCE_NAME][0]
 
-    assert (
-        resource["datastore_active"] is True
-    ), f"Resource {RESOURCE_NAME} found but not in datastore"
-
     return resource["id"]
 
 
