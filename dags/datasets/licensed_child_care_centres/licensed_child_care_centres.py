@@ -168,7 +168,9 @@ def get_new_data_unique_id(**kwargs):
     data = pd.read_csv(data_fp)
 
     data_hash = hashlib.md5()
-    data_hash.update(data.sort_values(by="LOC_ID").to_csv(index=False).encode("utf-8"))
+    data_hash.update(
+        data.sort_values(by="LOC_ID").round(10).to_csv(index=False).encode("utf-8")
+    )
 
     return data_hash.hexdigest()
 
