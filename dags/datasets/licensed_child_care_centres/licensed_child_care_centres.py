@@ -319,6 +319,7 @@ with DAG(
             "name": RESOURCE_NAME,
             "format": "csv",
             "is_preview": True,
+            "url_type": "datastore",
         },
     )
 
