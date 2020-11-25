@@ -176,7 +176,7 @@ def build_notification_message(**kwargs):
             lines.append(
                 "{}: `{}`".format(
                     r["resource_name"],
-                    r["file_last_modified"],
+                    " ".join(r["file_last_modified"].split("T")),
                 )
             )
 
