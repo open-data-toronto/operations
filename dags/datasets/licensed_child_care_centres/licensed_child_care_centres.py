@@ -75,6 +75,8 @@ def get_data_file(**kwargs):
     filename = "new_data_raw"
     filepath = tmp_dir / f"{filename}.csv"
 
+    logging.info(f"Read {data.shape[0]} records")
+
     data.to_csv(filepath, index=False)
 
     return filepath
@@ -211,7 +213,6 @@ def insert_new_records(**kwargs):
         records=records,
         chunk_size=int(Variable.get("ckan_insert_chunk_size")),
     )
-    return CKAN.action.datastore_create(id=resource_id, records=records)
 
 
 def build_message(**kwargs):
