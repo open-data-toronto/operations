@@ -113,7 +113,7 @@ def get_resource_id():
     return resource["id"]
 
 
-def backup_old_data(**kwargs):
+def backup_previous_data(**kwargs):
     ti = kwargs.pop("ti")
     package = ti.xcom_pull(task_ids="get_package")
     backups = Path(Variable.get("backups_dir")) / JOB_NAME
@@ -193,7 +193,7 @@ def is_data_new(**kwargs):
     return "data_is_new"
 
 
-def delete_old_records(**kwargs):
+def delete_previous_records(**kwargs):
     resource_id = kwargs.pop("ti").xcom_pull(task_ids="get_resource_id")
 
     CKAN.action.datastore_delete(id=resource_id, filters={})
@@ -207,14 +207,22 @@ def insert_new_records(**kwargs):
     ti = kwargs.pop("ti")
     resource_id = ti.xcom_pull(task_ids="get_resource_id")
     data_fp = Path(ti.xcom_pull(task_ids="get_data_file"))
+    backup = ti.xcom_pull(task_ids="backup_previous_data")
 
     data = pd.read_csv(data_fp)
     records = data.to_dict(orient="records")
+
+    if backup is None:
+        fields = ti.xcom_pull(task_ids="build_data_dict")
+    else:
+        with open(Path(backup["fields"]), "r") as f:
+            fields = json.load(f)
 
     ckan_utils.insert_datastore_records(
         ckan=CKAN,
         resource_id=resource_id,
         records=records,
+        fields=fields,
         chunk_size=int(Variable.get("ckan_insert_chunk_size")),
     )
 
@@ -259,21 +267,6 @@ def build_data_dict(**kwargs):
     return fields
 
 
-def create_new_resource(**kwargs):
-    fields = kwargs.pop("ti").xcom_pull(task_ids="build_data_dict")
-
-    CKAN.action.datastore_create(
-        resource={
-            "package_id": PACKAGE_ID,
-            "name": RESOURCE_NAME,
-            "format": "csv",
-            "is_preview": True,
-        },
-        fields=fields,
-        records=[],
-    )
-
-
 default_args = airflow_utils.get_default_args(
     {
         "on_failure_callback": send_failure_msg,
@@ -316,8 +309,13 @@ with DAG(
 
     new_resource = PythonOperator(
         task_id="create_new_resource",
-        python_callable=create_new_resource,
-        provide_context=True,
+        python_callable=CKAN.action.resource_create,
+        op_kwargs={
+            "package_id": PACKAGE_ID,
+            "name": RESOURCE_NAME,
+            "format": "csv",
+            "is_preview": True,
+        },
     )
 
     package = PythonOperator(
@@ -326,9 +324,9 @@ with DAG(
         op_kwargs={"id": PACKAGE_ID},
     )
 
-    old_data = PythonOperator(
-        task_id="backup_old_data",
-        python_callable=backup_old_data,
+    previous_data = PythonOperator(
+        task_id="backup_previous_data",
+        python_callable=backup_previous_data,
         provide_context=True,
     )
 
@@ -360,9 +358,9 @@ with DAG(
         trigger_rule="none_failed",
     )
 
-    delete_old = PythonOperator(
-        task_id="delete_old_records",
-        python_callable=delete_old_records,
+    delete_previous = PythonOperator(
+        task_id="delete_previous_records",
+        python_callable=delete_previous_records,
         provide_context=True,
     )
 
@@ -378,12 +376,12 @@ with DAG(
         provide_context=True,
     )
 
-    # nothing_to_load_msg = PythonOperator(
-    #     task_id="build_nothing_to_load_msg",
-    #     python_callable=build_message,
-    #     op_kwargs={"already_loaded": True},
-    #     provide_context=True,
-    # )
+    nothing_to_load_msg = PythonOperator(
+        task_id="build_nothing_to_load_msg",
+        python_callable=build_message,
+        op_kwargs={"already_loaded": True},
+        provide_context=True,
+    )
 
     resource_is_not_new = DummyOperator(
         task_id="resource_is_not_new",
@@ -408,12 +406,12 @@ with DAG(
         op_kwargs={"msg_task_id": "build_loaded_msg"},
     )
 
-    send_nothing_to_load_msg = PythonOperator(
-        task_id="send_nothing_to_load_msg",
-        python_callable=send_success_msg,
-        provide_context=True,
-        op_kwargs={"msg_task_id": "build_nothing_to_load_msg"},
-    )
+    # send_nothing_to_load_msg = PythonOperator(
+    #     task_id="send_nothing_to_load_msg",
+    #     python_callable=send_success_msg,
+    #     provide_context=True,
+    #     op_kwargs={"msg_task_id": "build_nothing_to_load_msg"},
+    # )
 
     delete_tmp_files = PythonOperator(
         task_id="delete_tmp_files",
@@ -437,17 +435,17 @@ with DAG(
 
     create_tmp_dir >> source_data >> new_data_unique_id >> is_data_new_branch
 
-    create_backups_dir >> old_data
+    create_backups_dir >> previous_data
 
     package >> is_resource_new_branch
 
     is_resource_new_branch >> resource_is_new >> data_dict >> new_resource >> resource_id
 
-    is_resource_new_branch >> resource_is_not_new >> old_data >> resource_id
+    is_resource_new_branch >> resource_is_not_new >> previous_data >> resource_id
 
     resource_id >> is_data_new_branch
 
-    is_data_new_branch >> data_is_new >> delete_old >> insert_new
+    is_data_new_branch >> data_is_new >> delete_previous >> insert_new
     insert_new >> update_timestamp >> loaded_msg >> send_loaded_notification
 
     data_is_new >> last_modified >> update_timestamp
