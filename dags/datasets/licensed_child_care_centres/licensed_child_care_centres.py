@@ -141,6 +141,8 @@ def backup_old_data(**kwargs):
     data_hash.update(data.sort_values(by="LOC_ID").to_csv(index=False).encode("utf-8"))
     unique_id = data_hash.hexdigest()
 
+    logging.info(f"Unique ID generated: {unique_id}")
+
     data_path = backups / f"data.{unique_id}.csv"
     if not data_path.exists():
         data.to_csv(data_path, index=False)
