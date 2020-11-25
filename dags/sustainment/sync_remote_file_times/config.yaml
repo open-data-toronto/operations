@@ -107,8 +107,8 @@ head-of-household:
     - http://opendata.toronto.ca/employment.social/head.household/tess_ow_split_files.zip
 3d-massing:
     - http://opendata.toronto.ca/planning/3dmassing/3DContextMassing_Tile_Locator.pdf
-    - http://opendata.toronto.ca/planning/3dmassing/3DMassingShapefile_2019_WGS84.zip
-    - http://opendata.toronto.ca/planning/3dmassing/3DMassingMultipatch_2019_WGS84.zip
+    - http://opendata.toronto.ca/city.planning/3d-massing/2020/3DMassingShapefile_2020_WGS84.zip
+    - http://opendata.toronto.ca/city.planning/3d-massing/2020/3DMassingMultipatch_2020_WGS84.zip
 clerk-s-directory-of-record-for-record-series-management-tool-rsmt:
     - http://opendata.toronto.ca/clerk/rsmt/rsmtDirectoryOfRecords.xml
 clerks-record-classification-system-authoritative-source-rsmt:
