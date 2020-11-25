@@ -190,13 +190,21 @@ def is_data_new(**kwargs):
 
 
 def delete_previous_records(**kwargs):
-    resource_id = kwargs.pop("ti").xcom_pull(task_ids="get_resource_id")
+    ti = kwargs.pop("ti")
+    resource_id = ti.xcom_pull(task_ids="get_resource_id")
+    backup = ti.xcom_pull(task_ids="backup_previous_data")
 
-    CKAN.action.datastore_delete(id=resource_id, filters={})
+    if backup is not None:
+        CKAN.action.datastore_delete(id=resource_id, filters={})
 
-    record_count = CKAN.action.datastore_search(id=resource_id, limit=0)["total"]
+        record_count = CKAN.action.datastore_search(id=resource_id, limit=0)["total"]
 
-    logging.info(f"Records in resource after cleanup: {record_count}")
+        msg = f"Records in resource after cleanup: {record_count}"
+
+    else:
+        msg = "No backups found, nothing to delete"
+
+    logging.info(msg)
 
 
 def insert_new_records(**kwargs):
