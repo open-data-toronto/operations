@@ -453,9 +453,8 @@ with DAG(
     data_is_new >> last_modified >> update_timestamp
 
     is_data_new_branch >> data_is_not_new >> nothing_to_load_msg
-    nothing_to_load_msg >> send_nothing_to_load_msg
 
     [
-        send_nothing_to_load_msg,
+        nothing_to_load_msg,
         send_loaded_notification,
     ] >> delete_tmp_files >> delete_tmp_dir
