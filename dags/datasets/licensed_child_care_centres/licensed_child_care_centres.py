@@ -378,12 +378,12 @@ with DAG(
         provide_context=True,
     )
 
-    nothing_to_load_msg = PythonOperator(
-        task_id="build_nothing_to_load_msg",
-        python_callable=build_message,
-        op_kwargs={"already_loaded": True},
-        provide_context=True,
-    )
+    # nothing_to_load_msg = PythonOperator(
+    #     task_id="build_nothing_to_load_msg",
+    #     python_callable=build_message,
+    #     op_kwargs={"already_loaded": True},
+    #     provide_context=True,
+    # )
 
     resource_is_not_new = DummyOperator(
         task_id="resource_is_not_new",
