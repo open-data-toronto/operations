@@ -45,7 +45,9 @@ def create_resource_if_new(**kwargs):
 def insert_datastore_records(ckan, resource_id, records, chunk_size=20000, fields=None):
     if fields is not None:
         logging.info(f"Creating datastore resource with fields: {fields}")
-        ckan.action.datastore_create(id=resource_id, records=[], fields=fields)
+        ckan.action.datastore_create(
+            id=resource_id, records=[], fields=fields, force=True
+        )
 
     chunks = [records[i : i + chunk_size] for i in range(0, len(records), chunk_size)]
 
