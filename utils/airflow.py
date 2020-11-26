@@ -52,7 +52,7 @@ def message_slack(name, msg, message_type, prod_webhook=True, active_env=None):
     if message_type.lower() == "error":
         header = header.upper()
 
-    msg_title = "{}: *{}* | {}".format(active_env.upper(), name, header)
+    msg_title = f"*{name}* | {active_env.upper()}"
 
     head = {
         "type": "section",
