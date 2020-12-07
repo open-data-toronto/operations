@@ -14,7 +14,7 @@ from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
     "description": "Identifies empty datastore resources and send to Slack",
-    "schedule": "15 15,23 * * *",
+    "schedule": "0 15,17,19,23 * * *",
     "start_date": datetime(2020, 11, 9, 0, 30, 0),
 }
 
