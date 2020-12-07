@@ -115,6 +115,7 @@ def upload_remote_files(**kwargs):
                 if r["last_modified"]:
                     resource_last_modified = parser.parse(r["last_modified"] + " UTC")
                 else:
+                    logging.info(f"{r['id']}: No last_modified, using created.")
                     resource_last_modified = parser.parse(r["created"] + " UTC")
 
                 if file_last_modified > resource_last_modified:
@@ -132,7 +133,12 @@ def upload_remote_files(**kwargs):
 
                 res = requests.post(
                     urljoin(ckan.address, f"api/3/action/{api_func}"),
-                    data=metadata,
+                    data={
+                        **metadata,
+                        "last_modified": file_last_modified.strftime(
+                            "%Y-%m-%dT%H:%M:%S"
+                        ),
+                    },
                     headers={"Authorization": ckan.apikey},
                     files={
                         "upload": (
