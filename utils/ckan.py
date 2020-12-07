@@ -1,5 +1,4 @@
 import logging
-import math
 
 
 def update_resource_last_modified(ckan, resource_id, new_last_modified):
