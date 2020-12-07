@@ -136,6 +136,7 @@ def upload_remote_files(**kwargs):
                 "last_modified": parser.parse(res["last_modified"]).strftime(
                     "%Y-%m-%d %H:%M"
                 ),
+                "size_mb": round(float(headers["Content-Length"]) / (1024 * 1024), 1),
             }
 
             package_upload_results.append({**record, "result": "uploaded"})
@@ -184,9 +185,10 @@ def build_notification_message(**kwargs):
                 continue
 
             lines.append(
-                "{}: `{}`".format(
+                "{}: `{}` | {} MB".format(
                     r["resource_name"],
                     " ".join(r["last_modified"].split("T")),
+                    r["size_mb"],
                 )
             )
 
