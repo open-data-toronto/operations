@@ -102,7 +102,7 @@ def upload_remote_files(**kwargs):
                     "name": name,
                     "format": details["format"],
                     "is_preview": False,
-                    "extract_job": f"Airflow: {kwargs['dag_run'].run_id}",
+                    "extract_job": f"Airflow: {kwargs['dag'].dag_id}",
                 }
 
                 api_func = "resource_create"
