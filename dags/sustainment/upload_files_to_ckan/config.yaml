@@ -1,0 +1,347 @@
+3d-massing:
+  3D Massing (WGS84):
+    format: shp
+    url: http://opendata.toronto.ca/city.planning/3d-massing/2020/3DMassingShapefile_2020_WGS84.zip
+  3D Massing Multipatch (WGS84):
+    format: shp
+    url: http://opendata.toronto.ca/city.planning/3d-massing/2020/3DMassingMultipatch_2020_WGS84.zip
+  Tile Locator Reference File (PDF):
+    format: pdf
+    url: http://opendata.toronto.ca/planning/3dmassing/3DContextMassing_Tile_Locator.pdf
+address-points-municipal-toronto-one-address-repository:
+  Municipal address points (wgs84) - geojson:
+    format: zip
+    url: http://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/ADDRESS_POINT_WGS84_geojson.zip
+  Municipal address points (wgs84) - shapefile:
+    format: shp
+    url: http://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/municipal-address-points-wgs84-latitude-longitude.zip
+building-permits-active-permits:
+  Active Building Permits Readme:
+    format: xls
+    url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/BuildingPermitsActiveReadme.xls
+  Active permits (CSV):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits_csv.zip
+  Active permits (XML):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits.zip
+building-permits-cleared-permits-current-year:
+  Cleared Permits 2020 in csv:
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits2020_csv.zip
+  Cleared Permits 2020 xml:
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits2020.zip
+  Cleared Permits Readme:
+    format: xls
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/BuildingPermitsClearedReadme.xls
+building-permits-cleared-permits-prior-years:
+  Cleared Permits (2001-2014 csv zip):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/TBPCleared2001_2014_csv.zip
+  Cleared Permits (2001-2014 xml zip):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/TBPCleared2001_2014.zip
+  Cleared Permits (2012 CSV ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2012_csv.zip
+  Cleared Permits (2012 XML ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2012.zip
+  Cleared Permits (2013 CSV ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2013_csv.zip
+  Cleared Permits (2013 XML ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2013.zip
+  Cleared Permits (2014 CSV ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2014_csv.zip
+  Cleared Permits (2014 XML ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2014.zip
+  Cleared Permits (2015 CSV ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2015_csv.zip
+  Cleared Permits (2015 XML ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2015.zip
+  Cleared Permits (2016 CSV ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2016_csv.zip
+  Cleared Permits (2016 XML ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2016.zip
+  Cleared Permits (2017 CSV ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2017_csv.zip
+  Cleared Permits (2017 XML ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2017.zip
+  Cleared Permits (2018 CSV ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2018_csv.zip
+  Cleared Permits (2018 XMLZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2018.zip
+  Cleared Permits (2019 CSV ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2019_csv.zip
+  Cleared Permits (2019 XML ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2019.zip
+  Toronto Building Cleared Permits Readme:
+    format: xls
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/BuildingPermitsClearedReadme.xls
+clerk-s-directory-of-record-for-record-series-management-tool-rsmt:
+  RSMT Directory of records:
+    format: xml
+    url: http://opendata.toronto.ca/clerk/rsmt/rsmtDirectoryOfRecords.xml
+clerks-record-classification-system-authoritative-source-rsmt:
+  RCS authoritative source:
+    format: xml
+    url: http://opendata.toronto.ca/clerk/rsmt/rsmtRcsAuthoritative.xml
+clerks-record-classification-system-internally-approved-rsmt:
+  RCS internal approved:
+    format: xml
+    url: http://opendata.toronto.ca/clerk/rsmt/rsmtRcsInternal.xml
+committee-of-adjustment-applications:
+  Active Applications:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/active.zip
+  Applications Closed in 2001:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2001.zip
+  Applications Closed in 2002:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2002.zip
+  Applications Closed in 2003:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2003.zip
+  Applications Closed in 2004:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2004.zip
+  Applications Closed in 2005:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2005.zip
+  Applications Closed in 2006:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2006.zip
+  Applications Closed in 2007:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2007.zip
+  Applications Closed in 2008:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2008.zip
+  Applications Closed in 2009:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2009.zip
+  Applications Closed in 2010:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2010.zip
+  Applications Closed in 2011:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2011.zip
+  Applications Closed in 2012:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2012.zip
+  Applications Closed in 2013:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2013.zip
+  Applications Closed in 2014:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2014.zip
+  Applications Closed in 2015:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2015.zip
+  Applications Closed in 2016:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2016.zip
+  Applications closed since 2017:
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2017.zip
+  Readme (attributes):
+    format: xlsx
+    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/coa_attributes.xlsx
+head-of-household:
+  Head of household - split files:
+    format: zip
+    url: http://opendata.toronto.ca/employment.social/head.household/tess_ow_split_files.zip
+  head-of-household-data:
+    format: zip
+    url: http://opendata.toronto.ca/employment.social/head.household/opendata_tess_ow.zip
+labour-force-survey:
+  Annual labour force survey database(ivt):
+    format: zip
+    url: http://opendata.toronto.ca/economic.development.culture/labour-force-survey/lfs_ivt_annual.zip
+  Monthly labour force survey database(ivt):
+    format: zip
+    url: http://opendata.toronto.ca/economic.development.culture/labour-force-survey/lfs_ivt_monthly.zip
+licensed-child-care-centres:
+  Licensed day-care centres:
+    format: csv
+    url: http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv
+lobbyist-registry:
+  Lobbyist Registry Activity:
+    format: zip
+    url: http://opendata.toronto.ca/lobbyist.registrar/lobbyist-registry/lobbyactivity.zip
+mobile-watch-your-speed-program-detailed-speed-counts:
+  Mobile sign detail count 2018(9-12):
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2018.zip
+  Mobile sign detail count 2019:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2019.zip
+  Mobile sign detail count 2020:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2020.zip
+municipal-licensing-and-standards-business-licences-and-permits:
+  Business licences data:
+    format: csv
+    url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
+municipal-licensing-and-standards-investigation-activity:
+  Investigation Activities (CSV ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_csv.zip
+  Investigation Activities (JSON ZIP):
+    format: zip
+    url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_json.zip
+  Readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/investigation_readme.xlsx
+non-regulated-lead-sample:
+  non-regulated-lead-sample-2011-2013-csv:
+    format: zip
+    url: http://opendata.toronto.ca/water/lead.sampling/NonRegulatedLeadSampling2011-2013.zip
+  non-regulated-lead-sample-from-2014-to-present-csv:
+    format: zip
+    url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_csv.zip
+  non-regulated-lead-sample-from-2014-to-present-xml:
+    format: zip
+    url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
+outbreaks-in-toronto-healthcare-institutions:
+  Outbreaks in Toronto Healthcare Institutions 2016:
+    format: xls
+    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2016.xls
+  Outbreaks in Toronto Healthcare Institutions 2017:
+    format: xls
+    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2017.xls
+  Outbreaks in Toronto Healthcare Institutions 2018:
+    format: xls
+    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2018.xls
+  Outbreaks in Toronto Healthcare Institutions 2019:
+    format: xls
+    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2019.xls
+  Outbreaks in Toronto Healthcare Institutions-2020:
+    format: xls
+    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2020.xls
+  Readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/outbreaks-in-toronto-readme.xlsx
+paramedic-services-incident-data:
+  paramedic-services-incident-data-2010-2019:
+    format: xlsx
+    url: http://opendata.toronto.ca/it/com/TPS_Incident_Data_2010-2019.xlsx
+parking-ticket-trials:
+  parking-ticket-trial-data:
+    format: zip
+    url: http://opendata.toronto.ca/revenue/parking/trial/Parking_Ticket_Trials.zip
+pcard-expenditures:
+  pcard-expenses:
+    format: zip
+    url: http://opendata.toronto.ca/accounting/pcard/expenditures.zip
+property-boundaries:
+  Property Boundaries (wgs84) - geojson:
+    format: zip
+    url: http://opendata.toronto.ca/technology.services/property-boundaries/PROPERTY_BOUNDARIES_WGS84_geojson.zip
+  Property Boundaries (wgs84) - shapefile:
+    format: shp
+    url: http://opendata.toronto.ca/technology.services/property-boundaries/property_bnds_gcc_wgs84.zip
+rain-gauge-locations-and-precipitation:
+  Rain gauge notes:
+    format: zip
+    url: http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/raingaugenotes.zip
+  Readme:
+    format: docx
+    url: http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/readme.docx
+registered-programs-and-drop-in-courses-offering:
+  Registered programs and drop in courses offering data:
+    format: zip
+    url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/program_offering.zip
+school-safety-zone-watch-your-speed-program-detailed-speed-counts:
+  Stationary count detailed 2017:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2017.zip
+  Stationary count detailed 2018:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2018.zip
+  Stationary count detailed 2019:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2019.zip
+  Stationary count detailed 2020:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2020.zip
+toronto-centreline-tcl:
+  Centreline (wgs84) - geojson:
+    format: zip
+    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/centreline_wgs84_geojson.zip
+  Centreline (wgs84) - shapefile:
+    format: shp
+    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/centreline_wgs84.zip
+toronto-economic-bulletin:
+  Toronto economic bulletin data:
+    format: xlsx
+    url: http://opendata.toronto.ca/economic.development.culture/toronto-economic-bulletin/bulletin_opendata.xlsx
+traffic-cameras:
+  Traffic Camera List (CSV):
+    format: csv
+    url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.csv
+  Traffic Camera List (JSON):
+    format: json
+    url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.json
+  Traffic Camera List (XML):
+    format: xml
+    url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.xml
+  Traffic Camera List (XSD):
+    format: xsd
+    url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.xsd
+  Traffic Camera List (update timestamp):
+    format: json
+    url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcamerassn.json
+triangular-irregular-network-tin:
+  triangular-irregular-network-polygon-data-east-1:
+    format: shp
+    url: http://opendata.toronto.ca/gcc/polytin_east1_mtm3.zip
+  triangular-irregular-network-polygon-data-east-2:
+    format: shp
+    url: http://opendata.toronto.ca/gcc/polytin_east2_mtm3.zip
+  triangular-irregular-network-polygon-data-north:
+    format: shp
+    url: http://opendata.toronto.ca/gcc/polytin_north_mtm3.zip
+  triangular-irregular-network-polygon-data-south:
+    format: shp
+    url: http://opendata.toronto.ca/gcc/polytin_south_mtm3.zip
+  triangular-irregular-network-polygon-data-west:
+    format: shp
+    url: http://opendata.toronto.ca/gcc/polytin_west_mtm3.zip
+ttc-routes-and-schedules:
+  TTC Routes and Schedules Data:
+    format: zip
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/OpenData_TTC_Schedules.zip
+utility-cut-permits:
+  utility-cut-permits:
+    format: zip
+    url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp.zip
+  utility-cut-permits-documentation:
+    format: zip
+    url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp_doc.zip
+web-analytics:
+  Web Analytics Readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/web-analytics/web_analytics_readme.xlsx
+  web-analytics-monthly-report:
+    format: zip
+    url: http://opendata.toronto.ca/city.clerks.office/web-analytics/web_analytics_monthly_csv.zip
+  web-analytics-weekly-report:
+    format: zip
+    url: http://opendata.toronto.ca/city.clerks.office/web-analytics/web_analytics_weekly_csv.zip
