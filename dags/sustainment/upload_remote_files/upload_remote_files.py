@@ -93,6 +93,9 @@ def upload_remote_files(**kwargs):
 
             should_upload = False
 
+            headers = requests.head(details["url"]).headers
+            file_last_modified = parser.parse(headers["Last-Modified"])
+
             if len(resource) == 0:
                 metadata = {
                     "package_id": package["id"],
@@ -109,9 +112,6 @@ def upload_remote_files(**kwargs):
                 r = resource[0]
                 metadata = {"id": r["id"]}
                 api_func = "resource_patch"
-
-                headers = requests.head(details["url"]).headers
-                file_last_modified = parser.parse(headers["Last-Modified"])
 
                 if r["last_modified"]:
                     resource_last_modified = parser.parse(r["last_modified"] + " UTC")
@@ -131,9 +131,6 @@ def upload_remote_files(**kwargs):
                     should_upload = True
 
             if should_upload:
-                response = requests.get(details["url"])
-                headers = response.headers
-
                 assert (
                     "Last-Modified" in headers
                 ), f"No Last-Modified in headers. URL may be broken and was directed? {json.dumps(dict(headers))}"
@@ -145,7 +142,7 @@ def upload_remote_files(**kwargs):
                     files={
                         "upload": (
                             Path(details["url"]).name,
-                            response.content,
+                            requests.get(details["url"]).content,
                         )
                     },
                 ).json()["result"]
