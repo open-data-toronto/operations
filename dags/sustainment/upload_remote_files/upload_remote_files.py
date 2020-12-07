@@ -105,7 +105,8 @@ def upload_remote_files(**kwargs):
                 should_upload = True
 
             else:
-                metadata = {"id": resource[0]["id"]}
+                r = resource[0]
+                metadata = {"id": r["id"]}
                 api_func = "resource_patch"
 
                 headers = requests.head(details["url"]).headers
