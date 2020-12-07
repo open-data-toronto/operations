@@ -119,10 +119,16 @@ def upload_remote_files(**kwargs):
                     logging.info(f"{r['id']}: No last_modified, using created.")
                     resource_last_modified = parser.parse(r["created"] + " UTC")
 
-                if file_last_modified > resource_last_modified:
-                    should_upload = True
-                else:
+                difference_in_seconds = (
+                    file_last_modified.timestamp() - resource_last_modified.timestamp()
+                )
+
+                if difference_in_seconds == 0:
+                    logging.info(f"Up to date: {r['name']} | {details['url']}")
                     should_upload = False
+
+                else:
+                    should_upload = True
 
             if should_upload:
                 response = requests.get(details["url"])
@@ -191,7 +197,7 @@ def build_notification_message(**kwargs):
     upload_results = kwargs.pop("ti").xcom_pull(task_ids="upload_files")
     message_lines = [""]
 
-    for result_type in ["uploaded", "error", "unchanged"]:
+    for result_type in ["uploaded", "error"]:
         result_type_resources = [
             r for r in upload_results if r["result"] == result_type
         ]
@@ -199,14 +205,9 @@ def build_notification_message(**kwargs):
         if len(result_type_resources) == 0:
             continue
 
-        lines = []
-        if result_type != "unchanged":
-            lines = [f"*{result_type}*"]
+        lines = [f"*{result_type}*"]
 
         for index, r in enumerate(result_type_resources):
-            if result_type == "unchanged":
-                continue
-
             if result_type == "error":
                 lines.append("{}. {} ".format(index + 1, r["package_name"]))
                 continue
@@ -223,7 +224,7 @@ def build_notification_message(**kwargs):
 
     notification_msg = "\n".join(message_lines)
 
-    if all(["error" not in notification_msg, "synced" not in notification_msg]):
+    if all(["error" not in notification_msg, "uploaded" not in notification_msg]):
         return None
 
     return "\n".join(message_lines)
