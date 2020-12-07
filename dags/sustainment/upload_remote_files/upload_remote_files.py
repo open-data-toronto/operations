@@ -108,13 +108,9 @@ def upload_remote_files(**kwargs):
             response = requests.get(details["url"])
             headers = response.headers
 
-            assert not all(
-                [
-                    headers["Content-Type"] == "text/html; charset=UTF-8",
-                    "Link" in headers
-                    and "https://www.toronto.ca/wp-json/" in headers["Link"],
-                ]
-            ), f"File not found: URL redirected. Response headers: {json.dumps(dict(headers))}"
+            assert (
+                "Last-Modified" in headers
+            ), f"Last modified date not in headers. URL may be broken and was directed? {json.dumps(dict(headers))}"
 
             res = requests.post(
                 urljoin(ckan.address, f"api/3/action/{api_func}"),
