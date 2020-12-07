@@ -111,7 +111,11 @@ def upload_remote_files(**kwargs):
 
                 headers = requests.head(details["url"]).headers
                 file_last_modified = parser.parse(headers["Last-Modified"])
-                resource_last_modified = parser.parse(r["last_modified"] + " UTC")
+
+                if r["last_modified"]:
+                    resource_last_modified = parser.parse(r["last_modified"] + " UTC")
+                else:
+                    resource_last_modified = parser.parse(r["created"] + " UTC")
 
                 if file_last_modified > resource_last_modified:
                     should_upload = True
