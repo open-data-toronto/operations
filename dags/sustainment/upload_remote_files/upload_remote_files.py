@@ -21,15 +21,14 @@ from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
     "description": "Uploads files from opendata.toronto.ca to respective CKAN resource",
-    "schedule": "@once",
+    "schedule": "0,30 * * * *",
     "start_date": datetime(2020, 11, 10, 0, 30, 0),
 }
 
 job_file = Path(os.path.abspath(__file__))
 job_name = job_file.name[:-3]
 
-# active_env = Variable.get("active_env")
-active_env = "dev"
+active_env = Variable.get("active_env")
 ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
 ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
 
