@@ -39,7 +39,7 @@ def send_success_msg(**kwargs):
         name=job_name,
         message_type="success",
         msg=msg,
-        prod_webhook=active_env == "dev",
+        prod_webhook=active_env == "prod",
         active_env=active_env,
     )
 
@@ -49,7 +49,7 @@ def send_failure_msg(self):
         name=job_name,
         message_type="error",
         msg="Job not finished",
-        prod_webhook=active_env == "dev",
+        prod_webhook=active_env == "prod",
         active_env=active_env,
     )
 
@@ -90,6 +90,8 @@ def upload_remote_files(**kwargs):
                 len(resource) <= 1
             ), f"Expected 0 or 1 resource named {name}. Found {len(resource)}."
 
+            should_upload = False
+
             if len(resource) == 0:
                 metadata = {
                     "package_id": package["id"],
@@ -100,42 +102,60 @@ def upload_remote_files(**kwargs):
                 }
 
                 api_func = "resource_create"
+                should_upload = True
 
             else:
                 metadata = {"id": resource[0]["id"]}
                 api_func = "resource_patch"
 
-            response = requests.get(details["url"])
-            headers = response.headers
+                headers = requests.head(details["url"]).headers
+                file_last_modified = parser.parse(headers["Last-Modified"])
+                resource_last_modified = parser.parse(r["last_modified"] + " UTC")
 
-            assert (
-                "Last-Modified" in headers
-            ), f"Last modified date not in headers. URL may be broken and was directed? {json.dumps(dict(headers))}"
+                if file_last_modified > resource_last_modified:
+                    should_upload = True
+                else:
+                    should_upload = False
 
-            res = requests.post(
-                urljoin(ckan.address, f"api/3/action/{api_func}"),
-                data=metadata,
-                headers={"Authorization": ckan.apikey},
-                files={
-                    "upload": (
-                        Path(details["url"]).name,
-                        response.content,
-                    )
-                },
-            ).json()["result"]
+            if should_upload:
+                response = requests.get(details["url"])
+                headers = response.headers
 
-            record = {
-                "package_name": package["name"],
-                "resource_name": res["name"],
-                "resource_id": res["id"],
-                "file": details["url"],
-                "last_modified": parser.parse(res["last_modified"]).strftime(
-                    "%Y-%m-%d %H:%M"
-                ),
-                "size_mb": round(float(headers["Content-Length"]) / (1024 * 1024), 1),
-            }
+                assert (
+                    "Last-Modified" in headers
+                ), f"No Last-Modified in headers. URL may be broken and was directed? {json.dumps(dict(headers))}"
 
-            package_upload_results.append({**record, "result": "uploaded"})
+                res = requests.post(
+                    urljoin(ckan.address, f"api/3/action/{api_func}"),
+                    data=metadata,
+                    headers={"Authorization": ckan.apikey},
+                    files={
+                        "upload": (
+                            Path(details["url"]).name,
+                            response.content,
+                        )
+                    },
+                ).json()["result"]
+
+                record = {
+                    "package_name": package["name"],
+                    "resource_name": res["name"],
+                    "resource_id": res["id"],
+                    "file": details["url"],
+                    "last_modified": parser.parse(res["last_modified"]).strftime(
+                        "%Y-%m-%d %H:%M"
+                    ),
+                    "size_mb": round(
+                        float(headers["Content-Length"]) / (1024 * 1024), 1
+                    ),
+                }
+
+                package_upload_results.append({**record, "result": "uploaded"})
+
+            else:
+                logging.info(
+                    f"File hasn't changed, nothing to upload: {details['url']}"
+                )
 
         return package_upload_results
 
