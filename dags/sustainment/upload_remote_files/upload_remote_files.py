@@ -84,7 +84,7 @@ def upload_remote_files(**kwargs):
 
         package_upload_results = []
         for name, details in files.items():
-            logging.info(f"Uploading: {name} | {details['url']}")
+            logging.info(f"Attempting: {name} | {details['url']}")
             resource = [r for r in resources if r["name"] == name]
 
             assert (
@@ -116,7 +116,7 @@ def upload_remote_files(**kwargs):
                 if r["last_modified"]:
                     resource_last_modified = parser.parse(r["last_modified"] + " UTC")
                 else:
-                    logging.info(f"{r['id']}: No last_modified, using created.")
+                    logging.info(f"{r['name']}: No last_modified, using created.")
                     resource_last_modified = parser.parse(r["created"] + " UTC")
 
                 difference_in_seconds = (
@@ -124,7 +124,7 @@ def upload_remote_files(**kwargs):
                 )
 
                 if difference_in_seconds == 0:
-                    logging.info(f"Up to date: {r['name']} | {details['url']}")
+                    logging.info(f"{r['name']}: up to date, nothing to upload")
                     should_upload = False
 
                 else:
@@ -165,11 +165,6 @@ def upload_remote_files(**kwargs):
                 }
 
                 package_upload_results.append({**record, "result": "uploaded"})
-
-            else:
-                logging.info(
-                    f"File hasn't changed, nothing to upload: {details['url']}"
-                )
 
         return package_upload_results
 
