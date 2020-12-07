@@ -17,6 +17,7 @@ from urllib.parse import urljoin
 
 sys.path.append(Variable.get("repo_dir"))
 from utils import airflow as airflow_utils  # noqa: E402
+from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
     "description": "Uploads files from opendata.toronto.ca to respective CKAN resource",
@@ -133,12 +134,7 @@ def upload_remote_files(**kwargs):
 
                 res = requests.post(
                     urljoin(ckan.address, f"api/3/action/{api_func}"),
-                    data={
-                        **metadata,
-                        "last_modified": file_last_modified.strftime(
-                            "%Y-%m-%dT%H:%M:%S"
-                        ),
-                    },
+                    data=metadata,
                     headers={"Authorization": ckan.apikey},
                     files={
                         "upload": (
@@ -148,14 +144,18 @@ def upload_remote_files(**kwargs):
                     },
                 ).json()["result"]
 
+                ckan_utils.update_resource_last_modified(
+                    ckan=ckan,
+                    resource_id=res["id"],
+                    new_last_modified=file_last_modified,
+                )
+
                 record = {
                     "package_name": package["name"],
                     "resource_name": res["name"],
                     "resource_id": res["id"],
                     "file": details["url"],
-                    "last_modified": parser.parse(res["last_modified"]).strftime(
-                        "%Y-%m-%d %H:%M"
-                    ),
+                    "last_modified": file_last_modified.strftime("%Y-%m-%d %H:%M"),
                     "size_mb": round(
                         float(headers["Content-Length"]) / (1024 * 1024), 1
                     ),
