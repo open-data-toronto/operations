@@ -80,7 +80,7 @@ def create_dag(d):
         package = kwargs.pop("ti").xcom_pull(task_ids="get_package")
         resource_name = kwargs.pop("resource_name")
 
-        resource = [r for r in package["resources"] if r["name"] == resource_name][0]
+        resource = [r for r in package["resources"] if r["name"] == resource_name]
 
         assert (
             len(resource) <= 1
