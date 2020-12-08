@@ -21,7 +21,7 @@ from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
     "description": "Uploads files from opendata.toronto.ca to respective CKAN resource",
-    "schedule": "0,30 * * * *",
+    "schedule": "0,15,30,45 * * * *",
     "start_date": datetime(2020, 11, 10, 0, 30, 0),
 }
 
