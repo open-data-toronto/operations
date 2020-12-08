@@ -581,7 +581,7 @@ for d in dags:
             provide_context=True,
         )
 
-        zip_files = PythonOperator(
+        zip_resource_files = PythonOperator(
             task_id="zip_files",
             python_callable=zip_files,
             provide_context=True,
@@ -624,7 +624,7 @@ for d in dags:
 
         [new_reports, staging_folder] >> zip_reports
 
-        [copy_previous, zip_reports] >> zip_files >> upload_data >> msg
+        [copy_previous, zip_reports] >> zip_resource_files >> upload_data >> msg
 
         create_tmp_dir >> staging_folder
 
