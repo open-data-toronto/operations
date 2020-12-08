@@ -76,7 +76,7 @@ def create_dag(d):
             active_env=active_env,
         )
 
-    def get_or_create_resource(**kwargs):
+    def is_resource_new(**kwargs):
         package = kwargs.pop("ti").xcom_pull(task_ids="get_package")
         resource_name = kwargs.pop("resource_name")
 
@@ -467,9 +467,9 @@ def create_dag(d):
             op_kwargs={"dag_id": d["dag_id"], "dir_variable_name": "tmp_dir"},
         )
 
-        get_or_create = BranchPythonOperator(
-            task_id="get_or_create_resource",
-            python_callable=get_or_create_resource,
+        is_resource_new_branch = BranchPythonOperator(
+            task_id="is_resource_new",
+            python_callable=is_resource_new,
             provide_context=True,
             op_kwargs={"resource_name": d["resource_name"]},
         )
@@ -586,11 +586,11 @@ def create_dag(d):
             provide_context=True,
         )
 
-        package >> get_or_create
+        package >> is_resource_new_branch
 
-        get_or_create >> create_resource
+        is_resource_new_branch >> create_resource
 
-        get_or_create >> no_new_resource
+        is_resource_new_branch >> no_new_resource
 
         [
             create_resource,
