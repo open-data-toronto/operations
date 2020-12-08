@@ -313,9 +313,13 @@ def create_dag(d):
 
             call = f"{prefix}/{reports[report_id]}/data?begin={begin}&end={end}&{qs}"
 
-            logging.info(f"{report_id.upper()} | Begin: {begin} | End: {end}")
+            logging.info(f"{report_id.upper()} | Begin: {begin} | End: {end} | {call}")
 
-            return requests.get(call, auth=(user, password))
+            response = requests.get(call, auth=(user, password))
+
+            logging.info(f"Reponse: {response.status_code}")
+
+            return response
 
         def convert(response):
             report = response.json()
@@ -516,6 +520,7 @@ def create_dag(d):
         )
 
         no_new_periods_to_load = DummyOperator(task_id="no_new_periods_to_load")
+
         new_periods_to_load = DummyOperator(task_id="new_periods_to_load")
 
         start_cleanup = DummyOperator(
