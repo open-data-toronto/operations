@@ -628,7 +628,7 @@ for d in dags:
 
         new_data_to_load >> new_reports
 
-        build_message >> send_notification
+        msg >> send_notification
 
         [send_notification, no_new_periods_to_load] >> start_cleanup
 
