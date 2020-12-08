@@ -588,6 +588,12 @@ for d in dags:
             op_kwargs={"resource_name": d["resource_name"]},
         )
 
+        upload_data = PythonOperator(
+            task_id="upload_zip",
+            python_callable=upload_zip,
+            provide_context=True,
+        )
+
         msg = PythonOperator(
             task_id="build_message",
             python_callable=build_message,
@@ -618,7 +624,7 @@ for d in dags:
 
         [new_reports, staging_folder] >> zip_reports
 
-        [copy_previous, zip_reports] >> zip_files >> upload_zip >> msg
+        [copy_previous, zip_reports] >> zip_files >> upload_data >> msg
 
         create_tmp_dir >> staging_folder
 
