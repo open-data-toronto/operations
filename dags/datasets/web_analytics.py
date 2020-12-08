@@ -259,7 +259,7 @@ def create_dag(d):
         elif period_range == "yearly":
             return years(latest_loaded)
 
-    def extract_reports(**kwargs):
+    def extract_new_reports(**kwargs):
         ti = kwargs.pop("ti")
         periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
         filename_date_format = ti.xcom_pull(task_ids="get_filename_date_format")
@@ -316,13 +316,11 @@ def create_dag(d):
 
             call = f"{prefix}/{reports[report_id]}/data?begin={begin}&end={end}&{qs}"
 
-            logging.info(f"{report_id.upper()} | Begin: {begin} | End: {end} | {call}")
+            logging.info(
+                f"{report_id.upper()} | Begin: {begin} | End: {end} | {prefix}/{reports[report_id]}/data?begin={begin}&end={end}"
+            )
 
-            response = requests.get(call, auth=(user, password))
-
-            logging.info(f"Reponse: {response.status_code}")
-
-            return response
+            return requests.get(call, auth=(user, password))
 
         def convert(response):
             report = response.json()
@@ -382,7 +380,9 @@ def create_dag(d):
 
     def zip_new_reports(**kwargs):
         ti = kwargs.pop("ti")
-        file_directories = [Path(f) for f in ti.xcom_pull(task_ids="extract_reports")]
+        file_directories = [
+            Path(f) for f in ti.xcom_pull(task_ids="extract_new_reports")
+        ]
         dest_dir = Path(ti.xcom_pull(task_ids="make_staging_folder"))
 
         paths = []
@@ -546,8 +546,8 @@ def create_dag(d):
         )
 
         new_reports = PythonOperator(
-            task_id="extract_reports",
-            python_callable=extract_reports,
+            task_id="extract_new_reports",
+            python_callable=extract_new_reports,
             provide_context=True,
         )
 
