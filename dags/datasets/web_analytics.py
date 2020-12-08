@@ -25,7 +25,7 @@ PACKAGE_ID = JOB_NAME.replace("_", "-")
 
 dags = [
     {
-        "period_name": "weekly",
+        "period_range": "weekly",
         "dag_id": f"{JOB_NAME}_weekly",
         "description": "Gets weekly Oracle Infinity data and uploads to web-analytics",
         "schedule": "@once",
@@ -33,7 +33,7 @@ dags = [
         "resource_name": "web-analytics-weekly-report",
     },
     {
-        "period_name": "monthly",
+        "period_range": "monthly",
         "dag_id": f"{JOB_NAME}_monthly",
         "description": "Gets monthly Oracle Infinity data and uploads to web-analytics",
         "schedule": "@once",
@@ -41,7 +41,7 @@ dags = [
         "resource_name": "web-analytics-monthly-report",
     },
     # {
-    #     "period_name": "yearly",
+    #     "period_range": "yearly",
     #     "dag_id": f"{JOB_NAME}_yearly".
     #     "description": "Gets yearly Oracle Infinity data & uploads to web-analytics",
     #     "schedule": "@once",
