@@ -374,7 +374,7 @@ def create_dag(d):
 
         staging = tmp_dir / resource_name
 
-        staging.mkdir(parents=True, exist_ok=False)
+        staging.mkdir(parents=True, exist_ok=True)
 
         return staging
 
