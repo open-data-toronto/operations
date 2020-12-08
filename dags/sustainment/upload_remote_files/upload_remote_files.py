@@ -12,7 +12,6 @@ import sys
 from dateutil import parser
 import requests
 import traceback
-import json
 from urllib.parse import urljoin
 
 sys.path.append(Variable.get("repo_dir"))
@@ -92,8 +91,13 @@ def upload_remote_files(**kwargs):
 
             should_upload = False
 
-            headers = requests.head(details["url"]).headers
-            file_last_modified = parser.parse(headers["Last-Modified"])
+            head = requests.head(details["url"])
+
+            assert (
+                head.status_code == 200
+            ), f"Request response is {head.status_code}, not 200. Validate file URL."
+
+            file_last_modified = parser.parse(head.headers["Last-Modified"])
 
             if len(resource) == 0:
                 metadata = {
@@ -130,10 +134,6 @@ def upload_remote_files(**kwargs):
                     should_upload = True
 
             if should_upload:
-                assert (
-                    "Last-Modified" in headers
-                ), f"No Last-Modified in headers. URL may be broken and was directed? {json.dumps(dict(headers))}"
-
                 res = requests.post(
                     urljoin(ckan.address, f"api/3/action/{api_func}"),
                     data=metadata,
@@ -159,7 +159,7 @@ def upload_remote_files(**kwargs):
                     "file": details["url"],
                     "last_modified": file_last_modified.strftime("%Y-%m-%d %H:%M"),
                     "size_mb": round(
-                        float(headers["Content-Length"]) / (1024 * 1024), 1
+                        float(head.headers["Content-Length"]) / (1024 * 1024), 1
                     ),
                 }
 
