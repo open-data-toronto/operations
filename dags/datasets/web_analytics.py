@@ -618,7 +618,7 @@ for d in dags:
 
         [new_reports, staging_folder] >> zip_reports
 
-        [copy_previous, zip_reports] >> zip_files >> upload_zip >> build_message
+        [copy_previous, zip_reports] >> zip_files >> upload_zip >> msg
 
         create_tmp_dir >> staging_folder
 
