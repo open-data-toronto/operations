@@ -523,11 +523,6 @@ def create_dag(d):
 
         new_periods_to_load = DummyOperator(task_id="new_periods_to_load")
 
-        start_cleanup = DummyOperator(
-            task_id="start_cleanup",
-            trigger_rule="none_failed",
-        )
-
         new_data_to_load = BranchPythonOperator(
             task_id="are_there_new_periods",
             python_callable=are_there_new_periods,
@@ -586,6 +581,13 @@ def create_dag(d):
             provide_context=True,
         )
 
+        delete_tmp_dir = PythonOperator(
+            task_id="delete_tmp_dir",
+            python_callable=airflow_utils.delete_dir_tree,
+            op_kwargs={"dag_id": d["dag_id"]},
+            trigger_rule="none_failed",
+        )
+
         package >> is_resource_new_branch
 
         is_resource_new_branch >> create_resource
@@ -615,7 +617,7 @@ def create_dag(d):
 
         msg >> send_notification
 
-        [send_notification, no_new_periods_to_load] >> start_cleanup
+        [send_notification, no_new_periods_to_load] >> delete_tmp_dir
 
         # delete_original_resource_tmp = PythonOperator(
         #     task_id="delete_original_resource_tmp_file",
@@ -639,13 +641,11 @@ def create_dag(d):
         #     provide_context=True,
         # )
 
-        # delete_tmp_dir = PythonOperator(
-        #     task_id="delete_tmp_data_dir",
-        #     python_callable=airflow_utils.delete_tmp_data_dir,
-        #     op_kwargs={"dag_id": d["dag_id"]},
-        # )
-
-        # no_notification = DummyOperator(task_id="no_need_for_notification")
+        delete_tmp_dir = PythonOperator(
+            task_id="delete_tmp_data_dir",
+            python_callable=airflow_utils.delete_dir_tree,
+            op_kwargs={"dag_id": d["dag_id"]},
+        )
 
     return dag
 
