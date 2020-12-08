@@ -82,7 +82,9 @@ def create_dag(d):
 
         resource = [r for r in package["resources"] if r["name"] == resource_name][0]
 
-        assert len(resource) <= 1, f"Found {len(resource)}. Must be 1 or 0."
+        assert (
+            len(resource) <= 1
+        ), f"Found {len(resource)} named {resource_name}. Must be 1 or 0."
 
         if len(resource) == 1:
             return "do_not_create_new_resource"
@@ -437,6 +439,7 @@ def create_dag(d):
             {
                 "on_failure_callback": send_failure_msg,
                 "start_date": d["start_date"],
+                "retries": 0,
             }
         ),
         description=d["description"],
