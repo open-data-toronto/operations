@@ -304,9 +304,6 @@ def create_dag(d):
         }
 
         logging.info(f"Getting reports. Parameters: {args}")
-        logging.info(
-            f"user: {user}, account_id: {account_id}, pw length: {len(password)}"
-        )
 
         def generate(report_id, begin, end):
 
