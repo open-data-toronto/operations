@@ -56,425 +56,404 @@ ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
 ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
 
 
-def send_success_msg(**kwargs):
-    msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
-    airflow_utils.message_slack(
-        name=JOB_NAME,
-        message_type="success",
-        msg=msg,
-        prod_webhook=active_env == "prod",
-        active_env=active_env,
-    )
+def create_dag(d):
+    def send_success_msg(**kwargs):
+        msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
+        airflow_utils.message_slack(
+            name=JOB_NAME,
+            message_type="success",
+            msg=msg,
+            prod_webhook=active_env == "prod",
+            active_env=active_env,
+        )
 
+    def send_failure_msg(self):
+        airflow_utils.message_slack(
+            name=JOB_NAME,
+            message_type="error",
+            msg="Job not finished",
+            prod_webhook=active_env == "prod",
+            active_env=active_env,
+        )
 
-def send_failure_msg(self):
-    airflow_utils.message_slack(
-        name=JOB_NAME,
-        message_type="error",
-        msg="Job not finished",
-        prod_webhook=active_env == "prod",
-        active_env=active_env,
-    )
+    def get_or_create_resource(**kwargs):
+        package = kwargs.pop("ti").xcom_pull(task_ids="get_package")
+        resource_name = kwargs.pop("resource_name")
 
+        resource = [r for r in package["resources"] if r["name"] == resource_name][0]
 
-def get_or_create_resource(**kwargs):
-    package = kwargs.pop("ti").xcom_pull(task_ids="get_package")
-    resource_name = kwargs.pop("resource_name")
+        assert len(resource) <= 1, f"Found {len(resource)}. Must be 1 or 0."
 
-    resource = [r for r in package["resources"] if r["name"] == resource_name][0]
+        if len(resource) == 1:
+            return "do_not_create_new_resource"
 
-    assert len(resource) <= 1, f"Found {len(resource)}. Must be 1 or 0."
+        return "create_new_resource"
 
-    if len(resource) == 1:
-        return "do_not_create_new_resource"
+    def get_resource(**kwargs):
+        package = ckan_utils.get_package(ckan=ckan, package_id=PACKAGE_ID)
+        resource_name = kwargs.pop("resource_name")
 
-    return "create_new_resource"
+        resource = [r for r in package["resources"] if r["name"] == resource_name][0]
 
+        return resource
 
-def get_resource(**kwargs):
-    package = ckan_utils.get_package(ckan=ckan, package_id=PACKAGE_ID)
-    resource_name = kwargs.pop("resource_name")
+    def create_new_resource(**kwargs):
+        ti = kwargs.pop("ti")
+        package = ti.xcom_pull(task_ids="get_package")
+        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+        resource_name = kwargs.pop("resource_name")
 
-    resource = [r for r in package["resources"] if r["name"] == resource_name][0]
+        save_path = tmp_dir / f"{resource_name}.zip"
 
-    return resource
+        with zipfile.ZipFile(save_path, "w") as file:
+            file
+            pass
 
+        logging.info(
+            "New resource. Creating empty placeholder Zip file to upload with resource"
+        )
 
-def create_new_resource(**kwargs):
-    ti = kwargs.pop("ti")
-    package = ti.xcom_pull(task_ids="get_package")
-    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
-    resource_name = kwargs.pop("resource_name")
+        res = ckan.action.resource_create(
+            package_id=package["name"],
+            name=resource_name,
+            is_preview=False,
+            format="ZIP",
+            extract_job=f"Airflow: {kwargs['dag'].dag_id}",
+            upload=open(save_path, "rb"),
+        )
 
-    save_path = tmp_dir / f"{resource_name}.zip"
+        logging.info(res)
 
-    with zipfile.ZipFile(save_path, "w") as file:
-        file
-        pass
+        return save_path
 
-    logging.info(
-        "New resource. Creating empty placeholder Zip file to upload with resource"
-    )
+    def download_data(**kwargs):
+        ti = kwargs.pop("ti")
+        resource = ti.xcom_pull(task_ids="get_resource")
+        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
 
-    res = ckan.action.resource_create(
-        package_id=package["name"],
-        name=resource_name,
-        is_preview=False,
-        format="ZIP",
-        extract_job=f"Airflow: {kwargs['dag'].dag_id}",
-        upload=open(save_path, "rb"),
-    )
+        r = requests.get(resource["url"], stream=True)
 
-    logging.info(res)
+        save_path = tmp_dir / "src" / Path(resource["url"]).suffix
 
-    return save_path
+        with open(save_path, "wb") as fd:
+            for chunk in r.iter_content(
+                chunk_size=128
+            ):  # to-do: read up on chunk size here
+                fd.write(chunk)
 
+        return save_path
 
-def download_data(**kwargs):
-    ti = kwargs.pop("ti")
-    resource = ti.xcom_pull(task_ids="get_resource")
-    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+    def unzip_data(**kwargs):
+        ti = kwargs.pop("ti")
+        fp = ti.xcom_pull(task_ids="download_data")
+        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
 
-    r = requests.get(resource["url"], stream=True)
+        target_dir = tmp_dir / "src"
 
-    save_path = tmp_dir / "src" / Path(resource["url"]).suffix
+        with zipfile.ZipFile(fp, "r") as f:
+            f.extractall(target_dir)
 
-    with open(save_path, "wb") as fd:
-        for chunk in r.iter_content(
-            chunk_size=128
-        ):  # to-do: read up on chunk size here
-            fd.write(chunk)
+        return target_dir
 
-    return save_path
+    def get_filename_date_format(**kwargs):
+        period_range = kwargs["period_range"]
 
+        if period_range == "weekly":
+            filename_date_format = "%Y%m%d"
+        elif period_range == "monthly":
+            filename_date_format = "%Y%m"
+        elif period_range == "yearly":
+            filename_date_format = "%Y"
 
-def unzip_data(**kwargs):
-    ti = kwargs.pop("ti")
-    fp = ti.xcom_pull(task_ids="download_data")
-    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+        return filename_date_format
 
-    target_dir = tmp_dir / "src"
+    def determine_latest_period_loaded(**kwargs):
+        ti = kwargs.pop("ti")
+        data_fp = Path(ti.xcom_pull(task_ids="unzip_data"))
+        filename_date_format = ti.xcom_pull(task_ids="get_filename_date_format")
 
-    with zipfile.ZipFile(fp, "r") as f:
-        f.extractall(target_dir)
+        dates_loaded = []
+        for f in os.listdir(data_fp):
+            time_range = f.split(".")[0]
+            end_date = datetime.strptime(time_range, filename_date_format)
+            dates_loaded.append(end_date)
 
-    return target_dir
+        if not dates_loaded:
+            return datetime(2016, 1, 1)
 
+        return max(dates_loaded)
 
-def get_filename_date_format(**kwargs):
-    period_range = kwargs["period_range"]
+    def calculate_periods_to_load(**kwargs):
+        ti = kwargs.pop("ti")
+        latest_loaded = ti.xcom_pull(task_ids="determine_latest_period_loaded")
+        period_range = kwargs["period_range"]
 
-    if period_range == "weekly":
-        filename_date_format = "%Y%m%d"
-    elif period_range == "monthly":
-        filename_date_format = "%Y%m"
-    elif period_range == "yearly":
-        filename_date_format = "%Y"
+        def weeks(latest_loaded):
+            logging.info("Calculating weeks to load")
+            periods_to_load = []
 
-    return filename_date_format
-
-
-def determine_latest_period_loaded(**kwargs):
-    ti = kwargs.pop("ti")
-    data_fp = Path(ti.xcom_pull(task_ids="unzip_data"))
-    filename_date_format = ti.xcom_pull(task_ids="get_filename_date_format")
-
-    dates_loaded = []
-    for f in os.listdir(data_fp):
-        time_range = f.split(".")[0]
-        end_date = datetime.strptime(time_range, filename_date_format)
-        dates_loaded.append(end_date)
-
-    if not dates_loaded:
-        return datetime(2016, 1, 1)
-
-    return max(dates_loaded)
-
-
-def calculate_periods_to_load(**kwargs):
-    ti = kwargs.pop("ti")
-    latest_loaded = ti.xcom_pull(task_ids="determine_latest_period_loaded")
-    period_range = kwargs["period_range"]
-
-    def weeks(latest_loaded):
-        logging.info("Calculating weeks to load")
-        periods_to_load = []
-
-        begin = latest_loaded + timedelta(days=1)
-        end = begin + timedelta(days=6)
-
-        while end < datetime.now():
-            periods_to_load.append(
-                {
-                    "begin": datetime.strftime(begin, "%Y/%m/%d/0"),
-                    "end": datetime.strftime(end, "%Y/%m/%d/23"),
-                }
-            )
-
+            begin = latest_loaded + timedelta(days=1)
             end = begin + timedelta(days=6)
-            begin = end + timedelta(days=1)
 
-        return periods_to_load
+            while end < datetime.now():
+                periods_to_load.append(
+                    {
+                        "begin": datetime.strftime(begin, "%Y/%m/%d/0"),
+                        "end": datetime.strftime(end, "%Y/%m/%d/23"),
+                    }
+                )
 
-    def months(latest_loaded):
-        logging.info("Calculating months to load")
-        periods_to_load = []
+                end = begin + timedelta(days=6)
+                begin = end + timedelta(days=1)
 
-        begin = latest_loaded + timedelta(days=32)
-        month_end_day = calendar.monthrange(begin.year, begin.month)[1]
-        end = datetime(begin.year, begin.month, month_end_day)
+            return periods_to_load
 
-        while end < datetime.now():
-            periods_to_load.append(
-                {
-                    "begin": datetime.strftime(begin, "%Y/%m/1/0"),
-                    "end": datetime.strftime(end, "%Y/%m/%d/23"),
-                }
-            )
+        def months(latest_loaded):
+            logging.info("Calculating months to load")
+            periods_to_load = []
 
-            begin = begin + timedelta(days=32)
+            begin = latest_loaded + timedelta(days=32)
             month_end_day = calendar.monthrange(begin.year, begin.month)[1]
             end = datetime(begin.year, begin.month, month_end_day)
 
-        return periods_to_load
+            while end < datetime.now():
+                periods_to_load.append(
+                    {
+                        "begin": datetime.strftime(begin, "%Y/%m/1/0"),
+                        "end": datetime.strftime(end, "%Y/%m/%d/23"),
+                    }
+                )
 
-    def years(latest_loaded):
-        logging.info("Calculating years to load")
-        periods_to_load = []
+                begin = begin + timedelta(days=32)
+                month_end_day = calendar.monthrange(begin.year, begin.month)[1]
+                end = datetime(begin.year, begin.month, month_end_day)
 
-        begin = latest_loaded + timedelta(days=365)
-        end = datetime(begin.year, 12, 31)
+            return periods_to_load
 
-        while end < datetime.now():
-            periods_to_load.append(
-                {
-                    "begin": datetime.strftime(begin, "%Y/1/1/0"),
-                    "end": datetime.strftime(end, "%Y/12/31/23"),
-                }
-            )
+        def years(latest_loaded):
+            logging.info("Calculating years to load")
+            periods_to_load = []
 
-            begin = begin + timedelta(days=365)
+            begin = latest_loaded + timedelta(days=365)
             end = datetime(begin.year, 12, 31)
 
-        return periods_to_load
+            while end < datetime.now():
+                periods_to_load.append(
+                    {
+                        "begin": datetime.strftime(begin, "%Y/1/1/0"),
+                        "end": datetime.strftime(end, "%Y/12/31/23"),
+                    }
+                )
 
-    if period_range == "weekly":
-        return weeks(latest_loaded)
-    elif period_range == "monthly":
-        return months(latest_loaded)
-    elif period_range == "yearly":
-        return years(latest_loaded)
+                begin = begin + timedelta(days=365)
+                end = datetime(begin.year, 12, 31)
 
+            return periods_to_load
 
-def extract_reports(**kwargs):
-    ti = kwargs.pop("ti")
-    periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
-    filename_date_format = ti.xcom_pull(task_ids="get_filename_date_format")
-    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
-    dest_path = tmp_dir / "new"
+        if period_range == "weekly":
+            return weeks(latest_loaded)
+        elif period_range == "monthly":
+            return months(latest_loaded)
+        elif period_range == "yearly":
+            return years(latest_loaded)
 
-    account_id = Variable.get("oracle_infinity_account_id")
-    user = Variable.get("oracle_infinity_user")
-    password = Variable.get("oracle_infinity_password")
+    def extract_reports(**kwargs):
+        ti = kwargs.pop("ti")
+        periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
+        filename_date_format = ti.xcom_pull(task_ids="get_filename_date_format")
+        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+        dest_path = tmp_dir / "new"
 
-    reports = {
-        "Key Metrics": "x5vawmkc4m",
-        "New vs. Return Visitors": "xmg3h9vx0q",
-        "Hits by Hour of Day": "he4my9hqm3",
-        "Visits by Day of Week": "b306ez6xl9",
-        "Operating System Platform": "gdr9cnxhhe",
-        "Browser": "aq6la9qe1y",
-        "Screen Resolution": "kxol0nmtp7",
-        "Mobile Devices": "k39zenjrov",
-        "Mobile Browser": "c3vhba0tbr",
-        "Referring Site": "zu2w468s89",
-        "Search Engines": "k8vzq4e8go",
-        "Countries": "m73c1tcrhq",
-        "Cities": "q0armw9day",
-        "Top Pages": "mpv8f1ox49",
-        "Entry Pages": "jw6dgdkl7b",
-        "Exit Pages": "donxi2vw5x",
-        "File Downloads": "t8rzu1nm32",
-        "Email Address": "xes0swn7f4",
-        "Offsite Links": "l0y5yfde3v",
-        "Anchor Tags": "mswxaifo96",
-    }
+        account_id = Variable.get("oracle_infinity_account_id")
+        user = Variable.get("oracle_infinity_user")
+        password = Variable.get("oracle_infinity_password")
 
-    args = {
-        "format": "json",
-        "timezone": "America/New_York",
-        "suppressErrorCodes": "true",
-        "autoDownload": "true",
-        "download": "false",
-        "totals": "true",
-        "limit": "250",
-    }
-
-    logging.info(f"Getting reports. Parameters: {args}")
-
-    def generate(report_id, begin, end):
-
-        querystring = "&".join(["{}={}".format(k, v) for k, v in args.items()])
-
-        prefix = f"https://api.oracleinfinity.io/v1/account/{account_id}/dataexport"
-
-        call = (
-            f"{prefix}/{reports[report_id]}/data?begin={begin}&end={end}&{querystring}"
-        )
-
-        logging.info(f"{report_id.upper()} | Begin: {begin} | End: {end}")
-
-        return requests.get(call, auth=(user, password))
-
-    def convert(response):
-        report = response.json()
-
-        rows = [{x["guid"]: x["value"] for x in report["measures"]}]
-
-        for dim in report["dimensions"]:
-            row = {dim["guid"]: dim["value"]}
-
-            for m in dim["measures"]:
-                row[m["guid"]] = m["value"]
-            rows.append(row)
-
-        columns = rows[-1].keys()
-
-        return pd.DataFrame(rows, columns=columns)
-
-    dirs = []
-
-    for period in periods_to_load:
-        period_path_name = datetime.strptime(period["end"], "%Y/%m/%d/%H").strftime(
-            filename_date_format
-        )
-        period_path = dest_path / period_path_name
-        period_path.mkdir(parents=True, exist_ok=True)
-        dirs.append(period_path)
-
-        for report_id in list(reports.keys()):
-            response = generate(
-                report_id=report_id, begin=period["begin"], end=period["end"]
-            )
-
-            fpath = period_path / (report_id + ".csv")
-            convert(response).to_csv(fpath, index=False)
-
-    return dirs
-
-
-def are_there_new_periods(**kwargs):
-    ti = kwargs.pop("ti")
-    periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
-
-    if len(periods_to_load) > 0:
-        return "extract_reports"
-
-    return "no_new_periods_to_load"
-
-
-def make_staging_folder(**kwargs):
-    ti = kwargs.pop("ti")
-    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
-    resource_name = kwargs["resource_name"]
-
-    staging = tmp_dir / resource_name
-
-    staging.mkdir(parents=True, exist_ok=False)
-
-    return staging
-
-
-def zip_new_reports(**kwargs):
-    ti = kwargs.pop("ti")
-    file_directories = [Path(f) for f in ti.xcom_pull(task_ids="extract_reports")]
-    dest_dir = Path(ti.xcom_pull(task_ids="make_staging_folder"))
-
-    paths = []
-    for fpath in file_directories:
-        f = shutil.make_archive(
-            base_name=dest_dir / fpath.name, format="zip", root_dir=fpath
-        )
-        paths.append(Path(f))
-
-    return paths
-
-
-def zip_files(**kwargs):
-    ti = kwargs.pop("ti")
-    resource_name = kwargs["resource_name"]
-    dest_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
-    staging_dir = Path(ti.xcom_pull(task_ids="make_staging_folder"))
-
-    return shutil.make_archive(
-        base_name=dest_dir / resource_name, format="zip", root_dir=staging_dir
-    )
-
-
-def copy_previous_to_staging(**kwargs):
-    ti = kwargs.pop("ti")
-    from_dir = Path(ti.xcom_pull(task_ids="unzip_data"))
-    dest_dir = Path(ti.xcom_pull(task_ids="make_staging_folder"))
-
-    copy_tree(str(from_dir.absolute()), str(dest_dir.absolute()))
-
-    return dest_dir
-
-
-def upload_zip(**kwargs):
-    ti = kwargs.pop("ti")
-    path = Path(ti.xcom_pull(task_ids="zip_files"))
-    resource = Path(ti.xcom_pull(task_ids="get_resource"))
-
-    res = ckan.action.resource_patch(
-        id=resource["id"],
-        upload=open(path, "rb"),
-    )
-
-    return res
-
-
-def build_message(**kwargs):
-    ti = kwargs.pop("ti")
-    resource_name = kwargs["resource_name"]
-    periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
-
-    msg = [f"Loaded new periods to {resource_name}:", ""]
-
-    for p in periods_to_load:
-        begin = "-".join(p["begin"].split("/")[:-1])
-        end = "-".join(p["end"].split("/")[:-1])
-
-        msg.append(f" * {begin} to {end}")
-
-    return "\n".join(msg)
-
-
-def return_branch(**kwargs):
-    filepath = kwargs.pop("ti").xcom_pull(task_ids="get_site_datapoints")
-    df = pd.read_csv(filepath)
-
-    if df.shape[0] == 0:
-        return "no_need_for_notification"
-
-    return "update_resource_data"
-
-
-for d in dags:
-    default_args = airflow_utils.get_default_args(
-        {
-            "on_failure_callback": send_failure_msg,
-            "start_date": d["start_date"],
+        reports = {
+            "Key Metrics": "x5vawmkc4m",
+            "New vs. Return Visitors": "xmg3h9vx0q",
+            "Hits by Hour of Day": "he4my9hqm3",
+            "Visits by Day of Week": "b306ez6xl9",
+            "Operating System Platform": "gdr9cnxhhe",
+            "Browser": "aq6la9qe1y",
+            "Screen Resolution": "kxol0nmtp7",
+            "Mobile Devices": "k39zenjrov",
+            "Mobile Browser": "c3vhba0tbr",
+            "Referring Site": "zu2w468s89",
+            "Search Engines": "k8vzq4e8go",
+            "Countries": "m73c1tcrhq",
+            "Cities": "q0armw9day",
+            "Top Pages": "mpv8f1ox49",
+            "Entry Pages": "jw6dgdkl7b",
+            "Exit Pages": "donxi2vw5x",
+            "File Downloads": "t8rzu1nm32",
+            "Email Address": "xes0swn7f4",
+            "Offsite Links": "l0y5yfde3v",
+            "Anchor Tags": "mswxaifo96",
         }
-    )
 
-    with DAG(
+        args = {
+            "format": "json",
+            "timezone": "America/New_York",
+            "suppressErrorCodes": "true",
+            "autoDownload": "true",
+            "download": "false",
+            "totals": "true",
+            "limit": "250",
+        }
+
+        logging.info(f"Getting reports. Parameters: {args}")
+
+        def generate(report_id, begin, end):
+
+            qs = "&".join(["{}={}".format(k, v) for k, v in args.items()])
+
+            prefix = f"https://api.oracleinfinity.io/v1/account/{account_id}/dataexport"
+
+            call = f"{prefix}/{reports[report_id]}/data?begin={begin}&end={end}&{qs}"
+
+            logging.info(f"{report_id.upper()} | Begin: {begin} | End: {end}")
+
+            return requests.get(call, auth=(user, password))
+
+        def convert(response):
+            report = response.json()
+
+            rows = [{x["guid"]: x["value"] for x in report["measures"]}]
+
+            for dim in report["dimensions"]:
+                row = {dim["guid"]: dim["value"]}
+
+                for m in dim["measures"]:
+                    row[m["guid"]] = m["value"]
+                rows.append(row)
+
+            columns = rows[-1].keys()
+
+            return pd.DataFrame(rows, columns=columns)
+
+        dirs = []
+
+        for period in periods_to_load:
+            period_path_name = datetime.strptime(period["end"], "%Y/%m/%d/%H").strftime(
+                filename_date_format
+            )
+            period_path = dest_path / period_path_name
+            period_path.mkdir(parents=True, exist_ok=True)
+            dirs.append(period_path)
+
+            for report_id in list(reports.keys()):
+                response = generate(
+                    report_id=report_id, begin=period["begin"], end=period["end"]
+                )
+
+                fpath = period_path / (report_id + ".csv")
+                convert(response).to_csv(fpath, index=False)
+
+        return dirs
+
+    def are_there_new_periods(**kwargs):
+        ti = kwargs.pop("ti")
+        periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
+
+        if len(periods_to_load) > 0:
+            return "extract_reports"
+
+        return "no_new_periods_to_load"
+
+    def make_staging_folder(**kwargs):
+        ti = kwargs.pop("ti")
+        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+        resource_name = kwargs["resource_name"]
+
+        staging = tmp_dir / resource_name
+
+        staging.mkdir(parents=True, exist_ok=False)
+
+        return staging
+
+    def zip_new_reports(**kwargs):
+        ti = kwargs.pop("ti")
+        file_directories = [Path(f) for f in ti.xcom_pull(task_ids="extract_reports")]
+        dest_dir = Path(ti.xcom_pull(task_ids="make_staging_folder"))
+
+        paths = []
+        for fpath in file_directories:
+            f = shutil.make_archive(
+                base_name=dest_dir / fpath.name, format="zip", root_dir=fpath
+            )
+            paths.append(Path(f))
+
+        return paths
+
+    def zip_files(**kwargs):
+        ti = kwargs.pop("ti")
+        resource_name = kwargs["resource_name"]
+        dest_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+        staging_dir = Path(ti.xcom_pull(task_ids="make_staging_folder"))
+
+        return shutil.make_archive(
+            base_name=dest_dir / resource_name, format="zip", root_dir=staging_dir
+        )
+
+    def copy_previous_to_staging(**kwargs):
+        ti = kwargs.pop("ti")
+        from_dir = Path(ti.xcom_pull(task_ids="unzip_data"))
+        dest_dir = Path(ti.xcom_pull(task_ids="make_staging_folder"))
+
+        copy_tree(str(from_dir.absolute()), str(dest_dir.absolute()))
+
+        return dest_dir
+
+    def upload_zip(**kwargs):
+        ti = kwargs.pop("ti")
+        path = Path(ti.xcom_pull(task_ids="zip_files"))
+        resource = Path(ti.xcom_pull(task_ids="get_resource"))
+
+        res = ckan.action.resource_patch(
+            id=resource["id"],
+            upload=open(path, "rb"),
+        )
+
+        return res
+
+    def build_message(**kwargs):
+        ti = kwargs.pop("ti")
+        resource_name = kwargs["resource_name"]
+        periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
+
+        msg = [f"Loaded new periods to {resource_name}:", ""]
+
+        for p in periods_to_load:
+            begin = "-".join(p["begin"].split("/")[:-1])
+            end = "-".join(p["end"].split("/")[:-1])
+
+            msg.append(f" * {begin} to {end}")
+
+        return "\n".join(msg)
+
+    def return_branch(**kwargs):
+        filepath = kwargs.pop("ti").xcom_pull(task_ids="get_site_datapoints")
+        df = pd.read_csv(filepath)
+
+        if df.shape[0] == 0:
+            return "no_need_for_notification"
+
+        return "update_resource_data"
+
+    dag = DAG(
         d["dag_id"],
-        default_args=default_args,
+        default_args=airflow_utils.get_default_args(
+            {
+                "on_failure_callback": send_failure_msg,
+                "start_date": d["start_date"],
+            }
+        ),
         description=d["description"],
         schedule_interval=d["schedule"],
         catchup=False,
-    ) as dag:
+    )
+
+    with dag:
 
         package = PythonOperator(
             task_id="get_package",
@@ -667,3 +646,11 @@ for d in dags:
         # )
 
         # no_notification = DummyOperator(task_id="no_need_for_notification")
+
+    return dag
+
+
+for d in dags:
+    dag_id = d["dag_id"]
+
+    globals()[dag_id] = create_dag(d)
