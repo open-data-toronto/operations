@@ -135,7 +135,7 @@ def create_dag(d):
 
         r = requests.get(resource["url"], stream=True)
 
-        save_path = tmp_dir / "src" / Path(resource["url"]).suffix
+        save_path = tmp_dir / f'src.{Path(resource["url"]).suffix}'
 
         with open(save_path, "wb") as fd:
             for chunk in r.iter_content(
