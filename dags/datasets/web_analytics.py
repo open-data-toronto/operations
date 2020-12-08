@@ -356,7 +356,7 @@ def create_dag(d):
         periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
 
         if len(periods_to_load) > 0:
-            return "extract_reports"
+            return "new_periods_to_load"
 
         return "no_new_periods_to_load"
 
@@ -430,15 +430,6 @@ def create_dag(d):
             msg.append(f" * {begin} to {end}")
 
         return "\n".join(msg)
-
-    def return_branch(**kwargs):
-        filepath = kwargs.pop("ti").xcom_pull(task_ids="get_site_datapoints")
-        df = pd.read_csv(filepath)
-
-        if df.shape[0] == 0:
-            return "no_need_for_notification"
-
-        return "update_resource_data"
 
     dag = DAG(
         d["dag_id"],
@@ -522,6 +513,7 @@ def create_dag(d):
         )
 
         no_new_periods_to_load = DummyOperator(task_id="no_new_periods_to_load")
+        new_periods_to_load = DummyOperator(task_id="new_periods_to_load")
 
         start_cleanup = DummyOperator(
             task_id="start_cleanup",
@@ -595,7 +587,7 @@ def create_dag(d):
         [
             create_resource,
             no_new_resource,
-        ] >> resource >> get_data >> unzip_files >> copy_previous
+        ] >> resource >> get_data >> unzip_files
 
         [unzip_files, filename_date_format] >> latest_loaded
 
@@ -611,7 +603,7 @@ def create_dag(d):
 
         new_data_to_load >> no_new_periods_to_load
 
-        new_data_to_load >> new_reports
+        new_data_to_load >> new_periods_to_load >> [new_reports, copy_previous]
 
         msg >> send_notification
 
