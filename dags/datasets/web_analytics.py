@@ -12,8 +12,9 @@ import requests
 import ckanapi
 import zipfile
 import shutil
-import os
+import json
 import sys
+import os
 
 sys.path.append(Variable.get("repo_dir"))
 from utils import airflow as airflow_utils  # noqa: E402
@@ -313,27 +314,39 @@ def create_dag(d):
 
             call = f"{prefix}/{reports[report_id]}/data?begin={begin}&end={end}&{qs}"
 
-            logging.info(
-                f"{report_id.upper()} | Begin: {begin} | End: {end} | {prefix}/{reports[report_id]}/data?begin={begin}&end={end}"
-            )
+            logging.info(f"{report_id.upper()} | Begin: {begin} | End: {end} | {call}")
 
-            return requests.get(call, auth=(user, password))
+            response = requests.get(call, auth=(user, password))
+
+            status_code = response.status_code
+
+            assert (
+                status_code == 200
+            ), f"Response code: {status_code}. Content: {json.dumps(response.json())}"
+
+            return response
 
         def convert(response):
             report = response.json()
 
-            rows = [{x["guid"]: x["value"] for x in report["measures"]}]
+            try:
+                report = response.json()
 
-            for dim in report["dimensions"]:
-                row = {dim["guid"]: dim["value"]}
+                rows = [{x["guid"]: x["value"] for x in report["measures"]}]
 
-                for m in dim["measures"]:
-                    row[m["guid"]] = m["value"]
-                rows.append(row)
+                for dim in report["dimensions"]:
+                    row = {dim["guid"]: dim["value"]}
 
-            columns = rows[-1].keys()
+                    for m in dim["measures"]:
+                        row[m["guid"]] = m["value"]
+                    rows.append(row)
 
-            return pd.DataFrame(rows, columns=columns)
+                columns = rows[-1].keys()
+
+                return pd.DataFrame(rows, columns=columns)
+
+            except Exception:
+                raise f"Parsing issue with call content: {json.dumps(report)}"
 
         dirs = []
 
