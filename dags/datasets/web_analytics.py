@@ -56,6 +56,77 @@ active_env = "dev"
 ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
 ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
 
+reports = {
+    "Key Metrics": "x5vawmkc4m",
+    "New vs. Return Visitors": "xmg3h9vx0q",
+    "Hits by Hour of Day": "he4my9hqm3",
+    "Visits by Day of Week": "b306ez6xl9",
+    "Operating System Platform": "gdr9cnxhhe",
+    "Browser": "aq6la9qe1y",
+    "Screen Resolution": "kxol0nmtp7",
+    "Mobile Devices": "k39zenjrov",
+    "Mobile Browser": "c3vhba0tbr",
+    "Referring Site": "zu2w468s89",
+    "Search Engines": "k8vzq4e8go",
+    "Countries": "m73c1tcrhq",
+    "Cities": "q0armw9day",
+    "Top Pages": "mpv8f1ox49",
+    "Entry Pages": "jw6dgdkl7b",
+    "Exit Pages": "donxi2vw5x",
+    "File Downloads": "t8rzu1nm32",
+    "Email Address": "xes0swn7f4",
+    "Offsite Links": "l0y5yfde3v",
+    "Anchor Tags": "mswxaifo96",
+}
+
+args = {
+    "format": "json",
+    "timezone": "America/New_York",
+    "suppressErrorCodes": "true",
+    "autoDownload": "true",
+    "download": "false",
+    "totals": "true",
+    "limit": "250",
+}
+
+
+def generate_report(report_name, report_id, begin, end, account_id, user, password):
+
+    qs = "&".join(["{}={}".format(k, v) for k, v in args.items()])
+
+    prefix = f"https://api.oracleinfinity.io/v1/account/{account_id}/dataexport"
+
+    call = f"{prefix}/{report_id}/data?begin={begin}&end={end}&{qs}"
+
+    logging.info(f"Begin: {begin} | End: {end} | {report_name.upper()} | {call}")
+
+    response = requests.get(call, auth=(user, password))
+
+    status_code = response.status_code
+
+    assert (
+        status_code == 200
+    ), f"Response code: {status_code}. Reason: {response.reason}"
+
+    return response
+
+
+def convert_report(response):
+    report = response.json()
+
+    rows = [{x["guid"]: x["value"] for x in report["measures"]}]
+
+    for dim in report["dimensions"]:
+        row = {dim["guid"]: dim["value"]}
+
+        for m in dim["measures"]:
+            row[m["guid"]] = m["value"]
+        rows.append(row)
+
+    columns = rows[-1].keys()
+
+    return pd.DataFrame(rows, columns=columns)
+
 
 def create_dag(d):
     def send_success_msg(**kwargs):
@@ -370,6 +441,71 @@ def create_dag(d):
 
         return dirs
 
+    def make_new_extract_folders(**kwargs):
+        logging.info(f"Created directory for storing extracts")
+
+        ti = kwargs.pop("ti")
+        filename_date_format = ti.xcom_pull(task_ids="get_filename_date_format")
+        periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
+        dest_path = Path(ti.xcom_pull(task_ids="make_staging_folder"))
+
+        dirs = []
+
+        for period in periods_to_load:
+            period_path_name = datetime.strptime(period["end"], "%Y/%m/%d/%H").strftime(
+                filename_date_format
+            )
+            period_path = dest_path / period_path_name
+            period_path.mkdir()
+            dirs.append(period_path)
+
+            logging.info(period_path)
+
+        return dirs
+
+    def extract_new_report(**kwargs):
+        ti = kwargs.pop("ti")
+        periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
+        filename_date_format = ti.xcom_pull(task_ids="get_filename_date_format")
+        dest_path = Path(ti.xcom_pull(task_ids="make_staging_folder"))
+
+        account_id = Variable.get("oracle_infinity_account_id")
+        user = Variable.get("oracle_infinity_user")
+        password = Variable.get("oracle_infinity_password")
+
+        report_name = kwargs["report_name"]
+        report_id = reports[report_name]
+
+        logging.info(f"Getting reports. Parameters: {args}")
+
+        file_paths = []
+
+        for period in periods_to_load:
+            period_path_name = datetime.strptime(period["end"], "%Y/%m/%d/%H").strftime(
+                filename_date_format
+            )
+            period_path = dest_path / period_path_name
+            fpath = period_path / (report_id + ".csv")
+
+            file_paths.append(fpath)
+
+            response = generate_report(
+                report_name=report_name,
+                report_id=report_id,
+                begin=period["begin"],
+                end=period["end"],
+                account_id=account_id,
+                user=user,
+                password=password,
+            )
+
+            try:
+                convert_report(response).to_csv(fpath, index=False)
+            except Exception:
+                raise f"Parsing issue with call content: {json.dumps(response.json())}"
+
+        return file_paths
+
     def are_there_new_periods(**kwargs):
         ti = kwargs.pop("ti")
         periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
@@ -536,14 +672,160 @@ def create_dag(d):
             op_kwargs={"resource_name": d["resource_name"]},
         )
 
-        new_reports = PythonOperator(
-            task_id="extract_new_reports",
-            python_callable=extract_new_reports,
+        # extract_new = PythonOperator(
+        #     task_id="extract_new",
+        #     python_callable=extract_new_reports,
+        #     provide_context=True,
+        # )
+
+        extract_complete = DummyOperator(task_id="extract_complete")
+
+        extract_new = PythonOperator(
+            task_id="extract_new",
+            python_callable=make_new_extract_folders,
             provide_context=True,
         )
 
+        key_metrics = PythonOperator(
+            task_id="key_metrics",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Key Metrics"},
+        )
+
+        new_v_return_visitors = PythonOperator(
+            task_id="new_v_return_visitors",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "New vs. Return Visitors"},
+        )
+
+        hits_by_hour = PythonOperator(
+            task_id="hits_by_hour",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Hits by Hour of Day"},
+        )
+
+        visits_by_day = PythonOperator(
+            task_id="visits_by_day",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Visits by Day of Week"},
+        )
+
+        operating_system = PythonOperator(
+            task_id="operating_system",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Operating System Platform"},
+        )
+
+        browser = PythonOperator(
+            task_id="browser",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Browser"},
+        )
+
+        screen_resolution = PythonOperator(
+            task_id="screen_resolution",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Screen Resolution"},
+        )
+
+        mobile_devices = PythonOperator(
+            task_id="mobile_devices",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Mobile Devices"},
+        )
+
+        mobile_browser = PythonOperator(
+            task_id="mobile_browser",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Mobile Browser"},
+        )
+
+        referring_site = PythonOperator(
+            task_id="referring_site",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Referring Site"},
+        )
+
+        search_engines = PythonOperator(
+            task_id="search_engines",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Search Engines"},
+        )
+
+        countries = PythonOperator(
+            task_id="countries",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Countries"},
+        )
+
+        cities = PythonOperator(
+            task_id="cities",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Cities"},
+        )
+
+        top_pages = PythonOperator(
+            task_id="top_pages",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Top Pages"},
+        )
+
+        entry_pages = PythonOperator(
+            task_id="entry_pages",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Entry Pages"},
+        )
+
+        exit_pages = PythonOperator(
+            task_id="exit_pages",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Exit Pages"},
+        )
+
+        file_downloads = PythonOperator(
+            task_id="file_downloads",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "File Downloads"},
+        )
+
+        email_address = PythonOperator(
+            task_id="email_address",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Email Address"},
+        )
+        offsite_links = PythonOperator(
+            task_id="offsite_links",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Offsite Links"},
+        )
+        anchor_tags = PythonOperator(
+            task_id="anchor_tags",
+            python_callable=extract_new_report,
+            provide_context=True,
+            op_kwargs={"report_name": "Anchor Tags"},
+        )
+
         copy_previous = PythonOperator(
-            task_id="copy_previous_to_staging",
+            task_id="copy_previous",
             python_callable=copy_previous_to_staging,
             provide_context=True,
         )
@@ -596,16 +878,39 @@ def create_dag(d):
 
         latest_loaded >> periods_to_load >> new_data_to_load
 
-        [copy_previous, new_reports] >> zip_resource_files >> upload_data >> msg
+        [copy_previous, extract_complete] >> zip_resource_files >> upload_data >> msg
 
         create_tmp_dir >> get_data
 
         new_data_to_load >> no_new_periods_to_load
 
         new_data_to_load >> new_periods_to_load >> staging_folder >> [
-            new_reports,
+            extract_new,
             copy_previous,
         ]
+
+        extract_new >> [
+            key_metrics,
+            new_v_return_visitors,
+            hits_by_hour,
+            visits_by_day,
+            operating_system,
+            browser,
+            screen_resolution,
+            mobile_devices,
+            mobile_browser,
+            referring_site,
+            search_engines,
+            countries,
+            cities,
+            top_pages,
+            entry_pages,
+            exit_pages,
+            file_downloads,
+            email_address,
+            offsite_links,
+            anchor_tags,
+        ] >> extract_complete
 
         msg >> send_notification
 
