@@ -322,7 +322,7 @@ def create_dag(d):
 
             assert (
                 status_code == 200
-            ), f"Response code: {status_code}. Content: {json.dumps(response.json())}"
+            ), f"Response code: {status_code}. Reason: {response.reason)}"
 
             return response
 
