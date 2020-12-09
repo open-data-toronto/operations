@@ -25,22 +25,22 @@ JOB_NAME = JOB_FILE.name[:-3]
 PACKAGE_ID = JOB_NAME.replace("_", "-")
 
 dags = [
-    # {
-    #     "period_range": "weekly",
-    #     "dag_id": f"{JOB_NAME}_weekly",
-    #     "description": "Gets weekly Oracle Infinity data and uploads to web-analytics",
-    #     "schedule": "@once",
-    #     "start_date": datetime(2020, 11, 10, 13, 35, 0),
-    #     "resource_name": "web-analytics-weekly-report",
-    # },
-    # {
-    #     "period_range": "monthly",
-    #     "dag_id": f"{JOB_NAME}_monthly",
-    #     "description": "Gets monthly Oracle Infinity data and uploads to web-analytics",
-    #     "schedule": "@once",
-    #     "start_date": datetime(2020, 11, 10, 13, 35, 0),
-    #     "resource_name": "web-analytics-monthly-report",
-    # },
+    {
+        "period_range": "weekly",
+        "dag_id": f"{JOB_NAME}_weekly",
+        "description": "Gets weekly Oracle Infinity data and uploads to web-analytics",
+        "schedule": "@once",
+        "start_date": datetime(2020, 11, 10, 13, 35, 0),
+        "resource_name": "web-analytics-weekly-report",
+    },
+    {
+        "period_range": "monthly",
+        "dag_id": f"{JOB_NAME}_monthly",
+        "description": "Gets monthly Oracle Infinity data and uploads to web-analytics",
+        "schedule": "@once",
+        "start_date": datetime(2020, 11, 10, 13, 35, 0),
+        "resource_name": "web-analytics-monthly-report",
+    },
     {
         "period_range": "yearly",
         "dag_id": f"{JOB_NAME}_yearly",
@@ -48,7 +48,7 @@ dags = [
         "schedule": "@once",
         "start_date": datetime(2020, 11, 10, 13, 35, 0),
         "resource_name": "web-analytics-yearly-report",
-    }
+    },
 ]
 
 # active_env = Variable.get("active_env")
@@ -442,7 +442,7 @@ def create_dag(d):
         return dirs
 
     def make_new_extract_folders(**kwargs):
-        logging.info(f"Created directory for storing extracts")
+        logging.info("Created directory for storing extracts")
 
         ti = kwargs.pop("ti")
         filename_date_format = ti.xcom_pull(task_ids="get_filename_date_format")
@@ -485,7 +485,7 @@ def create_dag(d):
                 filename_date_format
             )
             period_path = dest_path / period_path_name
-            fpath = period_path / (report_id + ".csv")
+            fpath = period_path / (report_name + ".csv")
 
             file_paths.append(fpath)
 
