@@ -156,6 +156,9 @@ def create_dag(d):
         with zipfile.ZipFile(fp, "r") as f:
             f.extractall(target_dir)
 
+        if target_dir.exists() is False:
+            target_dir.mkdir()
+
         return target_dir
 
     def get_filename_date_format(**kwargs):
