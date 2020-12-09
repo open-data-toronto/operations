@@ -314,7 +314,7 @@ def create_dag(d):
 
             call = f"{prefix}/{reports[report_id]}/data?begin={begin}&end={end}&{qs}"
 
-            logging.info(f"{report_id.upper()} | Begin: {begin} | End: {end} | {call}")
+            logging.info(f"Begin: {begin} | End: {end} | {report_id.upper()} | {call}")
 
             response = requests.get(call, auth=(user, password))
 
