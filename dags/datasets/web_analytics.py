@@ -29,24 +29,24 @@ dags = [
         "period_range": "weekly",
         "dag_id": f"{JOB_NAME}_weekly",
         "description": "Gets weekly Oracle Infinity data and uploads to web-analytics",
-        "schedule": "@once",
-        "start_date": datetime(2020, 11, 10, 13, 35, 0),
+        "schedule": "0 10 * * 7",
+        "start_date": datetime(2000, 1, 1, 1, 1, 0),
         "resource_name": "web-analytics-weekly-report",
     },
     {
         "period_range": "monthly",
         "dag_id": f"{JOB_NAME}_monthly",
         "description": "Gets monthly Oracle Infinity data and uploads to web-analytics",
-        "schedule": "@once",
-        "start_date": datetime(2020, 11, 10, 13, 35, 0),
+        "schedule": "0 12 1 * *",
+        "start_date": datetime(2000, 1, 1, 1, 1, 0),
         "resource_name": "web-analytics-monthly-report",
     },
     {
         "period_range": "yearly",
         "dag_id": f"{JOB_NAME}_yearly",
         "description": "Gets yearly Oracle Infinity data & uploads to web-analytics",
-        "schedule": "@once",
-        "start_date": datetime(2020, 11, 10, 13, 35, 0),
+        "schedule": "0 11 1 1 *",
+        "start_date": datetime(2000, 1, 1, 1, 1, 0),
         "resource_name": "web-analytics-yearly-report",
     },
 ]
@@ -256,7 +256,7 @@ def create_dag(d):
         ]
 
         if not dates_loaded:
-            return datetime(2018, 12, 31)
+            return datetime(2018, 12, 30)
 
         return max(dates_loaded)
 
@@ -333,113 +333,6 @@ def create_dag(d):
             return months(latest_loaded)
         elif period_range == "yearly":
             return years(latest_loaded)
-
-    def extract_new_reports(**kwargs):
-        ti = kwargs.pop("ti")
-        periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
-        filename_date_format = ti.xcom_pull(task_ids="get_filename_date_format")
-        dest_path = Path(ti.xcom_pull(task_ids="make_staging_folder"))
-
-        account_id = Variable.get("oracle_infinity_account_id")
-        user = Variable.get("oracle_infinity_user")
-        password = Variable.get("oracle_infinity_password")
-
-        reports = {
-            "Key Metrics": "x5vawmkc4m",
-            "New vs. Return Visitors": "xmg3h9vx0q",
-            "Hits by Hour of Day": "he4my9hqm3",
-            "Visits by Day of Week": "b306ez6xl9",
-            "Operating System Platform": "gdr9cnxhhe",
-            "Browser": "aq6la9qe1y",
-            "Screen Resolution": "kxol0nmtp7",
-            "Mobile Devices": "k39zenjrov",
-            "Mobile Browser": "c3vhba0tbr",
-            "Referring Site": "zu2w468s89",
-            "Search Engines": "k8vzq4e8go",
-            "Countries": "m73c1tcrhq",
-            "Cities": "q0armw9day",
-            "Top Pages": "mpv8f1ox49",
-            "Entry Pages": "jw6dgdkl7b",
-            "Exit Pages": "donxi2vw5x",
-            "File Downloads": "t8rzu1nm32",
-            "Email Address": "xes0swn7f4",
-            "Offsite Links": "l0y5yfde3v",
-            "Anchor Tags": "mswxaifo96",
-        }
-
-        args = {
-            "format": "json",
-            "timezone": "America/New_York",
-            "suppressErrorCodes": "true",
-            "autoDownload": "true",
-            "download": "false",
-            "totals": "true",
-            "limit": "250",
-        }
-
-        logging.info(f"Getting reports. Parameters: {args}")
-
-        def generate(report_id, begin, end):
-
-            qs = "&".join(["{}={}".format(k, v) for k, v in args.items()])
-
-            prefix = f"https://api.oracleinfinity.io/v1/account/{account_id}/dataexport"
-
-            call = f"{prefix}/{reports[report_id]}/data?begin={begin}&end={end}&{qs}"
-
-            logging.info(f"Begin: {begin} | End: {end} | {report_id.upper()} | {call}")
-
-            response = requests.get(call, auth=(user, password))
-
-            status_code = response.status_code
-
-            assert (
-                status_code == 200
-            ), f"Response code: {status_code}. Reason: {response.reason}"
-
-            return response
-
-        def convert(response):
-            report = response.json()
-
-            try:
-                report = response.json()
-
-                rows = [{x["guid"]: x["value"] for x in report["measures"]}]
-
-                for dim in report["dimensions"]:
-                    row = {dim["guid"]: dim["value"]}
-
-                    for m in dim["measures"]:
-                        row[m["guid"]] = m["value"]
-                    rows.append(row)
-
-                columns = rows[-1].keys()
-
-                return pd.DataFrame(rows, columns=columns)
-
-            except Exception:
-                raise f"Parsing issue with call content: {json.dumps(report)}"
-
-        dirs = []
-
-        for period in periods_to_load:
-            period_path_name = datetime.strptime(period["end"], "%Y/%m/%d/%H").strftime(
-                filename_date_format
-            )
-            period_path = dest_path / period_path_name
-            period_path.mkdir(parents=True, exist_ok=True)
-            dirs.append(period_path)
-
-            for report_id in list(reports.keys()):
-                response = generate(
-                    report_id=report_id, begin=period["begin"], end=period["end"]
-                )
-
-                fpath = period_path / (report_id + ".csv")
-                convert(response).to_csv(fpath, index=False)
-
-        return dirs
 
     def make_new_extract_folders(**kwargs):
         logging.info("Created directory for storing extracts")
@@ -578,7 +471,8 @@ def create_dag(d):
             {
                 "on_failure_callback": send_failure_msg,
                 "start_date": d["start_date"],
-                "retries": 0,
+                "retries": 5,
+                "retry_delay": timedelta(minutes=15),
             }
         ),
         description=d["description"],
@@ -671,12 +565,6 @@ def create_dag(d):
             provide_context=True,
             op_kwargs={"resource_name": d["resource_name"]},
         )
-
-        # extract_new = PythonOperator(
-        #     task_id="extract_new",
-        #     python_callable=extract_new_reports,
-        #     provide_context=True,
-        # )
 
         extract_complete = DummyOperator(task_id="extract_complete")
 
