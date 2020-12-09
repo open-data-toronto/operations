@@ -119,18 +119,15 @@ def create_dir_with_dag_name(**kwargs):
 
 def delete_tmp_data_dir(**kwargs):
     dag_id = kwargs.pop("dag_id")
+    recursively = kwargs.get("recursively")
 
     files_dir_path = Path(Variable.get("tmp_dir"))
     dag_tmp_dir = files_dir_path / dag_id
 
-    os.rmdir(dag_tmp_dir)
-
-
-def delete_dir_tree(**kwargs):
-    dag_id = kwargs.pop("dag_id")
-    files_dir_path = Path(Variable.get("tmp_dir"))
-
-    shutil.rmtree(files_dir_path / dag_id)
+    if not recursively:
+        os.rmdir(dag_tmp_dir)
+    else:
+        shutil.rmtree(dag_tmp_dir)
 
 
 def delete_file(**kwargs):

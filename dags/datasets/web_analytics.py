@@ -583,8 +583,8 @@ def create_dag(d):
 
         delete_tmp_dir = PythonOperator(
             task_id="delete_tmp_dir",
-            python_callable=airflow_utils.delete_dir_tree,
-            op_kwargs={"dag_id": d["dag_id"]},
+            python_callable=airflow_utils.delete_tmp_data_dir,
+            op_kwargs={"dag_id": d["dag_id"], "recursively": True},
             trigger_rule="none_failed",
         )
 
@@ -618,34 +618,6 @@ def create_dag(d):
         msg >> send_notification
 
         [send_notification, no_new_periods_to_load] >> delete_tmp_dir
-
-        # delete_original_resource_tmp = PythonOperator(
-        #     task_id="delete_original_resource_tmp_file",
-        #     python_callable=airflow_utils.delete_file,
-        #     op_kwargs={"task_ids": ["get_resource_data"]},
-        #     provide_context=True,
-        #     trigger_rule="one_success",
-        # )
-
-        # delete_new_records_tmp = PythonOperator(
-        #     task_id="delete_new_records_tmp_file",
-        #     python_callable=airflow_utils.delete_file,
-        #     op_kwargs={"task_ids": ["get_site_datapoints"]},
-        #     provide_context=True,
-        # )
-
-        # delete_new_resource_tmp = PythonOperator(
-        #     task_id="delete_new_resource_tmp",
-        #     python_callable=airflow_utils.delete_file,
-        #     op_kwargs={"task_ids": ["update_resource_data"]},
-        #     provide_context=True,
-        # )
-
-        delete_tmp_dir = PythonOperator(
-            task_id="delete_tmp_data_dir",
-            python_callable=airflow_utils.delete_dir_tree,
-            op_kwargs={"dag_id": d["dag_id"]},
-        )
 
     return dag
 
