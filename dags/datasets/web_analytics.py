@@ -280,8 +280,8 @@ def create_dag(d):
                     }
                 )
 
-                end = begin + timedelta(days=6)
                 begin = end + timedelta(days=1)
+                end = begin + timedelta(days=6)
 
             return periods_to_load
 
