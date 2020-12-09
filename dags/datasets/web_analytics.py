@@ -25,30 +25,30 @@ JOB_NAME = JOB_FILE.name[:-3]
 PACKAGE_ID = JOB_NAME.replace("_", "-")
 
 dags = [
-    {
-        "period_range": "weekly",
-        "dag_id": f"{JOB_NAME}_weekly",
-        "description": "Gets weekly Oracle Infinity data and uploads to web-analytics",
-        "schedule": "@once",
-        "start_date": datetime(2020, 11, 10, 13, 35, 0),
-        "resource_name": "web-analytics-weekly-report",
-    },
-    {
-        "period_range": "monthly",
-        "dag_id": f"{JOB_NAME}_monthly",
-        "description": "Gets monthly Oracle Infinity data and uploads to web-analytics",
-        "schedule": "@once",
-        "start_date": datetime(2020, 11, 10, 13, 35, 0),
-        "resource_name": "web-analytics-monthly-report",
-    },
     # {
-    #     "period_range": "yearly",
-    #     "dag_id": f"{JOB_NAME}_yearly".
-    #     "description": "Gets yearly Oracle Infinity data & uploads to web-analytics",
+    #     "period_range": "weekly",
+    #     "dag_id": f"{JOB_NAME}_weekly",
+    #     "description": "Gets weekly Oracle Infinity data and uploads to web-analytics",
     #     "schedule": "@once",
     #     "start_date": datetime(2020, 11, 10, 13, 35, 0),
-    # "resource_name": "web-analytics-yearly-report"
-    # }
+    #     "resource_name": "web-analytics-weekly-report",
+    # },
+    # {
+    #     "period_range": "monthly",
+    #     "dag_id": f"{JOB_NAME}_monthly",
+    #     "description": "Gets monthly Oracle Infinity data and uploads to web-analytics",
+    #     "schedule": "@once",
+    #     "start_date": datetime(2020, 11, 10, 13, 35, 0),
+    #     "resource_name": "web-analytics-monthly-report",
+    # },
+    {
+        "period_range": "yearly",
+        "dag_id": f"{JOB_NAME}_yearly".
+        "description": "Gets yearly Oracle Infinity data & uploads to web-analytics",
+        "schedule": "@once",
+        "start_date": datetime(2020, 11, 10, 13, 35, 0),
+    "resource_name": "web-analytics-yearly-report"
+    }
 ]
 
 # active_env = Variable.get("active_env")
@@ -175,14 +175,14 @@ def create_dag(d):
         data_fp = Path(ti.xcom_pull(task_ids="unzip_data"))
         filename_date_format = ti.xcom_pull(task_ids="get_filename_date_format")
 
-        dates_loaded = []
-        for f in os.listdir(data_fp):
-            time_range = f.split(".")[0]
-            end_date = datetime.strptime(time_range, filename_date_format)
-            dates_loaded.append(end_date)
+        dates_loaded = [
+            datetime.strptime(p.name, filename_date_format)
+            for p in data_fp.iterdir()
+            if p.is_file() is False
+        ]
 
         if not dates_loaded:
-            return datetime(2016, 1, 1)
+            return datetime(2018, 12, 31)
 
         return max(dates_loaded)
 
@@ -264,8 +264,7 @@ def create_dag(d):
         ti = kwargs.pop("ti")
         periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
         filename_date_format = ti.xcom_pull(task_ids="get_filename_date_format")
-        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
-        dest_path = tmp_dir / "new"
+        dest_path = Path(ti.xcom_pull(task_ids="make_staging_folder"))
 
         account_id = Variable.get("oracle_infinity_account_id")
         user = Variable.get("oracle_infinity_user")
@@ -388,22 +387,6 @@ def create_dag(d):
 
         return staging
 
-    def zip_new_reports(**kwargs):
-        ti = kwargs.pop("ti")
-        file_directories = [
-            Path(f) for f in ti.xcom_pull(task_ids="extract_new_reports")
-        ]
-        dest_dir = Path(ti.xcom_pull(task_ids="make_staging_folder"))
-
-        paths = []
-        for fpath in file_directories:
-            f = shutil.make_archive(
-                base_name=dest_dir / fpath.name, format="zip", root_dir=fpath
-            )
-            paths.append(Path(f))
-
-        return paths
-
     def zip_files(**kwargs):
         ti = kwargs.pop("ti")
         resource_name = kwargs["resource_name"]
@@ -426,7 +409,7 @@ def create_dag(d):
     def upload_zip(**kwargs):
         ti = kwargs.pop("ti")
         path = Path(ti.xcom_pull(task_ids="zip_files"))
-        resource = Path(ti.xcom_pull(task_ids="get_resource"))
+        resource = ti.xcom_pull(task_ids="get_resource")
 
         res = ckan.action.resource_patch(
             id=resource["id"],
@@ -556,12 +539,6 @@ def create_dag(d):
             provide_context=True,
         )
 
-        zip_reports = PythonOperator(
-            task_id="zip_new_reports",
-            python_callable=zip_new_reports,
-            provide_context=True,
-        )
-
         copy_previous = PythonOperator(
             task_id="copy_previous_to_staging",
             python_callable=copy_previous_to_staging,
@@ -616,17 +593,16 @@ def create_dag(d):
 
         latest_loaded >> periods_to_load >> new_data_to_load
 
-        [new_reports, staging_folder] >> zip_reports
-
-        [copy_previous, zip_reports] >> zip_resource_files >> upload_data >> msg
-
-        create_tmp_dir >> staging_folder
+        [copy_previous, new_reports] >> zip_resource_files >> upload_data >> msg
 
         create_tmp_dir >> get_data
 
         new_data_to_load >> no_new_periods_to_load
 
-        new_data_to_load >> new_periods_to_load >> [new_reports, copy_previous]
+        new_data_to_load >> new_periods_to_load >> staging_folder >> [
+            new_reports,
+            copy_previous,
+        ]
 
         msg >> send_notification
 
