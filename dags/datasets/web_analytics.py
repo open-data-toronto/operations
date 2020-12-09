@@ -452,16 +452,15 @@ def create_dag(d):
 
     def build_message(**kwargs):
         ti = kwargs.pop("ti")
-        resource_name = kwargs["resource_name"]
         periods_to_load = ti.xcom_pull(task_ids="calculate_periods_to_load")
 
-        msg = [f"Loaded new periods to {resource_name}:", ""]
+        msg = [f"Loaded {d['period_range']} data:", ""]
 
         for p in periods_to_load:
             begin = "-".join(p["begin"].split("/")[:-1])
             end = "-".join(p["end"].split("/")[:-1])
 
-            msg.append(f" * {begin} to {end}")
+            msg.append(f"- {begin} to {end}")
 
         return "\n".join(msg)
 
@@ -735,7 +734,6 @@ def create_dag(d):
             task_id="build_message",
             python_callable=build_message,
             provide_context=True,
-            op_kwargs={"resource_name": d["resource_name"]},
         )
 
         send_notification = PythonOperator(
