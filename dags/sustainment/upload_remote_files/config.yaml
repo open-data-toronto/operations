@@ -335,13 +335,13 @@ utility-cut-permits:
   utility-cut-permits-documentation:
     format: zip
     url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp_doc.zip
-web-analytics:
-  Web Analytics Readme:
-    format: xlsx
-    url: http://opendata.toronto.ca/city.clerks.office/web-analytics/web_analytics_readme.xlsx
-  web-analytics-monthly-report:
-    format: zip
-    url: http://opendata.toronto.ca/city.clerks.office/web-analytics/web_analytics_monthly_csv.zip
-  web-analytics-weekly-report:
-    format: zip
-    url: http://opendata.toronto.ca/city.clerks.office/web-analytics/web_analytics_weekly_csv.zip
+# web-analytics:
+#   Web Analytics Readme:
+#     format: xlsx
+#     url: http://opendata.toronto.ca/city.clerks.office/web-analytics/web_analytics_readme.xlsx
+#   web-analytics-monthly-report:
+#     format: zip
+#     url: http://opendata.toronto.ca/city.clerks.office/web-analytics/web_analytics_monthly_csv.zip
+#   web-analytics-weekly-report:
+#     format: zip
+#     url: http://opendata.toronto.ca/city.clerks.office/web-analytics/web_analytics_weekly_csv.zip
