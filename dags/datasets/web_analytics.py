@@ -43,11 +43,11 @@ dags = [
     # },
     {
         "period_range": "yearly",
-        "dag_id": f"{JOB_NAME}_yearly".
+        "dag_id": f"{JOB_NAME}_yearly",
         "description": "Gets yearly Oracle Infinity data & uploads to web-analytics",
         "schedule": "@once",
         "start_date": datetime(2020, 11, 10, 13, 35, 0),
-    "resource_name": "web-analytics-yearly-report"
+        "resource_name": "web-analytics-yearly-report",
     }
 ]
 
