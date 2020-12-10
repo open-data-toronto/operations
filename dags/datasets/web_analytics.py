@@ -49,8 +49,7 @@ dags = [
     },
 ]
 
-# active_env = Variable.get("active_env")
-active_env = "dev"
+active_env = Variable.get("active_env")
 ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
 ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
 
