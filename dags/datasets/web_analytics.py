@@ -5,14 +5,12 @@ from datetime import datetime, timedelta
 from airflow.models import Variable
 from pathlib import Path
 from airflow import DAG
-import pandas as pd
 import logging
 import calendar
 import requests
 import ckanapi
 import zipfile
 import shutil
-import json
 import sys
 import os
 
@@ -80,7 +78,7 @@ reports = {
 }
 
 args = {
-    "format": "json",
+    "format": "csv",
     "timezone": "America/New_York",
     "suppressErrorCodes": "true",
     "autoDownload": "true",
@@ -109,23 +107,6 @@ def generate_report(report_name, report_id, begin, end, account_id, user, passwo
     ), f"Response code: {status_code}. Reason: {response.reason}"
 
     return response
-
-
-def convert_report(response):
-    report = response.json()
-
-    rows = [{x["guid"]: x["value"] for x in report["measures"]}]
-
-    for dim in report["dimensions"]:
-        row = {dim["guid"]: dim["value"]}
-
-        for m in dim["measures"]:
-            row[m["guid"]] = m["value"]
-        rows.append(row)
-
-    columns = rows[-1].keys()
-
-    return pd.DataFrame(rows, columns=columns)
 
 
 def create_dag(d):
@@ -392,10 +373,8 @@ def create_dag(d):
                 password=password,
             )
 
-            try:
-                convert_report(response).to_csv(fpath, index=False)
-            except Exception:
-                raise f"Parsing issue with call content: {json.dumps(response.json())}"
+            with open(fpath, "wb") as f:
+                f.write(response.content)
 
         return file_paths
 
@@ -698,12 +677,14 @@ def create_dag(d):
             provide_context=True,
             op_kwargs={"report_name": "Email Address"},
         )
+
         offsite_links = PythonOperator(
             task_id="offsite_links",
             python_callable=extract_new_report,
             provide_context=True,
             op_kwargs={"report_name": "Offsite Links"},
         )
+
         anchor_tags = PythonOperator(
             task_id="anchor_tags",
             python_callable=extract_new_report,
