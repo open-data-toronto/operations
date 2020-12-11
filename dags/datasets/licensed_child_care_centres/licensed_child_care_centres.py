@@ -39,7 +39,7 @@ RESOURCE_NAME = "Child care centres"
 
 def send_success_msg(**kwargs):
     ti = kwargs.pop("ti")
-    msg = ti.xcom_pull(task_ids="build_notification_msg")
+    msg = ti.xcom_pull(task_ids="build_message")
 
     airflow_utils.message_slack(
         name=JOB_NAME,
@@ -401,7 +401,7 @@ with DAG(
     )
 
     notification_msg = PythonOperator(
-        task_id="build_notification_msg",
+        task_id="build_message",
         python_callable=build_message,
         provide_context=True,
     )
@@ -431,10 +431,9 @@ with DAG(
     )
 
     send_notification = PythonOperator(
-        task_id="send_success_msg",
+        task_id="send_notification",
         python_callable=send_success_msg,
         provide_context=True,
-        op_kwargs={"msg_task_id": "build_notification_msg"},
     )
 
     delete_tmp_dir = PythonOperator(
