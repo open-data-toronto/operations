@@ -272,9 +272,9 @@ def is_file_new(**kwargs):
     )
 
     if difference_in_seconds == 0:
-        return "delete_tmp_dir"
+        return "file_is_not_new"
 
-    return "update_resource_last_modified"
+    return "file_is_new"
 
 
 def build_data_dict(**kwargs):
@@ -414,6 +414,14 @@ with DAG(
         task_id="resource_is_new",
     )
 
+    file_is_new = DummyOperator(
+        task_id="file_is_new",
+    )
+
+    file_is_not_new = DummyOperator(
+        task_id="file_is_not_new",
+    )
+
     data_is_new = DummyOperator(
         task_id="data_is_new",
     )
@@ -453,8 +461,6 @@ with DAG(
 
     is_resource_new_branch >> resource_is_not_new >> previous_data >> resource
 
-    resource >> is_data_new_branch
-
     is_data_new_branch >> data_is_new >> delete_previous >> insert_new
 
     insert_new >> update_timestamp
@@ -465,7 +471,9 @@ with DAG(
 
     is_file_new_branch >> delete_tmp_dir
 
-    is_file_new_branch >> update_timestamp
+    is_file_new_branch >> file_is_new >> update_timestamp
+
+    is_file_new_branch >> file_is_new >> is_data_new_branch
 
     update_timestamp >> notification_msg >> send_notification
 
