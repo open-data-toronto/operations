@@ -293,13 +293,14 @@ def build_data_dict(**kwargs):
 
 def create_new_resource(**kwargs):
     return CKAN.action.resource_create(
-            package_id = PACKAGE_ID,
-            nam =: RESOURCE_NAME,
-            format = "csv",
-            is_preview = True,
-            url_type = "datastore",
-                    extract_job = f"Airflow: {kwargs['dag'].dag_id}",
+        package_id=PACKAGE_ID,
+        name=RESOURCE_NAME,
+        format="csv",
+        is_preview=True,
+        url_type="datastore",
+        extract_job=f"Airflow: {kwargs['dag'].dag_id}",
     )
+
 
 default_args = airflow_utils.get_default_args(
     {
