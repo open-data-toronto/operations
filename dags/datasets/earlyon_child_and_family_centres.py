@@ -465,7 +465,7 @@ with DAG(
 
     is_data_new_branch >> data_is_new >> delete_previous >> insert_new
 
-    insert_new >> update_timestamp >> notification_msg
+    insert_new >> update_timestamp
 
     is_data_new_branch >> data_is_not_new >> delete_tmp_dir
 
