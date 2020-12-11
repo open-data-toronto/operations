@@ -450,7 +450,6 @@ with DAG(
         task_id="update_resource_last_modified",
         python_callable=update_resource_last_modified,
         provide_context=True,
-        trigger_rule="none_failed",
     )
 
     create_tmp_dir >> source_data >> new_data_unique_id >> is_data_new_branch
