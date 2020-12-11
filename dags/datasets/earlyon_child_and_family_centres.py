@@ -407,7 +407,6 @@ with DAG(
         task_id="build_message",
         python_callable=build_message,
         provide_context=True,
-        trigger_rule="none_failed",
     )
 
     resource_is_not_new = DummyOperator(
@@ -451,6 +450,7 @@ with DAG(
         task_id="update_resource_last_modified",
         python_callable=update_resource_last_modified,
         provide_context=True,
+        trigger_rule="none_failed",
     )
 
     create_tmp_dir >> source_data >> new_data_unique_id >> is_data_new_branch
@@ -465,7 +465,7 @@ with DAG(
 
     is_data_new_branch >> data_is_new >> delete_previous >> insert_new
 
-    insert_new >> notification_msg
+    insert_new >> update_timestamp
 
     is_data_new_branch >> data_is_not_new >> delete_tmp_dir
 
