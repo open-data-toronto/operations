@@ -339,6 +339,7 @@ with DAG(
     new_resource = PythonOperator(
         task_id="create_new_resource",
         python_callable=create_new_resource,
+        provide_context=True,
     )
 
     package = PythonOperator(
