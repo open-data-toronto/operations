@@ -70,11 +70,11 @@ def get_file(**kwargs):
     data = pd.read_csv(BytesIO(file_content), encoding="latin1")
 
     filename = "new_data_raw"
-    filepath = tmp_dir / f"{filename}.csv"
+    filepath = tmp_dir / f"{filename}.parquet"
 
     logging.info(f"Read {data.shape[0]} records")
 
-    data.to_csv(filepath, index=False)
+    data.to_parquet(filepath, index=False)
 
     file_last_modified = response.headers["last-modified"]
 
@@ -138,9 +138,9 @@ def backup_previous_data(**kwargs):
 
     logging.info(f"Unique ID generated: {unique_id}")
 
-    data_path = backups / f"data.{unique_id}.csv"
+    data_path = backups / f"data.{unique_id}.parquet"
     if not data_path.exists():
-        data.to_csv(data_path, index=False)
+        data.to_parquet(data_path)
 
     fields = [f for f in datastore_response["fields"] if f["id"] != "_id"]
 
@@ -160,7 +160,7 @@ def backup_previous_data(**kwargs):
 def get_new_data_unique_id(**kwargs):
     ti = kwargs.pop("ti")
     data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
-    data = pd.read_csv(data_fp)
+    data = pd.read_parquet(data_fp)
 
     data_hash = hashlib.md5()
     data_hash.update(
@@ -212,7 +212,7 @@ def insert_new_records(**kwargs):
     data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
     backup = ti.xcom_pull(task_ids="backup_previous_data")
 
-    data = pd.read_csv(data_fp)
+    data = pd.read_parquet(data_fp)
     records = data.to_dict(orient="records")
 
     if backup is None:
@@ -236,7 +236,7 @@ def build_message(**kwargs):
     new_data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
 
     if new_data_fp is not None:
-        new_data = pd.read_csv(new_data_fp)
+        new_data = pd.read_parquet(new_data_fp)
 
         return f"Refreshed: {new_data.shape[0]} records"
 
@@ -284,7 +284,7 @@ def is_file_new(**kwargs):
 def build_data_dict(**kwargs):
     ti = kwargs.pop("ti")
     data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
-    data = pd.read_csv(data_fp)
+    data = pd.read_parquet(data_fp)
 
     fields = []
 
@@ -409,6 +409,7 @@ with DAG(
         task_id="build_message",
         python_callable=build_message,
         provide_context=True,
+        trigger_rule="none_failed",
     )
 
     resource_is_not_new = DummyOperator(
@@ -466,7 +467,7 @@ with DAG(
 
     is_data_new_branch >> data_is_new >> delete_previous >> insert_new
 
-    insert_new >> update_timestamp
+    insert_new >> notification_msg
 
     is_data_new_branch >> data_is_not_new >> delete_tmp_dir
 
