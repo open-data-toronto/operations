@@ -467,15 +467,13 @@ with DAG(
 
     insert_new >> update_timestamp
 
-    is_data_new_branch >> data_is_not_new >> delete_tmp_dir
+    is_data_new_branch >> data_is_not_new >> update_timestamp
 
     [source_data, resource] >> is_file_new_branch
 
     is_file_new_branch >> file_is_not_new >> delete_tmp_dir
 
     is_file_new_branch >> file_is_new >> is_data_new_branch
-
-    data_is_not_new >> update_timestamp
 
     update_timestamp >> notification_msg >> send_notification
 
