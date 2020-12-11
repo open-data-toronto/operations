@@ -261,7 +261,7 @@ def update_resource_last_modified(**kwargs):
 def is_file_new(**kwargs):
     ti = kwargs.pop("ti")
     resource = ti.xcom_pull(task_ids="get_resource")
-    last_modified_string = Path(ti.xcom_pull(task_ids="get_file")["file_last_modified"])
+    last_modified_string = ti.xcom_pull(task_ids="get_file")["file_last_modified"]
 
     file_last_modified = parser.parse(last_modified_string)
     resource_last_modified = parser.parse(resource["last_modified"] + " UTC")
