@@ -74,7 +74,7 @@ def get_file(**kwargs):
 
     logging.info(f"Read {data.shape[0]} records")
 
-    data.to_parquet(filepath, index=False)
+    data.to_parquet(filepath)
 
     file_last_modified = response.headers["last-modified"]
 
