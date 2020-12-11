@@ -35,7 +35,7 @@ building-permits-cleared-permits-current-year:
   Cleared Permits Readme:
     format: xls
     url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/BuildingPermitsClearedReadme.xls
-building-permits-cleared-permits-prior-years:
+  # building-permits-cleared-permits-prior-years:
   # Cleared Permits (2001-2014 csv zip):
   #   format: zip
   #   url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/TBPCleared2001_2014_csv.zip
