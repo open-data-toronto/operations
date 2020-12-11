@@ -33,7 +33,7 @@ PACKAGE_ID = JOB_NAME.replace("_", "-")
 ACTIVE_ENV = "dev"
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
-SOURCE_CSV = "http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/            "  # noqa: E501
+SOURCE_CSV = "http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv"  # noqa: E501
 RESOURCE_NAME = "Child care centres"
 
 
@@ -60,15 +60,13 @@ def send_failure_msg(self):
     )
 
 
-def get_file_last_modified():
-    return requests.head(SOURCE_CSV).headers["Last-Modified"]
-
-
-def get_data_file(**kwargs):
+def get_file(**kwargs):
     ti = kwargs.pop("ti")
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
 
-    file_content = requests.get(SOURCE_CSV).content
+    response = requests.get(SOURCE_CSV)
+
+    file_content = response.content
     data = pd.read_csv(BytesIO(file_content), encoding="latin1")
 
     filename = "new_data_raw"
@@ -78,7 +76,9 @@ def get_data_file(**kwargs):
 
     data.to_csv(filepath, index=False)
 
-    return filepath
+    file_last_modified = response.headers["last-modified"]
+
+    return {"path": filepath, "file_last_modified": file_last_modified}
 
 
 def get_package():
@@ -159,7 +159,7 @@ def backup_previous_data(**kwargs):
 
 def get_new_data_unique_id(**kwargs):
     ti = kwargs.pop("ti")
-    data_fp = Path(ti.xcom_pull(task_ids="get_data_file"))
+    data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
     data = pd.read_csv(data_fp)
 
     data_hash = hashlib.md5()
@@ -209,7 +209,7 @@ def delete_previous_records(**kwargs):
 def insert_new_records(**kwargs):
     ti = kwargs.pop("ti")
     resource_id = ti.xcom_pull(task_ids="get_resource")["id"]
-    data_fp = Path(ti.xcom_pull(task_ids="get_data_file"))
+    data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
     backup = ti.xcom_pull(task_ids="backup_previous_data")
 
     data = pd.read_csv(data_fp)
@@ -233,7 +233,7 @@ def insert_new_records(**kwargs):
 def build_message(**kwargs):
     ti = kwargs.pop("ti")
 
-    new_data_fp = ti.xcom_pull(task_ids="get_data_file")
+    new_data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
 
     if new_data_fp is not None:
         new_data = pd.read_csv(new_data_fp)
@@ -249,7 +249,7 @@ def build_message(**kwargs):
 def update_resource_last_modified(**kwargs):
     ti = kwargs.pop("ti")
     resource_id = ti.xcom_pull(task_ids="get_resource")["id"]
-    last_modified_string = ti.xcom_pull(task_ids="get_file_last_modified")
+    last_modified_string = Path(ti.xcom_pull(task_ids="get_file")["file_last_modified"])
     last_modified = parser.parse(last_modified_string)
 
     return ckan_utils.update_resource_last_modified(
@@ -259,10 +259,10 @@ def update_resource_last_modified(**kwargs):
     )
 
 
-def is_file_newer(**kwargs):
+def is_file_new(**kwargs):
     ti = kwargs.pop("ti")
     resource = ti.xcom_pull(task_ids="get_resource")
-    last_modified_string = ti.xcom_pull(task_ids="get_file_last_modified")
+    last_modified_string = Path(ti.xcom_pull(task_ids="get_file")["file_last_modified"])
 
     file_last_modified = parser.parse(last_modified_string)
     resource_last_modified = parser.parse(resource["last_modified"] + " UTC")
@@ -274,12 +274,12 @@ def is_file_newer(**kwargs):
     if difference_in_seconds == 0:
         return "delete_tmp_dir"
 
-    return " update_resource_last_modified"
+    return "update_resource_last_modified"
 
 
 def build_data_dict(**kwargs):
     ti = kwargs.pop("ti")
-    data_fp = Path(ti.xcom_pull(task_ids="get_data_file"))
+    data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
     data = pd.read_csv(data_fp)
 
     fields = []
@@ -332,14 +332,9 @@ with DAG(
     )
 
     source_data = PythonOperator(
-        task_id="get_data_file",
-        python_callable=get_data_file,
+        task_id="get_file",
+        python_callable=get_file,
         provide_context=True,
-    )
-
-    file_last_modified = PythonOperator(
-        task_id="get_file_last_modified",
-        python_callable=get_file_last_modified,
     )
 
     new_resource = PythonOperator(
@@ -383,7 +378,7 @@ with DAG(
 
     is_file_new_branch = BranchPythonOperator(
         task_id="is_file_new",
-        python_callable=is_file_newer,
+        python_callable=is_file_new,
         provide_context=True,
     )
 
@@ -434,18 +429,11 @@ with DAG(
         op_kwargs={"msg_task_id": "build_notification_msg"},
     )
 
-    delete_tmp_files = PythonOperator(
-        task_id="delete_tmp_files",
-        python_callable=airflow_utils.delete_file,
-        op_kwargs={"task_ids": ["get_data_file"]},
-        provide_context=True,
-        trigger_rule="none_failed",
-    )
-
     delete_tmp_dir = PythonOperator(
         task_id="delete_tmp_dir",
         python_callable=airflow_utils.delete_tmp_data_dir,
-        op_kwargs={"dag_id": JOB_NAME},
+        op_kwargs={"dag_id": JOB_NAME, "recursively": True},
+        trigger_rule="none_failed",
     )
 
     update_timestamp = PythonOperator(
@@ -471,14 +459,14 @@ with DAG(
 
     insert_new >> update_timestamp
 
-    data_is_new >> file_last_modified >> update_timestamp
+    is_data_new_branch >> data_is_not_new >> delete_tmp_dir
 
-    is_data_new_branch >> data_is_not_new >> file_last_modified >> is_file_new_branch
+    [source_data, resource] >> is_file_new_branch
 
-    is_file_new_branch >> delete_tmp_files
+    is_file_new_branch >> delete_tmp_dir
 
     is_file_new_branch >> update_timestamp
 
     update_timestamp >> notification_msg >> send_notification
 
-    send_notification >> delete_tmp_files >> delete_tmp_dir
+    send_notification >> delete_tmp_dir
