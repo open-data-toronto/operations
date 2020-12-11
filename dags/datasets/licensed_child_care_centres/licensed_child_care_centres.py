@@ -21,7 +21,7 @@ from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
     "description": "Take data from opendata.toronto.ca (CSV) and put into datastore",
-    "schedule": "@once",
+    "schedule": "@daily",
     "start_date": datetime(2020, 11, 24, 13, 35, 0),
 }
 
@@ -291,6 +291,16 @@ def build_data_dict(**kwargs):
     return fields
 
 
+def create_new_resource(**kwargs):
+    return CKAN.action.resource_create(
+            package_id = PACKAGE_ID,
+            nam =: RESOURCE_NAME,
+            format = "csv",
+            is_preview = True,
+            url_type = "datastore",
+                    extract_job = f"Airflow: {kwargs['dag'].dag_id}",
+    )
+
 default_args = airflow_utils.get_default_args(
     {
         "on_failure_callback": send_failure_msg,
@@ -333,14 +343,7 @@ with DAG(
 
     new_resource = PythonOperator(
         task_id="create_new_resource",
-        python_callable=CKAN.action.resource_create,
-        op_kwargs={
-            "package_id": PACKAGE_ID,
-            "name": RESOURCE_NAME,
-            "format": "csv",
-            "is_preview": True,
-            "url_type": "datastore",
-        },
+        python_callable=create_new_resource,
     )
 
     package = PythonOperator(
