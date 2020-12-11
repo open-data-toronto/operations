@@ -264,7 +264,12 @@ def is_file_new(**kwargs):
     last_modified_string = ti.xcom_pull(task_ids="get_file")["file_last_modified"]
 
     file_last_modified = parser.parse(last_modified_string)
-    resource_last_modified = parser.parse(resource["last_modified"] + " UTC")
+    last_modified_attr = resource["last_modified"]
+
+    if not last_modified_attr:
+        last_modified_attr = resource["created"]
+
+    resource_last_modified = parser.parse(last_modified_attr + " UTC")
 
     difference_in_seconds = (
         file_last_modified.timestamp() - resource_last_modified.timestamp()
