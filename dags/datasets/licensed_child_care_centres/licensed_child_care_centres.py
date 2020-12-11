@@ -249,13 +249,12 @@ def build_message(**kwargs):
 def update_resource_last_modified(**kwargs):
     ti = kwargs.pop("ti")
     resource_id = ti.xcom_pull(task_ids="get_resource")["id"]
-    last_modified_string = Path(ti.xcom_pull(task_ids="get_file")["file_last_modified"])
-    last_modified = parser.parse(last_modified_string)
+    last_modified_string = ti.xcom_pull(task_ids="get_file")["file_last_modified"]
 
     return ckan_utils.update_resource_last_modified(
         ckan=CKAN,
         resource_id=resource_id,
-        new_last_modified=last_modified,
+        new_last_modified=parser.parse(last_modified_string),
     )
 
 
@@ -469,7 +468,7 @@ with DAG(
 
     [source_data, resource] >> is_file_new_branch
 
-    is_file_new_branch >> delete_tmp_dir
+    is_file_new_branch >> file_is_not_new >> delete_tmp_dir
 
     is_file_new_branch >> file_is_new >> update_timestamp
 
