@@ -1,6 +1,6 @@
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 from airflow.operators.dummy_operator import DummyOperator
-from datetime import datetime
+from datetime import datetime, timedelta
 from airflow.models import Variable
 import pandas as pd
 import ckanapi
@@ -21,7 +21,7 @@ from utils import ckan as ckan_utils  # noqa: E402
 job_settings = {
     "description": "Take COVID19 data from QA (filestore) and put in PROD (datastore)",
     "schedule": "59 14 * * 3",
-    "start_date": datetime(2020, 11, 10, 13, 35, 0),
+    "start_date": datetime(2020, 11, 24, 13, 35, 0),
 }
 
 JOB_FILE = Path(os.path.abspath(__file__))
@@ -29,7 +29,7 @@ JOB_NAME = JOB_FILE.name[:-3]
 PACKAGE_ID = JOB_NAME.replace("_", "-")
 
 ACTIVE_ENV = Variable.get("active_env")
-CKAN_CREDS = Variable.get("ckan_credentials", deserialize_json=True)
+CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 TARGET_CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 SOURCE_CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS["qa"])
 
@@ -216,7 +216,7 @@ def build_message(**kwargs):
     new_data_fp = ti.xcom_pull(task_ids="prep_new_data")
     new_data = pd.read_parquet(new_data_fp)
 
-    return "COVID data refreshed: from {} to {} records".format(
+    return "COVID data refreshed: from {} to {} cases".format(
         previous_data_records, new_data.shape[0]
     )
 
@@ -246,6 +246,8 @@ default_args = airflow_utils.get_default_args(
     {
         "on_failure_callback": send_failure_msg,
         "start_date": job_settings["start_date"],
+        "retries": 3,
+        "retry_delay": timedelta(minutes=3),
     }
 )
 
@@ -254,6 +256,7 @@ with DAG(
     default_args=default_args,
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
+    catchup=False,
 ) as dag:
 
     create_tmp_dir = PythonOperator(
@@ -332,7 +335,6 @@ with DAG(
         task_id="send_success_msg",
         python_callable=send_success_msg,
         provide_context=True,
-        trigger_rule="one_success",
         op_kwargs={"msg_task_id": "build_loaded_msg"},
     )
 
@@ -364,7 +366,7 @@ with DAG(
 
     begin_cleanup = DummyOperator(
         task_id="begin_cleanup",
-        trigger_rule="one_success",
+        trigger_rule="none_failed",
     )
 
     update_timestamp = PythonOperator(

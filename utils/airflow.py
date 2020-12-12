@@ -3,7 +3,7 @@ from datetime import timedelta
 from pathlib import Path
 from time import sleep
 import requests
-import yaml
+import shutil
 import math
 import json
 import sys
@@ -17,13 +17,6 @@ dirs = {
 }
 
 sys.path.append(repo_dir)
-
-
-def load_configs():
-    with open(Path(repo_dir) / "configs" / "config.yaml", "r") as f:
-        config = yaml.load(f, yaml.SafeLoader)
-
-    return config
 
 
 def get_default_args(args={}):
@@ -52,14 +45,15 @@ def get_default_args(args={}):
     }
 
 
-def message_slack(name, msg, message_type):
-    active_env = Variable.get("active_env")
+def message_slack(name, msg, message_type, prod_webhook=True, active_env=None):
+    if active_env is None:
+        active_env = Variable.get("active_env")
 
     header = f"{message_type}\n"
     if message_type.lower() == "error":
         header = header.upper()
 
-    msg_title = "{}: *{}* | {}".format(active_env.upper(), name, header)
+    msg_title = f"*{name}* | {active_env.upper()}"
 
     head = {
         "type": "section",
@@ -97,8 +91,12 @@ def message_slack(name, msg, message_type):
             }
         )
 
+        webhook_url = (
+            "slack_webhook_secret" if prod_webhook else "slack_dev_webhook_secret"
+        )
+
         res = requests.post(
-            Variable.get("slack_webhook"),
+            Variable.get(webhook_url),
             data=data,
             headers={"Content-Type": "application/json"},
         )
@@ -121,11 +119,15 @@ def create_dir_with_dag_name(**kwargs):
 
 def delete_tmp_data_dir(**kwargs):
     dag_id = kwargs.pop("dag_id")
+    recursively = kwargs.get("recursively")
 
     files_dir_path = Path(Variable.get("tmp_dir"))
     dag_tmp_dir = files_dir_path / dag_id
 
-    os.rmdir(dag_tmp_dir)
+    if not recursively:
+        os.rmdir(dag_tmp_dir)
+    else:
+        shutil.rmtree(dag_tmp_dir)
 
 
 def delete_file(**kwargs):

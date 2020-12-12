@@ -6,11 +6,13 @@ from airflow import DAG
 import ckanapi
 import logging
 from pathlib import Path
+import yaml
 import os
 import sys
 from dateutil import parser
 import requests
 import traceback
+import json
 
 sys.path.append(Variable.get("repo_dir"))
 from utils import airflow as airflow_utils  # noqa: E402
@@ -26,7 +28,7 @@ job_file = Path(os.path.abspath(__file__))
 job_name = job_file.name[:-3]
 
 active_env = Variable.get("active_env")
-ckan_creds = Variable.get("ckan_credentials", deserialize_json=True)
+ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
 ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
 
 
@@ -48,14 +50,17 @@ def send_failure_msg(self):
 
 
 def load_remote_files():
-    return airflow_utils.load_configs()["sustainment"][job_name]
+    with open(job_file.parent / "config.yaml", "r") as f:
+        config = yaml.load(f, yaml.SafeLoader)
+
+    return config
 
 
 def get_packages_to_sync(**kwargs):
     remote_files = kwargs.pop("ti").xcom_pull(task_ids="load_files")
 
     all_packages = ckan.action.package_search(rows=10000)["results"]
-    to_sync = [p["package_id"] for p in remote_files]
+    to_sync = list(remote_files.keys())
 
     packages = [p for p in all_packages if p["name"] in to_sync]
 
@@ -68,17 +73,22 @@ def sync_resource_timestamps(**kwargs):
     packages = ti.xcom_pull(task_ids="get_packages")
 
     def sync(package, remote_files):
-        files = [p for p in remote_files if p["package_id"] == package["name"]][0][
-            "files"
-        ]
+        files = remote_files[package["name"]]
         resources = package["resources"]
 
         package_sync_results = []
         for f in files:
-            resources_with_url = [r for r in resources if r["url"] == f]
+            f = f.replace("\u200b", "")
+
+            logging.info(f"Attempting: '{f}'")
+            resources_with_url = [
+                r for r in resources if r["url"].encode("utf-8") == f.encode("utf-8")
+            ]
 
             assert len(resources_with_url) == 1, logging.error(
-                f"{package['name']}: No resource for file: {f}"
+                "{}: {} resource(s), expected 1. Package: {}".format(
+                    package["name"], {len(resources_with_url)}, json.dumps(package)
+                )
             )
 
             resource = resources_with_url[0]
@@ -147,20 +157,13 @@ def build_notification_message(**kwargs):
 
     for result_type in ["synced", "error", "unchanged"]:
         result_type_resources = [r for r in sync_results if r["result"] == result_type]
-        result_type_packages = set(
-            [r["package_name"] for r in sync_results if r["result"] == result_type]
-        )
 
         if len(result_type_resources) == 0:
             continue
 
-        lines = [
-            "\n{} - packages: {}\tresources: {}".format(
-                result_type,
-                len(result_type_packages),
-                len(result_type_resources),
-            )
-        ]
+        lines = []
+        if result_type != "unchanged":
+            lines = [f"*{result_type}*"]
 
         for index, r in enumerate(result_type_resources):
             if result_type == "unchanged":
@@ -171,10 +174,9 @@ def build_notification_message(**kwargs):
                 continue
 
             lines.append(
-                "{}. _{}_: `{}`".format(
-                    index + 1,
+                "{}: `{}`".format(
                     r["resource_name"],
-                    r["file_last_modified"],
+                    " ".join(r["file_last_modified"].split("T")),
                 )
             )
 
@@ -210,6 +212,7 @@ with DAG(
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
     tags=["sustainment"],
+    catchup=False,
 ) as dag:
 
     load_files = PythonOperator(

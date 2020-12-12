@@ -3,7 +3,6 @@
 *.xml
 **/tmp/**
 *.ipynb
-config.yaml
 .vscode/
 backups/**
 staging/**
