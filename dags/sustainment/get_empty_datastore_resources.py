@@ -1,4 +1,5 @@
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
+from airflow.operators.dummy_operator import DummyOperator
 from airflow.models import Variable
 from datetime import datetime
 from airflow import DAG
@@ -14,7 +15,7 @@ from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
     "description": "Identifies empty datastore resources and send to Slack",
-    "schedule": "5 15,17,19,23 * * *",
+    "schedule": "5 15,18,21,0,3 * * *",
     "start_date": datetime(2020, 11, 9, 0, 30, 0),
 }
 
@@ -27,7 +28,7 @@ CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 
 def send_success_msg(**kwargs):
-    msg = kwargs.pop("ti").xcom_pull(task_ids="identify_empties")
+    msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
     airflow_utils.message_slack(name=job_name, **msg)
 
 
@@ -37,14 +38,6 @@ def send_failure_msg(self):
         message_type="error",
         msg="Job not finished",
     )
-
-
-def pprint_2d_list(matrix):
-    s = [[str(e) for e in row] for row in matrix]
-    lens = [max(map(len, col)) for col in zip(*s)]
-    fmt = "\t".join("{{:{}}}".format(x) for x in lens)
-    table = [fmt.format(*row) for row in s]
-    return "\n".join(table)
 
 
 def get_record_counts(**kwargs):
@@ -74,20 +67,33 @@ def get_record_counts(**kwargs):
 
     logging.info(f"Identified {len(datastore_resources)} datastore resources")
 
+    return datastore_resources
+
+
+def filter_empty_resources(**kwargs):
+    datastore_resources = kwargs.pop("ti").xcom_pull(task_ids="get_record_counts")
+
     empties = [r for r in datastore_resources if r["row_count"] == 0]
+
+    logging.info(f"Identified {len(empties)} empty datastore resources")
 
     return empties
 
 
-def identify_empties(**kwargs):
-    empties = kwargs.pop("ti").xcom_pull(task_ids="get_record_counts")
-    if not len(empties):
-        logging.info("No empty resources found")
-        return {"message_type": "success", "msg": "No empties"}
+def build_message(**kwargs):
+    def pprint_2d_list(matrix):
+        s = [[str(e) for e in row] for row in matrix]
+        lens = [max(map(len, col)) for col in zip(*s)]
+        fmt = "\t".join("{{:{}}}".format(x) for x in lens)
+        table = [fmt.format(*row) for row in s]
+        return "\n".join(table)
+
+    empties = kwargs.pop("ti").xcom_pull(task_ids="filter_empty_resources")
 
     empties = sorted(empties, key=lambda i: i["package_id"])
 
     matrix = [["#", "PACKAGE", "EXTRACT_JOB", "ROW_COUNT"]]
+
     for i, r in enumerate(empties):
         string = [f"{i+1}."]
         string.extend(
@@ -103,6 +109,15 @@ def identify_empties(**kwargs):
         "message_type": "warning",
         "msg": f"""```{empties}```""",
     }
+
+
+def are_there_empties(**kwargs):
+    empties = kwargs.pop("ti").xcom_pull(task_ids="filter_empty_resources")
+
+    if len(empties) == 0:
+        return "no_notification"
+
+    return "build_message"
 
 
 default_args = airflow_utils.get_default_args(
@@ -135,9 +150,25 @@ with DAG(
     )
 
     empties = PythonOperator(
-        task_id="identify_empties",
+        task_id="filter_empty_resources",
         provide_context=True,
-        python_callable=identify_empties,
+        python_callable=filter_empty_resources,
+    )
+
+    empties_branch = BranchPythonOperator(
+        task_id="are_there_empties",
+        python_callable=are_there_empties,
+        provide_context=True,
+    )
+
+    no_notification = DummyOperator(
+        task_id="no_notification",
+    )
+
+    message = PythonOperator(
+        python_callable=build_message,
+        task_id="build_message",
+        provide_context=True,
     )
 
     send_notification = PythonOperator(
@@ -146,4 +177,8 @@ with DAG(
         python_callable=send_success_msg,
     )
 
-    packages >> record_counts >> empties >> send_notification
+    packages >> record_counts >> empties >> empties_branch
+
+    empties_branch >> no_notification
+
+    empties_branch >> message >> send_notification
