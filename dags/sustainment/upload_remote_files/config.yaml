@@ -16,9 +16,9 @@ address-points-municipal-toronto-one-address-repository:
     format: shp
     url: http://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/municipal-address-points-wgs84-latitude-longitude.zip
 building-permits-active-permits:
-  Active Building Permits Readme:
-    format: xls
-    url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/BuildingPermitsActiveReadme.xls
+  # Active Building Permits Readme:
+  #   format: xls
+  #   url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/BuildingPermitsActiveReadme.xls
   Active permits (CSV):
     format: zip
     url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits_csv.zip
@@ -32,9 +32,9 @@ building-permits-cleared-permits-current-year:
   Cleared Permits 2020 xml:
     format: zip
     url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits2020.zip
-  Cleared Permits Readme:
-    format: xls
-    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/BuildingPermitsClearedReadme.xls
+  # Cleared Permits Readme:
+  #   format: xls
+  #   url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/BuildingPermitsClearedReadme.xls
   # building-permits-cleared-permits-prior-years:
   # Cleared Permits (2001-2014 csv zip):
   #   format: zip
@@ -186,12 +186,12 @@ lobbyist-registry:
     format: zip
     url: http://opendata.toronto.ca/lobbyist.registrar/lobbyist-registry/lobbyactivity.zip
 mobile-watch-your-speed-program-detailed-speed-counts:
-  Mobile sign detail count 2018(9-12):
-    format: zip
-    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2018.zip
-  Mobile sign detail count 2019:
-    format: zip
-    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2019.zip
+  # Mobile sign detail count 2018(9-12):
+  #   format: zip
+  #   url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2018.zip
+  # Mobile sign detail count 2019:
+  #   format: zip
+  #   url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2019.zip
   Mobile sign detail count 2020:
     format: zip
     url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2020.zip
@@ -206,9 +206,9 @@ municipal-licensing-and-standards-investigation-activity:
   Investigation Activities (JSON ZIP):
     format: zip
     url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_json.zip
-  Readme:
-    format: xlsx
-    url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/investigation_readme.xlsx
+  # Readme:
+  #   format: xlsx
+  #   url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/investigation_readme.xlsx
 non-regulated-lead-sample:
   # non-regulated-lead-sample-2011-2013-csv:
   #   format: zip
@@ -235,9 +235,9 @@ outbreaks-in-toronto-healthcare-institutions:
   Outbreaks in Toronto Healthcare Institutions-2020:
     format: xls
     url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2020.xls
-  Readme:
-    format: xlsx
-    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/outbreaks-in-toronto-readme.xlsx
+  # Readme:
+  #   format: xlsx
+  #   url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/outbreaks-in-toronto-readme.xlsx
 paramedic-services-incident-data:
   paramedic-services-incident-data-2010-2019:
     format: xlsx
@@ -261,9 +261,9 @@ rain-gauge-locations-and-precipitation:
   Rain gauge notes:
     format: zip
     url: http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/raingaugenotes.zip
-  Readme:
-    format: docx
-    url: http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/readme.docx
+  # Readme:
+  #   format: docx
+  #   url: http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/readme.docx
 registered-programs-and-drop-in-courses-offering:
   Registered programs and drop in courses offering data:
     format: zip
