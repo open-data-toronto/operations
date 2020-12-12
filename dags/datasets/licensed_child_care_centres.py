@@ -21,7 +21,7 @@ from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
     "description": "Take data from opendata.toronto.ca (CSV) and put into datastore",
-    "schedule": "@daily",
+    "schedule": "0 17 * * *",
     "start_date": datetime(2020, 11, 24, 13, 35, 0),
 }
 
