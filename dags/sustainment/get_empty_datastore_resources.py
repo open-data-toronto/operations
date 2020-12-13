@@ -121,9 +121,9 @@ def are_there_empties(**kwargs):
     empties = kwargs.pop("ti").xcom_pull(task_ids="filter_empty_resources")
 
     if len(empties) == 0:
-        return "there_are_empties"
+        return "there_are_no_empties"
 
-    return "there_are_no_empties"
+    return "there_are_empties"
 
 
 def were_there_empties_prior(**kwargs):
