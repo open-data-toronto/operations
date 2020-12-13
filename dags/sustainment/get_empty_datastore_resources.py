@@ -2,12 +2,13 @@ from airflow.operators.python_operator import PythonOperator, BranchPythonOperat
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.models import Variable
 from datetime import datetime
-from airflow import DAG
-import ckanapi
 from pathlib import Path
-import os
-import sys
+from airflow import DAG
 import logging
+import ckanapi
+import json
+import sys
+import os
 
 sys.path.append(Variable.get("repo_dir"))
 from utils import airflow as airflow_utils  # noqa: E402
@@ -21,6 +22,7 @@ job_settings = {
 
 job_file = Path(os.path.abspath(__file__))
 job_name = job_file.name[:-3]
+empties_file_name = "empties.json"
 
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
@@ -90,6 +92,11 @@ def build_message(**kwargs):
 
     empties = kwargs.pop("ti").xcom_pull(task_ids="filter_empty_resources")
 
+    
+    if not len(empties):
+        logging.info("No empty resources found")
+        return {"message_type": "success", "msg": "No empties"}
+
     empties = sorted(empties, key=lambda i: i["package_id"])
 
     matrix = [["#", "PACKAGE", "EXTRACT_JOB", "ROW_COUNT"]]
@@ -115,9 +122,35 @@ def are_there_empties(**kwargs):
     empties = kwargs.pop("ti").xcom_pull(task_ids="filter_empty_resources")
 
     if len(empties) == 0:
-        return "no_notification"
+        return "there_are_empties"
 
-    return "build_message"
+    return "there_are_no_empties"
+
+
+def were_there_empties_prior(**kwargs):
+    ti = kwargs.pop("ti")
+    empties = ti.xcom_pull(task_ids="filter_empty_resources")
+    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
+
+    fpath = tmp_dir / filename
+
+    if fpath.exists():
+        return "there_were_empties_prior"
+
+    return "there_were_no_empties_prior"
+
+
+def save_empties_file(**kwargs):
+    ti = kwargs.pop("ti")
+    empties = ti.xcom_pull(task_ids="filter_empty_resources")
+    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
+
+    fpath = tmp_dir / filename
+    
+     with open(fpath, "w") as f:
+         json.dump(empties, f)
+
+    return fpath
 
 
 default_args = airflow_utils.get_default_args(
@@ -136,6 +169,12 @@ with DAG(
     tags=["sustainment"],
     catchup=False,
 ) as dag:
+
+    create_tmp_dir = PythonOperator(
+        task_id="create_tmp_dir",
+        python_callable=airflow_utils.create_dir_with_dag_name,
+        op_kwargs={"dag_id": job_name, "dir_variable_name": "tmp_dir"},
+    )
 
     packages = PythonOperator(
         task_id="get_all_packages",
@@ -171,14 +210,56 @@ with DAG(
         provide_context=True,
     )
 
+    prior_branch = BranchPythonOperator(
+        task_id="were_there_empties_prior",
+        python_callable=were_there_empties_prior,
+        provide_context=True,
+    )
+
     send_notification = PythonOperator(
         task_id="send_notification",
         provide_context=True,
         python_callable=send_success_msg,
+        trigger_rule="none_failed",
     )
 
-    packages >> record_counts >> empties >> empties_branch
+    save_file = PythonOperator(
+        task_id="save_empties_file",
+        python_callable=save_empties_file,
+        provide_context=True,
+    )
 
-    empties_branch >> no_notification
+    there_are_empties = DummyOperator(
+        task_id="there_are_empties",
+    )
 
-    empties_branch >> message >> send_notification
+    there_are_no_empties = DummyOperator(
+        task_id="there_are_no_empties",
+    )
+
+    there_were_empties_prior = DummyOperator(
+        task_id="there_were_empties_prior",
+    )
+
+    there_were_no_empties_prior = DummyOperator(
+        task_id="there_were_no_empties_prior",
+    )
+
+    delete_tmp_dir = PythonOperator(
+        task_id="delete_tmp_dir",
+        python_callable=airflow_utils.delete_tmp_data_dir,
+        op_kwargs={"dag_id": job_name, "recursively": True},
+        trigger_rule="none_failed",
+    )
+
+    create_tmp_dir >> empties_branch
+
+    packages >> record_counts >> empties >> message >> empties_branch
+
+    empties_branch >> there_are_empties >> save_file >> send_notification
+
+    empties_branch >> there_are_no_empties >> prior_branch 
+    
+    prior_branch >> there_were_no_empties_prior >> no_notification >> delete_tmp_dir
+
+    prior_branch >> there_were_empties_prior >> send_notification >> delete_tmp_dir
