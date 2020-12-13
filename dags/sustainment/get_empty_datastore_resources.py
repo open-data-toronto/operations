@@ -261,4 +261,6 @@ with DAG(
 
     prior_branch >> there_were_no_empties_prior >> no_notification >> delete_tmp_dir
 
-    prior_branch >> there_were_empties_prior >> send_notification >> delete_tmp_dir
+    prior_branch >> there_were_empties_prior >> send_notification
+
+    there_were_empties_prior >> delete_tmp_dir
