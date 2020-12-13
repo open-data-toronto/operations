@@ -92,7 +92,6 @@ def build_message(**kwargs):
 
     empties = kwargs.pop("ti").xcom_pull(task_ids="filter_empty_resources")
 
-    
     if not len(empties):
         logging.info("No empty resources found")
         return {"message_type": "success", "msg": "No empties"}
@@ -146,9 +145,9 @@ def save_empties_file(**kwargs):
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
 
     fpath = tmp_dir / filename
-    
-     with open(fpath, "w") as f:
-         json.dump(empties, f)
+
+    with open(fpath, "w") as f:
+        json.dump(empties, f)
 
     return fpath
 
@@ -258,8 +257,8 @@ with DAG(
 
     empties_branch >> there_are_empties >> save_file >> send_notification
 
-    empties_branch >> there_are_no_empties >> prior_branch 
-    
+    empties_branch >> there_are_no_empties >> prior_branch
+
     prior_branch >> there_were_no_empties_prior >> no_notification >> delete_tmp_dir
 
     prior_branch >> there_were_empties_prior >> send_notification >> delete_tmp_dir
