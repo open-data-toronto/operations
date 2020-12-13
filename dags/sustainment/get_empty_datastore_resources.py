@@ -219,7 +219,7 @@ with DAG(
         task_id="send_notification",
         provide_context=True,
         python_callable=send_success_msg,
-        trigger_rule="none_failed",
+        trigger_rule="one_success",
     )
 
     save_file = PythonOperator(
