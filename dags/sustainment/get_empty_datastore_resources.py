@@ -131,7 +131,7 @@ def were_there_empties_prior(**kwargs):
     empties = ti.xcom_pull(task_ids="filter_empty_resources")
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
 
-    fpath = tmp_dir / filename
+    fpath = tmp_dir / empties_file_name
 
     if fpath.exists():
         return "there_were_empties_prior"
@@ -144,7 +144,7 @@ def save_empties_file(**kwargs):
     empties = ti.xcom_pull(task_ids="filter_empty_resources")
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
 
-    fpath = tmp_dir / filename
+    fpath = tmp_dir / empties_file_name
 
     with open(fpath, "w") as f:
         json.dump(empties, f)
