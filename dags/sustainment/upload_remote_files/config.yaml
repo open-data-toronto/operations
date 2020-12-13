@@ -90,9 +90,9 @@ building-permits-cleared-permits-current-year:
   # Cleared Permits (2019 XML ZIP):
   #   format: zip
   #   url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2019.zip
-  Toronto Building Cleared Permits Readme:
-    format: xls
-    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/BuildingPermitsClearedReadme.xls
+  # Toronto Building Cleared Permits Readme:
+  #   format: xls
+  #   url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/BuildingPermitsClearedReadme.xls
 clerk-s-directory-of-record-for-record-series-management-tool-rsmt:
   RSMT Directory of records:
     format: xml
@@ -160,9 +160,9 @@ committee-of-adjustment-applications:
   Applications closed since 2017:
     format: zip
     url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2017.zip
-  Readme (attributes):
-    format: xlsx
-    url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/coa_attributes.xlsx
+  # Readme (attributes):
+  #   format: xlsx
+  #   url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/coa_attributes.xlsx
 head-of-household:
   Head of household - split files:
     format: zip
