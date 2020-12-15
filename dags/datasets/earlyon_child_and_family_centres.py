@@ -255,8 +255,6 @@ def insert_new_records(**kwargs):
 def build_message(**kwargs):
     ti = kwargs.pop("ti")
 
-    new_data_fp = Path(ti.xcom_pull(task_ids="transform_data")["path"])
-
     records_inserted = ti.xcom_pull(task_ids="insert_new_records")
 
     if records_inserted is None:
@@ -267,6 +265,8 @@ def build_message(**kwargs):
         )
 
         return f"New file, no new data. New last modified timestamp: {last_modified}"
+
+    new_data_fp = Path(ti.xcom_pull(task_ids="transform_data"))
 
     new_data = pd.read_parquet(new_data_fp)
 
