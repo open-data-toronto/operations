@@ -205,12 +205,25 @@ def delete_previous_records(**kwargs):
 
 
 def insert_new_records(**kwargs):
+    def convert_to_geo_table(data):
+        data["geometry"] = data.apply(
+            lambda x: json.dumps(
+                {"type": "Point", "coordinates": [x["long"], x["lat"]]}
+            ),
+            axis=1,
+        )
+
+        data = data.drop(["lat", "long"], axis=1)
+
+        return data
+
     ti = kwargs.pop("ti")
     resource_id = ti.xcom_pull(task_ids="get_resource")["id"]
     data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
     backup = ti.xcom_pull(task_ids="backup_previous_data")
 
     data = pd.read_parquet(data_fp)
+    data = convert_to_geo_table(data)
     records = data.to_dict(orient="records")
 
     if backup is None:
@@ -297,7 +310,7 @@ def create_new_resource(**kwargs):
     return CKAN.action.resource_create(
         package_id=PACKAGE_ID,
         name=RESOURCE_NAME,
-        format="csv",
+        format="geojson",
         is_preview=True,
         url_type="datastore",
         extract_job=f"Airflow: {kwargs['dag'].dag_id}",
