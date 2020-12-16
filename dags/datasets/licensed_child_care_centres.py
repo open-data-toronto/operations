@@ -215,8 +215,10 @@ def transform_data(**kwargs):
     data = pd.read_parquet(data_fp)
 
     data["geometry"] = data.apply(
-        lambda x: json.dumps({"type": "Point", "coordinates": [x["long"], x["lat"]]})
-        if x["long"] and x["lat"]
+        lambda x: json.dumps(
+            {"type": "Point", "coordinates": [x["LONGITUDE"], x["LATITUDE"]]}
+        )
+        if x["LONGITUDE"] and x["LATITUDE"]
         else "",
         axis=1,
     )
