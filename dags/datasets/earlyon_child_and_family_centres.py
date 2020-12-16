@@ -503,7 +503,7 @@ with DAG(
 
     is_resource_new_branch >> resource_is_new >> data_dict >> new_resource >> resource
 
-    transform >> data_dict
+    transform >> resource_is_new
 
     is_resource_new_branch >> resource_is_not_new >> previous_data >> resource
 
