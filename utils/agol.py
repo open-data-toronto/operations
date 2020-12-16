@@ -79,7 +79,7 @@ def remove_geo_columns(df):
     ]
 
     data = data.drop(
-        [c for c in data.columns.values if c.lower() in geo_columns], drop=1
+        [c for c in data.columns.values if c.lower() in geo_columns], axis=1
     )
 
     return data
