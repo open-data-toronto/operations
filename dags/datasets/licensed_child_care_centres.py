@@ -159,7 +159,7 @@ def backup_previous_data(**kwargs):
 
 def get_new_data_unique_id(**kwargs):
     ti = kwargs.pop("ti")
-    data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
+    data_fp = Path(ti.xcom_pull(task_ids="transform_data"))
     data = pd.read_parquet(data_fp)
 
     data_hash = hashlib.md5()
@@ -206,10 +206,34 @@ def delete_previous_records(**kwargs):
     logging.info(msg)
 
 
+def transform_data(**kwargs):
+    ti = kwargs.pop("ti")
+    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
+    data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
+
+    data = pd.read_parquet(data_fp)
+
+    data["geometry"] = data.apply(
+        lambda x: json.dumps({"type": "Point", "coordinates": [x["long"], x["lat"]]})
+        if x["long"] and x["lat"]
+        else "",
+        axis=1,
+    )
+
+    data = data.drop(["lat", "long"], axis=1)
+
+    filename = "new_data_transformed"
+    filepath = tmp_dir / f"{filename}.parquet"
+
+    data.to_parquet(filepath)
+
+    return filepath
+
+
 def insert_new_records(**kwargs):
     ti = kwargs.pop("ti")
     resource_id = ti.xcom_pull(task_ids="get_resource")["id"]
-    data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
+    data_fp = Path(ti.xcom_pull(task_ids="transform_data"))
     backup = ti.xcom_pull(task_ids="backup_previous_data")
 
     data = pd.read_parquet(data_fp)
@@ -229,21 +253,26 @@ def insert_new_records(**kwargs):
         chunk_size=int(Variable.get("ckan_insert_chunk_size")),
     )
 
+    return len(records)
+
 
 def build_message(**kwargs):
     ti = kwargs.pop("ti")
 
-    new_data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
+    records_inserted = ti.xcom_pull(task_ids="insert_new_records")
 
-    if new_data_fp is not None:
-        new_data = pd.read_parquet(new_data_fp)
+    if records_inserted is None:
+        resource = ti.xcom_pull(task_ids="update_resource_last_modified")
+        last_modified = parser.parse(resource["last_modified"]).strftime(
+            "%Y-%m-%d %H:%M"
+        )
 
-        return f"Refreshed: {new_data.shape[0]} records"
+        return f"New file, no new data. New last modified timestamp: {last_modified}"
 
-    resource = ti.xcom_pull(task_ids="update_resource_last_modified")
-    last_modified = parser.parse(resource["last_modified"]).strftime("%Y-%m-%d %H:%M")
+    new_data_fp = Path(ti.xcom_pull(task_ids="transform_data"))
+    new_data = pd.read_parquet(new_data_fp)
 
-    return f"New file, no new data. New last modified timestamp: {last_modified}"
+    return f"Refreshed: {new_data.shape[0]} records"
 
 
 def update_resource_last_modified(**kwargs):
@@ -275,6 +304,10 @@ def is_file_new(**kwargs):
         file_last_modified.timestamp() - resource_last_modified.timestamp()
     )
 
+    logging.info(
+        f"{difference_in_seconds} seconds between file and resource last modified times"
+    )
+
     if difference_in_seconds == 0:
         return "file_is_not_new"
 
@@ -283,7 +316,7 @@ def is_file_new(**kwargs):
 
 def build_data_dict(**kwargs):
     ti = kwargs.pop("ti")
-    data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
+    data_fp = Path(ti.xcom_pull(task_ids="transform_data"))
     data = pd.read_parquet(data_fp)
 
     fields = []
@@ -299,7 +332,7 @@ def create_new_resource(**kwargs):
     return CKAN.action.resource_create(
         package_id=PACKAGE_ID,
         name=RESOURCE_NAME,
-        format="csv",
+        format="geojson",
         is_preview=True,
         url_type="datastore",
         extract_job=f"Airflow: {kwargs['dag'].dag_id}",
@@ -399,6 +432,12 @@ with DAG(
         provide_context=True,
     )
 
+    transform = PythonOperator(
+        task_id="transform_data",
+        python_callable=transform_data,
+        provide_context=True,
+    )
+
     insert_new = PythonOperator(
         task_id="insert_new_records",
         python_callable=insert_new_records,
@@ -455,13 +494,15 @@ with DAG(
         trigger_rule="one_success",
     )
 
-    create_tmp_dir >> source_data >> new_data_unique_id >> is_data_new_branch
+    create_tmp_dir >> source_data >> transform >> new_data_unique_id >> is_data_new_branch
 
     create_backups_dir >> previous_data
 
     package >> is_resource_new_branch
 
     is_resource_new_branch >> resource_is_new >> data_dict >> new_resource >> resource
+
+    transform >> data_dict
 
     is_resource_new_branch >> resource_is_not_new >> previous_data >> resource
 
@@ -471,7 +512,7 @@ with DAG(
 
     is_data_new_branch >> data_is_not_new >> update_timestamp
 
-    [source_data, resource] >> is_file_new_branch
+    [transform, resource] >> is_file_new_branch
 
     is_file_new_branch >> file_is_not_new >> delete_tmp_dir
 

@@ -212,7 +212,9 @@ def transform_data(**kwargs):
     data = pd.read_parquet(data_fp)
 
     data["geometry"] = data.apply(
-        lambda x: json.dumps({"type": "Point", "coordinates": [x["long"], x["lat"]]}),
+        lambda x: json.dumps({"type": "Point", "coordinates": [x["long"], x["lat"]]})
+        if x["long"] and x["lat"]
+        else "",
         axis=1,
     )
 
@@ -300,6 +302,10 @@ def is_file_new(**kwargs):
 
     difference_in_seconds = (
         file_last_modified.timestamp() - resource_last_modified.timestamp()
+    )
+
+    logging.info(
+        f"{difference_in_seconds} seconds between file and resource last modified times"
     )
 
     if difference_in_seconds == 0:
