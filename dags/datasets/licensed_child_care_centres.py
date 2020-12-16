@@ -17,6 +17,7 @@ from dateutil import parser
 
 sys.path.append(Variable.get("repo_dir"))
 from utils import airflow as airflow_utils  # noqa: E402
+from utils import agol as agol_utils  # noqa: E402
 from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
@@ -220,7 +221,7 @@ def transform_data(**kwargs):
         axis=1,
     )
 
-    data = data.drop(["lat", "long"], axis=1)
+    data = agol_utils.remove_geo_columns(data)
 
     filename = "new_data_transformed"
     filepath = tmp_dir / f"{filename}.parquet"

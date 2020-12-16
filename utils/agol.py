@@ -59,3 +59,27 @@ def get_fields(endpoint):
     fields = res.get("fields")
 
     return fields
+
+
+def remove_geo_columns(df):
+    data = df.copy()
+
+    geo_columns = [
+        "lat",
+        "latitude",
+        "lon",
+        "long",
+        "longitude",
+        "x",
+        "y",
+        "shape__area",
+        "shape_area",
+        "shape_length",
+        "shape__length",
+    ]
+
+    data = data.drop(
+        [c for c in data.columns.values if c.lower() in geo_columns], drop=1
+    )
+
+    return data
