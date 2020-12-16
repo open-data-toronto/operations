@@ -31,10 +31,10 @@ JOB_NAME = JOB_FILE.name[:-3]
 PACKAGE_ID = JOB_NAME.replace("_", "-")
 
 # ACTIVE_ENV = Variable.get("active_env")
-ACTIVE_ENV = "dev"
+ACTIVE_ENV = "qa"
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
-SOURCE_CSV = "http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv"  # noqa: E501
+SRC_FILE = "http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv"  # noqa: E501
 RESOURCE_NAME = "Child care centres"
 
 
@@ -65,7 +65,7 @@ def get_file(**kwargs):
     ti = kwargs.pop("ti")
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
 
-    response = requests.get(SOURCE_CSV)
+    response = requests.get(SRC_FILE)
 
     file_content = response.content
     data = pd.read_csv(BytesIO(file_content), encoding="latin1")
