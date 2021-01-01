@@ -291,7 +291,7 @@ def create_dag(d):
             logging.info("Calculating years to load")
             periods_to_load = []
 
-            begin = latest_loaded + timedelta(days=365)
+            begin = datetime(latest_loaded.year + 1, 1,1)
             end = datetime(begin.year, 12, 31)
 
             while end < datetime.now():
@@ -302,7 +302,7 @@ def create_dag(d):
                     }
                 )
 
-                begin = begin + timedelta(days=365)
+                begin = datetime(begin.year + 1,1,1)
                 end = datetime(begin.year, 12, 31)
 
             return periods_to_load
