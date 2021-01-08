@@ -92,10 +92,6 @@ outbreaks-in-toronto-healthcare-institutions:
   Outbreaks in Toronto Healthcare Institutions-2020:
     format: xls
     url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2020.xls
-paramedic-services-incident-data:
-  paramedic-services-incident-data-2010-2019:
-    format: xlsx
-    url: http://opendata.toronto.ca/it/com/TPS_Incident_Data_2010-2019.xlsx
 parking-ticket-trials:
   parking-ticket-trial-data:
     format: zip
