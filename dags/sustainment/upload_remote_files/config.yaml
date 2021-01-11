@@ -126,10 +126,10 @@ toronto-centreline-tcl:
   Centreline (wgs84) - shapefile:
     format: shp
     url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/centreline_wgs84.zip
-toronto-economic-bulletin:
-  Toronto economic bulletin data:
-    format: xlsx
-    url: http://opendata.toronto.ca/economic.development.culture/toronto-economic-bulletin/bulletin_opendata.xlsx
+# toronto-economic-bulletin:
+#   Toronto economic bulletin data:
+#     format: xlsx
+#     url: http://opendata.toronto.ca/economic.development.culture/toronto-economic-bulletin/bulletin_opendata.xlsx
 traffic-cameras:
   Traffic Camera List (CSV):
     format: csv
