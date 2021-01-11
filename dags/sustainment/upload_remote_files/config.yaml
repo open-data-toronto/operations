@@ -55,13 +55,13 @@ head-of-household:
   head-of-household-data:
     format: zip
     url: http://opendata.toronto.ca/employment.social/head.household/opendata_tess_ow.zip
-labour-force-survey:
-  Annual labour force survey database(ivt):
-    format: zip
-    url: http://opendata.toronto.ca/economic.development.culture/labour-force-survey/lfs_ivt_annual.zip
-  Monthly labour force survey database(ivt):
-    format: zip
-    url: http://opendata.toronto.ca/economic.development.culture/labour-force-survey/lfs_ivt_monthly.zip
+# labour-force-survey:
+#   Annual labour force survey database(ivt):
+#     format: zip
+#     url: http://opendata.toronto.ca/economic.development.culture/labour-force-survey/lfs_ivt_annual.zip
+#   Monthly labour force survey database(ivt):
+#     format: zip
+#     url: http://opendata.toronto.ca/economic.development.culture/labour-force-survey/lfs_ivt_monthly.zip
 lobbyist-registry:
   Lobbyist Registry Activity:
     format: zip
