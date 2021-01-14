@@ -92,6 +92,9 @@ outbreaks-in-toronto-healthcare-institutions:
   Outbreaks in Toronto Healthcare Institutions-2020:
     format: xls
     url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2020.xls
+  Outbreaks in Toronto Healthcare Institutions-2021:
+    format: xls
+    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2021.xls
 parking-ticket-trials:
   parking-ticket-trial-data:
     format: zip
