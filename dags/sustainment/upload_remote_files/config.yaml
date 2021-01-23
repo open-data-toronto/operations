@@ -128,13 +128,13 @@ toronto-centreline-tcl:
     url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_geojson_v1.zip
   Centreline (wgs84) - shapefile - v1:
     format: shp
-    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/centreline_wgs84_v1.zip
+    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v1.zip
   Centreline (wgs84) - geojson - v2:
     format: zip
     url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_geojson_v2.zip
   Centreline (wgs84) - shapefile - v2:
     format: shp
-    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/centreline_wgs84_v2.zip
+    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v2.zip
 # toronto-economic-bulletin:
 #   Toronto economic bulletin data:
 #     format: xlsx
