@@ -216,9 +216,9 @@ def transform_data(**kwargs):
 
     data["geometry"] = data.apply(
         lambda x: json.dumps(
-            {"type": "Point", "coordinates": [x["LONGITUDE"], x["LATITUDE"]]}
+            {"type": "Point", "coordinates": [x["longitude"], x["latitude"]]}
         )
-        if x["LONGITUDE"] and x["LATITUDE"]
+        if x["longitude"] and x["latitude"]
         else "",
         axis=1,
     )
