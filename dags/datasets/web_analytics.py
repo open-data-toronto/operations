@@ -207,8 +207,7 @@ def create_dag(d):
         with zipfile.ZipFile(fp, "r") as f:
             f.extractall(target_dir)
 
-        if target_dir.exists() is False:
-            target_dir.mkdir()
+        target_dir.mkdir(exists_ok=True)
 
         return target_dir
 
@@ -291,7 +290,7 @@ def create_dag(d):
             logging.info("Calculating years to load")
             periods_to_load = []
 
-            begin = datetime(latest_loaded.year + 1, 1,1)
+            begin = datetime(latest_loaded.year + 1, 1, 1)
             end = datetime(begin.year, 12, 31)
 
             while end < datetime.now():
@@ -302,7 +301,7 @@ def create_dag(d):
                     }
                 )
 
-                begin = datetime(begin.year + 1,1,1)
+                begin = datetime(begin.year + 1, 1, 1)
                 end = datetime(begin.year, 12, 31)
 
             return periods_to_load
@@ -329,7 +328,7 @@ def create_dag(d):
                 filename_date_format
             )
             period_path = dest_path / period_path_name
-            period_path.mkdir()
+            period_path.mkdir(exist_ok=True)
             dirs.append(period_path)
 
             logging.info(period_path)
