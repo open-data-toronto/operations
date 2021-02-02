@@ -206,8 +206,8 @@ def create_dag(d):
 
         with zipfile.ZipFile(fp, "r") as f:
             f.extractall(target_dir)
-
-        target_dir.mkdir(exists_ok=True)
+        if target_dir.exists() is False:
+            target_dir.mkdir()
 
         return target_dir
 
@@ -328,7 +328,10 @@ def create_dag(d):
                 filename_date_format
             )
             period_path = dest_path / period_path_name
-            period_path.mkdir(exist_ok=True)
+
+            if period_path.exists() is False:
+                period_path.mkdir()
+
             dirs.append(period_path)
 
             logging.info(period_path)
