@@ -8,6 +8,9 @@ import os
 
 repo_dir = Variable.get("repo_dir")
 
+sys.path.append(repo_dir)
+from utils import airflow as airflow_utils  # noqa: E402
+
 job_settings = {
     "description": "Pulls latest code from GitHub repo. Updated dags must be deleted and restarted manually.",
     "start_date": datetime(2020, 11, 10, 0, 30, 0),
