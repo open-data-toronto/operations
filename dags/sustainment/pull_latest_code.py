@@ -21,9 +21,9 @@ job_settings = {
 
 
 def compare_changed_to_list(**kwargs):
-    changes = kwargs.pop("ti").xcom_pull(task_ids="pull_repo")
-
-    dags = kwargs.pop("ti").xcom_pull(task_ids="list_dags")
+    ti = kwargs.pop("ti")
+    changes = ti.xcom_pull(task_ids="pull_repo")
+    dags = ti.xcom_pull(task_ids="list_dags")
 
     logging.info(f"changes: {changes}")
     logging.info(f"list_dags: {list_dags}")
