@@ -4,6 +4,7 @@ from datetime import datetime
 from airflow.models import Variable
 from airflow import DAG
 from pathlib import Path
+import sys
 import os
 
 repo_dir = Variable.get("repo_dir")
