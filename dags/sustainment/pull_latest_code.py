@@ -60,10 +60,7 @@ with DAG(
     )
 
     compare = PythonOperator(
-        task_id="compare",
-        provide_context=True,
-        python_callable=compare_changed_to_list
-        )
+        task_id="compare", provide_context=True, python_callable=compare_changed_to_list
+    )
 
-
-     pull_repo >> list_dags >> compare 
+    pull_repo >> list_dags >> compare
