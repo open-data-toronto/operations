@@ -23,7 +23,6 @@ job_name = job_file.name[:-3]
 
 default_args = airflow_utils.get_default_args(
     {
-        "on_failure_callback": send_failure_msg,
         "start_date": job_settings["start_date"],
     }
 )
