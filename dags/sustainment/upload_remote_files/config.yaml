@@ -116,8 +116,8 @@ rain-gauge-locations-and-precipitation:
     url: http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/raingaugenotes.zip
 registered-programs-and-drop-in-courses-offering:
   Registered programs and drop in courses offering data:
-    format: zip
-    url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/program_offering.zip
+    format: xlsx
+    url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
 school-safety-zone-watch-your-speed-program-detailed-speed-counts:
   Stationary count detailed 2020:
     format: zip
