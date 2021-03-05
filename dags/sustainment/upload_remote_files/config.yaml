@@ -23,10 +23,10 @@ building-permits-active-permits:
     format: zip
     url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits.zip
 building-permits-cleared-permits-current-year:
-  Cleared Permits Currrent Year (CSV):
+  Cleared Permits Current Year (CSV):
     format: zip
     url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits_current_year_csv.zip
-  Cleared Permits Currrent Year (XML):
+  Cleared Permits Current Year (XML):
     format: zip
     url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits_current_year.zip
 building-permits-cleared-permits-prior-years:
