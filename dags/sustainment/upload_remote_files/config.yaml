@@ -163,21 +163,9 @@ traffic-cameras:
     format: json
     url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcamerassn.json
 triangular-irregular-network-tin:
-  triangular-irregular-network-polygon-data-east-1:
+  triangular-irregular-network:
     format: shp
-    url: http://opendata.toronto.ca/gcc/polytin_east1_mtm3.zip
-  triangular-irregular-network-polygon-data-east-2:
-    format: shp
-    url: http://opendata.toronto.ca/gcc/polytin_east2_mtm3.zip
-  triangular-irregular-network-polygon-data-north:
-    format: shp
-    url: http://opendata.toronto.ca/gcc/polytin_north_mtm3.zip
-  triangular-irregular-network-polygon-data-south:
-    format: shp
-    url: http://opendata.toronto.ca/gcc/polytin_south_mtm3.zip
-  triangular-irregular-network-polygon-data-west:
-    format: shp
-    url: http://opendata.toronto.ca/gcc/polytin_west_mtm3.zip
+    url: http://opendata.toronto.ca/technology.services/TIN/2015_TIN.zip
 ttc-routes-and-schedules:
   TTC Routes and Schedules Data:
     format: zip
