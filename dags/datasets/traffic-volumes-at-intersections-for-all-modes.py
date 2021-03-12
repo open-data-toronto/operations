@@ -650,7 +650,6 @@ with DAG(
         task_id="update_resource_last_modified",
         python_callable=update_resource_last_modified,
         provide_context=True,
-        trigger_rule="none_failed",
     )
 
     notification_msg = PythonOperator(
