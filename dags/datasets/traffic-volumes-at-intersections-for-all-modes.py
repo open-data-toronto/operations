@@ -1,4 +1,5 @@
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
+from airflow.operators.dummy_operator import DummyOperator
 from airflow.models import Variable
 from datetime import datetime
 import pandas as pd
@@ -303,17 +304,22 @@ def identify_resources_to_load(**kwargs):
                 file_last_modified.timestamp() - resource_last_modified.timestamp()
             )
 
-            logging.info(
-                "{}secs between file {} and resource {} last modified".format(
-                    time_delta, raw_fpath.name, resource_name
-                )
-            )
-
             update = time_delta != 0
             break
 
         if update:
+            logging.info(
+                "To refresh: {}s between file {} and resource {} last modified".format(
+                    time_delta, raw_fpath.name, resource_name
+                )
+            )
             resources_to_load.append(i)
+        else:
+            logging.info(
+                "No change: {} same last modified time as source file".format(
+                    resource_name
+                )
+            )
 
     return resources_to_load
 
@@ -538,6 +544,9 @@ def build_message(**kwargs):
         task_ids="update_resource_last_modified"
     )
 
+    if len(resources_to_load) == 0:
+        return "There aren't any new resources to load"
+
     successes = []
     errors = []
 
@@ -559,6 +568,15 @@ def build_message(**kwargs):
         msg = msg + "\n*Errors*\n* {}".format("\n* ".join(errors))
 
     return msg
+
+
+def return_branch(**kwargs):
+    resources_to_load = kwargs["ti"].xcom_pull(task_ids="identify_resources_to_load")
+
+    if len(resources_to_load) == 0:
+        return "no_resources_to_refresh"
+
+    return "continue_with_refresh"
 
 
 default_args = airflow_utils.get_default_args(
@@ -606,6 +624,14 @@ with DAG(
         provide_context=True,
     )
 
+    branching = BranchPythonOperator(
+        task_id="branching", provide_context=True, python_callable=return_branch,
+    )
+
+    no_resources_to_refresh = DummyOperator(task_id="no_resources_to_refresh")
+
+    continue_with_refresh = DummyOperator(task_id="continue_with_refresh")
+
     datastore_resources = PythonOperator(
         task_id="insert_datastore_resources",
         python_callable=insert_datastore_resources,
@@ -626,7 +652,10 @@ with DAG(
     )
 
     notification_msg = PythonOperator(
-        task_id="build_message", python_callable=build_message, provide_context=True,
+        task_id="build_message",
+        python_callable=build_message,
+        provide_context=True,
+        trigger_rule="none_failed",
     )
 
     send_notification = PythonOperator(
@@ -646,9 +675,17 @@ with DAG(
 
     package >> resources_to_load
 
-    resources_to_load >> [datastore_resources, filestore_resources]
+    resources_to_load >> continue_with_refresh >> [
+        datastore_resources,
+        filestore_resources,
+    ]
 
     [
         datastore_resources,
         filestore_resources,
-    ] >> update_last_modified >> notification_msg >> send_notification
+    ] >> update_last_modified >> notification_msg
+
+    resources_to_load >> no_resources_to_refresh >> notification_msg
+
+    notification_msg >> send_notification
+
