@@ -245,7 +245,7 @@ def transform_data_files(**kwargs):
 
         data = prep_data(df)
 
-        if filename == "tmcs_preview.csv":
+        if filename.startswith("tmcs_preview"):
             data["geometry"] = data.apply(
                 lambda x: json.dumps(
                     {"type": "Point", "coordinates": [x["longitude"], x["latitude"]]}
@@ -288,7 +288,7 @@ def identify_resources_to_load(**kwargs):
 
         update = True
         raw_fpath = Path(i["raw_data_filepath"])
-        resource_name = i["target_resource_name"]
+        resource_name = i["target_resource"]
 
         for resource in package["resources"]:
             if resource["name"] != resource_name:
@@ -337,7 +337,7 @@ def insert_datastore_resources(**kwargs):
 
     results = []
     for i in datastore_resources:
-        resource_name = i["target_resource_name"]
+        resource_name = i["target_resource"]
         fpath = Path(i["processed_data_file"])
 
         try:
@@ -446,7 +446,7 @@ def upload_filestore_resources(**kwargs):
 
     results = []
     for i in filestore_resources:
-        resource_name = i["target_resource_name"]
+        resource_name = i["target_resource"]
         fpath = Path(i["processed_data_file"])
 
         try:
@@ -495,9 +495,7 @@ def update_resource_last_modified(**kwargs):
 
         try:
             resource = [
-                r
-                for r in package["resources"]
-                if r["name"] == i["target_resource_name"]
+                r for r in package["resources"] if r["name"] == i["target_resource"]
             ][0]
             ckan_utils.update_resource_last_modified(
                 ckan=CKAN,
@@ -506,7 +504,7 @@ def update_resource_last_modified(**kwargs):
             )
             logging.info(
                 "Updated last modified to {} for {}".format(
-                    i["file_last_modified"], i["target_resource_name"]
+                    i["file_last_modified"], i["target_resource"]
                 )
             )
             results.append(i)
@@ -522,9 +520,7 @@ def update_resource_last_modified(**kwargs):
 
         try:
             resource = [
-                r
-                for r in package["resources"]
-                if r["name"] == i["target_resource_name"]
+                r for r in package["resources"] if r["name"] == i["target_resource"]
             ][0]
             ckan_utils.update_resource_last_modified(
                 ckan=CKAN,
@@ -533,7 +529,7 @@ def update_resource_last_modified(**kwargs):
             )
             logging.info(
                 "Updated last modified to {} for {}".format(
-                    i["file_last_modified"], i["target_resource_name"]
+                    i["file_last_modified"], i["target_resource"]
                 )
             )
             results.append(i)
