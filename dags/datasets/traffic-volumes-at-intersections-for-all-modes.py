@@ -287,7 +287,7 @@ def identify_resources_to_load(**kwargs):
             continue
 
         update = True
-        raw_fpath = Path(i["raw_data_file"])
+        raw_fpath = Path(i["raw_data_filepath"])
         resource_name = i["target_resource_name"]
 
         for resource in package["resources"]:
