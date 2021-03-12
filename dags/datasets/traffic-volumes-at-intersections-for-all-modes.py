@@ -248,7 +248,7 @@ def transform_data_files(**kwargs):
         if filename.startswith("tmcs_preview"):
             data["geometry"] = data.apply(
                 lambda x: json.dumps(
-                    {"type": "Point", "coordinates": [x["longitude"], x["latitude"]]}
+                    {"type": "Point", "coordinates": [x["lng"], x["lat"]]}
                 )
                 if x["lng"] and x["lat"]
                 else "",
