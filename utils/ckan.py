@@ -3,8 +3,7 @@ import logging
 
 def update_resource_last_modified(ckan, resource_id, new_last_modified):
     return ckan.action.resource_patch(
-        id=resource_id,
-        last_modified=new_last_modified.strftime("%Y-%m-%dT%H:%M:%S"),
+        id=resource_id, last_modified=new_last_modified.strftime("%Y-%m-%dT%H:%M:%S"),
     )
 
 
