@@ -254,10 +254,10 @@ def transform_data_files(**kwargs):
                 else "",
                 axis=1,
             )
-            fpath = tmp_dir / resource_name + ".datastore.records.json"
+            fpath = tmp_dir / f"{resource_name}.datastore.records.json"
             pd.DataFrame(data).to_json(fpath, orient="records", date_format="iso")
 
-            fields_path = tmp_dir / resource_name + ".datastore.fields.json"
+            fields_path = tmp_dir / f"{resource_name}.datastore.fields.json"
             fields = make_ckan_fields(df)
 
             with open(fields_path, "w") as ff:
