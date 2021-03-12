@@ -562,10 +562,10 @@ def build_message(**kwargs):
 
     msg = ""
     if len(successes) > 0:
-        msg = msg + "*Updated*\n* {}".format("\n* ".join(successes))
+        msg = msg + "*Updated*\n- {}".format("\n- ".join(successes))
 
     if len(errors) > 0:
-        msg = msg + "\n*Errors*\n* {}".format("\n* ".join(errors))
+        msg = msg + "\n*Errors*\n- {}".format("\n- ".join(errors))
 
     return msg
 
@@ -574,9 +574,9 @@ def return_branch(**kwargs):
     resources_to_load = kwargs["ti"].xcom_pull(task_ids="identify_resources_to_load")
 
     if len(resources_to_load) == 0:
-        return "no_resources_to_refresh"
+        return "no_files_are_not_new"
 
-    return "continue_with_refresh"
+    return "yes_continue_with_refresh"
 
 
 default_args = airflow_utils.get_default_args(
@@ -630,9 +630,9 @@ with DAG(
         python_callable=return_branch,
     )
 
-    no_resources_to_refresh = DummyOperator(task_id="no_resources_to_refresh")
+    no_files_are_not_new = DummyOperator(task_id="no_files_are_not_new")
 
-    continue_with_refresh = DummyOperator(task_id="continue_with_refresh")
+    continue_with_refresh = DummyOperator(task_id="yes_continue_with_refresh")
 
     datastore_resources = PythonOperator(
         task_id="insert_datastore_resources",
@@ -666,12 +666,11 @@ with DAG(
         provide_context=True,
     )
 
-    # delete_tmp_dir = PythonOperator(
-    #     task_id="delete_tmp_dir",
-    #     python_callable=airflow_utils.delete_tmp_data_dir,
-    #     op_kwargs={"dag_id": JOB_NAME, "recursively": True},
-    #     trigger_rule="none_failed",
-    # )
+    delete_tmp_dir = PythonOperator(
+        task_id="delete_tmp_dir",
+        python_callable=airflow_utils.delete_tmp_data_dir,
+        op_kwargs={"dag_id": JOB_NAME, "recursively": True},
+    )
 
     create_tmp_dir >> extract >> transform >> resources_to_load
 
@@ -687,7 +686,6 @@ with DAG(
         filestore_resources,
     ] >> update_last_modified >> notification_msg
 
-    are_there_new_files >> no_resources_to_refresh >> notification_msg
+    are_there_new_files >> no_files_are_not_new >> notification_msg
 
-    notification_msg >> send_notification
-
+    notification_msg >> send_notification >> delete_tmp_dir
