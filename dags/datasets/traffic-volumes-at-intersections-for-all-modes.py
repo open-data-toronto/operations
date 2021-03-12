@@ -643,12 +643,12 @@ with DAG(
         provide_context=True,
     )
 
-    delete_tmp_dir = PythonOperator(
-        task_id="delete_tmp_dir",
-        python_callable=airflow_utils.delete_tmp_data_dir,
-        op_kwargs={"dag_id": JOB_NAME, "recursively": True},
-        trigger_rule="none_failed",
-    )
+    # delete_tmp_dir = PythonOperator(
+    #     task_id="delete_tmp_dir",
+    #     python_callable=airflow_utils.delete_tmp_data_dir,
+    #     op_kwargs={"dag_id": JOB_NAME, "recursively": True},
+    #     trigger_rule="none_failed",
+    # )
 
     create_tmp_dir >> extract >> transform >> resources_to_load
 
@@ -656,4 +656,7 @@ with DAG(
 
     resources_to_load >> [datastore_resources, filestore_resources]
 
-    [datastore_resources, filestore_resources] >> notification_msg >> send_notification
+    [
+        datastore_resources,
+        filestore_resources,
+    ] >> update_last_modified >> notification_msg >> send_notification
