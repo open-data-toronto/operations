@@ -654,10 +654,6 @@ with DAG(
 
     package >> resources_to_load
 
-    resources_to_load >> datastore_resources
+    resources_to_load >> [datastore_resources, filestore_resources]
 
-    resources_to_load >> filestore_resources
-
-    [datastore_resources, filestore_resources] >> resources_to_load
-
-    resources_to_load >> notification_msg >> send_notification
+    [datastore_resources, filestore_resources] >> notification_msg >> send_notification
