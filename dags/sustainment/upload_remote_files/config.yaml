@@ -23,12 +23,19 @@ building-permits-active-permits:
     format: zip
     url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits.zip
 building-permits-cleared-permits-current-year:
-  Cleared Permits 2020 in csv:
+  Cleared Permits Current Year (CSV):
     format: zip
-    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits2020_csv.zip
-  Cleared Permits 2020 xml:
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits_current_year_csv.zip
+  Cleared Permits Current Year (XML):
     format: zip
-    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits2020.zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits_current_year.zip
+building-permits-cleared-permits-prior-years:
+  Cleared Permits (2020 XML ZIP):
+    format: zip
+    url:  http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2020.zip
+  Cleared Permits (2020 CSV ZIP):
+    format: zip
+    url:  http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2020_csv.zip
 clerk-s-directory-of-record-for-record-series-management-tool-rsmt:
   RSMT Directory of records:
     format: xml
@@ -156,21 +163,9 @@ traffic-cameras:
     format: json
     url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcamerassn.json
 triangular-irregular-network-tin:
-  triangular-irregular-network-polygon-data-east-1:
+  triangular-irregular-network:
     format: shp
-    url: http://opendata.toronto.ca/gcc/polytin_east1_mtm3.zip
-  triangular-irregular-network-polygon-data-east-2:
-    format: shp
-    url: http://opendata.toronto.ca/gcc/polytin_east2_mtm3.zip
-  triangular-irregular-network-polygon-data-north:
-    format: shp
-    url: http://opendata.toronto.ca/gcc/polytin_north_mtm3.zip
-  triangular-irregular-network-polygon-data-south:
-    format: shp
-    url: http://opendata.toronto.ca/gcc/polytin_south_mtm3.zip
-  triangular-irregular-network-polygon-data-west:
-    format: shp
-    url: http://opendata.toronto.ca/gcc/polytin_west_mtm3.zip
+    url: http://opendata.toronto.ca/technology.services/TIN/2015_TIN.zip
 ttc-routes-and-schedules:
   TTC Routes and Schedules Data:
     format: zip
