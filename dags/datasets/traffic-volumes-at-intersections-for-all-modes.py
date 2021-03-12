@@ -624,8 +624,10 @@ with DAG(
         provide_context=True,
     )
 
-    branching = BranchPythonOperator(
-        task_id="branching", provide_context=True, python_callable=return_branch,
+    are_there_new_files = BranchPythonOperator(
+        task_id="are_there_new_files",
+        provide_context=True,
+        python_callable=return_branch,
     )
 
     no_resources_to_refresh = DummyOperator(task_id="no_resources_to_refresh")
@@ -673,9 +675,9 @@ with DAG(
 
     create_tmp_dir >> extract >> transform >> resources_to_load
 
-    package >> resources_to_load
+    package >> resources_to_load >> are_there_new_files
 
-    resources_to_load >> continue_with_refresh >> [
+    are_there_new_files >> continue_with_refresh >> [
         datastore_resources,
         filestore_resources,
     ]
@@ -685,7 +687,7 @@ with DAG(
         filestore_resources,
     ] >> update_last_modified >> notification_msg
 
-    resources_to_load >> no_resources_to_refresh >> notification_msg
+    are_there_new_files >> no_resources_to_refresh >> notification_msg
 
     notification_msg >> send_notification
 
