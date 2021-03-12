@@ -235,16 +235,8 @@ def transform_data_files(**kwargs):
             **i,
         }
 
-        try:
-            validate_columns(df)
-        except AssertionError as e:
-            err = f"{e}. Skipping"
-            logging.error(err)
-            row["error"] = err
-            continue
-
+        validate_columns(df)
         data = prep_data(df)
-
         if filename.startswith("tmcs_preview"):
             data["geometry"] = data.apply(
                 lambda x: json.dumps(
@@ -255,7 +247,10 @@ def transform_data_files(**kwargs):
                 axis=1,
             )
             fpath = tmp_dir / f"{resource_name}.datastore.records.json"
-            pd.DataFrame(data).to_json(fpath, orient="records", date_format="iso")
+            data = data[
+                data["count_date"].dt.year > datetime.now().year - 1
+            ]  # TODO: filter at source and remove
+            data.to_json(fpath, orient="records", date_format="iso")
 
             fields_path = tmp_dir / f"{resource_name}.datastore.fields.json"
             fields = make_ckan_fields(df)
