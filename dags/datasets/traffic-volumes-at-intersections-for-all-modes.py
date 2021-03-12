@@ -265,7 +265,7 @@ def transform_data_files(**kwargs):
 
         else:
             fmt = "zip"
-            fpath = tmp_dir / resource_name + "." + fmt
+            fpath = tmp_dir / f"{resource_name}.{fmt}"
             compression_options = dict(method=fmt, archive_name=filename)
             data.to_csv(fpath, compression=compression_options, index=False)
 
