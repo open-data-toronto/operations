@@ -551,9 +551,14 @@ def build_message(**kwargs):
         if "error" in i:
             errors.append(f"{i['target_resource']}: {i['error']}")
 
-    return "*Successes*\n{}*Errors*\n{}".format(
-        "\n* ".join(successes), "\n* ".join(errors)
-    )
+    msg = ""
+    if len(successes) > 0:
+        msg = msg + "*Updated*\n* {}".format("\n* ".join(successes))
+
+    if len(errors) > 0:
+        msg = msg + "\n*Errors*\n* {}".format("\n* ".join(errors))
+
+    return msg
 
 
 default_args = airflow_utils.get_default_args(
