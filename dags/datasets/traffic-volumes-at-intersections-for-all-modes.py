@@ -238,6 +238,7 @@ def transform_data_files(**kwargs):
 
         validate_columns(df)
         data = prep_data(df)
+        logging.info(f"{f} | {data.shape[0]} columns, {data.shape[1]} rows")
         if filename.startswith("tmcs_preview"):
             data["geometry"] = data.apply(
                 lambda x: json.dumps(
@@ -251,6 +252,9 @@ def transform_data_files(**kwargs):
             data = data[
                 data["count_date"].dt.year > datetime.now().year - 1
             ]  # TODO: filter at source and remove
+            logging.info(
+                f"{f} | FILTERED: {data.shape[0]} columns, {data.shape[1]} rows"
+            )
             data.to_json(fpath, orient="records", date_format="iso")
 
             fields_path = tmp_dir / f"{resource_name}.datastore.fields.json"
