@@ -461,20 +461,15 @@ def upload_filestore_resources(**kwargs):
                 },
             )
 
-            res = CKAN.action.resource_patch(
+            CKAN.action.resource_patch(
                 id=resource["id"], upload=open(fpath, "rb"),
             )
 
-            if res["success"]:
-                logging.info(f"Completed: {resource_name}")
-                results.append(i)
-            else:
-                err = f"Could not complete: {resource_name}. Error: {res['error']}"
-                logging.error(err)
-                results.append({**i, "error": err})
+            logging.info(f"Uploaded: {resource_name}")
+            results.append(i)
 
         except Exception as e:
-            err = f"Could not upload new file {resource_name}. Error: {e}"
+            err = f"Could not upload file {resource_name}. Error: {e}"
             logging.error(err)
             results.append({**i, "error": err})
 
@@ -626,6 +621,7 @@ with DAG(
     update_last_modified = PythonOperator(
         task_id="update_resource_last_modified",
         python_callable=update_resource_last_modified,
+        provide_context=True,
         trigger_rule="none_failed",
     )
 
