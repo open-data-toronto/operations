@@ -239,7 +239,7 @@ def transform_data_files(**kwargs):
         validate_columns(df)
         data = prep_data(df)
         logging.info(
-            f"{filename} | {resource_name} | {data.shape[0]} columns, {data.shape[1]} rows"
+            f"{filename} | {resource_name} | {data.shape[0]} rows, {data.shape[1]} columns"
         )
         if filename.startswith("tmcs_preview"):
             data["geometry"] = data.apply(
@@ -252,10 +252,10 @@ def transform_data_files(**kwargs):
             )
             fpath = tmp_dir / f"{resource_name}.datastore.records.json"
             data = data[
-                data["count_date"].dt.year > datetime.now().year - 1
+                data["count_date"].dt.year >= (datetime.now().year - 1)
             ]  # TODO: filter at source and remove
             logging.info(
-                f"{filename} | {resource_name} | FILTERED: {data.shape[0]} columns, {data.shape[1]} rows"
+                f"{filename} | {resource_name} | FILTERED: {data.shape[0]} rows, {data.shape[1]} columns"
             )
             data.to_json(fpath, orient="records", date_format="iso")
 
@@ -671,11 +671,11 @@ with DAG(
         provide_context=True,
     )
 
-    # delete_tmp_dir = PythonOperator(
-    #     task_id="delete_tmp_dir",
-    #     python_callable=airflow_utils.delete_tmp_data_dir,
-    #     op_kwargs={"dag_id": JOB_NAME, "recursively": True},
-    # )
+    delete_tmp_dir = PythonOperator(
+        task_id="delete_tmp_dir",
+        python_callable=airflow_utils.delete_tmp_data_dir,
+        op_kwargs={"dag_id": JOB_NAME, "recursively": True},
+    )
 
     create_tmp_dir >> extract >> transform >> resources_to_load
 
@@ -693,4 +693,4 @@ with DAG(
 
     are_there_new_files >> no_files_are_not_new >> notification_msg
 
-    notification_msg >> send_notification
+    notification_msg >> send_notification >> delete_tmp_dir
