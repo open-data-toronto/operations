@@ -35,6 +35,25 @@ CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 SRC_FILE = "http://opendata.toronto.ca/shelter.support.housing.administration/toronto-shelter-system-flow/toronto_shelter_system_flow.csv"  # noqa: E501
 RESOURCE_NAME = "toronto-shelter-system-flow"
+EXPECTED_COLUMNS = [
+    "date(mmm-yy)",
+    "population_group",
+    "returned_from_housing",
+    "returned_to_shelter",
+    "newly_identified",
+    "moved_to_housing",
+    "no_recent_shelter_use",
+    "actively_homeless",
+    "ageunder16",
+    "age16-24",
+    "age25-44",
+    "age45-64",
+    "age65over",
+    "gender_male",
+    "gender_female",
+    "gender_transgender,non-binary_or_two_spirit",
+    "population_group_percentage",
+]
 
 
 def send_success_msg(**kwargs):
@@ -240,30 +259,13 @@ def validate_expected_columns(**kwargs):
     ti = kwargs.pop("ti")
     data_fp = Path(ti.xcom_pull(task_ids="transform_data"))
 
-    expected_columns = [
-        "date(mmm-yy)",
-        "population_group",
-        "returned_from_housing",
-        "returned_to_shelter",
-        "newly_identified",
-        "moved_to_housing",
-        "no_recent_shelter_use",
-        "actively_homeless",
-        "ageunder16",
-        "age16-24",
-        "age25-44",
-        "age45-64",
-        "age65over",
-        "gender_male",
-        "gender_female",
-        "gender_transgender,non-binary_or_two_spirit",
-        "population_group_percentage",
-    ]
-
     df = pd.read_parquet(data_fp)
 
     for col in df.columns.values:
-        assert col in expected_columns, f"{col} not in list of expected columns"
+        assert col in EXPECTED_COLUMNS, f"{col} not in list of expected columns"
+
+    for col in [c for c in EXPECTED_COLUMNS if c not in df.columns.values]:
+        logging.warn(f"Column '{col}' missing from the data")
 
 
 def insert_new_records(**kwargs):
