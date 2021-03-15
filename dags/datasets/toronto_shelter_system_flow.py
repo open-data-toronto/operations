@@ -213,17 +213,14 @@ def transform_data(**kwargs):
     data_fp = Path(ti.xcom_pull(task_ids="get_file")["path"])
 
     data = pd.read_parquet(data_fp)
-
-    data["geometry"] = data.apply(
-        lambda x: json.dumps(
-            {"type": "Point", "coordinates": [x["longitude"], x["latitude"]]}
-        )
-        if x["longitude"] and x["latitude"]
-        else "",
-        axis=1,
+    data = data.dropna(axis=0, how="all")
+    data = data[[c for c in data.columns if "unnamed" not in c.lower()]]
+    data = data.rename(columns={name: name.strip() for name in data.columns})
+    data[[c for c, d in data.dtypes.items() if d.name == "float64"]] = (
+        data[[c for c, d in data.dtypes.items() if d.name == "float64"]]
+        .fillna(0)
+        .astype("int64")
     )
-
-    data = agol_utils.remove_geo_columns(data)
 
     filename = "new_data_transformed"
     filepath = tmp_dir / f"{filename}.parquet"
@@ -253,8 +250,8 @@ def validate_expected_columns(**kwargs):
         "age65over",
         "gender_male",
         "gender_female",
-        "gender_transgender",
-        "non-binary_or_two_spirit",
+        "gender_transgender,non-binary_or_two_spirit",
+        "population_group_percentage",
     ]
 
     df = pd.read_parquet(data_fp)
