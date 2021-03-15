@@ -17,7 +17,6 @@ from dateutil import parser
 
 sys.path.append(Variable.get("repo_dir"))
 from utils import airflow as airflow_utils  # noqa: E402
-from utils import agol as agol_utils  # noqa: E402
 from utils import ckan as ckan_utils  # noqa: E402
 
 job_settings = {
@@ -134,7 +133,11 @@ def backup_previous_data(**kwargs):
         data = data.drop("_id", axis=1)
 
     data_hash = hashlib.md5()
-    data_hash.update(data.sort_values(by="LOC_ID").to_csv(index=False).encode("utf-8"))
+    data_hash.update(
+        data.sort_values(by=[c for c in data.columns.values])
+        .to_csv(index=False)
+        .encode("utf-8")
+    )
     unique_id = data_hash.hexdigest()
 
     logging.info(f"Unique ID generated: {unique_id}")
@@ -165,7 +168,10 @@ def get_new_data_unique_id(**kwargs):
 
     data_hash = hashlib.md5()
     data_hash.update(
-        data.sort_values(by="LOC_ID").round(10).to_csv(index=False).encode("utf-8")
+        data.sort_values(by=[c for c in data.columns.values])
+        .round(10)
+        .to_csv(index=False)
+        .encode("utf-8")
     )
 
     return data_hash.hexdigest()
