@@ -249,6 +249,9 @@ def transform_data(**kwargs):
         .fillna(0)
         .astype("int64")
     )
+    data["population_group_percentage"] = (
+        data["population_group_percentage"].str.replace("%", "").astype("float64")
+    )
 
     filename = "new_data_transformed"
     filepath = tmp_dir / f"{filename}.parquet"
