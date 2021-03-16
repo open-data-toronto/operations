@@ -269,8 +269,8 @@ def validate_expected_columns(**kwargs):
     for col in df.columns.values:
         assert col in EXPECTED_COLUMNS, f"{col} not in list of expected columns"
 
-    for col in [c for c in EXPECTED_COLUMNS if c not in df.columns.values]:
-        logging.warn(f"Column '{col}' missing from the data")
+    for col in EXPECTED_COLUMNS:
+        assert col in df.columns.values, f"Expected column {col} not in data file"
 
 
 def insert_new_records(**kwargs):
