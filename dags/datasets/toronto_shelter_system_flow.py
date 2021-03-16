@@ -146,7 +146,7 @@ def backup_previous_data(**kwargs):
     if len(records) > 0:
         logging.info(f"Example record retrieved: {json.dumps(records[0])}")
     else:
-        logging.info(f"Datastore resource was empty")
+        logging.info("Datastore resource was empty")
 
     data = pd.DataFrame(records)
     logging.info(f"Columns: {data.columns.values}")
