@@ -125,6 +125,10 @@ registered-programs-and-drop-in-courses-offering:
   Registered programs and drop in courses offering data:
     format: xlsx
     url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
+report-request-log-city-council-and-its-committees:
+  Report Request Log:
+    format: xlsx
+    url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog.xls
 school-safety-zone-watch-your-speed-program-detailed-speed-counts:
   Stationary count detailed 2020:
     format: zip
