@@ -268,7 +268,9 @@ def transform_data_files(**kwargs):
         else:
             fmt = "zip"
             fpath = tmp_dir / f"{resource_name}.{fmt}"
-            compression_options = dict(method=fmt, archive_name=filename)
+            compression_options = dict(
+                method=fmt, archive_name=filename.replace(".parquet", ".csv")
+            )
             data.to_csv(fpath, compression=compression_options, index=False)
 
         row["processed_data_file"] = fpath
