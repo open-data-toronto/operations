@@ -48,7 +48,7 @@ def compare_changed_to_list(**kwargs):
     for k in keys:
         json_file[k] = Variable.get(k)
 
-    with open(Path(Variable.get(k)) + "/vars.json", "w") as f:
+    with open(Path(Variable.get(k)) / "vars.json", "w") as f:
         json.dump(json_file, f)
 
     logging.info("created reference file")
