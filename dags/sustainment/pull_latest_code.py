@@ -46,9 +46,9 @@ def compare_changed_to_list(**kwargs):
     json_file = {}
 
     for k in keys:
-        json_file[k] = Variable.get(k)
+        json_file[k] = Variable.get(k, deserialize_json=k == "ckan_credentials_secret")
 
-    with open(Path(Variable.get(k)) / "vars.json", "w") as f:
+    with open(Path(Variable.get("tmp_dir")) / "vars.json", "w") as f:
         json.dump(json_file, f)
 
     logging.info("created reference file")
