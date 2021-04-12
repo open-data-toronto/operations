@@ -316,5 +316,5 @@ with DAG(
     scores_resource >> add_scores
     add_scores >> delete_final_scores_tmp_file
     [upload_models, add_scores] >> send_notification
-    [delete_final_scores_tmp_file, delete_raw_scores_tmp_file,] >> delete_tmp_dir
+    [delete_final_scores_tmp_file, delete_raw_scores_tmp_file] >> delete_tmp_dir
 
