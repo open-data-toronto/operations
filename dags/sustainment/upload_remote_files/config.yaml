@@ -77,6 +77,9 @@ mobile-watch-your-speed-program-detailed-speed-counts:
   Mobile sign detail count 2020:
     format: zip
     url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2020.zip
+  Mobile sign detail count 2021:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2021.zip
 municipal-licensing-and-standards-business-licences-and-permits:
   Business licences data:
     format: csv
@@ -133,6 +136,9 @@ school-safety-zone-watch-your-speed-program-detailed-speed-counts:
   Stationary count detailed 2020:
     format: zip
     url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2020.zip
+  Stationary count detailed 2021:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2021.zip
 toronto-centreline-tcl:
   Centreline (wgs84) - geojson - v1:
     format: zip
