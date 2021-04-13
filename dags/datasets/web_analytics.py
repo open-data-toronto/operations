@@ -423,10 +423,7 @@ def create_dag(d):
         path = Path(ti.xcom_pull(task_ids="zip_files"))
         resource = ti.xcom_pull(task_ids="get_resource")
 
-        res = ckan.action.resource_patch(
-            id=resource["id"],
-            upload=open(path, "rb"),
-        )
+        res = ckan.action.resource_patch(id=resource["id"], upload=open(path, "rb"),)
 
         return res
 
@@ -503,9 +500,7 @@ def create_dag(d):
         )
 
         unzip_files = PythonOperator(
-            task_id="unzip_data",
-            python_callable=unzip_data,
-            provide_context=True,
+            task_id="unzip_data", python_callable=unzip_data, provide_context=True,
         )
 
         filename_date_format = PythonOperator(
@@ -707,9 +702,7 @@ def create_dag(d):
         )
 
         upload_data = PythonOperator(
-            task_id="upload_zip",
-            python_callable=upload_zip,
-            provide_context=True,
+            task_id="upload_zip", python_callable=upload_zip, provide_context=True,
         )
 
         msg = PythonOperator(
@@ -737,10 +730,7 @@ def create_dag(d):
 
         is_resource_new_branch >> no_new_resource
 
-        [
-            create_resource,
-            no_new_resource,
-        ] >> resource >> get_data >> unzip_files
+        [create_resource, no_new_resource,] >> resource >> get_data >> unzip_files
 
         [unzip_files, filename_date_format] >> latest_loaded
 
