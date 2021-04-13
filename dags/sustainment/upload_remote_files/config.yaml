@@ -48,6 +48,13 @@ clerks-record-classification-system-internally-approved-rsmt:
   RCS internal approved:
     format: xml
     url: http://opendata.toronto.ca/clerk/rsmt/rsmtRcsInternal.xml
+city-subject-thesaurus:
+  City Subject Thesaurus:
+    format: xml
+    url: http://opendata.toronto.ca/city.clerks.office/city-subject-thesaurus/subject_thesaurus.xml
+  City Subject Thesaurus Readme:
+    format: xls
+    url: http://opendata.toronto.ca/city.clerks.office/city-subject-thesaurus/city-subject-thesaurus-readme.xls
 committee-of-adjustment-applications:
   Active Applications:
     format: zip
