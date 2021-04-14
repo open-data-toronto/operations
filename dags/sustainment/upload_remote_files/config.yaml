@@ -81,9 +81,6 @@ lobbyist-registry:
     format: zip
     url: http://opendata.toronto.ca/lobbyist.registrar/lobbyist-registry/lobbyactivity.zip
 mobile-watch-your-speed-program-detailed-speed-counts:
-  Mobile sign detail count 2017:
-    format: zip
-    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2017.zip
   Mobile sign detail count 2018:
     format: zip
     url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2018.zip
