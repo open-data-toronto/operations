@@ -140,6 +140,12 @@ report-request-log-city-council-and-its-committees:
     format: xlsx
     url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog.xls
 school-safety-zone-watch-your-speed-program-detailed-speed-counts:
+  Stationary count detailed 2018:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2018.zip
+  Stationary count detailed 2019:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2019.zip
   Stationary count detailed 2020:
     format: zip
     url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2020.zip
