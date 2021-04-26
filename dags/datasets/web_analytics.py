@@ -1,5 +1,5 @@
-from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.operators.dummy import DummyOperator
 from distutils.dir_util import copy_tree
 from datetime import datetime, timedelta
 from airflow.models import Variable
@@ -730,7 +730,7 @@ def create_dag(d):
 
         is_resource_new_branch >> no_new_resource
 
-        [create_resource, no_new_resource,] >> resource >> get_data >> unzip_files
+        [create_resource, no_new_resource] >> resource >> get_data >> unzip_files
 
         [unzip_files, filename_date_format] >> latest_loaded
 

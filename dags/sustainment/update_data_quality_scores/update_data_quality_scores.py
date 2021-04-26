@@ -1,4 +1,4 @@
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from datetime import datetime
 from airflow.models import Variable
 from airflow import DAG
@@ -70,7 +70,9 @@ def send_success_msg(**kwargs):
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=JOB_NAME, message_type="error", msg="Job not finished",
+        name=JOB_NAME,
+        message_type="error",
+        msg="Job not finished",
     )
 
 
@@ -143,7 +145,10 @@ def upload_models_to_resource(**kwargs):
         data={"id": model_resource["resource"]["id"]},
         headers={"Authorization": CKAN.apikey},
         files={
-            "upload": (f"{RESOURCE_MODEL}.json", json.dumps(model_resource["models"]),)
+            "upload": (
+                f"{RESOURCE_MODEL}.json",
+                json.dumps(model_resource["models"]),
+            )
         },
     )
 
@@ -194,7 +199,7 @@ def insert_scores(**kwargs):
 
 
 default_args = airflow_utils.get_default_args(
-    {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"],}
+    {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"]}
 )
 
 
@@ -226,7 +231,8 @@ with DAG(
     )
 
     dqs_package_resources = PythonOperator(
-        task_id="get_dqs_dataset_resources", python_callable=get_dqs_dataset_resources,
+        task_id="get_dqs_dataset_resources",
+        python_callable=get_dqs_dataset_resources,
     )
 
     framework_resource = PythonOperator(
@@ -284,7 +290,9 @@ with DAG(
     )
 
     add_scores = PythonOperator(
-        task_id="insert_scores", python_callable=insert_scores, provide_context=True,
+        task_id="insert_scores",
+        python_callable=insert_scores,
+        provide_context=True,
     )
 
     delete_final_scores_tmp_file = PythonOperator(
@@ -317,4 +325,3 @@ with DAG(
     add_scores >> delete_final_scores_tmp_file
     [upload_models, add_scores] >> send_notification
     [delete_final_scores_tmp_file, delete_raw_scores_tmp_file] >> delete_tmp_dir
-
