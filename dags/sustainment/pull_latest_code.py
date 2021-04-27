@@ -1,4 +1,5 @@
 from airflow.operators.bash import BashOperator
+
 from airflow.models import Variable
 from airflow import DAG
 from datetime import datetime
@@ -13,7 +14,7 @@ sys.path.append(repo_dir)
 from utils import airflow as airflow_utils  # noqa: E402
 
 job_settings = {
-    "description": "Pulls latest code from GitHub repo. Updated dags must be deleted and restarted manually.",
+    "description": "Pulls repo code. Updated dags must be deleted and restarted.",
     "start_date": datetime(2020, 11, 10, 0, 30, 0),
     "schedule": "@once",
 }
@@ -41,13 +42,6 @@ with DAG(
     pull_repo = BashOperator(
         task_id="pull_repo",
         bash_command=f"git -C {repo_dir} pull; echo $?",
-        xcom_push=True,
     )
 
-    list_dags = BashOperator(
-        task_id="list_dags",
-        bash_command="airflow list_dags; echo $?",
-        xcom_push=True,
-    )
-
-    pull_repo >> list_dags
+    pull_repo
