@@ -14,9 +14,8 @@ import shutil
 import sys
 import os
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+from utils import airflow_utils
+from utils import ckan_utils
 
 JOB_FILE = Path(os.path.abspath(__file__))
 JOB_NAME = JOB_FILE.name[:-3]
@@ -88,22 +87,16 @@ args = {
 
 
 def generate_report(report_name, report_id, begin, end, account_id, user, password):
-
     qs = "&".join(["{}={}".format(k, v) for k, v in args.items()])
-
     prefix = f"https://api.oracleinfinity.io/v1/account/{account_id}/dataexport"
 
     call = f"{prefix}/{report_id}/data?begin={begin}&end={end}&{qs}"
-
     logging.info(f"Begin: {begin} | End: {end} | {report_name.upper()} | {call}")
 
     response = requests.get(call, auth=(user, password))
+    status = response.status_code
 
-    status_code = response.status_code
-
-    assert (
-        status_code == 200
-    ), f"Response code: {status_code}. Reason: {response.reason}"
+    assert status == 200, f"Response code: {status}. Reason: {response.reason}"
 
     return response
 

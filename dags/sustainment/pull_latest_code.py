@@ -4,14 +4,9 @@ from airflow.models import Variable
 from airflow import DAG
 from datetime import datetime
 from pathlib import Path
-import sys
 import os
 
-repo_dir = Variable.get("repo_dir")
-tmp_dir = Variable.get("tmp_dir")
-
-sys.path.append(repo_dir)
-from utils import airflow as airflow_utils  # noqa: E402
+from utils import airflow_utils
 
 job_settings = {
     "description": "Pulls repo code. Updated dags must be deleted and restarted.",
@@ -24,10 +19,7 @@ job_file = Path(os.path.abspath(__file__))
 job_name = job_file.name[:-3]
 
 default_args = airflow_utils.get_default_args(
-    {
-        "retries": 0,
-        "start_date": job_settings["start_date"],
-    }
+    {"retries": 0, "start_date": job_settings["start_date"],}
 )
 
 with DAG(
@@ -41,7 +33,7 @@ with DAG(
 
     pull_repo = BashOperator(
         task_id="pull_repo",
-        bash_command=f"git -C {repo_dir} pull; echo $?",
+        bash_command=f"git -C {Variable.get('repo_dir')} pull; echo $?",
     )
 
     pull_repo
