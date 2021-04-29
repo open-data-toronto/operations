@@ -8,15 +8,13 @@ import logging
 from pathlib import Path
 import yaml
 import os
-import sys
 from dateutil import parser
 import requests
 import traceback
 from urllib.parse import urljoin
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+from utils import airflow_utils
+from utils import ckan_utils
 
 job_settings = {
     "description": "Uploads files from opendata.toronto.ca to respective CKAN resource",
@@ -231,10 +229,7 @@ def return_branch(**kwargs):
 
 
 default_args = airflow_utils.get_default_args(
-    {
-        "on_failure_callback": send_failure_msg,
-        "start_date": job_settings["start_date"],
-    }
+    {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"]}
 )
 
 with DAG(
@@ -247,8 +242,7 @@ with DAG(
 ) as dag:
 
     load_files = PythonOperator(
-        task_id="load_file_list",
-        python_callable=load_remote_files,
+        task_id="load_file_list", python_callable=load_remote_files,
     )
 
     get_packages = PythonOperator(
@@ -270,9 +264,7 @@ with DAG(
     )
 
     branching = BranchPythonOperator(
-        task_id="branching",
-        provide_context=True,
-        python_callable=return_branch,
+        task_id="branching", provide_context=True, python_callable=return_branch,
     )
 
     send_notification = PythonOperator(

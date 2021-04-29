@@ -12,13 +12,11 @@ from airflow import DAG
 import requests
 import json
 import os
-import sys
 from dateutil import parser
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import agol as agol_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+from utils import airflow_utils
+from utils import agol_utils
+from utils import ckan_utils
 
 job_settings = {
     "description": "Take data from opendata.toronto.ca (CSV) and put into datastore",
@@ -371,9 +369,7 @@ with DAG(
     )
 
     source_data = PythonOperator(
-        task_id="get_file",
-        python_callable=get_file,
-        provide_context=True,
+        task_id="get_file", python_callable=get_file, provide_context=True,
     )
 
     new_resource = PythonOperator(
@@ -407,9 +403,7 @@ with DAG(
     )
 
     is_data_new_branch = BranchPythonOperator(
-        task_id="is_data_new",
-        python_callable=is_data_new,
-        provide_context=True,
+        task_id="is_data_new", python_callable=is_data_new, provide_context=True,
     )
 
     is_resource_new_branch = BranchPythonOperator(
@@ -417,9 +411,7 @@ with DAG(
     )
 
     is_file_new_branch = BranchPythonOperator(
-        task_id="is_file_new",
-        python_callable=is_file_new,
-        provide_context=True,
+        task_id="is_file_new", python_callable=is_file_new, provide_context=True,
     )
 
     resource = PythonOperator(
@@ -435,9 +427,7 @@ with DAG(
     )
 
     transform = PythonOperator(
-        task_id="transform_data",
-        python_callable=transform_data,
-        provide_context=True,
+        task_id="transform_data", python_callable=transform_data, provide_context=True,
     )
 
     insert_new = PythonOperator(
@@ -447,34 +437,20 @@ with DAG(
     )
 
     notification_msg = PythonOperator(
-        task_id="build_message",
-        python_callable=build_message,
-        provide_context=True,
+        task_id="build_message", python_callable=build_message, provide_context=True,
     )
 
-    resource_is_not_new = DummyOperator(
-        task_id="resource_is_not_new",
-    )
+    resource_is_not_new = DummyOperator(task_id="resource_is_not_new",)
 
-    resource_is_new = DummyOperator(
-        task_id="resource_is_new",
-    )
+    resource_is_new = DummyOperator(task_id="resource_is_new",)
 
-    file_is_new = DummyOperator(
-        task_id="file_is_new",
-    )
+    file_is_new = DummyOperator(task_id="file_is_new",)
 
-    file_is_not_new = DummyOperator(
-        task_id="file_is_not_new",
-    )
+    file_is_not_new = DummyOperator(task_id="file_is_not_new",)
 
-    data_is_new = DummyOperator(
-        task_id="data_is_new",
-    )
+    data_is_new = DummyOperator(task_id="data_is_new",)
 
-    data_is_not_new = DummyOperator(
-        task_id="data_is_not_new",
-    )
+    data_is_not_new = DummyOperator(task_id="data_is_not_new",)
 
     send_notification = PythonOperator(
         task_id="send_notification",
@@ -496,7 +472,9 @@ with DAG(
         trigger_rule="one_success",
     )
 
-    create_tmp_dir >> source_data >> transform >> new_data_unique_id >> is_data_new_branch
+    create_tmp_dir >> source_data >> transform >> new_data_unique_id
+
+    new_data_unique_id >> is_data_new_branch
 
     create_backups_dir >> previous_data
 

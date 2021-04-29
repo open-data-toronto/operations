@@ -11,13 +11,11 @@ from airflow import DAG
 import requests
 import json
 import os
-import sys
 import re
 from dateutil import parser
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+from utils import airflow_utils
+from utils import ckan_utils
 
 job_settings = {
     "description": "Take data files from Transportation's flashscrow endpoint https://flashcrow-etladmin.intra.dev-toronto.ca/open_data/tmcs into CKAN",  # noqa: E501
@@ -238,7 +236,9 @@ def transform_data_files(**kwargs):
         validate_columns(df)
         data = prep_data(df)
         logging.info(
-            f"{filename} | {resource_name} | {data.shape[0]} rows, {data.shape[1]} columns"
+            " | ".join(
+                filename, resource_name, f"{data.shape[0]} rows, {data.shape[1]} cols"
+            )
         )
         if filename.startswith("tmcs_preview"):
             data["geometry"] = data.apply(
@@ -254,7 +254,11 @@ def transform_data_files(**kwargs):
                 data["count_date"].dt.year >= (datetime.now().year - 1)
             ]  # TODO: filter at source and remove
             logging.info(
-                f"{filename} | {resource_name} | FILTERED: {data.shape[0]} rows, {data.shape[1]} columns"
+                " | ".join(
+                    filename,
+                    resource_name,
+                    f"FILTERED: {data.shape[0]} rows, {data.shape[1]} cols",
+                )
             )
             data.to_json(fpath, orient="records", date_format="iso")
 

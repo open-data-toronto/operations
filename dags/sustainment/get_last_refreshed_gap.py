@@ -5,12 +5,10 @@ from pathlib import Path
 from airflow import DAG
 import logging
 import ckanapi
-import sys
 import os
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+from utils import airflow_utils
+from utils import ckan_utils
 
 job_settings = {
     "description": "Gets datasets behind expected refresh date",
@@ -42,9 +40,7 @@ def send_success_msg(**kwargs):
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=job_name,
-        message_type="error",
-        msg="Job not finished",
+        name=job_name, message_type="error", msg="Job not finished",
     )
 
 
@@ -101,10 +97,7 @@ def build_notification_message(**kwargs):
 
 
 default_args = airflow_utils.get_default_args(
-    {
-        "on_failure_callback": send_failure_msg,
-        "start_date": job_settings["start_date"],
-    }
+    {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"]}
 )
 
 with DAG(

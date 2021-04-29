@@ -13,11 +13,9 @@ from airflow import DAG
 import tempfile
 import requests
 import os
-import sys
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+from utils import airflow_utils
+from utils import ckan_utils
 
 job_settings = {
     "description": "Get rain gauge data from the last time it was loaded to now",
@@ -38,17 +36,13 @@ APIKEY = Variable.get("flowworks_apikey")
 def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
     airflow_utils.message_slack(
-        name=JOB_NAME,
-        message_type="success",
-        msg=msg,
+        name=JOB_NAME, message_type="success", msg=msg,
     )
 
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=JOB_NAME,
-        message_type="error",
-        msg="Job not finished",
+        name=JOB_NAME, message_type="error", msg="Job not finished",
     )
 
 
@@ -217,8 +211,7 @@ def upload_yearly_resources(**kwargs):
             else:
                 logging.info("resource for the year exists")
                 CKAN.action.resource_patch(
-                    id=resource_id,
-                    upload=open(path, "rb"),
+                    id=resource_id, upload=open(path, "rb"),
                 )
                 logging.info(f"updated resource: {r['name']}")
 
@@ -246,10 +239,7 @@ def return_branch(**kwargs):
 
 
 default_args = airflow_utils.get_default_args(
-    {
-        "on_failure_callback": send_failure_msg,
-        "start_date": job_settings["start_date"],
-    }
+    {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"]}
 )
 
 with DAG(
@@ -291,8 +281,7 @@ with DAG(
     )
 
     to_timestamp = PythonOperator(
-        task_id="get_to_timestamp",
-        python_callable=get_to_timestamp,
+        task_id="get_to_timestamp", python_callable=get_to_timestamp,
     )
 
     rain_gauge_sites = PythonOperator(
@@ -308,9 +297,7 @@ with DAG(
     )
 
     branching = BranchPythonOperator(
-        task_id="branching",
-        provide_context=True,
-        python_callable=return_branch,
+        task_id="branching", provide_context=True, python_callable=return_branch,
     )
 
     update_data = PythonOperator(
@@ -326,9 +313,7 @@ with DAG(
     )
 
     msg = PythonOperator(
-        task_id="build_message",
-        python_callable=build_message,
-        provide_context=True,
+        task_id="build_message", python_callable=build_message, provide_context=True,
     )
 
     send_notification = PythonOperator(

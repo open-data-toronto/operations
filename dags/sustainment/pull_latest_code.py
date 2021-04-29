@@ -19,7 +19,7 @@ job_file = Path(os.path.abspath(__file__))
 job_name = job_file.name[:-3]
 
 default_args = airflow_utils.get_default_args(
-    {"retries": 0, "start_date": job_settings["start_date"],}
+    {"retries": 0, "start_date": job_settings["start_date"]}
 )
 
 with DAG(

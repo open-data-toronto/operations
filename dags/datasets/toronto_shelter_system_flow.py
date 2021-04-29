@@ -12,15 +12,13 @@ from airflow import DAG
 import requests
 import json
 import os
-import sys
 from dateutil import parser
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+from utils import airflow_utils
+from utils import ckan_utils
 
 job_settings = {
-    "description": "Take data from http://opendata.toronto.ca/shelter.support.housing.administration/toronto-shelter-system-flow/toronto_shelter_system_flow.csv and put into datastore",
+    "description": "Take data from http://opendata.toronto.ca/shelter.support.housing.administration/toronto-shelter-system-flow/toronto_shelter_system_flow.csv and put into datastore",  # noqa: E501
     "schedule": "0 20 * * *",
     "start_date": datetime(2020, 11, 24, 13, 35, 0),
 }

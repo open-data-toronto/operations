@@ -11,7 +11,6 @@ import requests
 import ckanapi
 import zipfile
 import shutil
-import sys
 import os
 
 from utils import airflow_utils

@@ -12,11 +12,9 @@ from airflow import DAG
 import requests
 import json
 import os
-import sys
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+from utils import airflow_utils
+from utils import ckan_utils
 
 job_settings = {
     "description": "Take COVID19 data from QA (filestore) and put in PROD (datastore)",
@@ -42,17 +40,13 @@ def send_success_msg(**kwargs):
     msg = ti.xcom_pull(task_ids=msg_task_id)
 
     airflow_utils.message_slack(
-        name=JOB_NAME,
-        message_type="success",
-        msg=msg,
+        name=JOB_NAME, message_type="success", msg=msg,
     )
 
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=JOB_NAME,
-        message_type="error",
-        msg="Job not finished",
+        name=JOB_NAME, message_type="error", msg="Job not finished",
     )
 
 
@@ -234,9 +228,7 @@ def update_resource_last_modified(**kwargs):
     resource = package["resources"][0]
 
     res = ckan_utils.update_resource_last_modified(
-        ckan=TARGET_CKAN,
-        resource_id=resource["id"],
-        new_last_modified=datetime.now(),
+        ckan=TARGET_CKAN, resource_id=resource["id"], new_last_modified=datetime.now(),
     )
 
     return res
@@ -272,14 +264,11 @@ with DAG(
     )
 
     source_data = PythonOperator(
-        task_id="get_new_data",
-        python_callable=get_new_data,
-        provide_context=True,
+        task_id="get_new_data", python_callable=get_new_data, provide_context=True,
     )
 
     target_package = PythonOperator(
-        task_id="get_target_package",
-        python_callable=get_target_package,
+        task_id="get_target_package", python_callable=get_target_package,
     )
 
     old_data = PythonOperator(
@@ -289,9 +278,7 @@ with DAG(
     )
 
     prepare_data = PythonOperator(
-        task_id="prep_new_data",
-        python_callable=prep_new_data,
-        provide_context=True,
+        task_id="prep_new_data", python_callable=prep_new_data, provide_context=True,
     )
 
     new_data_unique_id = PythonOperator(
@@ -319,9 +306,7 @@ with DAG(
     )
 
     loaded_msg = PythonOperator(
-        task_id="build_loaded_msg",
-        python_callable=build_message,
-        provide_context=True,
+        task_id="build_loaded_msg", python_callable=build_message, provide_context=True,
     )
 
     nothing_to_load_msg = PythonOperator(
@@ -360,14 +345,10 @@ with DAG(
     )
 
     delete_source = PythonOperator(
-        task_id="delete_source_resource",
-        python_callable=delete_source_resource,
+        task_id="delete_source_resource", python_callable=delete_source_resource,
     )
 
-    begin_cleanup = DummyOperator(
-        task_id="begin_cleanup",
-        trigger_rule="none_failed",
-    )
+    begin_cleanup = DummyOperator(task_id="begin_cleanup", trigger_rule="none_failed",)
 
     update_timestamp = PythonOperator(
         task_id="update_resource_last_modified",

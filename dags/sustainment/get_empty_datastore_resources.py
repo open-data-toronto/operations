@@ -7,12 +7,10 @@ from airflow import DAG
 import logging
 import ckanapi
 import json
-import sys
 import os
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+from utils import airflow_utils
+from utils import ckan_utils
 
 job_settings = {
     "description": "Identifies empty datastore resources and send to Slack",
@@ -36,9 +34,7 @@ def send_success_msg(**kwargs):
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=job_name,
-        message_type="error",
-        msg="Job not finished",
+        name=job_name, message_type="error", msg="Job not finished",
     )
 
 
@@ -128,7 +124,6 @@ def are_there_empties(**kwargs):
 
 def were_there_empties_prior(**kwargs):
     ti = kwargs.pop("ti")
-    empties = ti.xcom_pull(task_ids="filter_empty_resources")
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
 
     fpath = tmp_dir / empties_file_name
@@ -153,10 +148,7 @@ def save_empties_file(**kwargs):
 
 
 default_args = airflow_utils.get_default_args(
-    {
-        "on_failure_callback": send_failure_msg,
-        "start_date": job_settings["start_date"],
-    }
+    {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"]}
 )
 
 
@@ -199,14 +191,10 @@ with DAG(
         provide_context=True,
     )
 
-    no_notification = DummyOperator(
-        task_id="no_notification",
-    )
+    no_notification = DummyOperator(task_id="no_notification",)
 
     message = PythonOperator(
-        python_callable=build_message,
-        task_id="build_message",
-        provide_context=True,
+        python_callable=build_message, task_id="build_message", provide_context=True,
     )
 
     prior_branch = BranchPythonOperator(
@@ -228,21 +216,13 @@ with DAG(
         provide_context=True,
     )
 
-    there_are_empties = DummyOperator(
-        task_id="there_are_empties",
-    )
+    there_are_empties = DummyOperator(task_id="there_are_empties",)
 
-    there_are_no_empties = DummyOperator(
-        task_id="there_are_no_empties",
-    )
+    there_are_no_empties = DummyOperator(task_id="there_are_no_empties",)
 
-    there_were_empties_prior = DummyOperator(
-        task_id="there_were_empties_prior",
-    )
+    there_were_empties_prior = DummyOperator(task_id="there_were_empties_prior",)
 
-    there_were_no_empties_prior = DummyOperator(
-        task_id="there_were_no_empties_prior",
-    )
+    there_were_no_empties_prior = DummyOperator(task_id="there_were_no_empties_prior",)
 
     delete_tmp_dir = PythonOperator(
         task_id="delete_tmp_dir",

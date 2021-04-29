@@ -8,12 +8,10 @@ import requests
 import logging
 import ckanapi
 import json
-import sys
 import os
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+from utils import airflow_utils
+from utils import ckan_utils
 import dags.sustainment.update_data_quality_scores.dqs_logic as dqs_logic  # noqa: E402
 
 
@@ -70,9 +68,7 @@ def send_success_msg(**kwargs):
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=JOB_NAME,
-        message_type="error",
-        msg="Job not finished",
+        name=JOB_NAME, message_type="error", msg="Job not finished",
     )
 
 
@@ -145,10 +141,7 @@ def upload_models_to_resource(**kwargs):
         data={"id": model_resource["resource"]["id"]},
         headers={"Authorization": CKAN.apikey},
         files={
-            "upload": (
-                f"{RESOURCE_MODEL}.json",
-                json.dumps(model_resource["models"]),
-            )
+            "upload": (f"{RESOURCE_MODEL}.json", json.dumps(model_resource["models"]),)
         },
     )
 
@@ -231,8 +224,7 @@ with DAG(
     )
 
     dqs_package_resources = PythonOperator(
-        task_id="get_dqs_dataset_resources",
-        python_callable=get_dqs_dataset_resources,
+        task_id="get_dqs_dataset_resources", python_callable=get_dqs_dataset_resources,
     )
 
     framework_resource = PythonOperator(
@@ -290,9 +282,7 @@ with DAG(
     )
 
     add_scores = PythonOperator(
-        task_id="insert_scores",
-        python_callable=insert_scores,
-        provide_context=True,
+        task_id="insert_scores", python_callable=insert_scores, provide_context=True,
     )
 
     delete_final_scores_tmp_file = PythonOperator(
