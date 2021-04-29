@@ -79,8 +79,8 @@ def get_file(**kwargs):
     return {"path": filepath, "file_last_modified": file_last_modified}
 
 
-def get_package():
-    return CKAN.action.package_show(id=PACKAGE_ID)
+def get_package(package_id):
+    return CKAN.action.package_show(id=package_id)
 
 
 def is_resource_new(**kwargs):
@@ -288,6 +288,7 @@ def update_resource_last_modified(**kwargs):
 
 
 def is_file_new(**kwargs):
+    logging.info(kwargs)
     ti = kwargs.pop("ti")
     resource = ti.xcom_pull(task_ids="get_resource")
     last_modified_string = ti.xcom_pull(task_ids="get_file")["file_last_modified"]
@@ -381,7 +382,7 @@ with DAG(
     package = PythonOperator(
         task_id="get_package",
         python_callable=CKAN.action.package_show,
-        op_kwargs={"id": PACKAGE_ID},
+        op_kwargs={"package_id": PACKAGE_ID},
     )
 
     previous_data = PythonOperator(
