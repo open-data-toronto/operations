@@ -82,6 +82,8 @@ with DAG(
         logging.info(f"Resource ID: {resource_id}")
 
         record_count = CKAN.action.datastore_search(id=resource_id, limit=0)["total"]
+        if record_count == 0:
+            return None
 
         datastore_response = CKAN.action.datastore_search(
             id=resource_id, limit=record_count
@@ -227,28 +229,14 @@ with DAG(
         assert count == 0, f"Resource not empty after cleanup: {count}"
 
     @dag.task()
-    def create_resource(package, data_dict):
-        resource = CKAN.action.resource_create(
-            package_id=package["id"],
-            name=RESOURCE_NAME,
-            format="geojson",
-            is_preview=True,
-            url_type="datastore",
-            extract_job=f"Airflow: {JOB_NAME}",
-        )
-
-        CKAN.action.datastore_create(id=resource["id"], fields=data_dict)
-
-    @dag.task()
-    def insert_new_records(
-        resource, transformed_data_fp, backup_data,
-    ):
+    def insert_new_records(resource, transformed_data_fp, backup_data, fields):
         resource_id = resource["id"]
         data = pd.read_parquet(Path(transformed_data_fp))
         records = data.to_dict(orient="records")
 
-        with open(Path(backup_data["fields"]), "r") as f:
-            fields = json.load(f)
+        if backup_data is not None:
+            with open(Path(backup_data["fields"]), "r") as f:
+                fields = json.load(f)
 
         ckan_utils.insert_datastore_records(
             ckan=CKAN,
@@ -305,8 +293,6 @@ with DAG(
         python_callable=is_resource_new,
         op_args=(package),
     )
-    resource_is_new = DummyOperator(task_id="resource_is_new")
-    resource_is_not_new = DummyOperator(task_id="resource_is_not_new")
 
     transformed_data = transform_data(tmp_dir, source_file)
 
@@ -316,9 +302,19 @@ with DAG(
 
     data_dict = build_data_dict(transformed_data)
 
-    new_resource = create_resource(package, data_dict)
-
-    new_resource >> backup_data
+    create_new_resource = PythonOperator(
+        task_id="create_new_resource",
+        python_callable=CKAN.action.resource_create,
+        op_kwargs={
+            "package_id": package["id"],
+            "name": RESOURCE_NAME,
+            "format": "geojson",
+            "is_preview": True,
+            "url_type": "datastore",
+            "extract_job": f"Airflow: {JOB_NAME}",
+        },
+        trigger_rule="none_failed",
+    )
 
     package_refresh = PythonOperator(
         task_id="get_package_again",
@@ -327,9 +323,13 @@ with DAG(
         trigger_rule="none_failed",
     )
 
-    new_resource_branch >> resource_is_new >> new_resource >> data_dict
-    new_resource_branch >> resource_is_not_new >> backup_data
-    [data_dict, backup_data] >> package_refresh
+    new_resource_branch >> DummyOperator(
+        task_id="resource_is_new"
+    ) >> data_dict >> create_new_resource >> package_refresh
+
+    new_resource_branch >> DummyOperator(
+        task_id="resource_is_not_new"
+    ) >> backup_data >> package_refresh
 
     resource = get_resource(package_refresh)
 
@@ -344,8 +344,6 @@ with DAG(
         python_callable=is_data_new,
         op_args=(checksum, backups_dir),
     )
-    data_is_new = DummyOperator(task_id="data_is_new")
-    data_is_not_new = DummyOperator(task_id="data_is_not_new")
 
     delete_tmp_data = PythonOperator(
         task_id="delete_tmp_data",
@@ -361,10 +359,14 @@ with DAG(
     file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
     file_new_branch >> DummyOperator(task_id="file_is_not_new") >> delete_tmp_data
 
-    records_inserted = insert_new_records(resource, transformed_data, backup_data)
+    records_inserted = insert_new_records(
+        resource, transformed_data, backup_data, data_dict
+    )
 
-    new_data_branch >> data_is_new >> records_deleted >> records_inserted
-    new_data_branch >> data_is_not_new >> updated_resource
+    new_data_branch >> DummyOperator(
+        task_id="data_is_new"
+    ) >> records_deleted >> records_inserted
+    new_data_branch >> DummyOperator(task_id="data_is_not_new") >> updated_resource
     records_inserted >> updated_resource
 
     msg = build_message(transformed_data, records_inserted, updated_resource)
