@@ -67,7 +67,7 @@ with DAG(
         data = pd.DataFrame(response.json())
         filepath = Path(tmp_dir) / "new_data_raw.parquet"
         print(f"Filepath {filepath}")
-        print(f"Read {data.shape[0]} records")
+        print(f"Read {data.shape[0]} records. Data types {data.dtypes}")
         data.to_parquet(filepath)
 
         file_last_modified = response.headers["last-modified"]
