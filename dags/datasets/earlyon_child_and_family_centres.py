@@ -63,7 +63,7 @@ with DAG(
     @dag.task()
     def get_data(tmp_dir):
         response = requests.get(SRC_FILE)
-        print(f"Response {response.status}")
+        print(f"Response {response.status_code}")
         data = pd.DataFrame(response.json())
         filepath = Path(tmp_dir) / "new_data_raw.parquet"
         print(f"Filepath {filepath}")
