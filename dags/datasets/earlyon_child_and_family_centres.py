@@ -268,6 +268,10 @@ with DAG(
 
         return f"New file, no new data. New last modified timestamp: {last_modified}"
 
+    @dag.task()
+    def get_package(trigger_rule="none_failed"):
+        return CKAN.action.package_show(id=PACKAGE_ID)
+
     tmp_dir = PythonOperator(
         task_id="tmp_dir",
         python_callable=airflow_utils.create_dir_with_dag_name,
@@ -282,11 +286,7 @@ with DAG(
 
     source_file = get_data(tmp_dir)
 
-    package = PythonOperator(
-        task_id="get_package",
-        python_callable=CKAN.action.package_show,
-        op_kwargs={"id": PACKAGE_ID},
-    )
+    package = get_package()
 
     new_resource_branch = BranchPythonOperator(
         task_id="new_resource_branch",
@@ -316,12 +316,7 @@ with DAG(
         trigger_rule="none_failed",
     )
 
-    package_refresh = PythonOperator(
-        task_id="get_package_again",
-        python_callable=CKAN.action.package_show,
-        op_kwargs={"id": PACKAGE_ID},
-        trigger_rule="none_failed",
-    )
+    package_refresh = get_package()
 
     new_resource_branch >> DummyOperator(
         task_id="resource_is_new"
