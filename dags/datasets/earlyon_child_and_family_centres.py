@@ -136,7 +136,7 @@ with DAG(
 
         return "resource_is_not_new"
 
-    @dag.task()
+    @dag.task(trigger_rule="none_failed")
     def build_data_dict(data_fp):
         data = pd.read_parquet(Path(data_fp))
 
