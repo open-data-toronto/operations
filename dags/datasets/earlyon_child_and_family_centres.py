@@ -273,10 +273,14 @@ with DAG(
         return f"New file, no new data. New last modified timestamp: {last_modified}"
 
     @dag.task()
-    def get_package(trigger_rule="none_failed"):
+    def get_package():
         return CKAN.action.package_show(id=PACKAGE_ID)
 
-    @dag.task(trigger_rule="none_failed_or_skipped")
+    @dag.task()
+    def refresh_package():
+        return CKAN.action.package_show(id=PACKAGE_ID)
+
+    @dag.task(trigger_rule="none_failed")
     def create_resource(package):
         return CKAN.action.resource_create(
             package_id=package["id"],
@@ -322,7 +326,7 @@ with DAG(
 
     create_new_resource = create_resource(package)
 
-    package_refresh = get_package()
+    package_refresh = refresh_package()
 
     new_resource_branch >> DummyOperator(
         task_id="resource_is_new"
