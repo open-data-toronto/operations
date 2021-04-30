@@ -12,7 +12,7 @@ import os
 
 from utils import airflow_utils
 from utils import ckan_utils
-import dags.sustainment.update_data_quality_scores.dqs_logic as dqs_logic  # noqa: E402
+from dags.sustainment.update_data_quality_scores import dqs_logic  # noqa: E402
 
 
 job_settings = {
