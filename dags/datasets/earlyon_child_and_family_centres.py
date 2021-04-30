@@ -126,9 +126,9 @@ with DAG(
         is_new = RESOURCE_NAME not in [r["name"] for r in package["resources"]]
 
         if is_new:
-            return "create_resource"
+            return "resource_is_new"
 
-        return "backup_data"
+        return "resource_is_not_new"
 
     @dag.task()
     def build_data_dict(data_fp):
@@ -190,9 +190,9 @@ with DAG(
         )
 
         if difference_in_seconds == 0:
-            return "new_data_branch"
+            return "file_is_new"
 
-        return "clean_tmp_dir"
+        return "file_is_not_new"
 
     @dag.task()
     def is_data_new(checksum, backups_dir):
@@ -204,10 +204,10 @@ with DAG(
 
             if os.path.isfile(backups / f) and checksum in f:
                 logging.info(f"Data has already been loaded, ID: {checksum}")
-                return "update_timestamp"
+                return "data_is_not_new"
 
         logging.info(f"Data has not been loaded, new ID: {checksum}")
-        return "delete_previous_records"
+        return "data_is_new"
 
     @dag.task()
     def get_checksum(transformed_data_fp):
@@ -366,8 +366,9 @@ with DAG(
 
     records_inserted = insert_new_records(resource, transformed_data, backup_data)
 
-    new_data_branch >> data_is_new >> records_deleted >> records_inserted >> updated_resource
+    new_data_branch >> data_is_new >> records_deleted >> records_inserted
     new_data_branch >> data_is_not_new >> updated_resource
+    records_inserted >> updated_resource
 
     msg = build_message(transformed_data, records_inserted, updated_resource)
 
