@@ -370,7 +370,7 @@ with DAG(
     msg = build_message(transformed_data, records_inserted, updated_resource)
 
     send_notification = PythonOperator(
-        task_id="backups_dir",
+        task_id="send_notification",
         python_callable=airflow_utils.message_slack,
         op_args=(JOB_NAME, msg, "success", ACTIVE_ENV == "prod", ACTIVE_ENV,),
     )
