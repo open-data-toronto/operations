@@ -215,6 +215,7 @@ with DAG(
 
             if os.path.isfile(backups / f) and checksum in f:
                 logging.info(f"Data has already been loaded, ID: {checksum}")
+                return "data_is_new"
                 return "data_is_not_new"
 
         logging.info(f"Data has not been loaded, new ID: {checksum}")
@@ -266,7 +267,7 @@ with DAG(
 
         return len(records)
 
-    @dag.task()
+    @dag.task(trigger_rule="none_failed")
     def update_resource_last_modified(resource, source_file):
         return ckan_utils.update_resource_last_modified(
             ckan=CKAN,
@@ -274,7 +275,7 @@ with DAG(
             new_last_modified=parser.parse(source_file["file_last_modified"]),
         )
 
-    @dag.task()
+    @dag.task(trigger_rule="none_failed")
     def build_message(transformed_data_fp, record_count, resource):
         if record_count > 0:
             new_data = pd.read_parquet(Path(transformed_data_fp))
