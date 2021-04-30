@@ -428,7 +428,6 @@ with DAG(
     no_new_data_notification = PythonOperator(
         task_id="no_new_data_notification",
         python_callable=airflow_utils.message_slack,
-        trigger_rule="",
         op_args=(
             JOB_NAME,
             "Updated resource last_modified time only: new file but no new data",
