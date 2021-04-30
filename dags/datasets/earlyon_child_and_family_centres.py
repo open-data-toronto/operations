@@ -270,7 +270,7 @@ with DAG(
 
         return fields
 
-    @dag.task(trigger_rule="none_failed")
+    @dag.task()
     def update_resource_last_modified(resource, source_file):
         return ckan_utils.update_resource_last_modified(
             ckan=CKAN,
