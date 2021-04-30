@@ -3,6 +3,7 @@ from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.operators.dummy import DummyOperator
 from datetime import datetime
 from airflow.models import Variable
+from airflow.utils.dates import days_ago
 import pandas as pd
 import ckanapi
 import logging
@@ -20,7 +21,7 @@ from utils import ckan_utils
 job_settings = {
     "description": "Take earlyon.json from opendata.toronto.ca and put into datastore",
     "schedule": "0 17 * * *",
-    "start_date": datetime(2020, 11, 24, 13, 35, 0),
+    "start_date": days_ago(1),
 }
 
 JOB_FILE = Path(os.path.abspath(__file__))
