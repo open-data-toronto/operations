@@ -137,8 +137,8 @@ with DAG(
         return "resource_is_not_new"
 
     @dag.task(trigger_rule="none_failed")
-    def build_data_dict(data_fp):
-        data = pd.read_parquet(Path(data_fp))
+    def build_data_dict(**kwargs):
+        data = pd.read_parquet(Path(kwargs["path"]))
 
         fields = []
         for field, dtype in data.dtypes.iteritems():
@@ -318,7 +318,7 @@ with DAG(
 
     backup_data = backup_previous_data(package, backups_dir)
 
-    data_dict = build_data_dict(transformed_data)
+    data_dict = build_data_dict(path=transformed_data)
 
     create_new_resource = create_resource(package)
 
