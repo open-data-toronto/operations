@@ -35,10 +35,7 @@ SRC_FILE = "http://opendata.toronto.ca/childrens.services/licensed-child-care-ce
 RESOURCE_NAME = "Child care centres"
 
 
-def send_success_msg(**kwargs):
-    ti = kwargs.pop("ti")
-    msg = ti.xcom_pull(task_ids="build_message")
-
+def send_success_msg(msg):
     airflow_utils.message_slack(
         name=JOB_NAME,
         message_type="success",
@@ -369,14 +366,10 @@ with DAG(
         op_kwargs={"dag_id": JOB_NAME, "dir_variable_name": "backups_dir"},
     )
 
-    source_data = PythonOperator(
-        task_id="get_file", python_callable=get_file, provide_context=True,
-    )
+    source_data = PythonOperator(task_id="get_file", python_callable=get_file,)
 
     new_resource = PythonOperator(
-        task_id="create_new_resource",
-        python_callable=create_new_resource,
-        provide_context=True,
+        task_id="create_new_resource", python_callable=create_new_resource,
     )
 
     package = PythonOperator(
@@ -386,33 +379,27 @@ with DAG(
     )
 
     previous_data = PythonOperator(
-        task_id="backup_previous_data",
-        python_callable=backup_previous_data,
-        provide_context=True,
+        task_id="backup_previous_data", python_callable=backup_previous_data,
     )
 
     data_dict = PythonOperator(
-        task_id="build_data_dict",
-        python_callable=build_data_dict,
-        provide_context=True,
+        task_id="build_data_dict", python_callable=build_data_dict,
     )
 
     new_data_unique_id = PythonOperator(
-        task_id="get_new_data_unique_id",
-        python_callable=get_new_data_unique_id,
-        provide_context=True,
+        task_id="get_new_data_unique_id", python_callable=get_new_data_unique_id,
     )
 
     is_data_new_branch = BranchPythonOperator(
-        task_id="is_data_new", python_callable=is_data_new, provide_context=True,
+        task_id="is_data_new", python_callable=is_data_new,
     )
 
     is_resource_new_branch = BranchPythonOperator(
-        task_id="is_resource_new", python_callable=is_resource_new, provide_context=True
+        task_id="is_resource_new", python_callable=is_resource_new
     )
 
     is_file_new_branch = BranchPythonOperator(
-        task_id="is_file_new", python_callable=is_file_new, provide_context=True,
+        task_id="is_file_new", python_callable=is_file_new,
     )
 
     resource = PythonOperator(
@@ -422,23 +409,19 @@ with DAG(
     )
 
     delete_previous = PythonOperator(
-        task_id="delete_previous_records",
-        python_callable=delete_previous_records,
-        provide_context=True,
+        task_id="delete_previous_records", python_callable=delete_previous_records,
     )
 
     transform = PythonOperator(
-        task_id="transform_data", python_callable=transform_data, provide_context=True,
+        task_id="transform_data", python_callable=transform_data,
     )
 
     insert_new = PythonOperator(
-        task_id="insert_new_records",
-        python_callable=insert_new_records,
-        provide_context=True,
+        task_id="insert_new_records", python_callable=insert_new_records,
     )
 
     notification_msg = PythonOperator(
-        task_id="build_message", python_callable=build_message, provide_context=True,
+        task_id="build_message", python_callable=build_message,
     )
 
     resource_is_not_new = DummyOperator(task_id="resource_is_not_new",)
@@ -454,9 +437,7 @@ with DAG(
     data_is_not_new = DummyOperator(task_id="data_is_not_new",)
 
     send_notification = PythonOperator(
-        task_id="send_notification",
-        python_callable=send_success_msg,
-        provide_context=True,
+        task_id="send_notification", python_callable=send_success_msg,
     )
 
     delete_tmp_dir = PythonOperator(
@@ -469,7 +450,6 @@ with DAG(
     update_timestamp = PythonOperator(
         task_id="update_resource_last_modified",
         python_callable=update_resource_last_modified,
-        provide_context=True,
         trigger_rule="one_success",
     )
 
