@@ -1,5 +1,6 @@
 from airflow.decorators import dag, task
 from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.operators.dummy import DummyOperator
 from airflow.utils.edgemodifier import Label
 from datetime import datetime
 from airflow.models import Variable
@@ -241,13 +242,13 @@ def execute():
 
     @task
     def insert_new_records(
-        resource, transformed_data_fp, backup_info,
+        resource, transformed_data_fp, backup_data,
     ):
         resource_id = resource["id"]
         data = pd.read_parquet(Path(transformed_data_fp))
         records = data.to_dict(orient="records")
 
-        with open(Path(backup_info["fields"]), "r") as f:
+        with open(Path(backup_data["fields"]), "r") as f:
             fields = json.load(f)
 
         ckan_utils.insert_datastore_records(
@@ -311,13 +312,13 @@ def execute():
 
     checksum = get_checksum(transformed_data)
 
-    backup_info = backup_previous_data(package, backups_dir)
+    backup_data = backup_previous_data(package, backups_dir)
 
     data_dict = build_data_dict(transformed_data)
 
     new_resource = create_resource(package, data_dict)
 
-    new_resource >> backup_info
+    new_resource >> backup_data
 
     package_refresh = PythonOperator(
         task_id="get_package_again",
@@ -326,11 +327,13 @@ def execute():
         trigger_rule="none_failed",
     )
 
-    new_resource_branch >> Label("resource is new") >> create_resource >> data_dict
+    new_resource_branch >> DummyOperator(
+        id="resource_is_new"
+    ) >> create_resource >> data_dict
 
-    new_resource_branch >> Label("resource is not new") >> backup_info
+    new_resource_branch >> DummyOperator(id="resource_is_not_new") >> backup_data
 
-    [data_dict, backup_info] >> package_refresh
+    [data_dict, backup_data] >> package_refresh
 
     resource = get_resource(package_refresh)
 
@@ -357,17 +360,17 @@ def execute():
 
     updated_resource = update_resource_last_modified(resource, source_file)
 
-    file_new_branch >> Label("file is new") >> new_data_branch
+    file_new_branch >> DummyOperator(id="file_is_new") >> new_data_branch
 
-    file_new_branch >> Label("file is not new") >> delete_tmp_data
+    file_new_branch >> DummyOperator(id="file_is_not_new") >> delete_tmp_data
 
-    records_inserted = insert_new_records(resource, transformed_data, backup_info)
+    records_inserted = insert_new_records(resource, transformed_data, backup_data)
 
-    new_data_branch >> Label(
-        "data is new"
+    new_data_branch >> DummyOperator(
+        id="data_is_new"
     ) >> records_deleted >> records_inserted >> updated_resource
 
-    new_data_branch >> Label("data is not new") >> updated_resource
+    new_data_branch >> DummyOperator(id="data_is_not_new") >> updated_resource
 
     msg = build_message(transformed_data, records_inserted, updated_resource)
 
