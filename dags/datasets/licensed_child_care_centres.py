@@ -377,7 +377,7 @@ with DAG(
     )
 
     package = PythonOperator(
-        task_id="get_package", python_callable=get_package, op_kargs=(PACKAGE_ID),
+        task_id="get_package", python_callable=get_package, op_args=(PACKAGE_ID),
     )
 
     previous_data = PythonOperator(
