@@ -330,7 +330,8 @@ with DAG(
     new_resource_branch >> resource_is_new >> create_resource >> data_dict
     new_resource_branch >> resource_is_not_new >> backup_data
 
-    [data_dict, backup_data] >> package_refresh
+    data_dict >> package_refresh
+    backup_data >> package_refresh
 
     resource = get_resource(package_refresh)
 
