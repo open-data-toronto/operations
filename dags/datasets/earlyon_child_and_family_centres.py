@@ -313,12 +313,6 @@ with DAG(
             dag_id=JOB_NAME, dir_variable_name="backups_dir"
         )
 
-    def were_records_loaded(record_count):
-        if record_count is None:
-            return "no_new_data_notification"
-
-        return "new_records_notification"
-
     tmp_dir = create_tmp_dir()
     backups_dir = create_backups_dir()
 
@@ -402,18 +396,6 @@ with DAG(
 
     records_inserted = insert_new_records(resource, transformed_data, fields)
 
-    notification_branch = BranchPythonOperator(
-        task_id="notification_branch",
-        python_callable=is_data_new,
-        op_args=(records_inserted),
-    )
-
-    new_data_branch >> DummyOperator(
-        task_id="data_is_new"
-    ) >> records_deleted >> records_inserted >> notification_branch
-
-    new_data_branch >> DummyOperator(task_id="data_is_not_new")
-
     new_records_notification = PythonOperator(
         task_id="new_records_notification",
         python_callable=airflow_utils.message_slack,
@@ -438,10 +420,16 @@ with DAG(
         ),
     )
 
-    updated_resource >> notification_branch >> [
-        new_records_notification,
-        no_new_data_notification,
-    ]
+    new_data_branch >> DummyOperator(
+        task_id="data_is_new"
+    ) >> records_deleted >> records_inserted >> new_records_notification
+
+    new_data_branch >> DummyOperator(
+        task_id="data_is_not_new"
+    ) >> no_new_data_notification
+
+    updated_resource >> new_records_notification
+    updated_resource >> no_new_data_notification
 
     [
         no_new_data_notification,
