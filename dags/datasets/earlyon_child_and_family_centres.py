@@ -278,19 +278,9 @@ with DAG(
             new_last_modified=parser.parse(source_file["file_last_modified"]),
         )
 
-    @dag.task(trigger_rule="none_failed")
+    @dag.task()
     def build_message(record_count, resource):
-        if record_count is not None and record_count > 0:
-            return f"Refreshed: {record_count} records"
-        elif record_count is None:
-            last_modified = parser.parse(resource["last_modified"]).strftime(
-                "%Y-%m-%d %H:%M"
-            )
-            return (
-                f"New file, no new data. New last modified timestamp: {last_modified}"
-            )
-
-        raise f"Unexpected scenario. record_count: {record_count} | resource {resource}"
+        return f"Refreshed: {record_count} records"
 
     @dag.task()
     def get_package():
@@ -322,6 +312,12 @@ with DAG(
         return airflow_utils.create_dir_with_dag_name(
             dag_id=JOB_NAME, dir_variable_name="backups_dir"
         )
+
+    def were_records_loaded(record_count):
+        if record_count is None:
+            return "no_new_data_notification"
+
+        return "new_records_notification"
 
     tmp_dir = create_tmp_dir()
     backups_dir = create_backups_dir()
@@ -374,7 +370,7 @@ with DAG(
         task_id="delete_tmp_data",
         python_callable=airflow_utils.delete_tmp_data_dir,
         op_kwargs={"dag_id": JOB_NAME, "recursively": True},
-        trigger_rule="none_failed",
+        trigger_rule="one_success",
     )
 
     records_deleted = delete_previous_records(resource)
@@ -396,9 +392,10 @@ with DAG(
     )
 
     file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
+
     file_new_branch >> DummyOperator(
         task_id="file_is_not_new"
-    ) >> send_nothing_notification >> delete_tmp_data
+    ) >> send_nothing_notification
 
     fields = get_fields(backup_data, data_dict)
 
@@ -406,19 +403,46 @@ with DAG(
 
     new_data_branch >> DummyOperator(
         task_id="data_is_new"
-    ) >> records_deleted >> records_inserted >> update_timestamp
-    new_data_branch >> DummyOperator(
-        task_id="data_is_not_new"
-    ) >> update_timestamp >> updated_resource
+    ) >> records_deleted >> records_inserted >> updated_resource
 
-    update_timestamp >> updated_resource
+    new_data_branch >> DummyOperator(task_id="data_is_not_new") >> updated_resource
 
-    msg = build_message(records_inserted, updated_resource)
-
-    send_notification = PythonOperator(
-        task_id="send_notification",
-        python_callable=airflow_utils.message_slack,
-        op_args=(JOB_NAME, msg, "success", ACTIVE_ENV == "prod", ACTIVE_ENV,),
+    records_loaded_branch = BranchPythonOperator(
+        task_id="records_loaded_branch",
+        python_callable=is_data_new,
+        op_args=(records_inserted),
     )
 
-    send_notification >> delete_tmp_data
+    new_records_notification = PythonOperator(
+        task_id="new_records_notification",
+        python_callable=airflow_utils.message_slack,
+        op_args=(
+            JOB_NAME,
+            f"Refreshed: {records_inserted} records",
+            "success",
+            ACTIVE_ENV == "prod",
+            ACTIVE_ENV,
+        ),
+    )
+
+    no_new_data_notification = PythonOperator(
+        task_id="no_new_data_notification",
+        python_callable=airflow_utils.message_slack,
+        trigger_rule="",
+        op_args=(
+            JOB_NAME,
+            "Updated resource last_modified time only: new file but no new data",
+            "success",
+            ACTIVE_ENV == "prod",
+            ACTIVE_ENV,
+        ),
+    )
+
+    records_loaded_branch >> [new_records_notification, no_new_data_notification]
+
+    [
+        no_new_data_notification,
+        new_records_notification,
+        send_nothing_notification,
+    ] >> delete_tmp_data
+
