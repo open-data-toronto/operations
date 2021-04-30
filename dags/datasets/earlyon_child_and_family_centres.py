@@ -270,7 +270,7 @@ with DAG(
 
         return fields
 
-    @dag.task(trigger_rule="one_success")
+    @dag.task(trigger_rule="none_failed")
     def update_resource_last_modified(resource, source_file):
         return ckan_utils.update_resource_last_modified(
             ckan=CKAN,
@@ -389,7 +389,10 @@ with DAG(
         ),
     )
 
-    file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
+    file_new_branch >> DummyOperator(task_id="file_is_new") >> [
+        new_data_branch,
+        updated_resource,
+    ]
 
     file_new_branch >> DummyOperator(
         task_id="file_is_not_new"
@@ -399,17 +402,17 @@ with DAG(
 
     records_inserted = insert_new_records(resource, transformed_data, fields)
 
-    new_data_branch >> DummyOperator(
-        task_id="data_is_new"
-    ) >> records_deleted >> records_inserted >> updated_resource
-
-    new_data_branch >> DummyOperator(task_id="data_is_not_new") >> updated_resource
-
-    records_loaded_branch = BranchPythonOperator(
-        task_id="records_loaded_branch",
+    notification_branch = BranchPythonOperator(
+        task_id="notification_branch",
         python_callable=is_data_new,
         op_args=(records_inserted),
     )
+
+    new_data_branch >> DummyOperator(
+        task_id="data_is_new"
+    ) >> records_deleted >> records_inserted >> notification_branch
+
+    new_data_branch >> DummyOperator(task_id="data_is_not_new")
 
     new_records_notification = PythonOperator(
         task_id="new_records_notification",
@@ -435,7 +438,7 @@ with DAG(
         ),
     )
 
-    updated_resource >> records_loaded_branch >> [
+    updated_resource >> notification_branch >> [
         new_records_notification,
         no_new_data_notification,
     ]
@@ -445,4 +448,3 @@ with DAG(
         new_records_notification,
         send_nothing_notification,
     ] >> delete_tmp_data
-
