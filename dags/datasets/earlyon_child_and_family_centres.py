@@ -178,7 +178,6 @@ with DAG(
     def get_resource(package):
         return [r for r in package["resources"] if r["name"] == RESOURCE_NAME][0]
 
-    @dag.task()
     def is_file_new(resource, data_file_info):
         last_modified_string = data_file_info["file_last_modified"]
 
