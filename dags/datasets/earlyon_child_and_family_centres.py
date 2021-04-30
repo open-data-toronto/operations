@@ -203,7 +203,6 @@ with DAG(
 
         return "file_is_new"
 
-    @dag.task()
     def is_data_new(checksum, backups_dir):
         logging.info(f"checksum: {checksum}")
         logging.info(f"backups_dir: {backups_dir}")
