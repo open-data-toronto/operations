@@ -234,6 +234,8 @@ with DAG(
 
     @dag.task()
     def delete_previous_records(resource):
+        logging.info(resource)
+
         resource_id = resource["id"]
         CKAN.action.datastore_delete(id=resource_id, filters={})
         count = CKAN.action.datastore_search(id=resource_id, limit=0)["total"]
