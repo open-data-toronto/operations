@@ -136,7 +136,7 @@ with DAG(
 
         return "resource_is_not_new"
 
-    @dag.task(trigger_rule="none_failed")
+    @dag.task(trigger_rule="none_failed_or_skipped")
     def build_data_dict(data_fp):
         data = pd.read_parquet(Path(data_fp))
 
@@ -276,7 +276,7 @@ with DAG(
     def get_package(trigger_rule="none_failed"):
         return CKAN.action.package_show(id=PACKAGE_ID)
 
-    @dag.task(trigger_rule="none_failed")
+    @dag.task(trigger_rule="none_failed_or_skipped")
     def create_resource(package):
         return CKAN.action.resource_create(
             package_id=package["id"],
