@@ -284,12 +284,13 @@ with DAG(
             new_data = pd.read_parquet(Path(transformed_data_fp))
             return f"Refreshed: {new_data.shape[0]} records"
 
-        last_modified = parser.parse(resource["last_modified"]).strftime(
-            "%Y-%m-%d %H:%M"
-        )
-
         elif record_count is None:
-            return f"New file, no new data. New last modified timestamp: {last_modified}"
+            last_modified = parser.parse(resource["last_modified"]).strftime(
+                "%Y-%m-%d %H:%M"
+            )
+            return (
+                f"New file, no new data. New last modified timestamp: {last_modified}"
+            )
 
         raise f"Unexpected scenario. record_count: {record_count} | transformed_data_fp: {transformed_data_fp} | resource {resource}"
 
