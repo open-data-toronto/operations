@@ -320,7 +320,7 @@ with DAG(
 
     data_dict = build_data_dict(transformed_data)
 
-    create_new_resource = create_resource()
+    create_new_resource = create_resource(package)
 
     package_refresh = get_package()
 
