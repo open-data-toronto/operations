@@ -242,7 +242,7 @@ with DAG(
 
         assert count == 0, f"Resource not empty after cleanup: {count}"
 
-    @dag.task()
+    @dag.task(trigger_rule="none_failed")
     def insert_new_records(resource, transformed_data_fp, backup_data, fields):
         resource_id = resource["id"]
         data = pd.read_parquet(Path(transformed_data_fp))
