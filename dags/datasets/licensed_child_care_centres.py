@@ -337,8 +337,8 @@ def create_new_resource(**kwargs):
     )
 
 
-def get_package(id):
-    return CKAN.action.package_show(id=PACKAGE_ID)
+def get_package(**kwargs):
+    return CKAN.action.package_show(id=kwargs["id"])
 
 
 default_args = airflow_utils.get_default_args(
@@ -377,7 +377,9 @@ with DAG(
     )
 
     package = PythonOperator(
-        task_id="get_package", python_callable=get_package, op_args=(PACKAGE_ID),
+        task_id="get_package",
+        python_callable=get_package,
+        op_kwargs={"id": PACKAGE_ID},
     )
 
     previous_data = PythonOperator(
