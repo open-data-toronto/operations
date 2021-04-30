@@ -215,7 +215,6 @@ with DAG(
 
             if os.path.isfile(backups / f) and checksum in f:
                 logging.info(f"Data has already been loaded, ID: {checksum}")
-                return "data_is_new"
                 return "data_is_not_new"
 
         logging.info(f"Data has not been loaded, new ID: {checksum}")
