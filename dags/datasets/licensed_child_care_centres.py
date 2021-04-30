@@ -337,6 +337,10 @@ def create_new_resource(**kwargs):
     )
 
 
+def get_package(id):
+    return CKAN.action.package_show(id=PACKAGE_ID)
+
+
 default_args = airflow_utils.get_default_args(
     {
         "on_failure_callback": send_failure_msg,
@@ -373,9 +377,7 @@ with DAG(
     )
 
     package = PythonOperator(
-        task_id="get_package",
-        python_callable=CKAN.action.package_show,
-        op_kwargs={"id": PACKAGE_ID},
+        task_id="get_package", python_callable=get_package, op_kargs=(PACKAGE_ID),
     )
 
     previous_data = PythonOperator(
