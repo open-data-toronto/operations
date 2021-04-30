@@ -270,7 +270,7 @@ with DAG(
 
         return fields
 
-    @dag.task(trigger_rule="none_failed")
+    @dag.task()
     def update_resource_last_modified(resource, source_file):
         return ckan_utils.update_resource_last_modified(
             ckan=CKAN,
@@ -381,6 +381,8 @@ with DAG(
 
     records_deleted = delete_previous_records(resource)
 
+    update_timestamp = DummyOperator(task_id="update_timestamp",)
+
     updated_resource = update_resource_last_modified(resource, source_file)
 
     send_nothing_notification = PythonOperator(
@@ -388,7 +390,7 @@ with DAG(
         python_callable=airflow_utils.message_slack,
         op_args=(
             JOB_NAME,
-            "File is not new",
+            "Non new data file",
             "success",
             ACTIVE_ENV == "prod",
             ACTIVE_ENV,
@@ -406,9 +408,12 @@ with DAG(
 
     new_data_branch >> DummyOperator(
         task_id="data_is_new"
-    ) >> records_deleted >> records_inserted
-    new_data_branch >> DummyOperator(task_id="data_is_not_new") >> updated_resource
-    records_inserted >> updated_resource
+    ) >> records_deleted >> records_inserted >> update_timestamp
+    new_data_branch >> DummyOperator(
+        task_id="data_is_not_new"
+    ) >> update_timestamp >> updated_resource
+
+    update_timestamp >> updated_resource
 
     msg = build_message(transformed_data, records_inserted, updated_resource)
 
