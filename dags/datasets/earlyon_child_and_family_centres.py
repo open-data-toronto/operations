@@ -207,9 +207,7 @@ with DAG(
         logging.info(f"checksum: {checksum}")
         logging.info(f"backups_dir: {backups_dir}")
 
-        backups = Path(backups_dir) / JOB_NAME
-        logging.info(f"os.listdir: {os.listdir(backups)}")
-
+        backups = Path(backups_dir)
         for f in os.listdir(backups):
             if not os.path.isfile(backups / f):
                 continue
