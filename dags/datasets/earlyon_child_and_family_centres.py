@@ -63,10 +63,11 @@ with DAG(
     @dag.task()
     def get_data(tmp_dir):
         response = requests.get(SRC_FILE)
-        logging.info(f"Response {response.status}")
+        print(f"Response {response.status}")
         data = pd.DataFrame(response.json())
         filepath = Path(tmp_dir) / "new_data_raw.parquet"
-        logging.info(f"Read {data.shape[0]} records")
+        print(f"Filepath {filepath}")
+        print(f"Read {data.shape[0]} records")
         data.to_parquet(filepath)
 
         file_last_modified = response.headers["last-modified"]
