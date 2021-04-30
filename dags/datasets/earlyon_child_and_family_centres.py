@@ -136,7 +136,7 @@ with DAG(
 
         return "resource_is_not_new"
 
-    @dag.task(trigger_rule="none_failed_or_skipped")
+    @dag.task()
     def build_data_dict(data_fp):
         data = pd.read_parquet(Path(data_fp))
 
@@ -252,7 +252,7 @@ with DAG(
 
         return len(records)
 
-    @dag.task(trigger_rule="one_success")
+    @dag.task()
     def update_resource_last_modified(resource, source_file):
         return ckan_utils.update_resource_last_modified(
             ckan=CKAN,
