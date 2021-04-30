@@ -179,8 +179,9 @@ with DAG(
         return [r for r in package["resources"] if r["name"] == RESOURCE_NAME][0]
 
     def is_file_new(resource, data_file_info):
-        last_modified_string = data_file_info["file_last_modified"]
+        print(f"resource: {resource} | data_file_info: {data_file_info}")
 
+        last_modified_string = data_file_info["file_last_modified"]
         file_last_modified = parser.parse(last_modified_string)
         last_modified_attr = resource["last_modified"]
 
