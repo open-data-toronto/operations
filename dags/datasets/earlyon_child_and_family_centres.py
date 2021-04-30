@@ -205,6 +205,9 @@ with DAG(
 
     @dag.task()
     def is_data_new(checksum, backups_dir):
+        logging.info(f"checksum: {checksum}")
+        logging.info(f"backups_dir: {backups_dir}")
+
         backups = Path(backups_dir) / JOB_NAME
         for f in os.listdir(backups):
             if not os.path.isfile(backups / f):
@@ -219,13 +222,16 @@ with DAG(
         return "data_is_new"
 
     @dag.task()
-    def get_checksum(transformed_data_fp):
+    def make_checksum(transformed_data_fp):
         data = pd.read_parquet(Path(transformed_data_fp))
         data_hash = hashlib.md5()
         data_hash.update(
             data.sort_values(by="loc_id").round(10).to_csv(index=False).encode("utf-8")
         )
-        return data_hash.hexdigest()
+        checksum = data_hash.hexdigest()
+        logging.info(f"checksum: {checksum}")
+
+        return checksum
 
     @dag.task()
     def delete_previous_records(resource):
@@ -321,7 +327,7 @@ with DAG(
 
     transformed_data = transform_data(tmp_dir, source_file)
 
-    checksum = get_checksum(transformed_data)
+    checksum = make_checksum(transformed_data)
 
     backup_data = backup_previous_data(package, backups_dir)
 
