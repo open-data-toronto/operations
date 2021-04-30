@@ -280,7 +280,7 @@ with DAG(
 
     @dag.task(trigger_rule="none_failed")
     def build_message(transformed_data_fp, record_count, resource):
-        if record_count > 0:
+        if record_count is not None and record_count > 0:
             new_data = pd.read_parquet(Path(transformed_data_fp))
             return f"Refreshed: {new_data.shape[0]} records"
 
@@ -288,7 +288,10 @@ with DAG(
             "%Y-%m-%d %H:%M"
         )
 
-        return f"New file, no new data. New last modified timestamp: {last_modified}"
+        elif record_count is None:
+            return f"New file, no new data. New last modified timestamp: {last_modified}"
+
+        raise f"Unexpected scenario. record_count: {record_count} | transformed_data_fp: {transformed_data_fp} | resource {resource}"
 
     @dag.task()
     def get_package():
