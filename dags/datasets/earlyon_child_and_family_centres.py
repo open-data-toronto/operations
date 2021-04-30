@@ -346,7 +346,7 @@ with DAG(
 
     new_resource_branch >> DummyOperator(
         task_id="resource_is_new"
-    ) >> data_dict >> create_new_resource >> package_refresh
+    ) >> create_new_resource >> package_refresh
 
     new_resource_branch >> DummyOperator(
         task_id="resource_is_not_new"
