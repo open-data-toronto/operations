@@ -68,11 +68,11 @@ with DAG(
         data = pd.DataFrame(response.json())
         filepath = Path(tmp_dir) / "new_data_raw.parquet"
 
-        print(f"Read {data.shape[0]} records")
+        logging.info(f"Read {data.shape[0]} records")
         data.to_parquet(path=filepath, engine="fastparquet", compression=None)
 
         file_last_modified = response.headers["last-modified"]
-        print(f"Created file: {filepath}. Last modified: file_last_modified")
+        logging.info(f"Created file: {filepath}. Last modified: file_last_modified")
 
         return {"path": filepath, "file_last_modified": file_last_modified}
 
@@ -150,7 +150,7 @@ with DAG(
 
     @dag.task()
     def transform_data(tmp_dir, data_file_info):
-        print(f"tmp_dir: {tmp_dir} | data_file_info: {data_file_info}")
+        logging.info(f"tmp_dir: {tmp_dir} | data_file_info: {data_file_info}")
 
         tmp_dir = Path(tmp_dir)
         data_fp = Path(data_file_info["path"])
@@ -179,7 +179,7 @@ with DAG(
         return [r for r in package["resources"] if r["name"] == RESOURCE_NAME][0]
 
     def is_file_new(resource, data_file_info):
-        print(f"resource: {resource} | data_file_info: {data_file_info}")
+        logging.info(f"resource: {resource} | data_file_info: {data_file_info}")
 
         last_modified_string = data_file_info["file_last_modified"]
         file_last_modified = parser.parse(last_modified_string)
@@ -199,9 +199,9 @@ with DAG(
         )
 
         if difference_in_seconds == 0:
-            return "file_is_new"
+            return "file_is_not_new"
 
-        return "file_is_not_new"
+        return "file_is_new"
 
     @dag.task()
     def is_data_new(checksum, backups_dir):
