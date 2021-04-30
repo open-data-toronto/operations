@@ -1,7 +1,6 @@
-from airflow.decorators import dag, task
 from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.operators.dummy import DummyOperator
-from datetime import datetime
+from airflow import DAG
 from airflow.models import Variable
 from airflow.utils.dates import days_ago
 import pandas as pd
@@ -45,7 +44,7 @@ def send_failure_msg(self):
     )
 
 
-@dag(
+with DAG(
     JOB_NAME,
     default_args=airflow_utils.get_default_args(
         {
@@ -59,9 +58,9 @@ def send_failure_msg(self):
     schedule_interval=job_settings["schedule"],
     catchup=False,
     tags=["dataset"],
-)
-def execute():
-    @task()
+) as dag:
+
+    @dag.task()
     def get_data(tmp_dir):
         response = requests.get(SRC_FILE)
         data = pd.DataFrame(response.json())
@@ -73,7 +72,7 @@ def execute():
 
         return {"path": filepath, "file_last_modified": file_last_modified}
 
-    @task(trigger_rule="none_failed")
+    @dag.task(trigger_rule="none_failed")
     def backup_previous_data(package, backups_dir):
         backups = Path(backups_dir)
 
@@ -131,7 +130,7 @@ def execute():
 
         return "backup_data"
 
-    @task()
+    @dag.task()
     def build_data_dict(data_fp):
         data = pd.read_parquet(Path(data_fp))
 
@@ -142,7 +141,7 @@ def execute():
 
         return fields
 
-    @task()
+    @dag.task()
     def transform_data(tmp_dir, data_file_info):
         tmp_dir = Path(tmp_dir)
         data_fp = Path(data_file_info["path"])
@@ -166,11 +165,11 @@ def execute():
 
         return filepath
 
-    @task()
+    @dag.task()
     def get_resource(package):
         return [r for r in package["resources"] if r["name"] == RESOURCE_NAME][0]
 
-    @task()
+    @dag.task()
     def is_file_new(resource, data_file_info):
         last_modified_string = data_file_info["file_last_modified"]
 
@@ -187,7 +186,7 @@ def execute():
         )
 
         logging.info(
-            f"{difference_in_seconds} secs between file and resource last modified times"
+            f"{difference_in_seconds}secs between file and resource last modified times"
         )
 
         if difference_in_seconds == 0:
@@ -195,7 +194,7 @@ def execute():
 
         return "clean_tmp_dir"
 
-    @task()
+    @dag.task()
     def is_data_new(checksum, backups_dir):
         backups = Path(backups_dir) / JOB_NAME
         for f in os.listdir(backups):
@@ -210,7 +209,7 @@ def execute():
         logging.info(f"Data has not been loaded, new ID: {checksum}")
         return "delete_previous_records"
 
-    @task()
+    @dag.task()
     def get_checksum(transformed_data_fp):
         data = pd.read_parquet(Path(transformed_data_fp))
         data_hash = hashlib.md5()
@@ -219,7 +218,7 @@ def execute():
         )
         return data_hash.hexdigest()
 
-    @task()
+    @dag.task()
     def delete_previous_records(resource):
         resource_id = resource["id"]
         CKAN.action.datastore_delete(id=resource_id, filters={})
@@ -227,7 +226,7 @@ def execute():
 
         assert count == 0, f"Resource not empty after cleanup: {count}"
 
-    @task()
+    @dag.task()
     def create_resource(package, data_dict):
         resource = CKAN.action.resource_create(
             package_id=package["id"],
@@ -240,7 +239,7 @@ def execute():
 
         CKAN.action.datastore_create(id=resource["id"], fields=data_dict)
 
-    @task()
+    @dag.task()
     def insert_new_records(
         resource, transformed_data_fp, backup_data,
     ):
@@ -261,7 +260,7 @@ def execute():
 
         return len(records)
 
-    @task(trigger_rule="one_success")
+    @dag.task(trigger_rule="one_success")
     def update_resource_last_modified(resource, source_file):
         return ckan_utils.update_resource_last_modified(
             ckan=CKAN,
@@ -269,13 +268,12 @@ def execute():
             new_last_modified=parser.parse(source_file["file_last_modified"]),
         )
 
-    @task()
+    @dag.task()
     def build_message(transformed_data_fp, record_count, resource):
         if record_count > 0:
             new_data = pd.read_parquet(Path(transformed_data_fp))
             return f"Refreshed: {new_data.shape[0]} records"
 
-        resource = ti.xcom_pull(task_ids="update_resource_last_modified")
         last_modified = parser.parse(resource["last_modified"]).strftime(
             "%Y-%m-%d %H:%M"
         )
@@ -381,6 +379,3 @@ def execute():
     )
 
     send_notification >> delete_tmp_data
-
-
-run = execute()
