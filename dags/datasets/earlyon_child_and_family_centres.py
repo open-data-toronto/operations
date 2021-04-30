@@ -1,7 +1,6 @@
 from airflow.decorators import dag, task
 from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.operators.dummy import DummyOperator
-from airflow.utils.edgemodifier import Label
 from datetime import datetime
 from airflow.models import Variable
 import pandas as pd
