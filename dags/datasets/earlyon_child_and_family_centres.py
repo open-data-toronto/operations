@@ -326,10 +326,10 @@ with DAG(
     )
 
     new_resource_branch >> DummyOperator(
-        id="resource_is_new"
+        task_id="resource_is_new"
     ) >> create_resource >> data_dict
 
-    new_resource_branch >> DummyOperator(id="resource_is_not_new") >> backup_data
+    new_resource_branch >> DummyOperator(task_id="resource_is_not_new") >> backup_data
 
     [data_dict, backup_data] >> package_refresh
 
@@ -358,17 +358,17 @@ with DAG(
 
     updated_resource = update_resource_last_modified(resource, source_file)
 
-    file_new_branch >> DummyOperator(id="file_is_new") >> new_data_branch
+    file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
 
-    file_new_branch >> DummyOperator(id="file_is_not_new") >> delete_tmp_data
+    file_new_branch >> DummyOperator(task_id="file_is_not_new") >> delete_tmp_data
 
     records_inserted = insert_new_records(resource, transformed_data, backup_data)
 
     new_data_branch >> DummyOperator(
-        id="data_is_new"
+        task_id="data_is_new"
     ) >> records_deleted >> records_inserted >> updated_resource
 
-    new_data_branch >> DummyOperator(id="data_is_not_new") >> updated_resource
+    new_data_branch >> DummyOperator(task_id="data_is_not_new") >> updated_resource
 
     msg = build_message(transformed_data, records_inserted, updated_resource)
 
