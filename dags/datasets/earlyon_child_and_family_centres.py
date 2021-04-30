@@ -75,7 +75,7 @@ with DAG(
 
         return {"path": filepath, "file_last_modified": file_last_modified}
 
-    @dag.task(trigger_rule="none_failed")
+    @dag.task()
     def backup_previous_data(package, backups_dir):
         backups = Path(backups_dir)
 
@@ -277,7 +277,7 @@ with DAG(
         return CKAN.action.package_show(id=PACKAGE_ID)
 
     @dag.task()
-    def refresh_package():
+    def refresh_package(trigger_rule="none_failed"):
         return CKAN.action.package_show(id=PACKAGE_ID)
 
     @dag.task(trigger_rule="none_failed")
