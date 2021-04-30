@@ -237,8 +237,12 @@ with DAG(
         logging.info(resource)
 
         resource_id = resource["id"]
-        CKAN.action.datastore_delete(id=resource_id, filters={})
+
+        delete = CKAN.action.datastore_delete(id=resource_id, filters={})
+        logging.info(f"datastore_delete: {delete}")
+
         count = CKAN.action.datastore_search(id=resource_id, limit=0)["total"]
+        logging.info(f"datastore_search: {delete}")
 
         assert count == 0, f"Resource not empty after cleanup: {count}"
 
