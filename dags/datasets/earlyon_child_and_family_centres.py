@@ -270,7 +270,7 @@ with DAG(
 
         return fields
 
-    @dag.task()
+    @dag.task(trigger_rule="one_success")
     def update_resource_last_modified(resource, source_file):
         return ckan_utils.update_resource_last_modified(
             ckan=CKAN,
@@ -437,7 +437,10 @@ with DAG(
         ),
     )
 
-    records_loaded_branch >> [new_records_notification, no_new_data_notification]
+    updated_resource >> records_loaded_branch >> [
+        new_records_notification,
+        no_new_data_notification,
+    ]
 
     [
         no_new_data_notification,
