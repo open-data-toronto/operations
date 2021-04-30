@@ -61,7 +61,7 @@ def send_failure_msg(self):
     tags=["dataset"],
 )
 def execute():
-    @task
+    @task()
     def get_data(tmp_dir):
         response = requests.get(SRC_FILE)
         data = pd.DataFrame(response.json())
@@ -131,7 +131,7 @@ def execute():
 
         return "backup_data"
 
-    @task
+    @task()
     def build_data_dict(data_fp):
         data = pd.read_parquet(Path(data_fp))
 
@@ -142,7 +142,7 @@ def execute():
 
         return fields
 
-    @task
+    @task()
     def transform_data(tmp_dir, data_file_info):
         tmp_dir = Path(tmp_dir)
         data_fp = Path(data_file_info["path"])
@@ -166,11 +166,11 @@ def execute():
 
         return filepath
 
-    @task
+    @task()
     def get_resource(package):
         return [r for r in package["resources"] if r["name"] == RESOURCE_NAME][0]
 
-    @task
+    @task()
     def is_file_new(resource, data_file_info):
         last_modified_string = data_file_info["file_last_modified"]
 
@@ -195,7 +195,7 @@ def execute():
 
         return "clean_tmp_dir"
 
-    @task
+    @task()
     def is_data_new(checksum, backups_dir):
         backups = Path(backups_dir) / JOB_NAME
         for f in os.listdir(backups):
@@ -210,7 +210,7 @@ def execute():
         logging.info(f"Data has not been loaded, new ID: {checksum}")
         return "delete_previous_records"
 
-    @task
+    @task()
     def get_checksum(transformed_data_fp):
         data = pd.read_parquet(Path(transformed_data_fp))
         data_hash = hashlib.md5()
@@ -219,7 +219,7 @@ def execute():
         )
         return data_hash.hexdigest()
 
-    @task
+    @task()
     def delete_previous_records(resource):
         resource_id = resource["id"]
         CKAN.action.datastore_delete(id=resource_id, filters={})
@@ -227,7 +227,7 @@ def execute():
 
         assert count == 0, f"Resource not empty after cleanup: {count}"
 
-    @task
+    @task()
     def create_resource(package, data_dict):
         resource = CKAN.action.resource_create(
             package_id=package["id"],
@@ -240,7 +240,7 @@ def execute():
 
         CKAN.action.datastore_create(id=resource["id"], fields=data_dict)
 
-    @task
+    @task()
     def insert_new_records(
         resource, transformed_data_fp, backup_data,
     ):
@@ -269,7 +269,7 @@ def execute():
             new_last_modified=parser.parse(source_file["file_last_modified"]),
         )
 
-    @task
+    @task()
     def build_message(transformed_data_fp, record_count, resource):
         if record_count > 0:
             new_data = pd.read_parquet(Path(transformed_data_fp))
