@@ -280,7 +280,7 @@ with DAG(
     def refresh_package(trigger_rule="none_failed"):
         return CKAN.action.package_show(id=PACKAGE_ID)
 
-    @dag.task(trigger_rule="none_failed")
+    @dag.task(trigger_rule="none_failed_or_skipped")
     def create_resource(package):
         return CKAN.action.resource_create(
             package_id=package["id"],
