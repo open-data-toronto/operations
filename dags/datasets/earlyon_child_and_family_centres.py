@@ -63,15 +63,16 @@ with DAG(
     @dag.task()
     def get_data(tmp_dir):
         response = requests.get(SRC_FILE)
-        print(f"Response {response.status_code}")
+        assert response.status_code == 200, f"Response status: {response.status_code}"
+
         data = pd.DataFrame(response.json())
         filepath = Path(tmp_dir) / "new_data_raw.parquet"
-        print(f"Filepath {filepath}")
-        print(f"Read {data.shape[0]} records. Data types {data.dtypes}")
+
+        print(f"Read {data.shape[0]} records")
         data.to_parquet(path=filepath, engine="fastparquet", compression=None)
-        print(f"Read {data.shape[0]} records. Data types {data.dtypes}")
 
         file_last_modified = response.headers["last-modified"]
+        print(f"Created file: {filepath}. Last modified: file_last_modified")
 
         return {"path": filepath, "file_last_modified": file_last_modified}
 
@@ -149,6 +150,8 @@ with DAG(
 
     @dag.task()
     def transform_data(tmp_dir, data_file_info):
+        print(f"tmp_dir: {tmp_dir} | data_file_info: {data_file_info}")
+
         tmp_dir = Path(tmp_dir)
         data_fp = Path(data_file_info["path"])
 
