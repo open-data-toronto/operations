@@ -246,15 +246,11 @@ with DAG(
 
         assert count == 0, f"Resource not empty after cleanup: {count}"
 
-    @dag.task(trigger_rule="none_failed")
-    def insert_new_records(resource, transformed_data_fp, backup_data, fields):
+    @dag.task()
+    def insert_new_records(resource, transformed_data_fp, fields):
         resource_id = resource["id"]
         data = pd.read_parquet(Path(transformed_data_fp))
         records = data.to_dict(orient="records")
-
-        if backup_data is not None:
-            with open(Path(backup_data["fields"]), "r") as f:
-                fields = json.load(f)
 
         ckan_utils.insert_datastore_records(
             ckan=CKAN,
@@ -265,6 +261,14 @@ with DAG(
         )
 
         return len(records)
+
+    @dag.task(trigger_rule="none_failed")
+    def get_fields(backup_data, fields):
+        if backup_data is not None:
+            with open(Path(backup_data["fields"]), "r") as f:
+                fields = json.load(f)
+
+        return fields
 
     @dag.task(trigger_rule="none_failed")
     def update_resource_last_modified(resource, source_file):
@@ -378,9 +382,9 @@ with DAG(
     file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
     file_new_branch >> DummyOperator(task_id="file_is_not_new") >> delete_tmp_data
 
-    records_inserted = insert_new_records(
-        resource, transformed_data, backup_data, data_dict
-    )
+    fields = get_fields(backup_data, data_dict)
+
+    records_inserted = insert_new_records(resource, transformed_data, fields)
 
     new_data_branch >> DummyOperator(
         task_id="data_is_new"
