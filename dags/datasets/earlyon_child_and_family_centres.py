@@ -376,15 +376,29 @@ with DAG(
         task_id="delete_tmp_data",
         python_callable=airflow_utils.delete_tmp_data_dir,
         op_kwargs={"dag_id": JOB_NAME, "recursively": True},
-        trigger_rule="one_success",
+        trigger_rule="none_failed",
     )
 
     records_deleted = delete_previous_records(resource)
 
     updated_resource = update_resource_last_modified(resource, source_file)
 
+    send_nothing_notification = PythonOperator(
+        task_id="send_nothing_notification",
+        python_callable=airflow_utils.message_slack,
+        op_args=(
+            JOB_NAME,
+            "File is not new",
+            "success",
+            ACTIVE_ENV == "prod",
+            ACTIVE_ENV,
+        ),
+    )
+
     file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
-    file_new_branch >> DummyOperator(task_id="file_is_not_new") >> delete_tmp_data
+    file_new_branch >> DummyOperator(
+        task_id="file_is_not_new"
+    ) >> send_nothing_notification >> delete_tmp_data
 
     fields = get_fields(backup_data, data_dict)
 
