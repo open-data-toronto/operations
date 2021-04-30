@@ -279,11 +279,9 @@ with DAG(
         )
 
     @dag.task(trigger_rule="none_failed")
-    def build_message(transformed_data_fp, record_count, resource):
+    def build_message(record_count, resource):
         if record_count is not None and record_count > 0:
-            new_data = pd.read_parquet(Path(transformed_data_fp))
-            return f"Refreshed: {new_data.shape[0]} records"
-
+            return f"Refreshed: {record_count} records"
         elif record_count is None:
             last_modified = parser.parse(resource["last_modified"]).strftime(
                 "%Y-%m-%d %H:%M"
@@ -292,7 +290,7 @@ with DAG(
                 f"New file, no new data. New last modified timestamp: {last_modified}"
             )
 
-        raise f"Unexpected scenario. record_count: {record_count} | transformed_data_fp: {transformed_data_fp} | resource {resource}"
+        raise f"Unexpected scenario. record_count: {record_count} | resource {resource}"
 
     @dag.task()
     def get_package():
@@ -415,7 +413,7 @@ with DAG(
 
     update_timestamp >> updated_resource
 
-    msg = build_message(transformed_data, records_inserted, updated_resource)
+    msg = build_message(records_inserted, updated_resource)
 
     send_notification = PythonOperator(
         task_id="send_notification",
