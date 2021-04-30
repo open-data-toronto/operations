@@ -368,7 +368,7 @@ with DAG(
         task_id="delete_tmp_data",
         python_callable=airflow_utils.delete_tmp_data_dir,
         op_kwargs={"dag_id": JOB_NAME, "recursively": True},
-        trigger_rule="none_failed",
+        trigger_rule="one_success",
     )
 
     records_deleted = delete_previous_records(resource)
