@@ -123,7 +123,8 @@ with DAG(
             "columns": data.shape[1],
         }
 
-    def is_resource_new(package):
+    def is_resource_new(**kwargs):
+        package = kwargs["package"]
         logging.info(f"resources found: {[r['name'] for r in package['resources']]}")
         is_new = RESOURCE_NAME not in [r["name"] for r in package["resources"]]
 
@@ -272,17 +273,26 @@ with DAG(
     def get_package(trigger_rule="none_failed"):
         return CKAN.action.package_show(id=PACKAGE_ID)
 
-    tmp_dir = PythonOperator(
-        task_id="tmp_dir",
-        python_callable=airflow_utils.create_dir_with_dag_name,
-        op_kwargs={"dag_id": JOB_NAME, "dir_variable_name": "tmp_dir"},
-    )
+    @dag.task(trigger_rule="none_failed")
+    def create_resource():
+        return CKAN.action.resource_create(
+            package_id=package["id"],
+            name=RESOURCE_NAME,
+            format="geojson",
+            is_preview=True,
+            url_type="datastore",
+            extract_job=f"Airflow: {JOB_NAME}",
+        )
 
-    backups_dir = PythonOperator(
-        task_id="backups_dir",
-        python_callable=airflow_utils.create_dir_with_dag_name,
-        op_kwargs={"dag_id": JOB_NAME, "dir_variable_name": "backups_dir"},
-    )
+    @dag.task()
+    def create_dir(dag_id, dir_variable_name):
+        return airflow_utils.create_dir_with_dag_name(
+            dag_id=dag_id, dir_variable_name=dir_variable_name
+        )
+
+    tmp_dir = create_dir(JOB_NAME, "tmp_dir")
+
+    backups_dir = create_dir(JOB_NAME, "backups_dir")
 
     source_file = get_data(tmp_dir)
 
@@ -291,7 +301,7 @@ with DAG(
     new_resource_branch = BranchPythonOperator(
         task_id="new_resource_branch",
         python_callable=is_resource_new,
-        op_args=(package),
+        op_kwargs={"package": package},
     )
 
     transformed_data = transform_data(tmp_dir, source_file)
@@ -302,19 +312,7 @@ with DAG(
 
     data_dict = build_data_dict(transformed_data)
 
-    create_new_resource = PythonOperator(
-        task_id="create_new_resource",
-        python_callable=CKAN.action.resource_create,
-        op_kwargs={
-            "package_id": package["id"],
-            "name": RESOURCE_NAME,
-            "format": "geojson",
-            "is_preview": True,
-            "url_type": "datastore",
-            "extract_job": f"Airflow: {JOB_NAME}",
-        },
-        trigger_rule="none_failed",
-    )
+    create_new_resource = create_resource()
 
     package_refresh = get_package()
 
