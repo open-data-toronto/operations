@@ -63,6 +63,7 @@ with DAG(
     @dag.task()
     def get_data(tmp_dir):
         response = requests.get(SRC_FILE)
+        logging.info(f"Response {response.status}")
         data = pd.DataFrame(response.json())
         filepath = Path(tmp_dir) / "new_data_raw.parquet"
         logging.info(f"Read {data.shape[0]} records")
@@ -285,14 +286,19 @@ with DAG(
         )
 
     @dag.task()
-    def create_dir(dag_id, dir_variable_name):
+    def create_tmp_dir():
         return airflow_utils.create_dir_with_dag_name(
-            dag_id=dag_id, dir_variable_name=dir_variable_name
+            dag_id=JOB_NAME, dir_variable_name="tmp_dir"
         )
 
-    tmp_dir = create_dir(JOB_NAME, "tmp_dir")
+    @dag.task()
+    def create_backups_dir():
+        return airflow_utils.create_dir_with_dag_name(
+            dag_id=JOB_NAME, dir_variable_name="backups_dir"
+        )
 
-    backups_dir = create_dir(JOB_NAME, "backups_dir")
+    tmp_dir = create_tmp_dir()
+    backups_dir = create_backups_dir()
 
     source_file = get_data(tmp_dir)
 
