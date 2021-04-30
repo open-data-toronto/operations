@@ -375,7 +375,7 @@ with DAG(
     package = PythonOperator(
         task_id="get_package",
         python_callable=CKAN.action.package_show,
-        op_kwargs={"package_id": PACKAGE_ID},
+        op_kwargs={"id": PACKAGE_ID},
     )
 
     previous_data = PythonOperator(
