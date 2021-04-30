@@ -279,8 +279,8 @@ with DAG(
     def get_package():
         return CKAN.action.package_show(id=PACKAGE_ID)
 
-    @dag.task()
-    def refresh_package(trigger_rule="none_failed"):
+    @dag.task(trigger_rule="none_failed")
+    def refresh_package():
         return CKAN.action.package_show(id=PACKAGE_ID)
 
     @dag.task()
