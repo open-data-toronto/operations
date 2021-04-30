@@ -327,11 +327,9 @@ with DAG(
         trigger_rule="none_failed",
     )
 
-    new_resource_branch >> resource_is_new >> create_resource >> data_dict
+    new_resource_branch >> resource_is_new >> new_resource >> data_dict
     new_resource_branch >> resource_is_not_new >> backup_data
-
-    data_dict >> package_refresh
-    backup_data >> package_refresh
+    [data_dict, backup_data] >> package_refresh
 
     resource = get_resource(package_refresh)
 
@@ -340,8 +338,6 @@ with DAG(
         python_callable=is_file_new,
         op_args=(resource, source_file),
     )
-    file_is_new = DummyOperator(task_id="file_is_new")
-    file_is_not_new = DummyOperator(task_id="file_is_not_new")
 
     new_data_branch = BranchPythonOperator(
         task_id="new_data_branch",
@@ -362,8 +358,8 @@ with DAG(
 
     updated_resource = update_resource_last_modified(resource, source_file)
 
-    file_new_branch >> file_is_new >> new_data_branch
-    file_new_branch >> file_is_not_new >> delete_tmp_data
+    file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
+    file_new_branch >> DummyOperator(task_id="file_is_not_new") >> delete_tmp_data
 
     records_inserted = insert_new_records(resource, transformed_data, backup_data)
 
