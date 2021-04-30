@@ -375,8 +375,6 @@ with DAG(
 
     records_deleted = delete_previous_records(resource)
 
-    update_timestamp = DummyOperator(task_id="update_timestamp",)
-
     updated_resource = update_resource_last_modified(resource, source_file)
 
     send_nothing_notification = PythonOperator(
