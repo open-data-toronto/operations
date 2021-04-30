@@ -305,6 +305,8 @@ with DAG(
         python_callable=is_resource_new,
         op_args=(package),
     )
+    resource_is_new = DummyOperator(task_id="resource_is_new")
+    resource_is_not_new = DummyOperator(task_id="resource_is_not_new")
 
     transformed_data = transform_data(tmp_dir, source_file)
 
@@ -325,11 +327,8 @@ with DAG(
         trigger_rule="none_failed",
     )
 
-    new_resource_branch >> DummyOperator(
-        task_id="resource_is_new"
-    ) >> create_resource >> data_dict
-
-    new_resource_branch >> DummyOperator(task_id="resource_is_not_new") >> backup_data
+    new_resource_branch >> resource_is_new >> create_resource >> data_dict
+    new_resource_branch >> resource_is_not_new >> backup_data
 
     [data_dict, backup_data] >> package_refresh
 
@@ -340,12 +339,16 @@ with DAG(
         python_callable=is_file_new,
         op_args=(resource, source_file),
     )
+    file_is_new = DummyOperator(task_id="file_is_new")
+    file_is_not_new = DummyOperator(task_id="file_is_not_new")
 
     new_data_branch = BranchPythonOperator(
         task_id="new_data_branch",
         python_callable=is_data_new,
         op_args=(checksum, backups_dir),
     )
+    data_is_new = DummyOperator(task_id="data_is_new")
+    data_is_not_new = DummyOperator(task_id="data_is_not_new")
 
     delete_tmp_data = PythonOperator(
         task_id="delete_tmp_data",
@@ -358,17 +361,13 @@ with DAG(
 
     updated_resource = update_resource_last_modified(resource, source_file)
 
-    file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
-
-    file_new_branch >> DummyOperator(task_id="file_is_not_new") >> delete_tmp_data
+    file_new_branch >> file_is_new >> new_data_branch
+    file_new_branch >> file_is_not_new >> delete_tmp_data
 
     records_inserted = insert_new_records(resource, transformed_data, backup_data)
 
-    new_data_branch >> DummyOperator(
-        task_id="data_is_new"
-    ) >> records_deleted >> records_inserted >> updated_resource
-
-    new_data_branch >> DummyOperator(task_id="data_is_not_new") >> updated_resource
+    new_data_branch >> data_is_new >> records_deleted >> records_inserted >> updated_resource
+    new_data_branch >> data_is_not_new >> updated_resource
 
     msg = build_message(transformed_data, records_inserted, updated_resource)
 
