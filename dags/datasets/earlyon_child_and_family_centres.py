@@ -279,10 +279,6 @@ with DAG(
         )
 
     @dag.task()
-    def build_message(record_count, resource):
-        return f"Refreshed: {record_count} records"
-
-    @dag.task()
     def get_package():
         return CKAN.action.package_show(id=PACKAGE_ID)
 
@@ -303,6 +299,7 @@ with DAG(
 
     @dag.task()
     def create_tmp_dir():
+        logging.info(f"Dag ID: {dag.dag_id}")
         return airflow_utils.create_dir_with_dag_name(
             dag_id=JOB_NAME, dir_variable_name="tmp_dir"
         )
@@ -376,7 +373,7 @@ with DAG(
         python_callable=airflow_utils.message_slack,
         op_args=(
             JOB_NAME,
-            "Non new data file",
+            "No new data file",
             "success",
             ACTIVE_ENV == "prod",
             ACTIVE_ENV,
