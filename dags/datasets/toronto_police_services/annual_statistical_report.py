@@ -1,16 +1,13 @@
-from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy import DummyOperator
-from datetime import datetime
-from airflow.models import Variable
-import ckanapi
-
-from pathlib import Path
-from airflow import DAG
 import json
+from datetime import datetime
+from pathlib import Path
 
-from utils import airflow_utils
-from utils import agol_utils
-from utils import ckan_utils
+import ckanapi
+from airflow import DAG
+from airflow.models import Variable
+from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import BranchPythonOperator, PythonOperator
+from utils import agol_utils, airflow_utils, ckan_utils
 
 common_job_settings = {
     "description": "Toronto Police Service - Annual Services Report for dataset",
@@ -360,6 +357,7 @@ def create_dag(dag_id, entry):
         ),
         description=description,
         schedule_interval=common_job_settings["schedule"],
+        tags=["archive"],
     )
 
     with dag:

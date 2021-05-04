@@ -603,6 +603,7 @@ with DAG(
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
     catchup=False,
+    tags=["dataset"],
 ) as dag:
 
     create_tmp_dir = PythonOperator(

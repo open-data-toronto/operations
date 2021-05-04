@@ -442,6 +442,7 @@ def create_dag(d):
         ),
         description=d["description"],
         schedule_interval=d["schedule"],
+        tags=["dataset"],
         catchup=False,
     )
 

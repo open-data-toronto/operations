@@ -41,6 +41,7 @@ with DAG(
     description="Get rain gauge data from the last time it was loaded to now",
     schedule_interval="30 14 * * *",
     catchup=False,
+    tags=["dataset"],
 ) as dag:
 
     CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
@@ -216,7 +217,7 @@ with DAG(
                         upload=open(path, "rb"),
                     )
                     logging.info(
-                        f"created {new_resource['name']} with {data_to_load.shape[0]} rows"
+                        f"created {new_resource['name']}: {data_to_load.shape[0]} rows"
                     )
                 else:
                     logging.info("resource for the year exists")

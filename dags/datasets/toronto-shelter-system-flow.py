@@ -67,6 +67,7 @@ with DAG(
     description="Take toronto_shelter_system_flow.csv from NAS and insert to datastore",
     schedule_interval="0 20 * * *",
     catchup=False,
+    tags=["dataset"],
 ) as dag:
     CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
     CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
