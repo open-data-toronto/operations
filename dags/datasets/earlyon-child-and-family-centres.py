@@ -302,6 +302,7 @@ with DAG(
     source_file = get_data(tmp_dir)
 
     package = GetPackageOperator(
+        task_id="get_package",
         address=ckan_creds[ACTIVE_ENV]["address"],
         apikey=ckan_creds[ACTIVE_ENV]["apikey"],
         package_name_or_id=dag.dag_id,
