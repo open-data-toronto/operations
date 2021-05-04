@@ -1,21 +1,20 @@
-from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy_operator import DummyOperator
-from airflow.models import Variable
-from datetime import datetime
-import pandas as pd
-import ckanapi
-import logging
-from io import BytesIO
-from pathlib import Path
-from airflow import DAG
-import requests
 import json
+import logging
 import os
 import re
-from dateutil import parser
+from datetime import datetime
+from io import BytesIO
+from pathlib import Path
 
-from utils import airflow_utils
-from utils import ckan_utils
+import ckanapi
+import pandas as pd
+import requests
+from airflow import DAG
+from airflow.models import Variable
+from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.python_operator import BranchPythonOperator, PythonOperator
+from dateutil import parser
+from utils import airflow_utils, ckan_utils
 
 job_settings = {
     "description": "Take data files from Transportation's flashscrow endpoint https://flashcrow-etladmin.intra.dev-toronto.ca/open_data/tmcs into CKAN",  # noqa: E501
@@ -23,10 +22,7 @@ job_settings = {
     "start_date": datetime(2020, 11, 24, 13, 35, 0),
 }
 
-JOB_FILE = Path(os.path.abspath(__file__))
-JOB_NAME = JOB_FILE.name[:-3]
-PACKAGE_ID = JOB_NAME.replace("_", "-")
-
+PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
@@ -50,7 +46,7 @@ def send_success_msg(**kwargs):
     msg = ti.xcom_pull(task_ids="build_message")
 
     airflow_utils.message_slack(
-        name=JOB_NAME,
+        name=PACKAGE_ID,
         message_type="success",
         msg=msg,
         prod_webhook=ACTIVE_ENV == "prod",
@@ -60,7 +56,7 @@ def send_success_msg(**kwargs):
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=JOB_NAME,
+        name=PACKAGE_ID,
         message_type="error",
         msg="Job not finished",
         active_env=ACTIVE_ENV,
@@ -596,7 +592,7 @@ default_args = airflow_utils.get_default_args(
 )
 
 with DAG(
-    JOB_NAME,
+    PACKAGE_ID,
     default_args=default_args,
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
@@ -606,7 +602,7 @@ with DAG(
     create_tmp_dir = PythonOperator(
         task_id="create_tmp_dir",
         python_callable=airflow_utils.create_dir_with_dag_name,
-        op_kwargs={"dag_id": JOB_NAME, "dir_variable_name": "tmp_dir"},
+        op_kwargs={"dag_id": PACKAGE_ID, "dir_variable_name": "tmp_dir"},
     )
 
     extract = PythonOperator(
@@ -675,7 +671,7 @@ with DAG(
     delete_tmp_dir = PythonOperator(
         task_id="delete_tmp_dir",
         python_callable=airflow_utils.delete_tmp_data_dir,
-        op_kwargs={"dag_id": JOB_NAME, "recursively": True},
+        op_kwargs={"dag_id": PACKAGE_ID, "recursively": True},
     )
 
     create_tmp_dir >> extract >> transform >> resources_to_load
