@@ -1,21 +1,20 @@
-from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy import DummyOperator
-from datetime import datetime, timedelta
-from airflow.models import Variable
-import pandas as pd
-from copy import deepcopy
-import ckanapi
 import logging
+import os
+import tempfile
+from copy import deepcopy
+from datetime import datetime, timedelta
 from io import BytesIO
 from pathlib import Path
-from dateutil import parser
-from airflow import DAG
-import tempfile
-import requests
-import os
 
-from utils import airflow_utils
-from utils import ckan_utils
+import ckanapi
+import pandas as pd
+import requests
+from airflow import DAG
+from airflow.models import Variable
+from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import BranchPythonOperator, PythonOperator
+from dateutil import parser
+from utils import airflow_utils, ckan_utils
 
 job_settings = {
     "description": "Get rain gauge data from the last time it was loaded to now",
@@ -36,13 +35,21 @@ APIKEY = Variable.get("flowworks_apikey")
 def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
     airflow_utils.message_slack(
-        name=JOB_NAME, message_type="success", msg=msg,
+        name=JOB_NAME,
+        message_type="success",
+        msg=msg,
+        active_env=ACTIVE_ENV,
+        prod_webhook=ACTIVE_ENV == "prod",
     )
 
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=JOB_NAME, message_type="error", msg="Job not finished",
+        name=JOB_NAME,
+        message_type="error",
+        msg="Job not finished",
+        active_env=ACTIVE_ENV,
+        prod_webhook=ACTIVE_ENV == "prod",
     )
 
 
