@@ -1,29 +1,26 @@
-from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy import DummyOperator
-from distutils.dir_util import copy_tree
-from datetime import datetime, timedelta
-from airflow.models import Variable
-from pathlib import Path
-from airflow import DAG
-import logging
 import calendar
-import requests
-import ckanapi
-import zipfile
-import shutil
+import logging
 import os
+import shutil
+import zipfile
+from datetime import datetime, timedelta
+from distutils.dir_util import copy_tree
+from pathlib import Path
 
-from utils import airflow_utils
-from utils import ckan_utils
+import ckanapi
+import requests
+from airflow import DAG
+from airflow.models import Variable
+from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import BranchPythonOperator, PythonOperator
+from utils import airflow_utils, ckan_utils
 
-JOB_FILE = Path(os.path.abspath(__file__))
-JOB_NAME = JOB_FILE.name[:-3]
-PACKAGE_ID = JOB_NAME.replace("_", "-")
+PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
 
 dags = [
     {
         "period_range": "weekly",
-        "dag_id": f"{JOB_NAME}_weekly",
+        "dag_id": f"{PACKAGE_ID}_weekly",
         "description": "Gets weekly Oracle Infinity data and uploads to web-analytics",
         "schedule": "0 10 * * 7",
         "start_date": datetime(2000, 1, 1, 1, 1, 0),
@@ -31,7 +28,7 @@ dags = [
     },
     {
         "period_range": "monthly",
-        "dag_id": f"{JOB_NAME}_monthly",
+        "dag_id": f"{PACKAGE_ID}_monthly",
         "description": "Gets monthly Oracle Infinity data and uploads to web-analytics",
         "schedule": "0 12 1 * *",
         "start_date": datetime(2000, 1, 1, 1, 1, 0),
@@ -39,7 +36,7 @@ dags = [
     },
     {
         "period_range": "yearly",
-        "dag_id": f"{JOB_NAME}_yearly",
+        "dag_id": f"{PACKAGE_ID}_yearly",
         "description": "Gets yearly Oracle Infinity data & uploads to web-analytics",
         "schedule": "0 11 1 1 *",
         "start_date": datetime(2000, 1, 1, 1, 1, 0),
@@ -104,7 +101,7 @@ def create_dag(d):
     def send_success_msg(**kwargs):
         msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
         airflow_utils.message_slack(
-            name=JOB_NAME,
+            name=PACKAGE_ID,
             message_type="success",
             msg=msg,
             prod_webhook=active_env == "prod",
@@ -113,7 +110,7 @@ def create_dag(d):
 
     def send_failure_msg(self):
         airflow_utils.message_slack(
-            name=JOB_NAME,
+            name=PACKAGE_ID,
             message_type="error",
             msg="Job not finished",
             prod_webhook=active_env == "prod",
