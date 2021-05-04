@@ -1,19 +1,17 @@
-from airflow.operators.python import PythonOperator
+import json
+import logging
+import os
 from datetime import datetime
-from airflow.models import Variable
-from airflow import DAG
 from pathlib import Path
+
+import ckanapi
 import pandas as pd
 import requests
-import logging
-import ckanapi
-import json
-import os
-
-from utils import airflow_utils
-from utils import ckan_utils
-from dags.sustainment.update_data_quality_scores import dqs_logic  # noqa: E402
-
+from airflow import DAG
+from airflow.models import Variable
+from airflow.operators.python import PythonOperator
+from sustainment.update_data_quality_scores import dqs_logic  # noqa: E402
+from utils import airflow_utils, ckan_utils
 
 job_settings = {
     "description": "Calculates DQ scores across the catalogue",
