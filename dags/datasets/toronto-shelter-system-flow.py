@@ -97,7 +97,7 @@ with DAG(
 
         logging.info(f"Read {data.shape[0]} records")
 
-        data.to_parquet(filepath)
+        data.to_parquet(filepath, engine="fastparquet", compression=None)
 
         file_last_modified = response.headers["last-modified"]
 
@@ -389,9 +389,7 @@ with DAG(
         op_kwargs={"dag_id": PACKAGE_ID, "dir_variable_name": "backups_dir"},
     )
 
-    source_data = PythonOperator(
-        task_id="get_file", python_callable=get_file, provide_context=True,
-    )
+    source_data = PythonOperator(task_id="get_file", python_callable=get_file,)
 
     new_resource = PythonOperator(
         task_id="create_new_resource",
@@ -399,11 +397,7 @@ with DAG(
         provide_context=True,
     )
 
-    package = PythonOperator(
-        task_id="get_package",
-        python_callable=CKAN.action.package_show,
-        op_kwargs={"id": PACKAGE_ID},
-    )
+    package = PythonOperator(task_id="get_package", python_callable=get_package,)
 
     previous_data = PythonOperator(
         task_id="backup_previous_data",
