@@ -88,7 +88,7 @@ def get_raw_files(**kwargs):
         filepath = tmp_dir / f.replace("csv", "parquet")
 
         logging.info(f"Read {f}: {data.shape[0]} records")
-        data.to_parquet(filepath)
+        data.to_parquet(filepath, engine="fastparquet", compression=None)
 
         row = {
             "raw_data_filepath": filepath,

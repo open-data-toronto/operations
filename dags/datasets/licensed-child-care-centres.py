@@ -1,22 +1,20 @@
-from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy import DummyOperator
-from datetime import datetime
-from airflow.models import Variable
-import pandas as pd
-import ckanapi
-import logging
 import hashlib
+import json
+import logging
+import os
+from datetime import datetime
 from io import BytesIO
 from pathlib import Path
-from airflow import DAG
-import requests
-import json
-import os
-from dateutil import parser
 
-from utils import airflow_utils
-from utils import agol_utils
-from utils import ckan_utils
+import ckanapi
+import pandas as pd
+import requests
+from airflow import DAG
+from airflow.models import Variable
+from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import BranchPythonOperator, PythonOperator
+from dateutil import parser
+from utils import agol_utils, airflow_utils, ckan_utils
 
 job_settings = {
     "description": "Take data from opendata.toronto.ca (CSV) and put into datastore",
@@ -69,7 +67,7 @@ def get_file(**kwargs):
 
     logging.info(f"Read {data.shape[0]} records")
 
-    data.to_parquet(filepath)
+    data.to_parquet(filepath, engine="fastparquet", compression=None)
 
     file_last_modified = response.headers["last-modified"]
 
@@ -131,7 +129,7 @@ def backup_previous_data(**kwargs):
 
     data_path = backups / f"data.{unique_id}.parquet"
     if not data_path.exists():
-        data.to_parquet(data_path)
+        data.to_parquet(data_path, engine="fastparquet", compression=None)
 
     fields = [f for f in datastore_response["fields"] if f["id"] != "_id"]
 
@@ -218,7 +216,7 @@ def transform_data(**kwargs):
     filename = "new_data_transformed"
     filepath = tmp_dir / f"{filename}.parquet"
 
-    data.to_parquet(filepath)
+    data.to_parquet(filepath, engine="fastparquet", compression=None)
 
     return filepath
 
