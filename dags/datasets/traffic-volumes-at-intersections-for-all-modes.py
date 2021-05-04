@@ -251,9 +251,11 @@ def transform_data_files(**kwargs):
             ]  # TODO: filter at source and remove
             logging.info(
                 " | ".join(
-                    filename,
-                    resource_name,
-                    f"FILTERED: {data.shape[0]} rows, {data.shape[1]} cols",
+                    [
+                        filename,
+                        resource_name,
+                        f"FILTERED: {data.shape[0]} rows, {data.shape[1]} cols",
+                    ]
                 )
             )
             data.to_json(fpath, orient="records", date_format="iso")
