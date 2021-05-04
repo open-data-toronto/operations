@@ -44,17 +44,21 @@ EXPECTED_COLUMNS = [
 ]
 
 
+def send_failure_message():
+    airflow_utils.message_slack(
+        name=PACKAGE_ID,
+        message_type="error",
+        msg="Job not finished",
+        active_env=ACTIVE_ENV,
+        prod_webhook=ACTIVE_ENV == "prod",
+    )
+
+
 with DAG(
     PACKAGE_ID,
     default_args=airflow_utils.get_default_args(
         {
-            "on_failure_callback": airflow_utils.message_slack(
-                name=PACKAGE_ID,
-                message_type="error",
-                msg="Job not finished",
-                active_env=ACTIVE_ENV,
-                prod_webhook=ACTIVE_ENV == "prod",
-            ),
+            "on_failure_callback": send_failure_message,
             "start_date": datetime(2020, 11, 24, 13, 35, 0),
             "retries": 0,
             # "retry_delay": timedelta(minutes=3),
