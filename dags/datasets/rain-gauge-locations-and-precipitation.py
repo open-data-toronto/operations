@@ -19,17 +19,22 @@ from utils import airflow_utils, ckan_utils
 PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
 ACTIVE_ENV = Variable.get("active_env")
 
+
+def send_failure_message():
+    airflow_utils.message_slack(
+        name=PACKAGE_ID,
+        message_type="error",
+        msg="Job not finished",
+        active_env=ACTIVE_ENV,
+        prod_webhook=ACTIVE_ENV == "prod",
+    )
+
+
 with DAG(
     PACKAGE_ID,
     default_args=airflow_utils.get_default_args(
         {
-            "on_failure_callback": airflow_utils.message_slack(
-                name=PACKAGE_ID,
-                message_type="error",
-                msg="Job not finished",
-                active_env=ACTIVE_ENV,
-                prod_webhook=ACTIVE_ENV == "prod",
-            ),
+            "on_failure_callback": send_failure_message,
             "start_date": datetime(2020, 11, 10, 13, 35, 0),
         }
     ),
