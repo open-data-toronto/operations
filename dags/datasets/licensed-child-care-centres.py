@@ -338,7 +338,7 @@ with DAG(
         records_inserted = kwargs.pop("records_inserted")
 
         if records_inserted is None:
-            resource = ti.xcom_pull(task_ids="update_resource_last_modified")
+            resource = kwargs.pop("update_resource_last_modified")
             last_modified = parser.parse(resource["last_modified"]).strftime(
                 "%Y-%m-%d %H:%M"
             )
@@ -347,7 +347,7 @@ with DAG(
                 f"New file, no new data. New last modified timestamp: {last_modified}"
             )
 
-        new_data_fp = Path(ti.xcom_pull(task_ids="transform_data"))
+        new_data_fp = Path(kwargs.pop("transform_data"))
         new_data = pd.read_parquet(new_data_fp)
 
         return f"Refreshed: {new_data.shape[0]} records"
