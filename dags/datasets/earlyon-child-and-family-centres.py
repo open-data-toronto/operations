@@ -1,42 +1,30 @@
-from airflow.operators.python import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy import DummyOperator
+import hashlib
+import json
+import logging
+import os
+from pathlib import Path
+
+import ckanapi
+import pandas as pd
+import requests
 from airflow import DAG
 from airflow.models import Variable
+from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
-import pandas as pd
-import ckanapi
-import logging
-import hashlib
-from pathlib import Path
-import requests
-import json
-import os
 from dateutil import parser
+from utils import agol_utils, airflow_utils, ckan_utils
 
-from utils import airflow_utils
-from utils import agol_utils
-from utils import ckan_utils
-
-job_settings = {
-    "description": "Take earlyon.json from opendata.toronto.ca and put into datastore",
-    "schedule": "0 17 * * *",
-    "start_date": days_ago(1),
-}
-
-JOB_FILE = Path(os.path.abspath(__file__))
-JOB_NAME = JOB_FILE.name[:-3]
-PACKAGE_ID = JOB_NAME.replace("_", "-")
+PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
+RESOURCE_NAME = "EarlyON Child and Family Centres"
+SRC_URL = "http://opendata.toronto.ca/childrens.services/child-family-programs/earlyon.json"  # noqa: E501
 
 ACTIVE_ENV = Variable.get("active_env")
-CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
-SRC_FILE = "http://opendata.toronto.ca/childrens.services/child-family-programs/earlyon.json"  # noqa: E501
-RESOURCE_NAME = "EarlyON Child and Family Centres"
 
 
-def send_failure_msg(self):
+def send_failure_message():
     airflow_utils.message_slack(
-        name=JOB_NAME,
+        name=PACKAGE_ID,
         message_type="error",
         msg="Job not finished",
         active_env=ACTIVE_ENV,
@@ -45,24 +33,26 @@ def send_failure_msg(self):
 
 
 with DAG(
-    JOB_NAME,
+    PACKAGE_ID,
     default_args=airflow_utils.get_default_args(
         {
-            "on_failure_callback": send_failure_msg,
-            "start_date": job_settings["start_date"],
+            "on_failure_callback": send_failure_message,
+            "start_date": days_ago(1),
             "retries": 0,
             # "retry_delay": timedelta(minutes=3),
         }
     ),
-    description=job_settings["description"],
-    schedule_interval=job_settings["schedule"],
+    description="Take earlyon.json from opendata.toronto.ca and put into datastore",
+    schedule_interval="0 17 * * *",
     catchup=False,
     tags=["dataset"],
 ) as dag:
+    ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
+    CKAN = ckanapi.RemoteCKAN(**ckan_creds[ACTIVE_ENV])
 
     @dag.task()
     def get_data(tmp_dir):
-        response = requests.get(SRC_FILE)
+        response = requests.get(SRC_URL)
         assert response.status_code == 200, f"Response status: {response.status_code}"
 
         data = pd.DataFrame(response.json())
@@ -233,7 +223,7 @@ with DAG(
         return checksum
 
     @dag.task()
-    def delete_previous_records(resource):
+    def delete_records(resource):
         logging.info(resource)
 
         resource_id = resource["id"]
@@ -248,13 +238,12 @@ with DAG(
 
     @dag.task()
     def insert_new_records(resource, transformed_data_fp, fields):
-        resource_id = resource["id"]
         data = pd.read_parquet(Path(transformed_data_fp))
         records = data.to_dict(orient="records")
 
         ckan_utils.insert_datastore_records(
             ckan=CKAN,
-            resource_id=resource_id,
+            resource_id=resource["id"],
             records=records,
             fields=fields,
             chunk_size=int(Variable.get("ckan_insert_chunk_size")),
@@ -280,11 +269,11 @@ with DAG(
 
     @dag.task()
     def get_package():
-        return CKAN.action.package_show(id=PACKAGE_ID)
+        return CKAN.action.package_show(id=dag.dag_id)
 
     @dag.task(trigger_rule="none_failed")
     def refresh_package():
-        return CKAN.action.package_show(id=PACKAGE_ID)
+        return CKAN.action.package_show(id=dag.dag_id)
 
     @dag.task()
     def create_resource(package):
@@ -294,23 +283,23 @@ with DAG(
             format="geojson",
             is_preview=True,
             url_type="datastore",
-            extract_job=f"Airflow: {JOB_NAME}",
+            extract_job=f"Airflow: {dag.dag_id}",
         )
 
     @dag.task()
     def create_tmp_dir():
-        logging.info(f"Dag ID: {dag.dag_id}")
         return airflow_utils.create_dir_with_dag_name(
-            dag_id=JOB_NAME, dir_variable_name="tmp_dir"
+            dag_id=dag.dag_id, dir_variable_name="tmp_dir"
         )
 
     @dag.task()
     def create_backups_dir():
         return airflow_utils.create_dir_with_dag_name(
-            dag_id=JOB_NAME, dir_variable_name="backups_dir"
+            dag_id=dag.dag_id, dir_variable_name="backups_dir"
         )
 
     tmp_dir = create_tmp_dir()
+
     backups_dir = create_backups_dir()
 
     source_file = get_data(tmp_dir)
@@ -360,11 +349,11 @@ with DAG(
     delete_tmp_data = PythonOperator(
         task_id="delete_tmp_data",
         python_callable=airflow_utils.delete_tmp_data_dir,
-        op_kwargs={"dag_id": JOB_NAME, "recursively": True},
+        op_kwargs={"dag_id": dag.dag_id, "recursively": True},
         trigger_rule="one_success",
     )
 
-    records_deleted = delete_previous_records(resource)
+    records_deleted = delete_records(resource)
 
     updated_resource = update_resource_last_modified(resource, source_file)
 
@@ -372,7 +361,7 @@ with DAG(
         task_id="send_nothing_notification",
         python_callable=airflow_utils.message_slack,
         op_args=(
-            JOB_NAME,
+            dag.dag_id,
             "No new data file",
             "success",
             ACTIVE_ENV == "prod",
@@ -397,7 +386,7 @@ with DAG(
         task_id="new_records_notification",
         python_callable=airflow_utils.message_slack,
         op_args=(
-            JOB_NAME,
+            dag.dag_id,
             f"Refreshed: {records_inserted} records",
             "success",
             ACTIVE_ENV == "prod",
@@ -409,7 +398,7 @@ with DAG(
         task_id="no_new_data_notification",
         python_callable=airflow_utils.message_slack,
         op_args=(
-            JOB_NAME,
+            dag.dag_id,
             "Updated resource last_modified time only: new file but no new data",
             "success",
             ACTIVE_ENV == "prod",
@@ -425,8 +414,7 @@ with DAG(
         task_id="data_is_not_new"
     ) >> no_new_data_notification
 
-    updated_resource >> new_records_notification
-    updated_resource >> no_new_data_notification
+    updated_resource >> [new_records_notification, no_new_data_notification]
 
     [
         no_new_data_notification,
