@@ -76,10 +76,6 @@ def get_file(**kwargs):
     return {"path": filepath, "file_last_modified": file_last_modified}
 
 
-def get_package(package_id):
-    return CKAN.action.package_show(id=package_id)
-
-
 def is_resource_new(**kwargs):
     ti = kwargs.pop("ti")
     package = ti.xcom_pull(task_ids="get_package")
@@ -253,25 +249,6 @@ def insert_new_records(**kwargs):
     return len(records)
 
 
-def build_message(**kwargs):
-    ti = kwargs.pop("ti")
-
-    records_inserted = ti.xcom_pull(task_ids="insert_new_records")
-
-    if records_inserted is None:
-        resource = ti.xcom_pull(task_ids="update_resource_last_modified")
-        last_modified = parser.parse(resource["last_modified"]).strftime(
-            "%Y-%m-%d %H:%M"
-        )
-
-        return f"New file, no new data. New last modified timestamp: {last_modified}"
-
-    new_data_fp = Path(ti.xcom_pull(task_ids="transform_data"))
-    new_data = pd.read_parquet(new_data_fp)
-
-    return f"Refreshed: {new_data.shape[0]} records"
-
-
 def update_resource_last_modified(**kwargs):
     ti = kwargs.pop("ti")
     resource_id = ti.xcom_pull(task_ids="get_resource")["id"]
@@ -357,6 +334,25 @@ with DAG(
     schedule_interval=job_settings["schedule"],
     catchup=False,
 ) as dag:
+
+    @dag.task()
+    def build_message(**kwargs):
+        records_inserted = kwargs.pop("records_inserted")
+
+        if records_inserted is None:
+            resource = ti.xcom_pull(task_ids="update_resource_last_modified")
+            last_modified = parser.parse(resource["last_modified"]).strftime(
+                "%Y-%m-%d %H:%M"
+            )
+
+            return (
+                f"New file, no new data. New last modified timestamp: {last_modified}"
+            )
+
+        new_data_fp = Path(ti.xcom_pull(task_ids="transform_data"))
+        new_data = pd.read_parquet(new_data_fp)
+
+        return f"Refreshed: {new_data.shape[0]} records"
 
     create_tmp_dir = PythonOperator(
         task_id="create_tmp_dir",
