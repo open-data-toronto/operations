@@ -462,14 +462,12 @@ def create_dag(d):
         is_resource_new_branch = BranchPythonOperator(
             task_id="is_resource_new",
             python_callable=is_resource_new,
-            provide_context=True,
             op_kwargs={"resource_name": d["resource_name"]},
         )
 
         create_resource = PythonOperator(
             task_id="create_new_resource",
             python_callable=create_new_resource,
-            provide_context=True,
             op_kwargs={"resource_name": d["resource_name"]},
         )
 
@@ -483,14 +481,10 @@ def create_dag(d):
         )
 
         get_data = PythonOperator(
-            task_id="download_data",
-            python_callable=download_data,
-            provide_context=True,
+            task_id="download_data", python_callable=download_data,
         )
 
-        unzip_files = PythonOperator(
-            task_id="unzip_data", python_callable=unzip_data, provide_context=True,
-        )
+        unzip_files = PythonOperator(task_id="unzip_data", python_callable=unzip_data,)
 
         filename_date_format = PythonOperator(
             task_id="get_filename_date_format",
@@ -501,13 +495,11 @@ def create_dag(d):
         latest_loaded = PythonOperator(
             task_id="determine_latest_period_loaded",
             python_callable=determine_latest_period_loaded,
-            provide_context=True,
         )
 
         periods_to_load = PythonOperator(
             task_id="calculate_periods_to_load",
             python_callable=calculate_periods_to_load,
-            provide_context=True,
             op_kwargs={"period_range": d["period_range"]},
         )
 
@@ -518,192 +510,157 @@ def create_dag(d):
         new_data_to_load = BranchPythonOperator(
             task_id="are_there_new_periods",
             python_callable=are_there_new_periods,
-            provide_context=True,
             op_kwargs={"resource_name": d["resource_name"]},
         )
 
         staging_folder = PythonOperator(
             task_id="make_staging_folder",
             python_callable=make_staging_folder,
-            provide_context=True,
             op_kwargs={"resource_name": d["resource_name"]},
         )
 
         extract_complete = DummyOperator(task_id="extract_complete")
 
         extract_new = PythonOperator(
-            task_id="extract_new",
-            python_callable=make_new_extract_folders,
-            provide_context=True,
+            task_id="extract_new", python_callable=make_new_extract_folders,
         )
 
         key_metrics = PythonOperator(
             task_id="key_metrics",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Key Metrics"},
         )
 
         new_v_return_visitors = PythonOperator(
             task_id="new_v_return_visitors",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "New vs. Return Visitors"},
         )
 
         hits_by_hour = PythonOperator(
             task_id="hits_by_hour",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Hits by Hour of Day"},
         )
 
         visits_by_day = PythonOperator(
             task_id="visits_by_day",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Visits by Day of Week"},
         )
 
         operating_system = PythonOperator(
             task_id="operating_system",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Operating System Platform"},
         )
 
         browser = PythonOperator(
             task_id="browser",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Browser"},
         )
 
         screen_resolution = PythonOperator(
             task_id="screen_resolution",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Screen Resolution"},
         )
 
         mobile_devices = PythonOperator(
             task_id="mobile_devices",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Mobile Devices"},
         )
 
         mobile_browser = PythonOperator(
             task_id="mobile_browser",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Mobile Browser"},
         )
 
         referring_site = PythonOperator(
             task_id="referring_site",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Referring Site"},
         )
 
         search_engines = PythonOperator(
             task_id="search_engines",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Search Engines"},
         )
 
         countries = PythonOperator(
             task_id="countries",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Countries"},
         )
 
         cities = PythonOperator(
             task_id="cities",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Cities"},
         )
 
         top_pages = PythonOperator(
             task_id="top_pages",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Top Pages"},
         )
 
         entry_pages = PythonOperator(
             task_id="entry_pages",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Entry Pages"},
         )
 
         exit_pages = PythonOperator(
             task_id="exit_pages",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Exit Pages"},
         )
 
         file_downloads = PythonOperator(
             task_id="file_downloads",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "File Downloads"},
         )
 
         email_address = PythonOperator(
             task_id="email_address",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Email Address"},
         )
 
         offsite_links = PythonOperator(
             task_id="offsite_links",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Offsite Links"},
         )
 
         anchor_tags = PythonOperator(
             task_id="anchor_tags",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Anchor Tags"},
         )
 
         copy_previous = PythonOperator(
-            task_id="copy_previous",
-            python_callable=copy_previous_to_staging,
-            provide_context=True,
+            task_id="copy_previous", python_callable=copy_previous_to_staging,
         )
 
         zip_resource_files = PythonOperator(
             task_id="zip_files",
             python_callable=zip_files,
-            provide_context=True,
             op_kwargs={"resource_name": d["resource_name"]},
         )
 
-        upload_data = PythonOperator(
-            task_id="upload_zip", python_callable=upload_zip, provide_context=True,
-        )
+        upload_data = PythonOperator(task_id="upload_zip", python_callable=upload_zip,)
 
-        msg = PythonOperator(
-            task_id="build_message",
-            python_callable=build_message,
-            provide_context=True,
-        )
+        msg = PythonOperator(task_id="build_message", python_callable=build_message,)
 
         send_notification = PythonOperator(
-            task_id="send_success_msg",
-            python_callable=send_success_msg,
-            provide_context=True,
+            task_id="send_success_msg", python_callable=send_success_msg,
         )
 
         delete_tmp_dir = PythonOperator(
