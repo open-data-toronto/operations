@@ -587,6 +587,10 @@ def return_branch(**kwargs):
     return "yes_continue_with_refresh"
 
 
+def get_package():
+    return CKAN.action.package_show(id=PACKAGE_ID)
+
+
 default_args = airflow_utils.get_default_args(
     {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"]}
 )
@@ -615,11 +619,7 @@ with DAG(
         provide_context=True,
     )
 
-    package = PythonOperator(
-        task_id="get_package",
-        python_callable=CKAN.action.package_show,
-        op_kwargs={"id": PACKAGE_ID},
-    )
+    package = PythonOperator(task_id="get_package", python_callable=get_package,)
 
     resources_to_load = PythonOperator(
         task_id="identify_resources_to_load",
