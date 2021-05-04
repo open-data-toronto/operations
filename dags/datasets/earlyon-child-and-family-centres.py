@@ -12,6 +12,7 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
+from ckan_plugin.operators.package_operator import GetPackageOperator
 from dateutil import parser
 from utils import agol_utils, airflow_utils, ckan_utils
 
@@ -267,10 +268,6 @@ with DAG(
             new_last_modified=parser.parse(source_file["file_last_modified"]),
         )
 
-    @dag.task()
-    def get_package():
-        return CKAN.action.package_show(id=dag.dag_id)
-
     @dag.task(trigger_rule="none_failed")
     def refresh_package():
         return CKAN.action.package_show(id=dag.dag_id)
@@ -304,7 +301,11 @@ with DAG(
 
     source_file = get_data(tmp_dir)
 
-    package = get_package()
+    package = GetPackageOperator(
+        address=ckan_creds[ACTIVE_ENV]["address"],
+        apikey=ckan_creds[ACTIVE_ENV]["apikey"],
+        package_name_or_id=dag.dag_id,
+    )
 
     new_resource_branch = BranchPythonOperator(
         task_id="new_resource_branch",
