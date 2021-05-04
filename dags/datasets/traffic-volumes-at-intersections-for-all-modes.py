@@ -233,7 +233,7 @@ def transform_data_files(**kwargs):
         data = prep_data(df)
         logging.info(
             " | ".join(
-                filename, resource_name, f"{data.shape[0]} rows, {data.shape[1]} cols"
+                [filename, resource_name, f"{data.shape[0]} rows, {data.shape[1]} cols"]
             )
         )
         if filename.startswith("tmcs_preview"):
@@ -609,14 +609,10 @@ with DAG(
         op_kwargs={"dag_id": PACKAGE_ID, "dir_variable_name": "tmp_dir"},
     )
 
-    extract = PythonOperator(
-        task_id="get_raw_files", python_callable=get_raw_files, provide_context=True,
-    )
+    extract = PythonOperator(task_id="get_raw_files", python_callable=get_raw_files,)
 
     transform = PythonOperator(
-        task_id="transform_data_files",
-        python_callable=transform_data_files,
-        provide_context=True,
+        task_id="transform_data_files", python_callable=transform_data_files,
     )
 
     package = PythonOperator(task_id="get_package", python_callable=get_package,)
@@ -624,13 +620,10 @@ with DAG(
     resources_to_load = PythonOperator(
         task_id="identify_resources_to_load",
         python_callable=identify_resources_to_load,
-        provide_context=True,
     )
 
     are_there_new_files = BranchPythonOperator(
-        task_id="are_there_new_files",
-        provide_context=True,
-        python_callable=return_branch,
+        task_id="are_there_new_files", python_callable=return_branch,
     )
 
     no_files_are_not_new = DummyOperator(task_id="no_files_are_not_new")
