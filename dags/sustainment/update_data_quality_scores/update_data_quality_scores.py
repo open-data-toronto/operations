@@ -61,12 +61,18 @@ BINS = {
 
 def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="insert_scores")
-    airflow_utils.message_slack(name=JOB_NAME, **msg)
+    airflow_utils.message_slack(
+        name=JOB_NAME, **msg, active_env=ACTIVE_ENV, prod_webhook=ACTIVE_ENV == "prod",
+    )
 
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=JOB_NAME, message_type="error", msg="Job not finished",
+        name=JOB_NAME,
+        message_type="error",
+        msg="Job not finished",
+        active_env=ACTIVE_ENV,
+        prod_webhook=ACTIVE_ENV == "prod",
     )
 
 
