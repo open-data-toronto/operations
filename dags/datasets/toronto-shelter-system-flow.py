@@ -64,7 +64,7 @@ with DAG(
             # "retry_delay": timedelta(minutes=3),
         }
     ),
-    description="Take data from http://opendata.toronto.ca/shelter.support.housing.administration/toronto-shelter-system-flow/toronto_shelter_system_flow.csv and put into datastore",
+    description="Take toronto_shelter_system_flow.csv from NAS and insert to datastore",
     schedule_interval="0 20 * * *",
     catchup=False,
 ) as dag:
@@ -346,7 +346,7 @@ with DAG(
         )
 
         logging.info(
-            f"{difference_in_seconds} seconds between file and resource last modified times"
+            f"{difference_in_seconds}secs between file and resource last modified times"
         )
 
         if difference_in_seconds == 0:
