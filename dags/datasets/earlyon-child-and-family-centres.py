@@ -162,7 +162,7 @@ with DAG(
 
     def get_fields(**kwargs):
         ti = kwargs["ti"]
-        backup_data = Path(ti.xcom_pull(task_ids="backup_data"))
+        backup_data = ti.xcom_pull(task_ids="backup_data")
 
         if backup_data is not None:
             with open(Path(backup_data["fields"]), "r") as f:
