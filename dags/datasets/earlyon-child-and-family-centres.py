@@ -206,7 +206,7 @@ with DAG(
 
     transformed_data = transform_data()
 
-    tmp_dir >> src >> transform_data
+    tmp_dir >> src >> transformed_data
 
     # checksum = make_checksum(transformed_data)
 
