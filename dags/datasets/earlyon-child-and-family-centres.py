@@ -129,10 +129,10 @@ with DAG(
         )
 
         if difference_in_seconds == 0:
-            return "is_data_new"
-            return "backup_data"
+            return "file_is_new"
+            return "file_is_not_new"
 
-        return "is_data_new"
+        return "file_is_new"
 
     def is_data_new(**kwargs):
         # ti = kwargs["ti"]
@@ -335,7 +335,7 @@ with DAG(
 
     new_resource_branch >> backup_data >> fields
 
-    file_new_branch >> new_data_branch
+    file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
 
     file_new_branch >> DummyOperator(
         task_id="file_is_not_new"
