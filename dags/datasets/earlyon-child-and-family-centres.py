@@ -1,4 +1,3 @@
-import hashlib
 import json
 import logging
 import os
@@ -6,14 +5,21 @@ from pathlib import Path
 
 import ckanapi
 import pandas as pd
-import requests
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
+from ckan_plugin.operators.datastore_operator import (
+    BackupDatastoreResourceOperator,
+    DeleteDatastoreResourceRecordsOperator,
+    InsertDatastoreResourceRecordsOperator,
+)
 from ckan_plugin.operators.package_operator import GetPackageOperator
-from ckan_plugin.operators.resource_operator import GetOrCreateResourceOperator
+from ckan_plugin.operators.resource_operator import (
+    GetOrCreateResourceOperator,
+    ResourceAndFileOperator,
+)
 from dateutil import parser
 from utils import agol_utils, airflow_utils, ckan_utils
 from utils_plugin.operators.directory_operator import CreateLocalDirectoryOperator
@@ -54,75 +60,6 @@ with DAG(
     ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
     CKAN = ckanapi.RemoteCKAN(**ckan_creds[ACTIVE_ENV])
 
-    @dag.task()
-    def get_data(tmp_dir):
-        response = requests.get(SRC_URL)
-        assert response.status_code == 200, f"Response status: {response.status_code}"
-
-        data = pd.DataFrame(response.json())
-        filepath = Path(tmp_dir) / "new_data_raw.parquet"
-
-        logging.info(f"Read {data.shape[0]} records")
-        data.to_parquet(path=filepath, engine="fastparquet", compression=None)
-
-        file_last_modified = response.headers["last-modified"]
-        logging.info(f"Created file: {filepath}. Last modified: file_last_modified")
-
-        return {"path": filepath, "file_last_modified": file_last_modified}
-
-    @dag.task()
-    def backup_previous_data(**kwargs):
-        ti = kwargs["ti"]
-        package = ti.xcom_pull(task_ids="get_package")
-        backups = Path(ti.xcom_pull(task_ids="backups_dir"))
-
-        resource_id = [r for r in package["resources"] if r["name"] == RESOURCE_NAME][
-            0
-        ]["id"]
-        logging.info(f"Resource ID: {resource_id}")
-
-        record_count = CKAN.action.datastore_search(id=resource_id, limit=0)["total"]
-        if record_count == 0:
-            return None
-
-        datastore_response = CKAN.action.datastore_search(
-            id=resource_id, limit=record_count
-        )
-        records = datastore_response["records"]
-        logging.info(f"Example record retrieved: {json.dumps(records[0])}")
-
-        data = pd.DataFrame(records)
-        logging.info(f"Columns: {data.columns.values}")
-
-        if "_id" in data.columns.values:
-            data = data.drop("_id", axis=1)
-
-        data_hash = hashlib.md5()
-        data_hash.update(
-            data.sort_values(by="loc_id").to_csv(index=False).encode("utf-8")
-        )
-        unique_id = data_hash.hexdigest()
-
-        logging.info(f"Unique ID generated: {unique_id}")
-
-        data_path = backups / f"data.{unique_id}.parquet"
-        if not data_path.exists():
-            data.to_parquet(path=data_path, engine="fastparquet", compression=None)
-
-        fields = [f for f in datastore_response["fields"] if f["id"] != "_id"]
-
-        fields_path = backups / f"fields.{unique_id}.json"
-        if not fields_path.exists():
-            with open(fields_path, "w") as f:
-                json.dump(fields, f)
-
-        return {
-            "fields": fields_path,
-            "data": data_path,
-            "records": data.shape[0],
-            "columns": data.shape[1],
-        }
-
     def is_resource_new(**kwargs):
         package = kwargs["ti"].xcom_pull(task_ids="get_package")
         logging.info(f"resources found: {[r['name'] for r in package['resources']]}")
@@ -145,13 +82,17 @@ with DAG(
         return fields
 
     @dag.task()
-    def transform_data(tmp_dir, data_file_info):
+    def transform_data(**kwargs):
+        ti = kwargs["ti"]
+        data_file_info = ti.xcom_pull(task_ids="get_data")
+        tmp_dir = Path(ti.xcom_pull(task_ids="tmp_dir"))
+
+        with open(Path(data_file_info["path"])) as f:
+            src_file = json.load(f)
+
         logging.info(f"tmp_dir: {tmp_dir} | data_file_info: {data_file_info}")
 
-        tmp_dir = Path(tmp_dir)
-        data_fp = Path(data_file_info["path"])
-
-        data = pd.read_parquet(data_fp)
+        data = pd.DataFrame(src_file)
 
         data["geometry"] = data.apply(
             lambda x: json.dumps(
@@ -170,11 +111,11 @@ with DAG(
 
         return filepath
 
-    @dag.task()
-    def get_resource(**kwargs):
-        return [r for r in package["resources"] if r["name"] == RESOURCE_NAME][0]
+    def is_file_new(**kwargs):
+        ti = kwargs["ti"]
+        data_file_info = ti.xcom_pull(task_ids="get_data")
+        resource = ti.xcom_pull(task_ids="get_or_create_resource")
 
-    def is_file_new(resource, data_file_info):
         logging.info(f"resource: {resource} | data_file_info: {data_file_info}")
 
         last_modified_string = data_file_info["file_last_modified"]
@@ -199,69 +140,30 @@ with DAG(
 
         return "file_is_new"
 
-    def is_data_new(checksum, **kwargs):
-        ti = kwargs["ti"]
-        backups_dir = Path(ti.xcom_pull(task_ids="backups_dir"))
+    def is_data_new(**kwargs):
+        # ti = kwargs["ti"]
+        # backups_dir = Path(ti.xcom_pull(task_ids="backups_dir"))
 
-        logging.info(f"checksum: {checksum}")
-        logging.info(f"backups_dir: {backups_dir}")
+        # logging.info(f"checksum: {checksum}")
+        # logging.info(f"backups_dir: {backups_dir}")
 
-        backups = Path(backups_dir)
-        for f in os.listdir(backups):
-            if not os.path.isfile(backups / f):
-                continue
-            logging.info(f"File in backups: {f}")
+        # backups = Path(backups_dir)
+        # for f in os.listdir(backups):
+        #     if not os.path.isfile(backups / f):
+        #         continue
+        #     logging.info(f"File in backups: {f}")
 
-            if os.path.isfile(backups / f) and checksum in f:
-                logging.info(f"Data has already been loaded, ID: {checksum}")
-                return "data_is_not_new"
+        #     if os.path.isfile(backups / f) and checksum in f:
+        #         logging.info(f"Data has already been loaded, ID: {checksum}")
+        #         return "data_is_not_new"
 
-        logging.info(f"Data has not been loaded, new ID: {checksum}")
+        # logging.info(f"Data has not been loaded, new ID: {checksum}")
         return "data_is_new"
 
-    @dag.task()
-    def make_checksum(transformed_data_fp):
-        data = pd.read_parquet(Path(transformed_data_fp))
-        data_hash = hashlib.md5()
-        data_hash.update(
-            data.sort_values(by="loc_id").round(10).to_csv(index=False).encode("utf-8")
-        )
-        checksum = data_hash.hexdigest()
-        logging.info(f"checksum: {checksum}")
-
-        return checksum
-
-    @dag.task()
-    def delete_records(resource):
-        logging.info(resource)
-
-        resource_id = resource["id"]
-
-        delete = CKAN.action.datastore_delete(id=resource_id, filters={})
-        logging.info(f"datastore_delete: {delete}")
-
-        count = CKAN.action.datastore_search(id=resource_id, limit=0)["total"]
-        logging.info(f"datastore_search: {delete}")
-
-        assert count == 0, f"Resource not empty after cleanup: {count}"
-
-    @dag.task()
-    def insert_new_records(resource, transformed_data_fp, fields):
-        data = pd.read_parquet(Path(transformed_data_fp))
-        records = data.to_dict(orient="records")
-
-        ckan_utils.insert_datastore_records(
-            ckan=CKAN,
-            resource_id=resource["id"],
-            records=records,
-            fields=fields,
-            chunk_size=int(Variable.get("ckan_insert_chunk_size")),
-        )
-
-        return len(records)
-
     @dag.task(trigger_rule="none_failed")
-    def get_fields(backup_data, fields):
+    def get_fields(fields, **kwargs):
+        backup_data = Path(kwargs["ti"].xcom_pull(task_ids="backup_data"))
+
         if backup_data is not None:
             with open(Path(backup_data["fields"]), "r") as f:
                 fields = json.load(f)
@@ -275,10 +177,6 @@ with DAG(
             resource_id=resource["id"],
             new_last_modified=parser.parse(source_file["file_last_modified"]),
         )
-
-    @dag.task(trigger_rule="none_failed")
-    def refresh_package():
-        return CKAN.action.package_show(id=dag.dag_id)
 
     tmp_dir = CreateLocalDirectoryOperator(
         task_id="tmp_dir", path=Path(Variable.get("tmp_dir")) / dag.dag_id,
@@ -295,10 +193,6 @@ with DAG(
         filename="src_data.json",
     )
 
-    tmp_dir >> src
-
-    source_file = get_data(tmp_dir)
-
     package = GetPackageOperator(
         task_id="get_package",
         address=ckan_creds[ACTIVE_ENV]["address"],
@@ -310,11 +204,11 @@ with DAG(
         task_id="new_resource_branch", python_callable=is_resource_new,
     )
 
-    transformed_data = transform_data(tmp_dir, source_file)
+    transformed_data = transform_data()
 
-    checksum = make_checksum(transformed_data)
+    tmp_dir >> src >> transform_data
 
-    backup_data = backup_previous_data()
+    # checksum = make_checksum(transformed_data)
 
     data_dict = build_data_dict(transformed_data)
 
@@ -330,33 +224,35 @@ with DAG(
             url_type="datastore",
             extract_job=f"Airflow: {dag.dag_id}",
         ),
+        trigger_rule="none_failed",
     )
 
-    refresh_package = GetPackageOperator(
-        task_id="refresh_package",
+    backup_data = BackupDatastoreResourceOperator(
+        task_id="backup_data",
         address=ckan_creds[ACTIVE_ENV]["address"],
         apikey=ckan_creds[ACTIVE_ENV]["apikey"],
-        package_name_or_id=dag.dag_id,
+        resource_task_id="get_or_create_resource",
+        dir_task_id="backups_dir",
     )
 
-    package >> new_resource_branch >> DummyOperator(
+    fields = get_fields(data_dict)
+
+    package >> get_or_create_resource >> new_resource_branch
+
+    new_resource_branch >> DummyOperator(
         task_id="resource_is_new"
-    ) >> get_or_create_resource
+    ) >> data_dict >> fields
 
     new_resource_branch >> DummyOperator(
         task_id="resource_is_not_new"
-    ) >> backup_data >> get_or_create_resource
-
-    resource = get_resource()
+    ) >> backup_data >> fields
 
     file_new_branch = BranchPythonOperator(
-        task_id="file_new_branch",
-        python_callable=is_file_new,
-        op_args=(resource, source_file),
+        task_id="file_new_branch", python_callable=is_file_new,
     )
 
     new_data_branch = BranchPythonOperator(
-        task_id="new_data_branch", python_callable=is_data_new, op_args=(checksum),
+        task_id="new_data_branch", python_callable=is_data_new,
     )
 
     delete_tmp_data = PythonOperator(
@@ -366,9 +262,15 @@ with DAG(
         trigger_rule="one_success",
     )
 
-    records_deleted = delete_records(resource)
-
-    updated_resource = update_resource_last_modified(resource, source_file)
+    sync_timestamp = ResourceAndFileOperator(
+        task_id="sync_timestamp",
+        address=ckan_creds[ACTIVE_ENV]["address"],
+        apikey=ckan_creds[ACTIVE_ENV]["apikey"],
+        download_file_task_id="get_data",
+        resource_task_id="get_or_create_resource",
+        upload_to_ckan=False,
+        sync_timestamp=True,
+    )
 
     send_nothing_notification = PythonOperator(
         task_id="send_nothing_notification",
@@ -384,23 +286,34 @@ with DAG(
 
     file_new_branch >> DummyOperator(task_id="file_is_new") >> [
         new_data_branch,
-        updated_resource,
+        sync_timestamp,
     ]
 
     file_new_branch >> DummyOperator(
         task_id="file_is_not_new"
     ) >> send_nothing_notification
 
-    fields = get_fields(backup_data, data_dict)
+    delete_records = DeleteDatastoreResourceRecordsOperator(
+        task_id="delete_records",
+        address=ckan_creds[ACTIVE_ENV]["address"],
+        apikey=ckan_creds[ACTIVE_ENV]["apikey"],
+        backup_task_id="backup_data",
+    )
 
-    records_inserted = insert_new_records(resource, transformed_data, fields)
+    insert_records = InsertDatastoreResourceRecordsOperator(
+        task_id="delete_records",
+        address=ckan_creds[ACTIVE_ENV]["address"],
+        apikey=ckan_creds[ACTIVE_ENV]["apikey"],
+        parquet_filepath_task_id="transform_data",
+        resource_task_id="get_or_create_resource",
+    )
 
     new_records_notification = PythonOperator(
         task_id="new_records_notification",
         python_callable=airflow_utils.message_slack,
         op_args=(
             dag.dag_id,
-            f"Refreshed: {records_inserted} records",
+            "Refreshed records",
             "success",
             ACTIVE_ENV == "prod",
             ACTIVE_ENV,
@@ -421,13 +334,13 @@ with DAG(
 
     new_data_branch >> DummyOperator(
         task_id="data_is_new"
-    ) >> records_deleted >> records_inserted >> new_records_notification
+    ) >> delete_records >> insert_records >> new_records_notification
 
     new_data_branch >> DummyOperator(
         task_id="data_is_not_new"
     ) >> no_new_data_notification
 
-    updated_resource >> [new_records_notification, no_new_data_notification]
+    sync_timestamp >> [new_records_notification, no_new_data_notification]
 
     [
         no_new_data_notification,

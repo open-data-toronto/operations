@@ -57,48 +57,44 @@ class GetOrCreateResourceOperator(BaseOperator):
 
 
 class ResourceAndFileOperator(BaseOperator):
+    """
+            - download_file_task_id: task_id that returns the download file info (ie. DownloadFileOperator)
+            - resource_task_id: task_id that returns resource object (ie. GetOrCreateResourcePackage)
+    """
+
     @apply_defaults
     def __init__(
         self,
         address: str,
         apikey: str,
-        resource_id: str,
-        file_url: str,
-        sync_timestamp: bool = True,
-        upload_to_ckan: bool = True,
+        resource_task_id: str,
+        download_file_task_id: str,
+        sync_timestamp: bool,
+        upload_to_ckan: bool,
+        **kwargs,
     ) -> None:
-        self.resource_id = resource_id
-        self.file_url = file_url
+        super().__init__(**kwargs)
+        self.resource_task_id = resource_task_id
+        self.download_file_task_id = download_file_task_id
         self.sync = sync_timestamp
         self.upload = upload_to_ckan
-        self.apikey = apikey
-        self.address = address
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
-    def _datetime_to_string(datetime):
+    def _datetime_to_string(self, datetime):
         return datetime.strftime("%Y-%m-%dT%H:%M:%S")
 
     def execute(self, context):
-        resource = self.ckan.action.resource_show(id=self.resource_id)
+        ti = context["ti"]
+        resource = ti.xcom_pull(task_ids=self.resource_task_id)
+        download_file_info = ti.xcom_pull(task_ids=self.download_file_task_id)
 
-        response = None
         if self.upload:
-            with tempfile.TemporaryDirectory() as tmpdir:
-                path = Path(tmpdir) / f"{resource['name'].resource['format']}"
+            self.ckan.action.resource_patch(
+                id=self.resource["id"],
+                upload=open(Path(download_file_info["path"]), "rb"),
+            )
 
-                with open(path, "wb") as f:
-                    response = requests.get(self.file_url)
-                    f.write(response.content)
-
-                self.ckan.action.resource_patch(
-                    id=self.resource_id, upload=open(path, "rb"),
-                )
-
-        file_last_modified = parser.parse(
-            requests.head(self.file_url).headers["last-modified"]
-            if response is None
-            else response.headers["last-modified"]
-        )
+        file_last_modified = parser.parse(download_file_info["last_modified"])
 
         resource_last_modified = parser.parse(
             (

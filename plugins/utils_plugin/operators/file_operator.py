@@ -1,3 +1,4 @@
+import hashlib
 from pathlib import Path
 
 import requests
@@ -7,7 +8,12 @@ from airflow.utils.decorators import apply_defaults
 
 class DownloadFileOperator(BaseOperator):
     """
-    Downloads file from URL and saves to provided directory using provided filename
+    Downloads file from URL and saves to provided directory using provided filename.
+
+    Returns a dictionary containing:
+        - path: path to saved file
+        - last_modified: timestamp file was last_modified (from the request)
+        - checksum: using md5 algorithm
     """
 
     @apply_defaults
@@ -26,7 +32,6 @@ class DownloadFileOperator(BaseOperator):
         self.overwrite_if_exists = overwrite_if_exists
 
     def execute(self, context):
-        print(context)
         path = Path(context["ti"].xcom_pull(task_ids=self.dir_task_id)) / self.filename
 
         if not self.overwrite_if_exists and path.exists():
@@ -35,7 +40,14 @@ class DownloadFileOperator(BaseOperator):
         res = requests.get(self.file_url)
         assert res.status_code == 200, f"Response status: {res.status_code}"
 
+        checksum = hashlib.md5()
         with open(path, "wb") as f:
             f.write(res.content)
 
-        return path
+        checksum.update(res.content)
+
+        return {
+            "path": path,
+            "last_modified": res.headers["last-modified"],
+            "checksum": checksum.hexdigest(),
+        }
