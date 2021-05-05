@@ -353,7 +353,7 @@ with DAG(
 
     sync_timestamp >> records_loaded_branch
 
-    records_loaded_branch  >> new_records_notification
+    records_loaded_branch >> new_records_notification
 
     records_loaded_branch >> no_new_data_notification
 
