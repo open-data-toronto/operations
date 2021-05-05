@@ -27,7 +27,7 @@ class DownloadFileOperator(BaseOperator):
 
     def execute(self, context):
         print(context)
-        path = Path(context["ti"].xcom_pull(task_id=self.dir_task_id)) / self.filename
+        path = Path(context["ti"].xcom_pull(task_ids=self.dir_task_id)) / self.filename
 
         if not self.overwrite_if_exists and path.exists():
             return path
