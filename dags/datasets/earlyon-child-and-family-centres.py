@@ -305,6 +305,7 @@ with DAG(
         address=ckan_creds[ACTIVE_ENV]["address"],
         apikey=ckan_creds[ACTIVE_ENV]["apikey"],
         package_name_or_id=dag.dag_id,
+        xcom_push=True,
     )
 
     new_resource_branch = BranchPythonOperator(
