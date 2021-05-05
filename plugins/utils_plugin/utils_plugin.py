@@ -1,6 +1,6 @@
 from airflow.plugins_manager import AirflowPlugin
 
-from operators import directory_operator
+from operators import directory_operator, file_operator
 
 
 class UtilsPlugin(AirflowPlugin):
@@ -8,4 +8,6 @@ class UtilsPlugin(AirflowPlugin):
     operators = [
         directory_operator.CreateLocalDirectoryOperator,
         directory_operator.DeleteLocalDirectoryOperator,
+        file_operator.CreateLocalDirectoryOperator,
+        file_operator.DeleteLocalDirectoryOperator,
     ]
