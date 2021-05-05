@@ -160,7 +160,6 @@ with DAG(
         # logging.info(f"Data has not been loaded, new ID: {checksum}")
         return "data_is_new"
 
-    @dag.task(trigger_rule="none_failed")
     def get_fields(**kwargs):
         ti = kwargs["ti"]
         backup_data = Path(ti.xcom_pull(task_ids="backup_data"))
