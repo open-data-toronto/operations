@@ -180,7 +180,7 @@ with DAG(
         return "records_were_not_loaded"
 
     def send_new_records_notification(**kwargs):
-        count = kwargs["it"].xcom_pull("insert_records")
+        count = kwargs["ti"].xcom_pull("insert_records")
 
         airflow_utils.message_slack(
             dag.dag_id,
