@@ -200,7 +200,7 @@ with DAG(
     )
 
     transformed_data = PythonOperator(
-        task_id="transformed_data", python_callable=transform_data,
+        task_id="transform_data", python_callable=transform_data,
     )
 
     data_dict = PythonOperator(task_id="data_dict", python_callable=build_data_dict,)
