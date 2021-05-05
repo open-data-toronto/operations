@@ -249,6 +249,8 @@ with DAG(
         task_id="resource_is_not_new"
     ) >> backup_data >> fields
 
+    fields >> new_data_branch
+
     file_new_branch = BranchPythonOperator(
         task_id="file_new_branch", python_callable=is_file_new,
     )
