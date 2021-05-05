@@ -168,9 +168,9 @@ with DAG(
         if backup_data is not None:
             with open(Path(backup_data["fields"]), "r") as f:
                 fields = json.load(f)
-        fields = ti.xcom_pull(task_ids="data_dict")
-
-        assert fields is not None, "No fields"
+        else:
+            fields = ti.xcom_pull(task_ids="data_dict")
+            assert fields is not None, "No fields"
 
         return fields
 
