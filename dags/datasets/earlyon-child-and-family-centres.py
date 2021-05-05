@@ -71,7 +71,8 @@ with DAG(
         return "resource_is_not_new"
 
     @dag.task()
-    def build_data_dict(data_fp):
+    def build_data_dict(**kwargs):
+        data_fp = Path(kwargs["ti"].xcom_pull(task_ids="transform_data"))
         data = pd.read_parquet(Path(data_fp))
 
         fields = []
@@ -81,7 +82,6 @@ with DAG(
 
         return fields
 
-    @dag.task()
     def transform_data(**kwargs):
         ti = kwargs["ti"]
         data_file_info = ti.xcom_pull(task_ids="get_data")
@@ -162,7 +162,9 @@ with DAG(
 
     @dag.task(trigger_rule="none_failed")
     def get_fields(fields, **kwargs):
-        backup_data = Path(kwargs["ti"].xcom_pull(task_ids="backup_data"))
+        yi = kwargs["ti"]
+        backup_data = Path(ti.xcom_pull(task_ids="backup_data"))
+        fields_path = ti.xcom_pull(task_ids="get_fields")
 
         if backup_data is not None:
             with open(Path(backup_data["fields"]), "r") as f:
@@ -204,11 +206,13 @@ with DAG(
         task_id="new_resource_branch", python_callable=is_resource_new,
     )
 
-    transformed_data = transform_data()
+    transformed_data = PythonOperator(
+        task_id="transformed_data", python_callable=transform_data,
+    )
+
+    data_dict = PythonOperator(task_id="data_dict", python_callable=build_data_dict,)
 
     # checksum = make_checksum(transformed_data)
-
-    data_dict = build_data_dict(transformed_data)
 
     get_or_create_resource = GetOrCreateResourceOperator(
         task_id="get_or_create_resource",
@@ -233,7 +237,7 @@ with DAG(
         dir_task_id="backups_dir",
     )
 
-    fields = get_fields(data_dict)
+    fields = PythonOperator(task_id="get_fields", python_callable=get_fields,)
 
     file_new_branch = BranchPythonOperator(
         task_id="file_new_branch", python_callable=is_file_new,
