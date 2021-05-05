@@ -11,18 +11,15 @@ from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
 from ckan_plugin.operators.datastore_operator import (
-    BackupDatastoreResourceOperator,
-    DeleteDatastoreResourceRecordsOperator,
-    InsertDatastoreResourceRecordsOperator,
-)
+    BackupDatastoreResourceOperator, DeleteDatastoreResourceRecordsOperator,
+    InsertDatastoreResourceRecordsOperator)
 from ckan_plugin.operators.package_operator import GetPackageOperator
 from ckan_plugin.operators.resource_operator import (
-    GetOrCreateResourceOperator,
-    ResourceAndFileOperator,
-)
+    GetOrCreateResourceOperator, ResourceAndFileOperator)
 from dateutil import parser
 from utils import agol_utils, airflow_utils, ckan_utils
-from utils_plugin.operators.directory_operator import CreateLocalDirectoryOperator
+from utils_plugin.operators.directory_operator import \
+    CreateLocalDirectoryOperator
 from utils_plugin.operators.file_operator import DownloadFileOperator
 
 PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
@@ -301,7 +298,7 @@ with DAG(
     )
 
     insert_records = InsertDatastoreResourceRecordsOperator(
-        task_id="delete_records",
+        task_id="insert_records",
         address=ckan_creds[ACTIVE_ENV]["address"],
         apikey=ckan_creds[ACTIVE_ENV]["apikey"],
         parquet_filepath_task_id="transform_data",
