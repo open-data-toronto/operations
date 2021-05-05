@@ -118,7 +118,8 @@ with DAG(
             "columns": data.shape[1],
         }
 
-    def is_resource_new(package):
+    def is_resource_new(**kwargs):
+        package = kwargs["ti"].xcom_pull(task_ids="get_package")
         logging.info(f"resources found: {[r['name'] for r in package['resources']]}")
         is_new = RESOURCE_NAME not in [r["name"] for r in package["resources"]]
 
@@ -305,13 +306,10 @@ with DAG(
         address=ckan_creds[ACTIVE_ENV]["address"],
         apikey=ckan_creds[ACTIVE_ENV]["apikey"],
         package_name_or_id=dag.dag_id,
-        xcom_push=True,
     )
 
     new_resource_branch = BranchPythonOperator(
-        task_id="new_resource_branch",
-        python_callable=is_resource_new,
-        op_args=(package),
+        task_id="new_resource_branch", python_callable=is_resource_new,
     )
 
     transformed_data = transform_data(tmp_dir, source_file)
@@ -326,7 +324,7 @@ with DAG(
 
     package_refresh = refresh_package()
 
-    new_resource_branch >> DummyOperator(
+    package >> new_resource_branch >> DummyOperator(
         task_id="resource_is_new"
     ) >> create_new_resource >> package_refresh
 
