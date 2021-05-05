@@ -11,15 +11,18 @@ from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
 from ckan_plugin.operators.datastore_operator import (
-    BackupDatastoreResourceOperator, DeleteDatastoreResourceRecordsOperator,
-    InsertDatastoreResourceRecordsOperator)
+    BackupDatastoreResourceOperator,
+    DeleteDatastoreResourceRecordsOperator,
+    InsertDatastoreResourceRecordsOperator,
+)
 from ckan_plugin.operators.package_operator import GetPackageOperator
 from ckan_plugin.operators.resource_operator import (
-    GetOrCreateResourceOperator, ResourceAndFileOperator)
+    GetOrCreateResourceOperator,
+    ResourceAndFileOperator,
+)
 from dateutil import parser
 from utils import agol_utils, airflow_utils, ckan_utils
-from utils_plugin.operators.directory_operator import \
-    CreateLocalDirectoryOperator
+from utils_plugin.operators.directory_operator import CreateLocalDirectoryOperator
 from utils_plugin.operators.file_operator import DownloadFileOperator
 
 PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
@@ -239,6 +242,8 @@ with DAG(
     new_resource_branch >> DummyOperator(
         task_id="resource_is_new"
     ) >> data_dict >> fields
+
+    backups_dir >> backup_data
 
     new_resource_branch >> DummyOperator(
         task_id="resource_is_not_new"
