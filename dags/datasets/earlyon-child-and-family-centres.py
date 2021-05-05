@@ -281,11 +281,11 @@ with DAG(
         return CKAN.action.package_show(id=dag.dag_id)
 
     tmp_dir = CreateLocalDirectoryOperator(
-        task_id="tmp_dir", file_path=Path(Variable.get("tmp_dir")) / dag.dag_id,
+        task_id="tmp_dir", path=Path(Variable.get("tmp_dir")) / dag.dag_id,
     )
 
     backups_dir = CreateLocalDirectoryOperator(
-        task_id="backups_dir", file_path=Path(Variable.get("backups_dir")) / dag.dag_id,
+        task_id="backups_dir", path=Path(Variable.get("backups_dir")) / dag.dag_id,
     )
 
     src = DownloadFileOperator(
