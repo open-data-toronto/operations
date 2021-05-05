@@ -318,7 +318,9 @@ with DAG(
 
     get_or_create_resource = GetOrCreateResourceOperator(
         task_id="get_or_create_resource",
-        package_name_or_id=PACKAGE_ID,
+        address=ckan_creds[ACTIVE_ENV]["address"],
+        apikey=ckan_creds[ACTIVE_ENV]["apikey"],
+        package_name_or_id=dag.dag_id,
         resource_name=RESOURCE_NAME,
         resource_attributes=dict(
             format="geojson",
