@@ -1,4 +1,6 @@
 import hashlib
+import os
+from datetime import datetime
 from pathlib import Path
 
 import requests
@@ -35,7 +37,18 @@ class DownloadFileOperator(BaseOperator):
         path = Path(context["ti"].xcom_pull(task_ids=self.dir_task_id)) / self.filename
 
         if not self.overwrite_if_exists and path.exists():
-            return path
+            checksum = hashlib.md5()
+            f = open(path, "rb")
+            content = f.read()
+            checksum.update(content)
+
+            s = os.stat(path)
+
+            return {
+                "path": path,
+                "last_modified": datetime.fromtimestamp(s.st_mtime).isoformat(),
+                "checksum": checksum.hexdigest(),
+            }
 
         res = requests.get(self.file_url)
         assert res.status_code == 200, f"Response status: {res.status_code}"
