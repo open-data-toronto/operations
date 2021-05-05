@@ -57,8 +57,6 @@ with DAG(
     catchup=False,
     tags=["dataset"],
 ) as dag:
-    ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
-    CKAN = ckanapi.RemoteCKAN(**ckan_creds[ACTIVE_ENV])
 
     def is_resource_new(**kwargs):
         package = kwargs["ti"].xcom_pull(task_ids="get_package")
@@ -70,7 +68,6 @@ with DAG(
 
         return "resource_is_not_new"
 
-    @dag.task()
     def build_data_dict(**kwargs):
         data_fp = Path(kwargs["ti"].xcom_pull(task_ids="transform_data"))
         data = pd.read_parquet(Path(data_fp))
@@ -172,6 +169,27 @@ with DAG(
             assert fields is not None, "No fields"
 
         return fields
+
+    def were_records_loaded(**kwargs):
+        inserted_records_count = kwargs["ti"].xcom_pull(task_ids="insert_records")
+
+        if inserted_records_count is not None and inserted_records_count > 0:
+            return "records_were_loaded"
+
+        return "records_were_not_loaded"
+
+    def send_new_records_notification(**kwargs):
+        count = kwargs["it"].xcom_pull("insert_records")
+
+        airflow_utils.message_slack(
+            dag.dag_id,
+            f"Refreshed {count} records",
+            "success",
+            Variable.get("active_env") == "prod",
+            Variable.get("active_env"),
+        )
+
+    ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
 
     tmp_dir = CreateLocalDirectoryOperator(
         task_id="tmp_dir", path=Path(Variable.get("tmp_dir")) / dag.dag_id,
@@ -289,14 +307,7 @@ with DAG(
 
     new_records_notification = PythonOperator(
         task_id="new_records_notification",
-        python_callable=airflow_utils.message_slack,
-        op_args=(
-            dag.dag_id,
-            "Refreshed records",
-            "success",
-            ACTIVE_ENV == "prod",
-            ACTIVE_ENV,
-        ),
+        python_callable=send_new_records_notification,
     )
 
     no_new_data_notification = PythonOperator(
@@ -309,6 +320,10 @@ with DAG(
             ACTIVE_ENV == "prod",
             ACTIVE_ENV,
         ),
+    )
+
+    records_loaded_branch = BranchPythonOperator(
+        task_id="were_records_loaded", python_callable=were_records_loaded,
     )
 
     backups_dir >> backup_data
@@ -335,11 +350,19 @@ with DAG(
 
     new_data_branch >> DummyOperator(
         task_id="data_is_new"
-    ) >> delete_records >> insert_records >> sync_timestamp >> new_records_notification
+    ) >> delete_records >> insert_records >> sync_timestamp
 
-    new_data_branch >> DummyOperator(
-        task_id="data_is_not_new"
-    ) >> sync_timestamp >> no_new_data_notification
+    new_data_branch >> DummyOperator(task_id="data_is_not_new") >> sync_timestamp
+
+    sync_timestamp >> records_loaded_branch
+
+    records_loaded_branch >> DummyOperator(
+        task_id="records_were_loaded"
+    ) >> new_records_notification
+
+    records_loaded_branch >> DummyOperator(
+        task_id="records_were_not_loaded"
+    ) >> no_new_data_notification
 
     [
         no_new_data_notification,
