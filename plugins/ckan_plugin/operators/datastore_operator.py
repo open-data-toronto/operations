@@ -99,7 +99,7 @@ class BackupDatastoreResourceOperator(BaseOperator):
         data = self._build_dataframe(datastore_response["records"])
         checksum = self._checksum_datastore_response(datastore_response)
 
-        return {
+        result = {
             "fields_file_path": self._save_fields_json(
                 datastore_response, checksum, backups_dir
             ),
@@ -109,7 +109,12 @@ class BackupDatastoreResourceOperator(BaseOperator):
             "records": data.shape[0],
             "columns": data.shape[1],
             "resource_id": datastore_response["resource_id"],
+            "checksum": checksum,
         }
+
+        logging.info(f"Returning: {json.dumps(result)}")
+
+        return result
 
 
 class DeleteDatastoreResourceRecordsOperator(BaseOperator):
@@ -195,5 +200,6 @@ class InsertDatastoreResourceRecordsOperator(BaseOperator):
 
             self.ckan.action.datastore_create(id=resource["id"], records=clean_records)
 
-        return data.shape[0]
+        logging.info(f"Records inserted: {data.shape[0]}")
 
+        return data.shape[0]

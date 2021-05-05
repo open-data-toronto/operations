@@ -1,8 +1,7 @@
-import tempfile
+import logging
 from pathlib import Path
 
 import ckanapi
-import requests
 from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from dateutil import parser
@@ -44,16 +43,18 @@ class GetOrCreateResourceOperator(BaseOperator):
 
     def execute(self, context):
         if self.resource_id is not None:
-            return self.ckan.action.resource_show(id=self.resource_id)
+            resource = self.ckan.action.resource_show(id=self.resource_id)
+        elif self._resource_exists():
+            resource = self.resource
+        else:
+            resource = self.ckan.action.resource_create(
+                package_id=self.package_id,
+                name=self.resource_name,
+                **self.resource_attributes,
+            )
 
-        if self._resource_exists():
-            return self.resource
-
-        return self.ckan.action.resource_create(
-            package_id=self.package_id,
-            name=self.resource_name,
-            **self.resource_attributes,
-        )
+        logging.info(f"Returning: {resource}")
+        return resource
 
 
 class ResourceAndFileOperator(BaseOperator):
@@ -115,9 +116,13 @@ class ResourceAndFileOperator(BaseOperator):
                 last_modified=self._datetime_to_string(file_last_modified),
             )
 
-        return {
+        result = {
             "resource_last_modified": self._datetime_to_string(resource_last_modified),
             "file_last_modified": self._datetime_to_string(file_last_modified),
             "timestamps_were_synced": self.sync and difference_in_seconds > 0,
             "difference_in_seconds": difference_in_seconds,
         }
+
+        logging.info(f"Returning: {result}")
+
+        return result

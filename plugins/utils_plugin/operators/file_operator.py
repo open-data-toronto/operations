@@ -1,4 +1,5 @@
 import hashlib
+import logging
 import os
 from datetime import datetime
 from pathlib import Path
@@ -44,23 +45,27 @@ class DownloadFileOperator(BaseOperator):
 
             s = os.stat(path)
 
-            return {
+            result = {
                 "path": path,
                 "last_modified": datetime.fromtimestamp(s.st_mtime).isoformat(),
                 "checksum": checksum.hexdigest(),
             }
+        else:
+            res = requests.get(self.file_url)
+            assert res.status_code == 200, f"Response status: {res.status_code}"
 
-        res = requests.get(self.file_url)
-        assert res.status_code == 200, f"Response status: {res.status_code}"
+            checksum = hashlib.md5()
+            with open(path, "wb") as f:
+                f.write(res.content)
 
-        checksum = hashlib.md5()
-        with open(path, "wb") as f:
-            f.write(res.content)
+            checksum.update(res.content)
 
-        checksum.update(res.content)
+            result = {
+                "path": path,
+                "last_modified": res.headers["last-modified"],
+                "checksum": checksum.hexdigest(),
+            }
 
-        return {
-            "path": path,
-            "last_modified": res.headers["last-modified"],
-            "checksum": checksum.hexdigest(),
-        }
+        logging.info(f"Returning: {result}")
+
+        return result
