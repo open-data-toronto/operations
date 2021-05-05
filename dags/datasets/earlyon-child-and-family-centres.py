@@ -165,7 +165,7 @@ with DAG(
         backup_data = ti.xcom_pull(task_ids="backup_data")
 
         if backup_data is not None:
-            with open(Path(backup_data["fields"]), "r") as f:
+            with open(Path(backup_data["fields_file_path"]), "r") as f:
                 fields = json.load(f)
         else:
             fields = ti.xcom_pull(task_ids="data_dict")
@@ -257,6 +257,7 @@ with DAG(
         resource_task_id="get_or_create_resource",
         upload_to_ckan=False,
         sync_timestamp=True,
+        trigger_rule="none_failed",
     )
 
     send_nothing_notification = PythonOperator(
@@ -324,10 +325,7 @@ with DAG(
         task_id="resource_is_not_new"
     ) >> backup_data >> fields
 
-    file_new_branch >> DummyOperator(task_id="file_is_new") >> [
-        new_data_branch,
-        sync_timestamp,
-    ]
+    file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
 
     file_new_branch >> DummyOperator(
         task_id="file_is_not_new"
@@ -337,13 +335,11 @@ with DAG(
 
     new_data_branch >> DummyOperator(
         task_id="data_is_new"
-    ) >> delete_records >> insert_records >> new_records_notification
+    ) >> delete_records >> insert_records >> sync_timestamp >> new_records_notification
 
     new_data_branch >> DummyOperator(
         task_id="data_is_not_new"
-    ) >> no_new_data_notification
-
-    sync_timestamp >> [new_records_notification, no_new_data_notification]
+    ) >> sync_timestamp >> no_new_data_notification
 
     [
         no_new_data_notification,
