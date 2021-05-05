@@ -129,7 +129,6 @@ with DAG(
         )
 
         if difference_in_seconds == 0:
-            return "file_is_new"
             return "file_is_not_new"
 
         return "file_is_new"
