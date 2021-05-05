@@ -275,7 +275,7 @@ with DAG(
         resource_task_id="get_or_create_resource",
         upload_to_ckan=False,
         sync_timestamp=True,
-        trigger_rule="none_failed",
+        trigger_rule="one_success",
     )
 
     send_nothing_notification = PythonOperator(
