@@ -161,14 +161,16 @@ with DAG(
         return "data_is_new"
 
     @dag.task(trigger_rule="none_failed")
-    def get_fields(fields, **kwargs):
+    def get_fields(**kwargs):
         ti = kwargs["ti"]
         backup_data = Path(ti.xcom_pull(task_ids="backup_data"))
-        fields_path = ti.xcom_pull(task_ids="get_fields")
 
         if backup_data is not None:
             with open(Path(backup_data["fields"]), "r") as f:
                 fields = json.load(f)
+        fields = ti.xcom_pull(task_ids="data_dict")
+
+        assert fields is not None, "No fields"
 
         return fields
 
