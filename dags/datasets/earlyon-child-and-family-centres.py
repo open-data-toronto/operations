@@ -71,7 +71,7 @@ with DAG(
         return {"path": filepath, "file_last_modified": file_last_modified}
 
     @dag.task()
-    def backup_previous_data(backups_dir, **kwargs):
+    def backup_previous_data(**kwargs):
         ti = kwargs["ti"]
         package = ti.xcom_pull(task_ids="get_package")
         backups = Path(ti.xcom_pull(task_ids="backups_dir"))
