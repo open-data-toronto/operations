@@ -345,7 +345,7 @@ with DAG(
         task_id="resource_is_not_new"
     ) >> backup_data >> get_or_create_resource
 
-    resource = get_resource(package_refresh)
+    resource = get_resource(refresh_package)
 
     file_new_branch = BranchPythonOperator(
         task_id="file_new_branch",
