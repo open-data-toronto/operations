@@ -112,7 +112,7 @@ class BackupDatastoreResourceOperator(BaseOperator):
             "checksum": checksum,
         }
 
-        logging.info(f"Returning: {json.dumps(result)}")
+        logging.info(f"Returning: {result}")
 
         return result
 
