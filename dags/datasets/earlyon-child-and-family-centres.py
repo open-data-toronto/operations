@@ -318,8 +318,8 @@ with DAG(
 
     get_or_create_resource = GetOrCreateResourceOperator(
         task_id="get_or_create_resource",
-        package_id=PACKAGE_ID,
-        name=RESOURCE_NAME,
+        package_name_or_id=PACKAGE_ID,
+        resource_name=RESOURCE_NAME,
         resource_attributes=dict(
             format="geojson",
             is_preview=True,
