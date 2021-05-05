@@ -13,8 +13,11 @@ from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
 from ckan_plugin.operators.package_operator import GetPackageOperator
+from ckan_plugin.operators.resource_operator import GetOrCreateResourceOperator
 from dateutil import parser
 from utils import agol_utils, airflow_utils, ckan_utils
+from utils_plugin.operators.directory_operator import CreateLocalDirectoryOperator
+from utils_plugin.operators.file_operator import DownloadFileOperator
 
 PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
 RESOURCE_NAME = "EarlyON Child and Family Centres"
@@ -68,8 +71,10 @@ with DAG(
         return {"path": filepath, "file_last_modified": file_last_modified}
 
     @dag.task()
-    def backup_previous_data(package, backups_dir):
-        backups = Path(backups_dir)
+    def backup_previous_data(backups_dir, **kwargs):
+        ti = kwargs["ti"]
+        package = ti.xcom_pull(task_ids="get_package")
+        backups = Path(ti.xcom_pull(task_ids="backups_dir"))
 
         resource_id = [r for r in package["resources"] if r["name"] == RESOURCE_NAME][
             0
@@ -194,7 +199,10 @@ with DAG(
 
         return "file_is_new"
 
-    def is_data_new(checksum, backups_dir):
+    def is_data_new(checksum):
+        ti = kwargs["ti"]
+        backups_dir = Path(ti.xcom_pull(task_ids="backups_dir"))
+
         logging.info(f"checksum: {checksum}")
         logging.info(f"backups_dir: {backups_dir}")
 
@@ -272,32 +280,17 @@ with DAG(
     def refresh_package():
         return CKAN.action.package_show(id=dag.dag_id)
 
-    @dag.task()
-    def create_resource(package):
-        return CKAN.action.resource_create(
-            package_id=package["id"],
-            name=RESOURCE_NAME,
-            format="geojson",
-            is_preview=True,
-            url_type="datastore",
-            extract_job=f"Airflow: {dag.dag_id}",
-        )
+    tmp_dir = CreateLocalDirectoryOperator(
+        task_id="tmp_dir", file_path=Path(Variable.get("tmp_dir")) / dag.dag_id,
+    )
 
-    @dag.task()
-    def create_tmp_dir():
-        return airflow_utils.create_dir_with_dag_name(
-            dag_id=dag.dag_id, dir_variable_name="tmp_dir"
-        )
+    backups_dir = CreateLocalDirectoryOperator(
+        task_id="backups_dir", file_path=Path(Variable.get("backups_dir")) / dag.dag_id,
+    )
 
-    @dag.task()
-    def create_backups_dir():
-        return airflow_utils.create_dir_with_dag_name(
-            dag_id=dag.dag_id, dir_variable_name="backups_dir"
-        )
-
-    tmp_dir = create_tmp_dir()
-
-    backups_dir = create_backups_dir()
+    src = DownloadFileOperator(
+        file_url=SRC_URL, dir_task_id="tmp_dir", filename="src_data.json"
+    )
 
     source_file = get_data(tmp_dir)
 
@@ -316,21 +309,38 @@ with DAG(
 
     checksum = make_checksum(transformed_data)
 
-    backup_data = backup_previous_data(package, backups_dir)
+    backup_data = backup_previous_data()
 
     data_dict = build_data_dict(transformed_data)
 
-    create_new_resource = create_resource(package)
+    get_or_create_resource = GetOrCreateResourceOperator(
+        task_id="get_or_create_resource",
+        package_id=PACKAGE_ID,
+        name=RESOURCE_NAME,
+        resource_attributes=dict(
+            format="geojson",
+            is_preview=True,
+            url_type="datastore",
+            extract_job=f"Airflow: {dag.dag_id}",
+        ),
+    )
 
     package_refresh = refresh_package()
 
+    refresh_package = GetPackageOperator(
+        task_id="refresh_package",
+        address=ckan_creds[ACTIVE_ENV]["address"],
+        apikey=ckan_creds[ACTIVE_ENV]["apikey"],
+        package_name_or_id=dag.dag_id,
+    )
+
     package >> new_resource_branch >> DummyOperator(
         task_id="resource_is_new"
-    ) >> create_new_resource >> package_refresh
+    ) >> get_or_create_resource
 
     new_resource_branch >> DummyOperator(
         task_id="resource_is_not_new"
-    ) >> backup_data >> package_refresh
+    ) >> backup_data >> get_or_create_resource
 
     resource = get_resource(package_refresh)
 
