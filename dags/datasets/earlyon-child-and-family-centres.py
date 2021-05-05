@@ -206,8 +206,6 @@ with DAG(
 
     transformed_data = transform_data()
 
-    tmp_dir >> src >> transformed_data
-
     # checksum = make_checksum(transformed_data)
 
     data_dict = build_data_dict(transformed_data)
@@ -236,20 +234,6 @@ with DAG(
     )
 
     fields = get_fields(data_dict)
-
-    package >> get_or_create_resource >> new_resource_branch
-
-    new_resource_branch >> DummyOperator(
-        task_id="resource_is_new"
-    ) >> data_dict >> fields
-
-    backups_dir >> backup_data
-
-    new_resource_branch >> DummyOperator(
-        task_id="resource_is_not_new"
-    ) >> backup_data >> fields
-
-    fields >> new_data_branch
 
     file_new_branch = BranchPythonOperator(
         task_id="file_new_branch", python_callable=is_file_new,
@@ -287,17 +271,6 @@ with DAG(
             ACTIVE_ENV,
         ),
     )
-
-    src >> file_new_branch
-
-    file_new_branch >> DummyOperator(task_id="file_is_new") >> [
-        new_data_branch,
-        sync_timestamp,
-    ]
-
-    file_new_branch >> DummyOperator(
-        task_id="file_is_not_new"
-    ) >> send_nothing_notification
 
     delete_records = DeleteDatastoreResourceRecordsOperator(
         task_id="delete_records",
@@ -337,6 +310,31 @@ with DAG(
             ACTIVE_ENV,
         ),
     )
+
+    backups_dir >> backup_data
+
+    tmp_dir >> src >> [file_new_branch, transformed_data]
+
+    package >> get_or_create_resource >> new_resource_branch
+
+    new_resource_branch >> DummyOperator(
+        task_id="resource_is_new"
+    ) >> data_dict >> fields
+
+    new_resource_branch >> DummyOperator(
+        task_id="resource_is_not_new"
+    ) >> backup_data >> fields
+
+    file_new_branch >> DummyOperator(task_id="file_is_new") >> [
+        new_data_branch,
+        sync_timestamp,
+    ]
+
+    file_new_branch >> DummyOperator(
+        task_id="file_is_not_new"
+    ) >> send_nothing_notification
+
+    fields >> new_data_branch
 
     new_data_branch >> DummyOperator(
         task_id="data_is_new"
