@@ -88,9 +88,9 @@ class BackupDatastoreResourceOperator(BaseOperator):
         resource = ti.xcom_pull(task_ids=self.resource_task_id)
         backups_dir = Path(ti.xcom_pull(task_ids=self.dir_task_id))
 
-        record_count = self.ckan.action.action.datastore_search(
-            id=resource["id"], limit=0
-        )["total"]
+        record_count = self.ckan.action.datastore_search(id=resource["id"], limit=0)[
+            "total"
+        ]
 
         datastore_response = self.ckan.action.datastore_search(
             id=resource["id"], limit=record_count
