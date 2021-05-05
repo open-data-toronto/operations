@@ -118,8 +118,7 @@ with DAG(
             "columns": data.shape[1],
         }
 
-    def is_resource_new(**kwargs):
-        package = kwargs["package"]
+    def is_resource_new(package):
         logging.info(f"resources found: {[r['name'] for r in package['resources']]}")
         is_new = RESOURCE_NAME not in [r["name"] for r in package["resources"]]
 
@@ -311,7 +310,7 @@ with DAG(
     new_resource_branch = BranchPythonOperator(
         task_id="new_resource_branch",
         python_callable=is_resource_new,
-        op_kwargs={"package": package},
+        op_args=(package),
     )
 
     transformed_data = transform_data(tmp_dir, source_file)
