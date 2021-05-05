@@ -171,9 +171,9 @@ with DAG(
         inserted_records_count = kwargs["ti"].xcom_pull(task_ids="insert_records")
 
         if inserted_records_count is not None and inserted_records_count > 0:
-            return "records_were_loaded"
+            return "new_records_notification"
 
-        return "records_were_not_loaded"
+        return "no_new_data_notification"
 
     def send_new_records_notification(**kwargs):
         count = kwargs["ti"].xcom_pull("insert_records")
@@ -353,13 +353,9 @@ with DAG(
 
     sync_timestamp >> records_loaded_branch
 
-    records_loaded_branch >> DummyOperator(
-        task_id="records_were_loaded"
-    ) >> new_records_notification
+    records_loaded_branch  >> new_records_notification
 
-    records_loaded_branch >> DummyOperator(
-        task_id="records_were_not_loaded"
-    ) >> no_new_data_notification
+    records_loaded_branch >> no_new_data_notification
 
     [
         no_new_data_notification,
