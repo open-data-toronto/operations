@@ -60,9 +60,9 @@ with DAG(
         is_new = RESOURCE_NAME not in [r["name"] for r in package["resources"]]
 
         if is_new:
-            return "resource_is_new"
+            return "create_data_dictionary"
 
-        return "resource_is_not_new"
+        return "backup_data"
 
     def build_data_dict(**kwargs):
         data_fp = Path(kwargs["ti"].xcom_pull(task_ids="transform_data"))
@@ -129,10 +129,10 @@ with DAG(
         )
 
         if difference_in_seconds == 0:
-            return "file_is_new"
-            return "file_is_not_new"
+            return "is_data_new"
+            return "backup_data"
 
-        return "file_is_new"
+        return "is_data_new"
 
     def is_data_new(**kwargs):
         # ti = kwargs["ti"]
@@ -162,7 +162,7 @@ with DAG(
             with open(Path(backup_data["fields_file_path"]), "r") as f:
                 fields = json.load(f)
         else:
-            fields = ti.xcom_pull(task_ids="data_dict")
+            fields = ti.xcom_pull(task_ids="create_data_dictionary")
             assert fields is not None, "No fields"
 
         return fields
@@ -218,7 +218,9 @@ with DAG(
         task_id="transform_data", python_callable=transform_data,
     )
 
-    data_dict = PythonOperator(task_id="data_dict", python_callable=build_data_dict,)
+    create_data_dictionary = PythonOperator(
+        task_id="create_data_dictionary", python_callable=build_data_dict,
+    )
 
     # checksum = make_checksum(transformed_data)
 
@@ -254,7 +256,7 @@ with DAG(
     )
 
     new_data_branch = BranchPythonOperator(
-        task_id="new_data_branch", python_callable=is_data_new,
+        task_id="is_data_new", python_callable=is_data_new,
     )
 
     delete_tmp_data = PythonOperator(
@@ -329,15 +331,11 @@ with DAG(
 
     package >> get_or_create_resource >> new_resource_branch
 
-    new_resource_branch >> DummyOperator(
-        task_id="resource_is_new"
-    ) >> data_dict >> fields
+    new_resource_branch >> create_data_dictionary >> fields
 
-    new_resource_branch >> DummyOperator(
-        task_id="resource_is_not_new"
-    ) >> backup_data >> fields
+    new_resource_branch >> backup_data >> fields
 
-    file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
+    file_new_branch >> new_data_branch
 
     file_new_branch >> DummyOperator(
         task_id="file_is_not_new"
