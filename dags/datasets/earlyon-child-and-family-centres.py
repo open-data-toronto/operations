@@ -354,9 +354,7 @@ with DAG(
     )
 
     new_data_branch = BranchPythonOperator(
-        task_id="new_data_branch",
-        python_callable=is_data_new,
-        op_args=(checksum, backups_dir),
+        task_id="new_data_branch", python_callable=is_data_new, op_args=(checksum),
     )
 
     delete_tmp_data = PythonOperator(
