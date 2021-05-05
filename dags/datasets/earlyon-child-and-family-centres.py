@@ -199,7 +199,7 @@ with DAG(
 
         return "file_is_new"
 
-    def is_data_new(checksum):
+    def is_data_new(checksum, **kwargs):
         ti = kwargs["ti"]
         backups_dir = Path(ti.xcom_pull(task_ids="backups_dir"))
 
@@ -289,7 +289,10 @@ with DAG(
     )
 
     src = DownloadFileOperator(
-        file_url=SRC_URL, dir_task_id="tmp_dir", filename="src_data.json"
+        task_id="get_data",
+        file_url=SRC_URL,
+        dir_task_id="tmp_dir",
+        filename="src_data.json",
     )
 
     source_file = get_data(tmp_dir)
