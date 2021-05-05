@@ -131,14 +131,14 @@ class DeleteDatastoreResourceRecordsOperator(BaseOperator):
     def execute(self, context):
         backups_info = context["ti"].xcom_pull(task_ids=self.backup_task_id)
 
-        self.ckan.action.action.datastore_delete(id=backups_info["resource_id"])
+        self.ckan.action.datastore_delete(id=backups_info["resource_id"])
 
         with open(Path(backups_info["fields_file_path"]), "r") as f:
             fields = json.load(f)
 
         self.ckan.action.datastore_create(id=backups_info["resource_id"], fields=fields)
 
-        record_count = self.ckan.action.action.datastore_search(
+        record_count = self.ckan.action.datastore_search(
             id=backups_info["resource_id"], limit=0
         )["total"]
 
