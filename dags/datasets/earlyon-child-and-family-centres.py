@@ -171,7 +171,7 @@ with DAG(
         return filepath
 
     @dag.task()
-    def get_resource(package):
+    def get_resource(**kwargs):
         return [r for r in package["resources"] if r["name"] == RESOURCE_NAME][0]
 
     def is_file_new(resource, data_file_info):
@@ -329,8 +329,6 @@ with DAG(
             extract_job=f"Airflow: {dag.dag_id}",
         ),
     )
-
-    package_refresh = refresh_package()
 
     refresh_package = GetPackageOperator(
         task_id="refresh_package",
