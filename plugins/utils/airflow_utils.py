@@ -1,12 +1,13 @@
-from airflow.models import Variable
+import json
+import math
+import os
+import shutil
 from datetime import timedelta
 from pathlib import Path
 from time import sleep
+
 import requests
-import shutil
-import math
-import json
-import os
+from airflow.models import Variable
 
 
 def get_default_args(args={}):
