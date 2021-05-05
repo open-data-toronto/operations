@@ -185,7 +185,7 @@ class InsertDatastoreResourceRecordsOperator(BaseOperator):
 
         for chunk in chunks:
             clean_records = []
-            logging.info(f"Removing NaNs and inserting {len( self.chunk_size)} records")
+            logging.info(f"Removing NaNs and inserting {len(records)} records")
             for r in chunk:
                 record = {}
                 for key, value in r.items():
