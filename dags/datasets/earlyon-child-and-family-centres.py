@@ -286,6 +286,8 @@ with DAG(
         ),
     )
 
+    src >> file_new_branch
+
     file_new_branch >> DummyOperator(task_id="file_is_new") >> [
         new_data_branch,
         sync_timestamp,
