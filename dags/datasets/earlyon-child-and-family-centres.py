@@ -295,6 +295,8 @@ with DAG(
         filename="src_data.json",
     )
 
+    tmp_dir >> src
+
     source_file = get_data(tmp_dir)
 
     package = GetPackageOperator(
