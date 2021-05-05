@@ -118,7 +118,7 @@ with DAG(
 
         logging.info(f"resource: {resource} | data_file_info: {data_file_info}")
 
-        last_modified_string = data_file_info["file_last_modified"]
+        last_modified_string = data_file_info["last_modified"]
         file_last_modified = parser.parse(last_modified_string)
         last_modified_attr = resource["last_modified"]
 
@@ -162,7 +162,7 @@ with DAG(
 
     @dag.task(trigger_rule="none_failed")
     def get_fields(fields, **kwargs):
-        yi = kwargs["ti"]
+        ti = kwargs["ti"]
         backup_data = Path(ti.xcom_pull(task_ids="backup_data"))
         fields_path = ti.xcom_pull(task_ids="get_fields")
 
@@ -171,14 +171,6 @@ with DAG(
                 fields = json.load(f)
 
         return fields
-
-    @dag.task()
-    def update_resource_last_modified(resource, source_file):
-        return ckan_utils.update_resource_last_modified(
-            ckan=CKAN,
-            resource_id=resource["id"],
-            new_last_modified=parser.parse(source_file["file_last_modified"]),
-        )
 
     tmp_dir = CreateLocalDirectoryOperator(
         task_id="tmp_dir", path=Path(Variable.get("tmp_dir")) / dag.dag_id,
@@ -237,7 +229,9 @@ with DAG(
         dir_task_id="backups_dir",
     )
 
-    fields = PythonOperator(task_id="get_fields", python_callable=get_fields,)
+    fields = PythonOperator(
+        task_id="get_fields", python_callable=get_fields, trigger_rule="none_failed"
+    )
 
     file_new_branch = BranchPythonOperator(
         task_id="file_new_branch", python_callable=is_file_new,
@@ -317,7 +311,7 @@ with DAG(
 
     backups_dir >> backup_data
 
-    tmp_dir >> src >> [file_new_branch, transformed_data]
+    tmp_dir >> src >> transformed_data >> file_new_branch
 
     package >> get_or_create_resource >> new_resource_branch
 
