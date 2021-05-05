@@ -3,7 +3,6 @@ import logging
 import os
 from pathlib import Path
 
-import ckanapi
 import pandas as pd
 from airflow import DAG
 from airflow.models import Variable
@@ -21,29 +20,26 @@ from ckan_plugin.operators.resource_operator import (
     ResourceAndFileOperator,
 )
 from dateutil import parser
-from utils import agol_utils, airflow_utils, ckan_utils
+from utils import agol_utils, airflow_utils
 from utils_plugin.operators.directory_operator import CreateLocalDirectoryOperator
 from utils_plugin.operators.file_operator import DownloadFileOperator
 
-PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
 RESOURCE_NAME = "EarlyON Child and Family Centres"
 SRC_URL = "http://opendata.toronto.ca/childrens.services/child-family-programs/earlyon.json"  # noqa: E501
-
-ACTIVE_ENV = Variable.get("active_env")
 
 
 def send_failure_message():
     airflow_utils.message_slack(
-        name=PACKAGE_ID,
+        name=Path(os.path.abspath(__file__)).name.replace(".py", ""),
         message_type="error",
         msg="Job not finished",
-        active_env=ACTIVE_ENV,
-        prod_webhook=ACTIVE_ENV == "prod",
+        active_env=Variable.get("active_env"),
+        prod_webhook=Variable.get("active_env") == "prod",
     )
 
 
 with DAG(
-    PACKAGE_ID,
+    Path(os.path.abspath(__file__)).name.replace(".py", ""),
     default_args=airflow_utils.get_default_args(
         {
             "on_failure_callback": send_failure_message,
@@ -209,8 +205,8 @@ with DAG(
 
     package = GetPackageOperator(
         task_id="get_package",
-        address=ckan_creds[ACTIVE_ENV]["address"],
-        apikey=ckan_creds[ACTIVE_ENV]["apikey"],
+        address=ckan_creds[Variable.get("active_env")]["address"],
+        apikey=ckan_creds[Variable.get("active_env")]["apikey"],
         package_name_or_id=dag.dag_id,
     )
 
@@ -228,8 +224,8 @@ with DAG(
 
     get_or_create_resource = GetOrCreateResourceOperator(
         task_id="get_or_create_resource",
-        address=ckan_creds[ACTIVE_ENV]["address"],
-        apikey=ckan_creds[ACTIVE_ENV]["apikey"],
+        address=ckan_creds[Variable.get("active_env")]["address"],
+        apikey=ckan_creds[Variable.get("active_env")]["apikey"],
         package_name_or_id=dag.dag_id,
         resource_name=RESOURCE_NAME,
         resource_attributes=dict(
@@ -243,8 +239,8 @@ with DAG(
 
     backup_data = BackupDatastoreResourceOperator(
         task_id="backup_data",
-        address=ckan_creds[ACTIVE_ENV]["address"],
-        apikey=ckan_creds[ACTIVE_ENV]["apikey"],
+        address=ckan_creds[Variable.get("active_env")]["address"],
+        apikey=ckan_creds[Variable.get("active_env")]["apikey"],
         resource_task_id="get_or_create_resource",
         dir_task_id="backups_dir",
     )
@@ -270,8 +266,8 @@ with DAG(
 
     sync_timestamp = ResourceAndFileOperator(
         task_id="sync_timestamp",
-        address=ckan_creds[ACTIVE_ENV]["address"],
-        apikey=ckan_creds[ACTIVE_ENV]["apikey"],
+        address=ckan_creds[Variable.get("active_env")]["address"],
+        apikey=ckan_creds[Variable.get("active_env")]["apikey"],
         download_file_task_id="get_data",
         resource_task_id="get_or_create_resource",
         upload_to_ckan=False,
@@ -286,22 +282,22 @@ with DAG(
             dag.dag_id,
             "No new data file",
             "success",
-            ACTIVE_ENV == "prod",
-            ACTIVE_ENV,
+            Variable.get("active_env") == "prod",
+            Variable.get("active_env"),
         ),
     )
 
     delete_records = DeleteDatastoreResourceRecordsOperator(
         task_id="delete_records",
-        address=ckan_creds[ACTIVE_ENV]["address"],
-        apikey=ckan_creds[ACTIVE_ENV]["apikey"],
+        address=ckan_creds[Variable.get("active_env")]["address"],
+        apikey=ckan_creds[Variable.get("active_env")]["apikey"],
         backup_task_id="backup_data",
     )
 
     insert_records = InsertDatastoreResourceRecordsOperator(
         task_id="insert_records",
-        address=ckan_creds[ACTIVE_ENV]["address"],
-        apikey=ckan_creds[ACTIVE_ENV]["apikey"],
+        address=ckan_creds[Variable.get("active_env")]["address"],
+        apikey=ckan_creds[Variable.get("active_env")]["apikey"],
         parquet_filepath_task_id="transform_data",
         resource_task_id="get_or_create_resource",
     )
@@ -318,8 +314,8 @@ with DAG(
             dag.dag_id,
             "Updated resource last_modified time only: new file but no new data",
             "success",
-            ACTIVE_ENV == "prod",
-            ACTIVE_ENV,
+            Variable.get("active_env") == "prod",
+            Variable.get("active_env"),
         ),
     )
 
