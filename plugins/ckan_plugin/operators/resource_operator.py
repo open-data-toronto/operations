@@ -111,7 +111,7 @@ class ResourceAndFileOperator(BaseOperator):
 
         if self.sync and difference_in_seconds > 0:
             self.ckan.action.resource_patch(
-                id=self.resource_id,
+                id=resource["id"],
                 last_modified=self._datetime_to_string(file_last_modified),
             )
 
