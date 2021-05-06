@@ -61,9 +61,11 @@ with DAG(
         is_new = RESOURCE_NAME not in [r["name"] for r in package["resources"]]
 
         if is_new:
-            return "create_data_dictionary"
+            return "resource_is_new"
+            # return "create_data_dictionary"
 
-        return "backup_data"
+        return "resource_is_not_new"
+        # return "backup_data"
 
     def build_data_dict(**kwargs):
         data_fp = Path(kwargs["ti"].xcom_pull(task_ids="transform_data"))
@@ -345,9 +347,13 @@ with DAG(
 
     package >> get_or_create_resource >> [file_new_branch, new_resource_branch]
 
-    new_resource_branch >> create_data_dictionary >> fields
+    new_resource_branch >> DummyOperator(
+        task_id="resource_is_new"
+    ) >> create_data_dictionary >> fields
 
-    new_resource_branch >> backup_data >> fields
+    new_resource_branch >> DummyOperator(
+        task_id="resource_is_not_new"
+    ) >> backup_data >> fields
 
     file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
 
