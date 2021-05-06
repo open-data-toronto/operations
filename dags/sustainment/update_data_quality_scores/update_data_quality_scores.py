@@ -1,21 +1,17 @@
-from airflow.operators.python_operator import PythonOperator
+import json
+import logging
+import os
 from datetime import datetime
-from airflow.models import Variable
-from airflow import DAG
 from pathlib import Path
+
+import ckanapi
 import pandas as pd
 import requests
-import logging
-import ckanapi
-import json
-import sys
-import os
-
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
-import dags.sustainment.update_data_quality_scores.dqs_logic as dqs_logic  # noqa: E402
-
+from airflow import DAG
+from airflow.models import Variable
+from airflow.operators.python import PythonOperator
+from sustainment.update_data_quality_scores import dqs_logic  # noqa: E402
+from utils import airflow_utils, ckan_utils
 
 job_settings = {
     "description": "Calculates DQ scores across the catalogue",
@@ -65,12 +61,18 @@ BINS = {
 
 def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="insert_scores")
-    airflow_utils.message_slack(name=JOB_NAME, **msg)
+    airflow_utils.message_slack(
+        name=JOB_NAME, **msg, active_env=ACTIVE_ENV, prod_webhook=ACTIVE_ENV == "prod",
+    )
 
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=JOB_NAME, message_type="error", msg="Job not finished",
+        name=JOB_NAME,
+        message_type="error",
+        msg="Job not finished",
+        active_env=ACTIVE_ENV,
+        prod_webhook=ACTIVE_ENV == "prod",
     )
 
 
@@ -194,7 +196,7 @@ def insert_scores(**kwargs):
 
 
 default_args = airflow_utils.get_default_args(
-    {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"],}
+    {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"]}
 )
 
 
@@ -317,4 +319,3 @@ with DAG(
     add_scores >> delete_final_scores_tmp_file
     [upload_models, add_scores] >> send_notification
     [delete_final_scores_tmp_file, delete_raw_scores_tmp_file] >> delete_tmp_dir
-

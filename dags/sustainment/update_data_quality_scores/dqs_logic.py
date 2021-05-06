@@ -1,8 +1,9 @@
 import json
+import logging
 import math
 import re
 from datetime import datetime as dt
-import logging
+from pathlib import Path
 
 import nltk
 import numpy as np
@@ -11,7 +12,6 @@ from geopandas import gpd
 from nltk.corpus import wordnet
 from shapely.geometry import shape
 from sklearn.preprocessing import MinMaxScaler
-from pathlib import Path
 
 nltk.download("wordnet")
 
@@ -105,7 +105,7 @@ def prepare_and_normalize_scores(**kwargs):
     filename = "final_scores"
     filepath = tmp_dir / f"{filename}.parquet"
 
-    df.to_parquet(filepath)
+    df.to_parquet(filepath, engine="fastparquet", compression=None)
 
     return str(filepath)
 
@@ -260,6 +260,6 @@ def score_catalogue(**kwargs):
 
             logging.info(f"{p['name']}: {r['name']} - {len(content)} records")
 
-    pd.DataFrame(data).to_parquet(filepath)
+    pd.DataFrame(data).to_parquet(filepath, engine="fastparquet", compression=None)
 
     return str(filepath)
