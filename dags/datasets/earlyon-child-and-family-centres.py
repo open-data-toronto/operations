@@ -343,7 +343,7 @@ with DAG(
 
     tmp_dir >> src >> transformed_data >> file_new_branch
 
-    package >> get_or_create_resource >> new_resource_branch
+    package >> get_or_create_resource >> [file_new_branch, new_resource_branch]
 
     new_resource_branch >> create_data_dictionary >> fields
 
