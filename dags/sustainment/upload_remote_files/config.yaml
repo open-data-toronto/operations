@@ -1,3 +1,12 @@
+# 2021/05/06, Gary
+traffic-and-parking-by-law-schedules:
+  Traffic and parking by-law schedules:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/traffic-and-parking-by-law-schedules/chapter950.zip
+toronto-economic-bulletin:
+  Toronto economic bulletin data:
+    format: xlsx
+    url: http://opendata.toronto.ca/economic.development.culture/toronto-economic-bulletin/bulletin_opendata.xlsx
 3d-massing:
   3D Massing (WGS84):
     format: shp
@@ -93,6 +102,13 @@ mobile-watch-your-speed-program-detailed-speed-counts:
   Mobile sign detail count 2021:
     format: zip
     url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2021.zip
+school-safety-zone-watch-your-speed-program-detailed-speed-counts:
+  Stationary count detailed 2020:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2020.zip
+  Stationary count detailed 2021:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2021.zip
 municipal-licensing-and-standards-business-licences-and-permits:
   Business licences data:
     format: csv
@@ -145,13 +161,6 @@ report-request-log-city-council-and-its-committees:
   Report Request Log:
     format: xlsx
     url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog.xls
-school-safety-zone-watch-your-speed-program-detailed-speed-counts:
-  Stationary count detailed 2020:
-    format: zip
-    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2020.zip
-  Stationary count detailed 2021:
-    format: zip
-    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2021.zip
 toronto-centreline-tcl:
   Centreline (wgs84) - geojson:
     format: zip
@@ -159,10 +168,6 @@ toronto-centreline-tcl:
   Centreline (wgs84) - shapefile:
     format: shp
     url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v2.zip
-# toronto-economic-bulletin:
-#   Toronto economic bulletin data:
-#     format: xlsx
-#     url: http://opendata.toronto.ca/economic.development.culture/toronto-economic-bulletin/bulletin_opendata.xlsx
 traffic-cameras:
   Traffic Camera List (CSV):
     format: csv
