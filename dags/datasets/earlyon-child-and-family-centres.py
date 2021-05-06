@@ -63,10 +63,8 @@ with DAG(
 
         if is_new:
             return "resource_is_new"
-            # return "create_data_dictionary"
 
         return "resource_is_not_new"
-        # return "backup_data"
 
     def build_data_dict(**kwargs):
         data_fp = Path(kwargs["ti"].xcom_pull(task_ids="transform_data"))
