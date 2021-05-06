@@ -347,7 +347,7 @@ with DAG(
         address=ckan_address,
         apikey=ckan_apikey,
         backup_task_id="backup_data",
-        trigger_rule="one_failed",
+        trigger_rule="all_failed",
     )
 
     backups_dir >> backup_data
