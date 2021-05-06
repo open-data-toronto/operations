@@ -1,22 +1,19 @@
-from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy_operator import DummyOperator
-from datetime import datetime, timedelta
-from airflow.models import Variable
-import pandas as pd
-import ckanapi
-import logging
 import hashlib
+import json
+import logging
+import os
+from datetime import datetime, timedelta
 from io import BytesIO
 from pathlib import Path
-from airflow import DAG
-import requests
-import json
-import os
-import sys
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+import ckanapi
+import pandas as pd
+import requests
+from airflow import DAG
+from airflow.models import Variable
+from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import BranchPythonOperator, PythonOperator
+from utils import airflow_utils, ckan_utils
 
 job_settings = {
     "description": "Take COVID19 data from QA (filestore) and put in PROD (datastore)",
@@ -24,10 +21,7 @@ job_settings = {
     "start_date": datetime(2020, 11, 24, 13, 35, 0),
 }
 
-JOB_FILE = Path(os.path.abspath(__file__))
-JOB_NAME = JOB_FILE.name[:-3]
-PACKAGE_ID = JOB_NAME.replace("_", "-")
-
+PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 TARGET_CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
@@ -42,24 +36,28 @@ def send_success_msg(**kwargs):
     msg = ti.xcom_pull(task_ids=msg_task_id)
 
     airflow_utils.message_slack(
-        name=JOB_NAME,
+        name=PACKAGE_ID,
         message_type="success",
         msg=msg,
+        active_env=ACTIVE_ENV,
+        prod_webhook=ACTIVE_ENV == "prod",
     )
 
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=JOB_NAME,
+        name=PACKAGE_ID,
         message_type="error",
         msg="Job not finished",
+        active_env=ACTIVE_ENV,
+        prod_webhook=ACTIVE_ENV == "prod",
     )
 
 
 def backup_old_data(**kwargs):
     ti = kwargs.pop("ti")
     package = ti.xcom_pull(task_ids="get_target_package")
-    backups = Path(Variable.get("backups_dir")) / JOB_NAME
+    backups = Path(Variable.get("backups_dir")) / PACKAGE_ID
 
     resource = package["resources"][0]
     record_count = TARGET_CKAN.action.datastore_search(id=resource["id"], limit=0)[
@@ -170,7 +168,7 @@ def get_new_data_unique_id(**kwargs):
 def confirm_data_is_new(**kwargs):
     ti = kwargs.pop("ti")
     data_to_load_unique_id = ti.xcom_pull(task_ids="get_new_data_unique_id")
-    backups = Path(Variable.get("backups_dir")) / JOB_NAME
+    backups = Path(Variable.get("backups_dir")) / PACKAGE_ID
 
     for f in os.listdir(backups):
         if os.path.isfile(backups / f) and data_to_load_unique_id in f:
@@ -234,9 +232,7 @@ def update_resource_last_modified(**kwargs):
     resource = package["resources"][0]
 
     res = ckan_utils.update_resource_last_modified(
-        ckan=TARGET_CKAN,
-        resource_id=resource["id"],
-        new_last_modified=datetime.now(),
+        ckan=TARGET_CKAN, resource_id=resource["id"], new_last_modified=datetime.now(),
     )
 
     return res
@@ -252,34 +248,32 @@ default_args = airflow_utils.get_default_args(
 )
 
 with DAG(
-    JOB_NAME,
+    PACKAGE_ID,
     default_args=default_args,
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
+    tags=["dataset", "priority"],
     catchup=False,
 ) as dag:
 
     create_tmp_dir = PythonOperator(
         task_id="create_tmp_dir",
         python_callable=airflow_utils.create_dir_with_dag_name,
-        op_kwargs={"dag_id": JOB_NAME, "dir_variable_name": "tmp_dir"},
+        op_kwargs={"dag_id": PACKAGE_ID, "dir_variable_name": "tmp_dir"},
     )
 
     create_backups_dir = PythonOperator(
         task_id="create_backups_dir",
         python_callable=airflow_utils.create_dir_with_dag_name,
-        op_kwargs={"dag_id": JOB_NAME, "dir_variable_name": "backups_dir"},
+        op_kwargs={"dag_id": PACKAGE_ID, "dir_variable_name": "backups_dir"},
     )
 
     source_data = PythonOperator(
-        task_id="get_new_data",
-        python_callable=get_new_data,
-        provide_context=True,
+        task_id="get_new_data", python_callable=get_new_data, provide_context=True,
     )
 
     target_package = PythonOperator(
-        task_id="get_target_package",
-        python_callable=get_target_package,
+        task_id="get_target_package", python_callable=get_target_package,
     )
 
     old_data = PythonOperator(
@@ -289,9 +283,7 @@ with DAG(
     )
 
     prepare_data = PythonOperator(
-        task_id="prep_new_data",
-        python_callable=prep_new_data,
-        provide_context=True,
+        task_id="prep_new_data", python_callable=prep_new_data, provide_context=True,
     )
 
     new_data_unique_id = PythonOperator(
@@ -319,9 +311,7 @@ with DAG(
     )
 
     loaded_msg = PythonOperator(
-        task_id="build_loaded_msg",
-        python_callable=build_message,
-        provide_context=True,
+        task_id="build_loaded_msg", python_callable=build_message, provide_context=True,
     )
 
     nothing_to_load_msg = PythonOperator(
@@ -356,18 +346,14 @@ with DAG(
     delete_tmp_dir = PythonOperator(
         task_id="delete_tmp_dir",
         python_callable=airflow_utils.delete_tmp_data_dir,
-        op_kwargs={"dag_id": JOB_NAME},
+        op_kwargs={"dag_id": PACKAGE_ID},
     )
 
     delete_source = PythonOperator(
-        task_id="delete_source_resource",
-        python_callable=delete_source_resource,
+        task_id="delete_source_resource", python_callable=delete_source_resource,
     )
 
-    begin_cleanup = DummyOperator(
-        task_id="begin_cleanup",
-        trigger_rule="none_failed",
-    )
+    begin_cleanup = DummyOperator(task_id="begin_cleanup", trigger_rule="none_failed",)
 
     update_timestamp = PythonOperator(
         task_id="update_resource_last_modified",

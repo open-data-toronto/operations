@@ -1,31 +1,26 @@
-from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy_operator import DummyOperator
-from distutils.dir_util import copy_tree
-from datetime import datetime, timedelta
-from airflow.models import Variable
-from pathlib import Path
-from airflow import DAG
-import logging
 import calendar
-import requests
-import ckanapi
-import zipfile
-import shutil
-import sys
+import logging
 import os
+import shutil
+import zipfile
+from datetime import datetime, timedelta
+from distutils.dir_util import copy_tree
+from pathlib import Path
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+import ckanapi
+import requests
+from airflow import DAG
+from airflow.models import Variable
+from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import BranchPythonOperator, PythonOperator
+from utils import airflow_utils, ckan_utils
 
-JOB_FILE = Path(os.path.abspath(__file__))
-JOB_NAME = JOB_FILE.name[:-3]
-PACKAGE_ID = JOB_NAME.replace("_", "-")
+PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
 
 dags = [
     {
         "period_range": "weekly",
-        "dag_id": f"{JOB_NAME}_weekly",
+        "dag_id": f"{PACKAGE_ID}_weekly",
         "description": "Gets weekly Oracle Infinity data and uploads to web-analytics",
         "schedule": "0 10 * * 7",
         "start_date": datetime(2000, 1, 1, 1, 1, 0),
@@ -33,7 +28,7 @@ dags = [
     },
     {
         "period_range": "monthly",
-        "dag_id": f"{JOB_NAME}_monthly",
+        "dag_id": f"{PACKAGE_ID}_monthly",
         "description": "Gets monthly Oracle Infinity data and uploads to web-analytics",
         "schedule": "0 12 1 * *",
         "start_date": datetime(2000, 1, 1, 1, 1, 0),
@@ -41,7 +36,7 @@ dags = [
     },
     {
         "period_range": "yearly",
-        "dag_id": f"{JOB_NAME}_yearly",
+        "dag_id": f"{PACKAGE_ID}_yearly",
         "description": "Gets yearly Oracle Infinity data & uploads to web-analytics",
         "schedule": "0 11 1 1 *",
         "start_date": datetime(2000, 1, 1, 1, 1, 0),
@@ -88,22 +83,16 @@ args = {
 
 
 def generate_report(report_name, report_id, begin, end, account_id, user, password):
-
     qs = "&".join(["{}={}".format(k, v) for k, v in args.items()])
-
     prefix = f"https://api.oracleinfinity.io/v1/account/{account_id}/dataexport"
 
     call = f"{prefix}/{report_id}/data?begin={begin}&end={end}&{qs}"
-
     logging.info(f"Begin: {begin} | End: {end} | {report_name.upper()} | {call}")
 
     response = requests.get(call, auth=(user, password))
+    status = response.status_code
 
-    status_code = response.status_code
-
-    assert (
-        status_code == 200
-    ), f"Response code: {status_code}. Reason: {response.reason}"
+    assert status == 200, f"Response code: {status}. Reason: {response.reason}"
 
     return response
 
@@ -112,7 +101,7 @@ def create_dag(d):
     def send_success_msg(**kwargs):
         msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
         airflow_utils.message_slack(
-            name=JOB_NAME,
+            name=PACKAGE_ID,
             message_type="success",
             msg=msg,
             prod_webhook=active_env == "prod",
@@ -121,7 +110,7 @@ def create_dag(d):
 
     def send_failure_msg(self):
         airflow_utils.message_slack(
-            name=JOB_NAME,
+            name=PACKAGE_ID,
             message_type="error",
             msg="Job not finished",
             prod_webhook=active_env == "prod",
@@ -453,6 +442,7 @@ def create_dag(d):
         ),
         description=d["description"],
         schedule_interval=d["schedule"],
+        tags=["dataset"],
         catchup=False,
     )
 
@@ -473,14 +463,12 @@ def create_dag(d):
         is_resource_new_branch = BranchPythonOperator(
             task_id="is_resource_new",
             python_callable=is_resource_new,
-            provide_context=True,
             op_kwargs={"resource_name": d["resource_name"]},
         )
 
         create_resource = PythonOperator(
             task_id="create_new_resource",
             python_callable=create_new_resource,
-            provide_context=True,
             op_kwargs={"resource_name": d["resource_name"]},
         )
 
@@ -494,14 +482,10 @@ def create_dag(d):
         )
 
         get_data = PythonOperator(
-            task_id="download_data",
-            python_callable=download_data,
-            provide_context=True,
+            task_id="download_data", python_callable=download_data,
         )
 
-        unzip_files = PythonOperator(
-            task_id="unzip_data", python_callable=unzip_data, provide_context=True,
-        )
+        unzip_files = PythonOperator(task_id="unzip_data", python_callable=unzip_data,)
 
         filename_date_format = PythonOperator(
             task_id="get_filename_date_format",
@@ -512,13 +496,11 @@ def create_dag(d):
         latest_loaded = PythonOperator(
             task_id="determine_latest_period_loaded",
             python_callable=determine_latest_period_loaded,
-            provide_context=True,
         )
 
         periods_to_load = PythonOperator(
             task_id="calculate_periods_to_load",
             python_callable=calculate_periods_to_load,
-            provide_context=True,
             op_kwargs={"period_range": d["period_range"]},
         )
 
@@ -529,192 +511,157 @@ def create_dag(d):
         new_data_to_load = BranchPythonOperator(
             task_id="are_there_new_periods",
             python_callable=are_there_new_periods,
-            provide_context=True,
             op_kwargs={"resource_name": d["resource_name"]},
         )
 
         staging_folder = PythonOperator(
             task_id="make_staging_folder",
             python_callable=make_staging_folder,
-            provide_context=True,
             op_kwargs={"resource_name": d["resource_name"]},
         )
 
         extract_complete = DummyOperator(task_id="extract_complete")
 
         extract_new = PythonOperator(
-            task_id="extract_new",
-            python_callable=make_new_extract_folders,
-            provide_context=True,
+            task_id="extract_new", python_callable=make_new_extract_folders,
         )
 
         key_metrics = PythonOperator(
             task_id="key_metrics",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Key Metrics"},
         )
 
         new_v_return_visitors = PythonOperator(
             task_id="new_v_return_visitors",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "New vs. Return Visitors"},
         )
 
         hits_by_hour = PythonOperator(
             task_id="hits_by_hour",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Hits by Hour of Day"},
         )
 
         visits_by_day = PythonOperator(
             task_id="visits_by_day",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Visits by Day of Week"},
         )
 
         operating_system = PythonOperator(
             task_id="operating_system",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Operating System Platform"},
         )
 
         browser = PythonOperator(
             task_id="browser",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Browser"},
         )
 
         screen_resolution = PythonOperator(
             task_id="screen_resolution",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Screen Resolution"},
         )
 
         mobile_devices = PythonOperator(
             task_id="mobile_devices",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Mobile Devices"},
         )
 
         mobile_browser = PythonOperator(
             task_id="mobile_browser",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Mobile Browser"},
         )
 
         referring_site = PythonOperator(
             task_id="referring_site",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Referring Site"},
         )
 
         search_engines = PythonOperator(
             task_id="search_engines",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Search Engines"},
         )
 
         countries = PythonOperator(
             task_id="countries",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Countries"},
         )
 
         cities = PythonOperator(
             task_id="cities",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Cities"},
         )
 
         top_pages = PythonOperator(
             task_id="top_pages",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Top Pages"},
         )
 
         entry_pages = PythonOperator(
             task_id="entry_pages",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Entry Pages"},
         )
 
         exit_pages = PythonOperator(
             task_id="exit_pages",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Exit Pages"},
         )
 
         file_downloads = PythonOperator(
             task_id="file_downloads",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "File Downloads"},
         )
 
         email_address = PythonOperator(
             task_id="email_address",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Email Address"},
         )
 
         offsite_links = PythonOperator(
             task_id="offsite_links",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Offsite Links"},
         )
 
         anchor_tags = PythonOperator(
             task_id="anchor_tags",
             python_callable=extract_new_report,
-            provide_context=True,
             op_kwargs={"report_name": "Anchor Tags"},
         )
 
         copy_previous = PythonOperator(
-            task_id="copy_previous",
-            python_callable=copy_previous_to_staging,
-            provide_context=True,
+            task_id="copy_previous", python_callable=copy_previous_to_staging,
         )
 
         zip_resource_files = PythonOperator(
             task_id="zip_files",
             python_callable=zip_files,
-            provide_context=True,
             op_kwargs={"resource_name": d["resource_name"]},
         )
 
-        upload_data = PythonOperator(
-            task_id="upload_zip", python_callable=upload_zip, provide_context=True,
-        )
+        upload_data = PythonOperator(task_id="upload_zip", python_callable=upload_zip,)
 
-        msg = PythonOperator(
-            task_id="build_message",
-            python_callable=build_message,
-            provide_context=True,
-        )
+        msg = PythonOperator(task_id="build_message", python_callable=build_message,)
 
         send_notification = PythonOperator(
-            task_id="send_success_msg",
-            python_callable=send_success_msg,
-            provide_context=True,
+            task_id="send_success_msg", python_callable=send_success_msg,
         )
 
         delete_tmp_dir = PythonOperator(
@@ -730,7 +677,7 @@ def create_dag(d):
 
         is_resource_new_branch >> no_new_resource
 
-        [create_resource, no_new_resource,] >> resource >> get_data >> unzip_files
+        [create_resource, no_new_resource] >> resource >> get_data >> unzip_files
 
         [unzip_files, filename_date_format] >> latest_loaded
 

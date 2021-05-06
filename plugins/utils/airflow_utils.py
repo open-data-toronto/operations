@@ -1,22 +1,13 @@
-from airflow.models import Variable
+import json
+import math
+import os
+import shutil
 from datetime import timedelta
 from pathlib import Path
 from time import sleep
+
 import requests
-import shutil
-import math
-import json
-import sys
-import os
-
-repo_dir = Variable.get("repo_dir")
-
-dirs = {
-    "tmp": Variable.get("tmp_dir"),
-    "backups": Variable.get("backups_dir"),
-}
-
-sys.path.append(repo_dir)
+from airflow.models import Variable
 
 
 def get_default_args(args={}):
@@ -45,6 +36,7 @@ def get_default_args(args={}):
     }
 
 
+# TODO: move to Operator
 def message_slack(name, msg, message_type, prod_webhook=True, active_env=None):
     if active_env is None:
         active_env = Variable.get("active_env")
@@ -82,10 +74,7 @@ def message_slack(name, msg, message_type, prod_webhook=True, active_env=None):
                     head,
                     {
                         "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "\n".join(block_lines),
-                        },
+                        "text": {"type": "mrkdwn", "text": "\n".join(block_lines)},
                     },
                 ]
             }

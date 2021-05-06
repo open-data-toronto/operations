@@ -1,19 +1,13 @@
-from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy_operator import DummyOperator
-from datetime import datetime
-from airflow.models import Variable
-import ckanapi
-
-# import logging
-from pathlib import Path
-from airflow import DAG
-import sys
 import json
+from datetime import datetime
+from pathlib import Path
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import agol as agol_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+import ckanapi
+from airflow import DAG
+from airflow.models import Variable
+from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import BranchPythonOperator, PythonOperator
+from utils import agol_utils, airflow_utils, ckan_utils
 
 common_job_settings = {
     "description": "Toronto Police Service - Annual Services Report for dataset",
@@ -231,9 +225,7 @@ def create_dag(dag_id, entry):
 
     def send_failure_msg(self):
         airflow_utils.message_slack(
-            name=dag_id,
-            message_type="error",
-            msg="Job not finished",
+            name=dag_id, message_type="error", msg="Job not finished",
         )
 
     def build_api_endpoint():
@@ -365,12 +357,12 @@ def create_dag(dag_id, entry):
         ),
         description=description,
         schedule_interval=common_job_settings["schedule"],
+        tags=["archive"],
     )
 
     with dag:
         api_endpoint = PythonOperator(
-            task_id="build_api_endpoint",
-            python_callable=build_api_endpoint,
+            task_id="build_api_endpoint", python_callable=build_api_endpoint,
         )
 
         create_tmp_dir = PythonOperator(
@@ -380,9 +372,7 @@ def create_dag(dag_id, entry):
         )
 
         data = PythonOperator(
-            task_id="get_data",
-            python_callable=get_data,
-            provide_context=True,
+            task_id="get_data", python_callable=get_data, provide_context=True,
         )
 
         agol_fields = PythonOperator(
@@ -421,13 +411,9 @@ def create_dag(dag_id, entry):
             provide_context=True,
         )
 
-        resource_is_not_new = DummyOperator(
-            task_id="resource_is_not_new",
-        )
+        resource_is_not_new = DummyOperator(task_id="resource_is_not_new",)
 
-        resource_is_new = DummyOperator(
-            task_id="resource_is_new",
-        )
+        resource_is_new = DummyOperator(task_id="resource_is_new",)
 
         insert = PythonOperator(
             task_id="insert_records",

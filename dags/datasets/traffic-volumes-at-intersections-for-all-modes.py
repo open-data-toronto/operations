@@ -1,23 +1,20 @@
-from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
-from airflow.operators.dummy_operator import DummyOperator
-from airflow.models import Variable
-from datetime import datetime
-import pandas as pd
-import ckanapi
+import json
 import logging
+import os
+import re
+from datetime import datetime
 from io import BytesIO
 from pathlib import Path
-from airflow import DAG
-import requests
-import json
-import os
-import sys
-import re
-from dateutil import parser
 
-sys.path.append(Variable.get("repo_dir"))
-from utils import airflow as airflow_utils  # noqa: E402
-from utils import ckan as ckan_utils  # noqa: E402
+import ckanapi
+import pandas as pd
+import requests
+from airflow import DAG
+from airflow.models import Variable
+from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.python_operator import BranchPythonOperator, PythonOperator
+from dateutil import parser
+from utils import airflow_utils, ckan_utils
 
 job_settings = {
     "description": "Take data files from Transportation's flashscrow endpoint https://flashcrow-etladmin.intra.dev-toronto.ca/open_data/tmcs into CKAN",  # noqa: E501
@@ -25,10 +22,7 @@ job_settings = {
     "start_date": datetime(2020, 11, 24, 13, 35, 0),
 }
 
-JOB_FILE = Path(os.path.abspath(__file__))
-JOB_NAME = JOB_FILE.name[:-3]
-PACKAGE_ID = JOB_NAME.replace("_", "-")
-
+PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
@@ -52,7 +46,7 @@ def send_success_msg(**kwargs):
     msg = ti.xcom_pull(task_ids="build_message")
 
     airflow_utils.message_slack(
-        name=JOB_NAME,
+        name=PACKAGE_ID,
         message_type="success",
         msg=msg,
         prod_webhook=ACTIVE_ENV == "prod",
@@ -62,7 +56,7 @@ def send_success_msg(**kwargs):
 
 def send_failure_msg(self):
     airflow_utils.message_slack(
-        name=JOB_NAME,
+        name=PACKAGE_ID,
         message_type="error",
         msg="Job not finished",
         active_env=ACTIVE_ENV,
@@ -94,7 +88,7 @@ def get_raw_files(**kwargs):
         filepath = tmp_dir / f.replace("csv", "parquet")
 
         logging.info(f"Read {f}: {data.shape[0]} records")
-        data.to_parquet(filepath)
+        data.to_parquet(filepath, engine="fastparquet", compression=None)
 
         row = {
             "raw_data_filepath": filepath,
@@ -238,7 +232,9 @@ def transform_data_files(**kwargs):
         validate_columns(df)
         data = prep_data(df)
         logging.info(
-            f"{filename} | {resource_name} | {data.shape[0]} rows, {data.shape[1]} columns"
+            " | ".join(
+                [filename, resource_name, f"{data.shape[0]} rows, {data.shape[1]} cols"]
+            )
         )
         if filename.startswith("tmcs_preview"):
             data["geometry"] = data.apply(
@@ -254,7 +250,13 @@ def transform_data_files(**kwargs):
                 data["count_date"].dt.year >= (datetime.now().year - 1)
             ]  # TODO: filter at source and remove
             logging.info(
-                f"{filename} | {resource_name} | FILTERED: {data.shape[0]} rows, {data.shape[1]} columns"
+                " | ".join(
+                    [
+                        filename,
+                        resource_name,
+                        f"FILTERED: {data.shape[0]} rows, {data.shape[1]} cols",
+                    ]
+                )
             )
             data.to_json(fpath, orient="records", date_format="iso")
 
@@ -587,50 +589,44 @@ def return_branch(**kwargs):
     return "yes_continue_with_refresh"
 
 
+def get_package():
+    return CKAN.action.package_show(id=PACKAGE_ID)
+
+
 default_args = airflow_utils.get_default_args(
     {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"]}
 )
 
 with DAG(
-    JOB_NAME,
+    PACKAGE_ID,
     default_args=default_args,
     description=job_settings["description"],
     schedule_interval=job_settings["schedule"],
     catchup=False,
+    tags=["dataset"],
 ) as dag:
 
     create_tmp_dir = PythonOperator(
         task_id="create_tmp_dir",
         python_callable=airflow_utils.create_dir_with_dag_name,
-        op_kwargs={"dag_id": JOB_NAME, "dir_variable_name": "tmp_dir"},
+        op_kwargs={"dag_id": PACKAGE_ID, "dir_variable_name": "tmp_dir"},
     )
 
-    extract = PythonOperator(
-        task_id="get_raw_files", python_callable=get_raw_files, provide_context=True,
-    )
+    extract = PythonOperator(task_id="get_raw_files", python_callable=get_raw_files,)
 
     transform = PythonOperator(
-        task_id="transform_data_files",
-        python_callable=transform_data_files,
-        provide_context=True,
+        task_id="transform_data_files", python_callable=transform_data_files,
     )
 
-    package = PythonOperator(
-        task_id="get_package",
-        python_callable=CKAN.action.package_show,
-        op_kwargs={"id": PACKAGE_ID},
-    )
+    package = PythonOperator(task_id="get_package", python_callable=get_package,)
 
     resources_to_load = PythonOperator(
         task_id="identify_resources_to_load",
         python_callable=identify_resources_to_load,
-        provide_context=True,
     )
 
     are_there_new_files = BranchPythonOperator(
-        task_id="are_there_new_files",
-        provide_context=True,
-        python_callable=return_branch,
+        task_id="are_there_new_files", python_callable=return_branch,
     )
 
     no_files_are_not_new = DummyOperator(task_id="no_files_are_not_new")
@@ -671,7 +667,7 @@ with DAG(
     delete_tmp_dir = PythonOperator(
         task_id="delete_tmp_dir",
         python_callable=airflow_utils.delete_tmp_data_dir,
-        op_kwargs={"dag_id": JOB_NAME, "recursively": True},
+        op_kwargs={"dag_id": PACKAGE_ID, "recursively": True},
     )
 
     create_tmp_dir >> extract >> transform >> resources_to_load
