@@ -1,3 +1,4 @@
+import hashlib
 import json
 import logging
 import os
@@ -129,28 +130,40 @@ with DAG(
         )
 
         if difference_in_seconds == 0:
+            return "file_is_new"
             return "file_is_not_new"
 
         return "file_is_new"
 
     def is_data_new(**kwargs):
-        # ti = kwargs["ti"]
-        # backups_dir = Path(ti.xcom_pull(task_ids="backups_dir"))
+        ti = kwargs["ti"]
+        fields = ti.xcom_pull(task_ids="get_fields")
+        if fields is not None:
+            return "data_is_new"
 
-        # logging.info(f"checksum: {checksum}")
-        # logging.info(f"backups_dir: {backups_dir}")
+        backups_dir = Path(ti.xcom_pull(task_ids="backups_dir"))
+        backup_data = ti.xcom_pull(task_ids="backup_data")
 
-        # backups = Path(backups_dir)
-        # for f in os.listdir(backups):
-        #     if not os.path.isfile(backups / f):
-        #         continue
-        #     logging.info(f"File in backups: {f}")
+        df = pd.read_parquet(backup_data["data"])
 
-        #     if os.path.isfile(backups / f) and checksum in f:
-        #         logging.info(f"Data has already been loaded, ID: {checksum}")
-        #         return "data_is_not_new"
+        if df.shape[0] == 0:
+            return "data_is_new"
 
-        # logging.info(f"Data has not been loaded, new ID: {checksum}")
+        checksum = hashlib.md5()
+        checksum.update(df.sort_values(by="loc_id").to_csv(index=False).encode("utf-8"))
+        checksum = checksum.hexdigest()
+
+        for f in os.listdir(backups_dir):
+            if not os.path.isfile(backups_dir / f):
+                continue
+
+            logging.info(f"File in backups: {f}")
+            if os.path.isfile(backups_dir / f) and checksum in f:
+                logging.info(f"Data is already backed up, ID: {checksum}")
+                return "data_is_not_new"
+
+        logging.info(f"Data is not yet in backups, new ID: {checksum}")
+
         return "data_is_new"
 
     def get_fields(**kwargs):
@@ -186,6 +199,9 @@ with DAG(
         )
 
     ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
+    active_env = Variable.get("active_env")
+    ckan_address = ckan_creds[active_env]["address"]
+    ckan_apikey = ckan_creds[active_env]["apikey"]
 
     tmp_dir = CreateLocalDirectoryOperator(
         task_id="tmp_dir", path=Path(Variable.get("tmp_dir")) / dag.dag_id,
@@ -204,8 +220,8 @@ with DAG(
 
     package = GetPackageOperator(
         task_id="get_package",
-        address=ckan_creds[Variable.get("active_env")]["address"],
-        apikey=ckan_creds[Variable.get("active_env")]["apikey"],
+        address=ckan_address,
+        apikey=ckan_apikey,
         package_name_or_id=dag.dag_id,
     )
 
@@ -221,12 +237,10 @@ with DAG(
         task_id="create_data_dictionary", python_callable=build_data_dict,
     )
 
-    # checksum = make_checksum(transformed_data)
-
     get_or_create_resource = GetOrCreateResourceOperator(
         task_id="get_or_create_resource",
-        address=ckan_creds[Variable.get("active_env")]["address"],
-        apikey=ckan_creds[Variable.get("active_env")]["apikey"],
+        address=ckan_address,
+        apikey=ckan_apikey,
         package_name_or_id=dag.dag_id,
         resource_name=RESOURCE_NAME,
         resource_attributes=dict(
@@ -240,10 +254,11 @@ with DAG(
 
     backup_data = BackupDatastoreResourceOperator(
         task_id="backup_data",
-        address=ckan_creds[Variable.get("active_env")]["address"],
-        apikey=ckan_creds[Variable.get("active_env")]["apikey"],
+        address=ckan_address,
+        apikey=ckan_apikey,
         resource_task_id="get_or_create_resource",
         dir_task_id="backups_dir",
+        sort_columns=["loc_id"],
     )
 
     fields = PythonOperator(
@@ -267,8 +282,8 @@ with DAG(
 
     sync_timestamp = ResourceAndFileOperator(
         task_id="sync_timestamp",
-        address=ckan_creds[Variable.get("active_env")]["address"],
-        apikey=ckan_creds[Variable.get("active_env")]["apikey"],
+        address=ckan_address,
+        apikey=ckan_apikey,
         download_file_task_id="get_data",
         resource_task_id="get_or_create_resource",
         upload_to_ckan=False,
@@ -283,22 +298,22 @@ with DAG(
             dag.dag_id,
             "No new data file",
             "success",
-            Variable.get("active_env") == "prod",
-            Variable.get("active_env"),
+            active_env == "prod",
+            active_env,
         ),
     )
 
     delete_records = DeleteDatastoreResourceRecordsOperator(
         task_id="delete_records",
-        address=ckan_creds[Variable.get("active_env")]["address"],
-        apikey=ckan_creds[Variable.get("active_env")]["apikey"],
+        address=ckan_address,
+        apikey=ckan_apikey,
         backup_task_id="backup_data",
     )
 
     insert_records = InsertDatastoreResourceRecordsOperator(
         task_id="insert_records",
-        address=ckan_creds[Variable.get("active_env")]["address"],
-        apikey=ckan_creds[Variable.get("active_env")]["apikey"],
+        address=ckan_address,
+        apikey=ckan_apikey,
         parquet_filepath_task_id="transform_data",
         resource_task_id="get_or_create_resource",
     )
@@ -315,8 +330,8 @@ with DAG(
             dag.dag_id,
             "Updated resource last_modified time only: new file but no new data",
             "success",
-            Variable.get("active_env") == "prod",
-            Variable.get("active_env"),
+            active_env == "prod",
+            active_env,
         ),
     )
 
