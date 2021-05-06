@@ -2,6 +2,7 @@ import hashlib
 import json
 import logging
 from pathlib import Path
+from typing import List
 
 import ckanapi
 import pandas as pd
@@ -33,28 +34,23 @@ class BackupDatastoreResourceOperator(BaseOperator):
         apikey: str,
         resource_task_id: str,
         dir_task_id: str,
+        sort_columns: List[str] = [],
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self.dir_task_id = dir_task_id
         self.resource_task_id = resource_task_id
+        self.sort_columns = sort_columns
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def _checksum_datastore_response(self, datastore_response):
-        fields = [f for f in datastore_response["fields"] if f["id"] != "_id"]
-
-        hash_object = {
-            "records": [],
-            "fields": fields,
-        }
-
-        for r in datastore_response["records"]:
-            hash_record = {**r}
-            del hash_record["_id"]
-            hash_object["records"].append(hash_record)
+        data = pd.DataFrame(datastore_response["records"])
+        data = data.drop("_id", axis=1)
+        if len(self.sort_columns) > 0:
+            data = data.sort_values(by=self.sort_columns)
 
         data_hash = hashlib.md5()
-        data_hash.update(json.dumps(hash_object).encode("utf-8"))
+        data_hash.update(data.to_csv(index=False).encode("utf-8"))
 
         return data_hash.hexdigest()
 
