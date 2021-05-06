@@ -199,3 +199,36 @@ class InsertDatastoreResourceRecordsOperator(BaseOperator):
         logging.info(f"Records inserted: {data.shape[0]}")
 
         return data.shape[0]
+
+
+class RestoreDatastoreResourceBackupOperator(BaseOperator):
+    @apply_defaults
+    def __init__(
+        self, address: str, apikey: str, backup_task_id: str, **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+        self.backup_task_id = backup_task_id
+        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+
+    def execute(self, context):
+        backups_info = context["ti"].xcom_pull(task_ids=self.backup_task_id)
+        resource_id = backups_info["resource_id"]
+
+        with open(Path(backups_info["fields_file_path"]), "r") as f:
+            fields = json.load(f)
+
+        data = pd.read_parquet(Path(backups_info["data_file_path"]))
+        records = data.to_dict(orient="records")
+
+        try:
+            self.ckan.action.datastore_delete(id=resource_id)
+        except Exception as e:
+            logging.error(e.msg)
+
+        result = self.ckan.action.datastore_create(
+            id=resource_id, fields=fields, records=records
+        )
+
+        logging.info(f"Result: {result}")
+
+        return result

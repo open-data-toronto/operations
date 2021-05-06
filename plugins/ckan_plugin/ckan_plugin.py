@@ -14,4 +14,5 @@ class CKANPlugin(AirflowPlugin):
         datastore_operator.BackupDatastoreResourceOperator,
         datastore_operator.DeleteDatastoreResourceRecordsOperator,
         datastore_operator.InsertDatastoreResourceRecordsOperator,
+        datastore_operator.RestoreDatastoreResourceBackupOperator,
     ]

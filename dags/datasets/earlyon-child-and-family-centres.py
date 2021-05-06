@@ -14,6 +14,7 @@ from ckan_plugin.operators.datastore_operator import (
     BackupDatastoreResourceOperator,
     DeleteDatastoreResourceRecordsOperator,
     InsertDatastoreResourceRecordsOperator,
+    RestoreDatastoreResourceBackupOperator,
 )
 from ckan_plugin.operators.package_operator import GetPackageOperator
 from ckan_plugin.operators.resource_operator import (
@@ -341,6 +342,14 @@ with DAG(
         task_id="were_records_loaded", python_callable=were_records_loaded,
     )
 
+    restore_backup = RestoreDatastoreResourceBackupOperator(
+        task_id="restore_backup",
+        address=ckan_address,
+        apikey=ckan_apikey,
+        backup_task_id="backup_data",
+        trigger_rule="one_failed",
+    )
+
     backups_dir >> backup_data
 
     tmp_dir >> src >> transformed_data >> file_new_branch
@@ -380,3 +389,5 @@ with DAG(
         new_records_notification,
         send_nothing_notification,
     ] >> delete_tmp_data
+
+    [delete_records, insert_records] >> restore_backup
