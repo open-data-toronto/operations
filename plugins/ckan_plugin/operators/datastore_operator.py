@@ -212,6 +212,9 @@ class RestoreDatastoreResourceBackupOperator(BaseOperator):
 
     def execute(self, context):
         backups_info = context["ti"].xcom_pull(task_ids=self.backup_task_id)
+
+        assert backups_info is not None, "No backup information"
+
         resource_id = backups_info["resource_id"]
 
         with open(Path(backups_info["fields_file_path"]), "r") as f:
