@@ -41,10 +41,10 @@ building-permits-cleared-permits-current-year:
 building-permits-cleared-permits-prior-years:
   Cleared Permits (2020 XML ZIP):
     format: zip
-    url:  http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2020.zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2020.zip
   Cleared Permits (2020 CSV ZIP):
     format: zip
-    url:  http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2020_csv.zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2020_csv.zip
 clerk-s-directory-of-record-for-record-series-management-tool-rsmt:
   RSMT Directory of records:
     format: xml
@@ -57,6 +57,13 @@ clerks-record-classification-system-internally-approved-rsmt:
   RCS internal approved:
     format: xml
     url: http://opendata.toronto.ca/clerk/rsmt/rsmtRcsInternal.xml
+city-subject-thesaurus:
+  City Subject Thesaurus:
+    format: xml
+    url: http://opendata.toronto.ca/city.clerks.office/city-subject-thesaurus/subject_thesaurus.xml
+  City Subject Thesaurus Readme:
+    format: xls
+    url: http://opendata.toronto.ca/city.clerks.office/city-subject-thesaurus/city-subject-thesaurus-readme.xls
 committee-of-adjustment-applications:
   Active Applications:
     format: zip
@@ -83,6 +90,12 @@ lobbyist-registry:
     format: zip
     url: http://opendata.toronto.ca/lobbyist.registrar/lobbyist-registry/lobbyactivity.zip
 mobile-watch-your-speed-program-detailed-speed-counts:
+  Mobile sign detail count 2018:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2018.zip
+  Mobile sign detail count 2019:
+    format: zip
+    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2019.zip
   Mobile sign detail count 2020:
     format: zip
     url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2020.zip
@@ -149,16 +162,10 @@ report-request-log-city-council-and-its-committees:
     format: xlsx
     url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog.xls
 toronto-centreline-tcl:
-  Centreline (wgs84) - geojson - v1:
-    format: zip
-    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_geojson_v1.zip
-  Centreline (wgs84) - shapefile - v1:
-    format: shp
-    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v1.zip
-  Centreline (wgs84) - geojson - v2:
+  Centreline (wgs84) - geojson:
     format: zip
     url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_geojson_v2.zip
-  Centreline (wgs84) - shapefile - v2:
+  Centreline (wgs84) - shapefile:
     format: shp
     url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v2.zip
 traffic-cameras:
