@@ -397,9 +397,13 @@ with DAG(
         trigger_rule="all_failed",
     )
 
+    validated_columns = PythonOperator(
+        task_id="validate_expected_columns", python_callable=validate_expected_columns,
+    )
+
     backups_dir >> backup_data
 
-    tmp_dir >> src >> validate_expected_columns >> transformed_data >> file_new_branch
+    tmp_dir >> src >> validated_columns >> transformed_data >> file_new_branch
 
     package >> get_or_create_resource >> [file_new_branch, new_resource_branch]
 
