@@ -1,6 +1,6 @@
 from airflow.plugins_manager import AirflowPlugin
 
-import operators
+from operators import datastore_operator, package_operator, resource_operator
 
 # TODO: Releplace ckanapi library with standard HTTP requests (SimpleHTTPOperator)
 
@@ -8,11 +8,11 @@ import operators
 class CKANPlugin(AirflowPlugin):
     name = "ckan_plugin"
     operators = [
-        operators.package_operator.GetPackageOperator,
-        operators.resource_operator.GetOrCreateResource,
-        operators.resource_operator.ResourceAndFileOperator,
-        operators.datastore_operator.BackupDatastoreResourceOperator,
-        operators.datastore_operator.DeleteDatastoreResourceRecordsOperator,
-        operators.datastore_operator.InsertDatastoreResourceRecordsOperator,
-        operators.datastore_operator.RestoreDatastoreResourceBackupOperator,
+        package_operator.GetPackageOperator,
+        resource_operator.GetOrCreateResource,
+        resource_operator.ResourceAndFileOperator,
+        datastore_operator.BackupDatastoreResourceOperator,
+        datastore_operator.DeleteDatastoreResourceRecordsOperator,
+        datastore_operator.InsertDatastoreResourceRecordsOperator,
+        datastore_operator.RestoreDatastoreResourceBackupOperator,
     ]
