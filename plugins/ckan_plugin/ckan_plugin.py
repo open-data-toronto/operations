@@ -1,6 +1,10 @@
 from airflow.plugins_manager import AirflowPlugin
 
-from operators import datastore_operator, package_operator, resource_operator
+from ckan_plugin.operators import (
+    datastore_operator,
+    package_operator,
+    resource_operator,
+)
 
 # TODO: Releplace ckanapi library with standard HTTP requests (SimpleHTTPOperator)
 
