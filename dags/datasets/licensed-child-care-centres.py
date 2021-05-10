@@ -30,6 +30,28 @@ SRC_URL = "http://opendata.toronto.ca/childrens.services/licensed-child-care-cen
 PACKAGE_NAME = "licensed-child-care-centres"
 RESOURCE_NAME = "Child care centres"
 
+EXPECTED_COLUMNS = [
+    "LOC_ID",
+    "LOC_NAME",
+    "AUSPICE",
+    "ADDRESS",
+    "PCODE",
+    "ward",
+    "PHONE",
+    "bldg_type",
+    "BLDGNAME",
+    "IGSPACE",
+    "TGSPACE",
+    "PGSPACE",
+    "KGSPACE",
+    "SGSPACE",
+    "TOTSPACE",
+    "subsidy",
+    "run_date",
+    "latitude",
+    "longitude",
+]
+
 
 def send_failure_msg():
     airflow_utils.message_slack(
@@ -122,6 +144,18 @@ with DAG(
         data.to_parquet(filepath, engine="fastparquet", compression=None)
 
         return filepath
+
+    def validate_expected_columns(**kwargs):
+        ti = kwargs["ti"]
+        data_fp = Path(ti.xcom_pull(task_ids="get_data")["path"])
+
+        df = pd.read_parquet(data_fp)
+
+        for col in df.columns.values:
+            assert col in EXPECTED_COLUMNS, f"{col} not in list of expected columns"
+
+        for col in EXPECTED_COLUMNS:
+            assert col in df.columns.values, f"Expected column {col} not in data file"
 
     def is_file_new(**kwargs):
         ti = kwargs["ti"]
@@ -365,7 +399,7 @@ with DAG(
 
     backups_dir >> backup_data
 
-    tmp_dir >> src >> transformed_data >> file_new_branch
+    tmp_dir >> src >> validate_expected_columns >> transformed_data >> file_new_branch
 
     package >> get_or_create_resource >> [file_new_branch, new_resource_branch]
 
