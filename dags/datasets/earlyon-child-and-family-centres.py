@@ -28,11 +28,12 @@ from utils_operators.file_operator import DownloadFileOperator
 
 RESOURCE_NAME = "EarlyON Child and Family Centres"
 SRC_URL = "http://opendata.toronto.ca/childrens.services/child-family-programs/earlyon.json"  # noqa: E501
+PACKAGE_NAME = "earlyon-child-and-family-centres"
 
 
 def send_failure_message():
     airflow_utils.message_slack(
-        name=Path(os.path.abspath(__file__)).name.replace(".py", ""),
+        name=PACKAGE_NAME,
         message_type="error",
         msg="Job not finished",
         active_env=Variable.get("active_env"),
@@ -41,7 +42,7 @@ def send_failure_message():
 
 
 with DAG(
-    Path(os.path.abspath(__file__)).name.replace(".py", ""),
+    PACKAGE_NAME,
     default_args=airflow_utils.get_default_args(
         {
             "on_failure_callback": send_failure_message,
@@ -192,7 +193,7 @@ with DAG(
         count = kwargs["ti"].xcom_pull("insert_records")
 
         airflow_utils.message_slack(
-            dag.dag_id,
+            PACKAGE_NAME,
             f"Refreshed {count} records",
             "success",
             Variable.get("active_env") == "prod",
@@ -205,11 +206,11 @@ with DAG(
     ckan_apikey = ckan_creds[active_env]["apikey"]
 
     tmp_dir = CreateLocalDirectoryOperator(
-        task_id="tmp_dir", path=Path(Variable.get("tmp_dir")) / dag.dag_id,
+        task_id="tmp_dir", path=Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
     )
 
     backups_dir = CreateLocalDirectoryOperator(
-        task_id="backups_dir", path=Path(Variable.get("backups_dir")) / dag.dag_id,
+        task_id="backups_dir", path=Path(Variable.get("backups_dir")) / PACKAGE_NAME,
     )
 
     src = DownloadFileOperator(
@@ -223,7 +224,7 @@ with DAG(
         task_id="get_package",
         address=ckan_address,
         apikey=ckan_apikey,
-        package_name_or_id=dag.dag_id,
+        package_name_or_id=PACKAGE_NAME,
     )
 
     new_resource_branch = BranchPythonOperator(
@@ -242,13 +243,13 @@ with DAG(
         task_id="get_or_create_resource",
         address=ckan_address,
         apikey=ckan_apikey,
-        package_name_or_id=dag.dag_id,
+        package_name_or_id=PACKAGE_NAME,
         resource_name=RESOURCE_NAME,
         resource_attributes=dict(
             format="geojson",
             is_preview=True,
             url_type="datastore",
-            extract_job=f"Airflow: {dag.dag_id}",
+            extract_job=f"Airflow: {PACKAGE_NAME}",
         ),
         trigger_rule="none_failed",
     )
@@ -277,7 +278,7 @@ with DAG(
     delete_tmp_data = PythonOperator(
         task_id="delete_tmp_data",
         python_callable=airflow_utils.delete_tmp_data_dir,
-        op_kwargs={"dag_id": dag.dag_id, "recursively": True},
+        op_kwargs={"dag_id": PACKAGE_NAME, "recursively": True},
         trigger_rule="one_success",
     )
 
@@ -296,7 +297,7 @@ with DAG(
         task_id="send_nothing_notification",
         python_callable=airflow_utils.message_slack,
         op_args=(
-            dag.dag_id,
+            PACKAGE_NAME,
             "No new data file",
             "success",
             active_env == "prod",
@@ -328,7 +329,7 @@ with DAG(
         task_id="no_new_data_notification",
         python_callable=airflow_utils.message_slack,
         op_args=(
-            dag.dag_id,
+            PACKAGE_NAME,
             "Updated resource last_modified time only: new file but no new data",
             "success",
             active_env == "prod",
