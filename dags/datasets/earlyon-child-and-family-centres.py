@@ -10,29 +10,40 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
-from ckan_plugin.operators.datastore_operator import (
+from ckan_operators.datastore_operator import (
     BackupDatastoreResourceOperator,
     DeleteDatastoreResourceRecordsOperator,
     InsertDatastoreResourceRecordsOperator,
     RestoreDatastoreResourceBackupOperator,
 )
-from ckan_plugin.operators.package_operator import GetPackageOperator
-from ckan_plugin.operators.resource_operator import (
+from ckan_operators.package_operator import GetPackageOperator
+from ckan_operators.resource_operator import (
     GetOrCreateResourceOperator,
     ResourceAndFileOperator,
 )
 from dateutil import parser
 from utils import agol_utils, airflow_utils
-from utils_plugin.operators.directory_operator import CreateLocalDirectoryOperator
-from utils_plugin.operators.file_operator import DownloadFileOperator
+from utils_operators.directory_operator import CreateLocalDirectoryOperator
+from utils_operators.file_operator import DownloadFileOperator
 
 RESOURCE_NAME = "EarlyON Child and Family Centres"
 SRC_URL = "http://opendata.toronto.ca/childrens.services/child-family-programs/earlyon.json"  # noqa: E501
+PACKAGE_NAME = "earlyon-child-and-family-centres"
+EXPECTED_COLUMNS = [
+    "loc_id",
+    "lat",
+    "long",
+    "program",
+    "agency",
+    "address",
+    "phone",
+    "rundate",
+]
 
 
 def send_failure_message():
     airflow_utils.message_slack(
-        name=Path(os.path.abspath(__file__)).name.replace(".py", ""),
+        name=PACKAGE_NAME,
         message_type="error",
         msg="Job not finished",
         active_env=Variable.get("active_env"),
@@ -41,7 +52,7 @@ def send_failure_message():
 
 
 with DAG(
-    Path(os.path.abspath(__file__)).name.replace(".py", ""),
+    PACKAGE_NAME,
     default_args=airflow_utils.get_default_args(
         {
             "on_failure_callback": send_failure_message,
@@ -76,6 +87,21 @@ with DAG(
             fields.append({"type": ckan_type_map[dtype.name], "id": field})
 
         return fields
+
+    def validate_expected_columns(**kwargs):
+        ti = kwargs["ti"]
+        data_file_info = ti.xcom_pull(task_ids="get_data")
+
+        with open(Path(data_file_info["path"])) as f:
+            src_file = json.load(f)
+
+        df = pd.DataFrame(src_file)
+
+        for col in df.columns.values:
+            assert col in EXPECTED_COLUMNS, f"{col} not in list of expected columns"
+
+        for col in EXPECTED_COLUMNS:
+            assert col in df.columns.values, f"Expected column {col} not in data file"
 
     def transform_data(**kwargs):
         ti = kwargs["ti"]
@@ -131,7 +157,6 @@ with DAG(
         )
 
         if difference_in_seconds == 0:
-            return "file_is_new"
             return "file_is_not_new"
 
         return "file_is_new"
@@ -192,7 +217,7 @@ with DAG(
         count = kwargs["ti"].xcom_pull("insert_records")
 
         airflow_utils.message_slack(
-            dag.dag_id,
+            PACKAGE_NAME,
             f"Refreshed {count} records",
             "success",
             Variable.get("active_env") == "prod",
@@ -205,11 +230,11 @@ with DAG(
     ckan_apikey = ckan_creds[active_env]["apikey"]
 
     tmp_dir = CreateLocalDirectoryOperator(
-        task_id="tmp_dir", path=Path(Variable.get("tmp_dir")) / dag.dag_id,
+        task_id="tmp_dir", path=Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
     )
 
     backups_dir = CreateLocalDirectoryOperator(
-        task_id="backups_dir", path=Path(Variable.get("backups_dir")) / dag.dag_id,
+        task_id="backups_dir", path=Path(Variable.get("backups_dir")) / PACKAGE_NAME,
     )
 
     src = DownloadFileOperator(
@@ -223,7 +248,7 @@ with DAG(
         task_id="get_package",
         address=ckan_address,
         apikey=ckan_apikey,
-        package_name_or_id=dag.dag_id,
+        package_name_or_id=PACKAGE_NAME,
     )
 
     new_resource_branch = BranchPythonOperator(
@@ -242,15 +267,14 @@ with DAG(
         task_id="get_or_create_resource",
         address=ckan_address,
         apikey=ckan_apikey,
-        package_name_or_id=dag.dag_id,
+        package_name_or_id=PACKAGE_NAME,
         resource_name=RESOURCE_NAME,
         resource_attributes=dict(
             format="geojson",
             is_preview=True,
             url_type="datastore",
-            extract_job=f"Airflow: {dag.dag_id}",
+            extract_job=f"Airflow: {PACKAGE_NAME}",
         ),
-        trigger_rule="none_failed",
     )
 
     backup_data = BackupDatastoreResourceOperator(
@@ -277,7 +301,7 @@ with DAG(
     delete_tmp_data = PythonOperator(
         task_id="delete_tmp_data",
         python_callable=airflow_utils.delete_tmp_data_dir,
-        op_kwargs={"dag_id": dag.dag_id, "recursively": True},
+        op_kwargs={"dag_id": PACKAGE_NAME, "recursively": True},
         trigger_rule="one_success",
     )
 
@@ -296,7 +320,7 @@ with DAG(
         task_id="send_nothing_notification",
         python_callable=airflow_utils.message_slack,
         op_args=(
-            dag.dag_id,
+            PACKAGE_NAME,
             "No new data file",
             "success",
             active_env == "prod",
@@ -328,7 +352,7 @@ with DAG(
         task_id="no_new_data_notification",
         python_callable=airflow_utils.message_slack,
         op_args=(
-            dag.dag_id,
+            PACKAGE_NAME,
             "Updated resource last_modified time only: new file but no new data",
             "success",
             active_env == "prod",
@@ -348,9 +372,13 @@ with DAG(
         trigger_rule="all_failed",
     )
 
+    validated_columns = PythonOperator(
+        task_id="validate_expected_columns", python_callable=validate_expected_columns,
+    )
+
     backups_dir >> backup_data
 
-    tmp_dir >> src >> transformed_data >> file_new_branch
+    tmp_dir >> src >> validated_columns >> transformed_data >> file_new_branch
 
     package >> get_or_create_resource >> [file_new_branch, new_resource_branch]
 
