@@ -90,9 +90,12 @@ with DAG(
 
     def validate_expected_columns(**kwargs):
         ti = kwargs["ti"]
-        data_fp = Path(ti.xcom_pull(task_ids="get_data")["path"])
+        data_file_info = ti.xcom_pull(task_ids="get_data")
 
-        df = pd.read_parquet(data_fp)
+        with open(Path(data_file_info["path"])) as f:
+            src_file = json.load(f)
+
+        df = pd.DataFrame(src_file)
 
         for col in df.columns.values:
             assert col in EXPECTED_COLUMNS, f"{col} not in list of expected columns"
