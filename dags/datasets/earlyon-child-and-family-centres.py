@@ -29,6 +29,16 @@ from utils_operators.file_operator import DownloadFileOperator
 RESOURCE_NAME = "EarlyON Child and Family Centres"
 SRC_URL = "http://opendata.toronto.ca/childrens.services/child-family-programs/earlyon.json"  # noqa: E501
 PACKAGE_NAME = "earlyon-child-and-family-centres"
+EXPECTED_COLUMNS = [
+    "loc_id",
+    "lat",
+    "long",
+    "program",
+    "agency",
+    "address",
+    "phone",
+    "rundate",
+]
 
 
 def send_failure_message():
@@ -77,6 +87,18 @@ with DAG(
             fields.append({"type": ckan_type_map[dtype.name], "id": field})
 
         return fields
+
+    def validate_expected_columns(**kwargs):
+        ti = kwargs["ti"]
+        data_fp = Path(ti.xcom_pull(task_ids="get_data")["path"])
+
+        df = pd.read_parquet(data_fp)
+
+        for col in df.columns.values:
+            assert col in EXPECTED_COLUMNS, f"{col} not in list of expected columns"
+
+        for col in EXPECTED_COLUMNS:
+            assert col in df.columns.values, f"Expected column {col} not in data file"
 
     def transform_data(**kwargs):
         ti = kwargs["ti"]
@@ -347,9 +369,13 @@ with DAG(
         trigger_rule="all_failed",
     )
 
+    validated_columns = PythonOperator(
+        task_id="validate_expected_columns", python_callable=validate_expected_columns,
+    )
+
     backups_dir >> backup_data
 
-    tmp_dir >> src >> transformed_data >> file_new_branch
+    tmp_dir >> src >> validated_columns >> transformed_data >> file_new_branch
 
     package >> get_or_create_resource >> [file_new_branch, new_resource_branch]
 
