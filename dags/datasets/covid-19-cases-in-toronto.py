@@ -81,7 +81,7 @@ with DAG(
 
         data_path = backups / f"data.{unique_id}.parquet"
         if not data_path.exists():
-            data.to_parquet(data_path)
+            data.to_parquet(path=data_path, engine="fastparquet", compression=None)
 
         fields = [f for f in datastore_response["fields"] if f["id"] != "_id"]
 
@@ -110,7 +110,7 @@ with DAG(
         filename = "new_data_raw"
         filepath = tmp_dir / f"{filename}.parquet"
 
-        data.to_parquet(filepath)
+        data.to_parquet(path=filepath, engine="fastparquet", compression=None)
 
         return filepath
 
@@ -148,7 +148,7 @@ with DAG(
         filename = "new_data_prepared"
         filepath = tmp_dir / f"{filename}.parquet"
 
-        data.to_parquet(filepath)
+        data.to_parquet(path=filepath, engine="fastparquet", compression=None)
 
         return filepath
 
