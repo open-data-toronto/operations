@@ -11,16 +11,12 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from ckan_operators.datastore_operator import (
-    BackupDatastoreResourceOperator,
-    DeleteDatastoreResourceRecordsOperator,
+    BackupDatastoreResourceOperator, DeleteDatastoreResourceRecordsOperator,
     InsertDatastoreResourceRecordsOperator,
-    RestoreDatastoreResourceBackupOperator,
-)
+    RestoreDatastoreResourceBackupOperator)
 from ckan_operators.package_operator import GetPackageOperator
-from ckan_operators.resource_operator import (
-    GetOrCreateResourceOperator,
-    ResourceAndFileOperator,
-)
+from ckan_operators.resource_operator import (GetOrCreateResourceOperator,
+                                              ResourceAndFileOperator)
 from dateutil import parser
 from utils import agol_utils, airflow_utils
 from utils_operators.directory_operator import CreateLocalDirectoryOperator
@@ -149,7 +145,7 @@ with DAG(
         ti = kwargs["ti"]
         data_fp = Path(ti.xcom_pull(task_ids="get_data")["path"])
 
-        df = pd.read_parquet(data_fp)
+        df = pd.read_csv(data_fp)
 
         for col in df.columns.values:
             assert col in EXPECTED_COLUMNS, f"{col} not in list of expected columns"
