@@ -10,21 +10,21 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
-from ckan_plugin.operators.datastore_operator import (
+from ckan_operators.datastore_operator import (
     BackupDatastoreResourceOperator,
     DeleteDatastoreResourceRecordsOperator,
     InsertDatastoreResourceRecordsOperator,
     RestoreDatastoreResourceBackupOperator,
 )
-from ckan_plugin.operators.package_operator import GetPackageOperator
-from ckan_plugin.operators.resource_operator import (
+from ckan_operators.package_operator import GetPackageOperator
+from ckan_operators.resource_operator import (
     GetOrCreateResourceOperator,
     ResourceAndFileOperator,
 )
 from dateutil import parser
 from utils import agol_utils, airflow_utils
-from utils_plugin.operators.directory_operator import CreateLocalDirectoryOperator
-from utils_plugin.operators.file_operator import DownloadFileOperator
+from utils_operators.directory_operator import CreateLocalDirectoryOperator
+from utils_operators.file_operator import DownloadFileOperator
 
 RESOURCE_NAME = "EarlyON Child and Family Centres"
 SRC_URL = "http://opendata.toronto.ca/childrens.services/child-family-programs/earlyon.json"  # noqa: E501
