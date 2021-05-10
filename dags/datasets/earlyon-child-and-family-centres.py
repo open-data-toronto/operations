@@ -132,7 +132,6 @@ with DAG(
         )
 
         if difference_in_seconds == 0:
-            return "file_is_new"
             return "file_is_not_new"
 
         return "file_is_new"
@@ -251,7 +250,6 @@ with DAG(
             url_type="datastore",
             extract_job=f"Airflow: {PACKAGE_NAME}",
         ),
-        trigger_rule="none_failed",
     )
 
     backup_data = BackupDatastoreResourceOperator(
