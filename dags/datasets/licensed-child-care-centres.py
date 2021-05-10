@@ -124,11 +124,13 @@ with DAG(
         return filepath
 
     def is_file_new(**kwargs):
-        logging.info(kwargs)
-        ti = kwargs.pop("ti")
-        resource = ti.xcom_pull(task_ids="get_resource")
-        last_modified_string = ti.xcom_pull(task_ids="get_data")["file_last_modified"]
+        ti = kwargs["ti"]
+        data_file_info = ti.xcom_pull(task_ids="get_data")
+        resource = ti.xcom_pull(task_ids="get_or_create_resource")
 
+        logging.info(f"resource: {resource} | data_file_info: {data_file_info}")
+
+        last_modified_string = data_file_info["last_modified"]
         file_last_modified = parser.parse(last_modified_string)
         last_modified_attr = resource["last_modified"]
 
