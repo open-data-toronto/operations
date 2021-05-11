@@ -169,7 +169,7 @@ class InsertDatastoreResourceRecordsOperator(BaseOperator):
         with open(fields_path, "r") as f:
             fields = json.load(f)
 
-        self.ckan.action.datastore_create(id=resource_id, fields=fields)
+        self.ckan.action.datastore_create(id=resource_id, fields=fields, force=True)
 
     def execute(self, context):
         ti = context["ti"]
