@@ -37,7 +37,6 @@ RESOURCES = {
         "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/summary-suspected-opiod-overdoses-in-shelters.csv",  # noqa: E501
         "name": "summary-suspected-opiod-overdoses-in-shelters",
         "metadata": {
-            "package_id": PACKAGE_NAME,
             "format": "csv",
             "is_preview": False,
             "extract_job": f"Airflow: {PACKAGE_NAME}",
@@ -54,7 +53,6 @@ RESOURCES = {
         "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/suspected-opiod-overdoses-in-shelters.csv",  # noqa: E501
         "name": "suspected-opiod-overdoses-in-shelters",
         "metadata": {
-            "package_id": PACKAGE_NAME,
             "format": "csv",
             "is_preview": True,
             "extract_job": f"Airflow: {PACKAGE_NAME}",
@@ -445,6 +443,7 @@ with DAG(
         op_kwargs={
             "resource_name": summary_resource["name"],
             "backup_data_task_id": "backup_summary_data",
+            "download_file_task_id": "get_summary_data",
         },
     )
     summary_data_not_new = DummyOperator(task_id="summary_data_is_not_new")
@@ -457,6 +456,7 @@ with DAG(
         op_kwargs={
             "resource_name": granular_resource["name"],
             "backup_data_task_id": "backup_granular_data",
+            "download_file_task_id": "get_granular_data",
         },
     )
     granular_data_not_new = DummyOperator(task_id="granular_data_is_not_new")
