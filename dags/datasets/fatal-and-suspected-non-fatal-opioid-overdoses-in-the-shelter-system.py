@@ -40,6 +40,7 @@ RESOURCES = {
             "format": "csv",
             "is_preview": False,
             "extract_job": f"Airflow: {PACKAGE_NAME}",
+            "url_type": "datastore",
         },
         "datastore": True,
         "expected_columns": [
@@ -56,6 +57,7 @@ RESOURCES = {
             "format": "csv",
             "is_preview": True,
             "extract_job": f"Airflow: {PACKAGE_NAME}",
+            "url_type": "datastore",
         },
         "datastore": True,
         "expected_columns": [
