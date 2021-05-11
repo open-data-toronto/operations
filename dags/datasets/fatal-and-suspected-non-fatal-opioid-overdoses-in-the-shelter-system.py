@@ -540,9 +540,11 @@ with DAG(
     # sequence
     tmp_dir >> get_summary_data >> validate_summary_expected_columns
     validate_summary_expected_columns >> transform_summary_data
+    transform_summary_data >> make_summary_data_dict
 
     tmp_dir >> get_granular_data >> validate_granular_expected_columns
     validate_granular_expected_columns >> transform_granular_data
+    transform_granular_data >> make_granular_data_dict
 
     backups_dir >> get_package
 
