@@ -15,17 +15,22 @@ from utils_operators.directory_operator import CreateLocalDirectoryOperator
 job_name = "get_empty_datastore_resources"
 empties_file_name = "empties.json"
 
+
+def send_failure_msg():
+    airflow_utils.message_slack(
+        name=job_name,
+        message_type="error",
+        msg="Job not finished",
+        active_env=Variable.get("active_env"),
+        prod_webhook=Variable.get("active_env") == "prod",
+    )
+
+
 with DAG(
     job_name,
     default_args=airflow_utils.get_default_args(
         {
-            "on_failure_callback": airflow_utils.message_slack(
-                name=job_name,
-                message_type="error",
-                msg="Job not finished",
-                active_env=Variable.get("active_env"),
-                prod_webhook=Variable.get("active_env") == "prod",
-            ),
+            "on_failure_callback": send_failure_msg,
             "start_date": datetime(2020, 11, 9, 0, 30, 0),
         }
     ),
