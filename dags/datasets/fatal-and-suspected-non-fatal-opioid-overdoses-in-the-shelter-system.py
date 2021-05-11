@@ -10,24 +10,17 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
-
 # from airflow.utils.task_group import TaskGroup
 from ckan_operators.datastore_operator import (
-    BackupDatastoreResourceOperator,
-    DeleteDatastoreResourceRecordsOperator,
-    InsertDatastoreResourceRecordsOperator,
-)
+    BackupDatastoreResourceOperator, DeleteDatastoreResourceRecordsOperator,
+    InsertDatastoreResourceRecordsOperator)
 from ckan_operators.package_operator import GetPackageOperator
-from ckan_operators.resource_operator import (
-    GetOrCreateResourceOperator,
-    ResourceAndFileOperator,
-)
+from ckan_operators.resource_operator import (GetOrCreateResourceOperator,
+                                              ResourceAndFileOperator)
 from dateutil import parser
 from utils import airflow_utils
-from utils_operators.directory_operator import (
-    CreateLocalDirectoryOperator,
-    DeleteLocalDirectoryOperator,
-)
+from utils_operators.directory_operator import (CreateLocalDirectoryOperator,
+                                                DeleteLocalDirectoryOperator)
 from utils_operators.file_operator import DownloadFileOperator
 
 PACKAGE_NAME = "fatal-and-suspected-non-fatal-opioid-overdoses-in-the-shelter-system"
@@ -444,6 +437,7 @@ with DAG(
         python_callable=is_data_new,
         op_kwargs={
             "resource_name": summary_resource["name"],
+            "resource_task_id": "get_or_create_summary_resource",
             "backup_data_task_id": "backup_summary_data",
             "download_file_task_id": "get_summary_data",
         },
@@ -457,6 +451,7 @@ with DAG(
         python_callable=is_data_new,
         op_kwargs={
             "resource_name": granular_resource["name"],
+            "resource_task_id": "get_or_create_granular_resource",
             "backup_data_task_id": "backup_granular_data",
             "download_file_task_id": "get_granular_data",
         },
