@@ -99,7 +99,9 @@ with DAG(
         package = kwargs["ti"].xcom_pull(task_ids="get_package")
         resource_name = kwargs["resource_name"]
 
-        logging.info(f"resources found: {[r['name'] for r in package['resources']]}")
+        logging.info(
+            f"looking for: {resource_name} | resources found: {[r['name'] for r in package['resources']]}"
+        )
         is_new = resource_name not in [r["name"] for r in package["resources"]]
 
         prefix = "summary" if "summary" in resource_name else "granular"
