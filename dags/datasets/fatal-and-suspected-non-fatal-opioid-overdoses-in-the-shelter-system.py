@@ -11,21 +11,15 @@ from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
 from ckan_operators.datastore_operator import (
-    BackupDatastoreResourceOperator,
-    DeleteDatastoreResourceRecordsOperator,
-    InsertDatastoreResourceRecordsOperator,
-)
+    BackupDatastoreResourceOperator, DeleteDatastoreResourceRecordsOperator,
+    InsertDatastoreResourceRecordsOperator)
 from ckan_operators.package_operator import GetPackageOperator
-from ckan_operators.resource_operator import (
-    GetOrCreateResourceOperator,
-    ResourceAndFileOperator,
-)
+from ckan_operators.resource_operator import (GetOrCreateResourceOperator,
+                                              ResourceAndFileOperator)
 from dateutil import parser
 from utils import airflow_utils
-from utils_operators.directory_operator import (
-    CreateLocalDirectoryOperator,
-    DeleteLocalDirectoryOperator,
-)
+from utils_operators.directory_operator import (CreateLocalDirectoryOperator,
+                                                DeleteLocalDirectoryOperator)
 from utils_operators.file_operator import DownloadFileOperator
 
 PACKAGE_NAME = "fatal-and-suspected-non-fatal-opioid-overdoses-in-the-shelter-system"
@@ -201,10 +195,6 @@ with DAG(
 
     def is_data_new(**kwargs):
         ti = kwargs["ti"]
-        fields = ti.xcom_pull(task_ids=kwargs["get_fields_task_id"])
-        if fields is not None:
-            return "data_is_new"
-
         backups_dir = Path(ti.xcom_pull(task_ids="backups_dir"))
         backup_data = ti.xcom_pull(task_ids=kwargs["backup_data_task_id"])
 
@@ -437,6 +427,7 @@ with DAG(
         apikey=ckan_apikey,
         resource_task_id="get_or_create_summary_resource",
         dir_task_id="backups_dir",
+        trigger_rule="one_success",
     )
 
     backup_granular_data = BackupDatastoreResourceOperator(
@@ -445,6 +436,7 @@ with DAG(
         apikey=ckan_apikey,
         resource_task_id="get_or_create_granular_resource",
         dir_task_id="backups_dir",
+        trigger_rule="one_success",
     )
 
     # branch: if resource is not new, backup existing fields
@@ -463,26 +455,6 @@ with DAG(
     )
     granular_resource_not_new = DummyOperator(task_id="granular_resource_is_not_new")
     granular_resource_is_new = DummyOperator(task_id="granular_resource_is_new")
-
-    # get fields from backup (if resource is not new) or generated dict (if it is new)
-    get_summary_fields = PythonOperator(
-        task_id="get_summary_fields",
-        python_callable=get_fields,
-        trigger_rule="none_failed",
-        op_kwargs={
-            "backup_data_task_id": "backup_summary_data",
-            "build_data_dict_task_id": "make_summary_data_dict",
-        },
-    )
-    get_granular_fields = PythonOperator(
-        task_id="get_granular_fields",
-        python_callable=get_fields,
-        trigger_rule="none_failed",
-        op_kwargs={
-            "backup_data_task_id": "backup_granular_data",
-            "build_data_dict_task_id": "make_granular_data_dict",
-        },
-    )
 
     # branch: file NOT new (file_last_modified==resoure_last_modified), nothing to load
     is_summary_file_new = BranchPythonOperator(
@@ -514,7 +486,6 @@ with DAG(
         task_id="summary_new_data_branch",
         python_callable=is_data_new,
         op_kwargs={
-            "get_fields_task_id": "get_summary_fields",
             "resource_name": summary_resource["name"],
             "backup_data_task_id": "backup_summary_data",
         },
@@ -526,7 +497,6 @@ with DAG(
         task_id="granular_new_data_branch",
         python_callable=is_data_new,
         op_kwargs={
-            "get_fields_task_id": "get_granular_fields",
             "resource_name": granular_resource["name"],
             "backup_data_task_id": "backup_granular_data",
         },
@@ -616,7 +586,7 @@ with DAG(
     validate_granular_expected_columns >> transform_granular_data
     transform_granular_data >> is_granular_file_new
 
-    backups_dir >> [backup_summary_data, backup_granular_data]
+    backups_dir >> get_package
 
     get_package >> get_or_create_summary_resource >> [
         is_summary_resource_new,
@@ -628,14 +598,14 @@ with DAG(
     ]
 
     is_summary_resource_new >> [summary_resource_not_new, summary_resource_is_new]
-    summary_resource_not_new >> backup_summary_data >> get_summary_fields
+    summary_resource_not_new >> backup_summary_data
     summary_resource_is_new >> make_summary_data_dict >> insert_summary_data_dict
-    insert_summary_data_dict >> get_summary_fields >> summary_new_data_branch
+    insert_summary_data_dict >> backup_summary_data
 
     is_granular_resource_new >> [granular_resource_not_new, granular_resource_is_new]
-    granular_resource_not_new >> backup_granular_data >> get_granular_fields
+    granular_resource_not_new >> backup_granular_data
     granular_resource_is_new >> make_granular_data_dict >> insert_granular_data_dict
-    insert_granular_data_dict >> get_granular_fields >> granular_new_data_branch
+    insert_granular_data_dict >> backup_granular_data
 
     is_summary_file_new >> [summary_file_not_new, summary_file_is_new]
     summary_file_not_new >> build_message
