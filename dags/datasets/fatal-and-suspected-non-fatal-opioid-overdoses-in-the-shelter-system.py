@@ -540,16 +540,17 @@ with DAG(
     # sequence
     tmp_dir >> get_summary_data >> validate_summary_expected_columns
     validate_summary_expected_columns >> transform_summary_data
-    transform_summary_data >> make_summary_data_dict
 
     tmp_dir >> get_granular_data >> validate_granular_expected_columns
     validate_granular_expected_columns >> transform_granular_data
-    transform_granular_data >> make_granular_data_dict
 
     backups_dir >> get_package
 
     get_package >> get_or_create_summary_resource >> is_summary_resource_new
+    transform_summary_data >> is_summary_resource_new
+
     get_package >> get_or_create_granular_resource >> is_granular_resource_new
+    transform_granular_data >> is_granular_resource_new
 
     is_summary_resource_new >> [summary_resource_not_new, summary_resource_is_new]
     summary_resource_not_new >> backup_summary_data
@@ -563,7 +564,7 @@ with DAG(
     insert_granular_data_dict >> backup_granular_data
 
     granular_file_not_new >> build_message
-    [backup_granular_data, transform_granular_data] >> is_granular_data_new
+    backup_granular_data >> is_granular_data_new
 
     is_summary_data_new >> [
         summary_data_not_new,
