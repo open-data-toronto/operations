@@ -10,24 +10,17 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
-
 # from airflow.utils.task_group import TaskGroup
 from ckan_operators.datastore_operator import (
-    BackupDatastoreResourceOperator,
-    DeleteDatastoreResourceRecordsOperator,
-    InsertDatastoreResourceRecordsOperator,
-)
+    BackupDatastoreResourceOperator, DeleteDatastoreResourceRecordsOperator,
+    InsertDatastoreResourceRecordsOperator)
 from ckan_operators.package_operator import GetPackageOperator
-from ckan_operators.resource_operator import (
-    GetOrCreateResourceOperator,
-    ResourceAndFileOperator,
-)
+from ckan_operators.resource_operator import (GetOrCreateResourceOperator,
+                                              ResourceAndFileOperator)
 from dateutil import parser
 from utils import airflow_utils
-from utils_operators.directory_operator import (
-    CreateLocalDirectoryOperator,
-    DeleteLocalDirectoryOperator,
-)
+from utils_operators.directory_operator import (CreateLocalDirectoryOperator,
+                                                DeleteLocalDirectoryOperator)
 from utils_operators.file_operator import DownloadFileOperator
 
 PACKAGE_NAME = "fatal-and-suspected-non-fatal-opioid-overdoses-in-the-shelter-system"
@@ -224,28 +217,30 @@ with DAG(
         lines = []
 
         # summary
-        if "is_not_new" in ti.xcom_pull(task_ids="is_summary_file_new"):
+        summary_branch_path = ti.xcom_pull(task_ids="is_summary_data_new"):
+        if summary_branch_path == "summary_file_is_not_new":
             lines.append(f"- `{summary['name']}`: no new file")
         else:
             summary_sync_ts = ti.xcom_pull(task_ids="sync_summary_ts")
             last_modified = summary_sync_ts["file_last_modified"]
             line = f"- `{summary['name']}` last_modified synced to: {last_modified}"
 
-            if "is_new" in ti.xcom_pull(task_ids="is_summary_data_new"):
+            if granular_branch_path=="summary_data_is_new":
                 summary_insert_count = ti.xcom_pull(task_ids="insert_summary_rows")
                 line = line + f" | records inserted: {summary_insert_count}"
 
             lines.append(line)
 
         # granular
-        if "is_not_new" in ti.xcom_pull(task_ids="is_granular_file_new"):
+        granular_branch_path = ti.xcom_pull(task_ids="is_granular_data_new"):
+        if granular_branch_path == "granular_file_is_not_new":
             lines.append(f"- `{granular['name']}`: no new file")
         else:
             granular_sync_ts = ti.xcom_pull(task_ids="sync_granular_ts")
             last_modified = granular_sync_ts["file_last_modified"]
             line = f"- `{granular['name']}` last_modified synced to: {last_modified}"
 
-            if "is_new" in ti.xcom_pull(task_ids="is_granular_data_new"):
+            if granular_branch_path=="granular_data_is_new":
                 granular_insert_count = ti.xcom_pull(task_ids="insert_granular_rows")
                 line = line + f" | records inserted: {granular_insert_count}"
 
