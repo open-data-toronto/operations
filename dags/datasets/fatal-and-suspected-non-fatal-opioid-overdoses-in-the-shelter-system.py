@@ -10,6 +10,8 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
+
+# from airflow.utils.task_group import TaskGroup
 from ckan_operators.datastore_operator import (
     BackupDatastoreResourceOperator,
     DeleteDatastoreResourceRecordsOperator,
@@ -168,12 +170,13 @@ with DAG(
 
         return fields_path
 
-    def is_file_new(**kwargs):
+    def is_data_new(**kwargs):
         ti = kwargs["ti"]
+        backups_dir = Path(ti.xcom_pull(task_ids="backups_dir"))
+        backup_data = ti.xcom_pull(task_ids=kwargs["backup_data_task_id"])
         data_file_info = ti.xcom_pull(task_ids=kwargs["download_file_task_id"])
         resource = ti.xcom_pull(task_ids=kwargs["resource_task_id"])
-
-        logging.info(f"resource: {resource} | data_file_info: {data_file_info}")
+        prefix = "summary" if "summary" in kwargs["resource_name"] else "granular"
 
         last_modified_string = data_file_info["last_modified"]
         file_last_modified = parser.parse(last_modified_string)
@@ -187,26 +190,10 @@ with DAG(
         difference_in_seconds = (
             file_last_modified.timestamp() - resource_last_modified.timestamp()
         )
-
-        logging.info(
-            f"{difference_in_seconds}secs between file and resource last modified times"
-        )
-
-        prefix = "summary" if "summary" in kwargs["resource_name"] else "granular"
-
         if difference_in_seconds == 0:
             return f"{prefix}_file_is_not_new"
 
-        return f"{prefix}_file_is_new"
-
-    def is_data_new(**kwargs):
-        ti = kwargs["ti"]
-        backups_dir = Path(ti.xcom_pull(task_ids="backups_dir"))
-        backup_data = ti.xcom_pull(task_ids=kwargs["backup_data_task_id"])
-
         df = pd.read_parquet(backup_data["data"])
-        prefix = "summary" if "summary" in kwargs["resource_name"] else "granular"
-
         if df.shape[0] == 0:
             return f"{prefix}_data_is_new"
 
@@ -226,19 +213,6 @@ with DAG(
         logging.info(f"Data is not yet in backups, new ID: {checksum}")
 
         return f"{prefix}_data_is_new"
-
-    def get_fields(**kwargs):
-        ti = kwargs["ti"]
-        backup_data = ti.xcom_pull(task_ids=kwargs["backup_data_task_id"])
-
-        if backup_data is not None:
-            with open(Path(backup_data["fields_file_path"]), "r") as f:
-                fields = json.load(f)
-        else:
-            fields = ti.xcom_pull(task_ids=kwargs["build_data_dict_task_id"])
-            assert fields is not None, "No fields"
-
-        return fields
 
     def build_notification_message(**kwargs):
         ti = kwargs.pop("ti")
@@ -462,31 +436,6 @@ with DAG(
     granular_resource_not_new = DummyOperator(task_id="granular_resource_is_not_new")
     granular_resource_is_new = DummyOperator(task_id="granular_resource_is_new")
 
-    # branch: file NOT new (file_last_modified==resoure_last_modified), nothing to load
-    is_summary_file_new = BranchPythonOperator(
-        task_id="is_summary_file_new",
-        python_callable=is_file_new,
-        op_kwargs={
-            "download_file_task_id": "get_summary_data",
-            "resource_name": summary_resource["name"],
-            "resource_task_id": "get_or_create_summary_resource",
-        },
-    )
-    summary_file_not_new = DummyOperator(task_id="summary_file_is_not_new")
-    summary_file_is_new = DummyOperator(task_id="summary_file_is_new")
-
-    is_granular_file_new = BranchPythonOperator(
-        task_id="is_granular_file_new",
-        python_callable=is_file_new,
-        op_kwargs={
-            "download_file_task_id": "get_granular_data",
-            "resource_name": granular_resource["name"],
-            "resource_task_id": "get_or_create_granular_resource",
-        },
-    )
-    granular_file_not_new = DummyOperator(task_id="granular_file_is_not_new")
-    granular_file_is_new = DummyOperator(task_id="granular_file_is_new")
-
     # branch: data NOT new (data checksum), nothing to load
     is_summary_data_new = BranchPythonOperator(
         task_id="is_summary_data_new",
@@ -498,6 +447,7 @@ with DAG(
     )
     summary_data_not_new = DummyOperator(task_id="summary_data_is_not_new")
     summary_data_is_new = DummyOperator(task_id="summary_data_is_new")
+    summary_file_not_new = DummyOperator(task_id="summary_file_not_new")
 
     is_granular_data_new = BranchPythonOperator(
         task_id="is_granular_data_new",
@@ -509,6 +459,7 @@ with DAG(
     )
     granular_data_not_new = DummyOperator(task_id="granular_data_is_not_new")
     granular_data_is_new = DummyOperator(task_id="granular_data_is_new")
+    granular_file_not_new = DummyOperator(task_id="granular_file_not_new")
 
     # delete & insert records
     delete_summary_rows = DeleteDatastoreResourceRecordsOperator(
@@ -586,47 +537,45 @@ with DAG(
 
     # sequence
     tmp_dir >> get_summary_data >> validate_summary_expected_columns
-    validate_summary_expected_columns >> transform_summary_data >> is_summary_file_new
+    validate_summary_expected_columns >> transform_summary_data
 
     tmp_dir >> get_granular_data >> validate_granular_expected_columns
     validate_granular_expected_columns >> transform_granular_data
-    transform_granular_data >> is_granular_file_new
 
     backups_dir >> get_package
 
-    get_package >> get_or_create_summary_resource >> [
-        is_summary_resource_new,
-        is_summary_file_new,
-    ]
-    get_package >> get_or_create_granular_resource >> [
-        is_granular_resource_new,
-        is_granular_file_new,
-    ]
+    get_package >> get_or_create_summary_resource >> is_summary_resource_new
+    get_package >> get_or_create_granular_resource >> is_granular_resource_new
 
     is_summary_resource_new >> [summary_resource_not_new, summary_resource_is_new]
     summary_resource_not_new >> backup_summary_data
     summary_resource_is_new >> make_summary_data_dict >> insert_summary_data_dict
     insert_summary_data_dict >> backup_summary_data
+    [backup_summary_data, transform_summary_data] >> is_summary_data_new
 
     is_granular_resource_new >> [granular_resource_not_new, granular_resource_is_new]
     granular_resource_not_new >> backup_granular_data
     granular_resource_is_new >> make_granular_data_dict >> insert_granular_data_dict
     insert_granular_data_dict >> backup_granular_data
 
-    is_summary_file_new >> [summary_file_not_new, summary_file_is_new]
-    summary_file_not_new >> build_message
-    [backup_summary_data, summary_file_is_new] >> is_summary_data_new
-
-    is_granular_file_new >> [granular_file_not_new, granular_file_is_new]
     granular_file_not_new >> build_message
-    [backup_granular_data, granular_file_is_new] >> is_granular_data_new
+    [backup_granular_data, transform_granular_data] >> is_granular_data_new
 
-    is_summary_data_new >> [summary_data_not_new, summary_data_is_new]
+    is_summary_data_new >> [
+        summary_data_not_new,
+        summary_data_is_new,
+        summary_file_not_new,
+    ]
+    summary_file_not_new >> build_message
     summary_data_not_new >> sync_summary_ts
     summary_data_is_new >> delete_summary_rows >> insert_summary_rows >> sync_summary_ts
     sync_summary_ts >> build_message
 
-    is_granular_data_new >> [granular_data_not_new, granular_data_is_new]
+    is_granular_data_new >> [
+        granular_data_not_new,
+        granular_data_is_new,
+        granular_file_not_new,
+    ]
     granular_data_not_new >> sync_granular_ts
     granular_data_is_new >> delete_granular_rows >> insert_granular_rows
     insert_granular_rows >> sync_granular_ts >> build_message
