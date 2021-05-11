@@ -628,8 +628,7 @@ with DAG(
 
     is_granular_data_new >> [granular_data_not_new, granular_data_is_new]
     granular_data_not_new >> sync_granular_ts
-    granular_data_is_new >> delete_granular_rows >> insert_granular_rows >> [
-        sync_granular_ts
-    ]
+    granular_data_is_new >> delete_granular_rows >> insert_granular_rows
+    insert_granular_rows >> sync_granular_ts >> build_message
 
-    sync_granular_ts >> build_message >> send_message >> delete_tmp_data
+    build_message >> send_message >> delete_tmp_data
