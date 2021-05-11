@@ -11,15 +11,21 @@ from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
 from ckan_operators.datastore_operator import (
-    BackupDatastoreResourceOperator, DeleteDatastoreResourceRecordsOperator,
-    InsertDatastoreResourceRecordsOperator)
+    BackupDatastoreResourceOperator,
+    DeleteDatastoreResourceRecordsOperator,
+    InsertDatastoreResourceRecordsOperator,
+)
 from ckan_operators.package_operator import GetPackageOperator
-from ckan_operators.resource_operator import (GetOrCreateResourceOperator,
-                                              ResourceAndFileOperator)
+from ckan_operators.resource_operator import (
+    GetOrCreateResourceOperator,
+    ResourceAndFileOperator,
+)
 from dateutil import parser
 from utils import airflow_utils
-from utils_operators.directory_operator import (CreateLocalDirectoryOperator,
-                                                DeleteLocalDirectoryOperator)
+from utils_operators.directory_operator import (
+    CreateLocalDirectoryOperator,
+    DeleteLocalDirectoryOperator,
+)
 from utils_operators.file_operator import DownloadFileOperator
 
 PACKAGE_NAME = "fatal-and-suspected-non-fatal-opioid-overdoses-in-the-shelter-system"
@@ -249,7 +255,7 @@ with DAG(
             last_modified = summary_sync_ts["file_last_modified"]
             line = f"- `{summary['name']}` last_modified synced to: {last_modified}"
 
-            if "is_new" in ti.xcom_pull(task_ids="summary_new_data_branch"):
+            if "is_new" in ti.xcom_pull(task_ids="is_summary_data_new"):
                 summary_insert_count = ti.xcom_pull(task_ids="insert_summary_rows")
                 line = line + f" | records inserted: {summary_insert_count}"
 
@@ -263,7 +269,7 @@ with DAG(
             last_modified = granular_sync_ts["file_last_modified"]
             line = f"- `{granular['name']}` last_modified synced to: {last_modified}"
 
-            if "is_new" in ti.xcom_pull(task_ids="granular_new_data_branch"):
+            if "is_new" in ti.xcom_pull(task_ids="is_granular_data_new"):
                 granular_insert_count = ti.xcom_pull(task_ids="insert_granular_rows")
                 line = line + f" | records inserted: {granular_insert_count}"
 
@@ -482,8 +488,8 @@ with DAG(
     granular_file_is_new = DummyOperator(task_id="granular_file_is_new")
 
     # branch: data NOT new (data checksum), nothing to load
-    summary_new_data_branch = BranchPythonOperator(
-        task_id="summary_new_data_branch",
+    is_summary_data_new = BranchPythonOperator(
+        task_id="is_summary_data_new",
         python_callable=is_data_new,
         op_kwargs={
             "resource_name": summary_resource["name"],
@@ -493,8 +499,8 @@ with DAG(
     summary_data_not_new = DummyOperator(task_id="summary_data_is_not_new")
     summary_data_is_new = DummyOperator(task_id="summary_data_is_new")
 
-    granular_new_data_branch = BranchPythonOperator(
-        task_id="granular_new_data_branch",
+    is_granular_data_new = BranchPythonOperator(
+        task_id="is_granular_data_new",
         python_callable=is_data_new,
         op_kwargs={
             "resource_name": granular_resource["name"],
@@ -609,17 +615,17 @@ with DAG(
 
     is_summary_file_new >> [summary_file_not_new, summary_file_is_new]
     summary_file_not_new >> build_message
-    summary_file_is_new >> summary_new_data_branch
+    [backup_summary_data, summary_file_is_new] >> is_summary_data_new
 
     is_granular_file_new >> [granular_file_not_new, granular_file_is_new]
     granular_file_not_new >> build_message
-    granular_file_is_new >> granular_new_data_branch
+    [backup_granular_data, granular_file_is_new] >> is_granular_data_new
 
-    summary_new_data_branch >> [summary_data_not_new, summary_data_is_new]
+    is_summary_data_new >> [summary_data_not_new, summary_data_is_new]
     summary_data_not_new >> sync_summary_ts
     summary_data_is_new >> delete_summary_rows >> insert_summary_rows >> sync_summary_ts
 
-    granular_new_data_branch >> [granular_data_not_new, granular_data_is_new]
+    is_granular_data_new >> [granular_data_not_new, granular_data_is_new]
     granular_data_not_new >> sync_granular_ts
     granular_data_is_new >> delete_granular_rows >> insert_granular_rows >> [
         sync_granular_ts
