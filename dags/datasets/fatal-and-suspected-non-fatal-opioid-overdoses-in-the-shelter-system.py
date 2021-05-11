@@ -146,7 +146,7 @@ with DAG(
 
     def build_data_dict(**kwargs):
         ti = kwargs["ti"]
-        data_fp = Path(ti.xcom_pull(task_ids="transform_data_task_id"))
+        data_fp = Path(ti.xcom_pull(task_ids=kwargs["transform_data_task_id"]))
         tmp_dir = Path(ti.xcom_pull(task_ids="tmp_dir"))
 
         data = pd.read_parquet(data_fp)
