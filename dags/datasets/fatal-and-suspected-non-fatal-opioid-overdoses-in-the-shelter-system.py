@@ -597,10 +597,12 @@ with DAG(
     is_summary_resource_new >> [summary_resource_not_new, summary_resource_is_new]
     summary_resource_not_new >> backup_summary_data >> get_summary_fields
     summary_resource_is_new >> make_summary_data_dict >> get_summary_fields
+    get_summary_fields >> summary_new_data_branch
 
     is_granular_resource_new >> [granular_resource_not_new, granular_resource_is_new]
     granular_resource_not_new >> backup_granular_data >> get_granular_fields
     granular_resource_is_new >> make_granular_data_dict >> get_granular_fields
+    get_granular_fields >> granular_new_data_branch
 
     is_summary_file_new >> [summary_file_not_new, summary_file_is_new]
     summary_file_not_new >> build_message
