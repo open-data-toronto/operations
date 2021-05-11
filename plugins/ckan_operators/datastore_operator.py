@@ -45,7 +45,8 @@ class BackupDatastoreResourceOperator(BaseOperator):
 
     def _checksum_datastore_response(self, datastore_response):
         data = pd.DataFrame(datastore_response["records"])
-        data = data.drop("_id", axis=1)
+        if "_id" in data.columns.values:
+            data = data.drop("_id", axis=1)
         if len(self.sort_columns) > 0:
             data = data.sort_values(by=self.sort_columns)
 
