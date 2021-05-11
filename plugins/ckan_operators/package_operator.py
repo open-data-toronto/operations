@@ -32,4 +32,3 @@ class GetAllPackagesOperator(BaseOperator):
         packages = self.ckan.action.package_list()
 
         return self.ckan.action.package_search(rows=len(packages))["results"]
-

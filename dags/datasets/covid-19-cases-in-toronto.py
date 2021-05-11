@@ -19,17 +19,21 @@ PACKAGE_NAME = "covid-19-cases-in-toronto"
 SOURCE_FILE_NAME = "covid19cases.csv"
 
 
+def send_failure_msg():
+    airflow_utils.message_slack(
+        name=PACKAGE_NAME,
+        message_type="error",
+        msg="Job not finished",
+        active_env=Variable.get("active_env"),
+        prod_webhook=Variable.get("active_env") == "prod",
+    )
+
+
 with DAG(
     PACKAGE_NAME,
     default_args=airflow_utils.get_default_args(
         {
-            "on_failure_callback": airflow_utils.message_slack(
-                name=PACKAGE_NAME,
-                message_type="error",
-                msg="Job not finished",
-                active_env=Variable.get("active_env"),
-                prod_webhook=Variable.get("active_env") == "prod",
-            ),
+            "on_failure_callback": send_failure_msg,
             "start_date": datetime(2020, 11, 24, 13, 35, 0),
             "retries": 3,
             "retry_delay": timedelta(minutes=3),
