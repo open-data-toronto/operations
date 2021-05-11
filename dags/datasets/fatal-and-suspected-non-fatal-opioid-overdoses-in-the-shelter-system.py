@@ -556,7 +556,7 @@ with DAG(
     summary_resource_not_new >> backup_summary_data
     summary_resource_is_new >> make_summary_data_dict >> insert_summary_data_dict
     insert_summary_data_dict >> backup_summary_data
-    [backup_summary_data, transform_summary_data] >> is_summary_data_new
+    backup_summary_data >> is_summary_data_new
 
     is_granular_resource_new >> [granular_resource_not_new, granular_resource_is_new]
     granular_resource_not_new >> backup_granular_data
