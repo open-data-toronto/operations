@@ -609,11 +609,9 @@ with DAG(
     )
 
     # sequence
-    tmp_dir >> get_summary_data >> is_summary_file_new
     tmp_dir >> get_summary_data >> validate_summary_expected_columns
     validate_summary_expected_columns >> transform_summary_data >> is_summary_file_new
 
-    tmp_dir >> get_granular_data >> is_granular_file_new
     tmp_dir >> get_granular_data >> validate_granular_expected_columns
     validate_granular_expected_columns >> transform_granular_data
     transform_granular_data >> is_granular_file_new
