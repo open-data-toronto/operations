@@ -117,13 +117,15 @@ with DAG(
 
         df = pd.read_csv(Path(data_file_info["path"]))
 
-        for col in df.columns.values:
+        for col in [x.lower() for x in df.columns.values.tolist()]:
             assert (
                 col in kwargs["expected_columns"]
             ), f"{col} not in list of expected columns"
 
         for col in kwargs["expected_columns"]:
-            assert col in df.columns.values, f"Expected column {col} not in data file"
+            assert col in [
+                x.lower() for x in df.columns.values.tolist()
+            ], f"Expected column {col} not in data file"
 
     def transform_data(**kwargs):
         ti = kwargs["ti"]
