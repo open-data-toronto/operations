@@ -96,13 +96,15 @@ with DAG(
 ) as dag:
 
     def is_resource_new(**kwargs):
-        package = kwargs["ti"].xcom_pull(task_ids="get_package")
+        pkg = kwargs["ti"].xcom_pull(task_ids="get_package")
         resource_name = kwargs["resource_name"]
 
         logging.info(
-            f"looking for: {resource_name} | resources found: {[r['name'] for r in package['resources']]}"
+            f"looking for: {resource_name} | resources found: {[r['name'] for r in pkg['resources']]}"
         )
-        is_new = resource_name not in [r["name"] for r in package["resources"]]
+        is_new = resource_name not in [
+            r["name"] for r in pkg["resources"] if r["datastore_active"]
+        ]
 
         prefix = "summary" if "summary" in resource_name else "granular"
 
