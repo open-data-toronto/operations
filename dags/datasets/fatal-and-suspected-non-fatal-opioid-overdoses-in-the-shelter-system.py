@@ -10,17 +10,24 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
+
 # from airflow.utils.task_group import TaskGroup
 from ckan_operators.datastore_operator import (
-    BackupDatastoreResourceOperator, DeleteDatastoreResourceRecordsOperator,
-    InsertDatastoreResourceRecordsOperator)
+    BackupDatastoreResourceOperator,
+    DeleteDatastoreResourceRecordsOperator,
+    InsertDatastoreResourceRecordsOperator,
+)
 from ckan_operators.package_operator import GetPackageOperator
-from ckan_operators.resource_operator import (GetOrCreateResourceOperator,
-                                              ResourceAndFileOperator)
+from ckan_operators.resource_operator import (
+    GetOrCreateResourceOperator,
+    ResourceAndFileOperator,
+)
 from dateutil import parser
 from utils import airflow_utils
-from utils_operators.directory_operator import (CreateLocalDirectoryOperator,
-                                                DeleteLocalDirectoryOperator)
+from utils_operators.directory_operator import (
+    CreateLocalDirectoryOperator,
+    DeleteLocalDirectoryOperator,
+)
 from utils_operators.file_operator import DownloadFileOperator
 
 PACKAGE_NAME = "fatal-and-suspected-non-fatal-opioid-overdoses-in-the-shelter-system"
@@ -188,7 +195,7 @@ with DAG(
         if difference_in_seconds == 0:
             return f"{prefix}_file_is_not_new"
 
-        df = pd.read_parquet(backup_data["data"])
+        df = pd.read_parquet(Path(backup_data["data_file_path"]))
         if df.shape[0] == 0:
             return f"{prefix}_data_is_new"
 
