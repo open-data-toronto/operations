@@ -508,8 +508,8 @@ with DAG(
         backup_task_id="backup_summary_data",
     )
 
-    delete_summary_rows = DeleteDatastoreResourceRecordsOperator(
-        task_id="delete_summary_rows",
+    delete_granular_rows = DeleteDatastoreResourceRecordsOperator(
+        task_id="delete_granular_rows",
         address=ckan_address,
         apikey=ckan_apikey,
         backup_task_id="backup_granular_data",
@@ -554,6 +554,7 @@ with DAG(
         trigger_rule="one_success",
     )
 
+    # notification message
     build_message = PythonOperator(
         task_id="build_message",
         trigger_rule="none_failed",
@@ -568,10 +569,12 @@ with DAG(
         task_id="send_message", python_callable=send_notification_message,
     )
 
+    # cleanup
     delete_tmp_data = DeleteLocalDirectoryOperator(
         task_id="delete_tmp_data", path=Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
     )
 
+    # sequence
     tmp_dir >> get_summary_data >> [
         validate_summary_expected_columns,
         is_summary_file_new,
@@ -615,7 +618,7 @@ with DAG(
 
     granular_new_data_branch >> [granular_data_not_new, granular_data_is_new]
     granular_data_not_new >> sync_granular_ts
-    granular_data_is_new >> delete_summary_rows >> insert_granular_rows >> [
+    granular_data_is_new >> delete_granular_rows >> insert_granular_rows >> [
         sync_granular_ts
     ]
 
