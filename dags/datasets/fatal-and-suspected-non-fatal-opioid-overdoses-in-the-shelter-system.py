@@ -624,6 +624,7 @@ with DAG(
     is_summary_data_new >> [summary_data_not_new, summary_data_is_new]
     summary_data_not_new >> sync_summary_ts
     summary_data_is_new >> delete_summary_rows >> insert_summary_rows >> sync_summary_ts
+    sync_summary_ts >> build_message
 
     is_granular_data_new >> [granular_data_not_new, granular_data_is_new]
     granular_data_not_new >> sync_granular_ts
