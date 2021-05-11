@@ -575,15 +575,13 @@ with DAG(
     )
 
     # sequence
-    tmp_dir >> get_summary_data >> [
-        validate_summary_expected_columns,
-        is_summary_file_new,
-    ] >> transform_summary_data >> make_summary_data_dict
+    tmp_dir >> get_summary_data >> is_summary_file_new
+    tmp_dir >> get_summary_data >> validate_summary_expected_columns
+    validate_summary_expected_columns >> transform_summary_data >> make_summary_data_dict
 
-    tmp_dir >> get_granular_data >> [
-        validate_granular_expected_columns,
-        is_granular_file_new,
-    ] >> transform_granular_data >> make_granular_data_dict
+    tmp_dir >> get_granular_data >> is_granular_file_new
+    tmp_dir >> get_granular_data >> validate_granular_expected_columns
+    validate_granular_expected_columns >> transform_granular_data >> make_granular_data_dict
 
     backups_dir >> [backup_summary_data, backup_granular_data]
 
