@@ -147,20 +147,14 @@ class DeleteDatastoreResourceRecordsOperator(BaseOperator):
 
 
 class InsertDatastoreResourceRecordsOperator(BaseOperator):
-    """
-    Deletes datastore resource records. Args:
-        - address: CKAN instance URL
-        - apikey: CKAN API key
-        - backup_task_id: task_id that returns backup file information (BackupDatastoreResourceOperator)
-    """
-
     @apply_defaults
     def __init__(
         self,
         address: str,
         apikey: str,
-        parquet_filepath_task_id: str,
         resource_task_id: str,
+        parquet_filepath_task_id: str = None,
+        fields_json_path_task_id: str = None,
         chunk_size: int = 20000,
         **kwargs,
     ) -> None:
@@ -168,37 +162,51 @@ class InsertDatastoreResourceRecordsOperator(BaseOperator):
         self.parquet_filepath_task_id = parquet_filepath_task_id
         self.resource_task_id = resource_task_id
         self.chunk_size = chunk_size
+        self.fields_json_path_task_id = fields_json_path_task_id
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+
+    def _create_empty_resource_with_fields(self, fields_path, resource_id):
+        with open(fields_path, "r") as f:
+            fields = json.load(f)
+
+        self.ckan.action.datastore_create(id=resource_id, fields=fields)
 
     def execute(self, context):
         ti = context["ti"]
-
         resource = ti.xcom_pull(task_ids=self.resource_task_id)
 
-        path = Path(ti.xcom_pull(task_ids=self.parquet_filepath_task_id))
-        data = pd.read_parquet(path)
-        records = data.to_dict(orient="records")
+        if self.fields_json_path_task_id is not None:
+            fields_path = Path(ti.xcom_pull(task_ids=self.fields_json_path_task_id))
+            self._create_empty_resource_with_fields(fields_path, resource["id"])
 
-        chunks = [
-            records[i : i + self.chunk_size]
-            for i in range(0, len(records), self.chunk_size)
-        ]
+        if self.parquet_filepath_task_id is not None:
+            path = Path(ti.xcom_pull(task_ids=self.parquet_filepath_task_id))
 
-        for chunk in chunks:
-            clean_records = []
-            logging.info(f"Removing NaNs and inserting {len(records)} records")
-            for r in chunk:
-                record = {}
-                for key, value in r.items():
-                    if value == value:
-                        record[key] = value
-                clean_records.append(record)
+            data = pd.read_parquet(path)
+            records = data.to_dict(orient="records")
 
-            self.ckan.action.datastore_create(id=resource["id"], records=clean_records)
+            chunks = [
+                records[i : i + self.chunk_size]
+                for i in range(0, len(records), self.chunk_size)
+            ]
 
-        logging.info(f"Records inserted: {data.shape[0]}")
+            for chunk in chunks:
+                clean_records = []
+                logging.info(f"Removing NaNs and inserting {len(records)} records")
+                for r in chunk:
+                    record = {}
+                    for key, value in r.items():
+                        if value == value:
+                            record[key] = value
+                    clean_records.append(record)
 
-        return data.shape[0]
+                self.ckan.action.datastore_create(
+                    id=resource["id"], records=clean_records
+                )
+
+            logging.info(f"Records inserted: {data.shape[0]}")
+
+            return data.shape[0]
 
 
 class RestoreDatastoreResourceBackupOperator(BaseOperator):

@@ -141,8 +141,12 @@ with DAG(
         return "resource_is_not_new"
 
     def build_data_dict(**kwargs):
-        data_fp = Path(kwargs["ti"].xcom_pull(task_ids="transform_data_task_id"))
+        ti = kwargs["ti"]
+        data_fp = Path(ti.xcom_pull(task_ids="transform_data_task_id"))
+        tmp_dir = Path(ti.xcom_pull(task_ids="tmp_dir"))
+
         data = pd.read_parquet(Path(data_fp))
+        fields_file_name = kwargs["fields_file_name"]
         fields = []
 
         for col, col_type in data.dtypes.items():
@@ -157,7 +161,12 @@ with DAG(
 
             fields.append({"type": field_type, "id": col})
 
-        return fields
+        fields_path = tmp_dir / f"{fields_file_name}.json"
+        if not fields_path.exists():
+            with open(fields_path, "w") as f:
+                json.dump(fields, f)
+
+        return fields_path
 
     def is_file_new(**kwargs):
         ti = kwargs["ti"]
@@ -361,13 +370,38 @@ with DAG(
     make_summary_data_dict = PythonOperator(
         task_id="make_summary_data_dict",
         python_callable=build_data_dict,
-        op_kwargs={"transform_data_task_id": "transform_summary_data"},
+        op_kwargs={
+            "transform_data_task_id": "transform_summary_data",
+            "fields_file_name": "summary_generated_fields",
+        },
     )
 
     make_granular_data_dict = PythonOperator(
         task_id="make_granular_data_dict",
         python_callable=build_data_dict,
-        op_kwargs={"transform_data_task_id": "transform_granular_data"},
+        op_kwargs={
+            "transform_data_task_id": "transform_granular_data",
+            "fields_file_name": "granular_generated_fields",
+        },
+    )
+
+    # create empty datastore resource with dictionary
+    insert_summary_data_dict = InsertDatastoreResourceRecordsOperator(
+        task_id="insert_summary_data_dict",
+        address=ckan_address,
+        apikey=ckan_apikey,
+        fields_json_path_task_id="make_summary_data_dict",
+        parquet_filepath_task_id=None,
+        resource_task_id="get_or_create_summary_resource",
+    )
+
+    insert_granular_data_dict = InsertDatastoreResourceRecordsOperator(
+        task_id="insert_granular_data_dict",
+        address=ckan_address,
+        apikey=ckan_apikey,
+        fields_json_path_task_id="make_granular_data_dict",
+        parquet_filepath_task_id=None,
+        resource_task_id="get_or_create_granular_resource",
     )
 
     # get package and get/create resources
@@ -581,7 +615,8 @@ with DAG(
 
     tmp_dir >> get_granular_data >> is_granular_file_new
     tmp_dir >> get_granular_data >> validate_granular_expected_columns
-    validate_granular_expected_columns >> transform_granular_data >> is_granular_file_new
+    validate_granular_expected_columns >> transform_granular_data
+    transform_granular_data >> is_granular_file_new
 
     backups_dir >> [backup_summary_data, backup_granular_data]
 
@@ -596,13 +631,13 @@ with DAG(
 
     is_summary_resource_new >> [summary_resource_not_new, summary_resource_is_new]
     summary_resource_not_new >> backup_summary_data >> get_summary_fields
-    summary_resource_is_new >> make_summary_data_dict >> get_summary_fields
-    get_summary_fields >> summary_new_data_branch
+    summary_resource_is_new >> make_summary_data_dict >> insert_summary_data_dict
+    insert_summary_data_dict >> get_summary_fields >> summary_new_data_branch
 
     is_granular_resource_new >> [granular_resource_not_new, granular_resource_is_new]
     granular_resource_not_new >> backup_granular_data >> get_granular_fields
-    granular_resource_is_new >> make_granular_data_dict >> get_granular_fields
-    get_granular_fields >> granular_new_data_branch
+    granular_resource_is_new >> make_granular_data_dict >> insert_granular_data_dict
+    insert_granular_data_dict >> get_granular_fields >> granular_new_data_branch
 
     is_summary_file_new >> [summary_file_not_new, summary_file_is_new]
     summary_file_not_new >> build_message
