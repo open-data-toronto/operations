@@ -133,7 +133,7 @@ class DeleteDatastoreResourceRecordsOperator(BaseOperator):
     def execute(self, context):
         backups_info = context["ti"].xcom_pull(task_ids=self.backup_task_id)
 
-        self.ckan.action.datastore_delete(id=backups_info["resource_id"], force=True)
+        self.ckan.action.datastore_delete(id=backups_info["resource_id"])
 
         with open(Path(backups_info["fields_file_path"]), "r") as f:
             fields = json.load(f)
@@ -170,7 +170,7 @@ class InsertDatastoreResourceRecordsOperator(BaseOperator):
         with open(fields_path, "r") as f:
             fields = json.load(f)
 
-        self.ckan.action.datastore_create(id=resource_id, fields=fields, force=True)
+        self.ckan.action.datastore_create(id=resource_id, fields=fields)
 
     def execute(self, context):
         ti = context["ti"]
