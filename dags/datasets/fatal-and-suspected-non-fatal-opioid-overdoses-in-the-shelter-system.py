@@ -42,7 +42,6 @@ RESOURCES = {
             "extract_job": f"Airflow: {PACKAGE_NAME}",
             "url_type": "datastore",
         },
-        "datastore": True,
         "expected_columns": [
             "year",
             "year_stage",
@@ -59,7 +58,6 @@ RESOURCES = {
             "extract_job": f"Airflow: {PACKAGE_NAME}",
             "url_type": "datastore",
         },
-        "datastore": True,
         "expected_columns": [
             "site_name",
             "address",
@@ -453,7 +451,7 @@ with DAG(
     )
     summary_data_not_new = DummyOperator(task_id="summary_data_is_not_new")
     summary_data_is_new = DummyOperator(task_id="summary_data_is_new")
-    summary_file_not_new = DummyOperator(task_id="summary_file_not_new")
+    summary_file_is_not_new = DummyOperator(task_id="summary_file_is_not_new")
 
     is_granular_data_new = BranchPythonOperator(
         task_id="is_granular_data_new",
@@ -467,7 +465,7 @@ with DAG(
     )
     granular_data_not_new = DummyOperator(task_id="granular_data_is_not_new")
     granular_data_is_new = DummyOperator(task_id="granular_data_is_new")
-    granular_file_not_new = DummyOperator(task_id="granular_file_not_new")
+    granular_file_is_not_new = DummyOperator(task_id="granular_file_is_not_new")
 
     # delete & insert records
     delete_summary_rows = DeleteDatastoreResourceRecordsOperator(
@@ -569,15 +567,15 @@ with DAG(
     granular_resource_is_new >> make_granular_data_dict >> insert_granular_data_dict
     insert_granular_data_dict >> backup_granular_data
 
-    granular_file_not_new >> build_message
+    granular_file_is_not_new >> build_message
     backup_granular_data >> is_granular_data_new
 
     is_summary_data_new >> [
         summary_data_not_new,
         summary_data_is_new,
-        summary_file_not_new,
+        summary_file_is_not_new,
     ]
-    summary_file_not_new >> build_message
+    summary_file_is_not_new >> build_message
     summary_data_not_new >> sync_summary_ts
     summary_data_is_new >> delete_summary_rows >> insert_summary_rows >> sync_summary_ts
     sync_summary_ts >> build_message
@@ -585,7 +583,7 @@ with DAG(
     is_granular_data_new >> [
         granular_data_not_new,
         granular_data_is_new,
-        granular_file_not_new,
+        granular_file_is_not_new,
     ]
     granular_data_not_new >> sync_granular_ts
     granular_data_is_new >> delete_granular_rows >> insert_granular_rows
