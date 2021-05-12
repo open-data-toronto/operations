@@ -273,6 +273,7 @@ with DAG(
 
     ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
     active_env = Variable.get("active_env")
+    active_env = "qa"
     ckan_address = ckan_creds[active_env]["address"]
     ckan_apikey = ckan_creds[active_env]["apikey"]
     summary_resource = RESOURCES.pop("summary-suspected-opiod-overdoses-in-shelters")
