@@ -10,8 +10,6 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
-
-# from airflow.utils.task_group import TaskGroup
 from ckan_operators.datastore_operator import (
     BackupDatastoreResourceOperator,
     DeleteDatastoreResourceRecordsOperator,
@@ -272,8 +270,7 @@ with DAG(
         )
 
     ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
-    active_env = "qa"
-    # active_env = Variable.get("active_env")
+    active_env = Variable.get("active_env")
     ckan_address = ckan_creds[active_env]["address"]
     ckan_apikey = ckan_creds[active_env]["apikey"]
     summary_resource = RESOURCES.pop("summary-suspected-opiod-overdoses-in-shelters")
