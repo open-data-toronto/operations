@@ -321,7 +321,7 @@ with DAG(
         task_id="transform_summary_data",
         python_callable=transform_data,
         op_kwargs={
-            "download_file_task_id": "get_granular_data",
+            "download_file_task_id": "get_summary_data",
             "resource_name": summary_resource["name"],
         },
     )
