@@ -197,10 +197,7 @@ with DAG(
         if df.shape[0] == 0:
             return f"{prefix}_data_is_new"
 
-        checksum = hashlib.md5()
-        checksum.update(df.to_csv(index=False).encode("utf-8"))
-        checksum = checksum.hexdigest()
-
+        checksum = data_file_info["checksum"]
         for f in os.listdir(backups_dir):
             if not os.path.isfile(backups_dir / f):
                 continue
