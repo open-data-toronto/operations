@@ -503,7 +503,7 @@ with DAG(
         download_file_task_id="get_measure",
         resource_task_id="get_or_create_resource",
         upload_to_ckan=False,
-        sync_timestamp=True,
+        sync_timestamp=False,
         trigger_rule="one_success",
     )
 
