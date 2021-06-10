@@ -2,7 +2,7 @@
 *.json
 *.xml
 **/tmp/**
-*.ipynb
+# *.ipynb
 .vscode/
 backups/**
 staging/**
