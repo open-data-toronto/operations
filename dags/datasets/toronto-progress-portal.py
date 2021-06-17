@@ -1,10 +1,15 @@
+import pandas as pd
+import requests
+import ckanapi
+import math
+import re
+
 import hashlib
 import json
 import logging
 import os
 from pathlib import Path
 
-import pandas as pd
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
@@ -26,20 +31,179 @@ from utils import agol_utils, airflow_utils
 from utils_operators.directory_operator import CreateLocalDirectoryOperator
 from utils_operators.file_operator import DownloadFileOperator
 
-RESOURCE_NAME = "EarlyON Child and Family Centres"
-SRC_URL = "http://opendata.toronto.ca/childrens.services/child-family-programs/earlyon.json"  # noqa: E501
-PACKAGE_NAME = "earlyon-child-and-family-centres"
+RESOURCE_NAME = "Toronto progress portal - Key metrics"
+tpp_measure_url = "https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_measures"
+tpp_narratives_url = "https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_narratives/"
+PACKAGE_NAME = "toronto-progress-portal"
 EXPECTED_COLUMNS = [
-    "loc_id",
-    "lat",
-    "long",
-    "program",
-    "agency",
-    "address",
-    "phone",
-    "rundate",
-]
+    "measure_id",		
+    "measure_name",		
+    "interval_type",		
+    "value_type",		
+    "measure_value",		
+    "target",
+    "year_to_date_variance",		
+    "budget_variance",		
+    "decimal_accuracy",		
+    "desired_direction",		
+    "category",		
+    "data_source_notes",		
+    "city_perspective_note",		
+    "year",		
+    "period_number_in_year",		
+    "keywords",	
+    "notes"		
+    ]
 
+mapping = {
+    "id": "measure_id",
+    "m": "measure_name",
+    "it": "interval_type",
+    "vt": "value_type",
+    "v": "variance",
+    "yv": "year_to_date_variance",
+    "bv": "budget_variance",
+    "da": "decimal_accuracy", # should this be precision?
+    "dd": "desired_direction",
+    "c": "category",
+    "ds":"data_source_notes",
+    "cp": "city_perspective_note",
+    "y": "year",
+    "p": "period_number_in_year",
+    "v": "measure_value",
+    "target":"target",
+    "note":"note",
+    "c": "category",
+}
+
+def get_category_measures(measures, category):
+    subset = []
+    for m in measures:
+        assert len(m["c"]) == 1, f"Measure has more than 1 category: {m['c']}"
+        if m["c"][0].lower() == category.lower():
+            subset.append(m)
+            
+    return subset
+
+
+def make_measures_records(measures):
+    records = []
+    
+    for i in measures:
+        item = { **i }
+        data_points = item.pop("vs")
+        
+        assert len(i["c"]) == 1, f"Item '{i['m']}' ({i['id']}) belongs to more than 1 category: {item['c']}"
+        
+        item["c"] = item["c"][0]
+        
+        for dp in data_points:
+            r = { k: v for k, v in {**item, **dp}.items() if v == v }
+            r["m"] = r["m"].replace("\n", " ")
+            r["ds"] = r["ds"].replace("&amp;", "&")
+            r.pop("ytd")
+            r.pop("ht")
+            r.pop("kw")
+            if "da" in r:
+                try:
+                    r["da"] = int(r["da"])
+                except:
+                    r.pop("da")
+            if "yv" in r:
+                try:
+                    r["yv"] = float(r["yv"])
+                except:
+                    r.pop("yv")
+            if "bv" in r:
+                try:
+                    r["bv"] = float(r["bv"])
+                except:
+                    r.pop("bv")
+            
+            for original,updated in mapping.items():
+                if original in r:
+                    r[updated] = r.pop(original)
+
+            records.append(r)
+            
+    return records
+
+def build_data_dict():
+    data_dict = []
+    
+    for m in mapping.values():
+        data_dict.append({
+            "id": m,
+            "type": "text",
+        })
+        
+    for c in data_dict:
+        if c["id"] in ["measure_id", "year_to_date_variance", "budget_variance", "measure_value","target"]:
+            c["type"] = "float"
+        # elif c["id"] in ["year_to_date_ind", "has_target_ind"]:
+        #     c["type"] = "boolean"
+        elif c["id"] in ["decimal_accuracy", "year", "period_number_in_year"]:
+            c["type"] = "int"
+
+            
+    return  data_dict
+
+def string_to_dict(string, pattern):
+    regex = re.sub(r'{(.+?)}', r'(?P<_\1>.+)', pattern)
+    values = list(re.search(regex, string).groups())
+    keys = re.findall(r'{(.+?)}', pattern)
+    _dict = dict(zip(keys, values))
+    return _dict
+
+def build_narratives_df(notes):
+    p_map = {
+        "January": 1,
+        "February":2,
+        "March":3,
+        "April":4,
+        "May":5,
+        "June":6,
+        "July":7,
+        "August":8,
+        "September":9,
+        "October":10,
+        "November":11,
+        "December":12,
+        "Spring":2,
+        "Summer":3,
+        "Fall":4,
+        "Winter":1,
+    }
+
+    pattern1 = {"a":"^\[Quarter {period_number_in_year} {year}\]{note}$", "b":"\[Quarter \d \d{4}].*"}
+    pattern2 = {"a":"^\[Annual {year}\]{note}$","b":"\[Annual \d{4}].*"}
+    pattern3 = {"a":"^\[{period_number_in_year} {year}\]{note}$","b":"\[\w{3,15} \d{4}].*"}
+
+    narratives=[]
+    for k,v in notes.items():
+        if len(v) > 10:
+            for n in v.split('<br /><br />'):
+                note = None
+                nn = n.replace("<br />", "").strip()
+                if re.fullmatch(pattern1["b"], nn, flags=0):
+                    note = string_to_dict(nn,pattern1["a"])
+                elif re.fullmatch(pattern2["b"], nn, flags=0):
+                    note = string_to_dict(nn,pattern2["a"])
+                    note["period_number_in_year"] = note["year"]
+                elif re.fullmatch(pattern3["b"], nn, flags=0):
+                    note = string_to_dict(nn,pattern3["a"])
+                    note['period_number_in_year'] = p_map[note['period_number_in_year']]
+                else:
+                    None
+                    # print("note does not match pattern:", n)
+
+                if note:
+                    note["year"] = int(note["year"])
+                    note["period_number_in_year"] = int(note["period_number_in_year"])
+                    note["measure_id"] = float(k)
+                    narratives.append(note)
+
+    return pd.DataFrame(narratives)
 
 def send_failure_message():
     airflow_utils.message_slack(
@@ -61,7 +225,7 @@ with DAG(
             # "retry_delay": timedelta(minutes=3),
         }
     ),
-    description="Take earlyon.json from opendata.toronto.ca and put into datastore",
+    description="Take tpp json from progress portal",
     schedule_interval="0 17 * * *",
     catchup=False,
     tags=["dataset"],
@@ -105,30 +269,51 @@ with DAG(
 
     def transform_data(**kwargs):
         ti = kwargs["ti"]
-        data_file_info = ti.xcom_pull(task_ids="get_data")
+        data_file_measure = ti.xcom_pull(task_ids="get_measure")
+        data_file_narrative = ti.xcom_pull(task_ids="get_narrative")
         tmp_dir = Path(ti.xcom_pull(task_ids="tmp_dir"))
 
-        with open(Path(data_file_info["path"])) as f:
-            src_file = json.load(f)
+        with open(Path(data_file_measure["path"])) as f:
+            measure = json.load(f)
+        logging.info(f"tmp_dir: {tmp_dir} | data_file_measure: {data_file_measure}")
 
-        logging.info(f"tmp_dir: {tmp_dir} | data_file_info: {data_file_info}")
+        with open(Path(data_file_narrative["path"])) as f:
+            narrative = json.load(f)
+        logging.info(f"tmp_dir: {tmp_dir} | data_file_narrative: {data_file_narrative}")
 
-        data = pd.DataFrame(src_file)
+        df_measure = pd.DataFrame(make_measures_records(measure["measures"]))       # measure without target
+        df_narrative = build_narratives_df(narrative)                               # narrative with measure id, year, period decoded
 
-        data["geometry"] = data.apply(
-            lambda x: json.dumps(
-                {"type": "Point", "coordinates": [x["long"], x["lat"]]}
-            )
-            if x["long"] and x["lat"]
-            else "",
-            axis=1,
-        )
+        # build target df
+        targets=measure["targets"][0]
+        df_target = pd.DataFrame()
+        for k, v in targets.items():
+            df = pd.DataFrame(v)
+            df["measure_id"] = float(k)
+            df_target = df_target.append (df.rename(columns={"v":"target", "p":"period_number_in_year", "y":"year"}))
+        
+        # join measure with target
+        df_measure_target = pd.merge(df_measure,df_target, how='left', on=['measure_id', 'year', 'period_number_in_year'])
+        df_measure_with_target = df_measure_target[df_measure_target['target'] == df_measure_target['target']][['measure_id', 'year', 'period_number_in_year','target']]
+        df_measure_with_target['matched']=True
+        # logging.info('target number:', len(df_target), '\nmacthed:', len(df_measure_with_target))
 
-        data = agol_utils.remove_geo_columns(data)
+        # find targets without measures
+        compare_df = pd.merge(df_target[['measure_id', 'year', 'period_number_in_year','target']], df_measure_with_target, how='left', on=['measure_id', 'year', 'period_number_in_year'])
+        df_target_wo_measure = compare_df[compare_df['matched'] != True][['measure_id','year','period_number_in_year','target_x']].rename(columns={"target_x":"target"})
+        df_measure_wo_vs = df_measure_target.drop(columns=['year','period_number_in_year','measure_value','target']).drop_duplicates(keep='last')
+        df_measure_wo_vs['measure_value']=None
+        df_target_wo_vs = pd.merge(df_target_wo_measure,df_measure_wo_vs, how='left', on=['measure_id'])
 
-        filepath = tmp_dir / "new_data_transformed.parquet"
+        # df with both measure and target, plus period with target but no measure is published yet. this is complete list
+        df_m_t = pd.concat([df_measure_target, df_target_wo_vs[df_measure_target.columns]])
 
-        data.to_parquet(path=filepath, engine="fastparquet", compression=None)
+        # measure/target join with narrative
+        df = pd.merge(df_m_t,df_narrative, how='left', on=['measure_id', 'year', 'period_number_in_year'])
+
+        filepath = tmp_dir / "measure_target_narrative.parquet"
+
+        df.to_parquet(path=filepath, engine="fastparquet", compression=None)
 
         return filepath
 
@@ -163,7 +348,7 @@ with DAG(
 
     def is_data_new(**kwargs):
         ti = kwargs["ti"]
-        fields = ti.xcom_pull(task_ids="get_fields")
+        fields = ti.xcom_pull(task_ids="get_measure")
         if fields is not None:
             return "data_is_new"
 
@@ -237,11 +422,17 @@ with DAG(
         task_id="backups_dir", path=Path(Variable.get("backups_dir")) / PACKAGE_NAME,
     )
 
-    src = DownloadFileOperator(
-        task_id="get_data",
-        file_url=SRC_URL,
-        dir = Path(Variable.get("tmp_dir")) / PACKAGE_NAME, 
-        filename="src_data.json",
+    src1 = DownloadFileOperator(
+        task_id="get_measure",
+        file_url=tpp_measure_url,
+        dir = Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
+        filename="measure.json",
+    )
+    src2 = DownloadFileOperator(
+        task_id="get_narrative",
+        file_url=tpp_narratives_url,
+        dir = Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
+        filename="narrative.json",
     )
 
     package = GetPackageOperator(
@@ -270,7 +461,7 @@ with DAG(
         package_name_or_id=PACKAGE_NAME,
         resource_name=RESOURCE_NAME,
         resource_attributes=dict(
-            format="geojson",
+            format="csv",
             is_preview=True,
             url_type="datastore",
             extract_job=f"Airflow: {PACKAGE_NAME}",
@@ -309,10 +500,10 @@ with DAG(
         task_id="sync_timestamp",
         address=ckan_address,
         apikey=ckan_apikey,
-        download_file_task_id="get_data",
+        download_file_task_id="get_measure",
         resource_task_id="get_or_create_resource",
         upload_to_ckan=False,
-        sync_timestamp=True,
+        sync_timestamp=False,
         trigger_rule="one_success",
     )
 
@@ -378,7 +569,7 @@ with DAG(
 
     backups_dir >> backup_data
 
-    tmp_dir >> src >> validated_columns >> transformed_data >> file_new_branch
+    tmp_dir >> src1 >> src2 >> validated_columns >> transformed_data >> file_new_branch
 
     package >> get_or_create_resource >> [file_new_branch, new_resource_branch]
 
@@ -417,3 +608,4 @@ with DAG(
     ] >> delete_tmp_data
 
     [delete_records, insert_records] >> restore_backup
+

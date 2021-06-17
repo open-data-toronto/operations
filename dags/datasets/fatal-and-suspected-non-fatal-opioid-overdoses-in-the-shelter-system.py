@@ -291,14 +291,14 @@ with DAG(
     get_summary_data = DownloadFileOperator(
         task_id="get_summary_data",
         file_url=summary_resource["file_url"],
-        dir_task_id="tmp_dir",
+        dir = Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
         filename=f"{summary_resource['name']}_data.csv",
     )
 
     get_granular_data = DownloadFileOperator(
         task_id="get_granular_data",
         file_url=granular_resource["file_url"],
-        dir_task_id="tmp_dir",
+        dir = Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
         filename=f"{granular_resource['name']}_data.csv",
     )
 

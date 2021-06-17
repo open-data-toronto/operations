@@ -37,56 +37,79 @@ class DownloadFileOperator(BaseOperator):
         self.filename = filename
         self.overwrite_if_exists = overwrite_if_exists
 
-    def execute(self):
         # init the filepath to the file we will create
-        #TODO 
-        # replace assignment of "path" to read from an input var, not xcom
-        #path = Path(context["ti"].xcom_pull(task_ids=self.dir_task_id)) / self.filename
-        path = Path(self.dir) / self.filename
+        self.path = Path(self.dir) / self.filename
 
+    def dont_overwrite_file_check(self):
+        return not (self.overwrite_if_exists and self.path.exists())
+
+    def return_current_file_metadata(self):
+        # make a hash of the file 
+        checksum = hashlib.md5()
+        f = open(self.path, "rb")
+        content = f.read()
+        checksum.update(content)
+
+        s = os.stat(self.path)
+
+        # return file hash and other metadata
+        return {
+            "path": self.path,
+            "last_modified": datetime.fromtimestamp(s.st_mtime).isoformat(),
+            "checksum": checksum.hexdigest(),
+        }
+
+    def get_data_from_http_request(self):
+        # grab data from input url
+        res = requests.get(self.file_url)
+        assert res.status_code == 200, f"Response status: {res.status_code}"
+
+        return res
+
+    def write_response_to_file_and_return_hash(self, res):
+        # write the data to a file
+        with open(self.path, "wb") as f:
+            f.write(res.content)
+
+        # make a hash out of the data
+        checksum = hashlib.md5()
+        checksum.update(res.content)
+
+        return checksum
+
+    def return_new_file_metadata(self, res, checksum):
+        # init last-modified date of file, if available in response
+        if "last-modified" in res.headers.keys():
+            last_modified = res.headers["last-modified"]
+        else:
+            last_modified = ""
+
+
+        # return file hash and other metadata
+        return {
+            "path": self.path,
+            "last_modified": last_modified,
+            "checksum": checksum.hexdigest(),
+        }
+            
+
+
+    def execute(self, context):
         # if the file exists already and we don't want to overwrite it
-        if not self.overwrite_if_exists and path.exists():
-
-            # make a hash of the file 
-            checksum = hashlib.md5()
-            f = open(path, "rb")
-            content = f.read()
-            checksum.update(content)
-
-            s = os.stat(path)
-
-            # return file hash and other metadata
-            result = {
-                "path": path,
-                "last_modified": datetime.fromtimestamp(s.st_mtime).isoformat(),
-                "checksum": checksum.hexdigest(),
-            }
+        if self.dont_overwrite_file_check():
+            result = return_current_file_metadata()
+            
         # if the file doesn't exist or we're ok with overwriting an existing one
         else:
-            # grab data from input url
-            res = requests.get(self.file_url)
-            assert res.status_code == 200, f"Response status: {res.status_code}"
+            # get data from http request
+            res = self.get_data_from_http_request()
 
-            # make a hash out of the file
-            checksum = hashlib.md5()
-            with open(path, "wb") as f:
-                f.write(res.content)
+            # write response to file and get its md5 hash
+            checksum = self.write_response_to_file_and_return_hash(res)
 
-            checksum.update(res.content)
-
-            # init last-modified date of file, if available in response
-            if "last-modified" in res.headers.keys():
-                last_modified = res.headers["last-modified"]
-            else:
-                last_modified = ""
-
-
-            # return file hash and other metadata
-            result = {
-                "path": path,
-                "last_modified": last_modified,
-                "checksum": checksum.hexdigest(),
-            }
+            # create result
+            result = self.return_new_file_metadata(res, checksum)
+            
 
         logging.info(f"Returning: {result}")
 

@@ -261,7 +261,7 @@ with DAG(
     src = DownloadFileOperator(
         task_id="get_data",
         file_url=SRC_URL,
-        dir_task_id="tmp_dir",
+        dir =Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
         filename="src_data.csv",
     )
 
