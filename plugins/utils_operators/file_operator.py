@@ -23,10 +23,7 @@ class DownloadFileOperator(BaseOperator):
     def __init__(
         self,
         file_url: str,
-
-        dir: str,
-        #TODO replace dir_task_id with an actual filepath
-        
+        dir: str,        
         filename: str,
         overwrite_if_exists: bool = True,
         **kwargs,
@@ -40,8 +37,9 @@ class DownloadFileOperator(BaseOperator):
         # init the filepath to the file we will create
         self.path = Path(self.dir) / self.filename
 
-    def dont_overwrite_file_check(self):
-        return not (self.overwrite_if_exists and self.path.exists())
+    def overwrite_file_check(self):
+        # if the file exists already and we don't want to overwrite it, return false
+        return not self.overwrite_if_exists and self.path.exists()
 
     def return_current_file_metadata(self):
         # make a hash of the file 
@@ -96,8 +94,8 @@ class DownloadFileOperator(BaseOperator):
 
     def execute(self, context):
         # if the file exists already and we don't want to overwrite it
-        if self.dont_overwrite_file_check():
-            result = return_current_file_metadata()
+        if self.overwrite_file_check():
+            result = self.return_current_file_metadata()
             
         # if the file doesn't exist or we're ok with overwriting an existing one
         else:

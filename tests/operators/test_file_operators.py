@@ -30,7 +30,7 @@ task = DownloadFileOperator(
         task_id="get_data",
         file_url=file_url,
         dir=dir,
-        filename="src_data.json",
+        filename="file_data.json",
         dag=dag
     )
 
