@@ -39,7 +39,7 @@ with DAG(
             "retry_delay": timedelta(minutes=3),
         }
     ),
-    description="Take COVID19 data from QA (filestore) and put in PROD (datastore)", #QUESTION - how does new data get to QA?
+    description="Take COVID19 data from QA (filestore) and put in PROD (datastore)", 
     schedule_interval="59 14 * * 3",
     tags=["dataset", "priority"],
     catchup=False,
@@ -65,7 +65,7 @@ with DAG(
 
         # find the backup folder, based on the environment's airflow variables
         ti = kwargs.pop("ti")
-        package = ti.xcom_pull(task_ids="get_target_package") # QUESTION: what is this "package?"
+        package = ti.xcom_pull(task_ids="get_target_package") 
         backups = Path(Variable.get("backups_dir")) / PACKAGE_NAME
 
         # gets the number of records (for a datastore resource) 
@@ -245,7 +245,7 @@ with DAG(
             )
 
         backup_details = ti.xcom_pull(task_ids="backup_old_data")
-        previous_data_records = backup_details["records"] # QUESTION: so we are pulling data from xcom?
+        previous_data_records = backup_details["records"] 
 
         new_data_fp = ti.xcom_pull(task_ids="prep_new_data")
         new_data = pd.read_parquet(new_data_fp)
@@ -366,7 +366,6 @@ with DAG(
         python_callable=update_resource_last_modified,
     )
 
-    # QUESTION: how does this notation work?
 
     create_tmp_dir >> source_data >> prepare_data >> new_data_unique_id >> data_is_new
 
