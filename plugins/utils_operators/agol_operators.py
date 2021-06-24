@@ -1,4 +1,3 @@
-#!python3
 # agol_operator.py - logic for all AGOL airflow operators
 
 import logging
@@ -10,7 +9,6 @@ from pathlib import Path
 
 import requests
 from airflow.models.baseoperator import BaseOperator
-from utils_operators.file_operator import DownloadFileOperator
 from airflow.utils.decorators import apply_defaults
 from utils import agol_utils
 
@@ -22,9 +20,9 @@ class AGOLDownloadFileOperator(BaseOperator):
     This is because we are not interested in versioning this data - only pulling the latest from AGOL.
 
     Returns a dictionary containing:
-        - path: path to saved file
+        - path: path to saved file containing data
         - last_modified: timestamp file was last_modified (from the request)
-        - checksum: using md5 algorithm
+        - fields_path: path to file containing fields
     """
 
     @apply_defaults

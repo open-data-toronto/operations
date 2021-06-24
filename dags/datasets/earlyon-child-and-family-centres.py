@@ -24,7 +24,7 @@ from ckan_operators.resource_operator import (
 from dateutil import parser
 from utils import agol_utils, airflow_utils
 from utils_operators.directory_operator import CreateLocalDirectoryOperator
-from utils_operators.file_operator import DownloadFileOperator
+from utils_operators.file_operators import DownloadFileOperator
 
 RESOURCE_NAME = "EarlyON Child and Family Centres"
 SRC_URL = "http://opendata.toronto.ca/childrens.services/child-family-programs/earlyon.json"  # noqa: E501

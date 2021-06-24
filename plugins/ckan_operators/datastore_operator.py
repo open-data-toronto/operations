@@ -81,21 +81,26 @@ class BackupDatastoreResourceOperator(BaseOperator):
         return data_file_path
 
     def execute(self, context):
+        # get a resource and backup directory via xcom
         ti = context["ti"]
         resource = ti.xcom_pull(task_ids=self.resource_task_id)
         backups_dir = Path(ti.xcom_pull(task_ids=self.dir_task_id))
 
+        # get number of records for this datastore resource
         record_count = self.ckan.action.datastore_search(id=resource["id"], limit=0)[
             "total"
         ]
 
+        # get data from datastore resource
         datastore_response = self.ckan.action.datastore_search(
             id=resource["id"], limit=record_count
         )
 
+        # turn data into dataframe
         data = self._build_dataframe(datastore_response["records"])
         checksum = self._checksum_datastore_response(datastore_response)
 
+        # return filepath for fields json, data parquet, row/col counts, checksum, and resource_id
         result = {
             "fields_file_path": self._save_fields_json(
                 datastore_response, checksum, backups_dir
