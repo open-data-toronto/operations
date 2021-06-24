@@ -1,4 +1,3 @@
-#!python3
 # test_http_to_file_operators - test suite for http to file operators
 
 import pytest
@@ -10,7 +9,7 @@ from datetime import datetime
 
 from airflow import DAG
 from airflow.models import TaskInstance
-from utils_operators.file_operator import DownloadFileOperator
+from utils_operators.file_operators import DownloadFileOperator
 
 #from airflow.operators import HTTPGETToFileOperator
 

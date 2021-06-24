@@ -28,7 +28,7 @@ from utils_operators.directory_operator import (
     CreateLocalDirectoryOperator,
     DeleteLocalDirectoryOperator,
 )
-from utils_operators.file_operator import DownloadFileOperator
+from utils_operators.file_operators import DownloadFileOperator
 
 PACKAGE_NAME = "fatal-and-suspected-non-fatal-opioid-overdoses-in-the-shelter-system"
 

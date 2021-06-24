@@ -1,4 +1,3 @@
-#!python3
 # test_agol_operators - test suite for AGOL operators
 
 import pytest
@@ -11,7 +10,7 @@ from datetime import datetime
 
 from airflow import DAG
 from airflow.models import TaskInstance
-from utils_operators.agol_operator import AGOLDownloadFileOperator
+from utils_operators.agol_operators import AGOLDownloadFileOperator
 from utils import agol_utils
 
 

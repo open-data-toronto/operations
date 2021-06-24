@@ -23,7 +23,7 @@ class DownloadFileOperator(BaseOperator):
     def __init__(
         self,
         file_url: str,
-        dir: str,        
+        dir: str,
         filename: str,
         overwrite_if_exists: bool = True,
         **kwargs,
