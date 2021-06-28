@@ -27,9 +27,9 @@ from ckan_operators.resource_operator import (
     ResourceAndFileOperator,
 )
 from dateutil import parser
-from utils import agol_utils, airflow_utils
+from utils import agol_utils, airflow_utils, ckan_utils
 from utils_operators.directory_operator import CreateLocalDirectoryOperator
-from utils_operators.file_operator import DownloadFileOperator
+from utils_operators.file_operators import DownloadFileOperator
 
 RESOURCE_NAME = "Toronto progress portal - Key metrics"
 tpp_measure_url = "https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_measures"
@@ -63,7 +63,7 @@ mapping = {
     "v": "variance",
     "yv": "year_to_date_variance",
     "bv": "budget_variance",
-    "da": "decimal_accuracy", # should this be precision?
+    "da": "decimal_accuracy", 
     "dd": "desired_direction",
     "c": "category",
     "ds":"data_source_notes",
@@ -128,25 +128,25 @@ def make_measures_records(measures):
             
     return records
 
-def build_data_dict():
-    data_dict = []
+def ds_fields():
+    fields=[{'info': {'notes': 'ID Number assigned to uniquely identify each Measure'},  'type': 'float8',  'id': 'measure_id'},
+            {'info': {'notes': 'Measure Name'},  'type': 'text',  'id': 'measure_name'},
+            {'info': {'notes': 'Interval Type for measure result collection'},  'type': 'text',  'id': 'interval_type'},
+            {'info': {'notes': 'Value Type of measure result'},  'type': 'text',  'id': 'value_type'},
+            {'info': {'notes': 'Actual value of the measure'},  'type': 'float8',  'id': 'measure_value'},
+            {'info': {'notes': 'Year To Date Variance to compare % Changed for Current Year-To-Date vs. Previous Year to determine Analysis in Trend Analysis'},  'type': 'float8',  'id': 'year_to_date_variance'},
+            {'info': {'notes': 'Budget Variance to compare % Changed for Current Period vs. Budget/Target to determine Analysis in Trend Analysis'},  'type': 'float8',  'id': 'budget_variance'},
+            {'info': {'notes': 'Decimal Accuracy - number of decimals to display in the measure result'},  'type': 'int4',  'id': 'decimal_accuracy'},
+            {'info': {'notes': 'Desired Direction - determines colour and direction of trend arrows'},  'type': 'text',  'id': 'desired_direction'},
+            {'info': {'notes': 'Category to which measure is assigned'},  'type': 'text',  'id': 'category'},
+            {'info': {'notes': 'DataSource Notes to display under the Chart'},  'type': 'text',  'id': 'data_source_notes'},
+            {'info': {'notes': 'CityPerspective Note to display under Trend Analysis'},  'type': 'text',  'id': 'city_perspective_note'},
+            {'info': {'notes': 'Year', 'label': ''}, 'type': 'int4', 'id': 'year'}, 
+            {'info': {'notes': 'Period number - Month'},  'type': 'int4',  'id': 'period_number_in_year'},
+            {'info': {'notes': 'Target value of the measure'}, 'type': 'float8',  'id': 'target'},
+            {'info': {'notes': 'Note'}, 'type': 'text',  'id': 'note'}]
     
-    for m in mapping.values():
-        data_dict.append({
-            "id": m,
-            "type": "text",
-        })
-        
-    for c in data_dict:
-        if c["id"] in ["measure_id", "year_to_date_variance", "budget_variance", "measure_value","target"]:
-            c["type"] = "float"
-        # elif c["id"] in ["year_to_date_ind", "has_target_ind"]:
-        #     c["type"] = "boolean"
-        elif c["id"] in ["decimal_accuracy", "year", "period_number_in_year"]:
-            c["type"] = "int"
-
-            
-    return  data_dict
+    return fields
 
 def string_to_dict(string, pattern):
     regex = re.sub(r'{(.+?)}', r'(?P<_\1>.+)', pattern)
@@ -157,7 +157,7 @@ def string_to_dict(string, pattern):
 
 def build_narratives_df(notes):
     p_map = {
-        "January": 1,
+        "January": 1,   
         "February":2,
         "March":3,
         "April":4,
@@ -225,7 +225,7 @@ with DAG(
             # "retry_delay": timedelta(minutes=3),
         }
     ),
-    description="Take tpp json from progress portal",
+    description="Take tpp json and narratives from progress portal",
     schedule_interval="0 17 * * *",
     catchup=False,
     tags=["dataset"],
@@ -241,20 +241,12 @@ with DAG(
 
         return "resource_is_not_new"
 
-    def build_data_dict(**kwargs):
-        data_fp = Path(kwargs["ti"].xcom_pull(task_ids="transform_data"))
-        data = pd.read_parquet(Path(data_fp))
-
-        fields = []
-        for field, dtype in data.dtypes.iteritems():
-            ckan_type_map = {"int64": "int", "object": "text", "float64": "float"}
-            fields.append({"type": ckan_type_map[dtype.name], "id": field})
-
-        return fields
-
     def validate_expected_columns(**kwargs):
+        # can't validate this way, since it's not a tabular json file. Will skip for now
+        return
+
         ti = kwargs["ti"]
-        data_file_info = ti.xcom_pull(task_ids="get_data")
+        data_file_info = ti.xcom_pull(task_ids="get_measure")
 
         with open(Path(data_file_info["path"])) as f:
             src_file = json.load(f)
@@ -317,78 +309,14 @@ with DAG(
 
         return filepath
 
-    def is_file_new(**kwargs):
-        ti = kwargs["ti"]
-        data_file_info = ti.xcom_pull(task_ids="get_data")
-        resource = ti.xcom_pull(task_ids="get_or_create_resource")
-
-        logging.info(f"resource: {resource} | data_file_info: {data_file_info}")
-
-        last_modified_string = data_file_info["last_modified"]
-        file_last_modified = parser.parse(last_modified_string)
-        last_modified_attr = resource["last_modified"]
-
-        if not last_modified_attr:
-            last_modified_attr = resource["created"]
-
-        resource_last_modified = parser.parse(last_modified_attr + " UTC")
-
-        difference_in_seconds = (
-            file_last_modified.timestamp() - resource_last_modified.timestamp()
-        )
-
-        logging.info(
-            f"{difference_in_seconds}secs between file and resource last modified times"
-        )
-
-        if difference_in_seconds == 0:
-            return "file_is_not_new"
-
-        return "file_is_new"
-
-    def is_data_new(**kwargs):
-        ti = kwargs["ti"]
-        fields = ti.xcom_pull(task_ids="get_measure")
-        if fields is not None:
-            return "data_is_new"
-
-        backups_dir = Path(ti.xcom_pull(task_ids="backups_dir"))
-        backup_data = ti.xcom_pull(task_ids="backup_data")
-
-        df = pd.read_parquet(backup_data["data"])
-
-        if df.shape[0] == 0:
-            return "data_is_new"
-
-        checksum = hashlib.md5()
-        checksum.update(df.sort_values(by="loc_id").to_csv(index=False).encode("utf-8"))
-        checksum = checksum.hexdigest()
-
-        for f in os.listdir(backups_dir):
-            if not os.path.isfile(backups_dir / f):
-                continue
-
-            logging.info(f"File in backups: {f}")
-            if os.path.isfile(backups_dir / f) and checksum in f:
-                logging.info(f"Data is already backed up, ID: {checksum}")
-                return "data_is_not_new"
-
-        logging.info(f"Data is not yet in backups, new ID: {checksum}")
-
-        return "data_is_new"
-
     def get_fields(**kwargs):
         ti = kwargs["ti"]
-        backup_data = ti.xcom_pull(task_ids="backup_data")
+        tmp_dir = Path(ti.xcom_pull(task_ids="tmp_dir"))
+        filepath = tmp_dir / "fields.json"
+        with open(filepath, 'w') as fields_json_file:
+            json.dump(ds_fields(), fields_json_file)
 
-        if backup_data is not None:
-            with open(Path(backup_data["fields_file_path"]), "r") as f:
-                fields = json.load(f)
-        else:
-            fields = ti.xcom_pull(task_ids="create_data_dictionary")
-            assert fields is not None, "No fields"
-
-        return fields
+        return filepath
 
     def were_records_loaded(**kwargs):
         inserted_records_count = kwargs["ti"].xcom_pull(task_ids="insert_records")
@@ -397,6 +325,15 @@ with DAG(
             return "new_records_notification"
 
         return "no_new_data_notification"
+
+    def send_update_failed_notification(**kwargs):
+        airflow_utils.message_slack(
+            PACKAGE_NAME,
+            "Update failed, data restored from backup",
+            "error",
+            Variable.get("active_env") == "prod",
+            Variable.get("active_env"),
+        )
 
     def send_new_records_notification(**kwargs):
         count = kwargs["ti"].xcom_pull("insert_records")
@@ -425,13 +362,13 @@ with DAG(
     src1 = DownloadFileOperator(
         task_id="get_measure",
         file_url=tpp_measure_url,
-        dir_task_id="tmp_dir",
+        dir=Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
         filename="measure.json",
     )
     src2 = DownloadFileOperator(
         task_id="get_narrative",
         file_url=tpp_narratives_url,
-        dir_task_id="tmp_dir",
+        dir=Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
         filename="narrative.json",
     )
 
@@ -448,10 +385,6 @@ with DAG(
 
     transformed_data = PythonOperator(
         task_id="transform_data", python_callable=transform_data,
-    )
-
-    create_data_dictionary = PythonOperator(
-        task_id="create_data_dictionary", python_callable=build_data_dict,
     )
 
     get_or_create_resource = GetOrCreateResourceOperator(
@@ -474,19 +407,10 @@ with DAG(
         apikey=ckan_apikey,
         resource_task_id="get_or_create_resource",
         dir_task_id="backups_dir",
-        sort_columns=["loc_id"],
     )
 
     fields = PythonOperator(
         task_id="get_fields", python_callable=get_fields, trigger_rule="none_failed"
-    )
-
-    file_new_branch = BranchPythonOperator(
-        task_id="file_new_branch", python_callable=is_file_new,
-    )
-
-    new_data_branch = BranchPythonOperator(
-        task_id="is_data_new", python_callable=is_data_new,
     )
 
     delete_tmp_data = PythonOperator(
@@ -507,18 +431,6 @@ with DAG(
         trigger_rule="one_success",
     )
 
-    send_nothing_notification = PythonOperator(
-        task_id="send_nothing_notification",
-        python_callable=airflow_utils.message_slack,
-        op_args=(
-            PACKAGE_NAME,
-            "No new data file",
-            "success",
-            active_env == "prod",
-            active_env,
-        ),
-    )
-
     delete_records = DeleteDatastoreResourceRecordsOperator(
         task_id="delete_records",
         address=ckan_address,
@@ -530,6 +442,7 @@ with DAG(
         task_id="insert_records",
         address=ckan_address,
         apikey=ckan_apikey,
+        fields_json_path_task_id="get_fields",
         parquet_filepath_task_id="transform_data",
         resource_task_id="get_or_create_resource",
     )
@@ -537,6 +450,11 @@ with DAG(
     new_records_notification = PythonOperator(
         task_id="new_records_notification",
         python_callable=send_new_records_notification,
+    )
+
+    update_failed_notification = PythonOperator(
+        task_id="update_failed_notification",
+        python_callable=send_update_failed_notification,
     )
 
     no_new_data_notification = PythonOperator(
@@ -567,33 +485,19 @@ with DAG(
         task_id="validate_expected_columns", python_callable=validate_expected_columns,
     )
 
-    backups_dir >> backup_data
+    tmp_dir >> src1 >> src2 >> validated_columns >> transformed_data >> fields 
 
-    tmp_dir >> src1 >> src2 >> validated_columns >> transformed_data >> file_new_branch
-
-    package >> get_or_create_resource >> [file_new_branch, new_resource_branch]
+    package >> get_or_create_resource >>  new_resource_branch 
 
     new_resource_branch >> DummyOperator(
         task_id="resource_is_new"
-    ) >> create_data_dictionary >> fields
+    ) >>  fields >> insert_records >> sync_timestamp
 
     new_resource_branch >> DummyOperator(
         task_id="resource_is_not_new"
-    ) >> backup_data >> fields
-
-    file_new_branch >> DummyOperator(task_id="file_is_new") >> new_data_branch
-
-    file_new_branch >> DummyOperator(
-        task_id="file_is_not_new"
-    ) >> send_nothing_notification
-
-    fields >> new_data_branch
-
-    new_data_branch >> DummyOperator(
-        task_id="data_is_new"
-    ) >> delete_records >> insert_records >> sync_timestamp
-
-    new_data_branch >> DummyOperator(task_id="data_is_not_new") >> sync_timestamp
+    ) >> backups_dir >> backup_data 
+    
+    [backup_data, transformed_data] >> delete_records >> fields >> insert_records >> sync_timestamp
 
     sync_timestamp >> records_loaded_branch
 
@@ -602,9 +506,9 @@ with DAG(
     records_loaded_branch >> no_new_data_notification
 
     [
+        update_failed_notification,
         no_new_data_notification,
         new_records_notification,
-        send_nothing_notification,
-    ] >> delete_tmp_data
+    ] >> DummyOperator(task_id="Notification_sent", trigger_rule="one_success",) >>delete_tmp_data
 
-    [delete_records, insert_records] >> restore_backup
+    insert_records >> restore_backup >> update_failed_notification
