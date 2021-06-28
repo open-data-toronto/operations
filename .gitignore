@@ -89,6 +89,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+*.ipynb # added to ensure we dont accidentally add ipynb - these should be added to the snippets repo
 
 # IPython
 profile_default/
