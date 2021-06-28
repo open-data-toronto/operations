@@ -1,7 +1,7 @@
 include .env
 
 setup:
-	docker-compose up airflow-init --detach
+	docker-compose up --detach
 	pip install -r requirements.txt
 	
 	
