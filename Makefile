@@ -1,12 +1,11 @@
 include .env
 
 setup:
-	docker-compose up -d --force-recreate --remove-orphans
-	sleep 240
-	docker exec airflow airflow users create --username admin --password admin --role Admin --firstname Ademir --lastname Junior --email admin@email.com
+	docker-compose up airflow-init
+	docker-compose up
 	
 down:
 	docker-compose down
 
 testing:
-	docker exec airflow pytest -v
+	pytest
