@@ -1,5 +1,5 @@
-*.csv
-*.json
+# *.csv
+# *.json
 *.xml
 **/tmp/**
 # *.ipynb
@@ -62,6 +62,7 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+*tests/plugins/utils_operators/tmp_dir/
 
 # Translations
 *.mo

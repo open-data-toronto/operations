@@ -28,7 +28,7 @@ from utils_operators.directory_operator import (
     CreateLocalDirectoryOperator,
     DeleteLocalDirectoryOperator,
 )
-from utils_operators.file_operator import DownloadFileOperator
+from utils_operators.file_operators import DownloadFileOperator
 
 PACKAGE_NAME = "fatal-and-suspected-non-fatal-opioid-overdoses-in-the-shelter-system"
 
@@ -291,14 +291,14 @@ with DAG(
     get_summary_data = DownloadFileOperator(
         task_id="get_summary_data",
         file_url=summary_resource["file_url"],
-        dir_task_id="tmp_dir",
+        dir = Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
         filename=f"{summary_resource['name']}_data.csv",
     )
 
     get_granular_data = DownloadFileOperator(
         task_id="get_granular_data",
         file_url=granular_resource["file_url"],
-        dir_task_id="tmp_dir",
+        dir = Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
         filename=f"{granular_resource['name']}_data.csv",
     )
 
