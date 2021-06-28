@@ -2,7 +2,7 @@ include .env
 
 setup:
 	docker-compose up -d --force-recreate --remove-orphans
-	sleep 60
+	sleep 240
 	docker exec airflow airflow users create --username admin --password admin --role Admin --firstname Ademir --lastname Junior --email admin@email.com
 	
 down:
