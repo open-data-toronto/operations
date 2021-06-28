@@ -1,0 +1,36 @@
+# Airflow is evolving rapidly and so maybe the docker and commands
+# used here may fail in the near future. The problem I face
+# now you have to wait a few minutes before you can send commands
+# for Airflow.
+
+# Running Airflow in Docker (official documentation)
+# http://apache-airflow-docs.s3-website.eu-central-1.amazonaws.com/docs/apache-airflow/latest/start/docker.html
+# I'm trying to implement this setup, but had problem
+
+# Github discussion about prod-ready docker-compose Airflow images
+# https://github.com/apache/airflow/issues/8605
+
+
+version: '3.6'
+
+services:
+
+  airflow:
+      image: ${REPO}
+      container_name: airflow
+      volumes:
+        - ./dags:/opt/airflow/dags
+        - ./sql:/opt/airflow/sql
+        - ./tests:/opt/airflow/tests
+        - ./data:/opt/airflow/data
+        - ./requirements.txt:/opt/airflow/requirements.txt
+      environment: 
+        - AIRFLOW_HOME=/opt/airflow
+        - AIRFLOW__CORE__FERNET_KEY=${FERNET_KEY}
+        - AIRFLOW__CORE__EXECUTOR=${EXECUTOR}
+        - AIRFLOW__CORE__LOAD_EXAMPLES=false
+        - AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=false
+        - AIRFLOW__API__AUTH_BACKEND=${AIRFLOW_API_BACKEND}
+      ports:
+        - 8080:8080
+      command: 'bash -c "pip3 install -r requirements.txt && airflow db init && airflow webserver -D && airflow scheduler -D"'
