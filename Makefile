@@ -1,10 +1,7 @@
 include .env
 
-python-setup:
-	python -m pip install --upgrade pip
-    if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-airflow-setup:
+setup:
 	export AIRFLOW_HOME=~/airflow
 
 	AIRFLOW_VERSION=2.1.0

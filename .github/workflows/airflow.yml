@@ -31,10 +31,12 @@ jobs:
       with:
         python-version: 3.9
     - name: Install dependencies
-      run: make python-setup
-        
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
     - name: Create airflow env
-      run: make airflow-setup
+      run: make setup
 
     - name: Run tests
       run: make testing
