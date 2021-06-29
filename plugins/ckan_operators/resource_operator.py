@@ -5,7 +5,7 @@ import ckanapi
 from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from dateutil import parser
-
+from datetime import datetime
 
 class GetOrCreateResourceOperator(BaseOperator):
     """
@@ -95,8 +95,13 @@ class ResourceAndFileOperator(BaseOperator):
                 upload=open(Path(download_file_info["path"]), "rb"),
             )
 
-        file_last_modified = parser.parse(download_file_info["last_modified"])
-
+        try:
+            file_last_modified = download_file_info["last_modified"])
+        except:
+            file_last_modified = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S") + " GMT"
+            
+        file_last_modified = parser.parse(file_last_modified)
+        
         resource_last_modified = parser.parse(
             (
                 resource["last_modified"]

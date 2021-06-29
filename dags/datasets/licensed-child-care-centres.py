@@ -20,7 +20,7 @@ from ckan_operators.resource_operator import (GetOrCreateResourceOperator,
 from dateutil import parser
 from utils import agol_utils, airflow_utils
 from utils_operators.directory_operator import CreateLocalDirectoryOperator
-from utils_operators.file_operator import DownloadFileOperator
+from utils_operators.file_operators import DownloadFileOperator
 
 SRC_URL = "http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv"  # noqa: E501
 PACKAGE_NAME = "licensed-child-care-centres"
@@ -261,7 +261,7 @@ with DAG(
     src = DownloadFileOperator(
         task_id="get_data",
         file_url=SRC_URL,
-        dir_task_id="tmp_dir",
+        dir =Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
         filename="src_data.csv",
     )
 

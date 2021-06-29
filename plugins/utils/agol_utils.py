@@ -31,6 +31,37 @@ def convert_dtypes_to_ckan(agol_fields):
 
     return ckan_fields
 
+def get_features(query_url):
+    print(f"  getting features from AGOL")
+
+    features = []
+    overflow = True
+    offset = 0
+    query_string_params = {
+        "where": "1=1",
+        "outFields": "*",
+        "outSR": 4326,
+        "f": "geojson",
+        "resultType": "standard",
+        "resultOffset": offset,
+    }
+    
+    while overflow is True:
+        params = "&".join([ f"{k}={v}" for k,v in query_string_params.items() ])
+        url = "https://" + "/".join([ url_part for url_part in f"{query_url}/query?{params}".replace("https://", "").split("/") if url_part ])
+        
+        print(url)
+
+        res = requests.get(url)
+        assert res.status_code == 200, f"Status code response: {res.status_code}"
+        
+        geojson = res.json()
+        features.extend(geojson["features"])
+        overflow = "properties" in geojson and "exceededTransferLimit" in geojson["properties"] and geojson["properties"]["exceededTransferLimit"] is True
+        offset = offset + len(geojson["features"])
+        query_string_params["resultOffset"] = offset
+
+    return features
 
 def get_data(endpoint):
     res = requests.get(endpoint).json()
@@ -53,12 +84,30 @@ def get_data(endpoint):
 
     return data
 
+def get_fields(query_url):
+    print(f"  getting fields from AGOL")
 
-def get_fields(endpoint):
-    res = requests.get(f"{endpoint}&resultRecordCount=1").json()
-    fields = res.get("fields")
+    query_string_params = {
+        "where": "1=1",
+        "outFields": "*",
+        "outSR": 4326,
+        "f": "json",
+        "resultRecordCount": 1
+    }
+    
+    params = "&".join([ f"{k}={v}" for k,v in query_string_params.items() ])
+    url = "https://" + "/".join([ url_part for url_part in f"{query_url}/query?{params}".replace("https://", "").split("/") if url_part ])
+    res = requests.get(url)
+    assert res.status_code == 200, f"Status code response: {res.status_code}"
+    
+    return res.json()["fields"]
 
-    return fields
+
+#def get_fields(endpoint):
+#    res = requests.get(f"{endpoint}&resultRecordCount=1").json()
+#    fields = res.get("fields")
+#
+#    return fields
 
 
 def remove_geo_columns(df):
