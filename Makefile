@@ -1,12 +1,14 @@
 include .env
 
 setup:
-	docker-compose up --detach
-	pip install -r requirements.txt
+	mkdir ./dags ./logs ./plugins
+	docker-compose up airflow-init
+	docker-compose up -d
+	docker exec airflow-scheduler pip install -r requirements.txt
 	
 	
 down:
 	docker-compose down
 
 testing:
-	pytest
+	docker exec airflow-scheduler pytest
