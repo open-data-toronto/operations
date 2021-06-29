@@ -1,13 +1,35 @@
 include .env
 
 setup:
-	docker-compose up -d --force-recreate --remove-orphans
-	sleep 240
-	docker exec airflow airflow users create --username admin --password admin --role Admin --firstname Ademir --lastname Junior --email admin@email.com
-	
-	
+	export AIRFLOW_HOME=~/airflow
+
+	AIRFLOW_VERSION=2.1.0
+	PYTHON_VERSION="$(python --version | cut -d " " -f 2 | cut -d "." -f 1-2)"
+	CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
+	pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}"
+	pip install -r requirements.txt
+
+	airflow db init
+
+	airflow users create \
+		--username admin \
+		--firstname Peter \
+		--lastname Parker \
+		--role Admin \
+		--email spiderman@superhero.org
+
+	airflow webserver --port 8080
+
+	airflow scheduler
+
+	pwd
+	ll
+	cd \
+	ll
+
+
 down:
-	docker-compose down
+	echo "down"
 
 testing:
-	docker exec airflow pytest -v
+	pytest
