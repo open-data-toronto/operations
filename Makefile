@@ -20,4 +20,5 @@ down:
 	echo "down"
 
 testing:
+	cd tests
 	python -m pytest
