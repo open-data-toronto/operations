@@ -35,7 +35,7 @@ from utils_operators.file_operators import DownloadFileOperator
 RESOURCE_NAME = "Toronto progress portal - Key metrics"
 tpp_measure_url = "https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_measures"
 tpp_narratives_url = "https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_narratives/"
-PACKAGE_NAME = "toronto-progress-portal"
+PACKAGE_NAME = "toronto-s-dashboard-key-indicators"
 EXPECTED_COLUMNS = [
     "measure_id",		
     "measure_name",		
@@ -337,8 +337,6 @@ with DAG(
 
     ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
     active_env = Variable.get("active_env")
-    if active_env != "prod":
-        active_env = 'qa'
     ckan_address = ckan_creds[active_env]["address"]
     ckan_apikey = ckan_creds[active_env]["apikey"]
 
