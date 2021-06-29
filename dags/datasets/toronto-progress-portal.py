@@ -3,6 +3,7 @@ import requests
 import ckanapi
 import math
 import re
+from datetime import timedelta
 
 import hashlib
 import json
@@ -219,10 +220,16 @@ with DAG(
     PACKAGE_NAME,
     default_args=airflow_utils.get_default_args(
         {
+            "owner": "Gary",
+            "depends_on_past": False,
+            "email": ["gqi@toronto.ca"],
+            "email_on_failure": False,
+            "email_on_retry": False,
+            "retries": 1,
+            "retry_delay": timedelta(seconds=600),
             "on_failure_callback": send_failure_message,
             "start_date": days_ago(1),
             "retries": 0,
-            # "retry_delay": timedelta(minutes=3),
         }
     ),
     description="Take tpp json and narratives from progress portal",
@@ -240,24 +247,6 @@ with DAG(
             return "resource_is_new"
 
         return "resource_is_not_new"
-
-    def validate_expected_columns(**kwargs):
-        # can't validate this way, since it's not a tabular json file. Will skip for now
-        return
-
-        ti = kwargs["ti"]
-        data_file_info = ti.xcom_pull(task_ids="get_measure")
-
-        with open(Path(data_file_info["path"])) as f:
-            src_file = json.load(f)
-
-        df = pd.DataFrame(src_file)
-
-        for col in df.columns.values:
-            assert col in EXPECTED_COLUMNS, f"{col} not in list of expected columns"
-
-        for col in EXPECTED_COLUMNS:
-            assert col in df.columns.values, f"Expected column {col} not in data file"
 
     def transform_data(**kwargs):
         ti = kwargs["ti"]
@@ -348,6 +337,8 @@ with DAG(
 
     ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
     active_env = Variable.get("active_env")
+    if active_env != "prod":
+        active_env = 'qa'
     ckan_address = ckan_creds[active_env]["address"]
     ckan_apikey = ckan_creds[active_env]["apikey"]
 
@@ -481,11 +472,7 @@ with DAG(
         trigger_rule="all_failed",
     )
 
-    validated_columns = PythonOperator(
-        task_id="validate_expected_columns", python_callable=validate_expected_columns,
-    )
-
-    tmp_dir >> src1 >> src2 >> validated_columns >> transformed_data >> fields 
+    tmp_dir >> src1 >> src2 >> transformed_data >> fields 
 
     package >> get_or_create_resource >>  new_resource_branch 
 
