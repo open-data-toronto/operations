@@ -8,7 +8,7 @@ from datetime import datetime
 
 from airflow import DAG
 from airflow.models import TaskInstance
-from utils_operators.file_operators import DownloadFileOperator
+from file_operators import DownloadFileOperator
 
 # init the url where the data will come from
 file_url = "https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_measures/"

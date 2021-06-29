@@ -10,7 +10,7 @@ from datetime import datetime
 
 from airflow import DAG
 from airflow.models import TaskInstance
-from utils_operators.agol_operators import AGOLDownloadFileOperator
+from agol_operators import AGOLDownloadFileOperator
 from utils import agol_utils
 
 # init the base url, without query parameters, of where the data will come from
