@@ -2,13 +2,12 @@
 # *.json
 *.xml
 **/tmp/**
-# *.ipynb
+*.ipynb
 .vscode/
 backups/**
 staging/**
 logs/**
 .DS_Store
-setting.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -62,7 +61,6 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
-*tests/plugins/utils_operators/tmp_dir/
 
 # Translations
 *.mo
