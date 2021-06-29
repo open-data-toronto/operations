@@ -11,9 +11,7 @@ setup:
 	airflow scheduler -D
 
 	pwd
-	ll
-	cd \
-	ll
+
 
 
 down:
