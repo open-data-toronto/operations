@@ -96,7 +96,7 @@ class ResourceAndFileOperator(BaseOperator):
             )
 
         try:
-            file_last_modified = download_file_info["last_modified"])
+            file_last_modified = download_file_info["last_modified"]
         except:
             file_last_modified = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S") + " GMT"
             
