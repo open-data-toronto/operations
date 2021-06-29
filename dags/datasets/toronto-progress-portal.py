@@ -233,7 +233,7 @@ with DAG(
         }
     ),
     description="Take tpp json and narratives from progress portal",
-    schedule_interval="0 17 * * *",
+    schedule_interval="0 18 * * 1-5",
     catchup=False,
     tags=["dataset"],
 ) as dag:
