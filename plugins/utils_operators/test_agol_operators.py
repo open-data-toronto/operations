@@ -70,14 +70,14 @@ def test_execute():
     with open( output["fields_path"] ) as f:
         fields_data = json.load(f)
 
-    with open( "/data/operations/tests/plugins/utils_operators/test_agol_operators_fields.json" ) as f:
+    with open( "test_agol_operators_fields.json" ) as f:
         test_fields_data = json.load(f)
 
     assert fields_data == test_fields_data
     
 
     # checks if checksums match
-    with open( "/data/operations/tests/plugins/utils_operators/test_agol_operators_checksum.txt" ) as f:
+    with open( "test_agol_operators_checksum.txt" ) as f:
         file_checksum = f.read()
     
     assert output["checksum"] == file_checksum

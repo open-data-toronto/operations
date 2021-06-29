@@ -53,7 +53,7 @@ def test_execute():
     assert os.path.exists(dir + "/" + filename)
 
     # checks if checksum is correct
-    with open( "/data/operations/tests/plugins/utils_operators/test_file_operators_checksum.txt" ) as f:
+    with open( "test_file_operators_checksum.txt" ) as f:
         file_checksum = f.read()
 
     assert file_checksum == output["checksum"]
