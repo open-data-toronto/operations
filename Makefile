@@ -20,4 +20,4 @@ down:
 	echo "down"
 
 testing:
-	pytest
+	python -m pytest
