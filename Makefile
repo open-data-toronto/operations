@@ -6,9 +6,9 @@ setup:
 
 	airflow db init
 
-	airflow webserver --port 8080
+	airflow webserver --port 8080 -D
 
-	airflow scheduler
+	airflow scheduler -D
 
 	pwd
 	ll
