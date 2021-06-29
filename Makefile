@@ -4,7 +4,7 @@ include .env
 setup:
 	export AIRFLOW_HOME=~/airflow
 
-	PYTHONPATH=. pytest
+	PYTHONPATH=.
 
 	airflow db init
 
