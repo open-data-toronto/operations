@@ -12,6 +12,14 @@ from airflow.operators.python import BranchPythonOperator, PythonOperator
 
 from utils_operators.directory_operator import CreateLocalDirectoryOperator
 from utils_operators.agol_operators import AGOLDownloadFileOperator
+from ckan_operators.datastore_operator import (
+    BackupDatastoreResourceOperator,
+    DeleteDatastoreResourceRecordsOperator,
+    InsertDatastoreResourceRecordsOperator,
+    RestoreDatastoreResourceBackupOperator,
+    DeleteDatastoreResourceOperator
+)
+from ckan_operators.resource_operator import GetOrCreateResourceOperator
 from utils import airflow_utils
 
 
@@ -19,7 +27,8 @@ from utils import airflow_utils
 # init hardcoded vars for these dags
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
+CKAN = CKAN_CREDS[ACTIVE_ENV]["address"]
+CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]
 
 base_url = "https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/"
 
@@ -69,10 +78,6 @@ def create_dag(dag_id,
                schedule,
                default_args):
 
-    def hello_world_py(*args):
-        print('Hello World')
-        print('This is DAG: {}'.format(str(dag_id)))
-
     dag = DAG(dag_id,
               agol_dataset,
               schedule_interval=schedule,
@@ -81,18 +86,46 @@ def create_dag(dag_id,
     with dag:
 
         tmp_dir = CreateLocalDirectoryOperator(
-            task_id="tmp_dir", 
-            path=Path(Variable.get("tmp_dir")) / dag_id,
+            task_id = "tmp_dir", 
+            path = Path(Variable.get("tmp_dir")) / dag_id
         )   
 
         get_agol_data = AGOLDownloadFileOperator(
-            task_id = "get_" + dag_id + "_from_agol",
+            task_id = "get_data_from_agol",
             file_url = base_url + agol_dataset + "/FeatureServer/0/",
             dir = Path(Variable.get("tmp_dir")) / dag_id,
             filename = dag_id + ".json"
         )
 
-        tmp_dir >> get_agol_data        
+        delete_resource = DeleteDatastoreResourceOperator(
+            task_id="delete_resource",
+            address = CKAN,
+            apikey = CKAN_APIKEY,
+            resource_id_filepath = Path(Variable.get("tmp_dir")) / dag_id / "resource_id.txt"
+
+        )
+
+        get_or_create_resource = GetOrCreateResourceOperator(
+            task_id="get_or_create_resource",
+            address=CKAN,
+            apikey=CKAN_APIKEY,
+            package_name_or_id=dag_id,
+            resource_name=dag_id,
+            resource_id_filepath = Path(Variable.get("tmp_dir")) / dag_id / "resource_id.txt",
+            resource_attributes=dict(
+                format="csv",
+                is_preview=True,
+                url_type="datastore",
+                extract_job=f"Airflow: {dag_id}",
+            ),
+        )
+
+        ## DAG EXECUTION LOGIC
+        tmp_dir >> get_agol_data >> get_or_create_resource >> delete_resource
+        
+
+
+        
 
     return dag
 

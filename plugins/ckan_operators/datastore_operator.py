@@ -119,6 +119,44 @@ class BackupDatastoreResourceOperator(BaseOperator):
         return result
 
 
+
+class DeleteDatastoreResourceOperator(BaseOperator):
+    """
+    Deletes a datastore resource
+    Inputs:
+        - address: CKAN instance URL
+        - apikey: CKAN API key
+        - resource_id: CKAN resource id to be deleted
+    """
+
+    @apply_defaults
+    def __init__(
+        self,
+        address: str,
+        apikey: str,
+        resource_id_filepath: str,
+        **kwargs,
+    ) -> None:
+    # init ckan client and resource_id to be truncated
+        super().__init__(**kwargs)
+        self.resource_id_filepath = resource_id_filepath
+        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+
+    def _get_resource_id(self):
+        with open( resource_id_filepath ) as f:
+            self.resource_id = f.read()
+
+    def execute(self, context):
+        # Delete the resource
+        try:
+            self.ckan.action.datastore_delete(id=self.resource_id)
+
+        except Exception as e:
+            logging.error("Error while trying to delete resource " + self.resource_id)
+            logging.error(e)
+
+
+
 class DeleteDatastoreResourceRecordsOperator(BaseOperator):
     """
     Deletes datastore resource records. Args:

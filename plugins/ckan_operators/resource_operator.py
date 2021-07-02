@@ -21,6 +21,7 @@ class GetOrCreateResourceOperator(BaseOperator):
         resource_name: str = None,
         resource_id: str = None,
         resource_attributes: str = None,
+        resource_id_filepath = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -29,6 +30,7 @@ class GetOrCreateResourceOperator(BaseOperator):
         self.resource_id = resource_id
         self.resource_attributes = resource_attributes
         self.resource = None
+        self.resource_id_filepath = resource_id_filepath
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def _resource_exists(self):
@@ -52,6 +54,13 @@ class GetOrCreateResourceOperator(BaseOperator):
                 name=self.resource_name,
                 **self.resource_attributes,
             )
+            self.resource_id = resource["result"]["id"]
+
+        # write the resource id to an input filepath, if the filepath is given
+        if self.resource_id_filepath and self.resource_Id:
+            f = open( self.resource_id_filepath, "w")
+            f.write( self.resource_id )
+
 
         logging.info(f"Returning: {resource}")
         return resource
