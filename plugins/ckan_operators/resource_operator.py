@@ -48,16 +48,22 @@ class GetOrCreateResourceOperator(BaseOperator):
             resource = self.ckan.action.resource_show(id=self.resource_id)
         elif self._resource_exists():
             resource = self.resource
-        else:
+        else: 
             resource = self.ckan.action.resource_create(
                 package_id=self.package_id,
                 name=self.resource_name,
                 **self.resource_attributes,
             )
-            self.resource_id = resource["result"]["id"]
+
+        logging.info("Received resource")
+        logging.info(resource)
+
+        self.resource_id = resource["id"]
+        logging.info("Received resource id: " + self.resource_id)
 
         # write the resource id to an input filepath, if the filepath is given
-        if self.resource_id_filepath and self.resource_Id:
+        if self.resource_id_filepath and self.resource_id:
+            logging.info("Writing resource id to " + str(self.resource_id_filepath))
             f = open( self.resource_id_filepath, "w")
             f.write( self.resource_id )
 

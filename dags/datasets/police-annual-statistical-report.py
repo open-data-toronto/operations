@@ -10,14 +10,15 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 
-from utils_operators.directory_operator import CreateLocalDirectoryOperator
+from utils_operators.directory_operator import CreateLocalDirectoryOperator, DeleteLocalDirectoryOperator
 from utils_operators.agol_operators import AGOLDownloadFileOperator
 from ckan_operators.datastore_operator import (
     BackupDatastoreResourceOperator,
     DeleteDatastoreResourceRecordsOperator,
     InsertDatastoreResourceRecordsOperator,
     RestoreDatastoreResourceBackupOperator,
-    DeleteDatastoreResourceOperator
+    DeleteDatastoreResourceOperator,
+    InsertDatastoreResourceRecordsFromJSONOperator
 )
 from ckan_operators.resource_operator import GetOrCreateResourceOperator
 from utils import airflow_utils
@@ -30,11 +31,13 @@ CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = CKAN_CREDS[ACTIVE_ENV]["address"]
 CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]
 
+TMP_DIR = Path(Variable.get("tmp_dir"))
+
 base_url = "https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/"
 
 datasets = [
-    {"tps_table_code": "ASR-RC-TBL-001", "package_id": "police-annual-statistical-report-reported-crimes", "agol_dataset": "Reported_Crimes_ASR_VC_TBL_001"},
-    {"tps_table_code": "ASR-VC-TBL-001", "package_id": "police-annual-statistical-report-victims-of-crime", "agol_dataset": "Victims_of_Crime_ASR_RC_TBL_001"},
+    {"tps_table_code": "ASR-RC-TBL-001", "package_id": "police-annual-statistical-report-reported-crimes", "agol_dataset": "Reported_Crimes_ASR_RC_TBL_001"},
+    {"tps_table_code": "ASR-VC-TBL-001", "package_id": "police-annual-statistical-report-victims-of-crime", "agol_dataset": "Victims_of_Crime_ASR_VC_TBL_001"},
     {"tps_table_code": "ASR-SP-TBL-001", "package_id": "police-annual-statistical-report-search-of-persons", "agol_dataset": "Search_of_Persons_ASR_SP_TBL_001"},
     {"tps_table_code": "ASR-T-TBL-001", "package_id": "police-annual-statistical-report-traffic-collisions", "agol_dataset": "Traffic_Collisions_ASR_T_TBL_001"},
     {"tps_table_code": "ASR-F-TBL-001", "package_id": "police-annual-statistical-report-firearms-top-5-calibres", "agol_dataset": "Firearms_Top_5_Calibres_ASR_F_TBL_001"},
@@ -62,6 +65,7 @@ common_job_settings = {
     "schedule": "@once",
 }
 
+
 # init slack failure message function
 def send_failure_message():
     airflow_utils.message_slack(
@@ -85,15 +89,18 @@ def create_dag(dag_id,
 
     with dag:
 
+        data_filename = dag_id + ".json"
+        fields_filename = "fields_" + dag_id + ".json"
+
         tmp_dir = CreateLocalDirectoryOperator(
             task_id = "tmp_dir", 
-            path = Path(Variable.get("tmp_dir")) / dag_id
+            path = TMP_DIR / dag_id
         )   
 
         get_agol_data = AGOLDownloadFileOperator(
-            task_id = "get_data_from_agol",
+            task_id = "get_agol_data",
             file_url = base_url + agol_dataset + "/FeatureServer/0/",
-            dir = Path(Variable.get("tmp_dir")) / dag_id,
+            dir = TMP_DIR / dag_id,
             filename = dag_id + ".json"
         )
 
@@ -101,17 +108,17 @@ def create_dag(dag_id,
             task_id="delete_resource",
             address = CKAN,
             apikey = CKAN_APIKEY,
-            resource_id_filepath = Path(Variable.get("tmp_dir")) / dag_id / "resource_id.txt"
+            resource_id_filepath = TMP_DIR / dag_id / "resource_id.txt"
 
         )
 
-        get_or_create_resource = GetOrCreateResourceOperator(
-            task_id="get_or_create_resource",
+        get_resource_id = GetOrCreateResourceOperator(
+            task_id="get_resource_id",
             address=CKAN,
             apikey=CKAN_APIKEY,
             package_name_or_id=dag_id,
             resource_name=dag_id,
-            resource_id_filepath = Path(Variable.get("tmp_dir")) / dag_id / "resource_id.txt",
+            resource_id_filepath = TMP_DIR / dag_id / "resource_id.txt",
             resource_attributes=dict(
                 format="csv",
                 is_preview=True,
@@ -120,8 +127,22 @@ def create_dag(dag_id,
             ),
         )
 
+        insert_records = InsertDatastoreResourceRecordsFromJSONOperator(
+            task_id = "insert_records",
+            address = CKAN,
+            apikey = CKAN_APIKEY,
+            resource_id_path = TMP_DIR / dag_id / "resource_id.txt",
+            data_path = TMP_DIR / dag_id / data_filename,
+            fields_path = TMP_DIR / dag_id / fields_filename
+        )
+
+        delete_tmp_dir = DeleteLocalDirectoryOperator(
+            task_id = "delete_tmp_dir",
+            path = TMP_DIR / dag_id
+        )
+
         ## DAG EXECUTION LOGIC
-        tmp_dir >> get_agol_data >> get_or_create_resource >> delete_resource
+        tmp_dir >> get_agol_data >> get_resource_id >> delete_resource >> insert_records >> delete_tmp_dir
         
 
 

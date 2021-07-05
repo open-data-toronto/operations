@@ -42,6 +42,9 @@ class AGOLDownloadFileOperator(BaseOperator):
         # init the filepath to the file we will create
         self.path = Path(self.dir) / self.filename
 
+    def parse_properties_from_features(self, features):
+        return [ object["properties"] for object in features ]
+
 
     def parse_data_from_agol(self):
         # calls agol utils to get only the features from a simple GET request to AGOL
@@ -49,7 +52,9 @@ class AGOLDownloadFileOperator(BaseOperator):
         last_modified = requests.get(self.file_url).headers["last-modified"]
         fields = agol_utils.get_fields( self.file_url )
         
-        return { "data": res,
+        logging.info("Received {} AGOL records".format(str(len(res))))
+
+        return { "data": self.parse_properties_from_features(res),
                  "last_modified": last_modified,
                  "fields": fields
                 }

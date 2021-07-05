@@ -1,4 +1,5 @@
 import requests
+import logging
 
 
 def convert_dtypes_to_ckan(agol_fields):
@@ -32,7 +33,7 @@ def convert_dtypes_to_ckan(agol_fields):
     return ckan_fields
 
 def get_features(query_url):
-    print(f"  getting features from AGOL")
+    logging.info(f"  getting features from AGOL")
 
     features = []
     overflow = True
@@ -47,20 +48,29 @@ def get_features(query_url):
     }
     
     while overflow is True:
+        # As long as there are more records to get on another request
+        
+        # make a request url 
         params = "&".join([ f"{k}={v}" for k,v in query_string_params.items() ])
         url = "https://" + "/".join([ url_part for url_part in f"{query_url}/query?{params}".replace("https://", "").split("/") if url_part ])
-        
-        print(url)
+        logging.info(url)
 
+        # make the request
         res = requests.get(url)
         assert res.status_code == 200, f"Status code response: {res.status_code}"
         
-        geojson = res.json()
-        features.extend(geojson["features"])
+        # parse the response
+        geojson = json.loads(res)
+        # get the properties out of each returned object
+        #data = [ object["properties"] for object in geojson["features"] ]
+        features.append( geojson["features"] )
+        
+        # prepare the next request, if needed
         overflow = "properties" in geojson and "exceededTransferLimit" in geojson["properties"] and geojson["properties"]["exceededTransferLimit"] is True
         offset = offset + len(geojson["features"])
         query_string_params["resultOffset"] = offset
 
+    logging.info("Returned {} AGOL records with these attributes: {}".format(str(len(features)), str(features[0].keys()) ))
     return features
 
 def get_data(endpoint):
@@ -100,7 +110,9 @@ def get_fields(query_url):
     res = requests.get(url)
     assert res.status_code == 200, f"Status code response: {res.status_code}"
     
-    return res.json()["fields"]
+    fields = json.loads(res)["features"][0].keys() 
+
+    return fields
 
 
 #def get_fields(endpoint):

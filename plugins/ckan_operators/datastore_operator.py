@@ -143,10 +143,14 @@ class DeleteDatastoreResourceOperator(BaseOperator):
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def _get_resource_id(self):
-        with open( resource_id_filepath ) as f:
+        with open( self.resource_id_filepath ) as f:
             self.resource_id = f.read()
 
     def execute(self, context):
+
+        # get resource id
+        self._get_resource_id()
+
         # Delete the resource
         try:
             self.ckan.action.datastore_delete(id=self.resource_id)
@@ -287,3 +291,54 @@ class RestoreDatastoreResourceBackupOperator(BaseOperator):
         logging.info(f"Result: {result}")
 
         return result
+
+
+
+class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
+    '''
+
+    '''
+    @apply_defaults
+    def __init__(
+        self,
+        address: str,
+        apikey: str,
+        resource_id_path: str,
+        data_path: str = None,
+        fields_path: str = None,
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+        self.data_path = data_path
+        self.resource_id_path = resource_id_path
+        self.fields_path = fields_path
+        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+
+    def _create_empty_resource_with_fields(self, fields_path, resource_id):
+        with open(fields_path, "r") as f:
+            fields = json.load(f)
+        try:
+            self.ckan.action.datastore_create(id=resource_id, fields=fields)
+        except:
+            logging.warning("Datastore resource already exists: " + resource_id)
+
+    def execute(self, context):
+    
+        if self.fields_path is not None:
+            with open(self.resource_id_path) as f:
+                resource_id = f.read()
+            self._create_empty_resource_with_fields(self.fields_path, resource_id)
+            logging.info("created empty resource")
+
+        if self.data_path is not None:
+            with open(self.data_path) as f:
+                data = json.load(f)
+            logging.info("Data parsed from JSON file")
+
+            self.ckan.action.datastore_create(
+                id=resource_id, records=data
+            )
+
+            logging.info(f"Records inserted into CKAN")
+
+            
