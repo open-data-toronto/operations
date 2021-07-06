@@ -1,6 +1,6 @@
 import requests
 import logging
-
+import json
 
 def convert_dtypes_to_ckan(agol_fields):
     esri_to_ckan_map = {
@@ -60,17 +60,17 @@ def get_features(query_url):
         assert res.status_code == 200, f"Status code response: {res.status_code}"
         
         # parse the response
-        geojson = json.loads(res)
+        geojson = json.loads(res.text)
         # get the properties out of each returned object
         #data = [ object["properties"] for object in geojson["features"] ]
-        features.append( geojson["features"] )
+        features.extend( geojson["features"] )
         
         # prepare the next request, if needed
         overflow = "properties" in geojson and "exceededTransferLimit" in geojson["properties"] and geojson["properties"]["exceededTransferLimit"] is True
         offset = offset + len(geojson["features"])
         query_string_params["resultOffset"] = offset
 
-    logging.info("Returned {} AGOL records with these attributes: {}".format(str(len(features)), str(features[0].keys()) ))
+    logging.info("Returned {} AGOL records".format(str(len(features)) ))
     return features
 
 def get_data(endpoint):
@@ -110,9 +110,9 @@ def get_fields(query_url):
     res = requests.get(url)
     assert res.status_code == 200, f"Status code response: {res.status_code}"
     
-    fields = json.loads(res)["features"][0].keys() 
+    #fields = list( json.loads(res.text)["features"][0].keys() )
 
-    return fields
+    return res.json()["fields"]
 
 
 #def get_fields(endpoint):
