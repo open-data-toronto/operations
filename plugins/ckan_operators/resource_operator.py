@@ -96,11 +96,9 @@ class ResourceAndFileOperator(BaseOperator):
             )
 
         try:
-            file_last_modified = download_file_info["last_modified"]
+            file_last_modified = parser.parse(download_file_info["last_modified"])
         except:
-            file_last_modified = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S") + " GMT"
-            
-        file_last_modified = parser.parse(file_last_modified)
+            file_last_modified = parser.parse(datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S") + " GMT")
         
         resource_last_modified = parser.parse(
             (
