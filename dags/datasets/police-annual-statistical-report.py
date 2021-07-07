@@ -1,6 +1,7 @@
 # police-annual-statistical-report.py - this file makes multiple DAGs; each is an ETL for a police annual report from AGOL into CKAN
 
 import ckanapi
+import json
 
 from pathlib import Path
 from datetime import datetime
@@ -9,9 +10,12 @@ from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
+from airflow.operators.slack_operator import SlackAPIPostOperator
 
 from utils_operators.directory_operator import CreateLocalDirectoryOperator, DeleteLocalDirectoryOperator
 from utils_operators.agol_operators import AGOLDownloadFileOperator
+from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
+
 from ckan_operators.datastore_operator import (
     BackupDatastoreResourceOperator,
     DeleteDatastoreResourceRecordsOperator,
@@ -65,17 +69,6 @@ common_job_settings = {
     "schedule": "@once",
 }
 
-
-# init slack failure message function
-def send_failure_message():
-    airflow_utils.message_slack(
-        name=common_job_settings["description"],
-        message_type="error",
-        msg="Job not finished",
-        active_env=Variable.get("active_env"),
-        prod_webhook=Variable.get("active_env") == "prod",
-    )
-
 # custom function to create multiple custom dags
 def create_dag(dag_id,
                agol_dataset,
@@ -85,9 +78,14 @@ def create_dag(dag_id,
     dag = DAG(dag_id,
               agol_dataset,
               schedule_interval=schedule,
-              default_args=default_args)
+              default_args=default_args,
+              render_template_as_native_obj=True,
+              )
 
     with dag:
+
+        def get_xcoms(**kwargs):
+            return kwargs.pop("ti").xcom_pull(task_ids=target_task_id)
 
         data_filename = dag_id + ".json"
         fields_filename = "fields_" + dag_id + ".json"
@@ -101,7 +99,8 @@ def create_dag(dag_id,
             task_id = "get_agol_data",
             file_url = base_url + agol_dataset + "/FeatureServer/0/",
             dir = TMP_DIR / dag_id,
-            filename = dag_id + ".json"
+            filename = dag_id + ".json",
+            on_success_callback=task_success_slack_alert,
         )
 
         delete_resource = DeleteDatastoreResourceOperator(
@@ -109,7 +108,6 @@ def create_dag(dag_id,
             address = CKAN,
             apikey = CKAN_APIKEY,
             resource_id_filepath = TMP_DIR / dag_id / "resource_id.txt"
-
         )
 
         get_resource_id = GetOrCreateResourceOperator(
@@ -138,15 +136,19 @@ def create_dag(dag_id,
 
         delete_tmp_dir = DeleteLocalDirectoryOperator(
             task_id = "delete_tmp_dir",
-            path = TMP_DIR / dag_id
+            path = TMP_DIR / dag_id,
+            on_success_callback=task_success_slack_alert,
         )
 
+        # message_slack = GenericSlackOperator(
+        #     task_id = "message_slack",
+        #     #target_task_id = "get_agol_data",
+        #     #target_return_key = "checksum",
+        #     message = get_xcoms()
+        # )
+
         ## DAG EXECUTION LOGIC
-        tmp_dir >> get_agol_data >> get_resource_id >> delete_resource >> insert_records >> delete_tmp_dir
-        
-
-
-        
+        tmp_dir >> get_agol_data >> get_resource_id >> delete_resource >> insert_records >> delete_tmp_dir #>> message_slack 
 
     return dag
 
@@ -165,7 +167,7 @@ for dataset in datasets:
             "email_on_failure": False,
             "email_on_retry": False,
             "retries": 1,
-            "on_failure_callback": send_failure_message,
+            "on_failure_callback": task_failure_slack_alert,
             "retries": 0,
             "start_date": common_job_settings["start_date"],
         }
