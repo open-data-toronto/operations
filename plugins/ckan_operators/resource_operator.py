@@ -37,7 +37,9 @@ class GetOrCreateResourceOperator(BaseOperator):
         package = self.ckan.action.package_show(id=self.package_id)
 
         for r in package["resources"]:
-            if r["name"] == self.resource_name:
+            # find which resource in the package matches the input name
+            # this search ignores suffixes to the resource name, like date ranges
+            if r["name"] == self.resource_name or r["name"][:len(self.resource_name)] == self.resource_name:
                 self.resource = r
                 return True
 
@@ -45,10 +47,13 @@ class GetOrCreateResourceOperator(BaseOperator):
 
     def execute(self, context):
         if self.resource_id is not None:
+            logging.info("Resource ID used to get resource")
             resource = self.ckan.action.resource_show(id=self.resource_id)
         elif self._resource_exists():
+            logging.info("Resource found using package id")
             resource = self.resource
         else: 
+            logging.info("Resource not found - creating resource: " + self.resource_name)
             resource = self.ckan.action.resource_create(
                 package_id=self.package_id,
                 name=self.resource_name,
@@ -71,6 +76,60 @@ class GetOrCreateResourceOperator(BaseOperator):
         logging.info(f"Returning: {resource}")
         return resource
 
+class UpdateResourceMetadataOperator():
+    ## TODO
+    """
+    input: 
+        - resource_id = a ckan resource id
+        - address = details for correct CKAN env
+        - apikey = details for correct CKAN env
+        - ckan resource metadata attributes to be updated, like "name" or "last_modified", prefixed with "new_"
+            ... ex "new_name", "new_last_modified"
+
+    output:
+        - runs resource_patch with the inputs
+        - currently only works for last_modified and name
+        
+    """
+
+    @apply_defaults
+    def __init__(
+        self,
+        resource_id_filepath: str = None,
+        apikey: str = None,
+        address: str = None,
+        new_last_modified = None,
+        new_name = None
+        **kwargs
+    ) -> None:
+        super().__init__(**kwargs)
+        with open(self.resource_id_filepath, 'r') as f:
+            self.resource_id = f.read()
+        self.new_name = new_name
+        self.new_last_modified = last_modified
+        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+
+    def _resource_exists(self):
+        # request the resource from CKAN, return whether the request succeeded
+        check = self.ckan.action.resource_show(id=self.resource_id)
+        return check["success"]
+
+    def execute(self, context):
+        if self._resource_exists():
+            if self.new_name:
+                self.ckan.action.resource_patch(
+                id=self.resource_id,
+                name=self.new_name
+            )
+            if self.new_last_modified:
+                self.ckan.action.resource_patch(
+                id=self.resource_id,
+                last_modified=self.new_last_modified
+            )
+
+            
+        else:
+            logging.error("The input resource id doesnt have a corresponding resource in CKAN")
 
 class ResourceAndFileOperator(BaseOperator):
     """

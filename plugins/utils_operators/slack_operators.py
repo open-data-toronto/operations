@@ -37,14 +37,12 @@ def task_success_slack_alert(context):
             :large_green_circle: Task Succeeded  
             *Task*: {task}  
             *Dag*: {dag} 
-            *return_value*: {return_value} 
 
             *Log Url*:\n {log_url} 
             
             """.format(
             task=context.get('task_instance').task_id,
             dag=context.get('task_instance').dag_id,
-            return_value=context.get('return_value'),
 
             log_url=context.get('task_instance').log_url.replace( "http://localhost:8080/", AIRFLOW_URL ) ,
         )
