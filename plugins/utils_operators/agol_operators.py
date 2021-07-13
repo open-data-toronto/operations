@@ -49,7 +49,8 @@ class AGOLDownloadFileOperator(BaseOperator):
     def parse_data_from_agol(self):
         # calls agol utils to get only the features from a simple GET request to AGOL
         res = agol_utils.get_features( self.file_url )
-        last_modified = requests.get(self.file_url).headers["last-modified"]
+        unparsed_last_modified = requests.get(self.file_url).headers["last-modified"]
+        last_modified = datetime.strptime(unparsed_last_modified[:-13], "%a, %d %b %Y")
         fields = agol_utils.get_fields( self.file_url )
         
         logging.info("Received {} AGOL records".format(str(len(res))))
