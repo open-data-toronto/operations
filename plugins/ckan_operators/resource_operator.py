@@ -49,14 +49,14 @@ class GetOrCreateResourceOperator(BaseOperator):
     def _resource_exists(self):
         # get the package id from a task if its been provided from a task
         if self.package_name_or_id_task_id and self.package_name_or_id_task_key:
-            self.package_name_or_id = ti.xcom_pull(task_ids=self.package_name_or_id_task_id, key=self.package_name_or_id_task_key)
+            self.package_name_or_id = ti.xcom_pull(task_ids=self.package_name_or_id_task_id)[self.package_name_or_id_task_key]
 
         package = self.ckan.action.package_show(id=self.package_name_or_id)
 
         for r in package["resources"]:
             # get resource name if provided from another task
             if self.resource_name_task_id and self.resource_name_task_key:
-                self.resource_name = ti.xcom_pull(task_ids=self.resource_name_task_id, key=self.resource_name_task_key)
+                self.resource_name = ti.xcom_pull(task_ids=self.resource_name_task_id)[self.resource_name_task_key]
 
             # find which resource in the package matches the input name
             # this search ignores suffixes to the resource name, like date ranges
@@ -100,6 +100,71 @@ class GetOrCreateResourceOperator(BaseOperator):
 
         logging.info(f"Returning: {resource}")
         return resource
+
+class EditResourceMetadataOperator(BaseOperator):
+    @apply_defaults
+    def __init__(
+        self,
+        address: str,
+        apikey: str,
+
+        resource_id: str = None,
+        resource_id_task_id: str = None,
+        resource_id_task_key: str = None,
+
+        new_resource_name: str = None,
+        new_resource_name_task_id: str = None,
+        new_resource_name_task_key: str = None,
+
+        last_modified = None,
+        last_modified_task_id: str = None,
+        last_modified_task_key: str = None,
+
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+        
+        self.resource_id, self.resource_id_task_id, self.resource_id_task_key = resource_id, resource_id_task_id, resource_id_task_key
+        self.new_resource_name, self.new_resource_name_task_id, self.new_resource_name_task_key = new_resource_name, new_resource_name_task_id, new_resource_name_task_key
+        self.last_modified, self.last_modified_task_id, self.last_modified_task_key = last_modified, last_modified_task_id, last_modified_task_key
+        
+        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+
+    def _datetime_to_string(self, datetime):
+        return datetime.strftime("%Y-%m-%dT%H:%M:%S")
+
+    def execute(self, context):
+        # init task instance from context
+        ti = context['ti']
+
+        # assign vars if they come from another task
+        if self.resource_id_task_id and self.resource_id_task_key:
+            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[self.resource_id_task_key]
+
+        if self.new_resource_name_task_id and self.new_resource_name_task_key:
+            self.new_resource_name = ti.xcom_pull(task_ids=self.new_resource_name_task_id)[self.new_resource_name_task_key]
+
+        if self.last_modified_task_id and self.last_modified_task_key:
+            self.last_modified = ti.xcom_pull(task_ids=self.last_modified_task_id)[self.last_modified_task_key]
+
+        # resource_patch api call below for non null input vars
+        # last modified date
+        if self.last_modified:
+            last_modified = self._datetime_to_string(self.last_modified)
+            logging.info("Setting last-modified of resource_id {} to {}".format(self.resource_id, last_modified))
+            self.ckan.action.resource_patch(
+                id=self.resource_id,
+                last_modified=last_modified,
+            )
+        # resource_name
+        if self.new_resource_name:
+            logging.info("Setting name of resource_id {} to {}".format(self.resource_id, self.new_resource_name))
+            self.ckan.action.resource_patch(
+                id=self.resource_id,
+                name=self.new_resource_name,
+            )
+        
+
 
 
 class ResourceAndFileOperator(BaseOperator):

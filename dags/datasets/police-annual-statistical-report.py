@@ -24,7 +24,7 @@ from ckan_operators.datastore_operator import (
     DeleteDatastoreResourceOperator,
     InsertDatastoreResourceRecordsFromJSONOperator
 )
-from ckan_operators.resource_operator import GetOrCreateResourceOperator
+from ckan_operators.resource_operator import GetOrCreateResourceOperator, EditResourceMetadataOperator
 from utils import airflow_utils
 
 
@@ -40,27 +40,27 @@ TMP_DIR = Path(Variable.get("tmp_dir"))
 base_url = "https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/"
 
 datasets = [
-    {"tps_table_code": "ASR-RC-TBL-001", "package_id": "police-annual-statistical-report-reported-crimes", "agol_dataset": "Reported_Crimes_ASR_RC_TBL_001"},
-    {"tps_table_code": "ASR-VC-TBL-001", "package_id": "police-annual-statistical-report-victims-of-crime", "agol_dataset": "Victims_of_Crime_ASR_VC_TBL_001"},
-    {"tps_table_code": "ASR-SP-TBL-001", "package_id": "police-annual-statistical-report-search-of-persons", "agol_dataset": "Search_of_Persons_ASR_SP_TBL_001"},
-    {"tps_table_code": "ASR-T-TBL-001", "package_id": "police-annual-statistical-report-traffic-collisions", "agol_dataset": "Traffic_Collisions_ASR_T_TBL_001"},
-    {"tps_table_code": "ASR-F-TBL-001", "package_id": "police-annual-statistical-report-firearms-top-5-calibres", "agol_dataset": "Firearms_Top_5_Calibres_ASR_F_TBL_001"},
-    {"tps_table_code": "ASR-F-TBL-002", "package_id": "police-annual-statistical-report-top-20-offences-of-firearms-seizures", "agol_dataset": "Top_20_Offences_of_Firearms_Seizures_ASR_F_TBL_002"},
-    {"tps_table_code": "ASR-F-TBL-003", "package_id": "police-annual-statistical-report-miscellaneous-firearms", "agol_dataset": "Miscellaneous_Firearms_ASR_F_TBL_003"},
-    {"tps_table_code": "ASR-PB-TBL-001", "package_id": "police-annual-statistical-report-gross-expenditures-by-division", "agol_dataset": "Gross_Expenditures_by_Division_ASR_PB_TBL_001"},
-    {"tps_table_code": "ASR-PB-TBL-002", "package_id": "police-annual-statistical-report-personnel-by-rank", "agol_dataset": "Personnel_by_Rank_ASR_PB_TBL_002"},
-    {"tps_table_code": "ASR-PB-TBL-003", "package_id": "police-annual-statistical-report-personnel-by-rank-by-division", "agol_dataset": "Personnel_by_Rank_by_Division_ASR_PB_TBL_003"},
-    {"tps_table_code": "ASR-PB-TBL-004", "package_id": "police-annual-statistical-report-personnel-by-command", "agol_dataset": "Personnel_by_Command_ASR_PB_TBL_004"},
-    {"tps_table_code": "ASR-PB-TBL-005", "package_id": "police-annual-statistical-report-gross-operating-budget", "agol_dataset": "Gross_Operating_Budget_ASR_PB_TBL_005"},
-    {"tps_table_code": "ASR-CS-TBL-001", "package_id": "police-annual-statistical-report-dispatched-calls-by-division", "agol_dataset": "Dispatched_Calls_by_Division_ASR_CS_TBL_001"},
-    {"tps_table_code": "ASR-CS-TBL-002", "package_id": "police-annual-statistical-report-miscellaneous-calls-for-service", "agol_dataset": "Miscellaneous_Calls_for_Service_ASR_CS_TBL_002"},
-    {"tps_table_code": "ASR-PCF-TBL-001", "package_id": "police-annual-statistical-report-total-public-complaints", "agol_dataset": "Total_Public_Complaints_ASR_PCF_TBL_001"},
-    {"tps_table_code": "ASR-PCF-TBL-002", "package_id": "police-annual-statistical-report-investigated-alleged-misconduct", "agol_dataset": "Investigated_Alleged_Misconduct_ASR_PCF_TBL_002"},
-    {"tps_table_code": "ASR-PCF-TBL-003", "package_id": "police-annual-statistical-report-complaint-dispositions", "agol_dataset": "Complaint_Dispositions_ASR_PCF_TBL_003"},
-    {"tps_table_code": "ASR-RI-TBL-001", "package_id": "police-annual-statistical-report-regulated-interactions", "agol_dataset": "Regulated_Interactions_ASR_RI_TBL_001"},
-    {"tps_table_code": "ASR-RI-TBL-001", "package_id": "police-annual-statistical-report-regulated-interactions-demographics", "agol_dataset": "Regulated_Interactions_Demographics_ASR_RI_TBL_001"},
-    {"tps_table_code": "ASR-AD-TBL-001", "package_id": "police-annual-statistical-report-administrative", "agol_dataset": "Administrative_ASR_AD_TBL_001"},
-    {"tps_table_code": "ASR-MISC-TBL-001", "package_id": "police-annual-statistical-report-miscellaneous-data", "agol_dataset": "Miscellaneous_Data_ASR_MISC_TBL_001"}
+    {"name": "Reported Crimes", "tps_table_code": "ASR-RC-TBL-001", "package_id": "police-annual-statistical-report-reported-crimes", "agol_dataset": "Reported_Crimes_ASR_RC_TBL_001"},
+    {"name": "Victims of Crime", "tps_table_code": "ASR-VC-TBL-001", "package_id": "police-annual-statistical-report-victims-of-crime", "agol_dataset": "Victims_of_Crime_ASR_VC_TBL_001"},
+    {"name": "Search of Persons", "tps_table_code": "ASR-SP-TBL-001", "package_id": "police-annual-statistical-report-search-of-persons", "agol_dataset": "Search_of_Persons_ASR_SP_TBL_001"},
+    {"name": "Traffic Collisions", "tps_table_code": "ASR-T-TBL-001", "package_id": "police-annual-statistical-report-traffic-collisions", "agol_dataset": "Traffic_Collisions_ASR_T_TBL_001"},
+    {"name": "Firearms Top 5 Calibres", "tps_table_code": "ASR-F-TBL-001", "package_id": "police-annual-statistical-report-firearms-top-5-calibres", "agol_dataset": "Firearms_Top_5_Calibres_ASR_F_TBL_001"},
+    {"name": "Top 20 Offences of Firearms Seizures", "tps_table_code": "ASR-F-TBL-002", "package_id": "police-annual-statistical-report-top-20-offences-of-firearms-seizures", "agol_dataset": "Top_20_Offences_of_Firearms_Seizures_ASR_F_TBL_002"},
+    {"name": "Miscellaneous Firearms", "tps_table_code": "ASR-F-TBL-003", "package_id": "police-annual-statistical-report-miscellaneous-firearms", "agol_dataset": "Miscellaneous_Firearms_ASR_F_TBL_003"},
+    {"name": "Gross Expenditures by Division", "tps_table_code": "ASR-PB-TBL-001", "package_id": "police-annual-statistical-report-gross-expenditures-by-division", "agol_dataset": "Gross_Expenditures_by_Division_ASR_PB_TBL_001"},
+    {"name": "Personnel by Rank", "tps_table_code": "ASR-PB-TBL-002", "package_id": "police-annual-statistical-report-personnel-by-rank", "agol_dataset": "Personnel_by_Rank_ASR_PB_TBL_002"},
+    {"name": "Personnel by Rank by Division", "tps_table_code": "ASR-PB-TBL-003", "package_id": "police-annual-statistical-report-personnel-by-rank-by-division", "agol_dataset": "Personnel_by_Rank_by_Division_ASR_PB_TBL_003"},
+    {"name": "Personnel by Command", "tps_table_code": "ASR-PB-TBL-004", "package_id": "police-annual-statistical-report-personnel-by-command", "agol_dataset": "Personnel_by_Command_ASR_PB_TBL_004"},
+    {"name": "Gross Operating Budget", "tps_table_code": "ASR-PB-TBL-005", "package_id": "police-annual-statistical-report-gross-operating-budget", "agol_dataset": "Gross_Operating_Budget_ASR_PB_TBL_005"},
+    {"name": "Dispatched Calls by Division", "tps_table_code": "ASR-CS-TBL-001", "package_id": "police-annual-statistical-report-dispatched-calls-by-division", "agol_dataset": "Dispatched_Calls_by_Division_ASR_CS_TBL_001"},
+    {"name": "Miscellaneous Calls for Service", "tps_table_code": "ASR-CS-TBL-002", "package_id": "police-annual-statistical-report-miscellaneous-calls-for-service", "agol_dataset": "Miscellaneous_Calls_for_Service_ASR_CS_TBL_002"},
+    {"name": "Total Public Complaints", "tps_table_code": "ASR-PCF-TBL-001", "package_id": "police-annual-statistical-report-total-public-complaints", "agol_dataset": "Total_Public_Complaints_ASR_PCF_TBL_001"},
+    {"name": "Investigated Alleged Misconduct", "tps_table_code": "ASR-PCF-TBL-002", "package_id": "police-annual-statistical-report-investigated-alleged-misconduct", "agol_dataset": "Investigated_Alleged_Misconduct_ASR_PCF_TBL_002"},
+    {"name": "Complaint Dispositions", "tps_table_code": "ASR-PCF-TBL-003", "package_id": "police-annual-statistical-report-complaint-dispositions", "agol_dataset": "Complaint_Dispositions_ASR_PCF_TBL_003"},
+    #{"name": "Regulated Interactions", "tps_table_code": "ASR-RI-TBL-001", "package_id": "police-annual-statistical-report-regulated-interactions", "agol_dataset": "Regulated_Interactions_ASR_RI_TBL_001"},
+    #{"name": "Regulated Interactions Demographics", "tps_table_code": "ASR-RI-TBL-001", "package_id": "police-annual-statistical-report-regulated-interactions-demographics", "agol_dataset": "Regulated_Interactions_Demographics_ASR_RI_TBL_001"},
+    {"name": "Administrative", "tps_table_code": "ASR-AD-TBL-001", "package_id": "police-annual-statistical-report-administrative", "agol_dataset": "Administrative_ASR_AD_TBL_001"},
+    {"name": "Miscellaneous Data", "tps_table_code": "ASR-MISC-TBL-001", "package_id": "police-annual-statistical-report-miscellaneous-data", "agol_dataset": "Miscellaneous_Data_ASR_MISC_TBL_001"}
 ]
 
 common_job_settings = {
@@ -71,23 +71,21 @@ common_job_settings = {
 
 # custom function to create multiple custom dags
 def create_dag(dag_id,
-               agol_dataset,
+               dataset,
                schedule,
                default_args):
 
     dag = DAG(dag_id,
-              agol_dataset,
               schedule_interval=schedule,
               default_args=default_args
               )
 
     with dag:
-
-        def get_xcoms(**kwargs):
-            return kwargs.pop("ti").xcom_pull(task_ids=target_task_id)
-
+        # init vars
         data_filename = dag_id + ".json"
         fields_filename = "fields_" + dag_id + ".json"
+        agol_dataset = dataset["agol_dataset"]
+        name = dataset["name"]
 
         tmp_dir = CreateLocalDirectoryOperator(
             task_id = "tmp_dir", 
@@ -107,7 +105,7 @@ def create_dag(dag_id,
             address=CKAN,
             apikey=CKAN_APIKEY,
             package_name_or_id=dag_id,
-            resource_name=dag_id,
+            resource_name=name,
             #resource_id_filepath = TMP_DIR / dag_id / "resource_id.txt",
             resource_attributes=dict(
                 format="csv",
@@ -121,16 +119,29 @@ def create_dag(dag_id,
             task_id="delete_resource",
             address = CKAN,
             apikey = CKAN_APIKEY,
-            resource_id_filepath = TMP_DIR / dag_id / "resource_id.txt"
+            resource_id_task_id = "get_resource_id",
+            resource_id_task_key = "id"
         )
 
         insert_records = InsertDatastoreResourceRecordsFromJSONOperator(
             task_id = "insert_records",
             address = CKAN,
             apikey = CKAN_APIKEY,
-            resource_id_path = TMP_DIR / dag_id / "resource_id.txt",
+            resource_id_task_id = "get_resource_id",
+            resource_id_task_key = "id",
             data_path = TMP_DIR / dag_id / data_filename,
             fields_path = TMP_DIR / dag_id / fields_filename
+        )
+
+        modify_metadata = EditResourceMetadataOperator(
+            task_id = "modify_metadata",
+            address = CKAN,
+            apikey = CKAN_APIKEY,
+            resource_id_task_id = "get_resource_id",
+            resource_id_task_key = "id",
+            new_resource_name = name,
+            last_modified_task_id = "get_agol_data",
+            last_modified_task_key = "last_modified"           
         )
 
         delete_tmp_dir = DeleteLocalDirectoryOperator(
@@ -147,7 +158,7 @@ def create_dag(dag_id,
         # )
 
         ## DAG EXECUTION LOGIC
-        tmp_dir >> get_agol_data >> get_resource_id >> delete_resource >> insert_records >> delete_tmp_dir #>> message_slack 
+        tmp_dir >> get_agol_data >> get_resource_id >> delete_resource >> insert_records >> modify_metadata >>  delete_tmp_dir #>> message_slack 
 
     return dag
 
@@ -155,7 +166,7 @@ def create_dag(dag_id,
 # build a dag for each number in range(10)
 for dataset in datasets:
     dag_id = dataset['package_id']
-    agol_dataset = dataset['agol_dataset']
+    #agol_dataset = dataset['agol_dataset']
 
     schedule = '@once'
     default_args = airflow_utils.get_default_args(
@@ -172,6 +183,6 @@ for dataset in datasets:
         }
     )
     globals()[dag_id] = create_dag(dag_id,
-                                  agol_dataset,
+                                  dataset,
                                   schedule,
                                   default_args)

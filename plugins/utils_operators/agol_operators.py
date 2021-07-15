@@ -51,10 +51,10 @@ class AGOLDownloadFileOperator(BaseOperator):
         # init the filepath to the file we will create
         # how this is done depends on whether the operator received task ids/keys, or actual values 
         if self.dir_task_id and self.dir_task_key:
-            self.dir = ti.xcom_pull(task_ids=self.dir_task_id, key=self.dir_task_key)
+            self.dir = ti.xcom_pull(task_ids=self.dir_task_id)[self.dir_task_key]
 
         if self.filename_task_id and self.filename_task_key:
-            self.filename = ti.xcom_pull(task_ids=self.filename_task_id, key=self.filename_task_key)
+            self.filename = ti.xcom_pull(task_ids=self.filename_task_id)[self.filename_task_key]
 
         self.path = Path(self.dir) / self.filename    
         

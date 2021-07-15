@@ -50,10 +50,10 @@ class DownloadFileOperator(BaseOperator):
         # init the filepath to the file we will create
         # how this is done depends on whether the operator received task ids/keys, or actual values 
         if self.dir_task_id and self.dir_task_key:
-            self.dir = ti.xcom_pull(task_ids=self.dir_task_id, key=self.dir_task_key)
+            self.dir = ti.xcom_pull(task_ids=self.dir_task_id)[self.dir_task_key]
 
         if self.filename_task_id and self.filename_task_key:
-            self.filename = ti.xcom_pull(task_ids=self.filename_task_id, key=self.filename_task_key)
+            self.filename = ti.xcom_pull(task_ids=self.filename_task_id)[self.filename_task_key]
 
         self.path = Path(self.dir) / self.filename
 
@@ -80,7 +80,7 @@ class DownloadFileOperator(BaseOperator):
     def get_data_from_http_request(self, ti):
         # get url if its from a separate task
         if self.file_url_task_id and self.file_url_task_key:
-            self.file_url = ti.xcom_pull(task_ids=self.file_url_task_id, key=self.file_url_task_key)
+            self.file_url = ti.xcom_pull(task_ids=self.file_url_task_id)[self.file_url_task_key]
 
         # grab data from input url
         res = requests.get(self.file_url)

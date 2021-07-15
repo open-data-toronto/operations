@@ -37,17 +37,33 @@ class DeleteLocalDirectoryOperator(BaseOperator):
     """
 
     @apply_defaults
-    def __init__(self, path: str, delete_recursively: bool = True, **kwargs):
+    def __init__(self,
+    path = None,
+    path_task_id: str = None,
+    path_task_key: str = None,
+    delete_recursively: bool = True,
+    **kwargs):
         super().__init__(**kwargs)
         self.file_path = path
+        self.file_path_task_id = path
+        self.file_path_task_key = path
+
         self.recursively = delete_recursively
 
     def execute(self, context):
-        path = Path(self.file_path)
+        # init task instance from context
+        ti = context['ti']
 
+        # get path if provided by another task
+        # commented out as it causes a "cannot adapt" error from psycopg, and is currently not needed
+        # if self.file_path_task_id and self.file_path_task_key:
+        #     self.file_path = ti.xcom_pull(task_ids=self.file_path_task_id)[self.file_path_task_key]
+
+        path = Path(self.file_path) if type(self.file_path) == "str" else self.file_path
+            
         if not self.recursively:
             os.rmdir(path)
         else:
             shutil.rmtree(path)
 
-        return path
+        return {"path": path}
