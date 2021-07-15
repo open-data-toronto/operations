@@ -78,8 +78,7 @@ def create_dag(dag_id,
     dag = DAG(dag_id,
               agol_dataset,
               schedule_interval=schedule,
-              default_args=default_args,
-              render_template_as_native_obj=True,
+              default_args=default_args
               )
 
     with dag:
@@ -103,26 +102,26 @@ def create_dag(dag_id,
             on_success_callback=task_success_slack_alert,
         )
 
-        delete_resource = DeleteDatastoreResourceOperator(
-            task_id="delete_resource",
-            address = CKAN,
-            apikey = CKAN_APIKEY,
-            resource_id_filepath = TMP_DIR / dag_id / "resource_id.txt"
-        )
-
         get_resource_id = GetOrCreateResourceOperator(
             task_id="get_resource_id",
             address=CKAN,
             apikey=CKAN_APIKEY,
             package_name_or_id=dag_id,
             resource_name=dag_id,
-            resource_id_filepath = TMP_DIR / dag_id / "resource_id.txt",
+            #resource_id_filepath = TMP_DIR / dag_id / "resource_id.txt",
             resource_attributes=dict(
                 format="csv",
                 is_preview=True,
                 url_type="datastore",
                 extract_job=f"Airflow: {dag_id}",
             ),
+        )
+
+        delete_resource = DeleteDatastoreResourceOperator(
+            task_id="delete_resource",
+            address = CKAN,
+            apikey = CKAN_APIKEY,
+            resource_id_filepath = TMP_DIR / dag_id / "resource_id.txt"
         )
 
         insert_records = InsertDatastoreResourceRecordsFromJSONOperator(
