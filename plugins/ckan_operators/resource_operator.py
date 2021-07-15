@@ -17,26 +17,47 @@ class GetOrCreateResourceOperator(BaseOperator):
         self,
         address: str,
         apikey: str,
-        package_name_or_id: str,
+
+        package_name_or_id: str = None,
+        package_name_or_id_task_id: str = None,
+        package_name_or_id_task_key: str = None,
+
         resource_name: str = None,
+        resource_name_task_id: str = None,
+        resource_name_task_key: str = None,
+
         resource_id: str = None,
+        resource_id_task_id: str = None,
+        resource_id_task_key: str = None,
+
+
         resource_attributes: str = None,
-        resource_id_filepath = None,
+        #resource_id_filepath = None,
+
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
-        self.package_id = package_name_or_id
-        self.resource_name = resource_name
-        self.resource_id = resource_id
+        self.package_name_or_id, self.package_name_or_id_task_id, self.package_name_or_id_task_key = package_name_or_id, package_name_or_id_task_id, package_name_or_id_task_key
+        self.resource_name, self.resource_name_task_id, self.resource_name_task_key = resource_name, resource_name_task_id, resource_name_task_key
+        self.resource_id, self.resource_id_task_id, self.resource_id_task_key = resource_id, resource_id_task_id, resource_id_task_key
+
         self.resource_attributes = resource_attributes
-        self.resource = None
-        self.resource_id_filepath = resource_id_filepath
+        # self.resource = None
+        # self.resource_id_filepath = resource_id_filepath
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def _resource_exists(self):
-        package = self.ckan.action.package_show(id=self.package_id)
+        # get the package id from a task if its been provided from a task
+        if self.package_name_or_id_task_id and self.package_name_or_id_task_key:
+            self.package_name_or_id = ti.xcom_pull(task_ids=self.package_name_or_id_task_id, key=self.package_name_or_id_task_key)
+
+        package = self.ckan.action.package_show(id=self.package_name_or_id)
 
         for r in package["resources"]:
+            # get resource name if provided from another task
+            if self.resource_name_task_id and self.resource_name_task_key:
+                self.resource_name = ti.xcom_pull(task_ids=self.resource_name_task_id, key=self.resource_name_task_key)
+
             # find which resource in the package matches the input name
             # this search ignores suffixes to the resource name, like date ranges
             if r["name"] == self.resource_name or r["name"][:len(self.resource_name)] == self.resource_name:
@@ -47,31 +68,34 @@ class GetOrCreateResourceOperator(BaseOperator):
         return False
 
     def execute(self, context):
+        # get resource id from a task if its provided by another task
+        if self.resource_id_task_id and self.resource_id_task_key:
+            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id, key=self.resource_id_task_key)
+        
         if self.resource_id is not None:
             logging.info("Resource ID used to get resource")
             resource = self.ckan.action.resource_show(id=self.resource_id)
         elif self._resource_exists():
-            logging.info("Resource found using package id")
+            logging.info("Resource found using the package id {} and resource name {}". format(self.package_name_or_id, self.resource_name) )
             resource = self.resource
         else: 
-            logging.info("Resource not found - creating resource: " + self.resource_name)
+            logging.info("Resource not found - creating a resource called {} in package {}".format(self.resource_name, self.package_name_or_id))
             resource = self.ckan.action.resource_create(
-                package_id=self.package_id,
+                package_name_or_id=self.package_name_or_id,
                 name=self.resource_name,
                 **self.resource_attributes,
             )
 
-        logging.info("Received resource")
         logging.info(resource)
 
         self.resource_id = resource["id"]
-        logging.info("Received resource id: " + self.resource_id)
+        logging.info("Resource id: " + self.resource_id)
 
-        # write the resource id to an input filepath, if the filepath is given
-        if self.resource_id_filepath and self.resource_id:
-            logging.info("Writing resource id to " + str(self.resource_id_filepath))
-            f = open( self.resource_id_filepath, "w")
-            f.write( self.resource_id )
+        # # write the resource id to an input filepath, if the filepath is given
+        # if self.resource_id_filepath and self.resource_id:
+        #     logging.info("Writing resource id to " + str(self.resource_id_filepath))
+        #     f = open( self.resource_id_filepath, "w")
+        #     f.write( self.resource_id )
 
 
         logging.info(f"Returning: {resource}")

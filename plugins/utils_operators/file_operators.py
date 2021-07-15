@@ -24,15 +24,18 @@ class DownloadFileOperator(BaseOperator):
     def __init__(
         self,
         file_url: str = None,
-        dir: str = None,
-        filename: str = None,
-        overwrite_if_exists: bool = True,
         file_url_task_id: str = None,
         file_url_task_key: str= None,
+
+        dir: str = None,
         dir_task_id: str = None,
         dir_task_key: str= None,
+        
+        filename: str = None,
         filename_task_id: str = None, 
         filename_task_key: str= None,
+
+        overwrite_if_exists: bool = True,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)

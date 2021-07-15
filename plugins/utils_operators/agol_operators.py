@@ -29,18 +29,35 @@ class AGOLDownloadFileOperator(BaseOperator):
     @apply_defaults
     def __init__(
         self,
-        file_url: str,
-        dir: str,        
-        filename: str,
+        file_url: str = None,
+        file_url_task_id: str = None,
+        file_url_task_key: str = None,
+
+        dir: str = None,
+        dir_task_id: str = None,
+        dir_task_key: str = None, 
+               
+        filename: str = None,
+        filename_task_id: str = None,
+        filename_task_key: str = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
-        self.file_url = file_url
-        self.dir = dir
-        self.filename = filename
-         
+        self.file_url, self.file_url_task_id, self.file_url_task_key = file_url, file_url_task_id, file_url_task_key
+        self.dir, self.dir_task_id, self.dir_task_key = dir, dir_task_id, dir_task_key
+        self.filename, self.filename_task_id, self.filename_task_key = filename, filename_task_id, filename_task_key
+    
+    def set_path(self, ti):
         # init the filepath to the file we will create
-        self.path = Path(self.dir) / self.filename
+        # how this is done depends on whether the operator received task ids/keys, or actual values 
+        if self.dir_task_id and self.dir_task_key:
+            self.dir = ti.xcom_pull(task_ids=self.dir_task_id, key=self.dir_task_key)
+
+        if self.filename_task_id and self.filename_task_key:
+            self.filename = ti.xcom_pull(task_ids=self.filename_task_id, key=self.filename_task_key)
+
+        self.path = Path(self.dir) / self.filename    
+        
 
     def parse_properties_from_features(self, features):
         return [ object["properties"] for object in features ]
@@ -73,6 +90,12 @@ class AGOLDownloadFileOperator(BaseOperator):
 
 
     def execute(self, context):
+        # init task instance context
+        ti = context['ti']
+
+        # create target filepath
+        self.set_path(ti)
+
         # Store data in memory
         res = self.parse_data_from_agol()
         last_modified = res["last_modified"]
