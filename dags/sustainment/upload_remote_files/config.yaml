@@ -192,10 +192,3 @@ ttc-routes-and-schedules:
   TTC Routes and Schedules Data:
     format: zip
     url: http://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/OpenData_TTC_Schedules.zip
-utility-cut-permits:
-  utility-cut-permits:
-    format: zip
-    url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp.zip
-  utility-cut-permits-documentation:
-    format: zip
-    url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp_doc.zip
