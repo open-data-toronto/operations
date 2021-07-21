@@ -335,6 +335,7 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
     def _create_empty_resource_with_fields(self, fields_path, resource_id):
         with open(fields_path, "r") as f:
             fields = json.load(f)
+            logging.info("Loaded the following fields from {}: {}".format( fields_path, fields ))
         try:
             self.ckan.action.datastore_create(id=resource_id, fields=fields)
         except:

@@ -83,7 +83,7 @@ def create_dag(dag_id,
     with dag:
         # init vars
         data_filename = dag_id + ".json"
-        fields_filename = "fields_" + dag_id + ".json"
+        fields_filepath = "/data/operations/utils/assets/fields_" + dag_id + ".json"
         agol_dataset = dataset["agol_dataset"]
         name = dataset["name"]
 
@@ -115,6 +115,15 @@ def create_dag(dag_id,
             ),
         )
 
+        backup_resource = BackupDatastoreResourceOperator(
+            task_id = "backup_resource",
+            address=CKAN,
+            apikey=CKAN_APIKEY,
+            resource_task_id="get_resource_id",
+            dir_task_id="tmp_dir"
+
+        )
+
         delete_resource = DeleteDatastoreResourceOperator(
             task_id="delete_resource",
             address = CKAN,
@@ -130,7 +139,8 @@ def create_dag(dag_id,
             resource_id_task_id = "get_resource_id",
             resource_id_task_key = "id",
             data_path = TMP_DIR / dag_id / data_filename,
-            fields_path = TMP_DIR / dag_id / fields_filename
+            fields_path_task_id = "backup_resource",
+            fields_path_task_key = "fields_file_path"
         )
 
         modify_metadata = EditResourceMetadataOperator(
@@ -158,7 +168,7 @@ def create_dag(dag_id,
         # )
 
         ## DAG EXECUTION LOGIC
-        tmp_dir >> get_agol_data >> get_resource_id >> delete_resource >> insert_records >> modify_metadata >>  delete_tmp_dir #>> message_slack 
+        tmp_dir >> get_agol_data >> get_resource_id >> backup_resource >> delete_resource >> insert_records >> modify_metadata >>  delete_tmp_dir #>> message_slack 
 
     return dag
 
