@@ -102,24 +102,42 @@ class GenericSlackOperator(BaseOperator):
     @apply_defaults
     def __init__(
         self,
-        #target_task_id: str,
-        #target_return_key: str,
-        message: str,
+        message_content: str = None,
+        message_content_task_id: str = None,
+        message_content_task_key: str = None,
+        message_header: str = None,
+        
+        
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
-        #self.target_task_id = target_task_id
-        #self.target_return_key = target_return_key
-        self.slack_msg = message
-
-        #self.slack_msg = """{{ task_instance.xcom_pull(task_ids=self.target_task_id, key=self.target_return_key) }}"""
+        self.message_header = message_header
+        self.message_content, self.message_content_task_id, self.message_content_task_key = message_content, message_content_task_id, message_content_task_key
+        self.message_content_task_key = message_content_task_key
 
     def execute(self, context):
+        ti = context['ti']
+        if self.message_content_task_id and self.message_content_task_key:
+            self.message_content = ti.xcom_pull(task_ids=self.message_content_task_id)[self.message_content_task_key]
+            
+
+        slack_message = """
+            :robot_face: *{header}*
+            {dag} 
+            {content} records loaded
+            """.format(
+            header=self.message_header,
+            dag=context.get('task_instance').dag_id,
+            content=self.message_content
+        )
+
+
+
         send_to_slack = SlackWebhookOperator( 
             task_id="slack",
             http_conn_id=SLACK_CONN_ID,
             webhook_token=slack_webhook_token,
-            message=self.slack_msg,
+            message=slack_message,
             username=USERNAME
         )
 

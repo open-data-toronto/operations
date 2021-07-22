@@ -97,7 +97,7 @@ def create_dag(dag_id,
             file_url = base_url + agol_dataset + "/FeatureServer/0/",
             dir = TMP_DIR / dag_id,
             filename = dag_id + ".json",
-            on_success_callback=task_success_slack_alert,
+            #on_success_callback=task_success_slack_alert,
         )
 
         get_resource_id = GetOrCreateResourceOperator(
@@ -154,22 +154,40 @@ def create_dag(dag_id,
             last_modified_task_key = "last_modified"           
         )
 
+        restore_backup = RestoreDatastoreResourceBackupOperator(
+            task_id = "restore_backup",
+            address = CKAN,
+            apikey = CKAN_APIKEY,
+            backup_task_id = "backup_resource",
+            trigger_rule="all_failed"
+        )
+
         delete_tmp_dir = DeleteLocalDirectoryOperator(
             task_id = "delete_tmp_dir",
             path = TMP_DIR / dag_id,
-            on_success_callback=task_success_slack_alert,
+            #on_success_callback=task_success_slack_alert,
         )
 
-        # message_slack = GenericSlackOperator(
-        #     task_id = "message_slack",
-        #     #target_task_id = "get_agol_data",
-        #     #target_return_key = "checksum",
-        #     message = get_xcoms()
-        # )
+        job_success = DummyOperator(
+            task_id = "job_success",
+            trigger_rule="all_success"
+        )
+
+        job_failed = DummyOperator(
+            task_id = "job_failed",
+            trigger_rule="all_failed"
+        )
+
+        message_slack = GenericSlackOperator(
+            task_id = "message_slack",
+            message_header = "Police Annual Statistical Report Job Succeeded",
+            message_content_task_id = "insert_records",
+            message_content_task_key = "data_inserted"
+        )
 
         ## DAG EXECUTION LOGIC
-        tmp_dir >> get_agol_data >> get_resource_id >> backup_resource >> delete_resource >> insert_records >> modify_metadata >>  delete_tmp_dir #>> message_slack 
-
+        tmp_dir >> get_agol_data >> get_resource_id >> backup_resource >> delete_resource >> insert_records >> modify_metadata >>  delete_tmp_dir >> job_success >> message_slack 
+        [modify_metadata, insert_records] >> job_failed >> restore_backup
     return dag
 
 
