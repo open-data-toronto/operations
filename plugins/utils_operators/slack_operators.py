@@ -14,7 +14,8 @@ from airflow.models import Variable
 ## Init airflow variables
 ACTIVE_ENV = Variable.get("active_env")
 SLACK_CONN_ID = 'slack' if ACTIVE_ENV == "prod" else "slack_dev"
-AIRFLOW_URL = "https://od-airflow.intra.dev-toronto.ca/" if Variable.get("active_env") == "prod" else "https://od-airflow2.intra.dev-toronto.ca/"
+AIRFLOW_URLS = {"dev": "https://od-airflow2.intra.dev-toronto.ca/", "qa": "https://od-airflow1.intra.dev-toronto.ca/", "prod": "https://od-airflow.intra.dev-toronto.ca/"}
+AIRFLOW_URL = AIRFLOW_URLS[ ACTIVE_ENV ]
 USERNAME = "Operator" if ACTIVE_ENV == "prod" else "airflow-test"
 
 slack_webhook_token = BaseHook.get_connection(SLACK_CONN_ID).password

@@ -12,6 +12,36 @@ from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from utils import agol_utils
 
+# init some vars to be used throughout this file
+# maps agol data type to ckan data type
+AGOL_CKAN_TYPE_MAP =  {
+    "sqlTypeFloat": "float",
+    "sqlTypeNVarchar": "text",
+    "sqlTypeInteger": "int",
+    "sqlTypeOther": "text",
+    "sqlTypeTimestamp2": "timestamp",
+    "sqlTypeDouble": "float",
+    "esriFieldTypeString": "text",
+    "esriFieldTypeDate": "timestamp",
+    "esriFieldTypeInteger": "int",
+    "esriFieldTypeOID": "int",
+    "esriFieldTypeDouble": "float"
+}
+
+# list of attributes that are redundant when geometry is present in a response
+DELETE_FIELDS = [
+    "longitude",
+    "latitude",
+    "shape__length",
+    "shape__area",
+    "lat",
+    "long",
+    "lon",
+    "x",
+    "y",
+    "index_"
+]
+
 
 class AGOLDownloadFileOperator(BaseOperator):
     """
@@ -56,12 +86,43 @@ class AGOLDownloadFileOperator(BaseOperator):
         if self.filename_task_id and self.filename_task_key:
             self.filename = ti.xcom_pull(task_ids=self.filename_task_id)[self.filename_task_key]
 
-        self.path = Path(self.dir) / self.filename    
+        self.path = Path(self.dir) / self.filename  
+
+    def esri_timestamp_to_datetime(self, ts):
+        #convert esri timestamp (which is unix) to ISO format datetime string
+        return  datetime.fromtimestamp(ts/1000).isoformat()  
         
 
-    def parse_properties_from_features(self, features):
-        return [ object["properties"] for object in features ]
+    def parse_properties_from_features(self, features, fields):
+        # returns properties (and geometry, if present) from the agol response
+        if "geometry" not in features[0].keys():
+            return [ object["properties"] for object in features ]
 
+        else:
+            rows = []
+            for feature in features:
+                # create a row object for each object in the json response, and flag its timestamp fields
+                row = {**feature["properties"], "geometry": json.dumps(feature["geometry"])}
+                datetime_fields = [ field["id"] for field in fields if field["type"] == "timestamp" ]
+                
+                # for every row
+                for k,v in {**row}.items():
+                    # delete field if duplicate geo field (x, y, lat, long, etc.)
+                    if k.lower() in DELETE_FIELDS:
+                        del row[k]
+                    
+                    # delete "<null>" string field
+                    if isinstance(v, str) and v.lower() == "<null>":
+                        del row[k]
+                        
+                # convert esri time data types to JSON standard (for ckan)
+                for dtf in datetime_fields:
+                    row[dtf] = self.esri_timestamp_to_datetime(row[dtf])
+                
+                rows.append(row)
+
+            return rows
+        
 
     def parse_data_from_agol(self):
         # calls agol utils to get only the features from a simple GET request to AGOL
@@ -71,8 +132,9 @@ class AGOLDownloadFileOperator(BaseOperator):
         fields = agol_utils.get_fields( self.file_url )
         
         logging.info("Received {} AGOL records".format(str(len(res))))
+        logging.info("Parsed the following fields: {}".format(fields))
 
-        return { "data": self.parse_properties_from_features(res),
+        return { "data": self.parse_properties_from_features(res, fields),
                  "last_modified": last_modified,
                  "fields": fields
                 }

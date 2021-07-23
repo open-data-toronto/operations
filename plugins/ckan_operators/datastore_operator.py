@@ -290,7 +290,7 @@ class RestoreDatastoreResourceBackupOperator(BaseOperator):
         try:
             self.ckan.action.datastore_delete(id=resource_id)
         except Exception as e:
-            logging.error(e.msg)
+            logging.error(e)
 
         result = self.ckan.action.datastore_create(
             id=resource_id, fields=fields, records=records
@@ -332,14 +332,14 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
         self.fields_path, self.fields_path_task_id, self.fields_path_task_key = fields_path, fields_path_task_id, fields_path_task_key
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
-    def _create_empty_resource_with_fields(self, fields_path, resource_id):
-        with open(fields_path, "r") as f:
-            fields = json.load(f)
-            logging.info("Loaded the following fields from {}: {}".format( fields_path, fields ))
-        try:
-            self.ckan.action.datastore_create(id=resource_id, fields=fields)
-        except:
-            logging.warning("Datastore resource already exists: " + resource_id)
+    #def _create_empty_resource_with_fields(self, fields_path, resource_id):
+    #    with open(fields_path, "r") as f:
+    #        fields = json.load(f)
+    #        logging.info("Loaded the following fields from {}: {}".format( fields_path, fields ))
+    #    try:
+    #        self.ckan.action.datastore_create(id=resource_id, fields=fields)
+    #    except:
+    #        logging.warning("Datastore resource already exists: " + resource_id)
 
     def execute(self, context):
         # init task instance from context
@@ -356,9 +356,15 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
             self.fields_path = ti.xcom_pull(task_ids=self.fields_path_task_id)[self.fields_path_task_key]
 
         # create an empty resource
-        assert self.fields_path, "Fields path, or the filepath of the fields to be inserted, must be provided!"
-        self._create_empty_resource_with_fields(self.fields_path, self.resource_id)
-        logging.info("created empty resource")
+        #assert self.fields_path, "Fields path, or the filepath of the fields to be inserted, must be provided!"
+        #self._create_empty_resource_with_fields(self.fields_path, self.resource_id)
+        
+        #logging.info("created empty resource")
+
+        # get fields from file
+        with open(self.fields_path, "r") as f:
+            fields = json.load(f)
+            logging.info("Loaded the following fields from {}: {}".format( self.fields_path, fields ))
 
         # populate that resource w data from the path provided
         assert self.data_path, "Data path, or the filepath to the data to be inserted, must be provided!"
@@ -366,9 +372,20 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
             data = json.load(f)
         logging.info("Data parsed from JSON file")
 
-        self.ckan.action.datastore_create(
-            id=self.resource_id, records=data
-        )
+        try:
+            logging.info(fields)
+            logging.info(data[0].keys())
+            self.ckan.action.datastore_create(id=self.resource_id, fields=fields, records=data)
+            logging.info("Resource created and populated from input fields and data")
+        except:
+            fields = [{"id": name} for name in data[0].keys() ]
+            logging.info(fields)
+            self.ckan.action.datastore_create(id=self.resource_id, records=data)
+            logging.info("Resource created and populated from input data alone")
+
+        #self.ckan.action.datastore_create(
+        #    id=self.resource_id, records=data
+        #)
 
         logging.info(f"Records inserted into CKAN")
 
