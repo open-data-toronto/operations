@@ -100,6 +100,13 @@ def task_failure_slack_alert(context):
 
 
 class GenericSlackOperator(BaseOperator):
+    """
+    Writes a message to the appropriate slack channel, depending on the server where this is being run
+    
+    Expects as input:
+    - message_content: a number of records moved that this operator wants to report on - can be received from another task or a hardcoded value
+    - message_header: the first line of the message, to appear in bold font
+    """
     @apply_defaults
     def __init__(
         self,

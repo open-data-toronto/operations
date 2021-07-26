@@ -127,6 +127,8 @@ class DeleteDatastoreResourceOperator(BaseOperator):
         - address: CKAN instance URL
         - apikey: CKAN API key
         - resource_id: CKAN resource id to be deleted
+
+        Resource id can be given with n actual value, or with a reference to a task_id and task_key that returns the value
     """
 
     @apply_defaults
@@ -304,7 +306,16 @@ class RestoreDatastoreResourceBackupOperator(BaseOperator):
 
 class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
     '''
+    Reads a JSON file and write the output into a CKAN datastore resource
+    
+    Expects as inputs:
+    - address - url of target ckan
+    - apikey - key needed to make authorized ckan calls
+    - resource_id - id of the resource that will receive this data
+    - data_path - location of the json data file
+    - fields_path - location of the data's fields, already in a CKAN-friendly format
 
+    All of the above, except the address and apikey, can be given with an actual value, or with a reference to a task_id and task_key that returns the value
     '''
     @apply_defaults
     def __init__(
@@ -332,14 +343,6 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
         self.fields_path, self.fields_path_task_id, self.fields_path_task_key = fields_path, fields_path_task_id, fields_path_task_key
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
-    #def _create_empty_resource_with_fields(self, fields_path, resource_id):
-    #    with open(fields_path, "r") as f:
-    #        fields = json.load(f)
-    #        logging.info("Loaded the following fields from {}: {}".format( fields_path, fields ))
-    #    try:
-    #        self.ckan.action.datastore_create(id=resource_id, fields=fields)
-    #    except:
-    #        logging.warning("Datastore resource already exists: " + resource_id)
 
     def execute(self, context):
         # init task instance from context
@@ -355,11 +358,6 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
         if self.fields_path_task_id and self.fields_path_task_key:
             self.fields_path = ti.xcom_pull(task_ids=self.fields_path_task_id)[self.fields_path_task_key]
 
-        # create an empty resource
-        #assert self.fields_path, "Fields path, or the filepath of the fields to be inserted, must be provided!"
-        #self._create_empty_resource_with_fields(self.fields_path, self.resource_id)
-        
-        #logging.info("created empty resource")
 
         # get fields from file
         with open(self.fields_path, "r") as f:
@@ -382,10 +380,6 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
             logging.info(fields)
             self.ckan.action.datastore_create(id=self.resource_id, records=data)
             logging.info("Resource created and populated from input data alone")
-
-        #self.ckan.action.datastore_create(
-        #    id=self.resource_id, records=data
-        #)
 
         logging.info(f"Records inserted into CKAN")
 

@@ -49,6 +49,12 @@ class AGOLDownloadFileOperator(BaseOperator):
     This will always overwrite an existing file, if it's there.
     This is because we are not interested in versioning AGOL data - only pulling the latest from AGOL.
 
+    Expects the following inputs:
+        - file_url - reference to the url where this operator will grab the data
+        - dir - directory where the response from the above will be saved
+        - filename - name of the file to be made
+        each of the three above can be given with an actual value, or with a reference to a task_id and task_key that returns the value
+
     Returns a dictionary containing:
         - path: path to saved file containing data
         - last_modified: timestamp file was last_modified (from the request)

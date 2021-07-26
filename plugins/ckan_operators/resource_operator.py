@@ -9,7 +9,17 @@ from datetime import datetime
 
 class GetOrCreateResourceOperator(BaseOperator):
     """
-    Returns CKAN resource object, or creates it if it does not exist 
+    Returns CKAN resource object, or creates it if it does not exist
+
+    Expects as inputs:
+    - address: CKAN instance URL
+    - apikey: CKAN API key 
+    - package_name_or_id: the name or id of the package wherein we'll look for/make a resource
+    - resource_name: the name of the resource this operator will look for/make
+    - resource_id: the resource_id this operator will look for/make
+    - resource_attributes: the attributes that will be in a resource if we create it
+
+    Each of the above (except resource attributes, address and apikey) can be given with an actual value or with a reference to a task_id and task_key that returns the value
     """
 
     @apply_defaults
@@ -102,6 +112,19 @@ class GetOrCreateResourceOperator(BaseOperator):
         return resource
 
 class EditResourceMetadataOperator(BaseOperator):
+    """
+    Edits a resource's name or last_modified date
+
+    Expects as inputs:
+    - address: CKAN instance URL
+    - apikey: CKAN API key
+    - resource_id - the id of the ckan resource whose metadata will be updated
+    - new_resource_name - the new name of the resource
+    - last_modified - the last_modified date of the resource
+
+    Only one of name or last_modified is required
+    either of these can be given with an actual value, or with a reference to a task_id and task_key that returns the value
+    """
     @apply_defaults
     def __init__(
         self,
