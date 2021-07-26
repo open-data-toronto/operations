@@ -14,6 +14,7 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from utils import airflow_utils, ckan_utils
+from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
 
 PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
 
@@ -434,7 +435,7 @@ def create_dag(d):
         d["dag_id"],
         default_args=airflow_utils.get_default_args(
             {
-                "on_failure_callback": send_failure_msg,
+                "on_failure_callback": task_failure_slack_alert,
                 "start_date": d["start_date"],
                 "retries": 5,
                 "retry_delay": timedelta(minutes=15),

@@ -10,6 +10,8 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
+from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
+
 
 # from airflow.utils.task_group import TaskGroup
 from ckan_operators.datastore_operator import (
@@ -83,7 +85,7 @@ with DAG(
     PACKAGE_NAME,
     default_args=airflow_utils.get_default_args(
         {
-            "on_failure_callback": send_failure_message,
+            "on_failure_callback": task_failure_slack_alert,
             "start_date": days_ago(1),
             "retries": 0,
             # "retry_delay": timedelta(minutes=3),
