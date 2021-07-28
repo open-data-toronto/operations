@@ -24,4 +24,4 @@ down:
 testing:
 	pwd
 	python --version
-	python -m pytest
+	pytest
