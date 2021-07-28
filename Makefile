@@ -23,4 +23,4 @@ down:
 testing:
 	pwd
 	python --version
-	pytest --import-mode=importlib
+	pytest
