@@ -16,9 +16,6 @@ setup:
 
 	ls -la
 
-	airflow scheduler status
-
-
 
 down:
 	echo "down"
