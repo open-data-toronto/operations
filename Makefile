@@ -16,6 +16,10 @@ setup:
 
 	ls -la
 
+	airflow jobs check --job-type SchedulerJob --allow-multiple --limit 100
+
+	airflwo db check
+
 
 
 down:
