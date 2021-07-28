@@ -10,7 +10,7 @@ from datetime import datetime
 
 from airflow import DAG
 from airflow.models import TaskInstance
-from agol_operators import AGOLDownloadFileOperator
+from utils_operators.agol_operators import AGOLDownloadFileOperator
 
 # init the base url, without query parameters, of where the data will come from
 file_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CENSUS_NEIGHBORHOOD/FeatureServer/0/"
