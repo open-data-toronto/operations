@@ -11,7 +11,7 @@ from airflow.models import TaskInstance
 from utils_operators.file_operators import DownloadFileOperator
 
 # init the url where the data will come from
-file_url = "https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_measures/"
+file_url = "https://realpython.com/python-modules-packages/#python-packages"
 file_url_content = requests.get(file_url).text
 
 # init the directory where the data will be written to
