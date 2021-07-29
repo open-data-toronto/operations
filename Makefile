@@ -1,5 +1,3 @@
-include .env
-
 
 setup:
 	export AIRFLOW_HOME=~/airflow
