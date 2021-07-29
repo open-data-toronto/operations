@@ -37,9 +37,6 @@ jobs:
         pip install pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.0.2/constraints-3.7.txt"; fi
 
-    - name: flake8 Lint
-      uses: py-actions/flake8@v1
-
     - name: Create airflow env
       run: make setup
 
