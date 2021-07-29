@@ -368,18 +368,13 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
         assert self.data_path, "Data path, or the filepath to the data to be inserted, must be provided!"
         with open(self.data_path) as f:
             data = json.load(f)
+        
         logging.info("Data parsed from JSON file")
+        logging.info("Fields from fields file: " + str(fields))
+        logging.info("Fields from data file: " + str(data[0].keys()))
 
-        try:
-            logging.info(fields)
-            logging.info(data[0].keys())
-            self.ckan.action.datastore_create(id=self.resource_id, fields=fields, records=data)
-            logging.info("Resource created and populated from input fields and data")
-        except:
-            fields = [{"id": name} for name in data[0].keys() ]
-            logging.info(fields)
-            self.ckan.action.datastore_create(id=self.resource_id, records=data)
-            logging.info("Resource created and populated from input data alone")
+        self.ckan.action.datastore_create(id=self.resource_id, fields=fields, records=data)
+        logging.info("Resource created and populated from input fields and data")
 
         logging.info(f"Records inserted into CKAN")
 
