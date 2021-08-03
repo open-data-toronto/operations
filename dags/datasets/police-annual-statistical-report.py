@@ -81,7 +81,6 @@ def create_dag(dag_id,
     with dag:
         # init vars
         data_filename = dag_id + ".json"
-        fields_filepath = "/data/operations/utils/assets/fields_" + dag_id + ".json"
         agol_dataset = dataset["agol_dataset"]
         name = dataset["name"]
 
