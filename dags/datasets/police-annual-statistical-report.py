@@ -37,9 +37,9 @@ CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]
 
 TMP_DIR = Path(Variable.get("tmp_dir"))
 
-base_url = "https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/"
+BASE_URL = "https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/"
 
-datasets = [
+DATASETS = [
     {"schema_change": False, "name": "Reported Crimes", "tps_table_code": "ASR-RC-TBL-001", "package_id": "police-annual-statistical-report-reported-crimes", "agol_dataset": "Reported_Crimes_ASR_RC_TBL_001"},
     {"schema_change": False, "name": "Victims of Crime", "tps_table_code": "ASR-VC-TBL-001", "package_id": "police-annual-statistical-report-victims-of-crime", "agol_dataset": "Victims_of_Crime_ASR_VC_TBL_001"},
     {"schema_change": False, "name": "Search of Persons", "tps_table_code": "ASR-SP-TBL-001", "package_id": "police-annual-statistical-report-search-of-persons", "agol_dataset": "Search_of_Persons_ASR_SP_TBL_001"},
@@ -57,13 +57,11 @@ datasets = [
     {"schema_change": False, "name": "Total Public Complaints", "tps_table_code": "ASR-PCF-TBL-001", "package_id": "police-annual-statistical-report-total-public-complaints", "agol_dataset": "Total_Public_Complaints_(ASR_PCF_TBL_001)"},
     {"schema_change": False, "name": "Investigated Alleged Misconduct", "tps_table_code": "ASR-PCF-TBL-002", "package_id": "police-annual-statistical-report-investigated-alleged-misconduct", "agol_dataset": "Investigated_Alleged_Misconduct__ASR_PCF_TBL_002"},
     {"schema_change": False, "name": "Complaint Dispositions", "tps_table_code": "ASR-PCF-TBL-003", "package_id": "police-annual-statistical-report-complaint-dispositions", "agol_dataset": "Complaint_Dispositions__ASR_PCF_TBL_003"},
-    #{"name": "Regulated Interactions", "tps_table_code": "ASR-RI-TBL-001", "package_id": "police-annual-statistical-report-regulated-interactions", "agol_dataset": "Regulated_Interactions_ASR_RI_TBL_001"},
-    #{"name": "Regulated Interactions Demographics", "tps_table_code": "ASR-RI-TBL-001", "package_id": "police-annual-statistical-report-regulated-interactions-demographics", "agol_dataset": "Regulated_Interactions_Demographics_ASR_RI_TBL_001"},
     {"schema_change": False, "name": "Administrative", "tps_table_code": "ASR-AD-TBL-001", "package_id": "police-annual-statistical-report-administrative", "agol_dataset": "Administrative_ASR_AD_TBL_001"},
     {"schema_change": False, "name": "Miscellaneous Data", "tps_table_code": "ASR-MISC-TBL-001", "package_id": "police-annual-statistical-report-miscellaneous-data", "agol_dataset": "Miscellaneous_Data_ASR_MISC_TBL_001"}
 ]
 
-common_job_settings = {
+COMMON_JOB_SETTINGS = {
     "description": "Toronto Police Service - Annual Services Report for dataset",
     "start_date": datetime(2021, 6, 30, 0, 0, 0),
     "schedule": "@once",
