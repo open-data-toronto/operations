@@ -99,10 +99,9 @@ def create_dag(dag_id,
 
         get_agol_data = AGOLDownloadFileOperator(
             task_id = "get_agol_data",
-            file_url = base_url + agol_dataset + "/FeatureServer/0/",
+            file_url = BASE_URL + agol_dataset + "/FeatureServer/0/",
             dir = TMP_DIR / dag_id,
             filename = dag_id + ".json",
-            #on_success_callback=task_success_slack_alert,
         )
 
         get_resource_id = GetOrCreateResourceOperator(
@@ -111,7 +110,6 @@ def create_dag(dag_id,
             apikey=CKAN_APIKEY,
             package_name_or_id=dag_id,
             resource_name=name,
-            #resource_id_filepath = TMP_DIR / dag_id / "resource_id.txt",
             resource_attributes=dict(
                 format="csv",
                 is_preview=True,
@@ -169,7 +167,6 @@ def create_dag(dag_id,
         delete_tmp_dir = DeleteLocalDirectoryOperator(
             task_id = "delete_tmp_dir",
             path = TMP_DIR / dag_id,
-            #on_success_callback=task_success_slack_alert,
         )
 
         job_success = DummyOperator(
@@ -195,10 +192,8 @@ def create_dag(dag_id,
     return dag
 
 
-# build a dag for each number in range(10)
-for dataset in datasets:
+for dataset in DATASETS:
     dag_id = dataset['package_id']
-    #agol_dataset = dataset['agol_dataset']
 
     schedule = '@once'
     default_args = airflow_utils.get_default_args(
@@ -211,7 +206,7 @@ for dataset in datasets:
             "retries": 1,
             "on_failure_callback": task_failure_slack_alert,
             "retries": 0,
-            "start_date": common_job_settings["start_date"],
+            "start_date": COMMON_JOB_SETTINGS["start_date"],
         }
     )
     globals()[dag_id] = create_dag(dag_id,
