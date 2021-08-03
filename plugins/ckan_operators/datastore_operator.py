@@ -401,8 +401,6 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
         self.ckan.action.datastore_create(id=self.resource_id, fields=fields, records=data)
         logging.info("Resource created and populated from input fields and data")
 
-        logging.info(f"Records inserted into CKAN")
-
         return {"resource_id": self.resource_id, "data_inserted": len(data)}
 
             

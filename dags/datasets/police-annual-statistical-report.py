@@ -99,7 +99,7 @@ def create_dag(dag_id,
 
         get_agol_data = AGOLDownloadFileOperator(
             task_id = "get_agol_data",
-            file_url = BASE_URL + agol_dataset + "/FeatureServer/0/",
+            request_url = BASE_URL + agol_dataset + "/FeatureServer/0/",
             dir = TMP_DIR / dag_id,
             filename = dag_id + ".json",
         )
