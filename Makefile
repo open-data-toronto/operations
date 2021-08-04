@@ -19,6 +19,7 @@ testing:
 docs:
 	pwd
 	ls -la
+	cd plugins
 	pdoc /home/runner/work/operations/operations/plugins --html
 	mv html/plugins operations/docs
 	ls operations/docs
