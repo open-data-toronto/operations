@@ -13,8 +13,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  # This workflow contains a single job called "make-docs"
+  make-docs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
@@ -31,9 +31,6 @@ jobs:
 
     - name: Install Dependencies
       run: make install-dependencies
-
-    - name: Create Airflow Environment
-      run: make setup
 
     - name: Create Documentation
       run: make docs
