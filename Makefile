@@ -21,8 +21,7 @@ docs:
 	ls -la
 	cd plugins
 	pdoc plugins --html
-	mv html/plugins operations/docs
-	ls operations/docs
+	pwd
 
 	cd operations
 	git status
