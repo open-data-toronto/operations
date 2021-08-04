@@ -46,11 +46,14 @@ jobs:
     - name: Create Documentation
       run: make docs
 
-    - name: Push Documentation to docs Branch
-        uses: s0/git-publish-subdir-action@develop
-        env:
-          REPO: self
-          BRANCH: docs # The branch name where you want to push the assets
-          FOLDER: docs # The directory where your assets are generated
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
-          MESSAGE: "Build: ({sha}) Updating Documentation to match latest docstrings" # The commit message
+    - name: Commit Documentation
+      run: |
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -m "Add changes" -a
+    
+    - name: Push Documentation
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: docs
