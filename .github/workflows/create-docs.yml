@@ -1,13 +1,11 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Docs
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ ci_cd_testing ]
-  pull_request:
     branches: [ main, ci_cd_testing ]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -33,9 +31,19 @@ jobs:
 
     - name: Install Dependencies
       run: make install-dependencies
-        
+
     - name: Create Airflow Environment
       run: make setup
 
-    - name: Run Tests
-      run: make testing
+    - name: Create Documentation
+      run: make docs
+
+    - name: Commit Documentation
+      run: make docs-commit
+    
+    - name: Push Documentation
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: docs
+        force: true

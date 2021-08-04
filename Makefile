@@ -1,3 +1,8 @@
+install-dependencies:
+	python -m pip install --upgrade pip
+	pip install pytest
+	if [ -f requirements.txt ]; then pip install -r requirements.txt --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.0.2/constraints-3.7.txt"; fi
+
 
 setup:
 	export AIRFLOW_HOME=~/airflow
@@ -5,23 +10,17 @@ setup:
 	airflow db init
 	airflow webserver --port 8080 -D
 	airflow scheduler -D
-	pwd
-	ls -la
-
-down:
-	echo "down"
 
 testing:
-	pwd
 	python --version
 	pytest
 
 docs:
-	pwd
-	ls -la
 	cd plugins
 	pdoc plugins --html
 	mv html/plugins /home/runner/work/operations/operations/docs
 
-	git status
-	git branch
+docs-commit:
+	git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+	git config --local user.name "github-actions[bot]"
+	git commit -m "Add changes to docs" -a
