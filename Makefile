@@ -17,7 +17,6 @@ testing:
 	pytest
 
 docs:
-	export PYTHONPATH=/home/runner/work/operations/operations/plugins
 	pwd
 	ls -la
 	pdoc /home/runner/work/operations/operations/plugins --html
