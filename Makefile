@@ -17,6 +17,7 @@ testing:
 	pytest
 
 docs:
+	export PYTHONPATH=/home/runner/work/operations/operations/plugins
 	pwd
 	ls -la
 	cd ..
