@@ -17,8 +17,12 @@ testing:
 	pytest
 
 docs:
+	pwd
+	ls -la
 	cd ..
-	pdoc operations/plugins --html
+	pwd
+	ls -la
+	pdoc /home/runner/work/operations/operations/plugins --html
 	mv html/plugins operations/docs
 	ls operations/docs
 
