@@ -21,6 +21,9 @@ docs:
 	ls -la
 	cd plugins
 	pdoc plugins --html
-	pwd
+	mv html/plugins /home/runner/work/operations/operations/docs
 
 	git status
+	git add docs
+	git status
+	git branch
