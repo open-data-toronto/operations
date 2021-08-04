@@ -20,9 +20,6 @@ docs:
 	export PYTHONPATH=/home/runner/work/operations/operations/plugins
 	pwd
 	ls -la
-	cd ..
-	pwd
-	ls -la
 	pdoc /home/runner/work/operations/operations/plugins --html
 	mv html/plugins operations/docs
 	ls operations/docs
