@@ -19,12 +19,9 @@ testing:
 docs:
 	pwd
 	ls -la
-	git checkout docs
 	cd plugins
 	pdoc plugins --html
 	mv html/plugins /home/runner/work/operations/operations/docs
 
-	git status
-	git add docs
 	git status
 	git branch
