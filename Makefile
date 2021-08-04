@@ -23,5 +23,4 @@ docs:
 	pdoc plugins --html
 	pwd
 
-	cd operations
 	git status
