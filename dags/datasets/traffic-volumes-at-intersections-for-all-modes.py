@@ -15,6 +15,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import BranchPythonOperator, PythonOperator
 from dateutil import parser
 from utils import airflow_utils, ckan_utils
+from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
 
 job_settings = {
     "description": "Take data files from Transportation's flashscrow endpoint https://flashcrow-etladmin.intra.dev-toronto.ca/open_data/tmcs into CKAN",  # noqa: E501
@@ -594,7 +595,7 @@ def get_package():
 
 
 default_args = airflow_utils.get_default_args(
-    {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"]}
+    {"on_failure_callback": task_failure_slack_alert,"start_date": job_settings["start_date"]}
 )
 
 with DAG(

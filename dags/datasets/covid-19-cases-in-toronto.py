@@ -13,6 +13,7 @@ from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
+from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
 from utils import airflow_utils, ckan_utils
 
 PACKAGE_NAME = "covid-19-cases-in-toronto"
@@ -33,7 +34,7 @@ with DAG(
     PACKAGE_NAME,
     default_args=airflow_utils.get_default_args(
         {
-            "on_failure_callback": send_failure_msg,
+            "on_failure_callback": task_failure_slack_alert,
             "start_date": datetime(2020, 11, 24, 13, 35, 0),
             "retries": 3,
             "retry_delay": timedelta(minutes=3),
