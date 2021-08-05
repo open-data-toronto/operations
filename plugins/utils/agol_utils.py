@@ -1,5 +1,36 @@
 import requests
+import logging
+import json
 
+# init some vars to be used throughout this file
+# maps agol data type to ckan data type
+AGOL_CKAN_TYPE_MAP =  {
+    "sqlTypeFloat": "float",
+    "sqlTypeNVarchar": "text",
+    "sqlTypeInteger": "int",
+    "sqlTypeOther": "text",
+    "sqlTypeTimestamp2": "timestamp",
+    "sqlTypeDouble": "float",
+    "esriFieldTypeString": "text",
+    "esriFieldTypeDate": "timestamp",
+    "esriFieldTypeInteger": "int",
+    "esriFieldTypeOID": "int",
+    "esriFieldTypeDouble": "float"
+}
+
+# list of attributes that are redundant when geometry is present in a response
+DELETE_FIELDS = [
+    "longitude",
+    "latitude",
+    "shape__length",
+    "shape__area",
+    "lat",
+    "long",
+    "lon",
+    "x",
+    "y",
+    "index_"
+]
 
 def convert_dtypes_to_ckan(agol_fields):
     esri_to_ckan_map = {
@@ -32,7 +63,7 @@ def convert_dtypes_to_ckan(agol_fields):
     return ckan_fields
 
 def get_features(query_url):
-    print(f"  getting features from AGOL")
+    logging.info(f"  getting features from AGOL")
 
     features = []
     overflow = True
@@ -47,20 +78,29 @@ def get_features(query_url):
     }
     
     while overflow is True:
+        # As long as there are more records to get on another request
+        
+        # make a request url 
         params = "&".join([ f"{k}={v}" for k,v in query_string_params.items() ])
         url = "https://" + "/".join([ url_part for url_part in f"{query_url}/query?{params}".replace("https://", "").split("/") if url_part ])
-        
-        print(url)
+        logging.info(url)
 
+        # make the request
         res = requests.get(url)
         assert res.status_code == 200, f"Status code response: {res.status_code}"
         
-        geojson = res.json()
-        features.extend(geojson["features"])
+        # parse the response
+        geojson = json.loads(res.text)
+        # get the properties out of each returned object
+        #data = [ object["properties"] for object in geojson["features"] ]
+        features.extend( geojson["features"] )
+        
+        # prepare the next request, if needed
         overflow = "properties" in geojson and "exceededTransferLimit" in geojson["properties"] and geojson["properties"]["exceededTransferLimit"] is True
         offset = offset + len(geojson["features"])
         query_string_params["resultOffset"] = offset
 
+    logging.info("Returned {} AGOL records".format(str(len(features)) ))
     return features
 
 def get_data(endpoint):
@@ -85,7 +125,6 @@ def get_data(endpoint):
     return data
 
 def get_fields(query_url):
-    print(f"  getting fields from AGOL")
 
     query_string_params = {
         "where": "1=1",
@@ -100,14 +139,18 @@ def get_fields(query_url):
     res = requests.get(url)
     assert res.status_code == 200, f"Status code response: {res.status_code}"
     
-    return res.json()["fields"]
+    ckan_fields = []
+    
+    for field in res.json()["fields"]:
+        if field["name"].lower() not in DELETE_FIELDS:
+            ckan_fields.append({
+                "id": field["name"],
+                "type": AGOL_CKAN_TYPE_MAP[field["type"]],
+            })
 
-
-#def get_fields(endpoint):
-#    res = requests.get(f"{endpoint}&resultRecordCount=1").json()
-#    fields = res.get("fields")
-#
-#    return fields
+    logging.info("Utils parsed the following fields: {}".format(ckan_fields))
+        
+    return ckan_fields 
 
 
 def remove_geo_columns(df):
