@@ -32,7 +32,7 @@ from utils_operators.directory_operator import (
 )
 from utils_operators.file_operators import DownloadFileOperator
 
-PACKAGE_NAME = "fatal-and-suspected-non-fatal-opioid-overdoses-in-the-shelter-system"
+PACKAGE_NAME = "fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system"
 
 RESOURCES = {
     "summary-suspected-opiod-overdoses-in-shelters": {
