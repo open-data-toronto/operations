@@ -42,7 +42,6 @@ class GetOrCreateResourceOperator(BaseOperator):
 
 
         resource_attributes: str = None,
-        #resource_id_filepath = None,
 
         **kwargs,
     ) -> None:
@@ -52,8 +51,6 @@ class GetOrCreateResourceOperator(BaseOperator):
         self.resource_id, self.resource_id_task_id, self.resource_id_task_key = resource_id, resource_id_task_id, resource_id_task_key
 
         self.resource_attributes = resource_attributes
-        # self.resource = None
-        # self.resource_id_filepath = resource_id_filepath
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def _resource_exists(self):
@@ -80,7 +77,7 @@ class GetOrCreateResourceOperator(BaseOperator):
     def execute(self, context):
         # get resource id from a task if its provided by another task
         if self.resource_id_task_id and self.resource_id_task_key:
-            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id, key=self.resource_id_task_key)
+            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[self.resource_id_task_key]
         
         if self.resource_id is not None:
             logging.info("Resource ID used to get resource")
@@ -96,19 +93,10 @@ class GetOrCreateResourceOperator(BaseOperator):
                 **self.resource_attributes,
             )
 
-        logging.info(resource)
 
         self.resource_id = resource["id"]
-        logging.info("Resource id: " + self.resource_id)
-
-        # # write the resource id to an input filepath, if the filepath is given
-        # if self.resource_id_filepath and self.resource_id:
-        #     logging.info("Writing resource id to " + str(self.resource_id_filepath))
-        #     f = open( self.resource_id_filepath, "w")
-        #     f.write( self.resource_id )
-
-
         logging.info(f"Returning: {resource}")
+
         return resource
 
 class EditResourceMetadataOperator(BaseOperator):

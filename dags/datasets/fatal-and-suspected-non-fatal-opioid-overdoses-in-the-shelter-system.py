@@ -201,10 +201,7 @@ with DAG(
         if df.shape[0] == 0:
             return f"{prefix}_data_is_new"
 
-        checksum = hashlib.md5()
-        checksum.update(df.to_csv(index=False).encode("utf-8"))
-        checksum = checksum.hexdigest()
-
+        checksum = data_file_info["checksum"]
         for f in os.listdir(backups_dir):
             if not os.path.isfile(backups_dir / f):
                 continue
@@ -275,6 +272,7 @@ with DAG(
 
     ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
     active_env = Variable.get("active_env")
+    active_env = "qa"
     ckan_address = ckan_creds[active_env]["address"]
     ckan_apikey = ckan_creds[active_env]["apikey"]
     summary_resource = RESOURCES.pop("summary-suspected-opiod-overdoses-in-shelters")
@@ -328,7 +326,7 @@ with DAG(
         task_id="transform_summary_data",
         python_callable=transform_data,
         op_kwargs={
-            "download_file_task_id": "get_granular_data",
+            "download_file_task_id": "get_summary_data",
             "resource_name": summary_resource["name"],
         },
     )
