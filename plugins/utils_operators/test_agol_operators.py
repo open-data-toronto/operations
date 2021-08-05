@@ -69,14 +69,16 @@ def test_execute():
     with open( output["fields_path"] ) as f:
         fields_data = json.load(f)
 
-    with open( "test_agol_operators_fields.json" ) as f:
+    print(os.getcwd())
+
+    with open( current_folder + "/test_agol_operators_fields.json" ) as f:
         test_fields_data = json.load(f)
 
     assert fields_data == test_fields_data
     
 
     # checks if checksums match
-    with open( "test_agol_operators_checksum.txt" ) as f:
+    with open( current_folder + "/test_agol_operators_checksum.txt" ) as f:
         file_checksum = f.read()
     
     assert output["checksum"] == file_checksum
