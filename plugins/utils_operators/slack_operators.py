@@ -104,24 +104,28 @@ class GenericSlackOperator(BaseOperator):
     Writes a message to the appropriate slack channel, depending on the server where this is being run
     
     Expects as input:
-    - message_content: a number of records moved that this operator wants to report on - can be received from another task or a hardcoded value
-    - message_header: the first line of the message, to appear in bold font
+    message_header
+    :   the first line of the message, to appear in bold font
+    message_content
+    :   a number of records moved that this operator wants to report on - can be received from another task or a hardcoded value
+    message_body
+    :   the text that comes after the message content - a hardcoded value to add detail to the message_content
     """
     @apply_defaults
     def __init__(
         self,
+        message_body: str = None,
         message_content: str = None,
         message_content_task_id: str = None,
         message_content_task_key: str = None,
         message_header: str = None,
-        
-        
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self.message_header = message_header
         self.message_content, self.message_content_task_id, self.message_content_task_key = message_content, message_content_task_id, message_content_task_key
         self.message_content_task_key = message_content_task_key
+        self.message_body = message_body
 
     def execute(self, context):
         ti = context['ti']
@@ -132,11 +136,12 @@ class GenericSlackOperator(BaseOperator):
         slack_message = """
             :robot_face: *{header}*
             {dag} 
-            {content} records loaded
+            {content} {body}
             """.format(
             header=self.message_header,
             dag=context.get('task_instance').dag_id,
-            content=self.message_content
+            content=self.message_content,
+            body=self.message_body
         )
 
 
