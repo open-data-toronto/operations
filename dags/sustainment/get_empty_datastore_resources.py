@@ -58,7 +58,7 @@ with DAG(
     def get_record_counts(**kwargs):
         ckan = ckanapi.RemoteCKAN(address=kwargs["address"], apikey=kwargs["apikey"])
 
-        packages = kwargs.pop("ti").xcom_pull(task_ids="get_all_packages")
+        packages = kwargs.pop("ti").xcom_pull(task_ids="get_all_packages")["packages"]
         datastore_resources = []
 
         for p in packages:

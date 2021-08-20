@@ -14,7 +14,8 @@ from airflow.models import Variable
 ## Init airflow variables
 ACTIVE_ENV = Variable.get("active_env")
 SLACK_CONN_ID = 'slack' if ACTIVE_ENV == "prod" else "slack_dev"
-AIRFLOW_URL = "https://od-airflow.intra.dev-toronto.ca/" if Variable.get("active_env") == "prod" else "https://od-airflow2.intra.dev-toronto.ca/"
+AIRFLOW_URLS = {"dev": "https://od-airflow2.intra.dev-toronto.ca/", "qa": "https://od-airflow1.intra.dev-toronto.ca/", "prod": "https://od-airflow.intra.dev-toronto.ca/"}
+AIRFLOW_URL = AIRFLOW_URLS[ ACTIVE_ENV ]
 USERNAME = "Operator" if ACTIVE_ENV == "prod" else "airflow-test"
 
 slack_webhook_token = BaseHook.get_connection(SLACK_CONN_ID).password
@@ -99,27 +100,57 @@ def task_failure_slack_alert(context):
 
 
 class GenericSlackOperator(BaseOperator):
+    """
+    Writes a message to the appropriate slack channel, depending on the server where this is being run
+    
+    Expects as input:
+    message_header
+    :   the first line of the message, to appear in bold font
+    message_content
+    :   a number of records moved that this operator wants to report on - can be received from another task or a hardcoded value
+    message_body
+    :   the text that comes after the message content - a hardcoded value to add detail to the message_content
+    """
     @apply_defaults
     def __init__(
         self,
-        #target_task_id: str,
-        #target_return_key: str,
-        message: str,
+        message_body: str = None,
+        message_content: str = None,
+        message_content_task_id: str = None,
+        message_content_task_key: str = None,
+        message_header: str = None,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
-        #self.target_task_id = target_task_id
-        #self.target_return_key = target_return_key
-        self.slack_msg = message
-
-        #self.slack_msg = """{{ task_instance.xcom_pull(task_ids=self.target_task_id, key=self.target_return_key) }}"""
+        self.message_header = message_header
+        self.message_content, self.message_content_task_id, self.message_content_task_key = message_content, message_content_task_id, message_content_task_key
+        self.message_content_task_key = message_content_task_key
+        self.message_body = message_body
 
     def execute(self, context):
+        ti = context['ti']
+        if self.message_content_task_id and self.message_content_task_key:
+            self.message_content = ti.xcom_pull(task_ids=self.message_content_task_id)[self.message_content_task_key]
+            
+
+        slack_message = """
+            :robot_face: *{header}*
+            {dag} 
+            {content} {body}
+            """.format(
+            header=self.message_header,
+            dag=context.get('task_instance').dag_id,
+            content=self.message_content,
+            body=self.message_body
+        )
+
+
+
         send_to_slack = SlackWebhookOperator( 
             task_id="slack",
             http_conn_id=SLACK_CONN_ID,
             webhook_token=slack_webhook_token,
-            message=self.slack_msg,
+            message=slack_message,
             username=USERNAME
         )
 

@@ -2,6 +2,36 @@ import requests
 import logging
 import json
 
+# init some vars to be used throughout this file
+# maps agol data type to ckan data type
+AGOL_CKAN_TYPE_MAP =  {
+    "sqlTypeFloat": "float",
+    "sqlTypeNVarchar": "text",
+    "sqlTypeInteger": "int",
+    "sqlTypeOther": "text",
+    "sqlTypeTimestamp2": "timestamp",
+    "sqlTypeDouble": "float",
+    "esriFieldTypeString": "text",
+    "esriFieldTypeDate": "timestamp",
+    "esriFieldTypeInteger": "int",
+    "esriFieldTypeOID": "int",
+    "esriFieldTypeDouble": "float"
+}
+
+# list of attributes that are redundant when geometry is present in a response
+DELETE_FIELDS = [
+    "longitude",
+    "latitude",
+    "shape__length",
+    "shape__area",
+    "lat",
+    "long",
+    "lon",
+    "x",
+    "y",
+    "index_"
+]
+
 def convert_dtypes_to_ckan(agol_fields):
     esri_to_ckan_map = {
         "esriFieldTypeInteger": "int",
@@ -95,7 +125,6 @@ def get_data(endpoint):
     return data
 
 def get_fields(query_url):
-    print(f"  getting fields from AGOL")
 
     query_string_params = {
         "where": "1=1",
@@ -110,16 +139,18 @@ def get_fields(query_url):
     res = requests.get(url)
     assert res.status_code == 200, f"Status code response: {res.status_code}"
     
-    #fields = list( json.loads(res.text)["features"][0].keys() )
+    ckan_fields = []
+    
+    for field in res.json()["fields"]:
+        if field["name"].lower() not in DELETE_FIELDS:
+            ckan_fields.append({
+                "id": field["name"],
+                "type": AGOL_CKAN_TYPE_MAP[field["type"]],
+            })
 
-    return res.json()["fields"]
-
-
-#def get_fields(endpoint):
-#    res = requests.get(f"{endpoint}&resultRecordCount=1").json()
-#    fields = res.get("fields")
-#
-#    return fields
+    logging.info("Utils parsed the following fields: {}".format(ckan_fields))
+        
+    return ckan_fields 
 
 
 def remove_geo_columns(df):

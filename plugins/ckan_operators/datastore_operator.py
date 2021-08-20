@@ -127,6 +127,11 @@ class DeleteDatastoreResourceOperator(BaseOperator):
         - address: CKAN instance URL
         - apikey: CKAN API key
         - resource_id: CKAN resource id to be deleted
+
+        Resource id can be given with n actual value, or with a reference to a task_id and task_key that returns the value
+    
+        Note: Deleting the entire resource also deletes the data dictionary (i.e. schema, field definitions and types). 
+        To keep the existing schema, delete the datastore resource records instead by using the DeleteDatastoreResourceRecordsOperator - this keeps the schema.
     """
 
     @apply_defaults
@@ -141,7 +146,6 @@ class DeleteDatastoreResourceOperator(BaseOperator):
     ) -> None:
     # init ckan client and resource_id to be truncated
         super().__init__(**kwargs)
-        #self.resource_id_filepath = resource_id_filepath
         self.resource_id, self.resource_id_task_id, self.resource_id_task_key = resource_id, resource_id_task_id, resource_id_task_key
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
@@ -157,15 +161,14 @@ class DeleteDatastoreResourceOperator(BaseOperator):
             logging.info(self.resource)
             logging.info("Pulled {} from {} via xcom".format(self.resource_id, self.resource_id_task_id) )
 
-        assert self.resource_id, "Resource id is empty! This operator needs a way to get the resource id in order to delete the right datastore resource!"
+        assert self.resource_id, "Resource ID is empty! This operator needs a way to get the resource ID in order to delete the right datastore resource!"
         # Delete the resource
         try:
             self.ckan.action.datastore_delete(id=self.resource_id)
             logging.info("Deleted " + self.resource_id)
 
         except Exception as e:
-            logging.error("Error while trying to delete resource")
-            logging.error(e)
+            logging.error("Error while trying to delete resource: " + e)
 
 
 
@@ -290,7 +293,7 @@ class RestoreDatastoreResourceBackupOperator(BaseOperator):
         try:
             self.ckan.action.datastore_delete(id=resource_id)
         except Exception as e:
-            logging.error(e.msg)
+            logging.error(e)
 
         result = self.ckan.action.datastore_create(
             id=resource_id, fields=fields, records=records
@@ -304,7 +307,40 @@ class RestoreDatastoreResourceBackupOperator(BaseOperator):
 
 class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
     '''
+    Reads a JSON file and write the output into a CKAN datastore resource.
+    JSON must be a list of dicts, with each dict being a record, like the following:
+    [
+        { "column1": "string", "column2": 100, "column3": true},
+        { "column1": "some other string", "column2": 34, "column3": false}
+    ]
 
+    The fields must match the CKAN standard, like the following:
+    [
+        {
+            "id": "column1", 
+            "type": "text" ,
+            "info": {
+            "notes": "Description of the field goes here. Info key is optional."
+            }
+        },
+        {
+            "id": "column2", 
+            "type": "int"
+        },
+        {
+            "id": "column3", 
+            "type": "bool"
+        }
+    ]
+    
+    Expects as inputs:
+    - address - url of target ckan
+    - apikey - key needed to make authorized ckan calls
+    - resource_id - id of the resource that will receive this data
+    - data_path - location of the json data file
+    - fields_path - location of the data's fields, already in a CKAN-friendly format
+
+    All of the above, except the address and apikey, can be given with an actual value, or with a reference to a task_id and task_key that returns the value
     '''
     @apply_defaults
     def __init__(
@@ -332,13 +368,6 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
         self.fields_path, self.fields_path_task_id, self.fields_path_task_key = fields_path, fields_path_task_id, fields_path_task_key
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
-    def _create_empty_resource_with_fields(self, fields_path, resource_id):
-        with open(fields_path, "r") as f:
-            fields = json.load(f)
-        try:
-            self.ckan.action.datastore_create(id=resource_id, fields=fields)
-        except:
-            logging.warning("Datastore resource already exists: " + resource_id)
 
     def execute(self, context):
         # init task instance from context
@@ -354,22 +383,23 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
         if self.fields_path_task_id and self.fields_path_task_key:
             self.fields_path = ti.xcom_pull(task_ids=self.fields_path_task_id)[self.fields_path_task_key]
 
-        # create an empty resource
-        assert self.fields_path, "Fields path, or the filepath of the fields to be inserted, must be provided!"
-        self._create_empty_resource_with_fields(self.fields_path, self.resource_id)
-        logging.info("created empty resource")
+
+        # get fields from file
+        with open(self.fields_path, "r") as f:
+            fields = json.load(f)
+            logging.info("Loaded the following fields from {}: {}".format( self.fields_path, fields ))
 
         # populate that resource w data from the path provided
         assert self.data_path, "Data path, or the filepath to the data to be inserted, must be provided!"
         with open(self.data_path) as f:
             data = json.load(f)
+        
         logging.info("Data parsed from JSON file")
+        logging.info("Fields from fields file: " + str(fields))
+        logging.info("Fields from data file: " + str(data[0].keys()))
 
-        self.ckan.action.datastore_create(
-            id=self.resource_id, records=data
-        )
-
-        logging.info(f"Records inserted into CKAN")
+        self.ckan.action.datastore_create(id=self.resource_id, fields=fields, records=data)
+        logging.info("Resource created and populated from input fields and data")
 
         return {"resource_id": self.resource_id, "data_inserted": len(data)}
 

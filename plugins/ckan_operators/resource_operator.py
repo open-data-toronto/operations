@@ -9,7 +9,17 @@ from datetime import datetime
 
 class GetOrCreateResourceOperator(BaseOperator):
     """
-    Returns CKAN resource object, or creates it if it does not exist 
+    Returns CKAN resource object, or creates it if it does not exist
+
+    Expects as inputs:
+    - address: CKAN instance URL
+    - apikey: CKAN API key 
+    - package_name_or_id: the name or id of the package wherein we'll look for/make a resource
+    - resource_name: the name of the resource this operator will look for/make
+    - resource_id: the resource_id this operator will look for/make
+    - resource_attributes: the attributes that will be in a resource if we create it
+
+    Each of the above (except resource attributes, address and apikey) can be given with an actual value or with a reference to a task_id and task_key that returns the value
     """
 
     @apply_defaults
@@ -32,7 +42,6 @@ class GetOrCreateResourceOperator(BaseOperator):
 
 
         resource_attributes: str = None,
-        #resource_id_filepath = None,
 
         **kwargs,
     ) -> None:
@@ -42,8 +51,6 @@ class GetOrCreateResourceOperator(BaseOperator):
         self.resource_id, self.resource_id_task_id, self.resource_id_task_key = resource_id, resource_id_task_id, resource_id_task_key
 
         self.resource_attributes = resource_attributes
-        # self.resource = None
-        # self.resource_id_filepath = resource_id_filepath
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def _resource_exists(self):
@@ -70,7 +77,7 @@ class GetOrCreateResourceOperator(BaseOperator):
     def execute(self, context):
         # get resource id from a task if its provided by another task
         if self.resource_id_task_id and self.resource_id_task_key:
-            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id, key=self.resource_id_task_key)
+            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[self.resource_id_task_key]
         
         if self.resource_id is not None:
             logging.info("Resource ID used to get resource")
@@ -86,22 +93,26 @@ class GetOrCreateResourceOperator(BaseOperator):
                 **self.resource_attributes,
             )
 
-        logging.info(resource)
 
         self.resource_id = resource["id"]
-        logging.info("Resource id: " + self.resource_id)
-
-        # # write the resource id to an input filepath, if the filepath is given
-        # if self.resource_id_filepath and self.resource_id:
-        #     logging.info("Writing resource id to " + str(self.resource_id_filepath))
-        #     f = open( self.resource_id_filepath, "w")
-        #     f.write( self.resource_id )
-
-
         logging.info(f"Returning: {resource}")
+
         return resource
 
 class EditResourceMetadataOperator(BaseOperator):
+    """
+    Edits a resource's name or last_modified date
+
+    Expects as inputs:
+    - address: CKAN instance URL
+    - apikey: CKAN API key
+    - resource_id - the id of the ckan resource whose metadata will be updated
+    - new_resource_name - the new name of the resource
+    - last_modified - the last_modified date of the resource
+
+    Only one of name or last_modified is required
+    either of these can be given with an actual value, or with a reference to a task_id and task_key that returns the value
+    """
     @apply_defaults
     def __init__(
         self,
