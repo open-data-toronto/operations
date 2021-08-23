@@ -1,3 +1,8 @@
+#2021/08/19, Gary
+monthly-communicable-disease-surveillance-data:
+  Communicable disease surveillance data 2021:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2021_Monthly_Report_AODA.xlsx
 # 2021/05/06, Gary
 traffic-and-parking-by-law-schedules:
   Traffic and parking by-law schedules:
@@ -192,10 +197,3 @@ ttc-routes-and-schedules:
   TTC Routes and Schedules Data:
     format: zip
     url: http://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/OpenData_TTC_Schedules.zip
-utility-cut-permits:
-  utility-cut-permits:
-    format: zip
-    url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp.zip
-  utility-cut-permits-documentation:
-    format: zip
-    url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp_doc.zip
