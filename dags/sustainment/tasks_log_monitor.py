@@ -5,6 +5,7 @@ It deletes logs that are too old
 """
  
 import os
+import shutil
 from datetime import datetime, timedelta
 import logging
 
@@ -62,7 +63,7 @@ def delete_logs(**kwargs):
     folders_to_delete = kwargs.pop("ti").xcom_pull("find_logs_to_delete")["folders"]
     if len(folders_to_delete) > 0:
         for folder in folders_to_delete:
-            os.rmdir( logs_basedir + folder)
+            shutil.rmtree( logs_basedir + folder)
             logging.info("Deleted: " + logs_basedir + folder)
         return {"folders": folders_to_delete}
     else:
