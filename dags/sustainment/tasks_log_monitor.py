@@ -15,7 +15,6 @@ from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.operators.bash import BashOperator
 
-from utils_operators.directory_operator import CreateLocalDirectoryOperator, DeleteLocalDirectoryOperator
 from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
 
 from utils import airflow_utils
@@ -37,38 +36,16 @@ DESCRIPTION = "Ensures only a set amount of days of airflow task logs are stored
 SCHEDULE = "0 0 * * *" # Every day at midnight
 TAGS=["sustainment"]
 
-logs_basedir = "/data/logs/scheduler/"
+LOGS_BASEDIR = "/data/logs/scheduler/"
 
 ## This is the number of days of logs we'll keep - anything outside this range will be deleted
-days_allowed = 30
+DAYS_ALLOWED = 30
 
 
-today = datetime.today()
-earliest_allowable_date = today - timedelta( days = days_allowed )
+TODAY = datetime.today()
+EARLIEST_ALLOWABLE_DATE = TODAY - timedelta( days = DAYS_ALLOWED )
 
-# return folder names in list are >30 days old
-def find_logs_to_delete(**kwargs):
-    all_folders = kwargs.pop("ti").xcom_pull("get_folder_names").split(" ")
-    folders_to_delete = []
-    for folder in all_folders:
-        if folder == "latest":
-            continue
-        if datetime.strptime(folder, "%Y-%m-%d") < earliest_allowable_date:
-            folders_to_delete.append( folder )
-    
-    return {"folders": folders_to_delete}
 
-# delete folders from previous task
-def delete_logs(**kwargs):
-    folders_to_delete = kwargs.pop("ti").xcom_pull("find_logs_to_delete")["folders"]
-    if len(folders_to_delete) > 0:
-        for folder in folders_to_delete:
-            shutil.rmtree( logs_basedir + folder)
-            logging.info("Deleted: " + logs_basedir + folder)
-        return {"folders": folders_to_delete}
-    else:
-        logging.info("No logs to delete!")
-        return {"folders": ["Nothing"]}
 
 with DAG(
     "tasks_log_monitor",
@@ -78,10 +55,34 @@ with DAG(
     tags=TAGS
 ) as dag:
 
+    # return folder names in list are >30 days old
+    def find_logs_to_delete(**kwargs):
+        all_folders = kwargs.pop("ti").xcom_pull("get_folder_names").split(" ")
+        folders_to_delete = []
+        for folder in all_folders:
+            if folder == "latest":
+                continue
+            if datetime.strptime(folder, "%Y-%m-%d") < EARLIEST_ALLOWABLE_DATE:
+                folders_to_delete.append( folder )
+        
+        return {"folders": folders_to_delete}
+
+    # delete folders from previous task
+    def delete_logs(**kwargs):
+        folders_to_delete = kwargs.pop("ti").xcom_pull("find_logs_to_delete")["folders"]
+        if len(folders_to_delete) > 0:
+            for folder in folders_to_delete:
+                shutil.rmtree( LOGS_BASEDIR + folder)
+                logging.info("Deleted: " + LOGS_BASEDIR + folder)
+            return {"folders": folders_to_delete}
+        else:
+            logging.info("No logs to delete!")
+            return {"folders": ["Nothing"]}
+
     # get folder names
     get_folder_names = BashOperator(
         task_id = "get_folder_names",
-        bash_command = "ls " + logs_basedir + " | tr '\n' ' ' "
+        bash_command = "ls " + LOGS_BASEDIR + " | tr '\n' ' ' "
     )
 
     find_logs_to_delete = PythonOperator(
