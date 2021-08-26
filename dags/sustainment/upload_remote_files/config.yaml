@@ -1,3 +1,12 @@
+#2021/08/25, Gary
+heritage-conservation-districts:
+  Heritage Conservation Districts Data(2021):
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/heritage-conservation-districts/HeritageConservationDistricts.zip
+heritage-register:
+  Heritage Register Data(2021):
+    format: zip
+    url: http://opendata.toronto.ca/city.planning/heritage-register/HeritageRegister.zip
 #2021/08/19, Gary
 monthly-communicable-disease-surveillance-data:
   Communicable disease surveillance data 2021:
@@ -197,3 +206,10 @@ ttc-routes-and-schedules:
   TTC Routes and Schedules Data:
     format: zip
     url: http://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/OpenData_TTC_Schedules.zip
+# utility-cut-permits:
+#   utility-cut-permits:
+#     format: zip
+#     url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp.zip
+#   utility-cut-permits-documentation:
+#     format: zip
+#     url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp_doc.zip
