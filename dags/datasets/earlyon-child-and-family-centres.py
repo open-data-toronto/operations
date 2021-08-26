@@ -16,6 +16,7 @@ from ckan_operators.datastore_operator import (
     InsertDatastoreResourceRecordsOperator,
     RestoreDatastoreResourceBackupOperator,
 )
+from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
 from ckan_operators.package_operator import GetPackageOperator
 from ckan_operators.resource_operator import (
     GetOrCreateResourceOperator,
@@ -55,7 +56,7 @@ with DAG(
     PACKAGE_NAME,
     default_args=airflow_utils.get_default_args(
         {
-            "on_failure_callback": send_failure_message,
+            "on_failure_callback": task_failure_slack_alert,
             "start_date": days_ago(1),
             "retries": 0,
             # "retry_delay": timedelta(minutes=3),

@@ -31,6 +31,7 @@ from dateutil import parser
 from utils import agol_utils, airflow_utils, ckan_utils
 from utils_operators.directory_operator import CreateLocalDirectoryOperator
 from utils_operators.file_operators import DownloadFileOperator
+from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
 
 RESOURCE_NAME = "Toronto progress portal - Key metrics"
 tpp_measure_url = "https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_measures"
@@ -227,7 +228,7 @@ with DAG(
             "email_on_retry": False,
             "retries": 1,
             "retry_delay": timedelta(seconds=600),
-            "on_failure_callback": send_failure_message,
+            "on_failure_callback": task_failure_slack_alert,
             "start_date": days_ago(1),
             "retries": 0,
         }

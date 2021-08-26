@@ -10,6 +10,8 @@ from airflow.models import Variable
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
+from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
+
 
 # from airflow.utils.task_group import TaskGroup
 from ckan_operators.datastore_operator import (
@@ -30,7 +32,7 @@ from utils_operators.directory_operator import (
 )
 from utils_operators.file_operators import DownloadFileOperator
 
-PACKAGE_NAME = "fatal-and-suspected-non-fatal-opioid-overdoses-in-the-shelter-system"
+PACKAGE_NAME = "fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system"
 
 RESOURCES = {
     "summary-suspected-opiod-overdoses-in-shelters": {
@@ -83,7 +85,7 @@ with DAG(
     PACKAGE_NAME,
     default_args=airflow_utils.get_default_args(
         {
-            "on_failure_callback": send_failure_message,
+            "on_failure_callback": task_failure_slack_alert,
             "start_date": days_ago(1),
             "retries": 0,
             # "retry_delay": timedelta(minutes=3),
@@ -199,10 +201,7 @@ with DAG(
         if df.shape[0] == 0:
             return f"{prefix}_data_is_new"
 
-        checksum = hashlib.md5()
-        checksum.update(df.to_csv(index=False).encode("utf-8"))
-        checksum = checksum.hexdigest()
-
+        checksum = data_file_info["checksum"]
         for f in os.listdir(backups_dir):
             if not os.path.isfile(backups_dir / f):
                 continue
@@ -326,7 +325,7 @@ with DAG(
         task_id="transform_summary_data",
         python_callable=transform_data,
         op_kwargs={
-            "download_file_task_id": "get_granular_data",
+            "download_file_task_id": "get_summary_data",
             "resource_name": summary_resource["name"],
         },
     )
