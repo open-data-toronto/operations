@@ -183,7 +183,8 @@ def create_dag(dag_id,
             task_id = "message_slack",
             message_header = "Police Annual Statistical Report Job Succeeded",
             message_content_task_id = "insert_records",
-            message_content_task_key = "data_inserted"
+            message_content_task_key = "data_inserted",
+            message_body = "records"
         )
 
         ## DAG EXECUTION LOGIC
