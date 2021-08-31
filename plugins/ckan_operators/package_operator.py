@@ -31,14 +31,24 @@ class GetAllPackagesOperator(BaseOperator):
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def execute(self, context):
-        packages = self.ckan.action.package_list()
+        # init empty lsit to put packages in
+        packages = []
 
-        return {"packages": self.ckan.action.package_search(rows=len(packages))["results"]}
+        # get a list of all CKAN package names
+        package_list = self.ckan.action.package_list()
+
+        for package_name in package_list:
+            package = self.ckan.action.package_show( id=package_name )
+            packages.append( package )
+
+        logging.info("Returning {} packages".format(str(len(packages))))
+
+        return {"packages": packages}
 
 
 class AssertIdenticalPackagesOperator(BaseOperator):
     """
-    Passes only if both package_a and package_b contain identical CKAN packages
+    Passes only if both package_a and package_b contain identical CKAN packages or identical lists of packages
 
     package_a
     :   a package dict object from CKAN, or a list thereof
@@ -137,7 +147,9 @@ class AssertIdenticalPackagesOperator(BaseOperator):
         # get input package data
         self.get_packages(ti)        
 
-        # compare packages
+        # compare lists of packages
         if isinstance(self.package_a, list):
             if self.lists_match( self.package_a, self.package_b ):
                 return {"result": True}
+
+        # TODO: add logic for comparing only packages and not lists of packages
