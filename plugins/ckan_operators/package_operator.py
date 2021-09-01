@@ -33,7 +33,7 @@ class GetAllPackagesOperator(BaseOperator):
     def execute(self, context):
         packages = self.ckan.action.package_list()
 
-        return {"packages": self.ckan.action.package_search(rows=len(packages))["results"]}
+        return {"packages": self.ckan.action.package_search(rows=1000)["results"]}
 
 
 
