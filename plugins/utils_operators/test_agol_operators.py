@@ -11,7 +11,6 @@ from datetime import datetime
 from airflow import DAG
 from airflow.models import TaskInstance
 from utils_operators.agol_operators import AGOLDownloadFileOperator
-from utils import agol_utils
 
 # init the base url, without query parameters, of where the data will come from
 file_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CENSUS_NEIGHBORHOOD/FeatureServer/0/"
@@ -70,14 +69,16 @@ def test_execute():
     with open( output["fields_path"] ) as f:
         fields_data = json.load(f)
 
-    with open( "/data/operations/tests/plugins/utils_operators/test_agol_operators_fields.json" ) as f:
+    print(os.getcwd())
+
+    with open( current_folder + "/test_agol_operators_fields.json" ) as f:
         test_fields_data = json.load(f)
 
     assert fields_data == test_fields_data
     
 
     # checks if checksums match
-    with open( "/data/operations/tests/plugins/utils_operators/test_agol_operators_checksum.txt" ) as f:
+    with open( current_folder + "/test_agol_operators_checksum.txt" ) as f:
         file_checksum = f.read()
     
     assert output["checksum"] == file_checksum
