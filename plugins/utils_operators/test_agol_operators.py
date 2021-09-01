@@ -13,7 +13,7 @@ from airflow.models import TaskInstance
 from utils_operators.agol_operators import AGOLDownloadFileOperator
 
 # init the base url, without query parameters, of where the data will come from
-file_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CENSUS_NEIGHBORHOOD/FeatureServer/0/"
+request_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CENSUS_NEIGHBORHOOD/FeatureServer/0/"
 
 
 # init the directory where the data will be written to
@@ -34,7 +34,7 @@ dag = DAG(dag_id='anydag', start_date=datetime.now())
 # init the Operator and Task Instance
 task = AGOLDownloadFileOperator(
         task_id="get_data",
-        file_url=file_url,
+        request_url=request_url,
         dir=dir,
         filename=filename,
         dag=dag
