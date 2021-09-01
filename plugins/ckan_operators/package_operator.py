@@ -31,19 +31,10 @@ class GetAllPackagesOperator(BaseOperator):
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def execute(self, context):
-        # init empty lsit to put packages in
-        packages = []
+        packages = self.ckan.action.package_list()
 
-        # get a list of all CKAN package names
-        package_list = self.ckan.action.package_list()
+        return {"packages": self.ckan.action.package_search(rows=len(packages))["results"]}
 
-        for package_name in package_list:
-            package = self.ckan.action.package_show( id=package_name )
-            packages.append( package )
-
-        logging.info("Returning {} packages".format(str(len(packages))))
-
-        return {"packages": packages}
 
 
 class AssertIdenticalPackagesOperator(BaseOperator):
@@ -105,7 +96,7 @@ class AssertIdenticalPackagesOperator(BaseOperator):
 
     def lists_match(self, package_a, package_b):
         # find a package in the first list that matches one in the second, by name
-        assert len(package_a) == len(package_b), "Input lists of packages are not the same length! There is an uneven number of packages!"
+        assert len(package_a) == len(package_b), "Input lists of packages are not the same length! Contrib has {} while Delivery has {}".format(len(package_a), len(package_b))
         assert isinstance(package_a, list) and isinstance(package_b, list), "Package comparison failed because a non-list object was given when a list of packages was expected"
         for a in package_a:
             match_found = False
