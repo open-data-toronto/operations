@@ -2,6 +2,9 @@
 # *.json
 *.xml
 **/tmp/**
+**/tmp_dir/*.json
+**/tmp_dir/*.txt
+**/tmp_dir/*.csv
 *.ipynb
 .vscode/
 backups/**

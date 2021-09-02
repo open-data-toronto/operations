@@ -39,7 +39,7 @@ ti = TaskInstance(task=task, execution_date=datetime.now())
 
 def test_get_data_from_http_request():
     # checks if the operator makes a simple http get correctly
-    assert task.get_data_from_http_request().text == file_url_content
+    assert task.get_data_from_http_request(ti).text == file_url_content
     
 def test_execute():
     # checks all keys are present in operator output
