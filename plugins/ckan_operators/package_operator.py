@@ -31,14 +31,32 @@ class GetAllPackagesOperator(BaseOperator):
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def execute(self, context):
-        packages = self.ckan.action.package_list()
+        # Initiate a loop of getting each package from CKAN, 1000 packages at a time
+        output = []
+        offset = 0
 
-        return {"packages": self.ckan.action.package_search(rows=len(packages))["results"]}
+        # Until we see all of the packages, keep asking CKAN for a batch of 1000 packages
+        while True:
+            # Append up to 1000 packages to the output
+            package_object = self.ckan.action.package_search(rows=1000, start=offset)
+            output += package_object["results"]
+
+            # Add 1000 to our offset so if we query 1000 more packages, we dont get ones we already have
+            offset += 1000
+
+            # IF the query result has less records than our new offset
+            # OR
+            # IF the query result gave us less than the maximum number of returnable packages (1000 packages)
+            # THEN break the loop - we've got all the packages
+            if package_object["count"] < offset or package_object["count"] > 1000:
+                break
+
+        return {"packages": output}
 
 
 class AssertIdenticalPackagesOperator(BaseOperator):
     """
-    Passes only if both package_a and package_b contain identical CKAN packages
+    Passes only if both package_a and package_b contain identical CKAN packages or identical lists of packages
 
     package_a
     :   a package dict object from CKAN, or a list thereof
@@ -95,7 +113,7 @@ class AssertIdenticalPackagesOperator(BaseOperator):
 
     def lists_match(self, package_a, package_b):
         # find a package in the first list that matches one in the second, by name
-        assert len(package_a) == len(package_b), "Input lists of packages are not the same length! There is an uneven number of packages!"
+        assert len(package_a) == len(package_b), "Input lists of packages are not the same length! Contrib has {} while Delivery has {}".format(len(package_a), len(package_b))
         assert isinstance(package_a, list) and isinstance(package_b, list), "Package comparison failed because a non-list object was given when a list of packages was expected"
         for a in package_a:
             match_found = False
@@ -137,7 +155,9 @@ class AssertIdenticalPackagesOperator(BaseOperator):
         # get input package data
         self.get_packages(ti)        
 
-        # compare packages
+        # compare lists of packages
         if isinstance(self.package_a, list):
             if self.lists_match( self.package_a, self.package_b ):
                 return {"result": True}
+
+        # TODO: add logic for comparing only packages and not lists of packages

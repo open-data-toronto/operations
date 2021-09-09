@@ -18,10 +18,6 @@ from ckan_operators.package_operator import GetAllPackagesOperator, AssertIdenti
 
 from utils import airflow_utils
 
-
-ACTIVE_ENV = Variable.get("active_env")
-CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-
 CONTRIB_ADDRESS = "https://ckanadmin0.intra.prod-toronto.ca/"
 DELIVERY_ADDRESS = "https://ckan0.cf.opendata.inter.prod-toronto.ca/"
 
@@ -33,9 +29,9 @@ DEFAULT_ARGS = airflow_utils.get_default_args(
         "email_on_failure": False,
         "email_on_retry": False,
         "retries": 1,
-        "on_failure_callback": task_failure_slack_alert,
+        #"on_failure_callback": task_failure_slack_alert,
         "retries": 0,
-        "start_date": datetime(2021, 8, 12, 0, 0, 0)
+        "start_date": datetime(2021, 9, 1, 0, 0, 0)
 
     })
 DESCRIPTION = "Compares CKAN Contrib to Delivery and returns slack message if they aren't identical"
