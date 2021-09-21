@@ -15,6 +15,8 @@ from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from dateutil import parser
 from utils import airflow_utils, ckan_utils
+from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
+
 
 PACKAGE_ID = Path(os.path.abspath(__file__)).name.replace(".py", "")
 ACTIVE_ENV = Variable.get("active_env")
@@ -34,7 +36,7 @@ with DAG(
     PACKAGE_ID,
     default_args=airflow_utils.get_default_args(
         {
-            "on_failure_callback": send_failure_message,
+            "on_failure_callback": task_failure_slack_alert,
             "start_date": datetime(2020, 11, 10, 13, 35, 0),
         }
     ),

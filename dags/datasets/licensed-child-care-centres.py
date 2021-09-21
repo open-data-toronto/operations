@@ -21,6 +21,8 @@ from dateutil import parser
 from utils import agol_utils, airflow_utils
 from utils_operators.directory_operator import CreateLocalDirectoryOperator
 from utils_operators.file_operators import DownloadFileOperator
+from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
+
 
 SRC_URL = "http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv"  # noqa: E501
 PACKAGE_NAME = "licensed-child-care-centres"
@@ -63,7 +65,7 @@ with DAG(
     PACKAGE_NAME,
     default_args=airflow_utils.get_default_args(
         {
-            "on_failure_callback": send_failure_msg,
+            "on_failure_callback": task_failure_slack_alert,
             "start_date": datetime(2020, 11, 24, 13, 35, 0),
             "retries": 0,
             # "retry_delay": timedelta(minutes=3),
