@@ -78,13 +78,6 @@ city-subject-thesaurus:
   City Subject Thesaurus Readme:
     format: xls
     url: http://opendata.toronto.ca/city.clerks.office/city-subject-thesaurus/city-subject-thesaurus-readme.xls
-# committee-of-adjustment-applications:
-#   Active Applications:
-#     format: zip
-#     url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/active.zip
-#   Applications closed since 2017:
-#     format: zip
-#     url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/closed_2017.zip
 head-of-household:
   Head of household - split files:
     format: zip
