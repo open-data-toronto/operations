@@ -69,8 +69,6 @@ def test_execute():
     with open( output["fields_path"] ) as f:
         fields_data = json.load(f)
 
-    print(os.getcwd())
-
     with open( current_folder + "/test_agol_operators_fields.json" ) as f:
         test_fields_data = json.load(f)
 
