@@ -11,7 +11,7 @@ from airflow.models import TaskInstance
 from utils_operators.file_operators import DownloadFileOperator
 
 # init the url where the data will come from
-file_url = "https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_measures/"
+file_url = "https://httpbin.org/html"
 file_url_content = requests.get(file_url).text
 
 # init the directory where the data will be written to
@@ -53,7 +53,7 @@ def test_execute():
     assert os.path.exists(dir + "/" + filename)
 
     # checks if checksum is correct
-    with open( "/data/operations/tests/plugins/utils_operators/test_file_operators_checksum.txt" ) as f:
+    with open( current_folder + "/test_file_operators_checksum.txt" ) as f:
         file_checksum = f.read()
 
     assert file_checksum == output["checksum"]
