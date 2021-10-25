@@ -75,12 +75,16 @@ class AGOLDownloadFileOperator(BaseOperator):
         filename: str = None,
         filename_task_id: str = None,
         filename_task_key: str = None,
+
+        delete_col: list = [],
+
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self.request_url, self.request_url_task_id, self.request_url_task_key = request_url, request_url_task_id, request_url_task_key
         self.dir, self.dir_task_id, self.dir_task_key = dir, dir_task_id, dir_task_key
         self.filename, self.filename_task_id, self.filename_task_key = filename, filename_task_id, filename_task_key
+        self.delete_col = delete_col
     
     def set_path(self, ti):
         # init the filepath to the file we will create
@@ -113,7 +117,7 @@ class AGOLDownloadFileOperator(BaseOperator):
                 # for every row
                 for k,v in {**row}.items():
                     # delete field if duplicate geo field (x, y, lat, long, etc.)
-                    if k.lower() in DELETE_FIELDS:
+                    if k.lower() in [*DELETE_FIELDS, *self.delete_col]:
                         del row[k]
                     
                     # delete "<null>" string field
@@ -187,7 +191,7 @@ class AGOLDownloadFileOperator(BaseOperator):
         ckan_fields = []
         
         for field in res.json()["fields"]:
-            if field["name"].lower() not in DELETE_FIELDS:
+            if field["name"].lower() not in [*DELETE_FIELDS, *self.delete_col]:
                 ckan_fields.append({
                     "id": field["name"],
                     "type": AGOL_CKAN_TYPE_MAP[field["type"]],
