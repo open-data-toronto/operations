@@ -286,7 +286,7 @@ for dataset in datasets:
     schedule = '@once'
     default_args = airflow_utils.get_default_args(
         {
-            "owner": "Gary Test",
+            "owner": "Gary",
             "depends_on_past": False,
             "email": ["gary.qi@toronto.ca"],
             "email_on_failure": False,
