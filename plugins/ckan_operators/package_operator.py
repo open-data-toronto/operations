@@ -4,6 +4,44 @@ from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
 
+class GetOrCreatePackageOperator(BaseOperator):
+    """
+    Returns, or creates, package with input name
+    """
+    @apply_defaults
+    def __init__(
+        self,
+        address: str,
+        apikey: str,
+
+        package_name_or_id: str = None,
+        package_name_or_id_task_id: str = None,
+        package_name_or_id_task_key: str = None,
+
+        **kwargs
+    ) -> None:
+        super().__init__(**kwargs)
+        self.package_name_or_id, self.package_name_or_id_task_id, self.package_name_or_id_task_key = package_name_or_id, package_name_or_id_task_id, package_name_or_id_task_key
+        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+
+    def execute(self, context):
+        # get the package id from a task if its been provided from a task
+        if self.package_name_or_id_task_id and self.package_name_or_id_task_key:
+            self.package_name_or_id = ti.xcom_pull(task_ids=self.package_name_or_id_task_id)[self.package_name_or_id_task_key]
+
+        # return a package, if the input package id exists
+        try:
+            return self.ckan.action.package_show(id=self.package_name_or_id)
+
+        except:
+            return self.ckan.action.package_create(
+                id=self.package_name_or_id,
+                owner_org="city-of-toronto",
+                name=self.package_name_or_id,
+                title=self.package_name_or_id.replace("-", " ").capitalize(),
+                )
+
+            
 
 class GetPackageOperator(BaseOperator):
     """

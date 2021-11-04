@@ -1,0 +1,43 @@
+# package name
+test-xlsx-package:
+  # resource name
+  test-xlsx-resource:
+    format: xlsx
+    url: http://opendata.toronto.ca/economic.development.culture/toronto-economic-bulletin/bulletin_opendata.xlsx
+    attributes:
+      - name: "col1"
+        definition: "column 1"
+        path: "col1"
+      - name: "col2"
+        definition: "column 2"
+        path: "col2"
+      - name: "col3"
+        definition: "column 3"
+        path: "col3"
+  another-test-xlsx-resource:
+    format: xlsx
+    url: http://opendata.toronto.ca/economic.development.culture/toronto-economic-bulletin/bulletin_opendata.xlsx
+    attributes:
+      - name: "col1"
+        definition: "column 1"
+        path: "col1"
+      - name: "col2"
+        definition: "column 2"
+        path: "col2"
+      - name: "col3"
+        definition: "column 3"
+        path: "col3"
+test-csv-package:
+  test-csv-resource:
+    format: csv
+    url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.csv
+    attributes:
+      - name: "col1"
+        definition: "column 1"
+        path: "col1"
+      - name: "col2"
+        definition: "column 2"
+        path: "col2"
+      - name: "col3"
+        definition: "column 3"
+        path: "col3"
