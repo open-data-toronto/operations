@@ -57,7 +57,7 @@ DATASETS = [
     {"schema_change": False, "name": "Total Public Complaints", "tps_table_code": "ASR-PCF-TBL-001", "package_id": "police-annual-statistical-report-total-public-complaints", "agol_dataset": "Total_Public_Complaints_(ASR_PCF_TBL_001)"},
     {"schema_change": False, "name": "Investigated Alleged Misconduct", "tps_table_code": "ASR-PCF-TBL-002", "package_id": "police-annual-statistical-report-investigated-alleged-misconduct", "agol_dataset": "Investigated_Alleged_Misconduct__ASR_PCF_TBL_002"},
     {"schema_change": False, "name": "Complaint Dispositions", "tps_table_code": "ASR-PCF-TBL-003", "package_id": "police-annual-statistical-report-complaint-dispositions", "agol_dataset": "Complaint_Dispositions__ASR_PCF_TBL_003"},
-    {"schema_change": False, "name": "Administrative", "tps_table_code": "ASR-AD-TBL-001", "package_id": "police-annual-statistical-report-administrative", "agol_dataset": "Administrative_ASR_AD_TBL_001"},
+    {"schema_change": True, "name": "Administrative", "tps_table_code": "ASR-AD-TBL-001", "package_id": "police-annual-statistical-report-administrative", "agol_dataset": "Administrative_ASR_AD_TBL_001"},
     {"schema_change": False, "name": "Miscellaneous Data", "tps_table_code": "ASR-MISC-TBL-001", "package_id": "police-annual-statistical-report-miscellaneous-data", "agol_dataset": "Miscellaneous_Data_ASR_MISC_TBL_001"}
 ]
 
@@ -112,11 +112,27 @@ def create_dag(dag_id,
             resource_name=name,
             resource_attributes=dict(
                 format="csv",
+                package_id=dag_id,
                 is_preview=True,
                 url_type="datastore",
                 extract_job=f"Airflow: {dag_id}",
             ),
         )
+
+        def is_resource_new(**kwargs):
+            resource = kwargs["ti"].xcom_pull(task_ids="get_resource_id")
+
+            if resource["is_new"]:
+                return "new_resource"
+
+            return "existing_resource"
+
+        new_or_existing = BranchPythonOperator(
+            task_id="new_or_existing", python_callable=is_resource_new,
+        )
+
+        new_resource = DummyOperator(task_id="new_resource", dag=dag)
+        existing_resource = DummyOperator(task_id="existing_resource", dag=dag)
 
         backup_resource = BackupDatastoreResourceOperator(
             task_id = "backup_resource",
@@ -187,9 +203,21 @@ def create_dag(dag_id,
             message_body = "records"
         )
 
+        join_or = DummyOperator(task_id="join_or", dag=dag, trigger_rule="one_success")
+        join_and = DummyOperator(task_id="join_and", dag=dag, trigger_rule="all_success")
+
         ## DAG EXECUTION LOGIC
-        tmp_dir >> get_agol_data >> get_resource_id >> backup_resource >> delete_resource >> insert_records >> modify_metadata >>  delete_tmp_dir >> job_success >> message_slack 
-        [modify_metadata, insert_records] >> job_failed >> restore_backup
+        # tmp_dir >> get_agol_data >> get_resource_id >> backup_resource >> delete_resource >> insert_records >> modify_metadata >>  delete_tmp_dir >> job_success >> message_slack 
+        # [modify_metadata, insert_records] >> job_failed >> restore_backup
+
+        tmp_dir >> get_agol_data >>  join_and
+        get_resource_id >> new_or_existing >> [new_resource,  existing_resource ]
+        new_resource >> join_or >> join_and
+        existing_resource >> backup_resource >> delete_resource >> join_or >> join_and
+        join_and >> insert_records >> modify_metadata >> job_success >> delete_tmp_dir>> message_slack 
+        [get_agol_data, get_resource_id] >> job_failed  
+        [insert_records] >> job_failed >> restore_backup 
+
     return dag
 
 
