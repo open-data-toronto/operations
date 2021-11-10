@@ -24,7 +24,8 @@ AGOL_CKAN_TYPE_MAP =  {
     "esriFieldTypeDate": "timestamp",
     "esriFieldTypeInteger": "int",
     "esriFieldTypeOID": "int",
-    "esriFieldTypeDouble": "float"
+    "esriFieldTypeDouble": "float",
+    "esriFieldTypeSmallInteger":"int",
 }
 
 # list of attributes that are redundant when geometry is present in a response
@@ -77,6 +78,7 @@ class AGOLDownloadFileOperator(BaseOperator):
         filename_task_key: str = None,
 
         delete_col: list = [],
+        fields_json_file: str = "fields.json",
 
         **kwargs,
     ) -> None:
@@ -85,6 +87,8 @@ class AGOLDownloadFileOperator(BaseOperator):
         self.dir, self.dir_task_id, self.dir_task_key = dir, dir_task_id, dir_task_key
         self.filename, self.filename_task_id, self.filename_task_key = filename, filename_task_id, filename_task_key
         self.delete_col = delete_col
+        self.fields_json_file = fields_json_file
+
     
     def set_path(self, ti):
         # init the filepath to the file we will create
@@ -186,6 +190,7 @@ class AGOLDownloadFileOperator(BaseOperator):
         params = "&".join([ f"{k}={v}" for k,v in query_string_params.items() ])
         url = "https://" + "/".join([ url_part for url_part in f"{query_url}/query?{params}".replace("https://", "").split("/") if url_part ])
         res = requests.get(url)
+        logging.info("Try and get fields: ", res)
         assert res.status_code == 200, f"Status code response: {res.status_code}"
         
         ckan_fields = []
@@ -249,7 +254,7 @@ class AGOLDownloadFileOperator(BaseOperator):
 
         # write fields to a file
         fields = json.dumps(res["fields"])
-        fields_filename = "fields_" + self.filename
+        fields_filename = self.fields_json_file    #"fields_" + self.filename
         fields_path = Path(self.dir) / fields_filename
         self.write_to_file(fields, fields_path)
 
