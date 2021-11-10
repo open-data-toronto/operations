@@ -1,5 +1,6 @@
 import hashlib
 import json
+import csv
 import logging
 from pathlib import Path
 from typing import List
@@ -119,7 +120,6 @@ class BackupDatastoreResourceOperator(BaseOperator):
         return result
 
 
-
 class DeleteDatastoreResourceOperator(BaseOperator):
     """
     Deletes a datastore resource
@@ -169,7 +169,6 @@ class DeleteDatastoreResourceOperator(BaseOperator):
 
         except Exception as e:
             logging.error("Error while trying to delete resource: " + e)
-
 
 
 class DeleteDatastoreResourceRecordsOperator(BaseOperator):
@@ -304,7 +303,6 @@ class RestoreDatastoreResourceBackupOperator(BaseOperator):
         return result
 
 
-
 class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
     '''
     Reads a JSON file and write the output into a CKAN datastore resource.
@@ -403,4 +401,127 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
 
         return {"resource_id": self.resource_id, "data_inserted": len(data)}
 
+
+class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
+    """
+    Inserts a file's data into a datastore resource based on specs from a YAML file
+    """          
+    @apply_defaults
+    def __init__(
+        self,
+        address: str,
+        apikey: str,
+
+        resource_id: str = None,
+        resource_id_task_id: str = None,
+        resource_id_task_key: str = None,
+
+        data_path: str = None,
+        data_path_task_id: str = None,
+        data_path_task_key: str = None,
+
+        fields: dict = None,
+        fields_task_id: str = None,
+        fields_task_key: str = None,
+
+        format: str = None,
+        format_task_id: str = None,
+        format_task_key: str = None,
+
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+        self.resource_id, self.resource_id_task_id, self.resource_id_task_key = resource_id, resource_id_task_id, resource_id_task_key
+        self.data_path, self.data_path_task_id, self.data_path_task_key = data_path, data_path_task_id, data_path_task_key
+        self.fields, self.fields_task_id, self.fields_task_key = fields, fields_task_id, fields_task_key
+        self.format, self.format_task_id, self.format_task_key = format, format_task_id, format_task_key
+        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+
+
+    def str_to_datetime(input):
+        # loops through the list of formats and tries to return an input string into a datetime of one of those formats
+        assert isinstance(input, str), "Utils str_to_datetime() function can only receive strings - it instead received {}".format(type(input))
+        for format in [
+            "%Y-%m-%dT%H:%M:%S.%f",
+            "%Y-%m-%d %H:%M:%S.%f",
+            "%Y-%m-%dT%H:%M:%S",
+            "%Y-%m-%d %H:%M:%S",
+            "%Y-%m-%d"
+        ]:
+            try:
+                output = datetime.strptime(input, format)
+                return output
+            except ValueError:
+                pass
+        logging.error("No valid datetime format in utils.str_to_datetime() for input string {}".format(input))
+
+
+    def parse_csv_file(self, filepath):
+        f= open(filepath, "r")
+        output = csv.DictReader(f)
+        #f.close()
+        return output
+
+    # put input file into memory based on input format
+    def read_file(self, data_path, format):
+        readers = {
+            "csv": self.parse_csv_file,
+        }
+
+        return  readers[format](data_path)
+    
+    
+    # parse file attributes into correct data types in a dict based on input fields
+    def parse_file(self, read_file, format, fields):
+
+        # init output
+        output = []
+
+        # list of functions used to convert input to desired data_type
+        formatters = {
+            "text": str,
+            "int": int,
+            "float": float,
+            "timestamp": self.str_to_datetime,
+        }
+
+        # convert each column in each row
+        print(read_file)
+        for row in read_file:
             
+            print(row)
+            new_row = {}
+            for field in fields:
+                src = row[field["id"]]
+                new_row[field["id"]] = formatters[ field["type"] ](src)
+            output.append( new_row )
+
+        return output
+                
+
+    # put dict into datastore_create call
+    def insert_into_datastore(self, resource_id, fields, records):
+        self.ckan.action.datastore_create( id=resource_id, fields=fields, records=records )
+
+    def execute(self, context):
+        # init task instance from context
+        ti = context['ti']
+
+        # assign important vars if provided from other tasks
+        if self.resource_id_task_id and self.resource_id_task_key:
+            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[self.resource_id_task_key]
+
+        if self.data_path_task_id and self.data_path_task_key:
+            self.data_path = ti.xcom_pull(task_ids=self.data_path_task_id)[self.data_path_task_key]
+
+        if self.fields_task_id and self.fields_task_key:
+            self.fields = ti.xcom_pull(task_ids=self.fields_task_id)[self.fields_task_key]
+
+        # read and parse file
+        read_file = self.read_file(self.data_path, self.format)
+        parsed_data = self.parse_file(read_file, self.format, self.fields)
+
+        # put parsed_data into ckan datastore
+        self.insert_into_datastore(self.resource_id, self.fields, parsed_data)
+
+        return {"Success": True}

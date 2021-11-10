@@ -1,0 +1,71 @@
+# package name
+test-package-one-csv-resource:
+  schedule: "@once"
+  resources:
+    # resource name
+    test-csv-resource:
+      format: csv
+      url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.csv
+      attributes:
+        - id: "Camera Number"
+          type: "text"
+          info:
+            notes: "Camera Number for this record"
+        - id: "Latitude"
+          type: "float"
+          info:
+            notes: "Latitude for this record"
+        - id: "Longitude"
+          type: "float"
+          info:
+            notes: "Longitude for this record"
+        - id: "Main Road"
+          type: "text"
+          info:
+            notes: "Main Road for this record"
+        - id: "Cross Street"
+          type: "text"
+          info:
+            notes: "Cross Street for this record"
+        - id: "Group"
+          type: "text"
+          info:
+            notes: "Group for this record"
+        - id: "Traffic Image"
+          type: "text"
+          info:
+            notes: "Traffic Image for this record"
+        - id: "North Reference Static Image"
+          type: "text"
+          info:
+            notes: "North Reference Static Image for this record"
+        - id: "East Reference Static Image"
+          type: "text"
+          info:
+            notes: "East Reference Static Image for this record"
+        - id: "South Reference Static Image"
+          type: "text"
+          info:
+            notes: "South Reference Static Image for this record"
+        - id: "West Reference Static Image"
+          type: "text"
+          info:
+            notes: "West Reference Static Image for this record"
+        
+    # resource name
+    #test-csv-resource2:
+    #  format: csv
+    #  url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
+    #  attributes:
+    #    - source_name: "col1"
+    #      type: "text"
+    #      info:
+    #        notes: "For what a column means in real life"
+    #    - source_name: "col1"
+    #      type: "text"
+    #      info:
+    #        notes: "For what a column means in real life"
+    #    - source_name: "col1"
+    #      type: "text"
+    #      info:
+    #        notes: "For what a column means in real life"

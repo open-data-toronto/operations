@@ -1,0 +1,24 @@
+# package name
+test-json-package:
+  schedule: "@once"
+  resources:
+    # resource name
+    test-json-resource:
+      format: json
+      url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.json
+      attributes:
+        - source_name: "col1"
+          target_name: "Column 1"          
+          data_type: "string"
+          definition: "For what a column means in real life"
+        - source_name: "col1"
+          target_name: "Column 1"
+          data_type: "string"
+          definition: "For what a column means in real life"
+        - source_name: "col1"
+          target_name: "Column 1"
+          data_type: "string"
+          definition: "For what a column means in real life"
+
+  
+      
