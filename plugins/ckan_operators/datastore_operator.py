@@ -2,6 +2,8 @@ import hashlib
 import json
 import csv
 import logging
+import codecs
+from datetime import datetime
 from pathlib import Path
 from typing import List
 
@@ -438,7 +440,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
 
-    def str_to_datetime(input):
+    def str_to_datetime(self, input):
         # loops through the list of formats and tries to return an input string into a datetime of one of those formats
         assert isinstance(input, str), "Utils str_to_datetime() function can only receive strings - it instead received {}".format(type(input))
         for format in [
@@ -446,7 +448,9 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "%Y-%m-%d %H:%M:%S.%f",
             "%Y-%m-%dT%H:%M:%S",
             "%Y-%m-%d %H:%M:%S",
-            "%Y-%m-%d"
+            "%Y-%m-%d",
+            "%d-%b-%Y",
+            "%d-%^b-%Y"
         ]:
             try:
                 output = datetime.strptime(input, format)
@@ -455,17 +459,25 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                 pass
         logging.error("No valid datetime format in utils.str_to_datetime() for input string {}".format(input))
 
+    # reads a csv and returns a list of dicts - one dict for each row
+    def read_csv_file(self, filepath):
+        output = []
+        dictreader = csv.DictReader(codecs.open(filepath, "rbU", "latin1"))
+        for row in dictreader:
+            # strip each attribute name - CKAN requires it
+            output_row = {}
+            for attr in row.keys():
+                output_row[ attr.strip() ] = row[attr]
+            output.append(output_row)
 
-    def parse_csv_file(self, filepath):
-        f= open(filepath, "r")
-        output = csv.DictReader(f)
         #f.close()
+        logging.info("Read {} records from {}".format( len(output), filepath))
         return output
 
     # put input file into memory based on input format
     def read_file(self, data_path, format):
         readers = {
-            "csv": self.parse_csv_file,
+            "csv": self.read_csv_file,
         }
 
         return  readers[format](data_path)
@@ -486,16 +498,14 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         }
 
         # convert each column in each row
-        print(read_file)
         for row in read_file:
-            
-            print(row)
             new_row = {}
             for field in fields:
                 src = row[field["id"]]
                 new_row[field["id"]] = formatters[ field["type"] ](src)
             output.append( new_row )
 
+        logging.info( "Cleaned {} records".format(len(output)) )
         return output
                 
 

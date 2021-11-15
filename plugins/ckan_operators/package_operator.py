@@ -31,9 +31,11 @@ class GetOrCreatePackageOperator(BaseOperator):
 
         # return a package, if the input package id exists
         try:
+            logging.info("Attempting to get package {}".format(self.package_name_or_id))
             return self.ckan.action.package_show(id=self.package_name_or_id)
 
         except:
+            logging.info("Unable to get package {} - creating it instead".format(self.package_name_or_id))
             return self.ckan.action.package_create(
                 id=self.package_name_or_id,
                 owner_org="city-of-toronto",

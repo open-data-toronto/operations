@@ -161,7 +161,7 @@ def create_dag(dag_id,
             tasks_list["new_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> dummy2
 
             # parse the target data into each resource as a datastore resource
-            dummy2 >> dummy3
+            dummy2 >> dummy3 >> tasks_list["dummy"]
     
     return dag
 

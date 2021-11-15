@@ -1,5 +1,5 @@
 # package name
-test-package-one-csv-resource:
+test-csv-package:
   schedule: "@once"
   resources:
     # resource name
@@ -51,21 +51,72 @@ test-package-one-csv-resource:
           type: "text"
           info:
             notes: "West Reference Static Image for this record"
-        
     # resource name
-    #test-csv-resource2:
-    #  format: csv
-    #  url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
-    #  attributes:
-    #    - source_name: "col1"
-    #      type: "text"
-    #      info:
-    #        notes: "For what a column means in real life"
-    #    - source_name: "col1"
-    #      type: "text"
-    #      info:
-    #        notes: "For what a column means in real life"
-    #    - source_name: "col1"
-    #      type: "text"
-    #      info:
-    #        notes: "For what a column means in real life"
+    another-test-csv-resource:
+      format: csv
+      url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
+      attributes:
+        - id: "Category"
+          type: "text"
+          info:
+            notes: "Category for this record"
+        - id: "Licence No."
+          type: "text"
+          info:
+            notes: "Licence No. for this record"
+        - id: "Operating Name"
+          type: "text"
+          info:
+            notes: "Operating Name for this record"
+        - id: "Issued"
+          type: "timestamp"
+          info:
+            notes: "Issued for this record"
+        - id: "Client Name"
+          type: "text"
+          info:
+            notes: "Client Name for this record"
+        - id: "Business Phone"
+          type: "text"
+          info:
+            notes: "Business Phone for this record"
+        - id: "Business Phone Ext."
+          type: "text"
+          info:
+            notes: "Business Phone Ext. for this record"
+        - id: "Licence Address Line 1"
+          type: "text"
+          info:
+            notes: "Licence Address Line 1 for this record"
+        - id: "Licence Address Line 2"
+          type: "text"
+          info:
+            notes: "Licence Address Line 2 for this record"
+        - id: "Licence Address Line 3"
+          type: "text"
+          info:
+            notes: "Licence Address Line 3 for this record"
+        - id: "Conditions"
+          type: "text"
+          info:
+            notes: "Conditions for this record"
+        - id: "Free Form Conditions Line 1"
+          type: "text"
+          info:
+            notes: "Free Form Conditions Line 1 for this record"
+        - id: "Free Form Conditions Line 2"
+          type: "text"
+          info:
+            notes: "Free Form Conditions Line 2 for this record"
+        - id: "Plate No."
+          type: "text"
+          info:
+            notes: "Plate No. for this record"
+        - id: "Endorsements"
+          type: "text"
+          info:
+            notes: "Endorsements for this record"
+        - id: "Cancel Date"
+          type: "timestamp"
+          info:
+            notes: "Cancel Date for this record"
