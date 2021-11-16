@@ -79,12 +79,21 @@ class GetOrCreateResourceOperator(BaseOperator):
         if self.resource_id_task_id and self.resource_id_task_key:
             self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[self.resource_id_task_key]
         
+        # branching to determine whether resource is found or created, set resource["is_new"] for branching in dags
         if self.resource_id is not None:
             logging.info("Resource ID used to get resource")
             resource = self.ckan.action.resource_show(id=self.resource_id)
+            if resource['datastore_active']:
+                resource["is_new"] = False
+            else:
+                resource["is_new"] = True   # considered as new if there is no datastore data
         elif self._resource_exists():
             logging.info("Resource found using the package id {} and resource name {}". format(self.package_name_or_id, self.resource_name) )
             resource = self.resource
+            if resource['datastore_active']:
+                resource["is_new"] = False
+            else:
+                resource["is_new"] = True   # considered as new if there is no datastore data
         else: 
             logging.info("Resource not found - creating a resource called {} in package {}".format(self.resource_name, self.package_name_or_id))
             resource = self.ckan.action.resource_create(
@@ -92,6 +101,7 @@ class GetOrCreateResourceOperator(BaseOperator):
                 name=self.resource_name,
                 **self.resource_attributes,
             )
+            resource["is_new"] = True
 
 
         self.resource_id = resource["id"]

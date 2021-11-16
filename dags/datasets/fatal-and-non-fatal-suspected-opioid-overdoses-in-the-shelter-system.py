@@ -36,8 +36,8 @@ PACKAGE_NAME = "fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-sy
 
 RESOURCES = {
     "summary-suspected-opiod-overdoses-in-shelters": {
-        "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/summary-suspected-opiod-overdoses-in-shelters.csv",  # noqa: E501
-        "name": "summary-suspected-opiod-overdoses-in-shelters",
+        "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/summary-suspected-opiod-overdoses-in-shelters_testQA.csv",  # noqa: E501
+        "name": "summary-suspected-opioid-overdoses-in-shelters", 
         "metadata": {
             "format": "csv",
             "is_preview": False,
@@ -52,8 +52,8 @@ RESOURCES = {
         ],
     },
     "suspected-opiod-overdoses-in-shelters": {
-        "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/suspected-opiod-overdoses-in-shelters.csv",  # noqa: E501
-        "name": "suspected-opiod-overdoses-in-shelters",
+        "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/suspected-opiod-overdoses-in-shelters_testQA.csv",  # noqa: E501
+        "name": "suspected-opioid-overdoses-in-shelters", 
         "metadata": {
             "format": "csv",
             "is_preview": True,
@@ -61,7 +61,7 @@ RESOURCES = {
             "url_type": "datastore",
         },
         "expected_columns": [
-            "site_name",
+            "location_name", 
             "address",
             "year",
             "year_stage",
@@ -91,7 +91,7 @@ with DAG(
             # "retry_delay": timedelta(minutes=3),
         }
     ),
-    description="Take earlyon.json from opendata.toronto.ca and put into datastore",
+    description="",
     schedule_interval="0 17 * * *",
     catchup=False,
     tags=["dataset"],
