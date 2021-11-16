@@ -110,6 +110,7 @@ class DownloadFileOperator(BaseOperator):
         # return file hash and other metadata
         return {
             "path": self.path,
+            "data_path": self.path,
             "last_modified": last_modified,
             "checksum": checksum.hexdigest(),
         }

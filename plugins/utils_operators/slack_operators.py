@@ -135,7 +135,7 @@ class GenericSlackOperator(BaseOperator):
 
         slack_message = """
             :robot_face: *{header}*
-            {dag} 
+            `{dag}` 
             {content} {body}
             """.format(
             header=self.message_header,

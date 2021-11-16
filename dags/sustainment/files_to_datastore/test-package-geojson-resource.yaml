@@ -1,0 +1,34 @@
+# package name
+test-geojson-package:
+  schedule: "@once"
+  resources:
+    # resource name
+    test-geojson-resource:
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Staffing_by_Command/FeatureServer/0/
+      attributes:
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year for this record"
+        - id: "Type_of_Metric"
+          type: "text"
+          info:
+            notes: "Type_of_Metric for this record"
+        - id: "Command"
+          type: "text"
+          info:
+            notes: "Command for this record"
+        - id: "Category"
+          type: "text"
+          info:
+            notes: "Category for this record"
+        - id: "Count_"
+          type: "float"
+          info:
+            notes: "Count_ for this record"
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "ObjectId for this record"
+    

@@ -20,6 +20,8 @@ from ckan_operators.package_operator import GetOrCreatePackageOperator
 from ckan_operators.resource_operator import GetOrCreateResourceOperator
 from ckan_operators.datastore_operator import BackupDatastoreResourceOperator, DeleteDatastoreResourceOperator, InsertDatastoreFromYAMLConfigOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
+from utils_operators.agol_operators import AGOLDownloadFileOperator
+
 
 # init hardcoded vars for these dags
 CONFIG_FOLDER = "/data/operations/dags/sustainment/files_to_datastore/"
@@ -30,6 +32,15 @@ CKAN = CKAN_CREDS[ACTIVE_ENV]["address"]
 CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]
 
 TMP_DIR = Path(Variable.get("tmp_dir"))
+
+# branch logic - depends whether or not input resource is new
+def is_resource_new(get_or_create_resource_task_id, resource_name, **kwargs):
+    resource = kwargs["ti"].xcom_pull(task_ids=get_or_create_resource_task_id)
+
+    if resource["is_new"]:
+        return "new_" + resource_name
+
+    return "existing_" + resource_name
 
 # custom function to create multiple custom dags - sort of like a template for a DAG
 def create_dag(dag_id,
@@ -43,6 +54,9 @@ def create_dag(dag_id,
         default_args=default_args,
         schedule_interval=schedule
     ) as dag:
+
+        # init list of resource names
+        resource_names = dataset["resources"].keys()
 
         # define the operators that each DAG needs regardless of how it is configured
         
@@ -59,28 +73,45 @@ def create_dag(dag_id,
             apikey = CKAN_APIKEY,
             package_name_or_id = package_name
         )
-
-        
         
         dummy2 = DummyOperator(
                 task_id='dummy2')
 
         dummy3 = DummyOperator(
                 task_id='dummy3')
+
+        success_message_slack = GenericSlackOperator(
+            task_id = "success_message_slack",
+            message_header = "Files to Datastore " + package_name,
+            message_content = "\n\t\t   ".join( [name + " | `" + dataset["resources"][name]["format"] +"`" for name in resource_names] ),
+            message_body = ""
+        )
                 
 
         # From a List
-        resource_names = dataset["resources"].keys()
+        
         tasks_list = {}
         for resource_name in resource_names:
             
             # download file
-            tasks_list["download_" + resource_name] = DownloadFileOperator(
-                task_id="download_" + resource_name,
-                file_url=dataset["resources"][resource_name]["url"],
-                dir=TMP_DIR,
-                filename=dataset["resources"][resource_name]["url"].split("/")[-1]
-            )
+            # CSV files:
+            if dataset["resources"][resource_name]["format"] in ["csv"]:
+                tasks_list["download_" + resource_name] = DownloadFileOperator(
+                    task_id="download_" + resource_name,
+                    file_url=dataset["resources"][resource_name]["url"],
+                    dir=TMP_DIR,
+                    filename=dataset["resources"][resource_name]["url"].split("/")[-1]
+                )
+
+            # GEOJSON files:
+            if dataset["resources"][resource_name]["format"] in ["geojson", "json"]:
+                tasks_list["download_" + resource_name] = AGOLDownloadFileOperator(
+                    task_id="download_" + resource_name,
+                    request_url=dataset["resources"][resource_name]["url"],
+                    dir=TMP_DIR,
+                    filename=resource_name + ".json"
+                )
+
 
             # get or create a resource a file
             tasks_list["get_or_create_resource_" + resource_name] = GetOrCreateResourceOperator(
@@ -98,33 +129,27 @@ def create_dag(dag_id,
                 ),
             )
 
-            # branch depending whether or not resource is new
-            def is_resource_new(get_or_create_resource_task_id, **kwargs):
-                resource = kwargs["ti"].xcom_pull(task_ids=get_or_create_resource_task_id)
-
-                if resource["is_new"]:
-                    return "new_" + resource_name
-
-                return "existing_" + resource_name
-
+            
+            # determine whether the resource is new or not
             tasks_list["new_or_existing_" + resource_name] = BranchPythonOperator(
                 task_id="new_or_existing_" + resource_name, 
                 python_callable=is_resource_new,
-                op_kwargs={"get_or_create_resource_task_id": "get_or_create_resource_" + resource_name}
+                op_kwargs={"get_or_create_resource_task_id": "get_or_create_resource_" + resource_name, "resource_name": resource_name }
             )
 
             tasks_list["new_" + resource_name] = DummyOperator(task_id="new_" + resource_name)
             tasks_list["existing_" + resource_name] = DummyOperator(task_id="existing_" + resource_name)
 
+            # backup an existing resource
             tasks_list["backup_resource_" + resource_name] = BackupDatastoreResourceOperator(
                 task_id = "backup_resource_" + resource_name,
                 address=CKAN,
                 apikey=CKAN_APIKEY,
                 resource_task_id="get_or_create_resource_" + resource_name,
                 dir_task_id="tmp_dir"
-
             )
 
+            # delete existing resource records
             tasks_list["delete_resource_" + resource_name] = DeleteDatastoreResourceOperator(
                 task_id="delete_resource_" + resource_name,
                 address = CKAN,
@@ -133,6 +158,7 @@ def create_dag(dag_id,
                 resource_id_task_key = "id"
             )
 
+            # intelligently insert new records into an emptied resource based on input yaml config
             tasks_list["insert_records_" + resource_name] = InsertDatastoreFromYAMLConfigOperator(
                 task_id="insert_records_" + resource_name,
                 address = CKAN,
@@ -140,13 +166,14 @@ def create_dag(dag_id,
                 resource_id_task_id = "get_or_create_resource_" + resource_name,
                 resource_id_task_key = "id",
                 data_path_task_id = "download_" + resource_name,
-                data_path_task_key = "path",
+                data_path_task_key = "data_path",
                 fields = dataset["resources"][resource_name]["attributes"],
                 format = dataset["resources"][resource_name]["format"],
                 trigger_rule = "one_success",
             )
             
             tasks_list["dummy"] = DummyOperator(task_id='Component'+str(resource_name))
+
 
             # init a temp directory and get/create the package for the target data
             tmp_dir >> get_or_create_package
@@ -161,11 +188,11 @@ def create_dag(dag_id,
             tasks_list["new_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> dummy2
 
             # parse the target data into each resource as a datastore resource
-            dummy2 >> dummy3 >> tasks_list["dummy"]
+            dummy2 >> dummy3 >> tasks_list["dummy"] >> success_message_slack
     
     return dag
 
-# Generate DAGs using the function above as a template parameterized by the configs
+# Generate DAGs using the function above as a template parameterized by the configs - one DAG per YAML file
 for config_file in os.listdir(CONFIG_FOLDER):
     if config_file.endswith(".yaml"):
 

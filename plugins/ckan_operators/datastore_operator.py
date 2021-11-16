@@ -192,7 +192,7 @@ class DeleteDatastoreResourceRecordsOperator(BaseOperator):
     def execute(self, context):
         backups_info = context["ti"].xcom_pull(task_ids=self.backup_task_id)
 
-        self.ckan.action.datastore_delete(id=backups_info["resource_id"])
+        self.ckan.action.datastore_delete(id=backups_info["resource_id"], force=True)
 
         with open(Path(backups_info["fields_file_path"]), "r") as f:
             fields = json.load(f)
@@ -440,9 +440,11 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
 
-    def str_to_datetime(self, input):
+    def clean_date_format(self, input):
         # loops through the list of formats and tries to return an input string into a datetime of one of those formats
-        assert isinstance(input, str), "Utils str_to_datetime() function can only receive strings - it instead received {}".format(type(input))
+        assert isinstance(input, str), "Utils clean_date_format() function can only receive strings - it instead received {}".format(type(input))
+        if len(input) == 0:
+            return
         for format in [
             "%Y-%m-%dT%H:%M:%S.%f",
             "%Y-%m-%d %H:%M:%S.%f",
@@ -450,14 +452,13 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "%Y-%m-%d %H:%M:%S",
             "%Y-%m-%d",
             "%d-%b-%Y",
-            "%d-%^b-%Y"
         ]:
             try:
-                output = datetime.strptime(input, format)
-                return output
+                datetime_object = datetime.strptime(input, format)
+                return datetime_object.strftime("%Y-%m-%dT%H:%M:%S.%f")
             except ValueError:
                 pass
-        logging.error("No valid datetime format in utils.str_to_datetime() for input string {}".format(input))
+        logging.error("No valid datetime format in utils.clean_date_format() for input string {}".format(input))
 
     # reads a csv and returns a list of dicts - one dict for each row
     def read_csv_file(self, filepath):
@@ -474,10 +475,15 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         logging.info("Read {} records from {}".format( len(output), filepath))
         return output
 
+    def read_json_file(self, filepath):
+        return json.load( open(filepath, "r"))
+
     # put input file into memory based on input format
     def read_file(self, data_path, format):
         readers = {
             "csv": self.read_csv_file,
+            "geojson": self.read_json_file,
+            "json": self.read_json_file,
         }
 
         return  readers[format](data_path)
@@ -494,7 +500,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "text": str,
             "int": int,
             "float": float,
-            "timestamp": self.str_to_datetime,
+            "timestamp": self.clean_date_format,
         }
 
         # convert each column in each row
