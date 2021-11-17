@@ -94,8 +94,8 @@ def create_dag(dag_id,
         for resource_name in resource_names:
             
             # download file
-            # CSV files:
-            if dataset["resources"][resource_name]["format"] in ["csv"]:
+            # CSV, XLSX files:
+            if dataset["resources"][resource_name]["format"] in ["csv", "xlsx"]:
                 tasks_list["download_" + resource_name] = DownloadFileOperator(
                     task_id="download_" + resource_name,
                     file_url=dataset["resources"][resource_name]["url"],
@@ -167,8 +167,9 @@ def create_dag(dag_id,
                 resource_id_task_key = "id",
                 data_path_task_id = "download_" + resource_name,
                 data_path_task_key = "data_path",
-                fields = dataset["resources"][resource_name]["attributes"],
-                format = dataset["resources"][resource_name]["format"],
+                config = dataset["resources"][resource_name],
+                #fields = dataset["resources"][resource_name]["attributes"],
+                #format = dataset["resources"][resource_name]["format"],
                 trigger_rule = "one_success",
             )
             

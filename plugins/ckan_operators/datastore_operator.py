@@ -3,6 +3,8 @@ import json
 import csv
 import logging
 import codecs
+import openpyxl
+
 from datetime import datetime
 from pathlib import Path
 from typing import List
@@ -422,23 +424,39 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         data_path_task_id: str = None,
         data_path_task_key: str = None,
 
-        fields: dict = None,
-        fields_task_id: str = None,
-        fields_task_key: str = None,
+        config: dict = {},
 
-        format: str = None,
-        format_task_id: str = None,
-        format_task_key: str = None,
+        #fields: dict = None,
+        #fields_task_id: str = None,
+        #fields_task_key: str = None,
+
+        #format: str = None,
+        #format_task_id: str = None,
+        #format_task_key: str = None,
 
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self.resource_id, self.resource_id_task_id, self.resource_id_task_key = resource_id, resource_id_task_id, resource_id_task_key
         self.data_path, self.data_path_task_id, self.data_path_task_key = data_path, data_path_task_id, data_path_task_key
-        self.fields, self.fields_task_id, self.fields_task_key = fields, fields_task_id, fields_task_key
-        self.format, self.format_task_id, self.format_task_key = format, format_task_id, format_task_key
+        self.config = config
+        #self.fields, self.fields_task_id, self.fields_task_key = fields, fields_task_id, fields_task_key
+        #self.format, self.format_task_id, self.format_task_key = format, format_task_id, format_task_key
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
+    def clean_string(self, input):
+        if input == None:
+            return ""
+        if not isinstance(input, str):
+            return str(input)
+        else:
+            return str(input).strip()
+
+    def clean_int(self, input):
+        if input:
+            return int(input)
+        else:
+            return 0
 
     def clean_date_format(self, input):
         # loops through the list of formats and tries to return an input string into a datetime of one of those formats
@@ -452,6 +470,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "%Y-%m-%d %H:%M:%S",
             "%Y-%m-%d",
             "%d-%b-%Y",
+            "%b-%d-%Y",
         ]:
             try:
                 datetime_object = datetime.strptime(input, format)
@@ -461,9 +480,9 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         logging.error("No valid datetime format in utils.clean_date_format() for input string {}".format(input))
 
     # reads a csv and returns a list of dicts - one dict for each row
-    def read_csv_file(self, filepath):
+    def read_csv_file(self):
         output = []
-        dictreader = csv.DictReader(codecs.open(filepath, "rbU", "latin1"))
+        dictreader = csv.DictReader(codecs.open(self.data_path, "rbU", "latin1"))
         for row in dictreader:
             # strip each attribute name - CKAN requires it
             output_row = {}
@@ -471,26 +490,39 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                 output_row[ attr.strip() ] = row[attr]
             output.append(output_row)
 
-        #f.close()
-        logging.info("Read {} records from {}".format( len(output), filepath))
+        logging.info("Read {} records from {}".format( len(output), self.data_path))
         return output
 
-    def read_json_file(self, filepath):
-        return json.load( open(filepath, "r"))
+    def read_json_file(self):
+        return json.load( open(self.data_path, "r"))
+
+    def read_xlsx_file(self):
+        workbook = openpyxl.load_workbook(self.data_path)
+        worksheet = workbook[ self.config["sheet"] ]
+
+        # init output and sheet column names
+        output = []
+        column_names = [ col.value for col in worksheet[1] ]
+
+        for row in worksheet.iter_rows(min_row=2):
+            output.append( { column_names[i]: self.clean_string(row[i].value) for i in range(len(row)) })
+
+        return output
 
     # put input file into memory based on input format
-    def read_file(self, data_path, format):
+    def read_file(self):
         readers = {
             "csv": self.read_csv_file,
             "geojson": self.read_json_file,
             "json": self.read_json_file,
+            "xlsx": self.read_xlsx_file
         }
 
-        return  readers[format](data_path)
+        return readers[self.config["format"]]()
     
     
     # parse file attributes into correct data types in a dict based on input fields
-    def parse_file(self, read_file, format, fields):
+    def parse_file(self, read_file):
 
         # init output
         output = []
@@ -498,7 +530,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         # list of functions used to convert input to desired data_type
         formatters = {
             "text": str,
-            "int": int,
+            "int": self.clean_int,
             "float": float,
             "timestamp": self.clean_date_format,
         }
@@ -506,8 +538,9 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         # convert each column in each row
         for row in read_file:
             new_row = {}
-            for field in fields:
+            for field in self.config["attributes"]:
                 src = row[field["id"]]
+                #logging.info(src)
                 new_row[field["id"]] = formatters[ field["type"] ](src)
             output.append( new_row )
 
@@ -516,8 +549,8 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                 
 
     # put dict into datastore_create call
-    def insert_into_datastore(self, resource_id, fields, records):
-        self.ckan.action.datastore_create( id=resource_id, fields=fields, records=records )
+    def insert_into_datastore(self, resource_id, records):
+        self.ckan.action.datastore_create( id=resource_id, fields=self.config["attributes"], records=records )
 
     def execute(self, context):
         # init task instance from context
@@ -530,14 +563,14 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         if self.data_path_task_id and self.data_path_task_key:
             self.data_path = ti.xcom_pull(task_ids=self.data_path_task_id)[self.data_path_task_key]
 
-        if self.fields_task_id and self.fields_task_key:
-            self.fields = ti.xcom_pull(task_ids=self.fields_task_id)[self.fields_task_key]
+        #if self.fields_task_id and self.fields_task_key:
+        #    self.fields = ti.xcom_pull(task_ids=self.fields_task_id)[self.fields_task_key]
 
         # read and parse file
-        read_file = self.read_file(self.data_path, self.format)
-        parsed_data = self.parse_file(read_file, self.format, self.fields)
+        read_file = self.read_file()
+        parsed_data = self.parse_file(read_file)
 
         # put parsed_data into ckan datastore
-        self.insert_into_datastore(self.resource_id, self.fields, parsed_data)
+        self.insert_into_datastore(self.resource_id, parsed_data)
 
         return {"Success": True}
