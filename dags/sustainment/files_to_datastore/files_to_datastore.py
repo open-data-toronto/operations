@@ -13,12 +13,12 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.dummy import DummyOperator
 from utils import airflow_utils
 
-from utils_operators.file_operators import DownloadFileOperator
+from utils_operators.file_operators import DownloadFileOperator, DownloadZipOperator
 from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
 from utils_operators.directory_operator import CreateLocalDirectoryOperator, DeleteLocalDirectoryOperator
 from ckan_operators.package_operator import GetOrCreatePackageOperator
 from ckan_operators.resource_operator import GetOrCreateResourceOperator
-from ckan_operators.datastore_operator import BackupDatastoreResourceOperator, DeleteDatastoreResourceOperator, InsertDatastoreFromYAMLConfigOperator
+from ckan_operators.datastore_operator import BackupDatastoreResourceOperator, DeleteDatastoreResourceOperator, InsertDatastoreFromYAMLConfigOperator, RestoreDatastoreResourceBackupOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from utils_operators.agol_operators import AGOLDownloadFileOperator
 
@@ -31,7 +31,7 @@ CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = CKAN_CREDS[ACTIVE_ENV]["address"]
 CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]
 
-TMP_DIR = Path(Variable.get("tmp_dir"))
+TMP_DIR = Variable.get("tmp_dir")
 
 # branch logic - depends whether or not input resource is new
 def is_resource_new(get_or_create_resource_task_id, resource_name, **kwargs):
@@ -63,7 +63,7 @@ def create_dag(dag_id,
         # create tmp dir
         tmp_dir = CreateLocalDirectoryOperator(
             task_id = "tmp_dir", 
-            path = TMP_DIR / dag_id
+            path = TMP_DIR + "/" + dag_id
         )   
 
         # get or create package
@@ -94,8 +94,17 @@ def create_dag(dag_id,
         for resource_name in resource_names:
             
             # download file
+            # ZIP files:
+            if "zip" in dataset["resources"][resource_name].keys():
+                if dataset["resources"][resource_name]["zip"]:
+                    tasks_list["download_" + resource_name] = DownloadZipOperator(
+                        task_id="download_" + resource_name,
+                        file_url=dataset["resources"][resource_name]["url"],
+                        dir=TMP_DIR,
+                    )
+
             # CSV, XLSX files:
-            if dataset["resources"][resource_name]["format"] in ["csv", "xlsx"]:
+            elif dataset["resources"][resource_name]["format"] in ["csv", "xlsx"]:
                 tasks_list["download_" + resource_name] = DownloadFileOperator(
                     task_id="download_" + resource_name,
                     file_url=dataset["resources"][resource_name]["url"],
@@ -104,13 +113,17 @@ def create_dag(dag_id,
                 )
 
             # GEOJSON files:
-            if dataset["resources"][resource_name]["format"] in ["geojson", "json"]:
+            elif dataset["resources"][resource_name]["format"] in ["geojson", "json"]:
                 tasks_list["download_" + resource_name] = AGOLDownloadFileOperator(
                     task_id="download_" + resource_name,
                     request_url=dataset["resources"][resource_name]["url"],
                     dir=TMP_DIR,
                     filename=resource_name + ".json"
                 )
+
+            
+            
+
 
 
             # get or create a resource a file
@@ -147,6 +160,14 @@ def create_dag(dag_id,
                 apikey=CKAN_APIKEY,
                 resource_task_id="get_or_create_resource_" + resource_name,
                 dir_task_id="tmp_dir"
+            )
+
+            tasks_list["restore_backup_" + resource_name] = RestoreDatastoreResourceBackupOperator(
+                task_id="restore_backup_" + resource_name,
+                address=CKAN,
+                apikey=CKAN_APIKEY,
+                backup_task_id="backup_resource_" + resource_name,
+                trigger_rule="one_failed",
             )
 
             # delete existing resource records
@@ -187,6 +208,10 @@ def create_dag(dag_id,
             
             # if it didnt exist before this run, then dont backup or delete anything
             tasks_list["new_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> dummy2
+
+            # if something happens while a resource is being deleted or added
+            [ tasks_list["delete_resource_" + resource_name], tasks_list["insert_records_" + resource_name] ] >> tasks_list["restore_backup_" + resource_name]
+
 
             # parse the target data into each resource as a datastore resource
             dummy2 >> dummy3 >> tasks_list["dummy"] >> success_message_slack

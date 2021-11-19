@@ -471,6 +471,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "%Y-%m-%d",
             "%d-%b-%Y",
             "%b-%d-%Y",
+            "%Y%m%d%H%M%S",
         ]:
             try:
                 datetime_object = datetime.strptime(input, format)
@@ -517,6 +518,10 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "json": self.read_json_file,
             "xlsx": self.read_xlsx_file
         }
+        if "zip" in self.config.keys():
+            if self.config["zip"]:
+                print(self.data_path)
+                self.data_path = self.data_path[ self.config["filename"] ]
 
         return readers[self.config["format"]]()
     

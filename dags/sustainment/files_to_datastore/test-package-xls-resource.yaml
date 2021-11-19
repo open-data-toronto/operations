@@ -80,5 +80,133 @@ test-xlsx-package:
           type: "text"
           info:
             notes: "Status / Information for this record"
+
+    test-zip-xlsx-resource:
+      zip: True
+      filename: clearedpermits_current_year_csv.csv
+      format: csv
+      url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
+      attributes:
+        - id: "PERMIT_NUM"
+          type: "text"
+          info:
+            notes: "PERMIT_NUM for this record"
+        - id: "REVISION_NUM"
+          type: "int"
+          info:
+            notes: "REVISION_NUM for this record"
+        - id: "PERMIT_TYPE"
+          type: "text"
+          info:
+            notes: "PERMIT_TYPE for this record"
+        - id: "STRUCTURE_TYPE"
+          type: "text"
+          info:
+            notes: "STRUCTURE_TYPE for this record"
+        - id: "WORK"
+          type: "text"
+          info:
+            notes: "WORK for this record"
+        - id: "STREET_NUM"
+          type: "text"
+          info:
+            notes: "STREET_NUM for this record"
+        - id: "STREET_NAME"
+          type: "text"
+          info:
+            notes: "STREET_NAME for this record"
+        - id: "STREET_TYPE"
+          type: "text"
+          info:
+            notes: "STREET_TYPE for this record"
+        - id: "STREET_DIRECTION"
+          type: "text"
+          info:
+            notes: "STREET_DIRECTION for this record"
+        - id: "POSTAL"
+          type: "text"
+          info:
+            notes: "POSTAL for this record"
+        - id: "GEO_ID"
+          type: "text"
+          info:
+            notes: "GEO_ID for this record"
+        - id: "WARD_GRID"
+          type: "text"
+          info:
+            notes: "WARD_GRID for this record"
+        - id: "APPLICATION_DATE"
+          type: "text"
+          info:
+            notes: "APPLICATION_DATE for this record"
+        - id: "ISSUED_DATE"
+          type: "timestamp"
+          info:
+            notes: "ISSUED_DATE for this record"
+        - id: "COMPLETED_DATE"
+          type: "timestamp"
+          info:
+            notes: "COMPLETED_DATE for this record"
+        - id: "STATUS"
+          type: "timestamp"
+          info:
+            notes: "STATUS for this record"
+        - id: "DESCRIPTION"
+          type: "text"
+          info:
+            notes: "DESCRIPTION for this record"
+        - id: "CURRENT_USE"
+          type: "text"
+          info:
+            notes: "CURRENT_USE for this record"
+        - id: "PROPOSED_USE"
+          type: "text"
+          info:
+            notes: "PROPOSED_USE for this record"
+        - id: "DWELLING_UNITS_CREATED"
+          type: "int"
+          info:
+            notes: "DWELLING_UNITS_CREATED for this record"
+        - id: "DWELLING_UNITS_LOST"
+          type: "int"
+          info:
+            notes: "DWELLING_UNITS_LOST for this record"
+        - id: "EST_CONST_COST"
+          type: "int"
+          info:
+            notes: "EST_CONST_COST for this record"
+        - id: "ASSEMBLY"
+          type: "int"
+          info:
+            notes: "ASSEMBLY for this record"
+        - id: "INSTITUTIONAL"
+          type: "float"
+          info:
+            notes: "INSTITUTIONAL for this record"
+        - id: "RESIDENTIAL"
+          type: "float"
+          info:
+            notes: "RESIDENTIAL for this record"
+        - id: "BUSINESS_AND_PERSONAL_SERVICES"
+          type: "float"
+          info:
+            notes: "BUSINESS_AND_PERSONAL_SERVICES for this record"
+        - id: "MERCANTILE"
+          type: "float"
+          info:
+            notes: "MERCANTILE for this record"
+        - id: "INDUSTRIAL"
+          type: "float"
+          info:
+            notes: "INDUSTRIAL for this record"
+        - id: "INTERIOR_ALTERATIONS"
+          type: "float"
+          info:
+            notes: "INTERIOR_ALTERATIONS for this record"
+        - id: "DEMOLITION"
+          type: "float"
+          info:
+            notes: "DEMOLITION for this record"
+        
         
     

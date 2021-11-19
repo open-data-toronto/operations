@@ -5,7 +5,7 @@ test-csv-package:
     # resource name
     test-csv-resource:
       format: csv
-      url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.csv
+      url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits_current_year_csv.zip
       attributes:
         - id: "Camera Number"
           type: "text"
