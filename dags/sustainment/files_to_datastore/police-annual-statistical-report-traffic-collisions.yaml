@@ -1,0 +1,67 @@
+# package name
+police-annual-statistical-report-traffic-collisions:
+  schedule: "@once"
+  resources:
+    # resource name
+    Traffic Collisions:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Traffic_Collisions_ASR_T_TBL_001/FeatureServer/0/
+      attributes:
+        - id: "EventUniqueId"
+          type: "int"
+          info:
+            notes: "Occurrence Number"
+        - id: "OccurrenceDate"
+          type: "timestamp"
+          info:
+            notes: "Date Collision Occurred"
+        - id: "Month"
+          type: "text"
+          info:
+            notes: "Month Collision Occurred"
+        - id: "Day_of_Week"
+          type: "text"
+          info:
+            notes: "Day of Week Collision Occurred"
+        - id: "Year"
+          type: "text"
+          info:
+            notes: "Year Collision Occurred"
+        - id: "Hour"
+          type: "int"
+          info:
+            notes: "Hour Collision Occurred"
+        - id: "Division"
+          type: "text"
+          info:
+            notes: "Police Division where Collision Occurred"
+        - id: "Atom"
+          type: "text"
+          info:
+            notes: "Identifier of Neighbourhood"
+        - id: "Neighbourhood"
+          type: "text"
+          info:
+            notes: "Name of Neighbourhood where Collision Occurred"
+        - id: "Fatalities"
+          type: "int"
+          info:
+            notes: "Number of Person’s Killed associated with the Collision (See definitions)"
+        - id: "Injury_Collisions"
+          type: "text"
+          info:
+            notes: "Indicates whether a Collision had an associated Injury (See definitions)"
+        - id: "FTR_Collisions"
+          type: "text"
+          info:
+            notes: "Indicates whether a Collision was associated to Fail to Remain (See definitions)"
+        - id: "PD_Collisions"
+          type: "text"
+          info:
+            notes: "Indicates Whether a Collision was associated to Property Damage (See definitions)"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: "Longitude Coordinate (Offset to nearest intersection) & Latitude Coordinate "
+        

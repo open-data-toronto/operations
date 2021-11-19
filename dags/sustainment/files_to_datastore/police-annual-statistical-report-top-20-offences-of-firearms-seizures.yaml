@@ -1,0 +1,27 @@
+# package name
+police-annual-statistical-report-top-20-offences-of-firearms-seizures:
+  schedule: "@once"
+  resources:
+    # resource name
+    Top 20 Offences of Firearms Seizures:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Top_20_Offences_of_Firearm_Seizures_ASR_F_TBL_002/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "SeizedYear"
+          type: "int"
+          info:
+            notes: "Year of firearm seizure"
+        - id: "Rank"
+          type: "text"
+          info:
+            notes: "Rank 1-20 by count of offences from highest to lowest"
+        - id: "offence"
+          type: "text"
+          info:
+            notes: "Description of offence for occurrence linked to a firearm seizure"
+        

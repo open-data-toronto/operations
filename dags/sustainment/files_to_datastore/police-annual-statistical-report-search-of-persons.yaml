@@ -1,0 +1,51 @@
+# package name
+police-annual-statistical-report-search-of-persons:
+  schedule: "@once"
+  resources:
+    # resource name
+    Search of Persons:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Search_of_Persons_ASR_SP_TBL_001/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "SearchYear"
+          type: "int"
+          info:
+            notes: "Year search was conducted"
+        - id: "SearchLevel"
+          type: "text"
+          info:
+            notes: "Search level, 3 or 4"
+        - id: "SelfIdentifyTrans"
+          type: "text"
+          info:
+            notes: "Did the searched individual self-identify as Trans, yes or no"
+        - id: "Evidence"
+          type: "text"
+          info:
+            notes: "Did the search yield evidence, yes or no"
+        - id: "Escape_"
+          type: "text"
+          info:
+            notes: "Did the searched individual escape, yes or no"
+        - id: "Injury"
+          type: "text"
+          info:
+            notes: "Did the searched individual have an injury, yes or no"
+        - id: "Other"
+          type: "text"
+          info:
+            notes: "Any other search that is does not fall under Evidence, Escape, or Injury, yes or no"
+        - id: "Count_"
+          type: "text"
+          info:
+            notes: "Count of searched persons"
+        - id: "ItemsFound"
+          type: "text"
+          info:
+            notes: ""
+        

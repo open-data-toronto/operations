@@ -1,0 +1,35 @@
+# package name
+police-annual-statistical-report-gross-expenditures-by-division:
+  schedule: "@once"
+  resources:
+    # resource name
+    Gross Expenditures by Division:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Gross_Expenditures_by_Division_ASR_PB_TBL_001/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Budget Year"
+        - id: "Category"
+          type: "text"
+          info:
+            notes: "Data category"
+        - id: "Division"
+          type: "text"
+          info:
+            notes: "Division description"
+        - id: "Command"
+          type: "text"
+          info:
+            notes: "Command type at time of reporting, East/West or Area/Central"
+        - id: "Gross_Expenditure__final_"
+          type: "text"
+          info:
+            notes: "Total cost of expenditures"
+        

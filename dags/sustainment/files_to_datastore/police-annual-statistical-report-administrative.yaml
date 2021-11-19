@@ -1,0 +1,35 @@
+# package name
+police-annual-statistical-report-administrative:
+  schedule: "@once"
+  resources:
+    # resource name
+    Administrative:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Administrative_ASR_AD_TBL_001/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year"
+        - id: "Section"
+          type: "text"
+          info:
+            notes: "Table description"
+        - id: "Category"
+          type: "text"
+          info:
+            notes: "Description of category"
+        - id: "Subtype"
+          type: "text"
+          info:
+            notes: "Detailed description of category subtype"
+        - id: "Count_"
+          type: "text"
+          info:
+            notes: "Total Count"
+        

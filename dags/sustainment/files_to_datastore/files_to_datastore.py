@@ -91,40 +91,43 @@ def create_dag(dag_id,
         # From a List
         
         tasks_list = {}
-        for resource_name in resource_names:
+        for resource_label in resource_names:
+            # clean the resource label so the DAG can label its tasks with it
+            resource_name = resource_label.replace(" ", "")
+            resource = dataset["resources"][resource_label]
+
             
             # download file
             # ZIP files:
-            if "zip" in dataset["resources"][resource_name].keys():
-                if dataset["resources"][resource_name]["zip"]:
+            if "zip" in resource.keys():
+                if resource["zip"]:
                     tasks_list["download_" + resource_name] = DownloadZipOperator(
                         task_id="download_" + resource_name,
-                        file_url=dataset["resources"][resource_name]["url"],
+                        file_url=resource["url"],
                         dir=TMP_DIR,
                     )
 
             # CSV, XLSX files:
-            elif dataset["resources"][resource_name]["format"] in ["csv", "xlsx"]:
+            elif resource["format"] in ["csv", "xlsx"]:
                 tasks_list["download_" + resource_name] = DownloadFileOperator(
                     task_id="download_" + resource_name,
-                    file_url=dataset["resources"][resource_name]["url"],
+                    file_url=resource["url"],
                     dir=TMP_DIR,
-                    filename=dataset["resources"][resource_name]["url"].split("/")[-1]
+                    filename=resource["url"].split("/")[-1]
                 )
 
-            # GEOJSON files:
-            elif dataset["resources"][resource_name]["format"] in ["geojson", "json"]:
-                tasks_list["download_" + resource_name] = AGOLDownloadFileOperator(
-                    task_id="download_" + resource_name,
-                    request_url=dataset["resources"][resource_name]["url"],
-                    dir=TMP_DIR,
-                    filename=resource_name + ".json"
-                )
-
-            
-            
-
-
+            # AGOL files:
+            elif "agol" in resource.keys():
+                if resource["agol"] and resource["format"] in ["geojson", "json"]:
+                    # remove geometry attribute if file is not geojson
+                    delete_col = ["geometry"] if resource["format"] == "json" else []
+                    tasks_list["download_" + resource_name] = AGOLDownloadFileOperator(
+                        task_id="download_" + resource_name,
+                        request_url=resource["url"],
+                        dir=TMP_DIR,
+                        filename=resource_name + "." + resource["format"],
+                        delete_col=delete_col
+                    )
 
             # get or create a resource a file
             tasks_list["get_or_create_resource_" + resource_name] = GetOrCreateResourceOperator(
@@ -132,9 +135,9 @@ def create_dag(dag_id,
                 address=CKAN,
                 apikey=CKAN_APIKEY,
                 package_name_or_id=package_name,
-                resource_name=resource_name,
+                resource_name=resource_label,
                 resource_attributes=dict(
-                    format=dataset["resources"][resource_name]["format"],
+                    format=resource["format"],
                     is_preview=True,
                     url_type="datastore",
                     extract_job=f"Airflow: files_to_datastore.py",
@@ -188,7 +191,7 @@ def create_dag(dag_id,
                 resource_id_task_key = "id",
                 data_path_task_id = "download_" + resource_name,
                 data_path_task_key = "data_path",
-                config = dataset["resources"][resource_name],
+                config = resource,
                 #fields = dataset["resources"][resource_name]["attributes"],
                 #format = dataset["resources"][resource_name]["format"],
                 trigger_rule = "one_success",

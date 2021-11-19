@@ -1,0 +1,27 @@
+# package name
+police-annual-statistical-report-top-5-calibres:
+  schedule: "@once"
+  resources:
+    # resource name
+    Top 5 Calibres:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Firearms_Top_5_Calibres_ASR_F_TBL_001/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year of firearm seizure"
+        - id: "Firearm_Type"
+          type: "text"
+          info:
+            notes: "Type of firearm seized"
+        - id: "Calibre"
+          type: "text"
+          info:
+            notes: "Top 5 calibres per firearm seized"
+        
