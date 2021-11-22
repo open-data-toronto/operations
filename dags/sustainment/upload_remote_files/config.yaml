@@ -1,3 +1,8 @@
+#2021/11/08, Gary
+automated-speed-enforcement-ase-charges:
+  Automated Speed Enforcement - Monthly Charges:
+    format: xlsx
+    url: http://opendata.toronto.ca/transportation.services/automated-speed-enforcement-ase-charges/Automated-Speed-Enforcement.xlsx
 #2021/08/25, Gary
 heritage-conservation-districts:
   Heritage Conservation Districts Data(2021):
@@ -24,13 +29,13 @@ toronto-economic-bulletin:
 3d-massing:
   3D Massing (WGS84):
     format: shp
-    url: http://opendata.toronto.ca/city.planning/3d-massing/2020/3DMassingShapefile_2020_WGS84.zip
+    url: http://opendata.toronto.ca/city.planning/3d-massing/2021/3DMassingShapefile_2021_WGS84.zip
   3D Massing Multipatch (WGS84):
     format: shp
-    url: http://opendata.toronto.ca/city.planning/3d-massing/2020/3DMassingMultipatch_2020_WGS84.zip
+    url: http://opendata.toronto.ca/city.planning/3d-massing/2021/3DMassingMultipatch_2021_WGS84.zip
   Tile Locator Reference File (PDF):
     format: pdf
-    url: http://opendata.toronto.ca/planning/3dmassing/3DContextMassing_Tile_Locator.pdf
+    url: http://opendata.toronto.ca/city.planning/3d-massing/3DContextMassing_Tile_Locator.pdf
 address-points-municipal-toronto-one-address-repository:
   Municipal address points (wgs84) - geojson:
     format: zip
