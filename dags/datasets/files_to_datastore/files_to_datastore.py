@@ -24,7 +24,7 @@ from utils_operators.agol_operators import AGOLDownloadFileOperator
 
 
 # init hardcoded vars for these dags
-CONFIG_FOLDER = "/data/operations/dags/sustainment/files_to_datastore/"
+CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
 
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
@@ -58,6 +58,10 @@ def create_dag(dag_id,
         # init list of resource names
         resource_names = dataset["resources"].keys()
 
+        # init package notes metadata attribute, where available
+        notes = dataset["notes"] if "notes" in dataset.keys() else None
+        limitations = dataset["limitations"] if "limitations" in dataset.keys() else None
+
         # define the operators that each DAG needs regardless of how it is configured
         
         # create tmp dir
@@ -71,14 +75,11 @@ def create_dag(dag_id,
             task_id = "get_or_create_package",
             address = CKAN,
             apikey = CKAN_APIKEY,
-            package_name_or_id = package_name
+            package_name_or_id = package_name,
+            package_notes = notes,
+            package_limitations = limitations,
         )
         
-        dummy2 = DummyOperator(
-                task_id='dummy2')
-
-        dummy3 = DummyOperator(
-                task_id='dummy3')
 
         success_message_slack = GenericSlackOperator(
             task_id = "success_message_slack",
@@ -197,7 +198,6 @@ def create_dag(dag_id,
                 trigger_rule = "one_success",
             )
             
-            tasks_list["dummy"] = DummyOperator(task_id='Component'+str(resource_name))
 
 
             # init a temp directory and get/create the package for the target data
@@ -207,17 +207,13 @@ def create_dag(dag_id,
             get_or_create_package >> tasks_list["download_" + resource_name] >> tasks_list["get_or_create_resource_" + resource_name] >> tasks_list["new_or_existing_" + resource_name] >> [tasks_list["new_" + resource_name], tasks_list["existing_" + resource_name]]
             
             # for each resource, if the resource existed before this run, back it up then delete it
-            tasks_list["existing_" + resource_name] >> tasks_list["backup_resource_" + resource_name] >> tasks_list["delete_resource_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> dummy2 
+            tasks_list["existing_" + resource_name] >> tasks_list["backup_resource_" + resource_name] >> tasks_list["delete_resource_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> success_message_slack 
             
             # if it didnt exist before this run, then dont backup or delete anything
-            tasks_list["new_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> dummy2
+            tasks_list["new_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> success_message_slack
 
             # if something happens while a resource is being deleted or added
             [ tasks_list["delete_resource_" + resource_name], tasks_list["insert_records_" + resource_name] ] >> tasks_list["restore_backup_" + resource_name]
-
-
-            # parse the target data into each resource as a datastore resource
-            dummy2 >> dummy3 >> tasks_list["dummy"] >> success_message_slack
     
     return dag
 
@@ -226,18 +222,21 @@ for config_file in os.listdir(CONFIG_FOLDER):
     if config_file.endswith(".yaml"):
 
         # read config file
-        with open(CONFIG_FOLDER + config_file, "r") as f:
+        with open(CONFIG_FOLDER + "/" + config_file, "r") as f:
             config = yaml.load(f, yaml.SafeLoader)
             package_name = list(config.keys())[0]
 
 
         dag_id = config_file.split(".yaml")[0]
         schedule = config[package_name]["schedule"]
+        owner_name = config[package_name]["owner_name"]
+        owner_email = config[package_name]["owner_email"]
+
         default_args = airflow_utils.get_default_args(
             {
-                "owner": "Mackenzie",
+                "owner": owner_name,
                 "depends_on_past": False,
-                "email": ["mackenzie.nichols4@toronto.ca"],
+                "email": [owner_email],
                 "email_on_failure": False,
                 "email_on_retry": False,
                 "retries": 1,

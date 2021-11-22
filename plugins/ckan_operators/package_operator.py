@@ -17,17 +17,35 @@ class GetOrCreatePackageOperator(BaseOperator):
         package_name_or_id: str = None,
         package_name_or_id_task_id: str = None,
         package_name_or_id_task_key: str = None,
+        
+        package_notes: str = None,
+        package_notes_task_id: str = None,
+        package_notes_task_key: str = None,
+
+        package_limitations: str = None,
+        package_limitations_task_id: str = None,
+        package_limitations_task_key: str = None,
+        
 
         **kwargs
     ) -> None:
         super().__init__(**kwargs)
         self.package_name_or_id, self.package_name_or_id_task_id, self.package_name_or_id_task_key = package_name_or_id, package_name_or_id_task_id, package_name_or_id_task_key
+        self.package_notes, self.package_notes_task_id, self.package_notes_task_key = package_notes, package_notes_task_id, package_notes_task_key
+        self.package_limitations, self.package_limitations_task_id, self.package_limitations_task_key = package_limitations, package_limitations_task_id, package_limitations_task_key
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def execute(self, context):
-        # get the package id from a task if its been provided from a task
+        # get the package id and notes from a task if its been provided from a task
         if self.package_name_or_id_task_id and self.package_name_or_id_task_key:
             self.package_name_or_id = ti.xcom_pull(task_ids=self.package_name_or_id_task_id)[self.package_name_or_id_task_key]
+
+        if self.package_notes_task_id and self.package_notes_task_key:
+            self.package_notes = ti.xcom_pull(task_ids=self.package_notes_task_id)[self.package_notes_task_key]
+
+        if self.package_limitations_task_id and self.package_limitations_task_key:
+            self.package_limitations = ti.xcom_pull(task_ids=self.package_limitations_task_id)[self.package_limitations_task_key]
+
 
         # return a package, if the input package id exists
         try:
@@ -40,7 +58,9 @@ class GetOrCreatePackageOperator(BaseOperator):
                 id=self.package_name_or_id,
                 owner_org="city-of-toronto",
                 name=self.package_name_or_id,
-                title=self.package_name_or_id.replace("-", " ").capitalize(),
+                title=self.package_name_or_id.replace("-", " ").title(),
+                notes=self.package_notes,
+                limitations=self.package_limitations
                 )
 
             

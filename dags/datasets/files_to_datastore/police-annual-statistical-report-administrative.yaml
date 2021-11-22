@@ -1,0 +1,52 @@
+# package name
+police-annual-statistical-report-administrative:
+  schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    This dataset provides a breakdown of administrative information from 2014 – 2019. This data is compiled and provided by several units of the Toronto Police Service. The data is broken down into the following categories:
+    
+    •	Community Events
+    •	Crime Stoppers
+    •	Volunteers
+    •	Fleet
+    •	Industrial Liaison
+    •	Victim Services
+    
+    This data is related to table (ASR-AD-TBL-001) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+  resources:
+    # resource name
+    Administrative:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Administrative_ASR_AD_TBL_001/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year"
+        - id: "Section"
+          type: "text"
+          info:
+            notes: "Table description"
+        - id: "Category"
+          type: "text"
+          info:
+            notes: "Description of category"
+        - id: "Subtype"
+          type: "text"
+          info:
+            notes: "Detailed description of category subtype"
+        - id: "Count_"
+          type: "text"
+          info:
+            notes: "Total Count"
+        

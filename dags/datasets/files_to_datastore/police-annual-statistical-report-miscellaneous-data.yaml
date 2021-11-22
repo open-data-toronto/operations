@@ -1,0 +1,57 @@
+# package name
+police-annual-statistical-report-miscellaneous-data:
+  schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    This dataset contains the following categories of information:
+
+    <strong>Hate Crimes</strong><br>
+    This portion of the dataset is provided by Intelligence Services to identify the count of Hate Crimes per year from 2014 – 2019.
+    Detailed Information on Hate/Bias crime can be found in the publication Hate Bias Statistical Report
+    [https://www.torontopolice.on.ca/publications/](https://www.torontopolice.on.ca/publications/)
+
+    <strong>Miscellaneous Budget</strong><br>
+    This portion of the dataset is provided by Financial Services to identify the actual budget expenditures from 2014 – 2019.
+
+    <strong>R.I.D.E.</strong><br>
+    This portion of the dataset is provided by Traffic Services to identify the number of vehicles stopped and charges laid as a result of R.I.D.E.
+
+    This data is related to table (ASR-MISC-TBL-001) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport)
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+
+  resources:
+    # resource name
+    Miscellaneous Data:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Miscellaneous_Data_ASR_MISC_TBL_001/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year"
+        - id: "Section"
+          type: "text"
+          info:
+            notes: "Table description"
+        - id: "Category"
+          type: "text"
+          info:
+            notes: "Description of category"
+        - id: "Subtype"
+          type: "text"
+          info:
+            notes: "Detailed description of category subtype"
+        - id: "Count_"
+          type: "text"
+          info:
+            notes: "Total Count"
+        

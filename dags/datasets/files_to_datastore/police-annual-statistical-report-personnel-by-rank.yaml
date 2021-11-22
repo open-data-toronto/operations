@@ -1,0 +1,43 @@
+# package name
+police-annual-statistical-report-personnel-by-rank:
+  schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
+  limitations: Does not include temporary and part-time civilian members.
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    This specific dataset provides a count of personnel broken down by rank classification for Uniform, Civilian, and Other Staff from 2014 - 2019. 
+
+    This data is related to table (ASR-PB-TBL-002) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+
+  resources:
+    # resource name
+    Personnel by Rank:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Personnel_by_Rank__ASR_PB_TBL_002/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year of reported personnel"
+        - id: "Rank"
+          type: "text"
+          info:
+            notes: "Breakdown of rank, uniform, civilian, other"
+        - id: "Classification"
+          type: "text"
+          info:
+            notes: "Description of rank breakdown"
+        - id: "Count_"
+          type: "text"
+          info:
+            notes: "Count of employed persons"
+        

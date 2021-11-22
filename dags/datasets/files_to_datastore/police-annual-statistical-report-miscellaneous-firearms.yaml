@@ -1,0 +1,65 @@
+# package name
+police-annual-statistical-report-miscellaneous-firearms:
+  schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    This table provides a breakdown of statistics pertaining to firearms seizures made by the Toronto Police Service from 2014 – 2019. The information is divided into various categories and subtypes accordingly. The description of the categories is provided below:
+
+    <strong>Firearm Type</strong>
+    Breakdown of firearm type for every firearm that was seized by the TPS in 2019
+
+    <strong>Crime Guns</strong>
+    A crime gun is “any firearm that has been or suspected to have been used in in a criminal offence; any firearm that is obtained, possessed, or intended to be used to facilitate criminal activity; any firearm that has had a serial number removed, altered or obliterated; and any weapon that has been adapted for use as a firearm” (Toronto Police Service Governance Definitions and Service Procedure 09‐03).
+
+    <strong>Crime Guns – Firearm Type</strong>
+    Crime guns seized by TPS in 2019, broken down by type of firearm
+
+    <strong>Crime Guns – Firearm Classification</strong>
+    Crime guns seized by TPS in 2019, broken down by firearm classification
+
+    <strong>Stolen Firearms – Recovered by TPS in 2019</strong>
+    Breakdown of firearms recovered by TPS by jurisdiction a firearm was reported stolen 
+
+    <strong>Firearms Reported Stolen and Recovered by Firearm Type</strong>
+    Breakdown of firearm types for those reported stolen and recovered by TPS in 2019
+
+    <strong>TPS Firearm Thefts by Premise Type</strong>
+    Breakdown of premise types where a firearm was stolen
+
+    <strong>Firearm thefts reported to TPS – Type of Firearm Stolen</strong>
+    Breakdown of firearm type stolen
+
+    This data is related to table (ASR-F-TBL-003) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+  resources:
+    # resource name
+    Miscellaneous Firearms:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Miscellaneous_Firearms_ASR_F_TBL_003/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year of firearm seizure"
+        - id: "Category"
+          type: "text"
+          info:
+            notes: "Description of table/section"
+        - id: "Type"
+          type: "text"
+          info:
+            notes: "Breakdown of datatype"
+        - id: "Count_"
+          type: "text"
+          info:
+            notes: "Count of firearms"
+        

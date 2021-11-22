@@ -1,0 +1,57 @@
+# package name
+police-annual-statistical-report-victims-of-crime:
+  schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
+  limitations: Victims only for CCJS Level 1 = ‘Crimes Against the Person’ and where the victim name is not null.
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    This specific dataset includes all identified victims of crimes against the person, including, but not limited to, those that may have been deemed unfounded after investigation, those that may have occurred outside the City of Toronto limits, or have no verified location. 
+
+    In accordance with the Municipal Freedom of Information and Protection of Privacy Act, the Toronto Police Service has taken the necessary measures to protect the privacy of individuals involved in the reported occurrences. No personal information related to any of the parties involved in the occurrence will be released as open data.
+
+    This data is related to table (ASR-VC-TBL-001) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+
+  resources:
+    # resource name
+    Victims of Crime:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Victims_of_Crime_ASR_VC_TBL_001/FeatureServer/0/
+      attributes:
+        - id: "ReportedYear"
+          type: "int"
+          info:
+            notes: "Year crime was reported"
+        - id: "Category"
+          type: "int"
+          info:
+            notes: "Crime category"
+        - id: "Subtype"
+          type: "text"
+          info:
+            notes: "Crime category subtype"
+        - id: "AssaultSubtype"
+          type: "text"
+          info:
+            notes: "Breakdown of assault subtypes"
+        - id: "Sex"
+          type: "text"
+          info:
+            notes: "Sex of identified victim"
+        - id: "AgeGroup"
+          type: "text"
+          info:
+            notes: "Age group of identified victim, adult or youth"
+        - id: "AgeCohort"
+          type: "text"
+          info:
+            notes: "Age cohort of identified victim"
+        - id: "Count_"
+          type: "text"
+          info:
+            notes: "Count of identified victims; duplicate persons are possible if the same person was victimized for the same offence during the same period"
+        

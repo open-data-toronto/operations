@@ -1,6 +1,19 @@
 # package name
 police-annual-statistical-report-search-of-persons:
   schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    This dataset includes all Level 3 and Level 4 searches that were conducted.
+
+    In accordance with the Municipal Freedom of Information and Protection of Privacy Act, the Toronto Police Service has taken the necessary measures to protect the privacy of individuals involved in the reported occurrences. No personal information related to any of the parties involved in the occurrence will be released as open data. 
+
+    This data is aggregated by search year and criteria selection.
+
+    There was a change in reporting effective October 2020. As a result, the type of item found during the search is not collected in a comparable manner. Now the information is identified as whether or not an object has been identified. This change has been reflected in the dataset.
+
   resources:
     # resource name
     Search of Persons:

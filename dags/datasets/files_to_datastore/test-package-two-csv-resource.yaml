@@ -1,6 +1,8 @@
 # package name
 test-csv-package:
   schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
   resources:
     # resource name
     test-csv-resource:

@@ -1,0 +1,42 @@
+# package name
+police-annual-statistical-report-investigated-alleged-misconduct:
+  schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
+  limitations: Data pertains to external public complaints that have been received by PRS and entered in PSIS as of the data extraction date. Data pertains to TPS uniform members only. Numbers are subject to change as the data in PSIS is frequently being updated as complaints are concluded.
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    This specific dataset provides a breakdown of the total investigated complaints by type of complaint submitted between 2014 and 2019.
+
+    This data is related to table (ASR-PCF-TBL-002) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+
+  resources:
+    # resource name
+    Investigated Alleged Misconduct:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Investigated_Alleged_Misconduct__ASR_PCF_TBL_002/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year"
+        - id: "Type"
+          type: "text"
+          info:
+            notes: "Type of allegation"
+        - id: "Subtype"
+          type: "text"
+          info:
+            notes: "Detailed description of category subtype"
+        - id: "Count_"
+          type: "text"
+          info:
+            notes: "Total Count"

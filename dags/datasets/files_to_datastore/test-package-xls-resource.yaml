@@ -1,6 +1,8 @@
 # package name
 test-xlsx-package:
   schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
   resources:
     # resource name
     test-xlsx-resource:

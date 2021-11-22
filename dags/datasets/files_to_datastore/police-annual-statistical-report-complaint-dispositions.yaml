@@ -1,0 +1,44 @@
+# package name
+police-annual-statistical-report-complaint-dispositions:
+  schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
+  limitations: Data pertains to external public complaints that have been received by PRS and entered in PSIS as of the data extraction date. Data pertains to TPS uniform members only. Numbers are subject to change as the data in PSIS is frequently being updated as complaints are concluded. The Disposition subtype of “Over 6 Months” was replaced by “Discontinued” in 2015.
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    This specific dataset provides a breakdown of the total investigated complaints by disposition of the complaint submitted between 2014 and 2019.
+
+    This data is related to table (ASR-PCF-TBL-003) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+
+
+  resources:
+    # resource name
+    Complaint Dispositions:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Complaint_Dispositions__ASR_PCF_TBL_003/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year complaint was received"
+        - id: "Type"
+          type: "text"
+          info:
+            notes: "Type of complaint received"
+        - id: "Subtype"
+          type: "text"
+          info:
+            notes: "Detailed description of complaint type"
+        - id: "Count_"
+          type: "text"
+          info:
+            notes: "Total Count of complaints received"
+        

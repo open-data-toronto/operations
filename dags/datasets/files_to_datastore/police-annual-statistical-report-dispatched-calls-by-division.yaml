@@ -1,6 +1,9 @@
 # package name
 police-annual-statistical-report-dispatched-calls-by-division:
   schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
+  limitations: The count for "Other" Dispatched Events is comprised of events with a valid call for a service event type that are discpatched to a valid call sign where a Division reference could not be readilt determined (For example, a TPS officer attends an address outside of the city or a location that is not verified and attributed to a TPS Division)
   resources:
     # resource name
     Dispatched Calls by Division:

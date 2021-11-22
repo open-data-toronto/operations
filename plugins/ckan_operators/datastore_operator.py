@@ -456,7 +456,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         if input:
             return int(input)
         else:
-            return 0
+            return None
 
     def clean_date_format(self, input):
         # loops through the list of formats and tries to return an input string into a datetime of one of those formats

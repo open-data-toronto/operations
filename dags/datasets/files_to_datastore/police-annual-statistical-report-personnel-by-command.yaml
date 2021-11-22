@@ -1,0 +1,38 @@
+# package name
+police-annual-statistical-report-personnel-by-command:
+  schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    This specific dataset provides a count of personnel broken down by command level from 2014 to 2019. 
+
+    This data is related to table (ASR-PB-TBL-004) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+
+  resources:
+    # resource name
+    Personnel by Command:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Personnel_by_Command_ASR_PB_TBL_004/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year"
+        - id: "Command"
+          type: "text"
+          info:
+            notes: "Command associated with the personnel"
+        - id: "Count_"
+          type: "text"
+          info:
+            notes: "Total Count"
+        

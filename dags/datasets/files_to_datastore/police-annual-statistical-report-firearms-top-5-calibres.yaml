@@ -1,0 +1,37 @@
+# package name
+police-annual-statistical-report-firearms-top-5-calibres:
+  schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    The specific dataset provides a list of the five most common types of pistols, revolvers, rifles and shotguns that comprise the crime guns seized by the Toronto Police Service from 2014 - 2019.
+
+    This data is related to table (ASR-F-TBL-001) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+  resources:
+    # resource name
+    Top 5 Calibres:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Firearms_Top_5_Calibres_ASR_F_TBL_001/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year of firearm seizure"
+        - id: "Firearm_Type"
+          type: "text"
+          info:
+            notes: "Type of firearm seized"
+        - id: "Calibre"
+          type: "text"
+          info:
+            notes: "Top 5 calibres per firearm seized"
+        

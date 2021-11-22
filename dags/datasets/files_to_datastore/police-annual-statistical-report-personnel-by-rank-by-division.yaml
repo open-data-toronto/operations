@@ -1,6 +1,18 @@
 # package name
 police-annual-statistical-report-personnel-by-rank-by-division:
   schedule: "@once"
+  owner_name: Mackenzie
+  owner_email: mackenzie.nichols4@toronto.ca
+  limitations: Does not include temporary and part-time civilian members.
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    This specific dataset provides a count of personnel broken down by rank classification for Uniform & Civilian staff from 2014 - 2019 by division. This data includes the command level at the time of reporting.
+
+    This data is related to table (ASR-PB-TBL-003) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+
   resources:
     # resource name
     Personnel by Rank by Division:
@@ -17,19 +29,19 @@ police-annual-statistical-report-personnel-by-rank-by-division:
           info:
             notes: "Year of reported personnel"
         - id: "Command_Group"
-          type: "int"
+          type: "text"
           info:
             notes: "Description of command group"
         - id: "Command_Subunit"
-          type: "int"
+          type: "text"
           info:
             notes: "Breakdown of command subunits"
         - id: "Unit"
-          type: "int"
+          type: "text"
           info:
             notes: "Breakdown of command units"
         - id: "Classification"
-          type: "int"
+          type: "text"
           info:
             notes: "Breakdown of rank"
         - id: "Count_"
