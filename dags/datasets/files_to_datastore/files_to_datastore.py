@@ -28,8 +28,8 @@ CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
 
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-CKAN = CKAN_CREDS[ACTIVE_ENV]["address"]
-CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]
+CKAN = "https://ckanadmin1.intra.dev-toronto.ca/"#CKAN_CREDS[ACTIVE_ENV]["address"]
+CKAN_APIKEY = "7b37ca63-ee3a-4553-8822-57d0f7e14e33"#CKAN_CREDS[ACTIVE_ENV]["apikey"]
 
 TMP_DIR = Variable.get("tmp_dir")
 
@@ -58,9 +58,14 @@ def create_dag(dag_id,
         # init list of resource names
         resource_names = dataset["resources"].keys()
 
-        # init package notes metadata attribute, where available
-        notes = dataset["notes"] if "notes" in dataset.keys() else None
-        limitations = dataset["limitations"] if "limitations" in dataset.keys() else None
+        # init package metadata attributes, where available
+        package_metadata = {}
+        for metadata_attribute in ["notes", "limitations", "refresh_rate", "dataset_category", "owner_division"]:
+            if metadata_attribute in dataset.keys():
+                package_metadata[metadata_attribute] = dataset[metadata_attribute]
+            else:
+                package_metadata[metadata_attribute] = None
+
 
         # define the operators that each DAG needs regardless of how it is configured
         
@@ -76,8 +81,11 @@ def create_dag(dag_id,
             address = CKAN,
             apikey = CKAN_APIKEY,
             package_name_or_id = package_name,
-            package_notes = notes,
-            package_limitations = limitations,
+            package_notes = package_metadata["notes"],
+            package_limitations = package_metadata["limitations"],
+            package_refresh_rate = package_metadata["refresh_rate"],
+            dataset_category = package_metadata["dataset_category"],
+            owner_division = package_metadata["owner_division"],
         )
         
 
@@ -229,14 +237,14 @@ for config_file in os.listdir(CONFIG_FOLDER):
 
         dag_id = config_file.split(".yaml")[0]
         schedule = config[package_name]["schedule"]
-        owner_name = config[package_name]["owner_name"]
-        owner_email = config[package_name]["owner_email"]
+        dag_owner_name = config[package_name]["dag_owner_name"]
+        dag_owner_email = config[package_name]["dag_owner_email"]
 
         default_args = airflow_utils.get_default_args(
             {
-                "owner": owner_name,
+                "owner": dag_owner_name,
                 "depends_on_past": False,
-                "email": [owner_email],
+                "email": [dag_owner_email],
                 "email_on_failure": False,
                 "email_on_retry": False,
                 "retries": 1,

@@ -1,8 +1,28 @@
 # package name
 police-annual-statistical-report-personnel-by-command:
+  # DAG info
   schedule: "@once"
-  owner_name: Mackenzie
-  owner_email: mackenzie.nichols4@toronto.ca
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  refresh_rate: Annually
+  owner_division: Toronto Police Services
+  dataset_category: Table
+
+  # optional package attributes
+  dataset_owner_unit: null
+  dataset_owner_section: null
+  dataset_owner_division: null
+  dataset_owner_email: null 
+
+  civic_issues: null
+  topics: null
+  tag_string: null
+
+  information_url: null
+  excerpt: null
+  limitations: null
   notes: |
     The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
 

@@ -25,14 +25,28 @@ class GetOrCreatePackageOperator(BaseOperator):
         package_limitations: str = None,
         package_limitations_task_id: str = None,
         package_limitations_task_key: str = None,
-        
 
+        package_refresh_rate: str = None,
+        package_refresh_rate_task_id: str = None,
+        package_refresh_rate_task_key: str = None,
+
+        dataset_category: str = None,
+        dataset_category_task_id: str = None,
+        dataset_category_task_key: str = None,
+
+        owner_division: str = None,
+        owner_division_task_id: str = None,
+        owner_division_task_key: str = None,
+    
         **kwargs
     ) -> None:
         super().__init__(**kwargs)
         self.package_name_or_id, self.package_name_or_id_task_id, self.package_name_or_id_task_key = package_name_or_id, package_name_or_id_task_id, package_name_or_id_task_key
         self.package_notes, self.package_notes_task_id, self.package_notes_task_key = package_notes, package_notes_task_id, package_notes_task_key
         self.package_limitations, self.package_limitations_task_id, self.package_limitations_task_key = package_limitations, package_limitations_task_id, package_limitations_task_key
+        self.package_refresh_rate, self.package_refresh_rate_task_id, self.package_refresh_rate_task_key = package_refresh_rate, package_refresh_rate_task_id, package_refresh_rate_task_key
+        self.dataset_category, self.dataset_category_task_id, self.dataset_category_task_key = dataset_category, dataset_category_task_id, dataset_category_task_key
+        self.owner_division, self.owner_division_task_id, self.owner_division_task_key = owner_division, owner_division_task_id, owner_division_task_key
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def execute(self, context):
@@ -46,6 +60,14 @@ class GetOrCreatePackageOperator(BaseOperator):
         if self.package_limitations_task_id and self.package_limitations_task_key:
             self.package_limitations = ti.xcom_pull(task_ids=self.package_limitations_task_id)[self.package_limitations_task_key]
 
+        if self.package_refresh_rate_task_id and self.package_refresh_rate_task_key:
+            self.package_refresh_rate = ti.xcom_pull(task_ids=self.package_refresh_rate_task_id)[self.package_refresh_rate_task_key]
+
+        if self.dataset_category_task_id and self.dataset_category_task_key:
+            self.dataset_category = ti.xcom_pull(task_ids=self.dataset_category_task_id)[self.dataset_category_task_key]
+
+        if self.owner_division_task_id and self.owner_division_task_key:
+            self.owner_division = ti.xcom_pull(task_ids=self.owner_division_task_id)[self.owner_division_task_key]
 
         # return a package, if the input package id exists
         try:
@@ -60,10 +82,12 @@ class GetOrCreatePackageOperator(BaseOperator):
                 name=self.package_name_or_id,
                 title=self.package_name_or_id.replace("-", " ").title(),
                 notes=self.package_notes,
-                limitations=self.package_limitations
-                )
+                limitations=self.package_limitations,
+                refresh_rate=self.package_refresh_rate,
+                dataset_category=self.dataset_category,
+                owner_division=self.owner_division
+            )
 
-            
 
 class GetPackageOperator(BaseOperator):
     """
