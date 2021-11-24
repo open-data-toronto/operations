@@ -99,24 +99,24 @@ def create_dag(dag_id,
             apikey = CKAN_APIKEY,
             package_name_or_id = package_name,
             package_metadata = package_metadata,
-            #notes = package_metadata["notes"],
-            #limitations = package_metadata["limitations"],
-            #refresh_rate = package_metadata["refresh_rate"],
-            #dataset_category = package_metadata["dataset_category"],
-            #owner_division = package_metadata["owner_division"],
         )
         
-
+        # success message to slack
         success_message_slack = GenericSlackOperator(
             task_id = "success_message_slack",
             message_header = "Files to Datastore " + package_name,
             message_content = "\n\t\t   ".join( [name + " | `" + dataset["resources"][name]["format"] +"`" for name in resource_names] ),
             message_body = ""
         )
+
+        # create tmp dir
+        del_tmp_dir = DeleteLocalDirectoryOperator(
+            task_id = "del_tmp_dir", 
+            path = TMP_DIR + "/" + dag_id
+        )
                 
 
         # From a List
-        
         tasks_list = {}
         for resource_label in resource_names:
             # clean the resource label so the DAG can label its tasks with it
@@ -219,13 +219,9 @@ def create_dag(dag_id,
                 data_path_task_id = "download_" + resource_name,
                 data_path_task_key = "data_path",
                 config = resource,
-                #fields = dataset["resources"][resource_name]["attributes"],
-                #format = dataset["resources"][resource_name]["format"],
                 trigger_rule = "one_success",
             )
             
-
-
             # init a temp directory and get/create the package for the target data
             tmp_dir >> get_or_create_package
             
@@ -233,10 +229,10 @@ def create_dag(dag_id,
             get_or_create_package >> tasks_list["download_" + resource_name] >> tasks_list["get_or_create_resource_" + resource_name] >> tasks_list["new_or_existing_" + resource_name] >> [tasks_list["new_" + resource_name], tasks_list["existing_" + resource_name]]
             
             # for each resource, if the resource existed before this run, back it up then delete it
-            tasks_list["existing_" + resource_name] >> tasks_list["backup_resource_" + resource_name] >> tasks_list["delete_resource_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> success_message_slack 
+            tasks_list["existing_" + resource_name] >> tasks_list["backup_resource_" + resource_name] >> tasks_list["delete_resource_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> del_tmp_dir >> success_message_slack 
             
             # if it didnt exist before this run, then dont backup or delete anything
-            tasks_list["new_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> success_message_slack
+            tasks_list["new_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> del_tmp_dir >> success_message_slack
 
             # if something happens while a resource is being deleted or added
             [ tasks_list["delete_resource_" + resource_name], tasks_list["insert_records_" + resource_name] ] >> tasks_list["restore_backup_" + resource_name]
