@@ -6,22 +6,27 @@ police-annual-statistical-report-administrative:
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
   # mandatory package attributes
+  title: "Police Annual Statistical Report - Administrative"
+  date_published: "2020-11-18T19:41:10.391098"
   refresh_rate: Annually
-  owner_division: Toronto Police Services
   dataset_category: Table
 
   # optional package attributes
-  dataset_owner_unit: null
-  dataset_owner_section: null
-  dataset_owner_division: null
-  dataset_owner_email: null 
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
 
   civic_issues: null
-  topics: null
-  tag_string: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: Annual Statistical Report
+      vocabulary_id: null
 
-  information_url: null
-  excerpt: null
+
+  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
+  excerpt: This dataset provides a breakdown of administrative information from 2014 – 2019.
   limitations: null
   notes: |
     The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 

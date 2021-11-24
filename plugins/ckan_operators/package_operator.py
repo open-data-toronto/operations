@@ -17,62 +17,76 @@ class GetOrCreatePackageOperator(BaseOperator):
         package_name_or_id: str = None,
         package_name_or_id_task_id: str = None,
         package_name_or_id_task_key: str = None,
-        
-        package_notes: str = None,
-        package_notes_task_id: str = None,
-        package_notes_task_key: str = None,
 
-        package_limitations: str = None,
-        package_limitations_task_id: str = None,
-        package_limitations_task_key: str = None,
+        package_metadata: dict = None,
+        package_metadata_task_id: dict = None,
+        package_metadata_task_key: dict = None,
+        #package_notes: str = None,
+        #package_notes_task_id: str = None,
+        #package_notes_task_key: str = None,
 
-        package_refresh_rate: str = None,
-        package_refresh_rate_task_id: str = None,
-        package_refresh_rate_task_key: str = None,
+        #package_limitations: str = None,
+        #package_limitations_task_id: str = None,
+        #package_limitations_task_key: str = None,
 
-        dataset_category: str = None,
-        dataset_category_task_id: str = None,
-        dataset_category_task_key: str = None,
+        #package_refresh_rate: str = None,
+        #package_refresh_rate_task_id: str = None,
+        #package_refresh_rate_task_key: str = None,
 
-        owner_division: str = None,
-        owner_division_task_id: str = None,
-        owner_division_task_key: str = None,
+        #dataset_category: str = None,
+        #dataset_category_task_id: str = None,
+        #dataset_category_task_key: str = None,
+
+        #owner_division: str = None,
+        #owner_division_task_id: str = None,
+        #owner_division_task_key: str = None,
     
         **kwargs
     ) -> None:
         super().__init__(**kwargs)
         self.package_name_or_id, self.package_name_or_id_task_id, self.package_name_or_id_task_key = package_name_or_id, package_name_or_id_task_id, package_name_or_id_task_key
-        self.package_notes, self.package_notes_task_id, self.package_notes_task_key = package_notes, package_notes_task_id, package_notes_task_key
-        self.package_limitations, self.package_limitations_task_id, self.package_limitations_task_key = package_limitations, package_limitations_task_id, package_limitations_task_key
-        self.package_refresh_rate, self.package_refresh_rate_task_id, self.package_refresh_rate_task_key = package_refresh_rate, package_refresh_rate_task_id, package_refresh_rate_task_key
-        self.dataset_category, self.dataset_category_task_id, self.dataset_category_task_key = dataset_category, dataset_category_task_id, dataset_category_task_key
-        self.owner_division, self.owner_division_task_id, self.owner_division_task_key = owner_division, owner_division_task_id, owner_division_task_key
+        self.package_metadata, self.package_metadata_task_id, self.package_metadata_task_key = package_metadata, package_metadata_task_id, package_metadata_task_key
+        #self.package_notes, self.package_notes_task_id, self.package_notes_task_key = package_notes, package_notes_task_id, package_notes_task_key
+        #self.package_limitations, self.package_limitations_task_id, self.package_limitations_task_key = package_limitations, package_limitations_task_id, package_limitations_task_key
+        #self.package_refresh_rate, self.package_refresh_rate_task_id, self.package_refresh_rate_task_key = package_refresh_rate, package_refresh_rate_task_id, package_refresh_rate_task_key
+        #self.dataset_category, self.dataset_category_task_id, self.dataset_category_task_key = dataset_category, dataset_category_task_id, dataset_category_task_key
+        #self.owner_division, self.owner_division_task_id, self.owner_division_task_key = owner_division, owner_division_task_id, owner_division_task_key
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def execute(self, context):
         # get the package id and notes from a task if its been provided from a task
         if self.package_name_or_id_task_id and self.package_name_or_id_task_key:
             self.package_name_or_id = ti.xcom_pull(task_ids=self.package_name_or_id_task_id)[self.package_name_or_id_task_key]
-
-        if self.package_notes_task_id and self.package_notes_task_key:
-            self.package_notes = ti.xcom_pull(task_ids=self.package_notes_task_id)[self.package_notes_task_key]
-
-        if self.package_limitations_task_id and self.package_limitations_task_key:
-            self.package_limitations = ti.xcom_pull(task_ids=self.package_limitations_task_id)[self.package_limitations_task_key]
-
-        if self.package_refresh_rate_task_id and self.package_refresh_rate_task_key:
-            self.package_refresh_rate = ti.xcom_pull(task_ids=self.package_refresh_rate_task_id)[self.package_refresh_rate_task_key]
-
-        if self.dataset_category_task_id and self.dataset_category_task_key:
-            self.dataset_category = ti.xcom_pull(task_ids=self.dataset_category_task_id)[self.dataset_category_task_key]
-
-        if self.owner_division_task_id and self.owner_division_task_key:
-            self.owner_division = ti.xcom_pull(task_ids=self.owner_division_task_id)[self.owner_division_task_key]
+#
+        #if self.package_notes_task_id and self.package_notes_task_key:
+        #    self.package_notes = ti.xcom_pull(task_ids=self.package_notes_task_id)[self.package_notes_task_key]
+#
+        #if self.package_limitations_task_id and self.package_limitations_task_key:
+        #    self.package_limitations = ti.xcom_pull(task_ids=self.package_limitations_task_id)[self.package_limitations_task_key]
+#
+        #if self.package_refresh_rate_task_id and self.package_refresh_rate_task_key:
+        #    self.package_refresh_rate = ti.xcom_pull(task_ids=self.package_refresh_rate_task_id)[self.package_refresh_rate_task_key]
+#
+        #if self.dataset_category_task_id and self.dataset_category_task_key:
+        #    self.dataset_category = ti.xcom_pull(task_ids=self.dataset_category_task_id)[self.dataset_category_task_key]
+#
+        #if self.owner_division_task_id and self.owner_division_task_key:
+        #    self.owner_division = ti.xcom_pull(task_ids=self.owner_division_task_id)[self.owner_division_task_key]
 
         # return a package, if the input package id exists
+        logging.info(self.package_metadata)
+
         try:
-            logging.info("Attempting to get package {}".format(self.package_name_or_id))
-            return self.ckan.action.package_show(id=self.package_name_or_id)
+            logging.info("Attempting to get and update package {}".format(self.package_name_or_id))
+            return self.ckan.action.package_patch(
+                id=self.package_name_or_id,
+                owner_org="city-of-toronto",
+                name=self.package_name_or_id,
+                #title=self.package_name_or_id.replace("-", " ").title(),
+                license_url="https://open.toronto.ca/open-data-license/",
+                **self.package_metadata
+            )
+            #return self.ckan.action.package_show(id=self.package_name_or_id)
 
         except:
             logging.info("Unable to get package {} - creating it instead".format(self.package_name_or_id))
@@ -80,12 +94,14 @@ class GetOrCreatePackageOperator(BaseOperator):
                 id=self.package_name_or_id,
                 owner_org="city-of-toronto",
                 name=self.package_name_or_id,
-                title=self.package_name_or_id.replace("-", " ").title(),
-                notes=self.package_notes,
-                limitations=self.package_limitations,
-                refresh_rate=self.package_refresh_rate,
-                dataset_category=self.dataset_category,
-                owner_division=self.owner_division
+                #title=self.package_name_or_id.replace("-", " ").title(),
+                license_url="https://open.toronto.ca/open-data-license/",
+                **self.package_metadata
+                #notes=self.package_notes,
+                #limitations=self.package_limitations,
+                #refresh_rate=self.package_refresh_rate,
+                #dataset_category=self.dataset_category,
+                #owner_division=self.owner_division
             )
 
 

@@ -542,6 +542,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
 
         # convert each column in each row
         for row in read_file:
+            print(row)
             new_row = {}
             for field in self.config["attributes"]:
                 src = row[field["id"]]
@@ -555,7 +556,16 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
 
     # put dict into datastore_create call
     def insert_into_datastore(self, resource_id, records):
+        # TO DO - Add chunking logic for large datasets
+        # Smaller datasets can all be loaded at once
+        #if len(records) < 200000:
         self.ckan.action.datastore_create( id=resource_id, fields=self.config["attributes"], records=records )
+
+        # Larger datasets, however, need to be loaded in chunks
+        #else:
+
+        
+        return {"record_count": len(records)}
 
     def execute(self, context):
         # init task instance from context
@@ -576,6 +586,6 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         parsed_data = self.parse_file(read_file)
 
         # put parsed_data into ckan datastore
-        self.insert_into_datastore(self.resource_id, parsed_data)
+        record_count = self.insert_into_datastore(self.resource_id, parsed_data)
 
-        return {"Success": True}
+        return {"Success": True, "record_count": record_count}

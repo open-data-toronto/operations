@@ -6,22 +6,26 @@ police-annual-statistical-report-victims-of-crime:
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
   # mandatory package attributes
+  title: "Police Annual Statistical Report - Victims of Crimes"
+  date_published: "2020-11-18T19:41:10.391098"
   refresh_rate: Annually
-  owner_division: Toronto Police Services
-  dataset_category: Table
+  dataset_category: Map
 
   # optional package attributes
-  dataset_owner_unit: null
-  dataset_owner_section: null
-  dataset_owner_division: null
-  dataset_owner_email: null 
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
 
   civic_issues: null
-  topics: null
-  tag_string: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: Annual Statistical Report
+      vocabulary_id: null
 
-  information_url: null
-  excerpt: null
+  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
+  excerpt: This dataset includes all identified victims of crimes against the person, including, but not limited to, those that may have been deemed unfounded after investigation, those that may have occurred outside the City of Toronto limits, or have no verified location.
   limitations: Victims only for CCJS Level 1 = ‘Crimes Against the Person’ and where the victim name is not null.
   notes: |
     The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
@@ -46,7 +50,7 @@ police-annual-statistical-report-victims-of-crime:
           info:
             notes: "Year crime was reported"
         - id: "Category"
-          type: "int"
+          type: "text"
           info:
             notes: "Crime category"
         - id: "Subtype"

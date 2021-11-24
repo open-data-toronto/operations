@@ -6,22 +6,26 @@ police-annual-statistical-report-traffic-collisions:
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
   # mandatory package attributes
+  title: "Police Annual Statistical Report - Traffic Collisions"
+  date_published: "2020-11-18T19:41:10.391098"
   refresh_rate: Annually
-  owner_division: Toronto Police Services
-  dataset_category: Table
+  dataset_category: Map
 
   # optional package attributes
-  dataset_owner_unit: null
-  dataset_owner_section: null
-  dataset_owner_division: null
-  dataset_owner_email: null 
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
 
   civic_issues: null
-  topics: null
-  tag_string: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: Annual Statistical Report
+      vocabulary_id: null
 
-  information_url: null
-  excerpt: null
+  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
+  excerpt: This dataset includes all identified motor vehicle collision occurrences from 2014 to 2020 by occurrence date and division.
   limitations: |
     No Specified Address (NSA) includes any occurrences reported outside the City of Toronto limits or those that have no verified location.
 
@@ -47,11 +51,11 @@ police-annual-statistical-report-traffic-collisions:
     # resource name
     Traffic Collisions:
       agol: True
-      format: json
+      format: geojson
       url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Traffic_Collisions_ASR_T_TBL_001/FeatureServer/0/
       attributes:
         - id: "EventUniqueId"
-          type: "int"
+          type: "text"
           info:
             notes: "Occurrence Number"
         - id: "OccurrenceDate"

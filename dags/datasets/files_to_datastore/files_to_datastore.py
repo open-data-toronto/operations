@@ -60,7 +60,24 @@ def create_dag(dag_id,
 
         # init package metadata attributes, where available
         package_metadata = {}
-        for metadata_attribute in ["notes", "limitations", "refresh_rate", "dataset_category", "owner_division"]:
+        for metadata_attribute in [
+            "title",
+            "date_published",
+            "refresh_rate",
+            "owner_division",
+            "dataset_category",
+            "owner_unit",
+            "owner_section",
+            "owner_division",
+            "owner_email",
+            "civic_issues",
+            "topics",
+            "tags",
+            "information_url",
+            "excerpt",
+            "limitations",
+            "notes",
+            ]:
             if metadata_attribute in dataset.keys():
                 package_metadata[metadata_attribute] = dataset[metadata_attribute]
             else:
@@ -81,11 +98,12 @@ def create_dag(dag_id,
             address = CKAN,
             apikey = CKAN_APIKEY,
             package_name_or_id = package_name,
-            package_notes = package_metadata["notes"],
-            package_limitations = package_metadata["limitations"],
-            package_refresh_rate = package_metadata["refresh_rate"],
-            dataset_category = package_metadata["dataset_category"],
-            owner_division = package_metadata["owner_division"],
+            package_metadata = package_metadata,
+            #notes = package_metadata["notes"],
+            #limitations = package_metadata["limitations"],
+            #refresh_rate = package_metadata["refresh_rate"],
+            #dataset_category = package_metadata["dataset_category"],
+            #owner_division = package_metadata["owner_division"],
         )
         
 
