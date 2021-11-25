@@ -9,7 +9,7 @@ police-annual-statistical-report-victims-of-crime:
   title: "Police Annual Statistical Report - Victims of Crimes"
   date_published: "2020-11-18T19:41:10.391098"
   refresh_rate: Annually
-  dataset_category: Map
+  dataset_category: Table
 
   # optional package attributes
   owner_division: Toronto Police Services

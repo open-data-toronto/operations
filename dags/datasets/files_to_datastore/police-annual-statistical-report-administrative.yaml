@@ -24,7 +24,6 @@ police-annual-statistical-report-administrative:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-
   information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
   excerpt: This dataset provides a breakdown of administrative information from 2014 – 2019.
   limitations: null

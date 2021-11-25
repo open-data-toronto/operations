@@ -21,7 +21,6 @@ class GetOrCreatePackageOperator(BaseOperator):
         package_metadata: dict = None,
         package_metadata_task_id: dict = None,
         package_metadata_task_key: dict = None,
-    
         **kwargs
     ) -> None:
         super().__init__(**kwargs)
@@ -34,17 +33,17 @@ class GetOrCreatePackageOperator(BaseOperator):
         if self.package_name_or_id_task_id and self.package_name_or_id_task_key:
             self.package_name_or_id = ti.xcom_pull(task_ids=self.package_name_or_id_task_id)[self.package_name_or_id_task_key]
 
-        # return a package, if the input package id exists
-        logging.info(self.package_metadata)
+        logging.info("Package metadata: " + str(self.package_metadata))
 
         try:
-            logging.info("Attempting to get and update package {}".format(self.package_name_or_id))
+            logging.info("Attempting to get package {}".format(self.package_name_or_id))
+            #return self.ckan.action.package_show(id=self.package_name_or_id)
             return self.ckan.action.package_patch(
                 id=self.package_name_or_id,
                 owner_org="city-of-toronto",
                 name=self.package_name_or_id,
                 license_url="https://open.toronto.ca/open-data-license/",
-                **self.package_metadata
+                **self.package_metadata,
             )
 
         except:
@@ -54,7 +53,7 @@ class GetOrCreatePackageOperator(BaseOperator):
                 owner_org="city-of-toronto",
                 name=self.package_name_or_id,
                 license_url="https://open.toronto.ca/open-data-license/",
-                **self.package_metadata
+                **self.package_metadata,
             )
 
 
