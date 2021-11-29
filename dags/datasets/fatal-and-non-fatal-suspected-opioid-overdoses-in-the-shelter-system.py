@@ -36,7 +36,7 @@ PACKAGE_NAME = "fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-sy
 
 RESOURCES = {
     "summary-suspected-opioid-overdoses-in-shelters": {
-        "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/summary-suspected-opioid-overdoses-in-shelters_test",  # noqa: E501
+        "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/summary-suspected-opioid-overdoses-in-shelters.csv",  # noqa: E501
         "name": "summary-suspected-opioid-overdoses-in-shelters", 
         "metadata": {
             "format": "csv",
@@ -52,7 +52,7 @@ RESOURCES = {
         ],
     },
     "suspected-opioid-overdoses-in-shelters": {
-        "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/suspected-opioid-overdoses-in-shelters_test",  # noqa: E501
+        "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/suspected-opioid-overdoses-in-shelters.csv",  # noqa: E501
         "name": "suspected-opioid-overdoses-in-shelters", 
         "metadata": {
             "format": "csv",
