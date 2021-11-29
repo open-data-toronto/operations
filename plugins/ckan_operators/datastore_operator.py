@@ -164,7 +164,7 @@ class DeleteDatastoreResourceOperator(BaseOperator):
         assert self.resource_id, "Resource ID is empty! This operator needs a way to get the resource ID in order to delete the right datastore resource!"
         # Delete the resource
         try:
-            self.ckan.action.datastore_delete(id=self.resource_id)
+            self.ckan.action.datastore_delete(id=self.resource_id, force=True)
             logging.info("Deleted " + self.resource_id)
 
         except Exception as e:
@@ -191,12 +191,12 @@ class DeleteDatastoreResourceRecordsOperator(BaseOperator):
     def execute(self, context):
         backups_info = context["ti"].xcom_pull(task_ids=self.backup_task_id)
 
-        self.ckan.action.datastore_delete(id=backups_info["resource_id"])
+        self.ckan.action.datastore_delete(id=backups_info["resource_id"], force=True)
 
         with open(Path(backups_info["fields_file_path"]), "r") as f:
             fields = json.load(f)
 
-        self.ckan.action.datastore_create(id=backups_info["resource_id"], fields=fields)
+        self.ckan.action.datastore_create(id=backups_info["resource_id"], fields=fields, force=True)
 
         record_count = self.ckan.action.datastore_search(
             id=backups_info["resource_id"], limit=0
@@ -228,7 +228,7 @@ class InsertDatastoreResourceRecordsOperator(BaseOperator):
         with open(fields_path, "r") as f:
             fields = json.load(f)
 
-        self.ckan.action.datastore_create(id=resource_id, fields=fields)
+        self.ckan.action.datastore_create(id=resource_id, fields=fields, force=True)
 
     def execute(self, context):
         ti = context["ti"]
@@ -260,7 +260,7 @@ class InsertDatastoreResourceRecordsOperator(BaseOperator):
                     clean_records.append(record)
 
                 self.ckan.action.datastore_create(
-                    id=resource["id"], records=clean_records
+                    id=resource["id"], records=clean_records, force=True
                 )
 
             logging.info(f"Records inserted: {data.shape[0]}")
