@@ -551,9 +551,12 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         else:
             chunk_size = 2000 if "geometry" in records[0].keys() else 20000
             logging.info( "Dataset is too big to load all at once - loading in chunks of " + str(chunk_size))
-            for i in range( len(records) // chunk_size):
+            for i in range( (len(records) // chunk_size) +1 ):
                 if i % 10 == 0:
-                    logging.info("Loading chunk {} out of {}".format( str(i), str(len(records) // chunk_size) ))
+                    logging.info("Loading chunk {} out of {} with {} records".format( 
+                        str(i), 
+                        str(len(records) // chunk_size), 
+                        str(len(records[ chunk_size*i : chunk_size*(i+1)])) ))
                 self.ckan.action.datastore_create( 
                     id=resource_id, 
                     fields=self.config["attributes"], 
