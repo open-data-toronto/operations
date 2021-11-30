@@ -14,7 +14,6 @@ from airflow.models import Variable
 
 from ckan_operators.package_operator import GetOrCreatePackageOperator
 
-
 # init CKAN vars
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
