@@ -10,15 +10,19 @@ dir = os.path.dirname(os.path.realpath(__file__))
 subdirs = ["datasets", "sustainment"]
 
 # check each DAG for syntax errors to determine whether it can be loaded into airflow
-def test_validity():
+def validity_check(subdir):
     ran_list = []
-    for subdir in subdirs:
-        for dag in os.listdir(dir + "/" + subdir):
-            print(dag)
-            if dag not in ran_list and dag.endswith(".py"):
-                print("Testing " + dag)
-                print( os.system("python " + dir + "/" + subdir + "/" + dag ) )
-                ran_list.append( dag )
+    for dag in os.listdir(dir + "/" + subdir):
+        if dag not in ran_list and dag.endswith(".py"):
+            assert os.system("python " + dir + "/" + subdir + "/" + dag ) == 0, dag + " did not load - it may have a syntax error"
+            ran_list.append( dag )
+
+def test_datasets_validity():
+    validity_check("datasets")
+
+def test_sustainment_validity():
+    validity_check("sustainment")
+
 
 if __name__ == "__main__":
-    test_validity()
+    validity_check("datasets")
