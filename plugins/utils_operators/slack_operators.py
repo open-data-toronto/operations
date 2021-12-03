@@ -132,6 +132,12 @@ class GenericSlackOperator(BaseOperator):
         if self.message_content_task_id and self.message_content_task_key:
             self.message_content = ti.xcom_pull(task_ids=self.message_content_task_id)[self.message_content_task_key]
             
+        # if the message content is a dict, print it nicely
+        if isinstance(self.message_content, dict):
+            highlight_terms = ["failed"]
+            self.message_content = "\n\t\t   ".join( ["*" + key + "*: " + value + ":exclamation:" if value in highlight_terms else
+                                                      "*" + key + "*: " + value 
+                                                      for (key,value) in self.message_content.items()] )
 
         slack_message = """
             :robot_face: *{header}*
