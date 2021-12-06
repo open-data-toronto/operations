@@ -104,9 +104,9 @@ with DAG(
         }
     ),
     description="Take new earlyon.json from opendata.toronto.ca and put into datastore",
-    schedule_interval="0 18 * * *",
+    schedule_interval="15 23 * * 1-5",
     catchup=False,
-    tags=["earlyon","gary"],
+    tags=["earlyon","datasets"],
 ) as dag:
 
     def is_resource_new(**kwargs):
