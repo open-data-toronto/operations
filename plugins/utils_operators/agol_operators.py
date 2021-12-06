@@ -190,7 +190,6 @@ class AGOLDownloadFileOperator(BaseOperator):
         params = "&".join([ f"{k}={v}" for k,v in query_string_params.items() ])
         url = "https://" + "/".join([ url_part for url_part in f"{query_url}/query?{params}".replace("https://", "").split("/") if url_part ])
         res = requests.get(url)
-        logging.info("Try and get fields: ", res)
         assert res.status_code == 200, f"Status code response: {res.status_code}"
         
         ckan_fields = []
