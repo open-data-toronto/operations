@@ -1,3 +1,8 @@
+#2021/12/08, Gary
+earlyon-locations:
+  EarlyON Child and Family Centres Locations(JSON):
+    format: json
+    url: http://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json
 #2021/11/08, Gary
 automated-speed-enforcement-ase-charges:
   Automated Speed Enforcement - Monthly Charges:
