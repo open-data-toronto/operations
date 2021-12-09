@@ -1,0 +1,306 @@
+# package name
+solid-waste-pickup-schedule:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Solid Waste Pickup Schedule"
+  date_published: "2019-07-23T18:00:43.099048"
+  refresh_rate: Annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Solid Waste Management Services
+  owner_section: null
+  owner_unit: null
+  owner_email: Sandra.Zavaglia@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Community services
+    - Garbage and recycling
+  tags: 
+    - name: garbage pickup schedule
+      vocabulary_id: null
+    - name: garbage schedule
+      vocabulary_id: null
+    - name: pickup schedule
+      vocabulary_id: null
+    - name: waste pickup schedule
+      vocabulary_id: null
+
+  information_url: https://www.toronto.ca/services-payments/recycling-organics-garbage/
+  excerpt: This dataset contains the curbside residential weekly pick-up schedules for green bin, garbage, recycling, yard waste and Christmas trees
+  limitations: null
+  notes: |
+    See Readme file\r\n\r\nThis Excel file relates to the Solid Waste Daytime Curbside Collection Areas in ESRI Shape file format.\r\n
+  
+  resources:
+    # resource name
+    pickup-schedule-2022:
+      agol: False
+      format: csv
+      url: "\\\\dmnas-smb.corp.toronto.ca\\opendata\\staging\\solid.waste.management.services\\solid-waste-pickup-schedule\\pickup-schedule-2022.csv"
+      attributes:
+        - id: "Calendar"
+          type: "text"
+          info:
+            notes: "Regular day of the week for garbage/recycling/green bin pick-up"
+        - id: "WeekStarting"
+          type: "timestamp"
+          info:
+            notes: "Actual date the weekly collection schedule starts"
+        - id: "GreenBin"
+          type: "text"
+          info:
+            notes: "The Green Bin Program collects organic waste and turns it into compost."
+        - id: "Garbage"
+          type: "text"
+          info:
+            notes: "Garbage is what is left over when items cannot be recycled or reused. For more information visit http://www.toronto.ca/garbage/garbage.htm"
+        - id: "Recycling"
+          type: "text"
+          info:
+            notes: "The list of items that can be placed in the blue bin for recycling continues to grow. For an up-to-date list visit: (http://www.toronto.ca/garbage/)"
+        - id: "YardWaste"
+          type: "text"
+          info:
+            notes: "Leaf and yard waste collection is defined on the City's Web site @ http://www.toronto.ca/compost/yardwaste.htm"
+        - id: "ChristmasTree"
+          type: "text"
+          info:
+            notes: "M Monday T Tuesday W Wednesday R Thursday F Friday S Saturday 0 No pick-up"
+    pickup-schedule-2021:
+      agol: False
+      format: csv
+      url: "\\\\dmnas-smb.corp.toronto.ca\\opendata\\staging\\solid.waste.management.services\\solid-waste-pickup-schedule\\pickup-schedule-2021.csv"
+      attributes:
+        - id: "Calendar"
+          type: "text"
+          info:
+            notes: "Regular day of the week for garbage/recycling/green bin pick-up"
+        - id: "WeekStarting"
+          type: "timestamp"
+          info:
+            notes: "Actual date the weekly collection schedule starts"
+        - id: "GreenBin"
+          type: "text"
+          info:
+            notes: "The Green Bin Program collects organic waste and turns it into compost."
+        - id: "Garbage"
+          type: "text"
+          info:
+            notes: "Garbage is what is left over when items cannot be recycled or reused. For more information visit http://www.toronto.ca/garbage/garbage.htm"
+        - id: "Recycling"
+          type: "text"
+          info:
+            notes: "The list of items that can be placed in the blue bin for recycling continues to grow. For an up-to-date list visit: (http://www.toronto.ca/garbage/)"
+        - id: "YardWaste"
+          type: "text"
+          info:
+            notes: "Leaf and yard waste collection is defined on the City's Web site @ http://www.toronto.ca/compost/yardwaste.htm"
+        - id: "ChristmasTree"
+          type: "text"
+          info:
+            notes: "M Monday T Tuesday W Wednesday R Thursday F Friday S Saturday 0 No pick-up"
+    pickup-schedule-2020:
+      agol: False
+      format: csv
+      url: "\\\\dmnas-smb.corp.toronto.ca\\opendata\\staging\\solid.waste.management.services\\solid-waste-pickup-schedule\\pickup-schedule-2020.csv"
+      attributes:
+        - id: "Calendar"
+          type: "text"
+          info:
+            notes: "Regular day of the week for garbage/recycling/green bin pick-up"
+        - id: "WeekStarting"
+          type: "timestamp"
+          info:
+            notes: "Actual date the weekly collection schedule starts"
+        - id: "GreenBin"
+          type: "text"
+          info:
+            notes: "The Green Bin Program collects organic waste and turns it into compost."
+        - id: "Garbage"
+          type: "text"
+          info:
+            notes: "Garbage is what is left over when items cannot be recycled or reused. For more information visit http://www.toronto.ca/garbage/garbage.htm"
+        - id: "Recycling"
+          type: "text"
+          info:
+            notes: "The list of items that can be placed in the blue bin for recycling continues to grow. For an up-to-date list visit: (http://www.toronto.ca/garbage/)"
+        - id: "YardWaste"
+          type: "text"
+          info:
+            notes: "Leaf and yard waste collection is defined on the City's Web site @ http://www.toronto.ca/compost/yardwaste.htm"
+        - id: "ChristmasTree"
+          type: "text"
+          info:
+            notes: "M Monday T Tuesday W Wednesday R Thursday F Friday S Saturday 0 No pick-up"
+    pickup-schedule-2019:
+      agol: False
+      format: csv
+      url: "\\\\dmnas-smb.corp.toronto.ca\\opendata\\staging\\solid.waste.management.services\\solid-waste-pickup-schedule\\pickup-schedule-2019.csv"
+      attributes:
+        - id: "Calendar"
+          type: "text"
+          info:
+            notes: "Regular day of the week for garbage/recycling/green bin pick-up"
+        - id: "WeekStarting"
+          type: "timestamp"
+          info:
+            notes: "Actual date the weekly collection schedule starts"
+        - id: "GreenBin"
+          type: "text"
+          info:
+            notes: "The Green Bin Program collects organic waste and turns it into compost."
+        - id: "Garbage"
+          type: "text"
+          info:
+            notes: "Garbage is what is left over when items cannot be recycled or reused. For more information visit http://www.toronto.ca/garbage/garbage.htm"
+        - id: "Recycling"
+          type: "text"
+          info:
+            notes: "The list of items that can be placed in the blue bin for recycling continues to grow. For an up-to-date list visit: (http://www.toronto.ca/garbage/)"
+        - id: "YardWaste"
+          type: "text"
+          info:
+            notes: "Leaf and yard waste collection is defined on the City's Web site @ http://www.toronto.ca/compost/yardwaste.htm"
+        - id: "ChristmasTree"
+          type: "text"
+          info:
+            notes: "M Monday T Tuesday W Wednesday R Thursday F Friday S Saturday 0 No pick-up"
+    pickup-schedule-2018:
+      agol: False
+      format: csv
+      url: "\\\\dmnas-smb.corp.toronto.ca\\opendata\\staging\\solid.waste.management.services\\solid-waste-pickup-schedule\\pickup-schedule-2018.csv"
+      attributes:
+        - id: "Calendar"
+          type: "text"
+          info:
+            notes: "Regular day of the week for garbage/recycling/green bin pick-up"
+        - id: "WeekStarting"
+          type: "timestamp"
+          info:
+            notes: "Actual date the weekly collection schedule starts"
+        - id: "GreenBin"
+          type: "text"
+          info:
+            notes: "The Green Bin Program collects organic waste and turns it into compost."
+        - id: "Garbage"
+          type: "text"
+          info:
+            notes: "Garbage is what is left over when items cannot be recycled or reused. For more information visit http://www.toronto.ca/garbage/garbage.htm"
+        - id: "Recycling"
+          type: "text"
+          info:
+            notes: "The list of items that can be placed in the blue bin for recycling continues to grow. For an up-to-date list visit: (http://www.toronto.ca/garbage/)"
+        - id: "YardWaste"
+          type: "text"
+          info:
+            notes: "Leaf and yard waste collection is defined on the City's Web site @ http://www.toronto.ca/compost/yardwaste.htm"
+        - id: "ChristmasTree"
+          type: "text"
+          info:
+            notes: "M Monday T Tuesday W Wednesday R Thursday F Friday S Saturday 0 No pick-up"
+    pickup-schedule-2017:
+      agol: False
+      format: csv
+      url: "\\\\dmnas-smb.corp.toronto.ca\\opendata\\staging\\solid.waste.management.services\\solid-waste-pickup-schedule\\pickup-schedule-2017.csv"
+      attributes:
+        - id: "Calendar"
+          type: "text"
+          info:
+            notes: "Regular day of the week for garbage/recycling/green bin pick-up"
+        - id: "WeekStarting"
+          type: "timestamp"
+          info:
+            notes: "Actual date the weekly collection schedule starts"
+        - id: "GreenBin"
+          type: "text"
+          info:
+            notes: "The Green Bin Program collects organic waste and turns it into compost."
+        - id: "Garbage"
+          type: "text"
+          info:
+            notes: "Garbage is what is left over when items cannot be recycled or reused. For more information visit http://www.toronto.ca/garbage/garbage.htm"
+        - id: "Recycling"
+          type: "text"
+          info:
+            notes: "The list of items that can be placed in the blue bin for recycling continues to grow. For an up-to-date list visit: (http://www.toronto.ca/garbage/)"
+        - id: "YardWaste"
+          type: "text"
+          info:
+            notes: "Leaf and yard waste collection is defined on the City's Web site @ http://www.toronto.ca/compost/yardwaste.htm"
+        - id: "ChristmasTree"
+          type: "text"
+          info:
+            notes: "M Monday T Tuesday W Wednesday R Thursday F Friday S Saturday 0 No pick-up"
+    pickup-schedule-2016:
+      agol: False
+      format: csv
+      url: "\\\\dmnas-smb.corp.toronto.ca\\opendata\\staging\\solid.waste.management.services\\solid-waste-pickup-schedule\\pickup-schedule-2016.csv"
+      attributes:
+        - id: "Calendar"
+          type: "text"
+          info:
+            notes: "Regular day of the week for garbage/recycling/green bin pick-up"
+        - id: "WeekStarting"
+          type: "timestamp"
+          info:
+            notes: "Actual date the weekly collection schedule starts"
+        - id: "GreenBin"
+          type: "text"
+          info:
+            notes: "The Green Bin Program collects organic waste and turns it into compost."
+        - id: "Garbage"
+          type: "text"
+          info:
+            notes: "Garbage is what is left over when items cannot be recycled or reused. For more information visit http://www.toronto.ca/garbage/garbage.htm"
+        - id: "Recycling"
+          type: "text"
+          info:
+            notes: "The list of items that can be placed in the blue bin for recycling continues to grow. For an up-to-date list visit: (http://www.toronto.ca/garbage/)"
+        - id: "YardWaste"
+          type: "text"
+          info:
+            notes: "Leaf and yard waste collection is defined on the City's Web site @ http://www.toronto.ca/compost/yardwaste.htm"
+        - id: "ChristmasTree"
+          type: "text"
+          info:
+            notes: "M Monday T Tuesday W Wednesday R Thursday F Friday S Saturday 0 No pick-up"
+    pickup-schedule-sept2014-dec-2015:
+      agol: False
+      format: csv
+      url: "\\\\dmnas-smb.corp.toronto.ca\\opendata\\staging\\solid.waste.management.services\\solid-waste-pickup-schedule\\pickup-schedule-sept2014-dec-2015"
+      attributes:
+        - id: "Calendar"
+          type: "text"
+          info:
+            notes: "Regular day of the week for garbage/recycling/green bin pick-up"
+        - id: "WeekStarting"
+          type: "timestamp"
+          info:
+            notes: "Actual date the weekly collection schedule starts"
+        - id: "GreenBin"
+          type: "text"
+          info:
+            notes: "The Green Bin Program collects organic waste and turns it into compost."
+        - id: "Garbage"
+          type: "text"
+          info:
+            notes: "Garbage is what is left over when items cannot be recycled or reused. For more information visit http://www.toronto.ca/garbage/garbage.htm"
+        - id: "Recycling"
+          type: "text"
+          info:
+            notes: "The list of items that can be placed in the blue bin for recycling continues to grow. For an up-to-date list visit: (http://www.toronto.ca/garbage/)"
+        - id: "YardWaste"
+          type: "text"
+          info:
+            notes: "Leaf and yard waste collection is defined on the City's Web site @ http://www.toronto.ca/compost/yardwaste.htm"
+        - id: "ChristmasTree"
+          type: "text"
+          info:
+            notes: "M Monday T Tuesday W Wednesday R Thursday F Friday S Saturday 0 No pick-up"
+        
