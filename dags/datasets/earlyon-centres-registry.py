@@ -29,11 +29,11 @@ from utils import agol_utils, airflow_utils
 from utils_operators.directory_operator import CreateLocalDirectoryOperator, DeleteLocalDirectoryOperator
 from utils_operators.file_operators import DownloadFileOperator
 
-RESOURCE_NAME = "EarlyON Child and Family Centres Locations"
+RESOURCE_NAME = "EarlyON Child and Family Centres Locations - geometry"
 # SRC_URL = "https://secure.csd.toronto.ca/cseon/rest/earlyONJsonService/locations"  # noqa: E501
 SRC_URL = "http://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json" 
 
-PACKAGE_NAME = "earlyon-locations"
+PACKAGE_NAME = "earlyon-child-and-family-centres"
 dag_id = "Earlyon-Centres-Registry"
 tmp_folder = Path(Variable.get("tmp_dir")) / dag_id
 filepath = tmp_folder / "data.parquet"
@@ -104,7 +104,7 @@ with DAG(
         }
     ),
     description="Take new earlyon.json from opendata.toronto.ca and put into datastore",
-    schedule_interval="15 23 * * 1-5",
+    schedule_interval="0 18 * * *",
     catchup=False,
     tags=["earlyon","datasets"],
 ) as dag:
@@ -334,11 +334,26 @@ with DAG(
         task_id="get_fields", python_callable=get_fields, trigger_rule="none_failed"
     )
 
+    # file_new_branch = BranchPythonOperator(
+    #     task_id="file_new_branch", python_callable=is_file_new,
+    # )
+
+    # new_data_branch = BranchPythonOperator(
+    #     task_id="is_data_new", python_callable=is_data_new,
+    # )
+
     delete_tmp_dir = DeleteLocalDirectoryOperator(
         task_id = "delete_tmp_dir",
         path = tmp_folder,
         #on_success_callback=task_success_slack_alert,
     )
+
+    # delete_tmp_dir = PythonOperator(
+    #     task_id="delete_tmp_dir",
+    #     python_callable=airflow_utils.delete_tmp_data_dir,
+    #     op_kwargs={"dag_id": dag_id, "recursively": True},
+    #     trigger_rule="one_success",
+    # )
 
     modify_metadata = ResourceAndFileOperator(
         task_id="modify_metadata",
@@ -350,6 +365,18 @@ with DAG(
         sync_timestamp=True,
         trigger_rule="one_success",
     )
+
+    # send_nothing_notification = PythonOperator(
+    #     task_id="send_nothing_notification",
+    #     python_callable=airflow_utils.message_slack,
+    #     op_args=(
+    #         PACKAGE_NAME,
+    #         "No new data file",
+    #         "success",
+    #         active_env == "prod",
+    #         active_env,
+    #     ),
+    # )
 
     delete_records = DeleteDatastoreResourceRecordsOperator(
         task_id="delete_records",
