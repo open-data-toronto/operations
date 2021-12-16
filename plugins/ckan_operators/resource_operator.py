@@ -1,5 +1,6 @@
 import logging
 from pathlib import Path
+import time
 
 import ckanapi
 from airflow.models.baseoperator import BaseOperator
@@ -95,6 +96,8 @@ class GetOrCreateResourceOperator(BaseOperator):
             else:
                 resource["is_new"] = True   # considered as new if there is no datastore data
         else: 
+            # create a resource and check that its created - if it isnt, then create it again
+            # try to make the resource
             logging.info("Resource not found - creating a resource called {} in package {}".format(self.resource_name, self.package_name_or_id))
             resource = self.ckan.action.resource_create(
                 package_name_or_id=self.package_name_or_id,
@@ -103,6 +106,26 @@ class GetOrCreateResourceOperator(BaseOperator):
             )
             resource["is_new"] = True
 
+            while True:
+                # try to get that created resource
+                try:
+                    # pause a moment before checking that the resource is truly loaded - sometimes a resource_create call reports success but never made a resource
+                    logging.info("Pausing a moment before checking that the resource is truly loaded")
+                    time.sleep(5)
+                    logging.info("Fetching resource to make sure it was created successfully...")
+                    assert self.ckan.action.resource_show(id=resource["id"])
+                    break
+
+                # but if we cant, make it again and repeat the cycle
+                except:
+                    logging.info("Resource not made successfully - trying again ... ")
+                    logging.info("Resource not found - creating a resource called {} in package {}".format(self.resource_name, self.package_name_or_id))
+                    resource = self.ckan.action.resource_create(
+                        package_name_or_id=self.package_name_or_id,
+                        name=self.resource_name,
+                        **self.resource_attributes,
+                    )
+                    resource["is_new"] = True
 
         self.resource_id = resource["id"]
         logging.info(f"Returning: {resource}")

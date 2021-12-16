@@ -24,7 +24,8 @@ AGOL_CKAN_TYPE_MAP =  {
     "esriFieldTypeDate": "timestamp",
     "esriFieldTypeInteger": "int",
     "esriFieldTypeOID": "int",
-    "esriFieldTypeDouble": "float"
+    "esriFieldTypeDouble": "float",
+    "esriFieldTypeSmallInteger": "int",
 }
 
 # list of attributes that are redundant when geometry is present in a response
@@ -189,7 +190,6 @@ class AGOLDownloadFileOperator(BaseOperator):
         assert res.status_code == 200, f"Status code response: {res.status_code}"
         
         ckan_fields = []
-        
         for field in res.json()["fields"]:
             if field["name"].lower() not in [*DELETE_FIELDS, *self.delete_col]:
                 ckan_fields.append({

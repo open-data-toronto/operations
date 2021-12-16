@@ -28,8 +28,8 @@ CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
 
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-CKAN = "https://ckanadmin1.intra.dev-toronto.ca/"#CKAN_CREDS[ACTIVE_ENV]["address"]
-CKAN_APIKEY = "7b37ca63-ee3a-4553-8822-57d0f7e14e33"#CKAN_CREDS[ACTIVE_ENV]["apikey"]
+CKAN =  CKAN_CREDS[ACTIVE_ENV]["address"]
+CKAN_APIKEY =  CKAN_CREDS[ACTIVE_ENV]["apikey"]
 
 TMP_DIR = Variable.get("tmp_dir")
 
@@ -167,8 +167,9 @@ def create_dag(dag_id,
                     format=resource["format"],
                     is_preview=True,
                     url_type="datastore",
-                    extract_job=f"Airflow: files_to_datastore.py",
-                    package_id=package_name
+                    extract_job=f"Airflow - files_to_datastore.py - " + package_name,
+                    package_id=package_name,
+                    url=resource["url"]
                 ),
             )
 
