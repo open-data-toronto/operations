@@ -155,27 +155,27 @@ zoning-by-law:
         #  type: "text"
         #  info:
         #    notes: ""
-        #- id: "geometry"
-        #  type: "text"
-        #  info:
-        #    notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
     Zoning Height Overlay:
       agol: True
       format: geojson
       url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/9
       attributes:
-        - id: "HT_STORIES"
-          type: "text"
-          info:
-            notes: ""
+        #- id: "HT_STORIES"
+        #  type: "text"
+        #  info:
+        #    notes: ""
         - id: "HT_STRING"
           type: "text"
           info:
             notes: ""
-        - id: "HT_HEIGHT"
-          type: "text"
-          info:
-            notes: ""
+        #- id: "HT_HEIGHT"
+        #  type: "text"
+        #  info:
+        #    notes: ""
         - id: "geometry"
           type: "text"
           info:
@@ -234,8 +234,8 @@ zoning-by-law:
         - id: "geometry"
           type: "text"
           info:
-            notes: "Actual date the weekly collection schedule starts"
-    Zoning Zooming House Overlay:
+            notes: ""
+    Zoning House Overlay:
       agol: True
       format: geojson
       url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/19

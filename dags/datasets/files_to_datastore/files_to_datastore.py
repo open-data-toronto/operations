@@ -11,6 +11,8 @@ from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.bash import BashOperator
 from airflow.operators.dummy import DummyOperator
+from airflow.models.baseoperator import chain
+
 from utils import airflow_utils
 
 from utils_operators.file_operators import DownloadFileOperator, DownloadZipOperator
@@ -28,8 +30,8 @@ CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
 
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-CKAN =  CKAN_CREDS[ACTIVE_ENV]["address"]
-CKAN_APIKEY =  CKAN_CREDS[ACTIVE_ENV]["apikey"]
+CKAN =  CKAN_CREDS[ACTIVE_ENV]["address"] 
+CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"] 
 
 TMP_DIR = Variable.get("tmp_dir")
 
@@ -114,6 +116,12 @@ def create_dag(dag_id,
             task_id = "del_tmp_dir", 
             path = TMP_DIR + "/" + dag_id
         )
+
+        start_get_or_create_resources = DummyOperator(task_id = "start_get_or_create_resources")
+        done_get_or_create_resources = DummyOperator(task_id = "done_get_or_create_resources")
+
+        start_inserting_into_datastore = DummyOperator(task_id = "start_inserting_into_datastore", trigger_rule="none_failed")
+        done_inserting_into_datastore = DummyOperator(task_id = "done_inserting_into_datastore")
                 
 
         # From a List
@@ -227,14 +235,36 @@ def create_dag(dag_id,
             tmp_dir >> get_or_create_package
             
             # grab the target data, put it in the temp dir, and get or create resource(s) for the data
-            get_or_create_package >> tasks_list["download_" + resource_name] >> tasks_list["get_or_create_resource_" + resource_name] >> tasks_list["new_or_existing_" + resource_name] >> [tasks_list["new_" + resource_name], tasks_list["existing_" + resource_name]]
+            get_or_create_package >> tasks_list["download_" + resource_name] >> start_get_or_create_resources
+            
+        # run this in sequence for performance reasons
+        chain( start_get_or_create_resources, *[tasks_list["get_or_create_resource_" + resource_name.replace(" ", "")] for resource_name in resource_names], done_get_or_create_resources )
+
+        # resume running in parallel
+        for resource_label in resource_names:
+            # clean the resource label so the DAG can label its tasks with it
+            resource_name = resource_label.replace(" ", "")
+            resource = dataset["resources"][resource_label]
+            
+            # for each resource, find out if said resource was just created or existed already
+            done_get_or_create_resources >> tasks_list["new_or_existing_" + resource_name] >> [tasks_list["new_" + resource_name], tasks_list["existing_" + resource_name]]
             
             # for each resource, if the resource existed before this run, back it up then delete it
-            tasks_list["existing_" + resource_name] >> tasks_list["backup_resource_" + resource_name] >> tasks_list["delete_resource_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> del_tmp_dir >> success_message_slack 
-            
-            # if it didnt exist before this run, then dont backup or delete anything
-            tasks_list["new_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> del_tmp_dir >> success_message_slack
+            tasks_list["existing_" + resource_name] >> tasks_list["backup_resource_" + resource_name] >> tasks_list["delete_resource_" + resource_name] >> start_inserting_into_datastore
 
+            # if it didnt exist before this run, then dont backup or delete anything
+            tasks_list["new_" + resource_name] >> start_inserting_into_datastore
+
+        # run this in sequence for performance reasons  
+        chain( start_inserting_into_datastore, *[tasks_list["insert_records_" + resource_name.replace(" ", "")] for resource_name in resource_names], done_inserting_into_datastore)
+        
+        # Delete our temporary dir and report success to slack
+        done_inserting_into_datastore >> del_tmp_dir >> success_message_slack
+
+        for resource_label in resource_names:
+            # clean the resource label so the DAG can label its tasks with it
+            resource_name = resource_label.replace(" ", "")
+            resource = dataset["resources"][resource_label]
             # if something happens while a resource is being deleted or added
             [ tasks_list["delete_resource_" + resource_name], tasks_list["insert_records_" + resource_name] ] >> tasks_list["restore_backup_" + resource_name]
     
