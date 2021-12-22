@@ -35,7 +35,7 @@ from utils_operators.slack_operators import task_success_slack_alert, task_failu
 #            "url_type": "datastore",
 #        }}}
 
-SRC_URL = "http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-2021"
+SRC_URL = "http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-2021.csv"
 PACKAGE_NAME = "daily-shelter-overnight-service-occupancy-capacity"
 RESOURCE_NAME = "daily-shelter-overnight-service-occupancy-capacity-2021"
 
