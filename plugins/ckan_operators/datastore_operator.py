@@ -448,6 +448,12 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         else:
             return None
 
+    def clean_float(self, input):
+        if input:
+            return float(input)
+        else:
+            return None
+
     def clean_date_format(self, input):
         # loops through the list of formats and tries to return an input string into a datetime of one of those formats
         assert isinstance(input, str), "Utils clean_date_format() function can only receive strings - it instead received {}".format(type(input))
@@ -525,16 +531,24 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         formatters = {
             "text": str,
             "int": self.clean_int,
-            "float": float,
+            "float": self.clean_float,
             "timestamp": self.clean_date_format,
         }
 
         # convert each column in each row
         for row in read_file:
             new_row = {}
-            for field in self.config["attributes"]:
-                src = row[field["id"]]
-                new_row[field["id"]] = formatters[ field["type"] ](src)
+            # for each attribute ...
+            for i in range(len(self.config["attributes"])):
+                
+                # map source column names to target column names, where needed
+                if "source_name" in self.config['attributes'][i].keys() and "target_name" in self.config['attributes'][i].keys():
+                    self.config["attributes"][i]["id"] = self.config["attributes"][i]["target_name"]
+                    src = row[self.config["attributes"][i]["source_name"]]
+                else:
+                    src = row[self.config["attributes"][i]["id"]]
+
+                new_row[self.config["attributes"][i]["id"]] = formatters[ self.config["attributes"][i]["type"] ](src)
             output.append( new_row )
 
         logging.info( "Cleaned {} records".format(len(output)) )
@@ -543,6 +557,11 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
 
     # put dict into datastore_create call
     def insert_into_datastore(self, resource_id, records):
+        # map source column names to target column names, where needed
+        for i in range(len(self.config['attributes'])):
+            if "source_name" in self.config['attributes'][i].keys() and "target_name" in self.config['attributes'][i].keys():
+                self.config["attributes"][i]["id"] = self.config["attributes"][i]["target_name"]
+
         # Smaller datasets can all be loaded at once
         if len(records) < 200000:
             self.ckan.action.datastore_create( id=resource_id, fields=self.config["attributes"], records=records )
