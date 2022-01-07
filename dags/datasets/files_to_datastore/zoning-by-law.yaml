@@ -38,7 +38,10 @@ zoning-by-law:
   limitations: |
     The information represented in the spatial file must be read with the by-law text. It is suggested that these files be used with the [Toronto Centreline (TCL)](https://open.toronto.ca/dataset/toronto-centreline-tcl/) and [Address Points (Municipal) - Toronto One Address Repository file](https://open.toronto.ca/dataset/address-points-municipal-toronto-one-address-repository/).\r\n\r\nPlease be aware that without direct access to the text of the Zoning By-law, the mapped data is meaningless.  The current on-line zoning map is an interactive product which provides direct links to key parts of the text most relevant to the respective polygons.
   notes: |
-      \r\nThis dataset contains ESRI shape files that are part of the Zoning By-law 569-2013, was approved by Council but it is still subject to an Ontario Municipal Board (OMB) hearing for final approval.  \r\n  \r\nThe Zoning By-law team is responsible for the revising the city-wide zoning bylaw. Zoning bylaws regulate the use, size, height, density and location of buildings on properties and affect every property in the City.\r\n\r\nView [Amendments to Zoning By-law 569-2013](https://www.toronto.ca/city-government/planning-development/zoning-by-law-preliminary-zoning-reviews/zoning-by-law-569-2013-2/)\r\n
+      This dataset contains ESRI shape files that are part of the Zoning By-law 569-2013, was approved by Council but it is still subject to an Ontario Municipal Board (OMB) hearing for final approval.  
+      The Zoning By-law team is responsible for the revising the city-wide zoning bylaw. Zoning bylaws regulate the use, size, height, density and location of buildings on properties and affect every property in the City.
+      
+      View [Amendments to Zoning By-law 569-2013](https://www.toronto.ca/city-government/planning-development/zoning-by-law-preliminary-zoning-reviews/zoning-by-law-569-2013-2/)
   
   resources:
     # resource name
@@ -51,110 +54,110 @@ zoning-by-law:
           type: "text"
           info:
             notes: ""
-        #- id: "ZN_LU_CATEGORY"
-        #  type: "int"
-        #  info:
-        #    notes: ""
-        #- id: "ZN_HOLDING"
-        #  type: "text"
-        #  info:
-        #    notes: ""
-        #- id: "ZN_HOLDING_NO"
-        #  type: "int"
-        #  info:
-        #    notes: ""
-        #- id: "ZN_FRONTAGE"
-        #  type: "float"
-        #  info:
-        #    notes: ""
-        #- id: "ZN_AREA"
-        #  type: "int"
-        #  info:
-        #    notes: ""
-        #- id: "ZN_UNIT_COUNT"
-        #  type: "int"
-        #  info:
-        #    notes: ""
-        #- id: "ZN_FSI_DENSITY"
-        #  type: "float"
-        #  info:
-        #    notes: ""
-        #- id: "ZN_COVERAGE"
-        #  type: "float"
-        #  info:
-        #    notes: ""
-        #- id: "FSI_TOTAL"
-        #  type: "float"
-        #  info:
-        #    notes: ""
-        #- id: "FSI_COMMERCIAL_USE"
-        #  type: "float"
-        #  info:
-        #    notes: ""
-        #- id: "FSI_RESIDENTIAL_USE"
-        #  type: "float"
-        #  info:
-        #    notes: ""
-        #- id: "FSI_EMPLOYMENT_USE"
-        #  type: "float"
-        #  info:
-        #    notes: ""
-        #- id: "FSI_OFFICE_USE"
-        #  type: "float"
-        #  info:
-        #    notes: ""
-        #- id: "ZN_EXCPTN"
-        #  type: "text"
-        #  info:
-        #    notes: ""
-        #- id: "ZN_EXCPTN_NO"
-        #  type: "int"
-        #  info:
-        #    notes: ""
-        #- id: "STANDARDS_SET"
-        #  type: "int"
-        #  info:
-        #    notes: ""
-        #- id: "ZN_STATUS"
-        #  type: "int"
-        #  info:
-        #    notes: ""
+        - id: "ZN_LU_CATEGORY"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ZN_HOLDING"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZN_HOLDING_NO"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ZN_FRONTAGE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "ZN_AREA"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ZN_UNIT_COUNT"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ZN_FSI_DENSITY"
+          type: "float"
+          info:
+            notes: ""
+        - id: "ZN_COVERAGE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "FSI_TOTAL"
+          type: "float"
+          info:
+            notes: ""
+        - id: "FSI_COMMERCIAL_USE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "FSI_RESIDENTIAL_USE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "FSI_EMPLOYMENT_USE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "FSI_OFFICE_USE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "ZN_EXCPTN"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZN_EXCPTN_NO"
+          type: "int"
+          info:
+            notes: ""
+        - id: "STANDARDS_SET"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ZN_STATUS"
+          type: "int"
+          info:
+            notes: ""
         #- id: "ZN_text"
         #  type: "text"
         #  info:
         #    notes: ""
-        #- id: "ZN_AREA_UNIT"
-        #  type: "float"
-        #  info:
-        #    notes: ""
-        #- id: "BYLAW_CHAPTERLINK"
-        #  type: "text"
-        #  info:
-        #    notes: ""
-        #- id: "BYLAW_SECTIONLINK"
-        #  type: "text"
-        #  info:
-        #    notes: ""
-        #- id: "BYLAW_EXCPTNLINK"
-        #  type: "text"
-        #  info:
-        #    notes: ""
-        #- id: "BYLAW_HOLDINGLINK"
-        #  type: "text"
-        #  info:
-        #    notes: ""
-        #- id: "ZBL_CHAPTER"
-        #  type: "text"
-        #  info:
-        #    notes: ""
-        #- id: "ZBL_SECTION"
-        #  type: "text"
-        #  info:
-        #    notes: ""
-        #- id: "ZBL_EXCPTN"
-        #  type: "text"
-        #  info:
-        #    notes: ""
+        - id: "ZN_AREA_UNIT"
+          type: "float"
+          info:
+            notes: ""
+        - id: "BYLAW_CHAPTERLINK"
+          type: "text"
+          info:
+            notes: ""
+        - id: "BYLAW_SECTIONLINK"
+          type: "text"
+          info:
+            notes: ""
+        - id: "BYLAW_EXCPTNLINK"
+          type: "text"
+          info:
+            notes: ""
+        - id: "BYLAW_HOLDINGLINK"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZBL_CHAPTER"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZBL_SECTION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZBL_EXCPTN"
+          type: "text"
+          info:
+            notes: ""
         - id: "geometry"
           type: "text"
           info:
@@ -164,18 +167,18 @@ zoning-by-law:
       format: geojson
       url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/9
       attributes:
-        #- id: "HT_STORIES"
-        #  type: "text"
-        #  info:
-        #    notes: ""
+        - id: "HT_STORIES"
+          type: "text"
+          info:
+            notes: ""
         - id: "HT_STRING"
           type: "text"
           info:
             notes: ""
-        #- id: "HT_HEIGHT"
-        #  type: "text"
-        #  info:
-        #    notes: ""
+        - id: "HT_HEIGHT"
+          type: "text"
+          info:
+            notes: ""
         - id: "geometry"
           type: "text"
           info:
@@ -235,7 +238,7 @@ zoning-by-law:
           type: "text"
           info:
             notes: ""
-    Zoning House Overlay:
+    Zoning Rooming House Overlay:
       agol: True
       format: geojson
       url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/19
