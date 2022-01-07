@@ -1,0 +1,174 @@
+# package name
+daily-shelter-overnight-service-occupancy-capacity:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Daily Shelter & Overnight Service Occupancy & Capacity"
+  date_published: "2021-06-28T13:44:56.408963"
+  refresh_rate: Daily
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Shelter, Support & Housing Administration
+  owner_section: null
+  owner_unit: null
+  owner_email: sshadata@toronto.ca
+
+  civic_issues: 
+    - Affordable housing
+  topics: 
+    - Community services
+    - City government
+  tags: 
+    - name: shelter
+      vocabulary_id: null
+
+  information_url: https://www.toronto.ca/city-government/data-research-maps/research-reports/housing-and-homelessness-research-and-reports/shelter-census/
+  excerpt: Daily occupancy and capacity data for City of Toronto funded shelter and overnight service programs.
+  limitations: This is unaudited data compiled directly from an administrative database. Data reflect only the state of each program's records in the database and may not always accurately reflect the actual current situation in each program.
+  notes: |
+    This data set provides a daily list of active overnight shelter and allied services in the Shelter Support and Housing Administration division's Shelter Management Information System (SMIS) database. The data provides daily updated information about shelter and overnight service programs administered by SSHA including the program's operator, location, classification, occupancy and capacity.
+    This reporting revises and updates the approach taken in the [Daily Shelter Occupancy data set] (https://open.toronto.ca/dataset/daily-shelter-occupancy/), starting with the current year data for 2021. This new data set includes the following revisions:
+    
+    * __Overnight service type:__ The previous data set only reported on shelter programs, now all overnight service types where occupancy is tracked in SMIS are included.
+    
+    * __Capacity type:__ Programs are categorized in this data set as having either bed based or room based capacity. Bed based capacity is typically applicable for programs with common sleeping areas, while room based capacity is typically applicable for family programs and hotel programs where sleeping rooms are not shared by people from different households. This change prevents over reporting of capacity in room based programs.
+    
+    * __Two measures of capacity:__ This data set provides information about two measures of capacity. __Funding__ capacity reports the number of beds or rooms that a program is intended to provide. This is also the capacity measure provided in the previous Daily Shelter Occupancy data set. There are a number of reasons why beds or rooms may be temporarily out of service, including maintenance, repairs, renovations, outbreaks or pest control, so a second capacity measure is also included in the reporting. __Actual__ capacity reports the number of beds or rooms in service and showing as available for occupancy in the Shelter Management Information System at time of reporting. The previous data set reported only funding capacity, but actual capacity is a more effective capacity measure to assess program occupancy rates.
+    
+    ### Definitions
+    Definitions for each field in the data set are provided under data features. Additional definitions about housing & homelessness services can be found in the Housing & Homelessness Services Glossary, which you can find on the [Housing Stability Service System Overview](https://www.toronto.ca/city-government/data-research-maps/research-reports/housing-and-homelessness-research-and-reports/housing-stability-service-system-map-and-terms/) web page.
+    
+  resources:
+    # resource name
+    daily-shelter-overnight-service-occupancy-capacity-2021:
+      format: csv
+      url: http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-2021.csv
+      attributes:
+        - id: "OCCUPANCY_DATE"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "ORGANIZATION_ID"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "ORGANIZATION_NAME"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "SHELTER_ID"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "SHELTER_GROUP"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "LOCATION_ID"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "LOCATION_NAME"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "LOCATION_ADDRESS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "LOCATION_POSTAL_CODE"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "LOCATION_CITY"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "LOCATION_PROVINCE"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "PROGRAM_ID"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "PROGRAM_NAME"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "SECTOR"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "PROGRAM_MODEL"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "OVERNIGHT_SERVICE_TYPE"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "PROGRAM_AREA"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "SERVICE_USER_COUNT"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "CAPACITY_TYPE"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "CAPACITY_ACTUAL_BED"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "CAPACITY_FUNDING_BED"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "OCCUPIED_BEDS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "UNOCCUPIED_BEDS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "UNAVAILABLE_BEDS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "CAPACITY_ACTUAL_ROOM"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "CAPACITY_FUNDING_ROOM"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "OCCUPIED_ROOMS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "UNOCCUPIED_ROOMS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "UNAVAILABLE_ROOMS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "OCCUPANCY_RATE_BEDS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "OCCUPANCY_RATE_ROOMS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
