@@ -30,8 +30,8 @@ CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
 
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-CKAN =  CKAN_CREDS[ACTIVE_ENV]["address"] 
-CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"] 
+CKAN = CKAN_CREDS[ACTIVE_ENV]["address"] #CKAN_CREDS[ACTIVE_ENV]["address"]#
+CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"] #CKAN_CREDS[ACTIVE_ENV]["apikey"]#
 
 TMP_DIR = Variable.get("tmp_dir")
 
@@ -140,6 +140,7 @@ def create_dag(dag_id,
                         task_id="download_" + resource_name,
                         file_url=resource["url"],
                         dir=TMP_DIR,
+                        retries=3,                      
                     )
 
             # CSV, XLSX files:
@@ -162,6 +163,16 @@ def create_dag(dag_id,
                         dir=TMP_DIR,
                         filename=resource_name + "." + resource["format"],
                         delete_col=delete_col
+                    )
+
+            # Non AGOL flat JSON files:
+            elif not resource.get("agol", False):
+                if resource["format"] == "json":
+                    tasks_list["download_" + resource_name] = DownloadFileOperator(
+                        task_id="download_" + resource_name,
+                        file_url=resource["url"],
+                        dir=TMP_DIR,
+                        filename=resource["url"].split("/")[-1]
                     )
 
             # get or create a resource a file

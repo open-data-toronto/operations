@@ -491,6 +491,9 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         return output
 
     def read_json_file(self):
+
+        #TODO logic here to find data if its hiding in a child attribute
+
         return json.load( open(self.data_path, "r"))
 
     def read_xlsx_file(self):
@@ -523,7 +526,12 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
     
     # parse file attributes into correct data types in a dict based on input fields
     def parse_file(self, read_file):
-
+        print("Read file to be parsed:")
+        print(type(read_file))
+        print(read_file[0] )
+        print(type(read_file[0]) )
+        print(read_file[0].keys() )
+        print(read_file)
         # init output
         output = []
 
