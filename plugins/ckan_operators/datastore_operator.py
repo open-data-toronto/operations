@@ -526,12 +526,6 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
     
     # parse file attributes into correct data types in a dict based on input fields
     def parse_file(self, read_file):
-        print("Read file to be parsed:")
-        print(type(read_file))
-        print(read_file[0] )
-        print(type(read_file[0]) )
-        print(read_file[0].keys() )
-        print(read_file)
         # init output
         output = []
 
@@ -590,7 +584,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                     records=records[ chunk_size*i : chunk_size*(i+1)]
                 )
 
-        return {"record_count": len(records)}
+        return len(records)
 
     def execute(self, context):
         # init task instance from context

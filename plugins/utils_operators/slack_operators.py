@@ -134,14 +134,14 @@ class GenericSlackOperator(BaseOperator):
             
         # if the message content is a dict, print it nicely
         if isinstance(self.message_content, dict):
-            highlight_terms = ["failed"]
+            highlight_terms = ["failed", 0]
             self.message_content = "\n\t\t   ".join( ["*" + key + "*: " + value + ":exclamation:" if value in highlight_terms else
                                                       "*" + key + "*: " + value 
                                                       for (key,value) in self.message_content.items()] )
 
         slack_message = """
             :robot_face: *{header}*
-            `{dag}` 
+            *DAG_ID*: `{dag}` 
             {content} {body}
             """.format(
             header=self.message_header,

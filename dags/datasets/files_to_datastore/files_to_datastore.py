@@ -30,8 +30,8 @@ CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
 
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-CKAN = CKAN_CREDS[ACTIVE_ENV]["address"] #CKAN_CREDS[ACTIVE_ENV]["address"]#
-CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"] #CKAN_CREDS[ACTIVE_ENV]["apikey"]#
+CKAN = CKAN_CREDS[ACTIVE_ENV]["address"]#
+CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]#
 
 TMP_DIR = Variable.get("tmp_dir")
 
@@ -43,6 +43,19 @@ def is_resource_new(get_or_create_resource_task_id, resource_name, **kwargs):
         return "new_" + resource_name
 
     return "existing_" + resource_name
+
+# create slack message logic
+def build_message_fcn(config, **kwargs):
+    package_name = list(config.keys())[0]
+    message = "*Package*: " + package_name + "\n\t\t   *Resources*:\n"
+    for resource_name in config[package_name]["resources"]:
+        resource_format = config[package_name]["resources"][resource_name]["format"]
+        resource_records = kwargs["ti"].xcom_pull(task_ids="insert_records_" + resource_name)["record_count"]
+        
+        message += "\n\t\t   " + "*{}* `{}`: {} records".format(resource_name, resource_format, resource_records)
+
+    return {"message": message}
+
 
 # custom function to create multiple custom dags - sort of like a template for a DAG
 def create_dag(dag_id,
@@ -86,7 +99,7 @@ def create_dag(dag_id,
                 package_metadata[metadata_attribute] = None
 
 
-        # define the operators that each DAG needs regardless of how it is configured
+        # define the operators that each DAG always needs, regardless of input configuration
         
         # create tmp dir
         tmp_dir = CreateLocalDirectoryOperator(
@@ -102,12 +115,19 @@ def create_dag(dag_id,
             package_name_or_id = package_name,
             package_metadata = package_metadata,
         )
-        
+        # build message to send to slack
+        build_message = PythonOperator(
+            task_id="build_message", 
+            python_callable=build_message_fcn,
+            op_kwargs={"config": config }
+        )
+
         # success message to slack
         success_message_slack = GenericSlackOperator(
             task_id = "success_message_slack",
-            message_header = "Files to Datastore " + package_name,
-            message_content = "\n\t\t   ".join( [name + " | `" + dataset["resources"][name]["format"] +"`" for name in resource_names] ),
+            message_header = "Files to Datastore",
+            message_content_task_id = "build_message",
+            message_content_task_key = "message",
             message_body = ""
         )
 
@@ -270,7 +290,7 @@ def create_dag(dag_id,
         chain( start_inserting_into_datastore, *[tasks_list["insert_records_" + resource_name.replace(" ", "")] for resource_name in resource_names], done_inserting_into_datastore)
         
         # Delete our temporary dir and report success to slack
-        done_inserting_into_datastore >> del_tmp_dir >> success_message_slack
+        done_inserting_into_datastore >> del_tmp_dir >> build_message >> success_message_slack
 
         for resource_label in resource_names:
             # clean the resource label so the DAG can label its tasks with it
