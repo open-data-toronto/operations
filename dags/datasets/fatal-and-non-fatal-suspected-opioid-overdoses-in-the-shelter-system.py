@@ -88,7 +88,11 @@ with DAG(
             "on_failure_callback": task_failure_slack_alert,
             "start_date": days_ago(1),
             "retries": 0,
-            # "retry_delay": timedelta(minutes=3),
+            "etl_mapping":[{
+                "source": RESOURCES[key]["file_url"],
+                "target_package_name": PACKAGE_NAME,
+                "target_resource_name": RESOURCES[key]["name"], 
+            } for key in RESOURCES]
         }
     ),
     description="Take earlyon.json from opendata.toronto.ca and put into datastore",

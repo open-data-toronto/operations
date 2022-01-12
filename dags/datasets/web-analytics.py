@@ -439,6 +439,11 @@ def create_dag(d):
                 "start_date": d["start_date"],
                 "retries": 5,
                 "retry_delay": timedelta(minutes=15),
+                "etl_mapping":[{
+                    "source": "https://api.oracleinfinity.io/",
+                    "target_package_name": PACKAGE_ID,
+                    "target_resource_name": d["resource_name"],
+                }]
             }
         ),
         description=d["description"],

@@ -68,7 +68,11 @@ with DAG(
             "on_failure_callback": task_failure_slack_alert,
             "start_date": datetime(2020, 11, 24, 13, 35, 0),
             "retries": 0,
-            # "retry_delay": timedelta(minutes=3),
+            "etl_mapping":[{
+                "source": SRC_URL,
+                "target_package_name": PACKAGE_NAME,
+                "target_resource_name": RESOURCE_NAME
+            }]
         }
     ),
     description="Take data from opendata.toronto.ca (CSV) and put into datastore",

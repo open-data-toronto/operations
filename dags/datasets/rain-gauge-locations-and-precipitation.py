@@ -38,6 +38,11 @@ with DAG(
         {
             "on_failure_callback": task_failure_slack_alert,
             "start_date": datetime(2020, 11, 10, 13, 35, 0),
+            "etl_mapping":[{
+                "source": "https://developers.flowworks.com/fwapi/v1",
+                "target_package_name": PACKAGE_ID,
+                "target_resource_name": "precipitation-data-YYYY"
+            }]
         }
     ),
     description="Get rain gauge data from the last time it was loaded to now",
