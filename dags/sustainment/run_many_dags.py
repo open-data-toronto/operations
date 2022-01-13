@@ -9,7 +9,7 @@ import re
 
 from datetime import datetime
 
-from utils import airflow_utils
+#from utils import airflow_utils
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.operators.dummy import DummyOperator
@@ -18,8 +18,7 @@ from utils_operators.slack_operators import task_success_slack_alert, task_failu
 
 from airflow.models import DagRun, DagBag
 
-DEFAULT_ARGS = airflow_utils.get_default_args(
-    {
+DEFAULT_ARGS = {
         "owner": "Mackenzie",
         "depends_on_past": False,
         "email": ["mackenzie.nichols4@toronto.ca"],
@@ -29,8 +28,7 @@ DEFAULT_ARGS = airflow_utils.get_default_args(
         "on_failure_callback": task_failure_slack_alert,
         "retries": 0,
         "start_date": datetime(2021, 11, 1, 0, 0, 0)
-
-    })
+    }
 DESCRIPTION = "Runs multiple input dags"
 SCHEDULE = "@once" 
 TAGS=["sustainment"]
