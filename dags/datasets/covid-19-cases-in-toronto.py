@@ -38,6 +38,11 @@ with DAG(
             "start_date": datetime(2020, 11, 24, 13, 35, 0),
             "retries": 3,
             "retry_delay": timedelta(minutes=3),
+            "etl_mapping":[{
+                "source": "covid19cases.csv supplied by Toronto Public Health",
+                "target_package_name": "covid-19-cases-in-toronto",
+                "target_resource_name": "COVID19 cases"
+            }]
         }
     ),
     description="Take COVID19 data from QA (filestore) and put in PROD (datastore)", 
@@ -58,6 +63,7 @@ with DAG(
             msg=msg,
             active_env=Variable.get("active_env"),
             prod_webhook=Variable.get("active_env") == "prod",
+            
         )
 
     

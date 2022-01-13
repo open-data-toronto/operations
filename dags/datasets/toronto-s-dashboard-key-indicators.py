@@ -393,6 +393,7 @@ with DAG(
             is_preview=True,
             url_type="datastore",
             extract_job=f"Airflow: {PACKAGE_NAME}",
+            package_id=PACKAGE_NAME,
         ),
     )
 

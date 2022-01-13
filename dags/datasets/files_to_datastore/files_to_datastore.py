@@ -50,7 +50,7 @@ def build_message_fcn(config, **kwargs):
     message = "*Package*: " + package_name + "\n\t\t   *Resources*:\n"
     for resource_name in config[package_name]["resources"]:
         resource_format = config[package_name]["resources"][resource_name]["format"]
-        resource_records = kwargs["ti"].xcom_pull(task_ids="insert_records_" + resource_name)["record_count"]
+        resource_records = kwargs["ti"].xcom_pull(task_ids="insert_records_" + resource_name.replace(" ", ""))["record_count"]
         
         message += "\n\t\t   " + "*{}* `{}`: {} records".format(resource_name, resource_format, resource_records)
 
@@ -97,6 +97,17 @@ def create_dag(dag_id,
                 package_metadata[metadata_attribute] = dataset[metadata_attribute]
             else:
                 package_metadata[metadata_attribute] = None
+            
+            ### RETROFITTING LOGIC
+            # This logic makes the above work in the context of CKAN <2.9
+            # It can be removed post CKAN 2.9 deployment
+
+            # only run this logic for certain metadata_attributes, on certain servers
+            if metadata_attribute in ["civic_issues", "formats", "topics"] and CKAN != "https://ckanadmin1.intra.dev-toronto.ca/":
+                if isinstance(dataset[metadata_attribute], list):
+                   package_metadata[metadata_attribute] = ",".join(dataset[metadata_attribute])
+            ###
+
 
 
         # define the operators that each DAG always needs, regardless of input configuration
