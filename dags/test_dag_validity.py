@@ -7,6 +7,10 @@ import sys
 # init current dir
 dir = os.path.dirname(os.path.realpath(__file__))
 
+# add operator dependencies manually to sys path
+sys.path.insert(0, dir[:-4] + "plugins/utils_operators" )
+sys.path.insert(0, dir[:-4] + "plugins/ckan_operators" )
+
 # init list of dag subdirs
 subdirs = ["datasets", "sustainment"]
 
