@@ -73,10 +73,10 @@ maker_attr_def = {
         "registeredHours": "Day of the week, Start and end time, whether program is full time, and frequency for in-person registered programs",
         "virtualHours": "Day of the week, Start and end time, whether program is full time, and frequency for virtual programs",
         "geometry":"markers geometry",
-        "centre_type": "Centre",
+        "centre_type": "",
         "program": "<a id='13650' href='#modal13650_' data-toggle='modal' data-target='#myModal' onclick='fillData(13650)'>101 Spruce St EarlyON Child and Family Centre</a>",
 }
-delete_col = ['program', 'centre_type']
+delete_col = ['program']
 EXPECTED_COLUMNS = [x for x in (m for m in maker_attr_def) if x not in delete_col]
 
 def send_failure_message():
