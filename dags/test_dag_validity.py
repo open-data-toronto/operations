@@ -16,7 +16,7 @@ def validity_check(subdir):
     ran_list = []
     for dag in os.listdir(dir + "/" + subdir):
         if dag not in ran_list and dag.endswith(".py"):
-            assert os.system("python -m " + dir + "/" + subdir + "/" + dag ) == 0, dag + " did not load - it may have a syntax error"
+            assert os.system("python " + dir + "/" + subdir + "/" + dag ) == 0, dag + " did not load - it may have a syntax error"
             ran_list.append( dag )
 
 def test_datasets_validity():
