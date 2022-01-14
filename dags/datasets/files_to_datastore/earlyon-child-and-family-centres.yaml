@@ -176,3 +176,7 @@ earlyon-child-and-family-centres:
           type: "text"
           info:
             notes:  "Day of the week, Start and end time, whether program is full time, and frequency for virtual programs"
+        - id: "centre_type"
+          type: "text"
+          info:
+            notes:  ""
