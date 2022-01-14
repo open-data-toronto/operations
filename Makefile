@@ -13,8 +13,6 @@ setup:
 
 testing:
 	python --version
-	ls -la
-	ls -la plugins
 	pytest
 
 docs:

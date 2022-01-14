@@ -2,15 +2,12 @@
 
 import pytest
 import os
-import sys
 
 # init current dir
 dir = os.path.dirname(os.path.realpath(__file__))
 
 # init list of dag subdirs
 subdirs = ["datasets", "sustainment"]
-
-print("Sys path: " + str(sys.path))
 
 # check each DAG for syntax errors to determine whether it can be loaded into airflow
 def validity_check(subdir):
