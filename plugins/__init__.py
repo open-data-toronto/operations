@@ -1,5 +1,4 @@
 import sys
-import os
 
 # init current dir
 dir = os.path.dirname(os.path.realpath(__file__))
