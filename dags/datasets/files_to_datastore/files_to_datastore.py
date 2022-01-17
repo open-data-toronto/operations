@@ -97,18 +97,6 @@ def create_dag(dag_id,
                 package_metadata[metadata_attribute] = dataset[metadata_attribute]
             else:
                 package_metadata[metadata_attribute] = None
-            
-            ### RETROFITTING LOGIC
-            # This logic makes the above work in the context of CKAN <2.9
-            # It can be removed post CKAN 2.9 deployment
-
-            # only run this logic for certain metadata_attributes, on certain servers
-            if metadata_attribute in ["civic_issues", "formats", "topics"] and CKAN != "https://ckanadmin1.intra.dev-toronto.ca/":
-                if isinstance(dataset[metadata_attribute], list):
-                   package_metadata[metadata_attribute] = ",".join(dataset[metadata_attribute])
-            ###
-
-
 
         # define the operators that each DAG always needs, regardless of input configuration
         
@@ -334,10 +322,11 @@ for config_file in os.listdir(CONFIG_FOLDER):
                 "email": [dag_owner_email],
                 "email_on_failure": False,
                 "email_on_retry": False,
-                "retries": 1,
+                "retries": 2,
+                "retry_delay": 3,
                 "on_failure_callback": task_failure_slack_alert,
-                "retries": 0,
-                "start_date": datetime(2021, 10, 30, 0, 0, 0)
+                "start_date": datetime(2021, 10, 30, 0, 0, 0),
+                "config_folder": CONFIG_FOLDER,
             }
         )
 
