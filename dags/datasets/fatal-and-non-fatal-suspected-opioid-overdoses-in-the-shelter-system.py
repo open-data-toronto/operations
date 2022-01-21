@@ -36,13 +36,15 @@ PACKAGE_NAME = "fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-sy
 
 RESOURCES = {
     "summary-suspected-opiod-overdoses-in-shelters": {
-        "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/summary-suspected-opiod-overdoses-in-shelters.csv",  # noqa: E501
+        "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/summary-suspected-opioid-overdoses-in-shelters.csv",  # noqa: E501
         "name": "summary-suspected-opiod-overdoses-in-shelters",
         "metadata": {
             "format": "csv",
             "is_preview": False,
             "extract_job": f"Airflow: {PACKAGE_NAME}",
             "url_type": "datastore",
+            "package_id": PACKAGE_NAME,
+            "url": "https://open.toronto.ca/dataset/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system",
         },
         "expected_columns": [
             "year",
@@ -52,16 +54,18 @@ RESOURCES = {
         ],
     },
     "suspected-opiod-overdoses-in-shelters": {
-        "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/suspected-opiod-overdoses-in-shelters.csv",  # noqa: E501
+        "file_url": "http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/suspected-opioid-overdoses-in-shelters.csv",  # noqa: E501
         "name": "suspected-opiod-overdoses-in-shelters",
         "metadata": {
             "format": "csv",
             "is_preview": True,
             "extract_job": f"Airflow: {PACKAGE_NAME}",
             "url_type": "datastore",
+            "package_id": PACKAGE_NAME,
+            "url": "https://open.toronto.ca/dataset/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system",
         },
         "expected_columns": [
-            "site_name",
+            "location_name",
             "address",
             "year",
             "year_stage",

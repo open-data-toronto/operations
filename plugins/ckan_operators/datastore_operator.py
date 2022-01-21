@@ -168,7 +168,7 @@ class DeleteDatastoreResourceOperator(BaseOperator):
         assert self.resource_id, "Resource ID is empty! This operator needs a way to get the resource ID in order to delete the right datastore resource!"
         # Delete the resource
         try:
-            self.ckan.action.datastore_delete(id=self.resource_id)
+            self.ckan.action.datastore_delete(id=self.resource_id, force=True)
             logging.info("Deleted " + self.resource_id)
 
         except Exception as e:

@@ -16,6 +16,21 @@ from sklearn.preprocessing import MinMaxScaler
 nltk.download("wordnet")
 
 
+def parse_datetime(input):
+    for format in [
+        "%Y-%m-%dT%H:%M:%S.%f",
+        "%Y-%m-%d %H:%M:%S.%f",
+        "%Y-%m-%dT%H:%M:%S",
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%d"
+    ]:
+        try:
+            delta = dt.strptime(input, format)
+            days = (dt.utcnow() - delta).days
+            return days
+        except ValueError:
+            pass
+
 def read_datastore(ckan, rid, rows=10000):
     records = []
 
@@ -210,12 +225,9 @@ def score_catalogue(**kwargs):
             return 1
         elif (
             rr in TIME_MAP and "last_refreshed" in package and package["last_refreshed"]
-        ):
-            days = (
-                dt.utcnow()
-                - dt.strptime(package["last_refreshed"], "%Y-%m-%dT%H:%M:%S.%f")
-            ).days
-
+        ):            
+            days = parse_datetime( package["last_refreshed"] )
+    
             # Greater than 2 periods have a score of 0
             metrics["elapse_periods"] = max(0, 1 - math.floor(days / TIME_MAP[rr]) / 2)
 
@@ -240,6 +252,8 @@ def score_catalogue(**kwargs):
 
     data = []
     for p in packages:
+        if p["name"].lower() == "tags":
+            continue
         for r in p["resources"]:
             if "datastore_active" not in r or not r["datastore_active"]:
                 continue
