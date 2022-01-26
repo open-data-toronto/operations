@@ -63,12 +63,12 @@ building-permits-cleared-permits-current-year:
     format: zip
     url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits_current_year.zip
 building-permits-cleared-permits-prior-years:
-  Cleared Permits (2020 XML ZIP):
+  Cleared Permits (2021 XML ZIP):
     format: zip
-    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2020.zip
-  Cleared Permits (2020 CSV ZIP):
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2021.zip
+  Cleared Permits (2021 CSV ZIP):
     format: zip
-    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2020_csv.zip
+    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2021_csv.zip
 clerk-s-directory-of-record-for-record-series-management-tool-rsmt:
   RSMT Directory of records:
     format: xml
