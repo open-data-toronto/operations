@@ -168,7 +168,9 @@ def combine_configs(**kwargs):
         if package_name in [ config["target_package_name"] for config in configs ]:
             # for each resource in a package, try to connect it to an etl config
             for resource in package["resources"]:
+                print(resource["name"])
                 for config in configs:
+                    # if this ETL config matches a resource name, combine them and add them to the output
                     if resource["name"] == config["target_resource_name"] and package_name == config["target_package_name"]:
                         print("Matched! " + resource["name"])
                         output.append({
@@ -186,7 +188,24 @@ def combine_configs(**kwargs):
                             "last_modified": resource["last_modified"] or resource["created"],
                             **config,
                         })
+                if resource["name"] not in [config["target_resource_name"] for config in configs]:
+                    output.append({
+                        "package_id": package["name"],
+                        "resource_name": resource["name"],
+                        "extract_job": resource["extract_job"],
+                        "refresh_rate": package["refresh_rate"],
+                        "is_retired": package["is_retired"],
+                        "owner_division": package["owner_division"],
+                        "owner_unit": package["owner_unit"],
+                        "owner_email": package["owner_email"],
+                        "information_url": package["information_url"],
+                        "datastore_active": resource["datastore_active"],
+                        "format": resource["format"],
+                        "last_modified": resource["last_modified"] or resource["created"],
+                        **{key: None for key in configs[0].keys()},
+                    })
         else:
+            # if the package doesnt match anything, add all its resources without ETL info
             for resource in package["resources"]:
                 print("No match - adding " + resource["name"])
                 output.append({
@@ -268,7 +287,7 @@ def assign_action(**kwargs):
 
 # Write Configs
 def write_configs(**kwargs):
-    configs = kwargs["ti"].xcom_pull(task_ids="assign_action")["output"]
+    configs = kwargs["ti"].xcom_pull(task_ids="combine_configs")["output"]
     f = open("/data/tmp/etl_inventory.csv", "w")
     writer = csv.DictWriter( f, fieldnames = list(configs[0].keys()) )
     writer.writeheader()
@@ -306,11 +325,11 @@ with DAG(
         provide_context = True
     )
 
-    assign_action = PythonOperator(
-        task_id = "assign_action",
-        python_callable = assign_action,
-        provide_context = True
-    )
+    #assign_action = PythonOperator(
+    #    task_id = "assign_action",
+    #    python_callable = assign_action,
+    #    provide_context = True
+    #)
 
     write_configs = PythonOperator(
         task_id = "write_configs",
@@ -318,4 +337,4 @@ with DAG(
         provide_context = True
     )
 
-    get_fme_nifi_configs >> get_airflow_configs >> combine_configs >> assign_action >> write_configs
+    get_fme_nifi_configs >> get_airflow_configs >> combine_configs >> write_configs
