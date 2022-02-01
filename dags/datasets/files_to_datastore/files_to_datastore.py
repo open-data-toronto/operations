@@ -20,7 +20,7 @@ from utils_operators.slack_operators import task_success_slack_alert, task_failu
 from utils_operators.directory_operator import CreateLocalDirectoryOperator, DeleteLocalDirectoryOperator
 from ckan_operators.package_operator import GetOrCreatePackageOperator
 from ckan_operators.resource_operator import GetOrCreateResourceOperator
-from ckan_operators.datastore_operator import BackupDatastoreResourceOperator, DeleteDatastoreResourceOperator, InsertDatastoreFromYAMLConfigOperator, RestoreDatastoreResourceBackupOperator
+from ckan_operators.datastore_operator import BackupDatastoreResourceOperator, DeleteDatastoreResourceOperator, InsertDatastoreFromYAMLConfigOperator, RestoreDatastoreResourceBackupOperator, DeltaCheckOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from utils_operators.agol_operators import AGOLDownloadFileOperator
 
@@ -44,17 +44,34 @@ def is_resource_new(get_or_create_resource_task_id, resource_name, **kwargs):
 
     return "existing_" + resource_name
 
+# branch logic - depends on whether the existing resource needs updating
+def does_resource_need_update(delta_check_task_id, **kwargs):
+    return kwargs["ti"].xcom_pull(task_ids=delta_check_task_id)
+
 # create slack message logic
 def build_message_fcn(config, **kwargs):
+    # init counter used to prevent empty messages
+    counter = 0
     package_name = list(config.keys())[0]
     message = "*Package*: " + package_name + "\n\t\t   *Resources*:\n"
     for resource_name in config[package_name]["resources"]:
-        resource_format = config[package_name]["resources"][resource_name]["format"]
-        resource_records = kwargs["ti"].xcom_pull(task_ids="insert_records_" + resource_name.replace(" ", ""))["record_count"]
-        
-        message += "\n\t\t   " + "*{}* `{}`: {} records".format(resource_name, resource_format, resource_records)
+        #print("insert_records_" + resource_name.replace(" ", ""))
+        #print(kwargs["ti"].xcom_pull(task_ids="insert_records_" + resource_name.replace(" ", "")))
+        #print(kwargs["ti"].xcom_pull(task_ids="insert_records_" + resource_name))
+        try:
+            resource_format = config[package_name]["resources"][resource_name]["format"]
+            resource_records = kwargs["ti"].xcom_pull(task_ids="insert_records_" + resource_name.replace(" ", ""))["record_count"]
+            
+            message += "\n\t\t   " + "*{}* `{}`: {} records".format(resource_name, resource_format, resource_records)
+            counter += 1
+        except Exception as e:
+            logging.error(e)
+            continue
 
-    return {"message": message}
+    if counter > 0:
+        return {"message": message}
+    else:
+        return None
 
 
 # custom function to create multiple custom dags - sort of like a template for a DAG
@@ -136,12 +153,13 @@ def create_dag(dag_id,
             path = TMP_DIR + "/" + dag_id
         )
 
-        start_get_or_create_resources = DummyOperator(task_id = "start_get_or_create_resources")
-        done_get_or_create_resources = DummyOperator(task_id = "done_get_or_create_resources")
+        #start_get_or_create_resources = DummyOperator(task_id = "start_get_or_create_resources")
+        #done_get_or_create_resources = DummyOperator(task_id = "done_get_or_create_resources")
 
-        start_inserting_into_datastore = DummyOperator(task_id = "start_inserting_into_datastore", trigger_rule="none_failed")
-        done_inserting_into_datastore = DummyOperator(task_id = "done_inserting_into_datastore")
+        #start_inserting_into_datastore = DummyOperator(task_id = "start_inserting_into_datastore", trigger_rule="none_skipped")
+        done_inserting_into_datastore = DummyOperator(task_id = "done_inserting_into_datastore", trigger_rule="all_done")
                 
+        #dag_complete = DummyOperator(task_id="dag_complete")
 
         # From a List
         tasks_list = {}
@@ -219,8 +237,33 @@ def create_dag(dag_id,
                 op_kwargs={"get_or_create_resource_task_id": "get_or_create_resource_" + resource_name, "resource_name": resource_name }
             )
 
+            # determine if the resource needs to be updated
+            tasks_list["does_" + resource_name + "_need_update"] = BranchPythonOperator(
+                task_id="does_" + resource_name + "_need_update", 
+                python_callable=does_resource_need_update,
+                op_kwargs={"delta_check_task_id": "delta_check_" + resource_name }
+            )
+
             tasks_list["new_" + resource_name] = DummyOperator(task_id="new_" + resource_name)
             tasks_list["existing_" + resource_name] = DummyOperator(task_id="existing_" + resource_name)
+
+            tasks_list["update_resource_" + resource_name] = DummyOperator(task_id="update_resource_" + resource_name)
+            tasks_list["dont_update_resource_" + resource_name] = DummyOperator(task_id="dont_update_resource_" + resource_name)            
+
+            tasks_list["prepare_update_" + resource_name] = DummyOperator(task_id="prepare_update_" + resource_name, trigger_rule="one_success")
+
+            tasks_list["delta_check_" + resource_name] = DeltaCheckOperator(
+                task_id="delta_check_" + resource_name,
+                address = CKAN,
+                apikey = CKAN_APIKEY,
+                resource_id_task_id = "get_or_create_resource_" + resource_name,
+                resource_id_task_key = "id",
+                data_path_task_id = "download_" + resource_name,
+                data_path_task_key = "data_path",
+                config = resource,
+                trigger_rule = "one_success",
+                resource_name = resource_name
+            )
 
             # backup an existing resource
             tasks_list["backup_resource_" + resource_name] = BackupDatastoreResourceOperator(
@@ -258,38 +301,38 @@ def create_dag(dag_id,
                 data_path_task_id = "download_" + resource_name,
                 data_path_task_key = "data_path",
                 config = resource,
-                trigger_rule = "one_success",
+                trigger_rule = "all_success",
             )
             
             # init a temp directory and get/create the package for the target data
             tmp_dir >> get_or_create_package
             
             # grab the target data, put it in the temp dir, and get or create resource(s) for the data
-            get_or_create_package >> tasks_list["download_" + resource_name] >> start_get_or_create_resources
-            
-        # run this in sequence for performance reasons
-        chain( start_get_or_create_resources, *[tasks_list["get_or_create_resource_" + resource_name.replace(" ", "")] for resource_name in resource_names], done_get_or_create_resources )
-
-        # resume running in parallel
-        for resource_label in resource_names:
-            # clean the resource label so the DAG can label its tasks with it
-            resource_name = resource_label.replace(" ", "")
-            resource = dataset["resources"][resource_label]
+            get_or_create_package >> tasks_list["download_" + resource_name] >> tasks_list["get_or_create_resource_" + resource_name] >> tasks_list["new_or_existing_" + resource_name]
             
             # for each resource, find out if said resource was just created or existed already
-            done_get_or_create_resources >> tasks_list["new_or_existing_" + resource_name] >> [tasks_list["new_" + resource_name], tasks_list["existing_" + resource_name]]
+            tasks_list["new_or_existing_" + resource_name] >> [tasks_list["new_" + resource_name], tasks_list["existing_" + resource_name]]
             
-            # for each resource, if the resource existed before this run, back it up then delete it
-            tasks_list["existing_" + resource_name] >> tasks_list["backup_resource_" + resource_name] >> tasks_list["delete_resource_" + resource_name] >> start_inserting_into_datastore
+            # for each resource, if the resource changed then update it ... otherwise dont touch it
+            tasks_list["existing_" + resource_name] >> tasks_list["delta_check_" + resource_name] >> tasks_list["does_" + resource_name + "_need_update"] >> [tasks_list["update_resource_" + resource_name], tasks_list["dont_update_resource_" + resource_name]]  
+
+            # if the resource didnt change, dont touch it
+            tasks_list["dont_update_resource_" + resource_name] >> done_inserting_into_datastore
+
+            # if its new, add data into the datastore
+            tasks_list["new_" + resource_name] >> tasks_list["prepare_update_" + resource_name]
 
             # if it didnt exist before this run, then dont backup or delete anything
-            tasks_list["new_" + resource_name] >> start_inserting_into_datastore
+            tasks_list["update_resource_" + resource_name] >> tasks_list["backup_resource_" + resource_name] >> tasks_list["delete_resource_" + resource_name] >> tasks_list["prepare_update_" + resource_name]
+            
+            # write into the datastore
+            tasks_list["prepare_update_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> done_inserting_into_datastore
 
         # run this in sequence for performance reasons  
-        chain( start_inserting_into_datastore, *[tasks_list["insert_records_" + resource_name.replace(" ", "")] for resource_name in resource_names], done_inserting_into_datastore)
+        #chain( start_inserting_into_datastore, *[tasks_list["insert_records_" + resource_name.replace(" ", "")] for resource_name in resource_names], done_inserting_into_datastore)
         
         # Delete our temporary dir and report success to slack
-        done_inserting_into_datastore >> del_tmp_dir >> build_message >> success_message_slack
+        done_inserting_into_datastore >> del_tmp_dir >> build_message >> success_message_slack #>> dag_complete
 
         for resource_label in resource_names:
             # clean the resource label so the DAG can label its tasks with it
@@ -327,6 +370,7 @@ for config_file in os.listdir(CONFIG_FOLDER):
                 "on_failure_callback": task_failure_slack_alert,
                 "start_date": datetime(2021, 10, 30, 0, 0, 0),
                 "config_folder": CONFIG_FOLDER,
+                "pool": "ckan_pool",
             }
         )
 

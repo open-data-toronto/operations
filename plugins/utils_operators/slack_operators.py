@@ -129,8 +129,14 @@ class GenericSlackOperator(BaseOperator):
 
     def execute(self, context):
         ti = context['ti']
+        # if a message has no content, dont send a message
+
         if self.message_content_task_id and self.message_content_task_key:
-            self.message_content = ti.xcom_pull(task_ids=self.message_content_task_id)[self.message_content_task_key]
+            self.message_content_task = ti.xcom_pull(task_ids=self.message_content_task_id)
+            if self.message_content_task:
+                self.message_content = self.message_content_task[self.message_content_task_key]
+            else:
+                return
             
         # if the message content is a dict, print it nicely
         if isinstance(self.message_content, dict):

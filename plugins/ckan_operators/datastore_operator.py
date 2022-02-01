@@ -467,14 +467,18 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "%Y-%m-%d",
             "%d-%b-%Y",
             "%b-%d-%Y",
+            "%m-%d-%y",
+            "%d-%m-%y",
             "%Y%m%d%H%M%S",
         ]:
             try:
+                input = input.replace("/", "-")
                 datetime_object = datetime.strptime(input, format)
                 return datetime_object.strftime("%Y-%m-%dT%H:%M:%S.%f")
             except ValueError:
+                #logging.error("No valid datetime format in clean_date_format() for input string {}".format(input))
                 pass
-        logging.error("No valid datetime format in utils.clean_date_format() for input string {}".format(input))
+        
 
     # reads a csv and returns a list of dicts - one dict for each row
     def read_csv_file(self):
@@ -605,3 +609,118 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         record_count = self.insert_into_datastore(self.resource_id, parsed_data)
 
         return {"Success": True, "record_count": record_count}
+
+
+class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
+    """
+    Input a reference to a CKAN datastore resource and a DownloadOperator
+    Optional input a YAML config, where column name mappings are stored
+    Output whether there is a difference in their columns and content
+    """    
+
+    def __init__(
+        self,
+        resource_name: str,
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+        self.resource_name = resource_name
+          
+    
+    def execute(self, context):
+        # init task instance from context
+        ti = context['ti']
+
+        # assign important vars if provided from other tasks
+        if self.resource_id_task_id and self.resource_id_task_key:
+            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[self.resource_id_task_key]
+
+        if self.data_path_task_id and self.data_path_task_key:
+            self.data_path = ti.xcom_pull(task_ids=self.data_path_task_id)[self.data_path_task_key]
+
+        # read and parse file
+        read_file = self.read_file()
+        parsed_data = self.parse_file(read_file)
+
+        # get existing resource contents and ensure the datastore resource exists
+        max_chunk_size = 32000
+        try:
+            record_count = self.ckan.action.datastore_search(id=self.resource_id, limit=0)["total"]
+            datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size)
+            
+            # if the resource is too big to get in a single call, make multiple calls
+            if record_count >= max_chunk_size:
+                iteration = 1
+                next_chunk = self.ckan.action.datastore_search(id=self.resource["id"], limit=max_chunk_size, offset=max_chunk_size*iteration)
+                datastore_resource["records"].append( next_chunk["records"] )
+                while len(next_chunk["records"]):
+                    next_chunk = self.ckan.action.datastore_search(id=self.resource["id"], limit=max_chunk_size, offset=max_chunk_size*iteration)
+                    datastore_resource["records"].append( next_chunk["records"] )
+                    iteration += 1
+        except Exception as e:
+            logging.error(e)
+            logging.info("Resource {} isn't in the datastore - update the existing dataset")
+            return "update_resource_" + self.resource_name
+
+        # if the data is a different length, green light an update
+        if len(parsed_data) != len(datastore_resource["records"]):
+            print("UPDATE THE DATASET! COUNT")
+            
+
+        # remove _id column from existing datastore_resource
+        datastore_record = datastore_resource["records"][0]
+        del datastore_record["_id"]
+        # if the data has different column names, green light an update
+        if parsed_data[0].keys() != datastore_record.keys():
+            print("UPDATE THE DATASET! COLUMNS")
+            return "update_resource_" + self.resource_name
+
+        
+
+        # rearrange data so if the content is the same, the whole list of dicts matches
+        if any( [("source_name" in attribute.keys() or "target_name" in attribute.keys()) for attribute in self.config["attributes"]] ):
+            print("COLUMN MAPPING!")
+            return "update_resource_" + self.resource_name
+
+        # Sort the data by all attributes (which we concatenate together into a single compound key)
+        parsed_data = sorted(parsed_data, key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) 
+        datastore_resource["records"] = sorted(parsed_data, key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) 
+        
+        # list of functions used to convert input to desired data_type
+        formatters = {
+            "text": str,
+            "int": self.clean_int,
+            "float": self.clean_float,
+            "timestamp": self.clean_date_format,
+        }
+
+        for i in range(len(parsed_data)):
+            #print("ITERATION: " + str(i))
+            # if theres column name mapping, capture it in your comparison
+            for attribute in self.config['attributes']:
+                if "source_name" in attribute.keys() and "target_name" in attribute[i].keys():
+                    print("REMAPPING A COLUMN: " + str(attribute))
+                    attribute["id"] = attribute["target_name"]
+                
+                # now check each attribute's values in each dataset and make sure they match
+                print("attribute: " + str(attribute["id"]))
+                # ensure we're transforming incumbent and new data in the same way
+                formatter = formatters[attribute["type"]]
+
+                #print( formatter(parsed_data[i][ attribute["id"] ])   )
+                #print( formatter(datastore_resource["records"][i][ attribute["id"] ])  )
+                
+                if formatter(parsed_data[i][ attribute["id"] ]) != formatter(datastore_resource["records"][i][ attribute["id"] ]):
+                    print("new data: " + str(parsed_data[i]))
+                    print("old data: " + str(datastore_resource["records"][i]))
+                    print(parsed_data[i][ attribute["id"] ])
+                    print(datastore_resource["records"][i][ attribute["id"] ])
+                    print("UPDATE THE DATASET! DATA MISMATCH!")
+                    return "update_resource_" + self.resource_name
+
+        return "dont_update_resource_" + self.resource_name
+
+        
+
+
+            
