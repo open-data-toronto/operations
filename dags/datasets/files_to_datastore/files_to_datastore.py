@@ -157,7 +157,7 @@ def create_dag(dag_id,
         #done_get_or_create_resources = DummyOperator(task_id = "done_get_or_create_resources")
 
         #start_inserting_into_datastore = DummyOperator(task_id = "start_inserting_into_datastore", trigger_rule="none_skipped")
-        done_inserting_into_datastore = DummyOperator(task_id = "done_inserting_into_datastore", trigger_rule="all_done")
+        done_inserting_into_datastore = DummyOperator(task_id = "done_inserting_into_datastore", trigger_rule="none_failed")
                 
         #dag_complete = DummyOperator(task_id="dag_complete")
 
@@ -261,7 +261,7 @@ def create_dag(dag_id,
                 data_path_task_id = "download_" + resource_name,
                 data_path_task_key = "data_path",
                 config = resource,
-                trigger_rule = "one_success",
+                #trigger_rule = "one_success",
                 resource_name = resource_name
             )
 
