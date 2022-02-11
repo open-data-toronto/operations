@@ -1,0 +1,150 @@
+# package name
+covid-19-cases-in-toronto:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "COVID-19 Cases in Toronto"
+  date_published: "2020-07-10T14:00:54.343339"
+  refresh_rate: Weekly
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Public Health
+  owner_section: Communicable Disease Control
+  owner_unit: Communicable Disease Surveillance Unit
+  owner_email: edau@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Health
+  tags: 
+    - name: covid19
+      vocabulary_id: null
+    - name: health
+      vocabulary_id: null
+    - name: pandemic
+      vocabulary_id: null
+
+  information_url: https://www.toronto.ca/home/covid-19/covid-19-latest-city-of-toronto-news/covid-19-status-of-cases-in-toronto/
+  excerpt: Line-listed report of COVID-19 cases among Toronto residents, including demographic, severity, geographical, and epidemiological variables.
+  limitations: The data in this spreadsheet are subject to change as public health investigations into reported cases and continuous quality improvement initiatives are ongoing, and additional cases continue to be reported. **The data will be completely refreshed and overwritten on a weekly basis*, extracted at 8:30 AM on the Tuesday of a given week, and posted on the Wednesday. Please note that these numbers may differ from those posted elsewhere, as data are extracted at different times, and from different sources.
+  notes: Toronto Public Health is responding to an ongoing COVID-19 outbreak, in the context of an evolving global pandemic. This data set contains demographic, geographic, and severity information for all confirmed and probable cases reported to and managed by Toronto Public Health since the first case was reported in January 2020. This includes cases that are sporadic (occurring in the community) and outbreak-associated. The data are extracted from the provincial Case & Contact Management System (CCM).
+  
+  resources:
+    # resource name
+    COVID19 cases:
+      format: csv
+      url: http://opendata.toronto.ca/toronto.public.health/covid-19-cases-in-toronto/covid19cases.csv
+      attributes:
+        - id: "Assigned_ID"
+          type: "int"
+          info:
+            notes: |
+              A unique ID assigned to cases by Toronto Public Health for the purposes of posting to Open Data, to allow for tracking of specific cases.
+              Please note, cases may be reclassified or removed from posted datasets over time. This can occur due to duplicate resolution, or other ongoing data cleaning initiatives. In such instances, the Assigned ID of that case will no longer appear on the list and will not get assigned to another case.
+        - id: "Outbreak Associated"
+          type: "text"
+          info:
+            notes: "Outbreak associated cases are associated with outbreaks of COVID-19 in Toronto healthcare institutions and healthcare settings (e.g. long-term care homes, retirement homes, hospitals, etc.) and other Toronto congregate settings (such as homeless shelters)."
+        - id: "Age Group"
+          type: "text"
+          info:
+            notes: "Age at time of illness. Age groups (in years): ≤19, 20-29, 30-39, 40-49, 50-59, 60-69, 70-79, 80-89, 90+, unknown (blank)"
+        - id: "Neighbourhood Name"
+          type: "text"
+          info:
+            notes: "Toronto is divided into 140 geographically distinct neighborhoods that were established to help government and community agencies with local planning by providing socio-economic data for a meaningful geographic area. Please note that client postal code information is mapped to the most up-to-date census tract (CT) and neighbourhood information available from the city. As a result, neighbourhood information is not available for those with missing postal code or when postal code could not be mapped/linked to a CT."
+        - id: "FSA"
+          type: "text"
+          info:
+            notes: "Forward sortation area (i.e. first three characters of postal code) based on the case's primary home address. FSA values are generated from client postal codes. One FSA can span multiple neighbourhoods."
+        - id: "Source of Infection"
+          type: "text"
+          info:
+            notes: |
+              The most likely way that cases acquired their COVID-19 infection is determined by examining several data fields including:
+
+              * A public health investigator's assessment of the most likely source of infection.
+              * Being associated with a confirmed COVID-19 outbreak
+              * Reported risk factors such as contact with a known case or travel
+              
+              If the public health investigator's assessment is absent, then the other data fields are used to infer source of acquisition using the following hierarchy:
+
+              Cases with episode dates before April 1 2020:
+              * Travel > Outbreak (settings described below) > Household Contact > Close Contact > Community > No information 
+
+              Cases with episode dates on or after April 1 2020:
+              * Outbreak (settings described below) > Household Contact > Close Contact > Travel > Community > No information.
+
+              Descriptions:
+
+              * **Household contact**: Case who acquired infection from a household contact with a confirmed or probable COVID-19 case (e.g. family member, roommate).
+              * **Close contact with a case**: Case who acquired infection from a close contact with a confirmed or probable COVID-19 case (e.g. co-worker).
+              * **Outbreaks**: Cases linked to known confirmed COVID-19 outbreaks. These could include the index case who may have acquired the infection elsewhere. Outbreaks settings include:
+                * _Outbreaks, Congregate Settings_: confirmed outbreaks in Toronto in shelters, correctional facilities, group homes, or other congregate settings such as hostels or rooming houses.
+                  * _Outbreaks, Healthcare Institutions_: confirmed outbreaks in Toronto in long-term care homes, retirement homes, hospitals, chronic care hospitals, or other institutional settings. 
+                  * _Outbreaks, Other Settings_: confirmed outbreaks in Toronto in workplaces, schools, day cares, or outbreaks outside of Toronto. We do not validate outbreaks that occur in other health units, as such these cases may not be linked to confirmed outbreaks.
+              * **Travel**: Case that travelled outside of Ontario in the 14 days prior to their symptom onset or test date, whichever is the earliest.
+              * **Community**: Cases who did not travel outside of Ontario, did not identify being a close contact with a COVID-19 case, and were not part of a known confirmed COVID-19 outbreak.
+              * **No information**: Cases with no information on the source of infection
+        - id: "Classification"
+          type: "text"
+          info:
+            notes: |
+              The application of the provincial case definition to categorize the cases as confirmed or probable, according to standard criteria. Please refer to the Ontario Ministry of Health website for Ontario's [current provincial case definitions.](http://www.health.gov.on.ca/en/pro/programs/publichealth/coronavirus/docs/2019_case_definition.pdf)
+        - id: "Episode Date"
+          type: "timestamp"
+          info:
+            notes: "The episode date is a derived variable that best estimates when the disease was acquired, and refers to the earliest available date from: symptom onset (the first day that COVID-19 symptoms occurred), laboratory specimen collection date, or reported date."
+        - id: "Reported Date"
+          type: "timestamp"
+          info:
+            notes: "The date on which the case was reported to Toronto Public Health."
+        - id: "Client Gender"
+          type: "text"
+          info:
+            notes: "Self-reported gender.  Gender is a system that operates in a social context and generally classifies people based on their assigned biological sex."
+        - id: "Outcome"
+          type: "text"
+          info:
+            notes: |
+              __Fatal:__  Cases with a fatal outcome reported.
+
+              __Resolved:__ Cases not reported as deceased, and who are either:
+
+              * Reported as 'recovered' OR
+              * Where the report date is more than 14 days from symptom onset AND the case is not currently hospitalized.
+
+              This number is underreported due to a lag in data entry.
+
+              __Active:__ All other cases
+
+        - id: "Currently Hospitalized"
+          type: "text"
+          info:
+            notes: "Cases that are currently admitted to hospital (i.e., no discharge date reported)."
+        - id: "Currently in ICU"
+          type: "text"
+          info:
+            notes: "Cases that are currently admitted to the intensive care unit (ICU) (i.e. no discharge date reported)."
+        - id: "Currently Intubated"
+          type: "text"
+          info:
+            notes: "Cases that were intubated related to their COVID-19 infection (includes cases that are currently intubated and those that have been discharged or deceased)."
+        - id: "Ever Hospitalized"
+          type: "text"
+          info:
+            notes: "Cases that were hospitalized related to their COVID-19 infection (includes cases that are currently hospitalized and those that have been discharged or are deceased). "
+        - id: "Ever in ICU"
+          type: "text"
+          info:
+            notes: "Cases that were admitted to the intensive care unit (ICU) related to their COVID-19 infection (includes cases that are currently in ICU and those that have been discharged or are deceased)."
+        - id: "Ever Intubated"
+          type: "text"
+          info:
+            notes: "Cases that were intubated related to their COVID-19 infection (includes cases that are currently intubated and those that have been discharged or deceased)"
+        
+        
