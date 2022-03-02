@@ -35,7 +35,9 @@ solid-waste-pickup-schedule:
   excerpt: This dataset contains the curbside residential weekly pick-up schedules for green bin, garbage, recycling, yard waste and Christmas trees
   limitations: null
   notes: |
-    See Readme file\r\n\r\nThis Excel file relates to the Solid Waste Daytime Curbside Collection Areas in ESRI Shape file format.\r\n
+    See Readme file for more.
+
+    This Excel file relates to the Solid Waste Daytime Curbside Collection Areas in ESRI Shape file format.
   
   resources:
     # resource name

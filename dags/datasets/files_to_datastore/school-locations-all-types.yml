@@ -1,0 +1,155 @@
+# package name
+school-locations-all-types:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "School Locations - All Types"
+  date_published: "2019-07-23T17:58:32.641183"
+  refresh_rate: Semi-annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Locations and mapping
+    - Community services
+  tags: 
+    - name: private schools
+      vocabulary_id: null
+    - name: public schools
+      vocabulary_id: null
+    - name: schools
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: A geographical spatial file containing all of the address points of all of the schools within the City of Toronto.
+  limitations: null
+  notes: A geographical file covering the City of Toronto that contains all the point location of schools that we have.  It also contains the private schools to the best of our knowledge.
+
+  resources:
+    # resource name
+    School locations-all types data:
+      agol: True
+      format: json
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_SCHOOL/FeatureServer/0/
+      attributes:
+        - id: "OBJECTID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "GEO_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SCHOOL_LEVEL"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SCHOOL_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "BOARD_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SOURCE_ADDRESS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SCHOOL_TYPE_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ADDRESS_POINT_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ADDRESS_NUMBER"
+          type: "text"
+          info:
+            notes: ""
+        - id: "LINEAR_NAME_FULL"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ADDRESS_FULL"
+          type: "text"
+          info:
+            notes: ""
+        - id: "POSTAL_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "MUNICIPALITY"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CITY"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PLACE_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "GENERAL_USE_CODE"
+          type: "int"
+          info:
+            notes: ""
+        - id: "CENTRELINE_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "LO_NUM"
+          type: "int"
+          info:
+            notes: ""
+        - id: "LO_NUM_SUF"
+          type: "text"
+          info:
+            notes: ""
+        - id: "HI_NUM"
+          type: "int"
+          info:
+            notes: ""
+        - id: "HI_NUM_SUF"
+          type: "text"
+          info:
+            notes: ""
+        - id: "LINEAR_NAME_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "X"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Y"
+          type: "float"
+          info:
+            notes: ""
+        - id: "LATITUDE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "LONGITUDE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "tex"
+          info:
+            notes: ""

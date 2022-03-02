@@ -171,8 +171,8 @@ def create_dag(dag_id,
             
             # download file
             # ZIP files:
-            if "zip" in resource.keys():
-                if resource["zip"]:
+            if "zip" in resource.keys() or "ZIP" in resource.keys():
+                if resource["zip"] or resource["ZIP"]:
                     tasks_list["download_" + resource_name] = DownloadZipOperator(
                         task_id="download_" + resource_name,
                         file_url=resource["url"],
@@ -181,7 +181,7 @@ def create_dag(dag_id,
                     )
 
             # CSV, XLSX files:
-            elif resource["format"] in ["csv", "xlsx"]:
+            elif resource["format"].lower() in ["csv", "xlsx"]:
                 tasks_list["download_" + resource_name] = DownloadFileOperator(
                     task_id="download_" + resource_name,
                     file_url=resource["url"],
@@ -191,7 +191,7 @@ def create_dag(dag_id,
 
             # AGOL files:
             elif "agol" in resource.keys():
-                if resource["agol"] and resource["format"] in ["geojson", "json"]:
+                if resource["agol"] and resource["format"].lower() in ["geojson", "json"]:
                     # remove geometry attribute if file is not geojson
                     delete_col = ["geometry"] if resource["format"] == "json" else []
                     tasks_list["download_" + resource_name] = AGOLDownloadFileOperator(

@@ -525,7 +525,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             if self.config["zip"]:
                 self.data_path = self.data_path[ self.config["filename"] ]
 
-        return readers[self.config["format"]]()
+        return readers[self.config["format"].lower()]()
     
     
     # parse file attributes into correct data types in a dict based on input fields
