@@ -665,7 +665,7 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
         # if the data is a different length, green light an update
         if len(parsed_data) != len(datastore_resource["records"]):
             print("UPDATE THE DATASET! COUNT")
-            
+            return "update_resource_" + self.resource_name
 
         # remove _id column from existing datastore_resource
         datastore_record = datastore_resource["records"][0]
