@@ -36,7 +36,7 @@ police-boundaries:
     # resource name
     Police Boundaries Data:
       agol: True
-      format: json
+      format: geojson
       url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_POLICE_DIVISION/FeatureServer/0/
       attributes:
         - id: "AREA_ID"
@@ -67,34 +67,34 @@ police-boundaries:
           type: "text"
           info:
             notes: ""
-        - id: "X"
-          type: "float"
-          info:
-            notes: ""
-        - id: "Y"
-          type: "float"
-          info:
-            notes: ""
-        - id: "LONGITUDE"
-          type: "float"
-          info:
-            notes: ""
-        - id: "LATITUDE"
-          type: "float"
-          info:
-            notes: ""
-        - id: "OBJECTID"
-          type: "int"
-          info:
-            notes: ""
-        - id: "Shape__Area"
-          type: "float"
-          info:
-            notes: ""
-        - id: "Shape__Length"
-          type: "float"
-          info:
-            notes: ""
+        #- id: "X"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "Y"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "LONGITUDE"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "LATITUDE"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "OBJECTID"
+        #  type: "int"
+        #  info:
+        #    notes: ""
+        #- id: "Shape__Area"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "Shape__Length"
+        #  type: "float"
+        #  info:
+        #    notes: ""
         - id: "geometry"
           type: "text"
           info:

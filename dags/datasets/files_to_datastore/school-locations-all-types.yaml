@@ -38,7 +38,7 @@ school-locations-all-types:
     # resource name
     School locations-all types data:
       agol: True
-      format: json
+      format: geojson
       url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_SCHOOL/FeatureServer/0/
       attributes:
         - id: "OBJECTID"
@@ -133,23 +133,23 @@ school-locations-all-types:
           type: "float"
           info:
             notes: ""
-        - id: "X"
-          type: "float"
-          info:
-            notes: ""
-        - id: "Y"
-          type: "float"
-          info:
-            notes: ""
-        - id: "LATITUDE"
-          type: "float"
-          info:
-            notes: ""
-        - id: "LONGITUDE"
-          type: "float"
-          info:
-            notes: ""
+        #- id: "X"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "Y"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "LATITUDE"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "LONGITUDE"
+        #  type: "float"
+        #  info:
+        #    notes: ""
         - id: "geometry"
-          type: "tex"
+          type: "text"
           info:
             notes: ""
