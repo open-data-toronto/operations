@@ -115,6 +115,23 @@ def create_dag(dag_id,
             else:
                 package_metadata[metadata_attribute] = None
 
+        # write some DAG-level documentation to be visible on the Airflow UI
+        dag.doc_md = """
+        ### Summary
+        This DAG loads the following resource(s) into the CKAN package **{package_name}**:\n 
+
+        {resources}
+
+        ### Contact
+        - Dataset-related inquiries should go to {dataset_owner_contact}
+        - ETL-related inquiries should go to {dag_owner_contact}
+        """.format(
+            resources = "\n".join(["- `" + resource_name + "` from [" + dataset["resources"][resource_name]["url"] + "](" + dataset["resources"][resource_name]["url"] + ")" for resource_name in resource_names]),
+            package_name = "[{package_name}]({CKAN}dataset/{package_name})".format(package_name=package_name, CKAN=CKAN),
+            dataset_owner_contact = "[{name}](mailto:{email})".format(name=package_metadata["owner_division"], email=package_metadata["owner_email"]),
+            dag_owner_contact = "[{name}](mailto:{email})".format(name=default_args["owner"], email=default_args["email"]),
+        )
+
         # define the operators that each DAG always needs, regardless of input configuration
         
         # create tmp dir
@@ -371,6 +388,7 @@ for config_file in os.listdir(CONFIG_FOLDER):
                 "start_date": datetime(2021, 10, 30, 0, 0, 0),
                 "config_folder": CONFIG_FOLDER,
                 "pool": "ckan_pool",
+                "tags": ["dataset", "yaml"]
             }
         )
 

@@ -98,6 +98,20 @@ with DAG(
     tags=TAGS
 ) as dag:
 
+    dag.doc_md = """
+    ### Summary
+    This DAG triggers multiple other input DAGs one by one, and then reports their success or failure in slack.
+
+    ### How To
+    When you trigger this DAG through this Airflow UI, specify the DAGs you want triggered in the configuration JSON, like below:
+
+    ```
+    {"dag_ids": ["dag_id1", "dag_id2", "dag_id3"]}
+    ```
+
+    There is no limit to the number of DAGs you can trigger
+    """
+
     get_dag_ids = PythonOperator(
         task_id = "get_dag_ids",
         python_callable = get_dag_ids,
