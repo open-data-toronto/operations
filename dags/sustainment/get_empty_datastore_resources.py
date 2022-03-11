@@ -72,7 +72,7 @@ with DAG(
                         "package_id": p["title"],
                         "resource_id": r["id"],
                         "resource_name": r["name"],
-                        "extract_job": r["extract_job"],
+                        #"extract_job": r["extract_job"],
                         "row_count": res["total"],
                         "fields": res["fields"],
                     }
@@ -109,12 +109,12 @@ with DAG(
 
         empties = sorted(empties, key=lambda i: i["package_id"])
 
-        matrix = [["#", "PACKAGE", "EXTRACT_JOB", "ROW_COUNT"]]
+        matrix = [["#", "PACKAGE", "ROW_COUNT"]]
 
         for i, r in enumerate(empties):
             string = [f"{i+1}."]
             string.extend(
-                [r[f] for f in ["package_id", "extract_job", "row_count"] if r[f]]
+                [r[f] for f in ["package_id", "row_count"] if r[f]]
             )
             matrix.append(string)
 

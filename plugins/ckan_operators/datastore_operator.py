@@ -456,9 +456,15 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
 
     def clean_date_format(self, input):
         # loops through the list of formats and tries to return an input string into a datetime of one of those formats
-        assert isinstance(input, str), "Utils clean_date_format() function can only receive strings - it instead received {}".format(type(input))
+       
+        if input == None:
+            return
+
         if len(input) == 0:
             return
+
+        assert isinstance(input, str), "Utils clean_date_format() function can only receive strings - it instead received {}".format(type(input))
+
         for format in [
             "%Y-%m-%dT%H:%M:%S.%f",
             "%Y-%m-%d %H:%M:%S.%f",
