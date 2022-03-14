@@ -1,0 +1,265 @@
+# package name
+zoning-by-law:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Zoning By-Law"
+  date_published: "2019-07-23T18:18:37.809235"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: City Planning
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: 
+    - Affordable housing
+    - Mobility
+  topics: 
+    - Development and infrastructure
+    - Locations and mapping
+  tags: 
+    - name: city-wide by-law
+      vocabulary_id: null
+    - name: development
+      vocabulary_id: null
+    - name: mapping
+      vocabulary_id: null
+    - name: zoning
+      vocabulary_id: null
+
+  information_url: https://www.toronto.ca/city-government/planning-development/zoning-by-law-preliminary-zoning-reviews
+  excerpt: City-wide Zoning Bylaw No. 569-2013 regulates the use of land, the size and location of buildings and parking across the City.
+  limitations: |
+    The information represented in the spatial file must be read with the by-law text. It is suggested that these files be used with the [Toronto Centreline (TCL)](https://open.toronto.ca/dataset/toronto-centreline-tcl/) and [Address Points (Municipal) - Toronto One Address Repository file](https://open.toronto.ca/dataset/address-points-municipal-toronto-one-address-repository/).\r\n\r\nPlease be aware that without direct access to the text of the Zoning By-law, the mapped data is meaningless.  The current on-line zoning map is an interactive product which provides direct links to key parts of the text most relevant to the respective polygons.
+  notes: |
+      This dataset contains ESRI shape files that are part of the Zoning By-law 569-2013, was approved by Council but it is still subject to an Ontario Municipal Board (OMB) hearing for final approval.  
+      The Zoning By-law team is responsible for the revising the city-wide zoning bylaw. Zoning bylaws regulate the use, size, height, density and location of buildings on properties and affect every property in the City.
+      
+      View [Amendments to Zoning By-law 569-2013](https://www.toronto.ca/city-government/planning-development/zoning-by-law-preliminary-zoning-reviews/zoning-by-law-569-2013-2/)
+  
+  resources:
+    # resource name
+    Zoning Area:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/3
+      attributes:
+        - id: "ZN_ZONE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZN_LU_CATEGORY"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ZN_HOLDING"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZN_HOLDING_NO"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ZN_FRONTAGE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "ZN_AREA"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ZN_UNIT_COUNT"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ZN_FSI_DENSITY"
+          type: "float"
+          info:
+            notes: ""
+        - id: "ZN_COVERAGE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "FSI_TOTAL"
+          type: "float"
+          info:
+            notes: ""
+        - id: "FSI_COMMERCIAL_USE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "FSI_RESIDENTIAL_USE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "FSI_EMPLOYMENT_USE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "FSI_OFFICE_USE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "ZN_EXCPTN"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZN_EXCPTN_NO"
+          type: "int"
+          info:
+            notes: ""
+        - id: "STANDARDS_SET"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ZN_STATUS"
+          type: "int"
+          info:
+            notes: ""
+        #- id: "ZN_text"
+        #  type: "text"
+        #  info:
+        #    notes: ""
+        - id: "ZN_AREA_UNIT"
+          type: "float"
+          info:
+            notes: ""
+        - id: "BYLAW_CHAPTERLINK"
+          type: "text"
+          info:
+            notes: ""
+        - id: "BYLAW_SECTIONLINK"
+          type: "text"
+          info:
+            notes: ""
+        - id: "BYLAW_EXCPTNLINK"
+          type: "text"
+          info:
+            notes: ""
+        - id: "BYLAW_HOLDINGLINK"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZBL_CHAPTER"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZBL_SECTION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZBL_EXCPTN"
+          type: "text"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Zoning Height Overlay:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/9
+      attributes:
+        - id: "HT_STORIES"
+          type: "text"
+          info:
+            notes: ""
+        - id: "HT_STRING"
+          type: "text"
+          info:
+            notes: ""
+        - id: "HT_HEIGHT"
+          type: "text"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Zoning Lot Coverage Overlay:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/10
+      attributes:
+        - id: "ZN_COVERAGE"
+          type: "int"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Zoning Policy Area Overlay:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/13
+      attributes:
+        - id: "POLICY_AREA"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZN_EXCPTN"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZN_EXCPTN_NO"
+          type: "int"
+          info:
+            notes: ""
+        - id: "LINK_TO_PARKINGRATE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "LINK_TO_EXCPTN"
+          type: "text"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Zoning Policy Road Overlay:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/14
+      attributes:
+        - id: "ROAD_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Zoning Rooming House Overlay:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/19
+      attributes:
+        - id: "RMG_HS_AREA"
+          type: "text"
+          info:
+            notes: ""
+        - id: "RMG_HS_NO"
+          type: "int"
+          info:
+            notes: ""
+        - id: "RMG_STRING"
+          type: "text"
+          info:
+            notes: ""
+        - id: "BYLAW_SECTIONLINK"
+          type: "text"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""

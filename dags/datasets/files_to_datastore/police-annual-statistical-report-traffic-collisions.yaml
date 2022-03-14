@@ -1,0 +1,113 @@
+# package name
+police-annual-statistical-report-traffic-collisions:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Police Annual Statistical Report - Traffic Collisions"
+  date_published: "2020-11-18T19:41:10.391098"
+  refresh_rate: Annually
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: Annual Statistical Report
+      vocabulary_id: null
+
+  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
+  excerpt: This dataset includes all identified motor vehicle collision occurrences from 2014 to 2020 by occurrence date and division.
+  limitations: |
+    No Specified Address (NSA) includes any occurrences reported outside the City of Toronto limits or those that have no verified location.
+
+    The location of calls for service have been deliberately offset to the nearest road intersection node to protect the privacy of parties involved in the occurrence. Due to the offset of occurrence location, the numbers by Division and Neighbourhood may not reflect the exact count of occurrences reported within these geographies. The Toronto Police Service does not guarantee the accuracy, completeness, timeliness of the data and it should not be compared to any other source of crime data.
+
+  notes: |
+    This dataset includes all Motor Vehicle Collision (MVC) occurrences by their occurrence date and related offences. The MVC categories include property damage (PD) collisions, Fail to Remain (FTR) collisions, injury collisions and fatalities. This data is provided at the occurrence level, therefore multiple offences and/or victims can be associated with each record. This data does not include occurrences that have been deemed unfounded. In this dataset a collision is defined as the contact resulting from the motion of a motor vehicle or streetcar or its load, which produces property damage, injury or death. The term collision indicates that the initial point of contact involved at least one motor vehicle or streetcar.
+
+    ##**Definitions:**
+
+    **Fatal Collisions** occur when an individual’s injuries from a MVC result in a fatality within 30 days. Please note this category excludes:
+
+    * (i) Occurrences on private property
+    * (ii) Occurrences related to sudden death prior to collision (suicide or medical episode)
+    * (iii) Occurrences where the individual has died more than 30 days after the collision
+
+    **Personal Injury Collisions** occur when an individual involved in a MVC suffers personal injuries. 
+
+    **Fail to Remain Collisions** occur when an individual involved in a MVC fails to stop and provide their information at the scene of a collision. 
+
+    **Property Damage Collisions** occur when an individual’s property has been damaged in a MVC or the value of damages is less than $2,000 for all involved parties.
+  resources:
+    # resource name
+    Traffic Collisions:
+      agol: True
+      format: geojson
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Traffic_Collisions_ASR_T_TBL_001/FeatureServer/0/
+      attributes:
+        - id: "EventUniqueId"
+          type: "text"
+          info:
+            notes: "Occurrence Number"
+        - id: "OccurrenceDate"
+          type: "timestamp"
+          info:
+            notes: "Date Collision Occurred"
+        - id: "Month"
+          type: "text"
+          info:
+            notes: "Month Collision Occurred"
+        - id: "Day_of_Week"
+          type: "text"
+          info:
+            notes: "Day of Week Collision Occurred"
+        - id: "Year"
+          type: "text"
+          info:
+            notes: "Year Collision Occurred"
+        - id: "Hour"
+          type: "int"
+          info:
+            notes: "Hour Collision Occurred"
+        - id: "Division"
+          type: "text"
+          info:
+            notes: "Police Division where Collision Occurred"
+        - id: "Atom"
+          type: "text"
+          info:
+            notes: "Identifier of Neighbourhood"
+        - id: "Neighbourhood"
+          type: "text"
+          info:
+            notes: "Name of Neighbourhood where Collision Occurred"
+        - id: "Fatalities"
+          type: "int"
+          info:
+            notes: "Number of Person’s Killed associated with the Collision (See definitions)"
+        - id: "Injury_Collisions"
+          type: "text"
+          info:
+            notes: "Indicates whether a Collision had an associated Injury (See definitions)"
+        - id: "FTR_Collisions"
+          type: "text"
+          info:
+            notes: "Indicates whether a Collision was associated to Fail to Remain (See definitions)"
+        - id: "PD_Collisions"
+          type: "text"
+          info:
+            notes: "Indicates Whether a Collision was associated to Property Damage (See definitions)"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: "Longitude Coordinate (Offset to nearest intersection) & Latitude Coordinate "
+        

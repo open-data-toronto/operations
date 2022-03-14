@@ -1,0 +1,62 @@
+# package name
+police-annual-statistical-report-top-20-offences-of-firearms-seizures:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Police Annual Statistical Report - Top 20 Offences of Firearms Seizures"
+  date_published: "2020-11-18T19:41:10.391098"
+  refresh_rate: Annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: Annual Statistical Report
+      vocabulary_id: null
+
+  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
+  excerpt: This dataset provides a list of top 20 offences ranked by volume, for occurrences linked to a firearm seizure between 2014 and 2019.
+  limitations: null
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    This specific dataset provides a list of top 20 offences ranked by volume, for occurrences linked to a firearm seizure between 2014 and 2019. Ranking 1-20 is in order of descending volume of offences.
+
+    This data is related to table (ASR-F-TBL-002) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+  
+  resources:
+    # resource name
+    Top 20 Offences of Firearms Seizures:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Top_20_Offences_of_Firearm_Seizures_ASR_F_TBL_002/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "SeizedYear"
+          type: "int"
+          info:
+            notes: "Year of firearm seizure"
+        - id: "Rank"
+          type: "text"
+          info:
+            notes: "Rank 1-20 by count of offences from highest to lowest"
+        - id: "Offence"
+          type: "text"
+          info:
+            notes: "Description of offence for occurrence linked to a firearm seizure"
+        

@@ -1,0 +1,102 @@
+# package name
+police-boundaries:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Police Boundaries"
+  date_published: "2020-11-20T16:31:06.954299"
+  refresh_rate: Annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Locations and mapping
+    - Public safety
+  tags: 
+    - name: police division
+      vocabulary_id: null
+    - name: toronto police service
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: Toronto Police Divisional boundary polygons.
+  limitations: null
+  notes: Data shows which geographical areas in the City are associated to each Toronto Police Division.
+
+  resources:
+    # resource name
+    Police Boundaries Data:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_POLICE_DIVISION/FeatureServer/0/
+      attributes:
+        - id: "AREA_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "AREA_ATTR_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "PARENT_AREA_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "AREA_SHORT_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_LONG_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_DESC"
+          type: "text"
+          info:
+            notes: ""
+        #- id: "X"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "Y"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "LONGITUDE"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "LATITUDE"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "OBJECTID"
+        #  type: "int"
+        #  info:
+        #    notes: ""
+        #- id: "Shape__Area"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        #- id: "Shape__Length"
+        #  type: "float"
+        #  info:
+        #    notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+        

@@ -43,6 +43,8 @@ RESOURCES = {
             "is_preview": False,
             "extract_job": f"Airflow: {PACKAGE_NAME}",
             "url_type": "datastore",
+            "package_id": PACKAGE_NAME,
+            "url": "https://open.toronto.ca/dataset/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system",
         },
         "expected_columns": [
             "year",
@@ -59,6 +61,8 @@ RESOURCES = {
             "is_preview": True,
             "extract_job": f"Airflow: {PACKAGE_NAME}",
             "url_type": "datastore",
+            "package_id": PACKAGE_NAME,
+            "url": "https://open.toronto.ca/dataset/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system",
         },
         "expected_columns": [
             "location_name", 
@@ -88,7 +92,11 @@ with DAG(
             "on_failure_callback": task_failure_slack_alert,
             "start_date": days_ago(1),
             "retries": 0,
-            # "retry_delay": timedelta(minutes=3),
+            "etl_mapping":[{
+                "source": RESOURCES[key]["file_url"],
+                "target_package_name": PACKAGE_NAME,
+                "target_resource_name": RESOURCES[key]["name"], 
+            } for key in RESOURCES]
         }
     ),
     description="",

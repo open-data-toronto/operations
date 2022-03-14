@@ -231,6 +231,11 @@ with DAG(
             "on_failure_callback": task_failure_slack_alert,
             "start_date": days_ago(1),
             "retries": 0,
+            "etl_mapping":[{
+                "source": ["https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_measures", "https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_narratives/"],
+                "target_package_name": PACKAGE_NAME,
+                "target_resource_name": RESOURCE_NAME
+            }]
         }
     ),
     description="Take tpp json and narratives from progress portal",
@@ -388,6 +393,7 @@ with DAG(
             is_preview=True,
             url_type="datastore",
             extract_job=f"Airflow: {PACKAGE_NAME}",
+            package_id=PACKAGE_NAME,
         ),
     )
 

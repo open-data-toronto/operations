@@ -1,6 +1,8 @@
 import hashlib
 import logging
 import os
+import io
+import zipfile
 from datetime import datetime
 from pathlib import Path
 
@@ -110,6 +112,7 @@ class DownloadFileOperator(BaseOperator):
         # return file hash and other metadata
         return {
             "path": self.path,
+            "data_path": self.path,
             "last_modified": last_modified,
             "checksum": checksum.hexdigest(),
         }
@@ -142,3 +145,64 @@ class DownloadFileOperator(BaseOperator):
         logging.info(f"Returning: {result}")
 
         return result
+
+
+class DownloadZipOperator(BaseOperator):
+    """
+    Input zip url and output directory, and this operator will grab a zip file from an online location
+    and unzip all of its contents into the output directory
+    """
+
+    @apply_defaults
+    def __init__(
+        self,
+        file_url: str = None,
+        file_url_task_id: str = None,
+        file_url_task_key: str= None,
+
+        dir: str = None,
+        dir_task_id: str = None,
+        dir_task_key: str= None,
+        
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+        self.file_url, self.file_url_task_id, self.file_url_task_key = file_url, file_url_task_id, file_url_task_key
+        self.dir, self.dir_task_id, self.dir_task_key = dir, dir_task_id, dir_task_key
+
+    def execute(self, context):
+        # set task instance from context
+        ti = context['ti']
+
+        # create filepath for file well create
+        # how this is done depends on whether the operator received task ids/keys, or actual values 
+        if self.dir_task_id and self.dir_task_key:
+            self.dir = ti.xcom_pull(task_ids=self.dir_task_id)[self.dir_task_key]
+
+        if self.file_url_task_id and self.file_url_task_key:
+            self.file_url = ti.xcom_pull(task_ids=self.file_url_task_id)[self.file_url_task_key]
+
+        # extract files into self.path
+        r = requests.get(self.file_url)
+        z = zipfile.ZipFile(io.BytesIO(r.content))
+        z.extractall(self.dir)
+
+        # build output dict of filenames
+        filenames = []
+        print("Printing files in folder")
+        for files in os.walk(self.dir):
+            print(files)
+            for file in files:
+                print(file)
+                filenames.append(file)
+        
+        data_path = {filename: self.dir + "/" + filename for filename in filenames}
+        print(filenames)
+        print(data_path)
+        return {
+            "path": data_path,
+            "data_path": data_path
+        }
+
+
+

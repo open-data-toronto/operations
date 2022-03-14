@@ -595,7 +595,15 @@ def get_package():
 
 
 default_args = airflow_utils.get_default_args(
-    {"on_failure_callback": task_failure_slack_alert,"start_date": job_settings["start_date"]}
+    {
+        "on_failure_callback": task_failure_slack_alert,
+        "start_date": job_settings["start_date"],
+        "etl_mapping":[{
+                "source": SRC_FILES + map,
+                "target_package_name": PACKAGE_ID,
+                "target_resource_name": FILE_RESOURCE_MAP[map],
+            } for map in FILE_RESOURCE_MAP]
+    }
 )
 
 with DAG(

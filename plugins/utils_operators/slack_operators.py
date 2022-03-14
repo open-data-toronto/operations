@@ -14,8 +14,8 @@ from airflow.models import Variable
 ## Init airflow variables
 ACTIVE_ENV = Variable.get("active_env")
 SLACK_CONN_ID = 'slack' if ACTIVE_ENV == "prod" else "slack_dev"
-AIRFLOW_URLS = {"dev": "https://od-airflow2.intra.dev-toronto.ca/", "qa": "https://od-airflow1.intra.dev-toronto.ca/", "prod": "https://od-airflow.intra.dev-toronto.ca/"}
-AIRFLOW_URL = AIRFLOW_URLS[ ACTIVE_ENV ]
+AIRFLOW_URLS = Variable.get("ckan_credentials_secret", deserialize_json=True)
+AIRFLOW_URL = AIRFLOW_URLS[ ACTIVE_ENV ]["address"]
 USERNAME = "Operator" if ACTIVE_ENV == "prod" else "airflow-test"
 
 slack_webhook_token = BaseHook.get_connection(SLACK_CONN_ID).password
@@ -129,13 +129,25 @@ class GenericSlackOperator(BaseOperator):
 
     def execute(self, context):
         ti = context['ti']
+        # if a message has no content, dont send a message
+
         if self.message_content_task_id and self.message_content_task_key:
-            self.message_content = ti.xcom_pull(task_ids=self.message_content_task_id)[self.message_content_task_key]
+            self.message_content_task = ti.xcom_pull(task_ids=self.message_content_task_id)
+            if self.message_content_task:
+                self.message_content = self.message_content_task[self.message_content_task_key]
+            else:
+                return
             
+        # if the message content is a dict, print it nicely
+        if isinstance(self.message_content, dict):
+            highlight_terms = ["failed", 0]
+            self.message_content = "\n\t\t   ".join( ["*" + key + "*: " + value + ":exclamation:" if value in highlight_terms else
+                                                      "*" + key + "*: " + value 
+                                                      for (key,value) in self.message_content.items()] )
 
         slack_message = """
             :robot_face: *{header}*
-            {dag} 
+            *DAG_ID*: `{dag}` 
             {content} {body}
             """.format(
             header=self.message_header,

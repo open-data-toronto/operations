@@ -1,0 +1,66 @@
+# package name
+police-annual-statistical-report-total-public-complaints:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Police Annual Statistical Report - Total Public Complaints"
+  date_published: "2020-11-18T19:41:10.391098"
+  refresh_rate: Annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: Annual Statistical Report
+      vocabulary_id: null
+
+  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
+  excerpt: This dataset provides a breakdown of the total number of public complaints filed with the Office of the Independent Police Review Director (O.I.P.R.D.) from 2014 – 2019.
+  limitations: Data pertains to external public complaints that have been received by PRS and entered in PSIS as of the data extraction date.  Data pertains to TPS uniform members only. Numbers are subject to change as the data in PSIS is frequently being updated as complaints are concluded.
+  notes: |
+    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+
+    This specific dataset provides a breakdown of the total number of public complaints filed with the Office of the Independent Police Review Director (O.I.P.R.D.) from 2014 – 2019 broken down by complaints that were investigated and not investigated.
+
+    This data is related to table (ASR-PCF-TBL-001) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+  
+  resources:
+    # resource name
+    Total Public Complaints:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Total_Public_Complaints_(ASR_PCF_TBL_001)/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year of received complaint"
+        - id: "Type"
+          type: "text"
+          info:
+            notes: "Type of received complaint"
+        - id: "Subtype"
+          type: "text"
+          info:
+            notes: "Detailed breakdown of complaint type"
+        - id: "Count_"
+          type: "text"
+          info:
+            notes: "Count of complaints received"
+        

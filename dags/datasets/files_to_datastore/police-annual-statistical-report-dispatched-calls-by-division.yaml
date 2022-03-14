@@ -1,0 +1,61 @@
+# package name
+police-annual-statistical-report-dispatched-calls-by-division:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Police Annual Statistical Report - Dispatched Calls by Division"
+  date_published: "2020-11-18T19:41:10.391098"
+  refresh_rate: Annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: Annual Statistical Report
+      vocabulary_id: null
+
+  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
+  excerpt: This dataset provides a count of the dispatched calls from 2014 – 2019 by division.
+  limitations: The count for "Other" Dispatched Events is comprised of events with a valid call for a service event type that are discpatched to a valid call sign where a Division reference could not be readilt determined (For example, a TPS officer attends an address outside of the city or a location that is not verified and attributed to a TPS Division)
+  resources:
+    # resource name
+    Dispatched Calls by Division:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Dispatched_Calls_by_Division_ASR_CS_TBL_001/FeatureServer/0/
+      attributes:
+        - id: "ObjectId"
+          type: "int"
+          info:
+            notes: "Unique identifier from the source system"
+        - id: "Year"
+          type: "int"
+          info:
+            notes: "Year call was dispatched"
+        - id: "Unit"
+          type: "text"
+          info:
+            notes: "Unit description"
+        - id: "Category"
+          type: "text"
+          info:
+            notes: "Description of data category"
+        - id: "Command"
+          type: "text"
+          info:
+            notes: "Command breakdown at time of dispatched call"
+        - id: "Count_"
+          type: "text"
+          info:
+            notes: "Number of dispatched calls"
+        

@@ -1,6 +1,11 @@
 import hashlib
 import json
+import csv
 import logging
+import codecs
+import openpyxl
+
+from datetime import datetime
 from pathlib import Path
 from typing import List
 
@@ -119,7 +124,6 @@ class BackupDatastoreResourceOperator(BaseOperator):
         return result
 
 
-
 class DeleteDatastoreResourceOperator(BaseOperator):
     """
     Deletes a datastore resource
@@ -169,7 +173,6 @@ class DeleteDatastoreResourceOperator(BaseOperator):
 
         except Exception as e:
             logging.error("Error while trying to delete resource: " + e)
-
 
 
 class DeleteDatastoreResourceRecordsOperator(BaseOperator):
@@ -304,7 +307,6 @@ class RestoreDatastoreResourceBackupOperator(BaseOperator):
         return result
 
 
-
 class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
     '''
     Reads a JSON file and write the output into a CKAN datastore resource.
@@ -402,5 +404,329 @@ class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
         logging.info("Resource created and populated from input fields and data")
 
         return {"resource_id": self.resource_id, "data_inserted": len(data)}
+
+
+class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
+    """
+    Inserts a file's data into a datastore resource based on specs from a YAML file
+    """          
+    @apply_defaults
+    def __init__(
+        self,
+        address: str,
+        apikey: str,
+
+        resource_id: str = None,
+        resource_id_task_id: str = None,
+        resource_id_task_key: str = None,
+
+        data_path: str = None,
+        data_path_task_id: str = None,
+        data_path_task_key: str = None,
+
+        config: dict = {},
+
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+        self.resource_id, self.resource_id_task_id, self.resource_id_task_key = resource_id, resource_id_task_id, resource_id_task_key
+        self.data_path, self.data_path_task_id, self.data_path_task_key = data_path, data_path_task_id, data_path_task_key
+        self.config = config
+        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+
+    def clean_string(self, input):
+        if input == None:
+            return ""
+        if not isinstance(input, str):
+            return str(input)
+        else:
+            return str(input).strip()
+
+    def clean_int(self, input):
+        if input:
+            return int(input)
+        else:
+            return None
+
+    def clean_float(self, input):
+        if input:
+            return float(input)
+        else:
+            return None
+
+    def clean_date_format(self, input):
+        # loops through the list of formats and tries to return an input string into a datetime of one of those formats
+       
+        if input == None:
+            return
+
+        if len(input) == 0:
+            return
+
+        assert isinstance(input, str), "Utils clean_date_format() function can only receive strings - it instead received {}".format(type(input))
+
+        for format in [
+            "%Y-%m-%dT%H:%M:%S.%f",
+            "%Y-%m-%d %H:%M:%S.%f",
+            "%Y-%m-%dT%H:%M:%S",
+            "%Y-%m-%d %H:%M:%S",
+            "%Y-%m-%d",
+            "%d-%b-%Y",
+            "%b-%d-%Y",
+            "%m-%d-%y",
+            "%d-%m-%y",
+            "%Y%m%d%H%M%S",
+        ]:
+            try:
+                input = input.replace("/", "-")
+                datetime_object = datetime.strptime(input, format)
+                return datetime_object.strftime("%Y-%m-%dT%H:%M:%S.%f")
+            except ValueError:
+                #logging.error("No valid datetime format in clean_date_format() for input string {}".format(input))
+                pass
+        
+
+    # reads a csv and returns a list of dicts - one dict for each row
+    def read_csv_file(self):
+        output = []
+        dictreader = csv.DictReader(codecs.open(self.data_path, "rbU", "latin1"))
+        for row in dictreader:
+            # strip each attribute name - CKAN requires it
+            output_row = {}
+            for attr in row.keys():
+                output_row[ attr.strip() ] = row[attr]
+            output.append(output_row)
+
+        logging.info("Read {} records from {}".format( len(output), self.data_path))
+        return output
+
+    def read_json_file(self):
+
+        #TODO logic here to find data if its hiding in a child attribute
+
+        return json.load( open(self.data_path, "r"))
+
+    def read_xlsx_file(self):
+        workbook = openpyxl.load_workbook(self.data_path)
+        worksheet = workbook[ self.config["sheet"] ]
+
+        # init output and sheet column names
+        output = []
+        column_names = [ col.value for col in worksheet[1] ]
+
+        for row in worksheet.iter_rows(min_row=2):
+            output.append( { column_names[i]: self.clean_string(row[i].value) for i in range(len(row)) })
+
+        return output
+
+    # put input file into memory based on input format
+    def read_file(self):
+        readers = {
+            "csv": self.read_csv_file,
+            "geojson": self.read_json_file,
+            "json": self.read_json_file,
+            "xlsx": self.read_xlsx_file
+        }
+        if "zip" in self.config.keys():
+            if self.config["zip"]:
+                self.data_path = self.data_path[ self.config["filename"] ]
+
+        return readers[self.config["format"].lower()]()
+    
+    
+    # parse file attributes into correct data types in a dict based on input fields
+    def parse_file(self, read_file):
+        # init output
+        output = []
+
+        # list of functions used to convert input to desired data_type
+        formatters = {
+            "text": str,
+            "int": self.clean_int,
+            "float": self.clean_float,
+            "timestamp": self.clean_date_format,
+        }
+
+        # convert each column in each row
+        for row in read_file:
+            new_row = {}
+            # for each attribute ...
+            for i in range(len(self.config["attributes"])):
+                
+                # map source column names to target column names, where needed
+                if "source_name" in self.config['attributes'][i].keys() and "target_name" in self.config['attributes'][i].keys():
+                    self.config["attributes"][i]["id"] = self.config["attributes"][i]["target_name"]
+                    src = row[self.config["attributes"][i]["source_name"]]
+                else:
+                    src = row[self.config["attributes"][i]["id"]]
+
+                new_row[self.config["attributes"][i]["id"]] = formatters[ self.config["attributes"][i]["type"] ](src)
+            output.append( new_row )
+
+        logging.info( "Cleaned {} records".format(len(output)) )
+        return output
+                
+
+    # put dict into datastore_create call
+    def insert_into_datastore(self, resource_id, records):
+        # map source column names to target column names, where needed
+        for i in range(len(self.config['attributes'])):
+            if "source_name" in self.config['attributes'][i].keys() and "target_name" in self.config['attributes'][i].keys():
+                self.config["attributes"][i]["id"] = self.config["attributes"][i]["target_name"]
+
+        # Smaller datasets can all be loaded at once
+        if len(records) < 200000:
+            self.ckan.action.datastore_create( id=resource_id, fields=self.config["attributes"], records=records )
+
+        # Larger datasets, however, need to be loaded in chunks
+        else:
+            chunk_size = 2000 if "geometry" in records[0].keys() else 20000
+            logging.info( "Dataset is too big to load all at once - loading in chunks of " + str(chunk_size))
+            for i in range( (len(records) // chunk_size) +1 ):
+                if i % 10 == 0:
+                    logging.info("Loading chunk {} out of {} with {} records".format( 
+                        str(i), 
+                        str(len(records) // chunk_size), 
+                        str(len(records[ chunk_size*i : chunk_size*(i+1)])) ))
+                self.ckan.action.datastore_create( 
+                    id=resource_id, 
+                    fields=self.config["attributes"], 
+                    records=records[ chunk_size*i : chunk_size*(i+1)]
+                )
+
+        return len(records)
+
+    def execute(self, context):
+        # init task instance from context
+        ti = context['ti']
+
+        # assign important vars if provided from other tasks
+        if self.resource_id_task_id and self.resource_id_task_key:
+            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[self.resource_id_task_key]
+
+        if self.data_path_task_id and self.data_path_task_key:
+            self.data_path = ti.xcom_pull(task_ids=self.data_path_task_id)[self.data_path_task_key]
+
+        # read and parse file
+        read_file = self.read_file()
+        parsed_data = self.parse_file(read_file)
+
+        # put parsed_data into ckan datastore
+        record_count = self.insert_into_datastore(self.resource_id, parsed_data)
+
+        return {"Success": True, "record_count": record_count}
+
+
+class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
+    """
+    Input a reference to a CKAN datastore resource and a DownloadOperator
+    Optional input a YAML config, where column name mappings are stored
+    Output whether there is a difference in their columns and content
+    """    
+
+    def __init__(
+        self,
+        resource_name: str,
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+        self.resource_name = resource_name
+          
+    
+    def execute(self, context):
+        # init task instance from context
+        ti = context['ti']
+
+        # assign important vars if provided from other tasks
+        if self.resource_id_task_id and self.resource_id_task_key:
+            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[self.resource_id_task_key]
+
+        if self.data_path_task_id and self.data_path_task_key:
+            self.data_path = ti.xcom_pull(task_ids=self.data_path_task_id)[self.data_path_task_key]
+
+        # read and parse file
+        read_file = self.read_file()
+        parsed_data = self.parse_file(read_file)
+
+        # get existing resource contents and ensure the datastore resource exists
+        max_chunk_size = 32000
+        try:
+            record_count = self.ckan.action.datastore_search(id=self.resource_id, limit=0)["total"]
+            datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size)
+            
+            # if the resource is too big to get in a single call, make multiple calls
+            if record_count >= max_chunk_size:
+                iteration = 1
+                next_chunk = self.ckan.action.datastore_search(id=self.resource["id"], limit=max_chunk_size, offset=max_chunk_size*iteration)
+                datastore_resource["records"].append( next_chunk["records"] )
+                while len(next_chunk["records"]):
+                    next_chunk = self.ckan.action.datastore_search(id=self.resource["id"], limit=max_chunk_size, offset=max_chunk_size*iteration)
+                    datastore_resource["records"].append( next_chunk["records"] )
+                    iteration += 1
+        except Exception as e:
+            logging.error(e)
+            logging.info("Resource {} isn't in the datastore - update the existing dataset")
+            return "update_resource_" + self.resource_name
+
+        # if the data is a different length, green light an update
+        if len(parsed_data) != len(datastore_resource["records"]):
+            print("UPDATE THE DATASET! COUNT")
+            return "update_resource_" + self.resource_name
+
+        # remove _id column from existing datastore_resource
+        datastore_record = datastore_resource["records"][0]
+        del datastore_record["_id"]
+        # if the data has different column names, green light an update
+        if parsed_data[0].keys() != datastore_record.keys():
+            print("UPDATE THE DATASET! COLUMNS")
+            return "update_resource_" + self.resource_name
+
+        
+
+        # rearrange data so if the content is the same, the whole list of dicts matches
+        if any( [("source_name" in attribute.keys() or "target_name" in attribute.keys()) for attribute in self.config["attributes"]] ):
+            print("COLUMN MAPPING!")
+            return "update_resource_" + self.resource_name
+
+        # Sort the data by all attributes (which we concatenate together into a single compound key)
+        parsed_data = sorted(parsed_data, key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) 
+        datastore_resource["records"] = sorted(parsed_data, key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) 
+        
+        # list of functions used to convert input to desired data_type
+        formatters = {
+            "text": str,
+            "int": self.clean_int,
+            "float": self.clean_float,
+            "timestamp": self.clean_date_format,
+        }
+
+        for i in range(len(parsed_data)):
+            #print("ITERATION: " + str(i))
+            # if theres column name mapping, capture it in your comparison
+            for attribute in self.config['attributes']:
+                if "source_name" in attribute.keys() and "target_name" in attribute[i].keys():
+                    print("REMAPPING A COLUMN: " + str(attribute))
+                    attribute["id"] = attribute["target_name"]
+                
+                # now check each attribute's values in each dataset and make sure they match
+                print("attribute: " + str(attribute["id"]))
+                # ensure we're transforming incumbent and new data in the same way
+                formatter = formatters[attribute["type"]]
+
+                #print( formatter(parsed_data[i][ attribute["id"] ])   )
+                #print( formatter(datastore_resource["records"][i][ attribute["id"] ])  )
+                
+                if formatter(parsed_data[i][ attribute["id"] ]) != formatter(datastore_resource["records"][i][ attribute["id"] ]):
+                    print("new data: " + str(parsed_data[i]))
+                    print("old data: " + str(datastore_resource["records"][i]))
+                    print(parsed_data[i][ attribute["id"] ])
+                    print(datastore_resource["records"][i][ attribute["id"] ])
+                    print("UPDATE THE DATASET! DATA MISMATCH!")
+                    return "update_resource_" + self.resource_name
+
+        return "dont_update_resource_" + self.resource_name
+
+        
+
 
             
