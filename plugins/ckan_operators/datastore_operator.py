@@ -476,6 +476,8 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "%m-%d-%y",
             "%d-%m-%y",
             "%Y%m%d%H%M%S",
+            "%d%m%Y",
+            "%d%b%Y",
         ]:
             try:
                 input = input.replace("/", "-")
@@ -725,8 +727,3 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
                     return "update_resource_" + self.resource_name
 
         return "dont_update_resource_" + self.resource_name
-
-        
-
-
-            
