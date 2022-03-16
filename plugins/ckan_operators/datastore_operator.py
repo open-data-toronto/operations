@@ -478,6 +478,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "%Y%m%d%H%M%S",
             "%d%m%Y",
             "%d%b%Y",
+            "%d-%b-%y",
         ]:
             try:
                 input = input.replace("/", "-")
