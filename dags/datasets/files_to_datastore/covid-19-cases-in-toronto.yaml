@@ -111,14 +111,13 @@ covid-19-cases-in-toronto:
           type: "text"
           info:
             notes: |
-              __Fatal:__  Cases with a fatal outcome reported.
+              __Fatal:__  Any case that has died and has been marked as Outcome equals 'Fatal' and Type of Death does not equal 'Disease of Public Health Significance was unrelated to cause of death' in the provincial reporting system (CCM).
 
-              __Resolved:__ Cases not reported as deceased, and who are either:
+              __Resolved:__ Cases who have: 
 
-              * Reported as 'recovered' OR
-              * Where the report date is more than 14 days from symptom onset AND the case is not currently hospitalized.
-
-              This number is underreported due to a lag in data entry.
+              * A case outcome description in CCM of 'Recovered' OR 
+              * Case outcome description is equal to 'Fatal' AND Type of Death is equal to 'Disease of Public Health Significance was unrelated to cause of death' OR
+              * Today's date is more than 14 days from episode date AND the case is not currently hospitalized/intubated/in ICU AND Case outcome description is not equal to 'Fatal' where Type of Death is not equal to 'Disease of Public Health Significance was unrelated to cause of death'.
 
               __Active:__ All other cases
 
