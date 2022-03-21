@@ -218,3 +218,10 @@ ttc-routes-and-schedules:
 #   utility-cut-permits-documentation:
 #     format: zip
 #     url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp_doc.zip
+imagination-manufacturing-innovation-and-technology-imit-program-recipients:
+  IMIT Program Recipients (CSV):
+    format: csv
+    url: http://opendata.toronto.ca/economic.development.culture/imagination-manufacturing-innovation-and-technology-imit-program-recipients/IMIT_Report.csv
+  IMIT Program Recipients (Excel):
+    format: xlsx
+    url: http://opendata.toronto.ca/economic.development.culture/imagination-manufacturing-innovation-and-technology-imit-program-recipients/IMIT_Report.xlsx
