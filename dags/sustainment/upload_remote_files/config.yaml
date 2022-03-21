@@ -17,11 +17,10 @@ heritage-register:
   Heritage Register Data(2021):
     format: zip
     url: http://opendata.toronto.ca/city.planning/heritage-register/HeritageRegister.zip
-#2021/08/19, Gary
 monthly-communicable-disease-surveillance-data:
-  Communicable disease surveillance data 2021:
+  Communicable disease surveillance data 2022:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2021_Monthly_Report_AODA.xlsx
+    url: http://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2022_Monthly_Report_AODA.xlsx
 # 2021/05/06, Gary
 traffic-and-parking-by-law-schedules:
   Traffic and parking by-law schedules:
