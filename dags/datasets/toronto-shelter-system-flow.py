@@ -31,7 +31,7 @@ EXPECTED_COLUMNS = [
     "returned_to_shelter",
     "newly_identified",
     "moved_to_housing",
-    "no_recent_shelter_use",
+    "became_inactive",
     "actively_homeless",
     "ageunder16",
     "age16-24",
