@@ -1,0 +1,148 @@
+# package name
+toronto-shelter-system-flow:
+  # DAG info
+  schedule: "0 20 * * *"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Toronto Shelter System Flow"
+  date_published: "2021-11-15T00:00:00.000000"
+  refresh_rate: Monthly
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Shelter, Support & Housing Administration
+  owner_section: SPI (Service Planning and Integrity)
+  owner_unit: null
+  owner_email: ssha@toronto.ca
+
+  civic_issues: 
+    - Affordable housing
+  topics: 
+    - Community services
+  tags: 
+    - name: homeless
+      vocabulary_id: null
+    - name: intake
+      vocabulary_id: null
+    - name: shelters
+      vocabulary_id: null
+    - name: affordable housing
+      vocabulary_id: null
+
+  information_url: https://www.toronto.ca/city-government/data-research-maps/research-reports/housing-and-homelessness-research-and-reports/shelter-system-flow-data/
+  excerpt: The report includes monthly data about people entering and exiting homelessness, and people active experiencing homeless in Toronto's shelter system, including for specific sub-populations. Some demographic data is included.
+  limitations: |
+    * The data reflects only people who have used an overnight service and does not include people exclusively sleeping outdoors or using other homelessness services.
+    
+    * Shelter sites that do not use SMIS and that are funded by other levels of government are also not included in the dataset.
+    
+    * The Open Data set will be published monthly, on the 15th day of the month (or the next business day). When a new data set is generated, it will include an updated data set for the previous month. The reason behind this is the discharge field in SMIS remain active for two weeks to enhance the accuracy of the final discharge disposition for each client. The previous month data will be replace when the new data extraction is complete. 
+    
+    <strong>Definitions</strong>
+    
+    <strong>• All populations: </strong> Refers to total number of individuals represented in the report without any demographic breakdown.
+    
+    <strong>• Chronic (refers to chronic homelessness):</strong> People who meet one of the two following criteria, as per the federal definition of chronic homelessness. The person has recorded a minimum of  180 overnight stay in the past year (365 days); or the person has recurrent overnight stays over the past three years with a cumulative duration of at least 546 nights.
+    
+    <strong>• Families:</strong> Individuals who are recorded as staying in a family designated overnight service. 
+    
+    <strong>• Youth: </strong>Refers to unaccompanied youth and includes people who are between 16 and 24 years old by the last date of the reporting month and are not members of a family as defined above.
+    
+    <strong>• Single Adult:</strong> Refers to individuals who are neither classified as youth nor are members of a family.
+    
+    <strong>• Refugees:</strong> People who either identify as refugees upon intake to a shelter system or whose intake is completed into a program designated for refugees. Applies to all household members as answered by the household head.
+    
+    <strong>• Non-Refugees:</strong> People who are not categorized as refugee per the definition above.
+    
+    <strong>• Indigenous:</strong> An individual is classified as Indigenous if the person has self-identified as First Nations (status, non-status, treaty, non-treaty), Metis or Inuit in at least one of the intake(s) completed in SMIS (Shelter Management Information System).
+    
+    <strong>Note:</strong> An updated Indigenous identity question became mandatory in Oct 2020. After a short adoption period, the data stabilized in January 2021, therefore only data from this time is included in this dashboard. Because the updated question is only asked on intake, we do anticipate the percentage of people who identify as Indigenous to continue to increase as people flow through the shelter system.  
+    
+    <strong>• Data restructure:</strong> Based on feedback received regarding the data, the age and gender breakdowns now reflect only those people who are actively experiencing homelessness at the end of the month. The data previously reflected all people experiencing homelessness in the month, including those who were in the outflow categories. The changes were backdated to January 2021
+    
+  notes: |
+    The City of Toronto funds and operates services dedicated to people experiencing homelessness in Toronto. The overnight services, including emergency shelters, respites, and other allied services (including hotel/motel programs and warming centres), use the Shelter Management Information System (SMIS) to intake people who are accessing these services into their programs.
+    
+    The Shelter System Flow data shares information about people experiencing homelessness who are entering and leaving the shelter system each month, including the number of unique people who have used the shelter system at least one time in the past three months and are considered to be actively experiencing homelessness (ie; they were not discharged to permanent housing). 
+    
+    This information provides insight into who is experiencing homelessness and how the City's system is functioning. It will also help measure progress towards the vision of reducing homelessness in Toronto to rare, brief, and non-recurring instances. 
+    
+    Over time, the data will be expanded to capture more people, such as people sleeping outdoors and people using overnight homelessness services that are not funded by the City of Toronto to provide more comprehensive picture of all people experiencing homelessness in Toronto. Based on the most recent Street Needs Assessment, we anticipate that approximately 18 per cent of people experiencing homelessness in Toronto are not currently reflected in this data. 
+  
+  resources:
+    # resource name
+    toronto-shelter-system-flow:
+      format: csv
+      url: http://opendata.toronto.ca/shelter.support.housing.administration/toronto-shelter-system-flow/toronto_shelter_system_flow.csv
+      attributes:
+        
+        - id: date(mmm-yy)
+          type: "text"
+          info:
+            notes: "The time period (month/year) for which the data is being published (format: mmm-yy)"
+        - id: population_group
+          type: "text"
+          info:
+            notes: "Each row represents different group: all population, chronic, refugees, families, youth, single adult and non-refugees"
+        - id: returned_from_housing
+          type: "int"
+          info:
+            notes: Individuals who were previously recorded as \"Moved to Permanent Housing\" (see definition below) and returned to an overnight service in the reporting month.
+        - id: returned_to_shelter
+          type: "int"
+          info:
+            notes: People who were previously using the shelter system, then did not use the system for 3 months or longer, and have now returned. Some other communities may call this indicator “Returned from Inactive”
+        - id: newly_identified 
+          type: "int"
+          info:
+            notes: People who entered the shelter system for the first time
+        - id: moved_to_housing
+          type: "int"
+          info:
+            notes: "Moved to Permanent Housing: People who were using the shelter system and have moved to permanent housing."
+        - id: became_inactive
+          type: "int"
+          info:
+            notes: "People who were using the shelter system previously, but have not used the shelter system in the past three months. Some other communities may call this indicator “Moved to Inactive”."
+        - id: actively_homeless
+          type: "int"
+          info:
+            notes: "People who have used the shelter system at least one time in the past three months and did not move to permanent housing."
+        - id: ageunder16
+          type: "int"
+          info:
+            notes: "Age is calculated using the self-reported date of birth and the time the data was extracted form SMIS (Shelter Management Information System)."
+        - id: age16-24
+          type: "int"
+          info:
+            notes: "Age is calculated using the self-reported date of birth and the time the data was extracted form SMIS (Shelter Management Information System)."
+        - id: age25-44
+          type: "int"
+          info:
+            notes: "Age is calculated using the self-reported date of birth and the time the data was extracted form SMIS (Shelter Management Information System)."
+        - id: age45-64
+          type: "int"
+          info:
+            notes: "Age is calculated using the self-reported date of birth and the time the data was extracted form SMIS (Shelter Management Information System)."
+        - id: age65over
+          type: "int"
+          info:
+            notes: "Age is calculated using the self-reported date of birth and the time the data was extracted form SMIS (Shelter Management Information System)."
+        - id: gender_male
+          type: "int"
+          info:
+            notes: "Self-reported gender status during intake and as registered in SMIS. Identified as male gender during intake"
+        - id: gender_female
+          type: "int"
+          info:
+            notes: "Self-reported gender status during intake and as registered in SMIS. Identified as female during intake"
+        - id: gender_transgender,non-binary_or_two_spirit
+          type: "int"
+          info:
+            notes: "Self-reported gender status during intake and as registered in SMIS. Identified as transgender, non-binary or two-spirit during intake"
+        - id: population_group_percentage
+          type: "text"
+          info:
+            notes: "Each row represents the percentage of each population group (chronic, refugees, families, youth, single adult and non-refugees). The proportion is calculated from all the population."

@@ -465,27 +465,33 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
 
         assert isinstance(input, str), "Utils clean_date_format() function can only receive strings - it instead received {}".format(type(input))
 
-        for format in [
-            "%Y-%m-%dT%H:%M:%S.%f",
-            "%Y-%m-%d %H:%M:%S.%f",
-            "%Y-%m-%dT%H:%M:%S",
-            "%Y-%m-%d %H:%M:%S",
-            "%Y-%m-%d",
-            "%d-%b-%Y",
-            "%b-%d-%Y",
-            "%m-%d-%y",
-            "%d-%m-%y",
-            "%Y%m%d%H%M%S",
-            "%d%m%Y",
-            "%d%b%Y",
-            "%d-%b-%y",
-        ]:
+        format_dict = {
+            "%Y-%m-%dT%H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S.%f",
+            "%Y-%m-%d %H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S.%f",
+            "%Y-%m-%dT%H:%M:%S": "%Y-%m-%dT%H:%M:%S.%f",
+            "%Y-%m-%d %H:%M:%S": "%Y-%m-%dT%H:%M:%S.%f",
+            "%Y-%m-%d": "%Y-%m-%d",
+            "%d-%b-%Y": "%Y-%m-%d",
+            "%b-%d-%Y": "%Y-%m-%d",
+            "%m-%d-%y": "%Y-%m-%d",
+            "%m-%d-%Y": "%Y-%m-%d",
+            "%d-%m-%y": "%Y-%m-%d",
+            "%Y%m%d%H%M%S": "%Y-%m-%dT%H:%M:%S.%f",
+            "%d%m%Y": "%Y-%m-%d",
+            "%d%b%Y": "%Y-%m-%d",
+        }
+
+        for format in format_dict.keys():
             try:
                 input = input.replace("/", "-")
                 datetime_object = datetime.strptime(input, format)
-                return datetime_object.strftime("%Y-%m-%dT%H:%M:%S.%f")
-            except ValueError:
-                #logging.error("No valid datetime format in clean_date_format() for input string {}".format(input))
+                output = datetime_object.strftime(format_dict[format])
+                #print("{} format worked with {} - returning {} as {}".format( format, input, format_dict[format], output) )
+                #print("returning: " + output)
+                return output
+            except ValueError as e:
+                #print("Format {} in clean_date_format() doesnt match input string {}".format(format, input))
+                #print(e)
                 pass
         
 
@@ -548,6 +554,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "int": self.clean_int,
             "float": self.clean_float,
             "timestamp": self.clean_date_format,
+            "date": self.clean_date_format,
         }
 
         # convert each column in each row
@@ -579,7 +586,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
 
         # Smaller datasets can all be loaded at once
         if len(records) < 200000:
-            self.ckan.action.datastore_create( id=resource_id, fields=self.config["attributes"], records=records )
+            self.ckan.action.datastore_create( id=resource_id, fields=self.config["attributes"], records=records, force=True )
 
         # Larger datasets, however, need to be loaded in chunks
         else:
