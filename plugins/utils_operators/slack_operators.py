@@ -140,7 +140,7 @@ class GenericSlackOperator(BaseOperator):
             
         # if the message content is a dict, print it nicely
         if isinstance(self.message_content, dict):
-            highlight_terms = ["failed", 0]
+            highlight_terms = ["failed", 0, "500"]
             self.message_content = "\n\t\t   ".join( ["*" + key + "*: " + value + ":exclamation:" if value in highlight_terms else
                                                       "*" + key + "*: " + value 
                                                       for (key,value) in self.message_content.items()] )

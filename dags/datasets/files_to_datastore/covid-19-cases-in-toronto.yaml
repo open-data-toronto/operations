@@ -96,11 +96,11 @@ covid-19-cases-in-toronto:
             notes: |
               The application of the provincial case definition to categorize the cases as confirmed or probable, according to standard criteria. Please refer to the Ontario Ministry of Health website for Ontario's [current provincial case definitions.](http://www.health.gov.on.ca/en/pro/programs/publichealth/coronavirus/docs/2019_case_definition.pdf)
         - id: "Episode Date"
-          type: "timestamp"
+          type: "date"
           info:
             notes: "The episode date is a derived variable that best estimates when the disease was acquired, and refers to the earliest available date from: symptom onset (the first day that COVID-19 symptoms occurred), laboratory specimen collection date, or reported date."
         - id: "Reported Date"
-          type: "timestamp"
+          type: "date"
           info:
             notes: "The date on which the case was reported to Toronto Public Health."
         - id: "Client Gender"
