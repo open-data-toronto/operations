@@ -12,7 +12,7 @@ automated-speed-enforcement-ase-charges:
 heritage-conservation-districts:
   Heritage Conservation Districts Data(2022):
     format: zip
-    url: http://opendata.toronto.ca/city.planning/heritage-conservation-districts/HeritageConservationDistricts.zip
+    url: http://opendata.toronto.ca/city.planning/heritage-conservation-districts/HeritageConservationDistrict.zip
 heritage-register:
   Heritage Register Data(2022):
     format: zip
