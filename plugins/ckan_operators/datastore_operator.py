@@ -472,6 +472,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "%Y-%m-%d %H:%M:%S": "%Y-%m-%dT%H:%M:%S.%f",
             "%Y-%m-%d": "%Y-%m-%d",
             "%d-%b-%Y": "%Y-%m-%d",
+            "%d-%b-%y": "%Y-%m-%d",
             "%b-%d-%Y": "%Y-%m-%d",
             "%m-%d-%y": "%Y-%m-%d",
             "%m-%d-%Y": "%Y-%m-%d",
