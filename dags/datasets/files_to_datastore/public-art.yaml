@@ -1,0 +1,135 @@
+# package name
+public-art:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Public Art"
+  date_published: "2021-02-11 16:20:17.562096"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Economic Development & Culture
+  owner_section: null
+  owner_unit: null
+  owner_email: 311@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Culture and tourism
+  tags: 
+    - name: art
+      vocabulary_id: null
+    - name: monuments
+      vocabulary_id: null
+    - name: planning
+      vocabulary_id: null
+    - name: public
+      vocabulary_id: null
+
+  information_url: "https://www.toronto.ca/explore-enjoy/history-art-culture/public-art/public-art-map/#location=Maple%20Claire%20Park&lat=43.67259&lng=-79.467623"
+  excerpt: "This map shows over 400 works of public art throughout the City of Toronto. The inventory is a record of public art from two City programs: the Public Art & Monuments Collection and the Percent for Public Art Program."
+  limitations: null
+  notes: "This map shows over 400 works of public art throughout the City of Toronto. The inventory is a record of public art from two City programs: the [Public Art & Monuments Collection](https://www.toronto.ca/explore-enjoy/history-art-culture/public-art/public-art-monuments-collection/) and the [Percent for Public Art Program](https://www.toronto.ca/city-government/planning-development/official-plan-guidelines/design-guidelines/percent-for-public-art-inventory/)."
+  resources:
+    # resource name
+    Public Art:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_PUBLICART/FeatureServer/0/
+      attributes:
+        - id: Source
+          type: "text"
+          info:
+            notes: ""
+        - id: Source_ID
+          type: "text"
+          info:
+            notes: ""
+        - id: Location
+          type: "text"
+          info:
+            notes: ""
+        - id: Artist
+          type: "text"
+          info:
+            notes: ""
+        - id: Title
+          type: "text"
+          info:
+            notes: ""
+        - id: Medium
+          type: "text"
+          info:
+            notes: ""
+        - id: ArtForm
+          type: "text"
+          info:
+            notes: ""
+        - id: Status
+          type: "text"
+          info:
+            notes: ""
+        - id: ImageName
+          type: "text"
+          info:
+            notes: ""
+        - id: ImageURL
+          type: "text"
+          info:
+            notes: ""
+        - id: ThumbURL
+          type: "text"
+          info:
+            notes: ""
+        - id: ImageAltText
+          type: "text"
+          info:
+            notes: ""
+        - id: WARD
+          type: "int"
+          info:
+            notes: ""
+        - id: WARD_FULLNAME
+          type: "text"
+          info:
+            notes: ""
+        - id: YEAR_INSTALLED
+          type: "text"
+          info:
+            notes: ""
+        - id: Description
+          type: "text"
+          info:
+            notes: ""
+        - id: OwnedBy
+          type: "text"
+          info:
+            notes: ""
+        - id: CommissionedBy
+          type: "text"
+          info:
+            notes: ""
+        - id: PublicArtConsultant
+          type: "text"
+          info:
+            notes: ""
+        - id: ImageOrientation
+          type: "text"
+          info:
+            notes: ""
+        - id: ExternalLink
+          type: "text"
+          info:
+            notes: ""
+        - id: ExternalLinkText
+          type: "text"
+          info:
+            notes: ""
+        - id: geometry
+          type: "text"
+          info:
+            notes: ""
