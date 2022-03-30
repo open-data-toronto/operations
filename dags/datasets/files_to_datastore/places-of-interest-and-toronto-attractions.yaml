@@ -1,0 +1,187 @@
+# package name
+places-of-interest-and-toronto-attractions:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Places of Interest and Toronto Attractions"
+  date_published: "2019-07-23 17:52:55.465588"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Economic Development & Culture
+  owner_section: null
+  owner_unit: null
+  owner_email: alok.sharma@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Business
+    - Culture and Tourism
+    - Locations and Mapping
+  tags: 
+    - name: attractions
+      vocabulary_id: null
+    - name: beach
+      vocabulary_id: null
+    - name: convention
+      vocabulary_id: null
+    - name: entertainment
+      vocabulary_id: null
+    - name: museum
+      vocabulary_id: null
+    - name: park
+      vocabulary_id: null
+    - name: places of interest
+      vocabulary_id: null
+    - name: shopping
+      vocabulary_id: null
+    - name: tourism
+      vocabulary_id: null
+    - name: trade center
+      vocabulary_id: null
+    - name: venue
+      vocabulary_id: null
+    - name: visitors
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: A listing of attractions in Toronto, as determined by Visitor Services. This is not necessarily a comprehensive listing, and will continue to expand over time. This information has been gathered through research and day-to-day operations of the Visitor Services Department.
+  limitations: "The Places of Interest dataset is currently under review and is expected to be updated in 2022. Please note that the list is not comprehensive. Under normal circumstances, this list is reviewed and  updated annually. Due to the City of Toronto's team response to COVID-19, updates to data have not taken place on schedule. Therefore, the accuracy of this data is not guaranteed at this time."
+  notes: |
+    A listing of attractions in Toronto, as determined by Visitor Services. This is not necessarily a comprehensive listing, and will continue to expand over time. This information has been gathered through research and day-to-day operations of the Visitor Services Department
+    
+    To suggest inclusion of an additional locations or for any comments or update requests to existing comment please email [visitorservices@toronto.ca](mailto:visitorservices@toronto.ca)
+    
+    _Please note: This data was originally accompanied by a tabular file which needed to be removed as it included information intended for internal discussion purposes only and was created by the subjective opinion of City of Toronto staff. As this discussion information did not use scientific/methodical evidence to determine the values, the publishing of it would mislead the reader.
+
+  resources:
+    # resource name
+    Places of Interest and Attractions:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_ATTRACTION/FeatureServer/0
+      attributes:
+        - id: ADDRESS_INFO
+          type: "text"
+          info:
+            notes: ""
+        - id: NAME
+          type: "text"
+          info:
+            notes: ""
+        - id: CATEGORY
+          type: "text"
+          info:
+            notes: ""
+        - id: PHONE
+          type: "text"
+          info:
+            notes: ""
+        - id: EMAIL
+          type: "text"
+          info:
+            notes: ""
+        - id: WEBSITE
+          type: "text"
+          info:
+            notes: ""
+        - id: GEOID
+          type: "float"
+          info:
+            notes: ""
+        - id: RECEIVED_DATE
+          type: "text"
+          info:
+            notes: ""
+        - id: ADDRESS_POINT_ID
+          type: "float"
+          info:
+            notes: ""
+        - id: ADDRESS_NUMBER
+          type: "float"
+          info:
+            notes: ""
+        - id: LINEAR_NAME_FULL
+          type: "text"
+          info:
+            notes: ""
+        - id: ADDRESS_FULL
+          type: "text"
+          info:
+            notes: ""
+        - id: POSTAL_CODE
+          type: "text"
+          info:
+            notes: ""
+        - id: MUNICIPALITY
+          type: "text"
+          info:
+            notes: ""
+        - id: CITY
+          type: "text"
+          info:
+            notes: ""
+        - id: PLACE_NAME
+          type: "text"
+          info:
+            notes: ""
+        - id: GENERAL_USE_CODE
+          type: "float"
+          info:
+            notes: ""
+        - id: CENTRELINE
+          type: "float"
+          info:
+            notes: ""
+        - id: LO_NUM
+          type: "float"
+          info:
+            notes: ""
+        - id: LO_NUM_SUF
+          type: "text"
+          info:
+            notes: ""
+        - id: HI_NUM
+          type: "text"
+          info:
+            notes: ""
+        - id: HI_NUM_SUF
+          type: "text"
+          info:
+            notes: ""
+        - id: LINEAR_NAME_ID
+          type: "float"
+          info:
+            notes: ""
+        - id: WARD
+          type: "text"
+          info:
+            notes: ""
+        - id: WARD_2003
+          type: "float"
+          info:
+            notes: ""
+        - id: WARD_2018
+          type: "float"
+          info:
+            notes: ""
+        - id: MI_PRINX
+          type: "float"
+          info:
+            notes: ""
+        - id: ATTRACTION
+          type: "text"
+          info:
+            notes: ""
+        - id: MAP_ACCESS
+          type: "text"
+          info:
+            notes: ""
+        - id: geometry
+          type: "text"
+          info:
+            notes: ""
