@@ -38,12 +38,12 @@ class GetOrCreatePackageOperator(BaseOperator):
         try:
             logging.info("Attempting to get package {}".format(self.package_name_or_id))
             #return self.ckan.action.package_show(id=self.package_name_or_id)
-            return self.ckan.action.package_patch(
+            return self.ckan.action.package_show(
                 id=self.package_name_or_id,
-                owner_org="city-of-toronto",
-                name=self.package_name_or_id,
-                license_url="https://open.toronto.ca/open-data-license/",
-                **self.package_metadata,
+                #owner_org="city-of-toronto",
+                #name=self.package_name_or_id,
+                #license_url="https://open.toronto.ca/open-data-license/",
+                #**self.package_metadata,
             )
 
         except:
