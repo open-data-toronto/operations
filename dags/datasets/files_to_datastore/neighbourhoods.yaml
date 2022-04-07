@@ -1,0 +1,134 @@
+# package name
+neighbourhoods:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Neighbourhoods"
+  date_published: "2019-07-23 17:47:38.364157"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Social Development, Finance & Administration
+  owner_section: null
+  owner_unit: null
+  owner_email: spar@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Locations and mapping
+  tags: 
+    - name: neighbourhood
+      vocabulary_id: null
+    
+
+  information_url: "www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/neighbourhood-profiles/about-toronto-neighbourhoods/"
+  excerpt: "Boundaries of Toronto Neighbourhoods."
+  limitations: null
+  notes: |
+    "Toronto’s 158 neighbourhoods are a microcosm of the city’s inhabitants, cultures and life. The primary purpose of the City-designated social planning neighbourhoods is to help City staff collect data, plan, analyze and forecast City services. While these neighbourhoods may not fully encompass every historical neighbourhood area, they do provide a way for planners and researchers to track information about them over time.\r\nThe neighbourhood profiles were developed to help government and community agencies with their local planning, by providing socio-economic data at a meaningful geographic area. Unlike other geographies like wards or dissemination blocks, the boundaries of these social planning neighbourhoods change very infrequently over time, allowing researchers to perform longitudinal studies to see the changes in each area. Not all people define neighbourhoods the same way, but for the purposes of statistical reporting these neighbourhoods were defined based on [Statistics Canada census tracts](https://www12.statcan.gc.ca/census-recensement/2011/ref/dict/geo013-eng.cfm).
+    
+    For more information visit our [About Toronto's Neighbourhoods](https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/neighbourhood-profiles/) page."
+  resources:
+    # resource name
+    Neighbourhoods:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CENSUS_NEIGHBORHOOD/FeatureServer/0/
+      attributes:
+        - id: "AREA_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "AREA_ATTR_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "PARENT_AREA_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "AREA_SHORT_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_LONG_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CLASSIFICATION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CLASSIFICATION_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "OBJECTID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Neighbourhoods - historical 140:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_NEIGHBOURHOOD_2002/FeatureServer/0
+      attributes:
+        - id: "AREA_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "AREA_ATTR_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "PARENT_AREA_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "AREA_SHORT_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_LONG_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CLASSIFICATION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CLASSIFICATION_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "OBJECTID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
