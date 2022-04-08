@@ -9,7 +9,7 @@ neighbourhood-profiles:
   title: "Neighbourhood Profiles"
   date_published: "2019-07-23 17:47:38.364157"
   refresh_rate: As available
-  dataset_category: Map
+  dataset_category: Table
 
   # optional package attributes
   owner_division: Social Development, Finance & Administration
@@ -92,7 +92,7 @@ neighbourhood-profiles:
         - id: City of Toronto
           type: "float"
           info:
-            notes: "Data for the neighbourhood City of Toronto"
+            notes: "Data for the City of Toronto"
         - id: Agincourt North
           type: "float"
           info:
@@ -672,7 +672,7 @@ neighbourhood-profiles:
         - id: City of Toronto
           type: "float"
           info:
-            notes: "Data for the neighbourhood City of Toronto"
+            notes: "Data for the City of Toronto"
         - id: Agincourt North
           type: "float"
           info:
@@ -1252,7 +1252,7 @@ neighbourhood-profiles:
         - id: City of Toronto
           type: "float"
           info:
-            notes: "Data for the neighbourhood City of Toronto"
+            notes: "Data for the City of Toronto"
         - id: Agincourt North
           type: "float"
           info:
@@ -1825,571 +1825,575 @@ neighbourhood-profiles:
           type: "text"
           info:
             notes: "Exactly what topic of the category is being measured"
-        - id: Attribute
+        - id: Data Source
+          type: "text"
+          info:
+            notes: "Where this data came from"
+        - id: Characteristic
           type: "text"
           info:
             notes: "The exact statistic shown per neighbourhood"
         - id: City of Toronto
-          type: "float"
+          type: "text"
           info:
-            notes: "Data for the neighbourhood City of Toronto"
+            notes: "Data for the City of Toronto"
         - id: Agincourt North
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Agincourt North"
         - id: Agincourt South-Malvern West
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Agincourt South-Malvern West"
         - id: Alderwood
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Alderwood"
         - id: Annex
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Annex"
         - id: Banbury-Don Mills
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Banbury-Don Mills"
         - id: Bathurst Manor
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Bathurst Manor"
         - id: Bay Street Corridor
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Bay Street Corridor"
         - id: Bayview Village
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Bayview Village"
         - id: Bayview Woods-Steeles
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Bayview Woods-Steeles"
         - id: Bedford Park-Nortown
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Bedford Park-Nortown"
         - id: Beechborough-Greenbrook
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Beechborough-Greenbrook"
         - id: Bendale
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Bendale"
         - id: Birchcliffe-Cliffside
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Birchcliffe-Cliffside"
         - id: Black Creek
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Black Creek"
         - id: Blake-Jones
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Blake-Jones"
         - id: Briar Hill-Belgravia
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Briar Hill-Belgravia"
         - id: Bridle Path-Sunnybrook-York Mills
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Bridle Path-Sunnybrook-York Mills"
         - id: Broadview North
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Broadview North"
         - id: Brookhaven-Amesbury
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Brookhaven-Amesbury"
         - id: Cabbagetown-South St. James Town
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Cabbagetown-South St. James Town"
         - id: Caledonia-Fairbank
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Caledonia-Fairbank"
         - id: Casa Loma
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Casa Loma"
         - id: Centennial Scarborough
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Centennial Scarborough"
         - id: Church-Yonge Corridor
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Church-Yonge Corridor"
         - id: Clairlea-Birchmount
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Clairlea-Birchmount"
         - id: Clanton Park
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Clanton Park"
         - id: Cliffcrest
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Cliffcrest"
         - id: Corso Italia-Davenport
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Corso Italia-Davenport"
         - id: Danforth
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Danforth"
         - id: Danforth East York
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Danforth East York"
         - id: Don Valley Village
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Don Valley Village"
         - id: Dorset Park
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Dorset Park"
         - id: Dovercourt-Wallace Emerson-Junction
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Dovercourt-Wallace Emerson-Junction"
         - id: Downsview-Roding-CFB
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Downsview-Roding-CFB"
         - id: Dufferin Grove
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Dufferin Grove"
         - id: East End-Danforth
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood East End-Danforth"
         - id: Edenbridge-Humber Valley
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Edenbridge-Humber Valley"
         - id: Eglinton East
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Eglinton East"
         - id: Elms-Old Rexdale
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Elms-Old Rexdale"
         - id: Englemount-Lawrence
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Englemount-Lawrence"
         - id: Eringate-Centennial-West Deane
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Eringate-Centennial-West Deane"
         - id: Etobicoke West Mall
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Etobicoke West Mall"
         - id: Flemingdon Park
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Flemingdon Park"
         - id: Forest Hill North
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Forest Hill North"
         - id: Forest Hill South
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Forest Hill South"
         - id: Glenfield-Jane Heights
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Glenfield-Jane Heights"
         - id: Greenwood-Coxwell
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Greenwood-Coxwell"
         - id: Guildwood
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Guildwood"
         - id: Henry Farm
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Henry Farm"
         - id: High Park North
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood High Park North"
         - id: High Park-Swansea
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood High Park-Swansea"
         - id: Highland Creek
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Highland Creek"
         - id: Hillcrest Village
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Hillcrest Village"
         - id: Humber Heights-Westmount
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Humber Heights-Westmount"
         - id: Humber Summit
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Humber Summit"
         - id: Humbermede
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Humbermede"
         - id: Humewood-Cedarvale
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Humewood-Cedarvale"
         - id: Ionview
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Ionview"
         - id: Islington-City Centre West
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Islington-City Centre West"
         - id: Junction Area
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Junction Area"
         - id: Keelesdale-Eglinton West
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Keelesdale-Eglinton West"
         - id: Kennedy Park
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Kennedy Park"
         - id: Kensington-Chinatown
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Kensington-Chinatown"
         - id: Kingsview Village-The Westway
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Kingsview Village-The Westway"
         - id: Kingsway South
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Kingsway South"
         - id: Lambton Baby Point
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Lambton Baby Point"
         - id: L'Amoreaux
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood L'Amoreaux"
         - id: Lansing-Westgate
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Lansing-Westgate"
         - id: Lawrence Park North
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Lawrence Park North"
         - id: Lawrence Park South
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Lawrence Park South"
         - id: Leaside-Bennington
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Leaside-Bennington"
         - id: Little Portugal
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Little Portugal"
         - id: Long Branch
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Long Branch"
         - id: Malvern
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Malvern"
         - id: Maple Leaf
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Maple Leaf"
         - id: Markland Wood
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Markland Wood"
         - id: Milliken
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Milliken"
         - id: Mimico (includes Humber Bay Shores)
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Mimico (includes Humber Bay Shores)"
         - id: Morningside
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Morningside"
         - id: Moss Park
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Moss Park"
         - id: Mount Dennis
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Mount Dennis"
         - id: Mount Olive-Silverstone-Jamestown
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Mount Olive-Silverstone-Jamestown"
         - id: Mount Pleasant East
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Mount Pleasant East"
         - id: Mount Pleasant West
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Mount Pleasant West"
         - id: New Toronto
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood New Toronto"
         - id: Newtonbrook East
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Newtonbrook East"
         - id: Newtonbrook West
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Newtonbrook West"
         - id: Niagara
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Niagara"
         - id: North Riverdale
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood North Riverdale"
         - id: North St. James Town
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood North St. James Town"
         - id: Oakridge
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Oakridge"
         - id: Oakwood Village
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Oakwood Village"
         - id: O'Connor-Parkview
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood O'Connor-Parkview"
         - id: Old East York
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Old East York"
         - id: Palmerston-Little Italy
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Palmerston-Little Italy"
         - id: Parkwoods-Donalda
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Parkwoods-Donalda"
         - id: Pelmo Park-Humberlea
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Pelmo Park-Humberlea"
         - id: Playter Estates-Danforth
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Playter Estates-Danforth"
         - id: Pleasant View
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Pleasant View"
         - id: Princess-Rosethorn
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Princess-Rosethorn"
         - id: Regent Park
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Regent Park"
         - id: Rexdale-Kipling
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Rexdale-Kipling"
         - id: Rockcliffe-Smythe
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Rockcliffe-Smythe"
         - id: Roncesvalles
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Roncesvalles"
         - id: Rosedale-Moore Park
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Rosedale-Moore Park"
         - id: Rouge
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Rouge"
         - id: Runnymede-Bloor West Village
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Runnymede-Bloor West Village"
         - id: Rustic
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Rustic"
         - id: Scarborough Village
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Scarborough Village"
         - id: South Parkdale
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood South Parkdale"
         - id: South Riverdale
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood South Riverdale"
         - id: St.Andrew-Windfields
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood St.Andrew-Windfields"
         - id: Steeles
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Steeles"
         - id: Stonegate-Queensway
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Stonegate-Queensway"
         - id: Tam O'Shanter-Sullivan
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Tam O'Shanter-Sullivan"
         - id: Taylor-Massey
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Taylor-Massey"
         - id: The Beaches
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood The Beaches"
         - id: Thistletown-Beaumond Heights
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Thistletown-Beaumond Heights"
         - id: Thorncliffe Park
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Thorncliffe Park"
         - id: Trinity-Bellwoods
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Trinity-Bellwoods"
         - id: University
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood University"
         - id: Victoria Village
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Victoria Village"
         - id: Waterfront Communities-The Island
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Waterfront Communities-The Island"
         - id: West Hill
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood West Hill"
         - id: West Humber-Clairville
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood West Humber-Clairville"
         - id: Westminster-Branson
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Westminster-Branson"
         - id: Weston
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Weston"
         - id: Weston-Pelham Park
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Weston-Pelham Park"
         - id: Wexford/Maryvale
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Wexford/Maryvale"
         - id: Willowdale East
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Willowdale East"
         - id: Willowdale West
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Willowdale West"
         - id: Willowridge-Martingrove-Richview
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Willowridge-Martingrove-Richview"
         - id: Woburn
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Woburn"
         - id: Woodbine Corridor
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Woodbine Corridor"
         - id: Woodbine-Lumsden
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Woodbine-Lumsden"
         - id: Wychwood
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Wychwood"
         - id: Yonge-Eglinton
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Yonge-Eglinton"
         - id: Yonge-St.Clair
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Yonge-St.Clair"
         - id: York University Heights
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood York University Heights"
         - id: Yorkdale-Glen Park
-          type: "float"
+          type: "text"
           info:
             notes: "Data for the neighbourhood Yorkdale-Glen Park"
