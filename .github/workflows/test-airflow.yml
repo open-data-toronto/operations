@@ -37,5 +37,5 @@ jobs:
     - name: Create Airflow Environment
       run: make setup
 
-    - name: Run Tests
-      run: make testing
+    #- name: Run Tests
+    #  run: make testing
