@@ -15,7 +15,7 @@ from airflow.models.baseoperator import chain
 
 from utils import airflow_utils
 
-from utils_operators.file_operators import DownloadFileOperator, DownloadZipOperator
+from utils_operators.file_operators import DownloadFileOperator
 from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
 from utils_operators.directory_operator import CreateLocalDirectoryOperator, DeleteLocalDirectoryOperator
 from ckan_operators.package_operator import GetOrCreatePackageOperator
@@ -187,18 +187,9 @@ def create_dag(dag_id,
 
             
             # download file
-            # ZIP files:
-            if "zip" in resource.keys() or "ZIP" in resource.keys():
-                if resource["zip"] or resource["ZIP"]:
-                    tasks_list["download_" + resource_name] = DownloadZipOperator(
-                        task_id="download_" + resource_name,
-                        file_url=resource["url"],
-                        dir=TMP_DIR,
-                        retries=3,                      
-                    )
-
+            
             # CSV, XLSX files:
-            elif resource["format"].lower() in ["csv", "xlsx"]:
+            if resource["format"].lower() in ["csv", "xlsx"]:
                 tasks_list["download_" + resource_name] = DownloadFileOperator(
                     task_id="download_" + resource_name,
                     file_url=resource["url"],
