@@ -37,7 +37,7 @@ neighbourhoods:
     Neighbourhoods:
       agol: True
       format: geojson
-      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CENSUS_NEIGHBORHOOD/FeatureServer/0/
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_NEIGHBOURHOOD/FeatureServer/0
       attributes:
         - id: "AREA_ID"
           type: "int"
