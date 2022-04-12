@@ -245,3 +245,112 @@ development-charge-revenues:
   #DC Revenues (2021):
   #  format: xlsx
   #  url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2021).xlsx
+ttc-bus-delay-data:
+  ttc-bus-delay-data-readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-readme.xlsx
+  ttc-bus-delay-data-2014:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2014.xlsx
+  ttc-bus-delay-data-2015:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2015.xlsx
+  ttc-bus-delay-data-2016:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2016.xlsx
+  ttc-bus-delay-data-2017:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2017.xlsx
+  ttc-bus-delay-data-2018:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2018.xlsx
+  ttc-bus-delay-data-2019:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2019.xlsx
+  ttc-bus-delay-data-2020:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2020.xlsx
+  ttc-bus-delay-data-2021:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2021.xlsx
+ttc-streetcar-delay-data:
+  ttc-streetcar-delay-data-readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-readme.xlsx
+  ttc-streetcar-delay-data-2014:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2014.xlsx
+  ttc-streetcar-delay-data-2015:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2015.xlsx
+  ttc-streetcar-delay-data-2016:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2016.xlsx
+  ttc-streetcar-delay-data-2017:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2017.xlsx
+  ttc-streetcar-delay-data-2018:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2018.xlsx
+  ttc-streetcar-delay-data-2019:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2019.xlsx
+  ttc-streetcar-delay-data-2020:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2020.xlsx
+  ttc-streetcar-delay-data-2021:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2021.xlsx
+ttc-subway-delay-data:
+  ttc-subway-delay-data-readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-readme.xlsx
+  ttc-subway-delay-codes:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-codes.xlsx
+  ttc-subway-delay-jan-2014-april-2017:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-jan-2014-april-2017.xlsx
+  ttc-subway-delay-may-december-2017:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-may-december-2017.xlsx
+  ttc-subway-delay-data-2018:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2018.xlsx
+  ttc-subway-delay-data-2019:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2019.xlsx
+  ttc-subway-delay-data-2020:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2020.xlsx
+  ttc-subway-delay-data-2021:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2021.xlsx
+bike-share-toronto-ridership-data:
+  bikeshare-ridership-readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-readme.xlsx
+  bikeshare-ridership-2014-2015:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2014-2015.xlsx
+  bikeshare-ridership-2016:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2016.xlsx
+  bikeshare-ridership-2017:
+    format: zip
+    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2017.zip
+  bikeshare-ridership-2018:
+    format: zip
+    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2018.zip
+  bikeshare-ridership-2019:
+    format: zip
+    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2019.zip
+  bikeshare-ridership-2020:
+    format: zip
+    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2020.zip
+  bikeshare-ridership-2021:
+    format: zip
+    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2021.zip
+  bikeshare-ridership-2022:
+    format: zip
+    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2022.zip
