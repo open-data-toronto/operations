@@ -363,3 +363,7 @@ bike-share-toronto-ridership-data:
   bikeshare-ridership-2022:
     format: zip
     url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2022.zip
+cafeto-curb-lane-parklet-cafe-locations:
+  Cafe TO Locations:
+    format: shp
+    url: http://opendata.toronto.ca/transportation.services/cafe-to/Cafe_TO_Locations_with_Years.zip
