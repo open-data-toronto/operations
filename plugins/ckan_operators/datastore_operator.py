@@ -602,7 +602,8 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                 self.ckan.action.datastore_create( 
                     id=resource_id, 
                     fields=self.config["attributes"], 
-                    records=records[ chunk_size*i : chunk_size*(i+1)]
+                    records=records[ chunk_size*i : chunk_size*(i+1)],
+                    force=True
                 )
 
         return len(records)
