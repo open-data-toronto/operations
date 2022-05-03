@@ -363,7 +363,41 @@ bike-share-toronto-ridership-data:
   bikeshare-ridership-2022:
     format: zip
     url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2022.zip
-cafeto-curb-lane-parklet-cafe-locations:
-  Cafe TO Locations:
-    format: shp
-    url: http://opendata.toronto.ca/transportation.services/cafe-to/Cafe_TO_Locations_with_Years.zip
+#cafeto-curb-lane-parklet-cafe-locations:
+#  Cafe TO Locations:
+#    format: shp
+#    url: http://opendata.toronto.ca/transportation.services/cafe-to/Cafe_TO_Locations_with_Years.zip
+freedom-of-information-requests-summary:
+  foi-request-summary-2011:
+    format: xls
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2011.xls
+  foi-request-summary-2012:
+    format: xls
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2012.xls
+  foi-request-summary-2013:
+    format: xls
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2013.xls
+  foi-request-summary-2014:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2014.xlsx
+  foi-request-summary-2015:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2015.xlsx
+  foi-request-summary-2016:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2016.xlsx
+  foi-request-summary-2017:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2017.xlsx
+  foi-request-summary-2018:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2018.xlsx
+  foi-request-summary-2019:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2019.xlsx
+  foi-request-summary-2020:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2020.xlsx
+  foi-request-summary-2021:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2021.xlsx
