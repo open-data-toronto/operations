@@ -30,7 +30,7 @@ DEFAULT_ARGS = airflow_utils.get_default_args(
         "retries": 1,
         "on_failure_callback": task_failure_slack_alert,
         "retries": 0,
-        "start_date": datetime(2022, 3, 24, 0, 0, 0)
+        "start_date": datetime(2022, 5, 4, 0, 0, 0)
     })
     
 DESCRIPTION = "For each datastore resource in CKAN, check whether its datastore cache is up-to-date"
@@ -43,11 +43,9 @@ def find_outdated_datastore_caches(**kwargs):
     packages = kwargs.pop("ti").xcom_pull(task_ids="get_packages")["packages"]
 
     for package in packages:
-        #print(package["name"])
-        if package["name"] == "public-art":
-            continue
+
         for resource in package["resources"]:
-            if resource["datastore_active"]:
+            if resource["datastore_active"] == True:
                 # if datastore_cache_last_update is earlier than the resource was created or last modified, then run datastore_cache
                 comparison_attribute = "last_modified" if resource["last_modified"] else "created"
                 if datetime.strptime(resource["datastore_cache_last_update"][:19], "%Y-%m-%dT%H:%M:%S") < datetime.strptime(resource[comparison_attribute][:19], "%Y-%m-%dT%H:%M:%S") :
