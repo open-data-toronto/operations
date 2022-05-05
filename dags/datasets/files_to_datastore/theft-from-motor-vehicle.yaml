@@ -1,0 +1,149 @@
+# package name
+theft-from-motor-vehicle:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: Theft from Motor Vehicle
+  date_published: "2022-04-21 14:16:02.226552"
+  refresh_rate: Semi-annually
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: null
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: []
+
+  information_url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/Theft_from_Motor_Vehicle/FeatureServer
+  excerpt: This dataset includes the Crime Data by Neighbourhood. Counts are available for Assault, Auto Theft, Break and Enter, Robbery, Theft Over, Homicide, Shooting & Firearm Discharges, and Theft from Motor Vehicle.
+  limitations: The location of crime occurrences have been deliberately offset to the nearest road intersection node to protect the privacy of parties involved in the occurrence. Due to the offset of occurrence location, the numbers by Division and Neighbourhood may not reflect the exact count of occurrences reported within these geographies. Therefore, the Toronto Police Service does not guarantee the accuracy, completeness, timeliness of the data and it should not be compared to any other source of crime data.
+  notes: |
+    This dataset includes all Theft from Motor Vehicle occurrences by reported date. The Theft from Motor Vehicle offences include Theft from Motor Vehicle Under and Theft from Motor Vehicle Over. This data is provided at the offence and/or victim level, therefore one occurrence number may have several rows of data associated to the various offences used to categorize the occurrence. 
+    
+    This data does not include occurrences that have been deemed unfounded. The definition of unfounded according to Statistics Canada is: “It has been determined through police investigation that the offence reported did not occur, nor was it attempted” (Statistics Canada, 2020). 
+    
+    This data includes all MCI occurrences reported to the Toronto Police Service, including those where the location has not been able to be verified. As a result, coordinate fields may appear blank. Likewise, this includes occurrences where the coordinate location is outside the City of Toronto.
+    
+    Note: The City of Toronto Neighbourhoods identified in this dataset correspond with the 140 neighbourhoods.
+    
+  resources:
+    # resource name
+    theft-from-motor-vehicle:
+      agol: True
+      format: geojson
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/Theft_from_Motor_Vehicle/FeatureServer/0
+      attributes:
+        - id: "event_unique_id"
+          type: "text"
+          info:
+            notes: ""
+        - id: "Division"
+          type: "text"
+          info:
+            notes: "Police Division where Offence Occurred"
+        - id: "occurrencedate"
+          type: "timestamp"
+          info:
+            notes: "Date of Offence"
+        - id: "reporteddate"
+          type: "timestamp"
+          info:
+            notes: "Date Offence was Reported"
+        - id: "location_type"
+          type: "text"
+          info:
+            notes: "Location Type of Offence"
+        - id: "premises_type"
+          type: "text"
+          info:
+            notes: "Premises Type of Offence"
+        - id: "ucr_code"
+          type: "int"
+          info:
+            notes: "UCR Code for Offence"
+        - id: "ucr_ext"
+          type: "int"
+          info:
+            notes: "UCR Extension for Offence"
+        - id: "Offence"
+          type: "text"
+          info:
+            notes: "Title of Offence"
+        - id: "reportedyear"
+          type: "int"
+          info:
+            notes: "Year Offence was Reported"
+        - id: "reportedmonth"
+          type: "text"
+          info:
+            notes: "Month Offence was Reported"
+        - id: "reportedday"
+          type: "int"
+          info:
+            notes: "Day of the Month Offence was Reported"
+        - id: "reporteddayofyear"
+          type: "int"
+          info:
+            notes: "Day of the Year Offence was Reported"
+        - id: "reporteddayofweek"
+          type: "text"
+          info:
+            notes: "Day of the Week Offence was Reported"
+        - id: "reportedhour"
+          type: "int"
+          info:
+            notes: "Hour Offence was Reported"
+        - id: "occurrenceyear"
+          type: "int"
+          info:
+            notes: "Year Offence Occurred"
+        - id: "occurrencemonth"
+          type: "text"
+          info:
+            notes: "Month Offence Occurred"
+        - id: "occurrenceday"
+          type: "int"
+          info:
+            notes: "Day of the Month Offence Occurred"
+        - id: "occurrencedayofyear"
+          type: "int"
+          info:
+            notes: "Day of the Year Offence Occurred"
+        - id: "occurrencedayofweek"
+          type: "text"
+          info:
+            notes: "Day of the Year Offence Occurred"
+        - id: "occurrencehour"
+          type: "int"
+          info:
+            notes: "Hour Offence Occurred"
+        - id: "MCI"
+          type: "text"
+          info:
+            notes: "MCI Category of Occurrence"
+        - id: "Hood_ID"
+          type: "int"
+          info:
+            notes: "Identifier of Neighbourhood"
+        - id: "Neighbourhood"
+          type: "text"
+          info:
+            notes: "Name of Neighbourhood"
+        - id: "ObjectId"
+          type: "text"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+         
+        

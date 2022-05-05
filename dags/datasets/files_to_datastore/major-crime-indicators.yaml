@@ -1,0 +1,149 @@
+# package name
+major-crime-indicators:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Major Crime Indicators"
+  date_published: "2020-08-18 14:18:24.389728"
+  refresh_rate: Semi-annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: null
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: tag
+      vocabulary_id: null
+
+  information_url: https://data.torontopolice.on.ca/datasets/mci-2014-to-2019
+  excerpt: This dataset includes all Major Crime Indicator offences by reported date.
+  limitations: null
+  notes: |
+    This dataset includes all Major Crime Indicators (MCI) occurrences by reported date. The Major Crime Indicators categories are Assault, Break and Enter, Auto Theft, Robbery and Theft Over (Excludes Sexual Assaults). This data is provided at the offence and/or victim level, therefore one occurrence number may have several rows of data associated to the various MCIs used to categorize the occurrence. 
+    
+    This data does not include occurrences that have been deemed unfounded. The definition of unfounded according to Statistics Canada is: “It has been determined through police investigation that the offence reported did not occur, nor was it attempted” (Statistics Canada, 2020). 
+    
+    This data includes all MCI occurrences reported to the Toronto Police Service, including those where the location has not been able to be verified. As a result, coordinate fields may appear blank. Likewise, this includes occurrences where the coordinate location is outside the City of Toronto.
+    
+    Note: The City of Toronto Neighbourhoods identified in this dataset correspond with the 140 neighbourhoods.
+    
+    Supporting documentation can be found [here](https://torontops.maps.arcgis.com/sharing/rest/content/items/c0b17f1888544078bf650f3b8b04d35d/data).
+  
+  resources:
+    # resource name
+    major-crime-indicators:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Major_Crime_Indicators/FeatureServer/0
+      attributes:
+        - id: "event_unique_id"
+          type: "text"
+          info:
+            notes: "Offence Number"
+        - id: "Division"
+          type: "text"
+          info:
+            notes: "Police Division where Offence Occurred"
+        - id: "occurrencedate"
+          type: "date"
+          info:
+            notes: "Date of Offence"
+        - id: "reporteddate"
+          type: "date"
+          info:
+            notes: "Date Offence was Reported"
+        - id: "location_type"
+          type: "text"
+          info:
+            notes: "Location Type of Offence"
+        - id: "premises_type"
+          type: "text"
+          info:
+            notes: "Premises Type of Offence"
+        - id: "ucr_code"
+          type: "int"
+          info:
+            notes: "UCR Code for Offence"
+        - id: "ucr_ext"
+          type: "int"
+          info:
+            notes: "UCR Extension for Offence"
+        - id: "offence"
+          type: "text"
+          info:
+            notes: "Title of Offence"
+        - id: "reportedyear"
+          type: "int"
+          info:
+            notes: "Year Offence was Reported"
+        - id: "reportedmonth"
+          type: "text"
+          info:
+            notes: "Month Offence was Reported"
+        - id: "reportedday"
+          type: "int"
+          info:
+            notes: "Day of the Month Offence was Reported"
+        - id: "reporteddayofyear"
+          type: "int"
+          info:
+            notes: "Day of the Year Offence was Reported"
+        - id: "reporteddayofweek"
+          type: "text"
+          info:
+            notes: "Day of the Week Offence was Reported"
+        - id: "reportedhour"
+          type: "int"
+          info:
+            notes: "Hour Offence was Reported"
+        - id: "occurrenceyear"
+          type: "int"
+          info:
+            notes: "Year Offence Occurred"
+        - id: "occurrencemonth"
+          type: "text"
+          info:
+            notes: "Month Offence Occurred"
+        - id: "occurrenceday"
+          type: "int"
+          info:
+            notes: "Day of the Month Offence Occurred"
+        - id: "occurrencedayofyear"
+          type: "int"
+          info:
+            notes: "Day of the Year Offence Occurred"
+        - id: "occurrencedayofweek"
+          type: "text"
+          info:
+            notes: "Day of the Week Offence Occurred"
+        - id: "occurrencehour"
+          type: "int"
+          info:
+            notes: "Hour Offence Occurred"
+        - id: "MCI"
+          type: "text"
+          info:
+            notes: "MCI Category of Occurrence"
+        - id: "Hood_ID"
+          type: "text"
+          info:
+            notes: "Identifier of Neighbourhood"
+        - id: "Neighbourhood"
+          type: "text"
+          info:
+            notes: "Name of Neighbourhood"
+        - id: "ObjectId"
+          type: "text"
+          info:
+            notes: ""
+        
+        
