@@ -31,6 +31,9 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
+from ckan_operators.package_operator import GetOrCreatePackageOperator
+from ckan_operators.resource_operator import GetOrCreateResourceOperator
+from ckan_operators.datastore_operator import DeleteDatastoreResourceOperator
 
 from airflow.models import DagRun, DagBag
 
@@ -44,26 +47,75 @@ DEFAULT_ARGS = airflow_utils.get_default_args(
         "retries": 1,
         "on_failure_callback": task_failure_slack_alert,
         "retries": 0,
-        "start_date": datetime.datetime(2022, 1, 1, 0, 0, 0)
+        "start_date": datetime.datetime(2022, 5, 5, 0, 0, 0)
     })
 
-DESCRIPTION = "goes to FME, NiFi, and Airflow to pull information about its ETLs"
+DESCRIPTION = "goes to NiFi, and Airflow to pull information about its ETLs"
 SCHEDULE = "@once" 
 TAGS=["sustainment"]
 
 # Init CKAN
-ACTIVE_ENV = "prod"#Variable.get("active_env")
+ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
+CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]#
+CKAN_ADDRESS = CKAN_CREDS[ACTIVE_ENV]["address"]
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
-# FME
-def get_fme_nifi_configs(**kwargs):
-    fme_nifi_configs_url = "http://opendata.toronto.ca/config/fme_nifi_od_etl_inventory.json"
+# Init CKAN package metadata
+package_name = "od-etl-configs"
+package_metadata = {  
+    "private": True,  
+    "title": "OD ETL List",
+    "date_published": "2022-05-06 00:00:00.000000",
+    "refresh_rate": "Daily",
+    "owner_division": "",
+    "dataset_category": "Table",
+    "owner_unit": "",
+    "owner_section": "",
+    "owner_division": "Information & Technology",
+    "owner_email": "",
+    "civic_issues": "",
+    "topics": "",
+    "tags": [],
+    "information_url": "",
+    "excerpt": "",
+    "limitations": "",
+    "notes": "",
+}
+
+# NIFI
+def get_nifi_configs(**kwargs):
+    nifi_configs_url = "http://opendata.toronto.ca/config/nifi_od_etl_inventory.json"
     try:
-        fme_nifi_response = json.loads(requests.get(fme_nifi_configs_url).text)
-        print(fme_nifi_response)
-        return {"output": fme_nifi_response}
-    except:
+        nifi_response = json.loads(requests.get(nifi_configs_url).text)
+        # flatten the structure of the nifi configs somewhat, to make combining this with airflow configs easier
+        for i in range(len(nifi_response)):
+            if "addtParams" in nifi_response[i].keys():
+                nifi_response[i]["engine"] = "NiFi"
+                nifi_response[i]["target_package_name"] = nifi_response[i]["addtParams"]["PACKAGE_NAME"]
+                nifi_response[i]["target_resource_name"] = nifi_response[i]["addtParams"]["RESOURCE_NAME"]
+                nifi_response[i]["source_data"] =  nifi_response[i]["connection"]["type"] + " - " + nifi_response[i]["connection"]["hostName"]
+                nifi_response[i]["schedule"] =  nifi_response[i]["addtParams"]["SCHEDULING_PERIOD"]
+                nifi_response[i]["config_location"] =  nifi_response[i]["pmID"]
+                nifi_response[i]["od_owner"] =  nifi_response[i]["addtParams"]["EMAIL"]
+                nifi_response[i]["etl_description"] =  nifi_response[i]["description"]
+            else:
+                nifi_response[i]["engine"] = None
+                nifi_response[i]["target_package_name"] = None
+                nifi_response[i]["target_resource_name"] = None
+                nifi_response[i]["source_data"] = None
+                nifi_response[i]["schedule"] = None
+                nifi_response[i]["config_location"] = None
+                nifi_response[i]["od_owner"] = None
+                nifi_response[i]["etl_description"] = None
+
+
+        print(nifi_response)
+        # TODO: parse out the structure from these files into something flatter that can be used more easily below
+        return {"output": nifi_response}
+    except Exception as e:
+        print("Failed while getting and parsing NiFi configs")
+        print(e)
         pass
 
 # Airflow
@@ -81,7 +133,7 @@ def get_airflow_configs(**kwargs):
                     "target_package_name": mapping["target_package_name"],
                     "target_resource_name": mapping["target_resource_name"],
                     "engine": "Airflow",
-                    "Schedule" : dag.schedule_interval,
+                    "schedule" : dag.schedule_interval,
                     #"?Schedule Flexibility (Fixed, Flexible)?" : "",
                     "config_location" : dag.filepath,
                     #"Logs Location (filepath, email inbox, slack channel where success/failure is logged)" : "",
@@ -104,7 +156,7 @@ def get_airflow_configs(**kwargs):
                         "target_package_name": package_name,
                         "target_resource_name": resource_name,
                         "engine": "Airflow",
-                        "Schedule" : dag.schedule_interval,
+                        "schedule" : dag.schedule_interval,
                         #"?Schedule Flexibility (Fixed, Flexible)?" : "",
                         "config_location" : dag.filepath,
                         #"Logs Location (filepath, email inbox, slack channel where success/failure is logged)" : "",
@@ -135,7 +187,7 @@ def get_airflow_configs(**kwargs):
                                 "target_package_name": package_name,
                                 "target_resource_name": resource_name,
                                 "engine": "Airflow",
-                                "Schedule" : dag.schedule_interval,
+                                "schedule" : dag.schedule_interval,
                                 #"?Schedule Flexibility (Fixed, Flexible)?" : "",
                                 "config_location" : dag.default_args["config_folder"] + "/" + config_file,
                                 #"Logs Location (filepath, email inbox, slack channel where success/failure is logged)" : "",
@@ -154,15 +206,18 @@ def combine_configs(**kwargs):
     output = []
 
     # get configs from other operators
-    fme_nifi_configs = kwargs["ti"].xcom_pull(task_ids="get_fme_nifi_configs")["output"]
+    nifi_configs = kwargs["ti"].xcom_pull(task_ids="get_nifi_configs")["output"]
     airflow_configs = kwargs["ti"].xcom_pull(task_ids="get_airflow_configs")["output"]
 
     # make a master list of etl configs
-    configs = fme_nifi_configs + airflow_configs
+    configs = nifi_configs + airflow_configs
 
     # combine master list of etl configs with ckan resources
     # get packages
     package_names = CKAN.action.package_list()
+    print("There are {} package names".format(str(len(package_names))))
+    print("There are {} nifi_configs".format(str(len(nifi_configs))))
+    print("There are {} airflow_configs".format(str(len(airflow_configs))))
     for package_name in package_names:
         package = CKAN.action.package_show(name_or_id=package_name)
         if package_name in [ config["target_package_name"] for config in configs ]:
@@ -174,56 +229,78 @@ def combine_configs(**kwargs):
                     if resource["name"] == config["target_resource_name"] and package_name == config["target_package_name"]:
                         print("Matched! " + resource["name"])
                         output.append({
-                            "package_id": package["name"],
+                            "package_id": package.get("name", None),
                             "resource_name": resource["name"],
-                            "extract_job": resource["extract_job"],
-                            "refresh_rate": package["refresh_rate"],
-                            "is_retired": package["is_retired"],
-                            "owner_division": package["owner_division"],
-                            "owner_unit": package["owner_unit"],
-                            "owner_email": package["owner_email"],
-                            "information_url": package["information_url"],
+                            "extract_job": config["config_location"],
+                            "refresh_rate": package.get("refresh_rate", None),
+                            "is_retired": package.get("is_retired", None),
+                            "owner_division": package.get("owner_division", None),
+                            "owner_unit": package.get("owner_unit", None),
+                            "owner_email": package.get("owner_email", None),
+                            "information_url": package.get("information_url", None),
                             "datastore_active": resource["datastore_active"],
                             "format": resource["format"],
                             "last_modified": resource["last_modified"] or resource["created"],
-                            **config,
+                            "engine": config.get("engine", None),
+                            "target_package_name": config.get("target_package_name", None),
+                            "target_resource_name": config.get("target_resource_name", None),
+                            "source_data": config.get("source_data", None),
+                            "schedule": config.get("schedule", None),
+                            "config_location": config.get("config_location", None),
+                            "od_owner": config.get("od_owner", None),
+                            "etl_description": config.get("etl_description", None),
                         })
+                # if the resource isnt in the NiFi or Airflow configs, then keep it with empty ETL info
                 if resource["name"] not in [config["target_resource_name"] for config in configs]:
                     output.append({
-                        "package_id": package["name"],
+                        "package_id": package.get("name", None),
                         "resource_name": resource["name"],
-                        "extract_job": resource["extract_job"],
-                        "refresh_rate": package["refresh_rate"],
-                        "is_retired": package["is_retired"],
-                        "owner_division": package["owner_division"],
-                        "owner_unit": package["owner_unit"],
-                        "owner_email": package["owner_email"],
-                        "information_url": package["information_url"],
+                        "extract_job": config["config_location"],
+                        "refresh_rate": package.get("refresh_rate", None),
+                        "is_retired": package.get("is_retired", None),
+                        "owner_division": package.get("owner_division", None),
+                        "owner_unit": package.get("owner_unit", None),
+                        "owner_email": package.get("owner_email", None),
+                        "information_url": package.get("information_url", None),
                         "datastore_active": resource["datastore_active"],
                         "format": resource["format"],
                         "last_modified": resource["last_modified"] or resource["created"],
-                        **{key: None for key in configs[0].keys()},
+                        "engine": config.get("engine", None),
+                        "target_package_name": config.get("target_package_name", None),
+                        "target_resource_name": config.get("target_resource_name", None),
+                        "source_data": config.get("source_data", None),
+                        "schedule": config.get("schedule", None),
+                        "config_location": config.get("config_location", None),
+                        "od_owner": config.get("od_owner", None),
+                        "etl_description": config.get("etl_description", None),
                     })
         else:
             # if the package doesnt match anything, add all its resources without ETL info
             for resource in package["resources"]:
                 print("No match - adding " + resource["name"])
                 output.append({
-                        "package_id": package["name"],
-                        "resource_name": resource["name"],
-                        "extract_job": resource["extract_job"],
-                        "refresh_rate": package["refresh_rate"],
-                        "is_retired": package["is_retired"],
-                        "owner_division": package["owner_division"],
-                        "owner_unit": package["owner_unit"],
-                        "owner_email": package["owner_email"],
-                        "information_url": package["information_url"],
-                        "datastore_active": resource["datastore_active"],
-                        "format": resource["format"],
+                        "package_id": package.get("name", None),
+                        "resource_name": resource.get("name", None),
+                        "extract_job": resource.get("extract_job", None),
+                        "refresh_rate": package.get("refresh_rate", None),
+                        "is_retired": package.get("is_retired", None),
+                        "owner_division": package.get("owner_division", None),
+                        "owner_unit": package.get("owner_unit", None),
+                        "owner_email": package.get("owner_email", None),
+                        "information_url": package.get("information_url", None),
+                        "datastore_active": resource.get("datastore_active", None),
+                        "format": resource.get("format", None),
                         "last_modified": resource["last_modified"] or resource["created"],
-                        **{key: None for key in configs[0].keys()},
+                        "engine": config.get("engine", None),
+                        "target_package_name": config.get("target_package_name", None),
+                        "target_resource_name": config.get("target_resource_name", None),
+                        "source_data": config.get("source_data", None),
+                        "schedule": config.get("schedule", None),
+                        "config_location": config.get("config_location", None),
+                        "od_owner": config.get("od_owner", None),
+                        "etl_description": config.get("etl_description", None),
                     })
-
+    print("Output is this long: " + str(len(output)))
     return {"output": output}
 
 # Assess, for each resource, a course of action
@@ -296,6 +373,22 @@ def write_configs(**kwargs):
     
     f.close()
 
+    # get resource info from other operator
+    resource = kwargs["ti"].xcom_pull(task_ids="get_or_create_resource")
+    if resource["datastore_active"] in ["true", True]:
+        CKAN.action.datastore_delete(id = resource["id"])
+    # this is a problematic try - except clause. The resource we work with here can only be accessed by authorized users
+    # so creating the datastore resource works ... but the CKAN extension fails to datastore_cache the resource
+    # this is fine for the purposes of this DAG ... but annoying that we have to put a generic try - except clause
+    try:
+        CKAN.action.datastore_create(
+            id=resource["id"], 
+            fields=[ { "id": key, "type": "text"} for key in list(config.keys()) ], 
+            records=configs
+        )
+    except Exception as e:
+        print(e)
+    
 
 
 # Run DAG
@@ -307,9 +400,9 @@ with DAG(
     tags=TAGS
 ) as dag:
 
-    get_fme_nifi_configs = PythonOperator(
-        task_id = "get_fme_nifi_configs",
-        python_callable = get_fme_nifi_configs,
+    get_nifi_configs = PythonOperator(
+        task_id = "get_nifi_configs",
+        python_callable = get_nifi_configs,
         provide_context = True
     )
 
@@ -337,4 +430,38 @@ with DAG(
         provide_context = True
     )
 
-    get_fme_nifi_configs >> get_airflow_configs >> combine_configs >> write_configs
+    get_or_create_package = GetOrCreatePackageOperator(
+        task_id = "get_or_create_package",
+        address = CKAN_ADDRESS,
+        apikey = CKAN_APIKEY,
+        package_name_or_id = package_name,
+        package_metadata = package_metadata,
+    )
+
+    # get or create a resource a file
+    get_or_create_resource = GetOrCreateResourceOperator(
+        task_id="get_or_create_resource",
+        address=CKAN_ADDRESS,
+        apikey=CKAN_APIKEY,
+        package_name_or_id=package_name,
+        resource_name="od-etl-configs",
+        resource_attributes=dict(
+            format="CSV",
+            is_preview=False,
+            url_type="datastore",
+            extract_job="Airflow",
+            package_id=package_name,
+            url="placeholder"
+        ),
+    )
+
+    # delete existing resource records
+    #delete_resource = DeleteDatastoreResourceOperator(
+    #    task_id="delete_resource",
+    #    address = CKAN_ADDRESS,
+    #    apikey = CKAN_APIKEY,
+    #    resource_id_task_id = "get_or_create_resource",
+    #    resource_id_task_key = "id"
+    #)
+
+    get_nifi_configs >> get_airflow_configs >> combine_configs >> get_or_create_package >> get_or_create_resource >> write_configs
