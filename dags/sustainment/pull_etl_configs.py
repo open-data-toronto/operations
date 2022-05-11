@@ -23,6 +23,7 @@ import ckanapi
 import csv
 
 import datetime
+import calendar
 
 from utils import airflow_utils
 from airflow import DAG
@@ -67,7 +68,7 @@ package_metadata = {
     "private": True,  
     "title": "OD ETL List",
     "date_published": "2022-05-06 00:00:00.000000",
-    "refresh_rate": "Daily",
+    #"refresh_rate": "Daily",
     "owner_division": "",
     "dataset_category": "Table",
     "owner_unit": "",
@@ -77,11 +78,61 @@ package_metadata = {
     "civic_issues": "",
     "topics": "",
     "tags": [],
-    "information_url": "",
+    #"information_url": "",
     "excerpt": "",
     "limitations": "",
     "notes": "",
 }
+
+def cron_to_english(cron):
+    print(cron)
+    working = cron.split(" ")
+    # If there arent 5 parts to the input, assume were not parsing a cron and leave the value as is
+    if len(working) != 5:
+        return cron
+
+    # time
+    if working[0] == "*" and working[1] == "*":
+        time = "Every Minute"
+    elif working[0] == "*" and working[1] != "*":
+        time = "Every Minute from {}:00 to {}:59UTC".format(working[1], working[1])
+    elif working[0] != "*" and working[1] == "*":
+        if len(working[0]) == 1:
+            working[0] = "0" + working[0]
+        time = "At {} minutes past every hour".format(working[0])
+    else:
+        if len(working[0]) == 1:
+            working[0] = "0" + working[0]
+        time = "At {}:{}UTC".format(working[1], working[0])
+
+
+    # day 
+    day = ''
+    if working[2] != "*" and isinstance(float(working[2]), float):
+        day = "On calendar day {}".format(working[2]) 
+
+    month = "of Every Month"
+    if working[3] != "*" and isinstance(float(working[3]), float):
+        month = "of the Month of {}".format(calendar.month_name[int(working[3])])
+    elif working[3] != "*" and isinstance(working[3], str):
+        month = working[3]
+
+    # weekday 
+    weekday = ''
+    if "-" in str(working[4]):
+        range = working[4].split("-")
+        print(range)
+        weekday = "Only from {} to {}".format( calendar.day_name[int(range[0]) - 1], calendar.day_name[int(range[1]) - 1])
+    elif working[4] != "*" and isinstance(float(working[4]), float):
+        weekday = "Only on {}".format(calendar.day_name[int(working[4]) - 1])
+    elif working[4] != "*" and isinstance(working[4], str):
+        weekday = "Only on " + working[4]
+
+    output = time + " " + day + " " + month + " " + weekday
+
+    return output
+
+    
 
 # NIFI
 def get_nifi_configs(**kwargs):
@@ -95,8 +146,10 @@ def get_nifi_configs(**kwargs):
                 nifi_response[i]["target_package_name"] = nifi_response[i]["addtParams"]["PACKAGE_NAME"]
                 nifi_response[i]["target_resource_name"] = nifi_response[i]["addtParams"]["RESOURCE_NAME"]
                 nifi_response[i]["source_data"] =  nifi_response[i]["connection"]["type"] + " - " + nifi_response[i]["connection"]["hostName"]
-                nifi_response[i]["schedule"] =  nifi_response[i]["addtParams"]["SCHEDULING_PERIOD"]
-                nifi_response[i]["config_location"] =  nifi_response[i]["pmID"]
+                if "https://services3.arcgis.com" in nifi_response[i]["connection"]["hostName"]:
+                        nifi_response[i]["source_data"] = nifi_response[i]["connection"]["hostName"].split("/query?where=1=1&outFields=*")[0]
+                nifi_response[i]["schedule"] =  cron_to_english( nifi_response[i]["addtParams"]["SCHEDULING_PERIOD"] )
+                nifi_response[i]["config_location"] =  nifi_response[i]["sourceCategory"] + " > " + nifi_response[i]["group"] + " > " + nifi_response[i]["name"]
                 nifi_response[i]["od_owner"] =  nifi_response[i]["addtParams"]["EMAIL"]
                 nifi_response[i]["etl_description"] =  nifi_response[i]["description"]
             else:
@@ -133,12 +186,12 @@ def get_airflow_configs(**kwargs):
                     "target_package_name": mapping["target_package_name"],
                     "target_resource_name": mapping["target_resource_name"],
                     "engine": "Airflow",
-                    "schedule" : dag.schedule_interval,
+                    "schedule" : cron_to_english( dag.schedule_interval ),
                     #"?Schedule Flexibility (Fixed, Flexible)?" : "",
                     "config_location" : dag.filepath,
                     #"Logs Location (filepath, email inbox, slack channel where success/failure is logged)" : "",
                     "od_owner" : dag.owner,
-                    "etl_description": dag.description,
+                    #"etl_description": dag.description,
                     #"COT Department (responsible for communicating wanted changes to the ETL to OD)" : "",
                     #"?Date Created?" : "",
                     #"?Active/Inactive?" : "",
@@ -149,19 +202,22 @@ def get_airflow_configs(**kwargs):
                 remote_items_config = yaml.load(f, yaml.SafeLoader)
 
             for package_name in (remote_items_config.keys()):
+                # we can skip the tags dataset
+                if package_name.lower=="tags":
+                    continue
                 for resource_name in list(remote_items_config[package_name].keys()):
                     resource = remote_items_config[package_name][resource_name]
                     airflow_configs.append( {
                         "source_data" : resource["url"],
                         "target_package_name": package_name,
                         "target_resource_name": resource_name,
-                        "engine": "Airflow",
-                        "schedule" : dag.schedule_interval,
+                        "engine": "Airflow - Remote Upload Files Job",
+                        "schedule" : cron_to_english( dag.schedule_interval ) ,
                         #"?Schedule Flexibility (Fixed, Flexible)?" : "",
                         "config_location" : dag.filepath,
                         #"Logs Location (filepath, email inbox, slack channel where success/failure is logged)" : "",
                         "od_owner" : dag.owner,
-                        "etl_description": dag.description,
+                        #"etl_description": dag.description,
                         #"COT Department (responsible for communicating wanted changes to the ETL to OD)" : "",
                         #"?Date Created?" : "",
                         #"?Active/Inactive?" : "",
@@ -186,13 +242,13 @@ def get_airflow_configs(**kwargs):
                                 "source_data" : config[package_name]["resources"][resource_name]["url"],
                                 "target_package_name": package_name,
                                 "target_resource_name": resource_name,
-                                "engine": "Airflow",
-                                "schedule" : dag.schedule_interval,
+                                "engine": "Airflow - YAML Job",
+                                "schedule" : cron_to_english( dag.schedule_interval ),
                                 #"?Schedule Flexibility (Fixed, Flexible)?" : "",
                                 "config_location" : dag.default_args["config_folder"] + "/" + config_file,
                                 #"Logs Location (filepath, email inbox, slack channel where success/failure is logged)" : "",
                                 "od_owner" : dag.owner,
-                                "etl_description": config[package_name]["excerpt"],
+                                #"etl_description": config[package_name]["excerpt"],
                                 #"cot_owner" : config[package_name]["owner_division"],
                                 #"?Date Created?" : "",
                                 #"?Active/Inactive?" : "",
@@ -219,8 +275,12 @@ def combine_configs(**kwargs):
     print("There are {} nifi_configs".format(str(len(nifi_configs))))
     print("There are {} airflow_configs".format(str(len(airflow_configs))))
     for package_name in package_names:
+        # skip the tags dataset - we dont care about that as much
+        if package_name.lower == "tags":
+            continue
         package = CKAN.action.package_show(name_or_id=package_name)
         if package_name in [ config["target_package_name"] for config in configs ]:
+            
             # for each resource in a package, try to connect it to an etl config
             for resource in package["resources"]:
                 print(resource["name"])
@@ -231,77 +291,89 @@ def combine_configs(**kwargs):
                         output.append({
                             "package_id": package.get("name", None),
                             "resource_name": resource["name"],
-                            "extract_job": config["config_location"],
-                            "refresh_rate": package.get("refresh_rate", None),
+                            #"extract_job": config["config_location"],
+                            #"refresh_rate": package.get("refresh_rate", None),
                             "is_retired": package.get("is_retired", None),
                             "owner_division": package.get("owner_division", None),
                             "owner_unit": package.get("owner_unit", None),
                             "owner_email": package.get("owner_email", None),
-                            "information_url": package.get("information_url", None),
+                            #"information_url": package.get("information_url", None),
                             "datastore_active": resource["datastore_active"],
-                            "format": resource["format"],
+                            #"format": resource["format"],
                             "last_modified": resource["last_modified"] or resource["created"],
                             "engine": config.get("engine", None),
-                            "target_package_name": config.get("target_package_name", None),
-                            "target_resource_name": config.get("target_resource_name", None),
+                            #"target_package_name": config.get("target_package_name", None),
+                            #"target_resource_name": config.get("target_resource_name", None),
                             "source_data": config.get("source_data", None),
                             "schedule": config.get("schedule", None),
                             "config_location": config.get("config_location", None),
                             "od_owner": config.get("od_owner", None),
-                            "etl_description": config.get("etl_description", None),
+                            #"etl_description": config.get("etl_description", None),
+                            "date_published": package.get("date_published", None),
+                            #"last_refreshed": package.get("last_refreshed", None),
+
                         })
-                # if the resource isnt in the NiFi or Airflow configs, then keep it with empty ETL info
-                if resource["name"] not in [config["target_resource_name"] for config in configs]:
+                # if the resource isnt in the NiFi or Airflow configs, AND it's not a datastore cache file, then keep it with empty ETL info
+                if resource["name"] not in [config["target_resource_name"] for config in configs] and resource["is_datastore_cache_file"] in [False, "true", "True"]:
                     output.append({
                         "package_id": package.get("name", None),
                         "resource_name": resource["name"],
-                        "extract_job": config["config_location"],
-                        "refresh_rate": package.get("refresh_rate", None),
+                        #"extract_job": config["config_location"],
+                        #"refresh_rate": package.get("refresh_rate", None),
                         "is_retired": package.get("is_retired", None),
                         "owner_division": package.get("owner_division", None),
                         "owner_unit": package.get("owner_unit", None),
                         "owner_email": package.get("owner_email", None),
-                        "information_url": package.get("information_url", None),
+                        #"information_url": package.get("information_url", None),
                         "datastore_active": resource["datastore_active"],
-                        "format": resource["format"],
+                        #"format": resource["format"],
                         "last_modified": resource["last_modified"] or resource["created"],
                         "engine": config.get("engine", None),
-                        "target_package_name": config.get("target_package_name", None),
-                        "target_resource_name": config.get("target_resource_name", None),
+                        #"target_package_name": config.get("target_package_name", None),
+                        #"target_resource_name": config.get("target_resource_name", None),
                         "source_data": config.get("source_data", None),
                         "schedule": config.get("schedule", None),
                         "config_location": config.get("config_location", None),
                         "od_owner": config.get("od_owner", None),
-                        "etl_description": config.get("etl_description", None),
+                        #"etl_description": config.get("etl_description", None),
+                        "date_published": package.get("date_published", None),
+                        #"last_refreshed": package.get("last_refreshed", None),
                     })
         else:
+            
             # if the package doesnt match anything, add all its resources without ETL info
             for resource in package["resources"]:
                 print("No match - adding " + resource["name"])
                 output.append({
                         "package_id": package.get("name", None),
                         "resource_name": resource.get("name", None),
-                        "extract_job": resource.get("extract_job", None),
-                        "refresh_rate": package.get("refresh_rate", None),
+                        #"extract_job": resource.get("extract_job", None),
+                        #"refresh_rate": package.get("refresh_rate", None),
                         "is_retired": package.get("is_retired", None),
                         "owner_division": package.get("owner_division", None),
                         "owner_unit": package.get("owner_unit", None),
                         "owner_email": package.get("owner_email", None),
-                        "information_url": package.get("information_url", None),
+                        #"information_url": package.get("information_url", None),
                         "datastore_active": resource.get("datastore_active", None),
-                        "format": resource.get("format", None),
+                        #"format": resource.get("format", None),
                         "last_modified": resource["last_modified"] or resource["created"],
                         "engine": config.get("engine", None),
-                        "target_package_name": config.get("target_package_name", None),
-                        "target_resource_name": config.get("target_resource_name", None),
+                        #"target_package_name": config.get("target_package_name", None),
+                        #"target_resource_name": config.get("target_resource_name", None),
                         "source_data": config.get("source_data", None),
                         "schedule": config.get("schedule", None),
                         "config_location": config.get("config_location", None),
                         "od_owner": config.get("od_owner", None),
-                        "etl_description": config.get("etl_description", None),
+                        #"etl_description": config.get("etl_description", None),
+                        "date_published": package.get("date_published", None),
+                        #"last_refreshed": package.get("last_refreshed", None),
                     })
     print("Output is this long: " + str(len(output)))
-    return {"output": output}
+
+    # sort dicts by package names
+    sorted_output = sorted(output, key=lambda d: d['package_id']) 
+
+    return {"output": sorted_output}
 
 # Assess, for each resource, a course of action
 def assign_action(**kwargs):

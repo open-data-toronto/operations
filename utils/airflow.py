@@ -21,9 +21,9 @@ sys.path.append(repo_dir)
 
 def get_default_args(args={}):
     return {
-        "owner": "Carlos",
+        "owner": "Open Data",
         "depends_on_past": False,
-        "email": ["carlos.hernandez@toronto.ca"],
+        "email": ["opendata@toronto.ca"],
         "email_on_failure": False,
         "email_on_retry": False,
         "retries": 3,
