@@ -68,7 +68,7 @@ package_metadata = {
     "private": True,  
     "title": "OD ETL List",
     "date_published": "2022-05-06 00:00:00.000000",
-    #"refresh_rate": "Daily",
+    "refresh_rate": "Daily",
     "owner_division": "",
     "dataset_category": "Table",
     "owner_unit": "",
@@ -107,7 +107,7 @@ def cron_to_english(cron):
 
 
     # day 
-    day = ''
+    day = 'Every Day'
     if working[2] != "*" and isinstance(float(working[2]), float):
         day = "On calendar day {}".format(working[2]) 
 
@@ -185,7 +185,7 @@ def get_airflow_configs(**kwargs):
                     "source_data" : mapping["source"],
                     "target_package_name": mapping["target_package_name"],
                     "target_resource_name": mapping["target_resource_name"],
-                    "engine": "Airflow",
+                    "engine": "Airflow Custom Job",
                     "schedule" : cron_to_english( dag.schedule_interval ),
                     #"?Schedule Flexibility (Fixed, Flexible)?" : "",
                     "config_location" : dag.filepath,
@@ -275,10 +275,13 @@ def combine_configs(**kwargs):
     print("There are {} nifi_configs".format(str(len(nifi_configs))))
     print("There are {} airflow_configs".format(str(len(airflow_configs))))
     for package_name in package_names:
+        print("Now processing the following package name: " + package_name)
         # skip the tags dataset - we dont care about that as much
-        if package_name.lower == "tags":
+        if package_name == "tags":
+            print("-------------------------------------------------- SKIPPING TAGS!")
             continue
         package = CKAN.action.package_show(name_or_id=package_name)
+        print(package)
         if package_name in [ config["target_package_name"] for config in configs ]:
             
             # for each resource in a package, try to connect it to an etl config
@@ -292,7 +295,7 @@ def combine_configs(**kwargs):
                             "package_id": package.get("name", None),
                             "resource_name": resource["name"],
                             #"extract_job": config["config_location"],
-                            #"refresh_rate": package.get("refresh_rate", None),
+                            "refresh_rate": package.get("refresh_rate", None),
                             "is_retired": package.get("is_retired", None),
                             "owner_division": package.get("owner_division", None),
                             "owner_unit": package.get("owner_unit", None),
@@ -314,12 +317,12 @@ def combine_configs(**kwargs):
 
                         })
                 # if the resource isnt in the NiFi or Airflow configs, AND it's not a datastore cache file, then keep it with empty ETL info
-                if resource["name"] not in [config["target_resource_name"] for config in configs] and resource["is_datastore_cache_file"] in [False, "true", "True"]:
+                if resource["name"] not in [config["target_resource_name"] for config in configs] and resource["is_datastore_cache_file"] in [False, "false", "False"]:
                     output.append({
                         "package_id": package.get("name", None),
                         "resource_name": resource["name"],
                         #"extract_job": config["config_location"],
-                        #"refresh_rate": package.get("refresh_rate", None),
+                        "refresh_rate": package.get("refresh_rate", None),
                         "is_retired": package.get("is_retired", None),
                         "owner_division": package.get("owner_division", None),
                         "owner_unit": package.get("owner_unit", None),
@@ -328,46 +331,50 @@ def combine_configs(**kwargs):
                         "datastore_active": resource["datastore_active"],
                         #"format": resource["format"],
                         "last_modified": resource["last_modified"] or resource["created"],
-                        "engine": config.get("engine", None),
-                        #"target_package_name": config.get("target_package_name", None),
-                        #"target_resource_name": config.get("target_resource_name", None),
-                        "source_data": config.get("source_data", None),
-                        "schedule": config.get("schedule", None),
-                        "config_location": config.get("config_location", None),
-                        "od_owner": config.get("od_owner", None),
-                        #"etl_description": config.get("etl_description", None),
+                        "engine": None,
+                        #"target_package_name": None,
+                        #"target_resource_name": None,
+                        "source_data": None,
+                        "schedule": None,
+                        "config_location": None,
+                        "od_owner": None,
+                        #"etl_description": None,
                         "date_published": package.get("date_published", None),
                         #"last_refreshed": package.get("last_refreshed", None),
                     })
         else:
-            
+            # skip the tags dataset - we dont care about that as much
+            if package_name == "tags":
+                print("-------------------------------------------------- SKIPPING TAGS!")
+                continue
             # if the package doesnt match anything, add all its resources without ETL info
             for resource in package["resources"]:
-                print("No match - adding " + resource["name"])
-                output.append({
-                        "package_id": package.get("name", None),
-                        "resource_name": resource.get("name", None),
-                        #"extract_job": resource.get("extract_job", None),
-                        #"refresh_rate": package.get("refresh_rate", None),
-                        "is_retired": package.get("is_retired", None),
-                        "owner_division": package.get("owner_division", None),
-                        "owner_unit": package.get("owner_unit", None),
-                        "owner_email": package.get("owner_email", None),
-                        #"information_url": package.get("information_url", None),
-                        "datastore_active": resource.get("datastore_active", None),
-                        #"format": resource.get("format", None),
-                        "last_modified": resource["last_modified"] or resource["created"],
-                        "engine": config.get("engine", None),
-                        #"target_package_name": config.get("target_package_name", None),
-                        #"target_resource_name": config.get("target_resource_name", None),
-                        "source_data": config.get("source_data", None),
-                        "schedule": config.get("schedule", None),
-                        "config_location": config.get("config_location", None),
-                        "od_owner": config.get("od_owner", None),
-                        #"etl_description": config.get("etl_description", None),
-                        "date_published": package.get("date_published", None),
-                        #"last_refreshed": package.get("last_refreshed", None),
-                    })
+                if resource.get("is_datastore_cache_file", False) in [False, "false", "False"]:
+                    print("No match - adding " + resource["name"])
+                    output.append({
+                            "package_id": package.get("name", None),
+                            "resource_name": resource.get("name", None),
+                            #"extract_job": resource.get("extract_job", None),
+                            "refresh_rate": package.get("refresh_rate", None),
+                            "is_retired": package.get("is_retired", None),
+                            "owner_division": package.get("owner_division", None),
+                            "owner_unit": package.get("owner_unit", None),
+                            "owner_email": package.get("owner_email", None),
+                            #"information_url": package.get("information_url", None),
+                            "datastore_active": resource.get("datastore_active", None),
+                            #"format": resource.get("format", None),
+                            "last_modified": resource["last_modified"] or resource["created"],
+                            "engine": None,
+                            #"target_package_name": None,
+                            #"target_resource_name": None,
+                            "source_data": None,
+                            "schedule": None,
+                            "config_location": None,
+                            "od_owner": None,
+                            #"etl_description": config.get("etl_description", None),
+                            "date_published": package.get("date_published", None),
+                            #"last_refreshed": package.get("last_refreshed", None),
+                        })
     print("Output is this long: " + str(len(output)))
 
     # sort dicts by package names
