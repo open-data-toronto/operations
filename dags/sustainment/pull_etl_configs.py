@@ -294,26 +294,30 @@ def combine_configs(**kwargs):
                         output.append({
                             "package_id": package.get("name", None),
                             "resource_name": resource["name"],
+                            "engine": config.get("engine", None),
+                            "source_data": config.get("source_data", None),
+                            "datastore_active": resource["datastore_active"],
                             #"extract_job": config["config_location"],
                             "refresh_rate": package.get("refresh_rate", None),
+                            "schedule": config.get("schedule", None),
                             "is_retired": package.get("is_retired", None),
                             "owner_division": package.get("owner_division", None),
                             "owner_unit": package.get("owner_unit", None),
                             "owner_email": package.get("owner_email", None),
                             #"information_url": package.get("information_url", None),
-                            "datastore_active": resource["datastore_active"],
+                            
                             #"format": resource["format"],
-                            "last_modified": resource["last_modified"] or resource["created"],
-                            "engine": config.get("engine", None),
+                            "resource_last_modified": resource["last_modified"] or resource["created"],
+                            
                             #"target_package_name": config.get("target_package_name", None),
                             #"target_resource_name": config.get("target_resource_name", None),
-                            "source_data": config.get("source_data", None),
-                            "schedule": config.get("schedule", None),
+                            
+                            
                             "config_location": config.get("config_location", None),
                             "od_owner": config.get("od_owner", None),
                             #"etl_description": config.get("etl_description", None),
                             "date_published": package.get("date_published", None),
-                            #"last_refreshed": package.get("last_refreshed", None),
+                            "package_last_refreshed": package.get("last_refreshed", None),
 
                         })
                 # if the resource isnt in the NiFi or Airflow configs, AND it's not a datastore cache file, then keep it with empty ETL info
@@ -321,26 +325,30 @@ def combine_configs(**kwargs):
                     output.append({
                         "package_id": package.get("name", None),
                         "resource_name": resource["name"],
+                        "engine": None,
+                        "source_data": None,
+                        "datastore_active": resource["datastore_active"],
                         #"extract_job": config["config_location"],
                         "refresh_rate": package.get("refresh_rate", None),
+                        "schedule": None,
                         "is_retired": package.get("is_retired", None),
                         "owner_division": package.get("owner_division", None),
                         "owner_unit": package.get("owner_unit", None),
                         "owner_email": package.get("owner_email", None),
                         #"information_url": package.get("information_url", None),
-                        "datastore_active": resource["datastore_active"],
+                        
                         #"format": resource["format"],
-                        "last_modified": resource["last_modified"] or resource["created"],
-                        "engine": None,
+                        "resource_last_modified": resource["last_modified"] or resource["created"],
+                        
                         #"target_package_name": None,
                         #"target_resource_name": None,
-                        "source_data": None,
-                        "schedule": None,
+                        
+                        
                         "config_location": None,
                         "od_owner": None,
                         #"etl_description": None,
                         "date_published": package.get("date_published", None),
-                        #"last_refreshed": package.get("last_refreshed", None),
+                        "package_last_refreshed": package.get("last_refreshed", None),
                     })
         else:
             # skip the tags dataset - we dont care about that as much
@@ -354,26 +362,26 @@ def combine_configs(**kwargs):
                     output.append({
                             "package_id": package.get("name", None),
                             "resource_name": resource.get("name", None),
+                            "engine": None,
+                            "source_data": None,
+                            "datastore_active": resource.get("datastore_active", None),
                             #"extract_job": resource.get("extract_job", None),
                             "refresh_rate": package.get("refresh_rate", None),
+                            "schedule": None,
                             "is_retired": package.get("is_retired", None),
                             "owner_division": package.get("owner_division", None),
                             "owner_unit": package.get("owner_unit", None),
                             "owner_email": package.get("owner_email", None),
                             #"information_url": package.get("information_url", None),
-                            "datastore_active": resource.get("datastore_active", None),
                             #"format": resource.get("format", None),
-                            "last_modified": resource["last_modified"] or resource["created"],
-                            "engine": None,
+                            "resource_last_modified": resource["last_modified"] or resource["created"],
                             #"target_package_name": None,
                             #"target_resource_name": None,
-                            "source_data": None,
-                            "schedule": None,
                             "config_location": None,
                             "od_owner": None,
                             #"etl_description": config.get("etl_description", None),
                             "date_published": package.get("date_published", None),
-                            #"last_refreshed": package.get("last_refreshed", None),
+                            "package_last_refreshed": package.get("last_refreshed", None),
                         })
     print("Output is this long: " + str(len(output)))
 
