@@ -155,5 +155,3 @@ class GenericSlackOperator(BaseOperator):
         )
 
         return send_to_slack.execute(context=context)
-
-    # task_instance.xcom_pull(‘other_task’, key=’return_value’)
