@@ -1,0 +1,216 @@
+# package name
+toronto-centreline-tcl:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Toronto Centreline (TCL)"
+  date_published: "2019-07-23 14:18:24.389728"
+  refresh_rate: Daily
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Information & Technology
+  owner_section: null
+  owner_unit: null
+  owner_email: gcc@toronto.ca 
+
+  civic_issues: Mobility
+  topics: 
+    - City government
+    - Locations and mapping
+    - Transportation
+  tags: 
+    - name: center line
+      vocabulary_id: null
+    - name: centerline
+      vocabulary_id: null
+    - name: centre line
+      vocabulary_id: null
+    - name: centreline
+      vocabulary_id: null
+    - name: roads
+      vocabulary_id: null
+    - name: street map
+      vocabulary_id: null
+    - name: streets
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: Linear representations of streets, walkways, rivers, railways, highways and administrative boundaries within the City of Toronto
+  limitations: null
+  notes: |
+    The Toronto Centreline is a data set of linear features representing streets, walkways, rivers, railways, highways and administrative boundaries within the City of Toronto. Each line segment is described with a series of attributes including a unique identifier, name, feature code, and address ranges (where applicable).
+    In addition to retaining historical archives, threaded archives are also retained that record splits and merges of address points, of linear features and of area features. All features are linked and integrated.
+  
+  resources:
+    # resource name
+    Centreline - Version 2:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_CENTRELINE/FeatureServer/0
+      attributes:
+        - id: "CENTRELINE_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "LINEAR_NAME_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "LINEAR_NAME_FULL"
+          type: "text"
+          info:
+            notes: ""
+        - id: "LINEAR_NAME_FULL_LEGAL"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ADDRESS_L"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ADDRESS_R"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PARITY_L"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PARITY_R"
+          type: "text"
+          info:
+            notes: ""
+        - id: "LO_NUM_L"
+          type: "int"
+          info:
+            notes: ""
+        - id: "HI_NUM_L"
+          type: "int"
+          info:
+            notes: ""
+        - id: "LO_NUM_R"
+          type: "int"
+          info:
+            notes: ""
+        - id: "HI_NUM_R"
+          type: "int"
+          info:
+            notes: ""
+        - id: "BEGIN_ADDR_POINT_ID_L"
+          type: "int"
+          info:
+            notes: ""
+        - id: "END_ADDR_POINT_ID_L"
+          type: "int"
+          info:
+            notes: ""
+        - id: "BEGIN_ADDR_POINT_ID_R"
+          type: "int"
+          info:
+            notes: ""
+        - id: "END_ADDR_POINT_ID_R"
+          type: "int"
+          info:
+            notes: ""
+        - id: "BEGIN_ADDR_L"
+          type: "int"
+          info:
+            notes: ""
+        - id: "END_ADDR_L"
+          type: "int"
+          info:
+            notes: ""
+        - id: "BEGIN_ADDR_R"
+          type: "int"
+          info:
+            notes: ""
+        - id: "END_ADDR_R"
+          type: "int"
+          info:
+            notes: ""
+        - id: "LOW_NUM_ODD"
+          type: "int"
+          info:
+            notes: ""
+        - id: "HIGH_NUM_ODD"
+          type: "int"
+          info:
+            notes: ""
+        - id: "LOW_NUM_EVEN"
+          type: "int"
+          info:
+            notes: ""
+        - id: "HIGH_NUM_EVEN"
+          type: "int"
+          info:
+            notes: ""
+        - id: "LINEAR_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "LINEAR_NAME_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "LINEAR_NAME_DIR"
+          type: "text"
+          info:
+            notes: ""
+        - id: "LINEAR_NAME_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "LINEAR_NAME_LABEL"
+          type: "text"
+          info:
+            notes: ""
+        - id: "FROM_INTERSECTION_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "TO_INTERSECTION_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ONEWAY_DIR_CODE"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ONEWAY_DIR_CODE_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "FEATURE_CODE"
+          type: "int"
+          info:
+            notes: ""
+        - id: "FEATURE_CODE_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "JURISDICTION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CENTRELINE_STATUS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "OBJECTID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "MI_PRINX"
+          type: "int"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+        
+        
