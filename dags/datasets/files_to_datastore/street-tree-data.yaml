@@ -1,0 +1,110 @@
+# package name
+street-tree-data:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Street Tree Data"
+  date_published: "2019-07-23 14:18:24.389728"
+  refresh_rate: Annually
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Parks, Forestry & Recreation
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca 
+
+  civic_issues: null
+  topics: 
+    - Environment
+    - Locations and mapping
+    - Parks and recreation
+  tags: 
+    - name: street tree data
+      vocabulary_id: null
+    - name: tree locations
+      vocabulary_id: null
+    
+
+  information_url: http://www.toronto.ca/trees/city_trees.htm
+  excerpt: This data set contains the common and botanical name as well as diameter size, street address and general location reference information for street trees within Toronto.
+  limitations: null
+  notes: |
+    This data primarily pertains to City-owned trees located on road allowances across Toronto. The intent of the database is to provide an inventory of City owned-trees on the road allowance for inspection and maintenance. Urban Forestry has had requests to determine ownership of trees within the road allowance, and where this has confirmed private ownership, these trees may be in the database as well for future reference.
+    
+    The dataset is limited to the City of Toronto boundaries and is best utilized when overlaid with the City's Street Centreline file. This shape file should not be used for ownership verification. The positioning shown is not accurate as the tree data has been geographically coded to the parcel address, and this will incorrectly indicate the tree location within the private parcel. The Toronto Street Tree data is compiled by Urban Forestry staff during their inspections or tree maintenance work on trees located on City owned street allowances. The database is large covering over 530,000 records and annually Urban Forestry can only update the volume that is worked on. Some data may be several years old and have not been updated recently, so there may be inaccuracies with the data as a result.
+    
+
+    
+    **_Note:_** _We are currently updating and improving street tree location information. This is an ongoing process; therefore, some trees may still appear mapped to the address point, whereas others will be mapped in their physical location along the street. For more information please contact Urban Forestry._
+    
+    **_Downloading_** _This is a fairly large data set. If you have any issues (like a timeout) using the dynamic file downloader (the first link in the \"Download Data\" section) feel free to use the **Alternate Files**._
+     
+  resources:
+    # resource name
+    Street Tree Data:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_TMMS_TREE/FeatureServer/0
+      attributes:
+        - id: "OBJECTID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "STRUCTID"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ADDRESS"
+          type: "int"
+          info:
+            notes: ""
+        - id: "STREETNAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CROSSSTREET1"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CROSSSTREET2"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SUFFIX"
+          type: "text"
+          info:
+            notes: ""
+        - id: "UNIT_NUMBER"
+          type: "text"
+          info:
+            notes: ""
+        - id: "TREE_POSITION_NUMBER"
+          type: "int"
+          info:
+            notes: ""
+        - id: "SITE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD"
+          type: "text"
+          info:
+            notes: ""
+        - id: "COMMON_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "DBH_TRUNK"
+          type: "int"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+        
+        
