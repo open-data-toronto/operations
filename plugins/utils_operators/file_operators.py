@@ -3,6 +3,7 @@ import logging
 import os
 import io
 import zipfile
+import json
 from datetime import datetime
 from pathlib import Path
 
@@ -243,7 +244,7 @@ class DownloadGeoJsonOperator(BaseOperator):
 
         # list of fields we dont want to accept
         # list of attributes that are redundant when geometry is present in a response
-        DELETE_FIELDS = [
+        self.DELETE_FIELDS = [
             "longitude",
             "latitude",
             "shape__length",
@@ -270,7 +271,7 @@ class DownloadGeoJsonOperator(BaseOperator):
     def get_features(self):
         # flattens file by removing all subobjects from each of the input file's dicts
         output = []
-        res = json.dumps( requests.get( self.url ).text )
+        res = json.loads( requests.get( self.file_url ).text )
 
         # for each feature, combine it with its geometry into one object and append it to the output
         for feature in res["features"]:
@@ -280,7 +281,7 @@ class DownloadGeoJsonOperator(BaseOperator):
             # for every row
             for k,v in {**row}.items():
                 # delete field if duplicate geo field (x, y, lat, long, etc.)
-                if k.lower() in DELETE_FIELDS:
+                if k.lower() in self.DELETE_FIELDS:
                     del row[k]
 
             output.append( row )
@@ -290,12 +291,7 @@ class DownloadGeoJsonOperator(BaseOperator):
     def write_to_file(self, data, filepath):
         # write the data to a file
         with open(filepath, "w") as f:
-            f.write(data)
-
-        checksum = hashlib.md5()
-        checksum.update(data.encode('utf-8'))
-
-        return checksum
+            f.write( json.dumps(data) )
         
 
     def execute(self, context):
@@ -303,17 +299,16 @@ class DownloadGeoJsonOperator(BaseOperator):
         ti = context['ti']
 
         # create target filepath
-        path = set_path(ti)
+        path = self.set_path(ti)
 
         # store parsed data in memory
         data = self.get_features()
 
         # write data into a file
-        checksum = self.write_to_file(data, path)
+        self.write_to_file(data, path)
 
         return {
             "data_path": path,
-            "checksum": checksum
         }
 
     

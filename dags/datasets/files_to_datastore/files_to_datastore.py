@@ -15,7 +15,7 @@ from airflow.models.baseoperator import chain
 
 from utils import airflow_utils
 
-from utils_operators.file_operators import DownloadFileOperator
+from utils_operators.file_operators import DownloadFileOperator, DownloadGeoJsonOperator
 from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
 from utils_operators.directory_operator import CreateLocalDirectoryOperator, DeleteLocalDirectoryOperator
 from ckan_operators.package_operator import GetOrCreatePackageOperator
@@ -220,9 +220,8 @@ def create_dag(dag_id,
                         filename=resource["url"].split("/")[-1]
                     )
             
-            # Non AGOL flat GEOJSON files:
-            elif not resource.get("agol", False):
-                if resource["format"] == "geojson":
+                # Non AGOL flat GEOJSON files:
+                elif resource["format"] == "geojson":
                     tasks_list["download_" + resource_name] = DownloadGeoJsonOperator(
                         task_id="download_" + resource_name,
                         file_url=resource["url"],
