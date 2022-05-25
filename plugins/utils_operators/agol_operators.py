@@ -167,7 +167,16 @@ class AGOLDownloadFileOperator(BaseOperator):
             features.extend( geojson["features"] )
             
             # prepare the next request, if needed
-            overflow = "properties" in geojson and "exceededTransferLimit" in geojson["properties"] and geojson["properties"]["exceededTransferLimit"] is True
+            if "exceededTransferLimit" in geojson:
+                overflow = geojson["exceededTransferLimit"] is True
+
+            elif "properties" in geojson:
+                overflow = "properties" in geojson and "exceededTransferLimit" in geojson["properties"] and geojson["properties"]["exceededTransferLimit"] is True
+
+            
+            else:
+                overflow = False
+
             offset = offset + len(geojson["features"])
             query_string_params["resultOffset"] = offset
 
