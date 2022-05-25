@@ -205,4 +205,115 @@ class DownloadZipOperator(BaseOperator):
         }
 
 
+class DownloadGeoJsonOperator(BaseOperator):
+    """
+    This is a stripped down copy of the AgolDownloadFileOperator
+    Downloads and parses GeoJson file from URL and saves to provided directory using provided filename as a flat json file.
+    Takes strings or reference to task ids + keys returning strings as inputs.
 
+    Returns a dictionary containing:
+        - path: path to saved file
+        - last_modified: timestamp file was last_modified (from the request)
+        - checksum: using md5 algorithm
+    """
+
+    @apply_defaults
+    def __init__(
+        self,
+        file_url: str = None,
+        file_url_task_id: str = None,
+        file_url_task_key: str= None,
+
+        dir: str = None,
+        dir_task_id: str = None,
+        dir_task_key: str= None,
+        
+        filename: str = None,
+        filename_task_id: str = None, 
+        filename_task_key: str= None,
+
+        overwrite_if_exists: bool = True,
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+        # Assigning these vars in single lines to emphasize that they are alternatives to one another
+        self.file_url, self.file_url_task_id, self.file_url_task_key = file_url, file_url_task_id, file_url_task_key
+        self.dir, self.dir_task_id, self.dir_task_key = dir, dir_task_id, dir_task_key
+        self.filename, self.filename_task_id, self.filename_task_key = filename, filename_task_id, filename_task_key
+
+        # list of fields we dont want to accept
+        # list of attributes that are redundant when geometry is present in a response
+        DELETE_FIELDS = [
+            "longitude",
+            "latitude",
+            "shape__length",
+            "shape__area",
+            "lat",
+            "long",
+            "lon",
+            "x",
+            "y",
+            "index_"
+        ]
+
+    def set_path(self, ti):
+        # init the filepath to the file we will create
+        # how this is done depends on whether the operator received task ids/keys, or actual values 
+        if self.dir_task_id and self.dir_task_key:
+            self.dir = ti.xcom_pull(task_ids=self.dir_task_id)[self.dir_task_key]
+
+        if self.filename_task_id and self.filename_task_key:
+            self.filename = ti.xcom_pull(task_ids=self.filename_task_id)[self.filename_task_key]
+
+        return Path(self.dir) / self.filename
+
+    def get_features(self):
+        # flattens file by removing all subobjects from each of the input file's dicts
+        output = []
+        res = json.dumps( requests.get( self.url ).text )
+
+        # for each feature, combine it with its geometry into one object and append it to the output
+        for feature in res["features"]:
+        # create a row object for each object in the json response, and flag its timestamp fields
+            row = {**feature["properties"], "geometry": json.dumps(feature["geometry"])}
+            
+            # for every row
+            for k,v in {**row}.items():
+                # delete field if duplicate geo field (x, y, lat, long, etc.)
+                if k.lower() in DELETE_FIELDS:
+                    del row[k]
+
+            output.append( row )
+        
+        return output
+
+    def write_to_file(self, data, filepath):
+        # write the data to a file
+        with open(filepath, "w") as f:
+            f.write(data)
+
+        checksum = hashlib.md5()
+        checksum.update(data.encode('utf-8'))
+
+        return checksum
+        
+
+    def execute(self, context):
+        # init task instance context
+        ti = context['ti']
+
+        # create target filepath
+        path = set_path(ti)
+
+        # store parsed data in memory
+        data = self.get_features()
+
+        # write data into a file
+        checksum = self.write_to_file(data, path)
+
+        return {
+            "data_path": path,
+            "checksum": checksum
+        }
+
+    

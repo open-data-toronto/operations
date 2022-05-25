@@ -219,6 +219,16 @@ def create_dag(dag_id,
                         dir=TMP_DIR,
                         filename=resource["url"].split("/")[-1]
                     )
+            
+            # Non AGOL flat GEOJSON files:
+            elif not resource.get("agol", False):
+                if resource["format"] == "geojson":
+                    tasks_list["download_" + resource_name] = DownloadGeoJsonOperator(
+                        task_id="download_" + resource_name,
+                        file_url=resource["url"],
+                        dir=TMP_DIR,
+                        filename=resource["url"].split("/")[-1]
+                    )
 
             # get or create a resource a file
             tasks_list["get_or_create_resource_" + resource_name] = GetOrCreateResourceOperator(
