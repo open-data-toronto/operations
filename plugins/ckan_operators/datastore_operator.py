@@ -710,6 +710,7 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
             "int": self.clean_int,
             "float": self.clean_float,
             "timestamp": self.clean_date_format,
+            "date": self.clean_date_format,
         }
 
         for i in range(len(parsed_data)):
