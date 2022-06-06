@@ -1,0 +1,160 @@
+# package name
+bicycle-parking-bike-stations-indoor:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Bicycle Parking - Bike Stations (Indoor)"
+  date_published: "2019-07-23 16:33:52.94697"
+  refresh_rate: Real-time
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Locations and mapping
+    - Transportation
+  tags: 
+    - name: bicycle parking
+      vocabulary_id: null
+    - name: bike racks
+      vocabulary_id: null
+    - name: bike stations
+      vocabulary_id: null
+    - name: cycling
+      vocabulary_id: null
+
+  information_url: http://www.toronto.ca/cycling
+  excerpt: Geospatial data that shows where all the indoor bike station facilities are located in Toronto
+  limitations: null
+  notes: |
+    This dataset contains the locations of all the indoor bike station facilities located in the City of Toronto.  This data set may not be representative of the whole City of Toronto. There may be information that has been missed and may no longer be accurate.
+    
+  resources:
+    # resource name
+    Bicycle Parking Data - Indoor:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_BICYCLE_STATION_INDOOR/FeatureServer/0
+      attributes:
+        - id: "ADDRESS_POINT_ID"
+          type: "float"
+          info:
+            notes: null
+        - id: "ADDRESS_NUMBER"
+          type: "text"
+          info:
+            notes: null
+        - id: "LINEAR_NAME_FULL"
+          type: "text"
+          info:
+            notes: null
+        - id: "ADDRESS_FULL"
+          type: "text"
+          info:
+            notes: null
+        - id: "POSTAL_CODE"
+          type: "text"
+          info:
+            notes: null
+        - id: "MUNICIPALITY"
+          type: "text"
+          info:
+            notes: null
+        - id: "CITY"
+          type: "text"
+          info:
+            notes: null
+        - id: "WARD_NAME"
+          type: "text"
+          info:
+            notes: null
+        - id: "PLACE_NAME"
+          type: "text"
+          info:
+            notes: null
+        - id: "GENERAL_USE_CODE"
+          type: "int"
+          info:
+            notes: null
+        - id: "CENTRELINE_ID"
+          type: "int"
+          info:
+            notes: null
+        - id: "LO_NUM"
+          type: "int"
+          info:
+            notes: null
+        - id: "LO_NUM_SUF"
+          type: "text"
+          info:
+            notes: null
+        - id: "HI_NUM"
+          type: "int"
+          info:
+            notes: null
+        - id: "HI_NUM_SUF"
+          type: "text"
+          info:
+            notes: null
+        - id: "LINEAR_NAME_ID"
+          type: "float"
+          info:
+            notes: null
+        - id: "MI_PRINX"
+          type: "int"
+          info:
+            notes: null
+        - id: "OBJECTID"
+          type: "text"
+          info:
+            notes: null
+        - id: "ID"
+          type: "int"
+          info:
+            notes: null
+        - id: "STATION_TYPE"
+          type: "text"
+          info:
+            notes: null
+        - id: "TRANSIT_STATION"
+          type: "text"
+          info:
+            notes: null
+        - id: "FLANKING"
+          type: "text"
+          info:
+            notes: null
+        - id: "BIKE_CAPACITY"
+          type: "int"
+          info:
+            notes: null
+        - id: "CHANGE_ROOM"
+          type: "text"
+          info:
+            notes: null
+        - id: "VENDING_MACHINE"
+          type: "text"
+          info:
+            notes: null
+        - id: "TOOLS_PUMP"
+          type: "text"
+          info:
+            notes: null
+        - id: "YR_INSTALL"
+          type: "int"
+          info:
+            notes: null
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: null
+        
