@@ -180,13 +180,13 @@ report-request-log-city-council-and-its-committees:
   Report Request Log:
     format: xlsx
     url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog.xls
-toronto-centreline-tcl:
-  Centreline (wgs84) - geojson:
-    format: zip
-    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_geojson_v2.zip
-  Centreline (wgs84) - shapefile:
-    format: shp
-    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v2.zip
+#toronto-centreline-tcl:
+#  Centreline (wgs84) - geojson:
+#    format: zip
+#    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_geojson_v2.zip
+#  Centreline (wgs84) - shapefile:
+#    format: shp
+#    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v2.zip
 traffic-cameras:
   Traffic Camera List (CSV):
     format: csv

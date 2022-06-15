@@ -70,11 +70,11 @@ neighbourhoods:
         - id: "CLASSIFICATION"
           type: "text"
           info:
-            notes: ""
+            notes: "Classification of specified area"
         - id: "CLASSIFICATION_CODE"
           type: "text"
           info:
-            notes: ""
+            notes: "Classification code of specified area. Possible values are: null, Emerging Neighbourhood (EN), and Neighbourhood Improvement Area (NIA)"
         - id: "OBJECTID"
           type: "float"
           info:
@@ -119,11 +119,11 @@ neighbourhoods:
         - id: "CLASSIFICATION"
           type: "text"
           info:
-            notes: ""
+            notes: "Classification of a specified area"
         - id: "CLASSIFICATION_CODE"
           type: "text"
           info:
-            notes: ""
+            notes: "Classification code of specified area. Possible values are: null, Emerging Neighbourhood (EN), and Neighbourhood Improvement Area (NIA)"
         - id: "OBJECTID"
           type: "float"
           info:
