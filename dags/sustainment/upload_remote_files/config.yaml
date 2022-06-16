@@ -275,7 +275,7 @@ ttc-bus-delay-data:
     url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2021.xlsx
   ttc-bus-delay-data-2022:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2022.xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-2022.xlsx
 ttc-streetcar-delay-data:
   ttc-streetcar-delay-data-readme:
     format: xlsx
@@ -306,7 +306,7 @@ ttc-streetcar-delay-data:
     url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2021.xlsx
   ttc-streetcar-delay-data-2022:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2022.xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-2022.xlsx
 ttc-subway-delay-data:
   ttc-subway-delay-data-readme:
     format: xlsx
