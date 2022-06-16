@@ -100,7 +100,10 @@ class AGOLDownloadFileOperator(BaseOperator):
 
     def esri_timestamp_to_datetime(self, ts):
         #convert esri timestamp (which is unix) to ISO format datetime string
-        return  datetime.fromtimestamp(ts/1000).isoformat()  
+        if ts:
+            return  datetime.fromtimestamp(ts/1000).isoformat()  
+        else:
+            return None
         
 
     def parse_properties_from_features(self, features, fields):
