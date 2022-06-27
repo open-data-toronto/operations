@@ -606,6 +606,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                     force=True
                 )
 
+        logging.info("Loaded {} records".format(str(len(records))))
         return len(records)
 
     def execute(self, context):
@@ -682,7 +683,7 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
 
         # if the data is a different length, green light an update
         if len(parsed_data) != len(datastore_resource["records"]):
-            print("UPDATE THE DATASET! COUNT")
+            logging.info("Incoming record count {} doesnt match current record count {}".format( str(len(parsed_data)) , str(len(datastore_resource["records"])) ) )
             return "update_resource_" + self.resource_name
 
         # remove _id column from existing datastore_resource
@@ -690,15 +691,17 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
         del datastore_record["_id"]
         # if the data has different column names, green light an update
         if parsed_data[0].keys() != datastore_record.keys():
-            print("UPDATE THE DATASET! COLUMNS")
+            logging.info("Column names dont match between current and incoming data")
+            logging.info("Current attributes:" + str( datastore_record.keys() ))
+            logging.info("Incoming attributes:" + parsed_data[0].keys() )
             return "update_resource_" + self.resource_name
 
         
 
         # rearrange data so if the content is the same, the whole list of dicts matches
-        if any( [("source_name" in attribute.keys() or "target_name" in attribute.keys()) for attribute in self.config["attributes"]] ):
-            print("COLUMN MAPPING!")
-            return "update_resource_" + self.resource_name
+        #if any( [("source_name" in attribute.keys() or "target_name" in attribute.keys()) for attribute in self.config["attributes"]] ):
+        #    logging.info("COLUMN MAPPING!")
+        #    return "update_resource_" + self.resource_name
 
         # Sort the data by all attributes (which we concatenate together into a single compound key)
         parsed_data = sorted(parsed_data, key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) 
@@ -718,11 +721,11 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
             # if theres column name mapping, capture it in your comparison
             for attribute in self.config['attributes']:
                 if "source_name" in attribute.keys() and "target_name" in attribute[i].keys():
-                    print("REMAPPING A COLUMN: " + str(attribute))
+                    logging.info("REMAPPING A COLUMN: " + str(attribute))
                     attribute["id"] = attribute["target_name"]
                 
                 # now check each attribute's values in each dataset and make sure they match
-                print("attribute: " + str(attribute["id"]))
+                logging.info("attribute: " + str(attribute["id"]))
                 # ensure we're transforming incumbent and new data in the same way
                 formatter = formatters[attribute["type"]]
 
@@ -730,11 +733,11 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
                 #print( formatter(datastore_resource["records"][i][ attribute["id"] ])  )
                 
                 if formatter(parsed_data[i][ attribute["id"] ]) != formatter(datastore_resource["records"][i][ attribute["id"] ]):
-                    print("new data: " + str(parsed_data[i]))
-                    print("old data: " + str(datastore_resource["records"][i]))
-                    print(parsed_data[i][ attribute["id"] ])
-                    print(datastore_resource["records"][i][ attribute["id"] ])
-                    print("UPDATE THE DATASET! DATA MISMATCH!")
+                    logging.info("Incoming record(s) dont match existing records. Details below:")
+                    logging.info("new data: " + str(parsed_data[i]))
+                    logging.info("old data: " + str(datastore_resource["records"][i]))
+                    logging.info(parsed_data[i][ attribute["id"] ])
+                    logging.info(datastore_resource["records"][i][ attribute["id"] ])
                     return "update_resource_" + self.resource_name
 
         return "dont_update_resource_" + self.resource_name
