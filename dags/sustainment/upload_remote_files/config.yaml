@@ -367,3 +367,30 @@ cafeto-curb-lane-parklet-cafe-locations:
   Cafe TO Locations:
     format: shp
     url: http://opendata.toronto.ca/transportation.services/cafe-to/Cafe_TO_Locations_with_Years.zip
+
+annual-energy-consumption:
+  annual-energy-consumption-data-readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-readme.xlsx
+  annual-energy-consumption-data-2011-2014:
+    format: xlsx
+    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2011-2014.xlsx
+  annual-energy-consumption-data-2015:
+    format: xlsx
+    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2015.xlsx
+  annual-energy-consumption-data-2016:
+    format: xlsx
+    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2016.xlsx
+  annual-energy-consumption-data-2017:
+    format: xlsx
+    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2017.xlsx
+  annual-energy-consumption-data-2018:
+    format: xlsx
+    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2018.xlsx
+  annual-energy-consumption-data-2019:
+    format: xlsx
+    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2019.xlsx
+  annual-energy-consumption-data-2020:
+    format: xlsx
+    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2020.xlsx
+  
