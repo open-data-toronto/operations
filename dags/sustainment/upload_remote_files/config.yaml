@@ -180,13 +180,13 @@ report-request-log-city-council-and-its-committees:
   Report Request Log:
     format: xlsx
     url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog.xls
-toronto-centreline-tcl:
-  Centreline (wgs84) - geojson:
-    format: zip
-    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_geojson_v2.zip
-  Centreline (wgs84) - shapefile:
-    format: shp
-    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v2.zip
+#toronto-centreline-tcl:
+#  Centreline (wgs84) - geojson:
+#    format: zip
+#    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_geojson_v2.zip
+#  Centreline (wgs84) - shapefile:
+#    format: shp
+#    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v2.zip
 traffic-cameras:
   Traffic Camera List (CSV):
     format: csv
@@ -275,7 +275,7 @@ ttc-bus-delay-data:
     url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2021.xlsx
   ttc-bus-delay-data-2022:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2022.xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-2022.xlsx
 ttc-streetcar-delay-data:
   ttc-streetcar-delay-data-readme:
     format: xlsx
@@ -306,7 +306,7 @@ ttc-streetcar-delay-data:
     url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2021.xlsx
   ttc-streetcar-delay-data-2022:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2022.xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-2022.xlsx
 ttc-subway-delay-data:
   ttc-subway-delay-data-readme:
     format: xlsx
@@ -363,11 +363,6 @@ bike-share-toronto-ridership-data:
   bikeshare-ridership-2022:
     format: zip
     url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2022.zip
-cafeto-curb-lane-parklet-cafe-locations:
-  Cafe TO Locations:
-    format: shp
-    url: http://opendata.toronto.ca/transportation.services/cafe-to/Cafe_TO_Locations_with_Years.zip
-
 annual-energy-consumption:
   annual-energy-consumption-data-readme:
     format: xlsx
@@ -392,5 +387,42 @@ annual-energy-consumption:
     url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2019.xlsx
   annual-energy-consumption-data-2020:
     format: xlsx
-    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2020.xlsx
-  
+    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2020.xlsx 
+#cafeto-curb-lane-parklet-cafe-locations:
+#  Cafe TO Locations:
+#    format: shp
+#    url: http://opendata.toronto.ca/transportation.services/cafe-to/Cafe_TO_Locations_with_Years.zip
+freedom-of-information-requests-summary:
+  foi-request-summary-2011:
+    format: xls
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2011.xls
+  foi-request-summary-2012:
+    format: xls
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2012.xls
+  foi-request-summary-2013:
+    format: xls
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2013.xls
+  foi-request-summary-2014:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2014.xlsx
+  foi-request-summary-2015:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2015.xlsx
+  foi-request-summary-2016:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2016.xlsx
+  foi-request-summary-2017:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2017.xlsx
+  foi-request-summary-2018:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2018.xlsx
+  foi-request-summary-2019:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2019.xlsx
+  foi-request-summary-2020:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2020.xlsx
+  foi-request-summary-2021:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2021.xlsx

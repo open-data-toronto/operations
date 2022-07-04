@@ -100,7 +100,10 @@ class AGOLDownloadFileOperator(BaseOperator):
 
     def esri_timestamp_to_datetime(self, ts):
         #convert esri timestamp (which is unix) to ISO format datetime string
-        return  datetime.fromtimestamp(ts/1000).isoformat()  
+        if ts:
+            return  datetime.fromtimestamp(ts/1000).isoformat()  
+        else:
+            return None
         
 
     def parse_properties_from_features(self, features, fields):
@@ -167,7 +170,16 @@ class AGOLDownloadFileOperator(BaseOperator):
             features.extend( geojson["features"] )
             
             # prepare the next request, if needed
-            overflow = "properties" in geojson and "exceededTransferLimit" in geojson["properties"] and geojson["properties"]["exceededTransferLimit"] is True
+            if "exceededTransferLimit" in geojson:
+                overflow = geojson["exceededTransferLimit"] is True
+
+            elif "properties" in geojson:
+                overflow = "properties" in geojson and "exceededTransferLimit" in geojson["properties"] and geojson["properties"]["exceededTransferLimit"] is True
+
+            
+            else:
+                overflow = False
+
             offset = offset + len(geojson["features"])
             query_string_params["resultOffset"] = offset
 

@@ -1,0 +1,60 @@
+# package name
+cafeto-curb-lane-parklet-cafe-locations:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "CaféTO Curb Lane - Parklet Café Locations"
+  date_published: "2022-05-26 17:29:01.383647"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: CafeTO@toronto.ca
+
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Locations and mapping
+    - Transportation
+    - Business
+  tags: 
+    - name: cafeto
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: Historical locations of CaféTO curb lane/parklet cafés.
+  limitations: null
+  notes: CaféTO is a program that provides restaurants and bars in Toronto with the opportunity to expand their outdoor dining space through sidewalk cafés, curb lane cafés or patios on private property. This dataset provides locations of historical curb lane/parklet cafés only. Curb lane/parklet cafés provide expanded temporary outdoor dining space by reallocating the public right-of-way on curb lanes for use by licensed eating or drinking establishments. To find the location of sidewalk cafés, please visit the [Municipal Licensing and Standards dataset](https://open.toronto.ca/dataset/municipal-licensing-and-standards-business-licences-and-permits)
+    
+  resources:
+    # resource name
+    Cafe TO Locations:
+      format: geojson
+      url: http://opendata.toronto.ca/transportation.services/cafe-to/CafeTO_Locations_with_Years.geojson
+      attributes:
+        - id: "id"
+          type: "text"
+          info:
+            notes: Id associated with the location
+        - id: "intersecti"
+          type: "text"
+          info:
+            notes: The BIA the location is in
+        - id: "installati"
+          type: "text"
+          info:
+            notes: Where the installation is located
+        - id: "Year"
+          type: "int"
+          info:
+            notes: The year the location was active
+        - id: "geometry"
+          type: "text"
+          info:
+            notes:  ""

@@ -109,6 +109,12 @@ with DAG(
     {"dag_ids": ["dag_id1", "dag_id2", "dag_id3"]}
     ```
 
+    You can also run any dag containing a particular operator, like below:
+    
+    ```
+    {"operators": ["operator1", "operator2", "operator3"]}
+    ```
+
     There is no limit to the number of DAGs you can trigger
     """
 
