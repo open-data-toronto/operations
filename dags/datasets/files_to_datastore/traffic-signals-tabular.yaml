@@ -1,0 +1,296 @@
+# package name
+traffic-signals-tabular:
+  # DAG info
+  schedule: "0 0 * * 6"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Traffic Signals Tabular"
+  date_published: "2019-07-23 18:06:51.951594"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Locations and mapping
+    - Transportation
+    - Public safety
+  tags: 
+    - name: flashing beacons
+      vocabulary_id: null
+    - name: intersections
+      vocabulary_id: null
+    - name: pedestrian crossover
+      vocabulary_id: null
+    - name: traffic signals
+      vocabulary_id: null
+    
+  information_url: null
+  excerpt: This dataset contains all the locations of the traffic signals in the City of Toronto.
+  limitations: null
+  notes: |
+    Please see \"Traffic Signal Tabular Readme\"
+    
+    This dataset contains all the locations of the traffic signals in the City of Toronto with their operational characteristics, such as:
+    
+      * type of system that controls the signals
+      * accessibility (Audible tone)
+      * countdown timer for pedestrians (y/n)
+      * rail/fire/transit/fire priority feature (y/n)
+      * date signal was activated (y/n)
+      * lat/long
+
+    
+    **Note:** In order to alleviate the potential adverse impacts on those who have been accessing the data, we have retained the original structure of the endpoint prior to the new data elements being added, which is listed as **Version 1**. The new data structure and data elements updated are included in **Version 2**
+    
+    This file does work independently. It complements the graphical Shape file.
+    
+  resources:
+    # resource name
+    Pedestrian Crossover:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial2/MapServer/7/
+      attributes:
+        - id: "PX"
+          type: "text"
+          info:
+            notes: ""
+        - id: "MAIN_STREET"
+          type: "text"
+          info:
+            notes: ""
+        - id: "MIDBLOCK_ROUTE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SIDE1_STREET"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SIDE2_STREET"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PRIVATE_ACCESS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ADDITIONAL_INFO"
+          type: "text"
+          info:
+            notes: ""
+        - id: "OBJECTID"
+          type: "text"
+          info:
+            notes: ""
+        - id: "GEO_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "NODE_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "MI_PRINX"
+          type: "int"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Traffic Beacon:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial2/MapServer/8/
+      attributes:
+        - id: "PX"
+          type: "text"
+          info:
+            notes: ""
+        - id: "MAIN_STREET"
+          type: "text"
+          info:
+            notes: ""
+        - id: "MIDBLOCK_ROUTE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SIDE1_STREET"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SIDE2_STREET"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PRIVATE_ACCESS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ADDITIONAL_INFO"
+          type: "text"
+          info:
+            notes: ""
+        - id: "OBJECTID"
+          type: "text"
+          info:
+            notes: ""
+        - id: "GEO_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "NODE_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "MI_PRINX"
+          type: "int"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Traffic Signal:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial2/MapServer/9/
+      attributes:
+        - id: "PX"
+          type: "text"
+          info:
+            notes: ""
+        - id: "MAIN_STREET"
+          type: "text"
+          info:
+            notes: ""
+        - id: "MIDBLOCK_ROUTE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SIDE1_STREET"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SIDE2_STREET"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PRIVATE_ACCESS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ADDITIONAL_INFO"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ACTIVATIONDATE"
+          type: "timestamp"
+          info:
+            notes: ""
+        - id: "SIGNALSYSTEM"
+          type: "text"
+          info:
+            notes: ""
+        - id: "NON_SYSTEM"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CONTROL_MODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PEDWALKSPEED"
+          type: "text"
+          info:
+            notes: ""
+        - id: "APS_OPERATION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "NUMBEROFAPPROACHES"
+          type: "text"
+          info:
+            notes: ""
+        - id: "OBJECTID"
+          type: "text"
+          info:
+            notes: ""
+        - id: "GEO_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "NODE_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "AUDIBLEPEDSIGNAL"
+          type: "float"
+          info:
+            notes: ""
+        - id: "TRANSIT_PREEMPT"
+          type: "float"
+          info:
+            notes: ""
+        - id: "FIRE_PREEMPT"
+          type: "float"
+          info:
+            notes: ""
+        - id: "RAIL_PREEMPT"
+          type: "float"
+          info:
+            notes: ""
+        - id: "MI_PRINX"
+          type: "int"
+          info:
+            notes: ""
+        - id: "BICYCLE_SIGNAL"
+          type: "float"
+          info:
+            notes: ""
+        - id: "UPS"
+          type: "float"
+          info:
+            notes: ""
+        - id: "LED_BLANKOUT_SIGN"
+          type: "float"
+          info:
+            notes: ""
+        - id: "LPI_NORTH_IMPLEMENTATION_DATE"
+          type: "timestamp"
+          info:
+            notes: ""
+        - id: "LPI_SOUTH_IMPLEMENTATION_DATE"
+          type: "timestamp"
+          info:
+            notes: ""
+        - id: "LPI_EAST_IMPLEMENTATION_DATE"
+          type: "timestamp"
+          info:
+            notes: ""
+        - id: "LPI_WEST_IMPLEMENTATION_DATE"
+          type: "timestamp"
+          info:
+            notes: ""
+        - id: "LPI_COMMENT"
+          type: "text"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+        
+
+
+        

@@ -1,0 +1,206 @@
+# package name
+elected-officials-contact-information:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Elected Officials' Contact Information"
+  date_published: "2019-07-23 17:47:38.364157"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - City government
+  tags: 
+    - name: councillor contact information
+      vocabulary_id: null
+    - name: councillors
+      vocabulary_id: null
+    
+
+  information_url: "http://www.toronto.ca/councillors"
+  excerpt: "This dataset contains the contact information of the Mayor and the 25 Councillors elected to City of Toronto Council (2018 - 2022 term)."
+  limitations: null
+  notes: This dataset contains contact information of the Mayor and the 25 Councillors elected to City of Toronto Council (2018-2022 term). The information includes the elected official's name, electoral area (e.g. ward for Councillors, City of Toronto for Mayor), phone number, address, email address, fax number, photo (URL) and web address.
+  resources:
+    # resource name
+    2018-2022 Elected Officials Contact Info:
+      format: xlsx
+      sheet: Toront_Elected_Officials_0217
+      url: http://opendata.toronto.ca/city.clerks.office/elected-officials-contact-information/2018-2022-elected-officials-contact.xlsx
+      attributes:
+        - id: "District name"
+          type: "text"
+          info:
+            notes: "Jurisdiction in which the elected official serves"
+        - id: "District ID"
+          type: "text"
+          info:
+            notes: "The district/area for which the Mayor or councillor was elected"
+        - id: "Primary role"
+          type: "text"
+          info:
+            notes: "Elected official's role"
+        - id: "First name"
+          type: "text"
+          info:
+            notes: "Elected official's first name"
+        - id: "Last name"
+          type: "text"
+          info:
+            notes: "Elected official's last name"
+        - id: "Email"
+          type: "text"
+          info:
+            notes: Elected official's email adress""
+        - id: "Photo URL"
+          type: "text"
+          info:
+            notes: "Online address where a photo of the elected official is available"
+        - id: "Website"
+          type: "text"
+          info:
+            notes: City of Toronto's web page linking to the mayor and councillor's contact information""
+        - id: "Address line 1"
+          type: "text"
+          info:
+            notes: "First line of address"
+        - id: "Address line 2"
+          type: "text"
+          info:
+            notes: "Second line of address"
+        - id: "Locality"
+          type: "text"
+          info:
+            notes: "Part of address"
+        - id: "Postal code"
+          type: "text"
+          info:
+            notes: "Part of address"
+        - id: "Province"
+          type: "text"
+          info:
+            notes: "Part of address"
+        - id: "Phone"
+          type: "text"
+          info:
+            notes: Phone Number""
+        - id: "Fax"
+          type: "text"
+          info:
+            notes: Fax number""
+        - id: "Personal Website"
+          type: "text"
+          info:
+            notes: "Elected official's personal website, if available "
+
+    Ward and Elected Councillor:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_WARD_COUNCILLOR/FeatureServer/0
+      attributes:
+        - id: "AREA_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "DATE_EFFECTIVE"
+          type: date
+          info:
+            notes: ""
+        - id: "DATE_EXPIRY"
+          type: date
+          info:
+            notes: ""
+        - id: "AREA_ATTR_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "AREA_TYPE_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "PARENT_AREA_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "AREA_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_CLASS_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "AREA_CLASS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_SHORT_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_LONG_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "FEATURE_CODE"
+          type: "int"
+          info:
+            notes: ""
+        - id: "FEATURE_CODE_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "TRANS_ID_CREATE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "TRANS_ID_EXPIRE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "OBJECTID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "WARD_NUMBER"
+          type: "float"
+          info:
+            notes: ""
+        - id: "COUNCILLOR"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PHONE_NUMBER"
+          type: "text"
+          info:
+            notes: ""
+        - id: "EMAIL_ADDRESS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "URL_LINK"
+          type: "text"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""

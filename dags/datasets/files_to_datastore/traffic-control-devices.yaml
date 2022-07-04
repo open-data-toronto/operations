@@ -1,0 +1,158 @@
+# package name
+traffic-control-devices:
+  # DAG info
+  schedule: "0 0 * * 6"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Traffic Control Devices"
+  date_published: "2020-09-11 14:31:58.637736"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Transportation Services
+  owner_section: Traffic Management
+  owner_unit: Traffic Systems Delivery
+  owner_email: 311@toronto.ca
+
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Locations and mapping
+    - City government
+    - Public safety
+  tags: 
+    - name: pedestrian crossover
+      vocabulary_id: null
+    - name: traffic control devices
+      vocabulary_id: null
+    - name: traffic signals
+      vocabulary_id: null
+
+  information_url: https://insideto-gis.toronto.ca/arcgis/rest/services/cot_geospatial2/MapServer/56
+  excerpt: Dataset containing new and upcoming traffic control devices.
+  limitations: This dataset only contains information traffic control devices that are planned to be installed, or installed within the last year.
+  notes: |
+    The Traffic Systems Delivery (TSD) map tracks Traffic Control Devices (TCDs) that are upcoming or recently activated. Currently TSD has data available for the following TCDs, more will be added as we expand our data set: 
+    
+    * Traffic Signals 
+    * PXO 
+    * Beacons
+  
+  resources:
+    # resource name
+    Traffic Control Devices:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial2/MapServer/56
+      attributes:
+        - id: "OBJECTID"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PXNUM"
+          type: "int"
+          info:
+            notes: ""
+        - id: "OBJECT_CLASS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "MAIN_STREET"
+          type: "text"
+          info:
+            notes: ""
+        - id: "MIDBLOCK_ROUTE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SIDE1_STREET"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SIDE2_STREET"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PRIVATE_ACCESS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ADDITIONAL_INFO"
+          type: "text"
+          info:
+            notes: ""
+        - id: "GEO_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "NODE_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "ACTIVATION_DATE"
+          type: "timestamp"
+          info:
+            notes: ""
+        - id: "REMOVAL_DATE"
+          type: "timestamp"
+          info:
+            notes: ""
+        - id: "DISTRICT"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD_1"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD_2"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD_3"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD_4"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD_1_COUNSELLOR"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD_2_COUNSELLOR"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD_3_COUNSELLOR"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD_4_COUNSELLOR"
+          type: "text"
+          info:
+            notes: ""
+        - id: "COUNCIL_ID"
+          type: "text"
+          info:
+            notes: ""
+        - id: "NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARDS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD_COUNSELLORS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""

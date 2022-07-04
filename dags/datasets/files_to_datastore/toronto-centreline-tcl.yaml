@@ -1,0 +1,214 @@
+# package name
+toronto-centreline-tcl:
+  # DAG info
+  schedule: "0 8 * * *"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Toronto Centreline (TCL)"
+  date_published: "2019-07-23 14:18:24.389728"
+  refresh_rate: Daily
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Information & Technology
+  owner_section: null
+  owner_unit: null
+  owner_email: gcc@toronto.ca 
+
+  civic_issues: Mobility
+  topics: 
+    - City government
+    - Locations and mapping
+    - Transportation
+  tags: 
+    - name: center line
+      vocabulary_id: null
+    - name: centerline
+      vocabulary_id: null
+    - name: centre line
+      vocabulary_id: null
+    - name: centreline
+      vocabulary_id: null
+    - name: roads
+      vocabulary_id: null
+    - name: street map
+      vocabulary_id: null
+    - name: streets
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: Linear representations of streets, walkways, rivers, railways, highways and administrative boundaries within the City of Toronto
+  limitations: null
+  notes: |
+    The Toronto Centreline is a data set of linear features representing streets, walkways, rivers, railways, highways and administrative boundaries within the City of Toronto. Each line segment is described with a series of attributes including a unique identifier, name, feature code, and address ranges (where applicable).
+    In addition to retaining historical archives, threaded archives are also retained that record splits and merges of address points, of linear features and of area features. All features are linked and integrated.
+  
+  resources:
+    # resource name
+    Centreline - Version 2:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_CENTRELINE/FeatureServer/0
+      attributes:
+        - id: "CENTRELINE_ID"
+          type: "int"
+          info:
+            notes: "Unique ID of centreline"
+        - id: "LINEAR_NAME_ID"
+          type: "int"
+          info:
+            notes: "Linear Name ID"
+        - id: "LINEAR_NAME_FULL"
+          type: "text"
+          info:
+            notes: "Linear Name in full, e.g. Don Mills Rd"
+        - id: "LINEAR_NAME_FULL_LEGAL"
+          type: "text"
+          info:
+            notes: "Legal Linear Name in full, e.g. Don Mills Road"
+        - id: "ADDRESS_L"
+          type: "text"
+          info:
+            notes: "Address Range on the left"
+        - id: "ADDRESS_R"
+          type: "text"
+          info:
+            notes: "Address Range on the right"
+        - id: "PARITY_L"
+          type: "text"
+          info:
+            notes: "Address numbers parity on left"
+        - id: "PARITY_R"
+          type: "text"
+          info:
+            notes: "Address numbers parity on right"
+        - id: "LO_NUM_L"
+          type: "int"
+          info:
+            notes: "Lowest address number for left"
+        - id: "HI_NUM_L"
+          type: "int"
+          info:
+            notes: "Highest address number for left"
+        - id: "LO_NUM_R"
+          type: "int"
+          info:
+            notes: "Lowest address number for right"
+        - id: "HI_NUM_R"
+          type: "int"
+          info:
+            notes: "Highest address number for right"
+        - id: "BEGIN_ADDR_POINT_ID_L"
+          type: "int"
+          info:
+            notes: "Begin positional address point on the left"
+        - id: "END_ADDR_POINT_ID_L"
+          type: "int"
+          info:
+            notes: "End positional address point on the left"
+        - id: "BEGIN_ADDR_POINT_ID_R"
+          type: "int"
+          info:
+            notes: "Begin positional address point on the right"
+        - id: "END_ADDR_POINT_ID_R"
+          type: "int"
+          info:
+            notes: "End positional address point on the right"
+        - id: "BEGIN_ADDR_L"
+          type: "int"
+          info:
+            notes: "Begin positional address on the left"
+        - id: "END_ADDR_L"
+          type: "int"
+          info:
+            notes: "End positional address on the left"
+        - id: "BEGIN_ADDR_R"
+          type: "int"
+          info:
+            notes: "Begin positional address on the right"
+        - id: "END_ADDR_R"
+          type: "int"
+          info:
+            notes: "End positional address on the right"
+        - id: "LOW_NUM_ODD"
+          type: "int"
+          info:
+            notes: "Numeric lowest odd number"
+        - id: "HIGH_NUM_ODD"
+          type: "int"
+          info:
+            notes: "Numeric highest odd number"
+        - id: "LOW_NUM_EVEN"
+          type: "int"
+          info:
+            notes: "Numeric lowest even number"
+        - id: "HIGH_NUM_EVEN"
+          type: "int"
+          info:
+            notes: "Numeric highest even number"
+        - id: "LINEAR_NAME"
+          type: "text"
+          info:
+            notes: "Name part of the linear name"
+        - id: "LINEAR_NAME_TYPE"
+          type: "text"
+          info:
+            notes: "Type part of the linear name"
+        - id: "LINEAR_NAME_DIR"
+          type: "text"
+          info:
+            notes: "Direction part of the linear name"
+        - id: "LINEAR_NAME_DESC"
+          type: "text"
+          info:
+            notes: "Description of the linear name"
+        - id: "LINEAR_NAME_LABEL"
+          type: "text"
+          info:
+            notes: "Centreline label"
+        - id: "FROM_INTERSECTION_ID"
+          type: "int"
+          info:
+            notes: "Intersection id at the from node"
+        - id: "TO_INTERSECTION_ID"
+          type: "int"
+          info:
+            notes: "Intersection id at the to node"
+        - id: "ONEWAY_DIR_CODE"
+          type: "int"
+          info:
+            notes: "Traffic direction (0, 1, -1)"
+        - id: "ONEWAY_DIR_CODE_DESC"
+          type: "text"
+          info:
+            notes: "non-oneway (0), follow digitized direction (1), against digitised direction (-1)"
+        - id: "FEATURE_CODE"
+          type: "int"
+          info:
+            notes: "Centreline classification code"
+        - id: "FEATURE_CODE_DESC"
+          type: "text"
+          info:
+            notes: "Centreline classification description"
+        - id: "JURISDICTION"
+          type: "text"
+          info:
+            notes: "Jurisdiction of the centreline (/ownership)"
+        - id: "CENTRELINE_STATUS"
+          type: "text"
+          info:
+            notes: "Business status of the centreline"
+        - id: "OBJECTID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "MI_PRINX"
+          type: "int"
+          info:
+            notes: "Unique MapInfo identifier"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""

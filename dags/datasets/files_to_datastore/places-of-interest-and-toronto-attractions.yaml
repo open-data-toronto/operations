@@ -57,7 +57,6 @@ places-of-interest-and-toronto-attractions:
     To suggest inclusion of an additional locations or for any comments or update requests to existing comment please email [visitorservices@toronto.ca](mailto:visitorservices@toronto.ca)
     
     _Please note: This data was originally accompanied by a tabular file which needed to be removed as it included information intended for internal discussion purposes only and was created by the subjective opinion of City of Toronto staff. As this discussion information did not use scientific/methodical evidence to determine the values, the publishing of it would mislead the reader.
-
   resources:
     # resource name
     Places of Interest and Attractions:
@@ -68,27 +67,27 @@ places-of-interest-and-toronto-attractions:
         - id: ADDRESS_INFO
           type: "text"
           info:
-            notes: ""
+            notes: "Additional location information"
         - id: NAME
           type: "text"
           info:
-            notes: ""
+            notes: "Name of attraction or place of interest"
         - id: CATEGORY
           type: "text"
           info:
-            notes: ""
+            notes: "The Category for the place of interest or attraction"
         - id: PHONE
           type: "text"
           info:
-            notes: ""
+            notes: "Business phone number"
         - id: EMAIL
           type: "text"
           info:
-            notes: ""
+            notes: "Business email address"
         - id: WEBSITE
           type: "text"
           info:
-            notes: ""
+            notes: "Website address for more information"
         - id: GEOID
           type: "float"
           info:
@@ -112,7 +111,7 @@ places-of-interest-and-toronto-attractions:
         - id: ADDRESS_FULL
           type: "text"
           info:
-            notes: ""
+            notes: "Place of interest or attraction address"
         - id: POSTAL_CODE
           type: "text"
           info:
