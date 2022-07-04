@@ -364,7 +364,7 @@ bike-share-toronto-ridership-data:
     format: zip
     url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2022.zip
 annual-energy-consumption:
-  annual-energy-consumption-data-readme:
+  annual-energy-consumption-readme:
     format: xlsx
     url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-readme.xlsx
   annual-energy-consumption-data-2011-2014:
