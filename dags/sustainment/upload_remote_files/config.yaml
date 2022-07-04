@@ -369,7 +369,7 @@ cafeto-curb-lane-parklet-cafe-locations:
     url: http://opendata.toronto.ca/transportation.services/cafe-to/Cafe_TO_Locations_with_Years.zip
 
 annual-energy-consumption:
-  annual-energy-consumption-data-readme:
+  annual-energy-consumption-readme:
     format: xlsx
     url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-readme.xlsx
   annual-energy-consumption-data-2011-2014:
