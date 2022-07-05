@@ -139,7 +139,7 @@ municipal-licensing-and-standards-investigation-activity:
 non-regulated-lead-sample:
   non-regulated-lead-sample-from-2014-to-present-csv:
     format: zip
-    url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_csv.zip
+    url: http://opendata.toronto.ca/toronto.water/non-regulated-lead-sample/leadsampling_csv.zip
 #  non-regulated-lead-sample-from-2014-to-present-xml:
 #    format: zip
 #    url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
