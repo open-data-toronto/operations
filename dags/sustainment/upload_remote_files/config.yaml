@@ -140,9 +140,9 @@ non-regulated-lead-sample:
   non-regulated-lead-sample-from-2014-to-present-csv:
     format: zip
     url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_csv.zip
-  non-regulated-lead-sample-from-2014-to-present-xml:
-    format: zip
-    url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
+#  non-regulated-lead-sample-from-2014-to-present-xml:
+#    format: zip
+#    url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
 outbreaks-in-toronto-healthcare-institutions:
   Outbreaks in Toronto Healthcare Institutions-2020:
     format: xls
