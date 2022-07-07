@@ -670,10 +670,10 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
             # if the resource is too big to get in a single call, make multiple calls
             if record_count >= max_chunk_size:
                 iteration = 1
-                next_chunk = self.ckan.action.datastore_search(id=self.resource["id"], limit=max_chunk_size, offset=max_chunk_size*iteration)
+                next_chunk = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, offset=max_chunk_size*iteration)
                 datastore_resource["records"].append( next_chunk["records"] )
                 while len(next_chunk["records"]):
-                    next_chunk = self.ckan.action.datastore_search(id=self.resource["id"], limit=max_chunk_size, offset=max_chunk_size*iteration)
+                    next_chunk = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, offset=max_chunk_size*iteration)
                     datastore_resource["records"].append( next_chunk["records"] )
                     iteration += 1
         except Exception as e:
