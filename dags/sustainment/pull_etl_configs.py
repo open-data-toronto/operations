@@ -48,11 +48,11 @@ DEFAULT_ARGS = airflow_utils.get_default_args(
         "retries": 1,
         "on_failure_callback": task_failure_slack_alert,
         "retries": 0,
-        "start_date": datetime.datetime(2022, 5, 5, 0, 0, 0)
+        "start_date": datetime.datetime(2022, 7, 7, 0, 0, 0)
     })
 
 DESCRIPTION = "goes to NiFi, and Airflow to pull information about its ETLs"
-SCHEDULE = "@once" 
+SCHEDULE = "0 6 * * *" 
 TAGS=["sustainment"]
 
 # Init CKAN
