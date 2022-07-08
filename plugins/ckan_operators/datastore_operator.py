@@ -682,7 +682,7 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
             return "update_resource_" + self.resource_name
 
         # if the data is a different length, green light an update
-        if len(parsed_data) != len(datastore_resource["records"]):
+        if len(parsed_data) != datastore_resource["total"]:
             logging.info("Incoming record count {} doesnt match current record count {}".format( str(len(parsed_data)) , str(len(datastore_resource["records"])) ) )
             return "update_resource_" + self.resource_name
 
