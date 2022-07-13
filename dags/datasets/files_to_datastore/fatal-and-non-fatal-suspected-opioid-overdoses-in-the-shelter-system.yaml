@@ -1,0 +1,95 @@
+# package name
+fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Fatal and non-fatal suspected opioid overdoses in the shelter system"
+  date_published: "2021-06-09 14:12:08.528142"
+  refresh_rate: Quarterly
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Shelter, Support & Housing Administration
+  owner_section: null
+  owner_unit: null
+  owner_email: Stephanie.bell@toronto.ca
+
+  civic_issues: 
+    - Affordable housing
+  topics: 
+    - Health
+  tags: 
+    - name: addiction
+      vocabulary_id: null
+    - name: drugs
+      vocabulary_id: null
+    - name: overdose
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: Fatal and non-fatal suspected opioid overdose incidents in the emergency shelter system.
+  limitations: |
+    <ul>
+    <li>Non-fatal incidents are suspected based on the expertise of Toronto Paramedic Services to identify an opioid overdose based on physical and circumstantial information.</li>
+    
+    <li>Only incidents where Toronto Paramedic Services are called are captured in the non-fatal suspected opioid overdose incident data set.</li>
+    
+    <li>In quarters with fewer than 5 calls to Toronto Paramedic Services for suspected non-fatal overdoses or overdose fatalities the data are suppressed to protect the privacy of individuals.</li>
+    
+    <li>Some incidents may be duplicated in the fatal and non-fatal data sets because after Toronto Paramedic Services brings a patient to hospital, further outcomes are not recorded. A patient identified by Toronto Paramedic Services as experiencing a non-fatal suspected opioid overdose who later dies in hospital will be captured in both fatal and non-fatal data sets.</li>
+    
+    <li>The Office of the Chief Coroner and Toronto Paramedic Services have identified cases for this data set based on addresses of locations in the shelter system. The data set excludes individuals living in encampments or outside of the formal homelessness services system.</li>
+    
+    <li>The City's Shelter, Support and Housing Administration division uses the Shelter Management Information System (SMIS) to record client information and track a wide range of incidents that occur at emergency shelter locations. Some information about overdose incidents is recorded in SMIS, but this information is less reliable than that provided by Toronto Paramedic Services and the Office of the Chief Coroner. Data collected in SMIS is not included in this data set.</li>
+    <ul>
+  notes: This data set shows the number of fatal and non-fatal suspected opioid overdose incidents in emergency shelters, shelter-hotels, and 24-hour respite sites in each quarter, starting in the first quarter of 2018. Fatal incidents are identified by the Ontario Office of the Chief Coroner, and non-fatal incidents are identified by Toronto Paramedic Services. Where location-specific data is provided, only locations where fatal or non-fatal incidents occurred are included.
+    
+  resources:
+    # resource name
+    suspected-opioid-overdoses-in-shelters:
+      format: csv
+      url: http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/suspected-opioid-overdoses-in-shelters.csv
+      attributes:
+        - id: "location_name"
+          type: text
+          info:
+            notes: ""
+        - id: "address"
+          type: text
+          info:
+            notes: ""
+        - id: "year"
+          type: int
+          info:
+            notes: ""
+        - id: "year_stage"
+          type: text
+          info:
+            notes: ""
+        - id: "suspected_non_fatal_overdoses"
+          type: text
+          info:
+            notes: ""
+    summary-suspected-opioid-overdoses-in-shelters:
+      format: csv
+      url: http://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/summary-suspected-opioid-overdoses-in-shelters.csv
+      attributes:
+        - id: "year"
+          type: int
+          info:
+            notes: ""
+        - id: "year_stage"
+          type: text
+          info:
+            notes: ""
+        - id: "suspected_non_fatal_overdoses_incidents"
+          type: int
+          info:
+            notes: ""
+        - id: "fatal_overdoses_incident"
+          type: text
+          info:
+            notes: ""
