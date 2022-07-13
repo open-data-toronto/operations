@@ -693,7 +693,7 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
         if parsed_data[0].keys() != datastore_record.keys():
             logging.info("Column names dont match between current and incoming data")
             logging.info("Current attributes:" + str( datastore_record.keys() ))
-            logging.info("Incoming attributes:" + parsed_data[0].keys() )
+            logging.info("Incoming attributes:" + str(parsed_data[0].keys()) )
             return "update_resource_" + self.resource_name
 
         
