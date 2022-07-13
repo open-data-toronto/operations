@@ -8,6 +8,8 @@ from datetime import datetime
 from pathlib import Path
 
 import requests
+
+from airflow.models import Variable
 from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
@@ -39,6 +41,8 @@ class DownloadFileOperator(BaseOperator):
         filename_task_key: str= None,
 
         overwrite_if_exists: bool = True,
+
+        custom_headers: dict = {},
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -48,6 +52,9 @@ class DownloadFileOperator(BaseOperator):
         self.filename, self.filename_task_id, self.filename_task_key = filename, filename_task_id, filename_task_key
                     
         self.overwrite_if_exists = overwrite_if_exists
+
+        # pull headers from airflow variables, as needed
+        self.custom_headers = {k:Variable.get(v) for k,v in custom_headers.items()}
 
     def set_path(self, ti):
         # init the filepath to the file we will create
@@ -86,7 +93,7 @@ class DownloadFileOperator(BaseOperator):
             self.file_url = ti.xcom_pull(task_ids=self.file_url_task_id)[self.file_url_task_key]
 
         # grab data from input url
-        res = requests.get(self.file_url)
+        res = requests.get(self.file_url, headers = self.custom_headers)
         assert res.status_code == 200, f"Response status: {res.status_code}"
 
         return res

@@ -194,7 +194,8 @@ def create_dag(dag_id,
                     task_id="download_" + resource_name,
                     file_url=resource["url"],
                     dir=TMP_DIR,
-                    filename=resource["url"].split("/")[-1]
+                    filename=resource["url"].split("/")[-1],
+                    custom_headers=resource.get("custom_headers", {}),
                 )
 
             # AGOL files:
@@ -217,7 +218,8 @@ def create_dag(dag_id,
                         task_id="download_" + resource_name,
                         file_url=resource["url"],
                         dir=TMP_DIR,
-                        filename=resource["url"].split("/")[-1]
+                        filename=resource["url"].split("/")[-1],
+                        custom_headers=resource.get("custom_headers", {}),
                     )
             
                 # Non AGOL flat GEOJSON files:

@@ -511,10 +511,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         return output
 
     def read_json_file(self):
-
-        #TODO logic here to find data if its hiding in a child attribute
-
-        return json.load( open(self.data_path, "r"))
+        return json.load( open(self.data_path, "r", encoding="latin-1"))
 
     def read_xlsx_file(self):
         workbook = openpyxl.load_workbook(self.data_path)
@@ -559,13 +556,38 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         }
 
         # convert each column in each row
+        print("========== FILE:")
+        print(read_file)
         for row in read_file:
             new_row = {}
             # for each attribute ...
             for i in range(len(self.config["attributes"])):
+
+                # if columns in source are nested, use custom logic to reach them
+
+                # TODO : 
+                # Add logic that checks each level of the nesting in a JSON
+                # If that level is an array, then we need to output a record for EACH item in the array
+                # This can happen more than once, since we can have arrays in arrays!
+                if self.config.get("nested", None):
+                    path = self.config["attributes"][i]["path"]
+                    path = path.split("~>")
+                    value = row
+                    print("ROW:")
+                    print(row)
+                    print("PPPAAATTTHHH")
+                    print(path)
+                    for key in path:
+                        print(key)
+                        print(row)
+                        value = value[key]
+                    print("=======" + str(value))
+                    src = value
+                
+                    
                 
                 # map source column names to target column names, where needed
-                if "source_name" in self.config['attributes'][i].keys() and "target_name" in self.config['attributes'][i].keys():
+                elif "source_name" in self.config['attributes'][i].keys() and "target_name" in self.config['attributes'][i].keys():
                     self.config["attributes"][i]["id"] = self.config["attributes"][i]["target_name"]
                     src = row[self.config["attributes"][i]["source_name"]]
                 else:
@@ -693,7 +715,7 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
         if parsed_data[0].keys() != datastore_record.keys():
             logging.info("Column names dont match between current and incoming data")
             logging.info("Current attributes:" + str( datastore_record.keys() ))
-            logging.info("Incoming attributes:" + parsed_data[0].keys() )
+            logging.info("Incoming attributes:" + str(parsed_data[0].keys()) )
             return "update_resource_" + self.resource_name
 
         
