@@ -1,0 +1,130 @@
+# package name
+bodysafe:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "BodySafe"
+  date_published: "2019-07-23 16:41:20.503792"
+  refresh_rate: Daily
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Toronto Public Health
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - City government
+    - Health
+    - Public safety
+  tags: 
+    - name: aesthetic
+      vocabulary_id: null
+    - name: barber
+      vocabulary_id: null
+    - name: body piercing
+      vocabulary_id: null
+    - name: body safe
+      vocabulary_id: null
+    - name: ear piercing
+      vocabulary_id: null
+    - name: electrolysis
+      vocabulary_id: null
+    - name: hair salon
+      vocabulary_id: null
+    - name: inspection notice
+      vocabulary_id: null
+    - name: manicure
+      vocabulary_id: null
+    - name: micropigmentation
+      vocabulary_id: null
+    - name: pedicure
+      vocabulary_id: null
+    - name: salon
+      vocabulary_id: null
+    - name: tattoo
+      vocabulary_id: null
+    
+
+  information_url: https://www.toronto.ca/community-people/health-wellness-care/health-programs-advice/bodysafe/
+  excerpt: This dataset contains the Personal Service Settings (PSS) annual health inspection results in accordance to the Ministry of Health and Long-Term Care's Infection Prevention and Control Best Practices for Personal Services Settings.
+  limitations: null
+  notes: Starting July 1, 2013, under the revised [Municipal Code Chapter 545, Licensing By-Law](http://www.toronto.ca/legdocs/municode/1184_545.pdf), all establishments offering hairstyling or barbering services were required to get a PSS licence and post their inspection notices at or near the entrance of the business, so that it is clearly visible to the public. All these establishments are included on the BodySafe website. Establishments offering other services such as tattooing, micropigmentation, ear and body piercing, electrolysis, manicures, pedicures and aesthetics will be phased in over the next few years.
+  
+  resources:
+    # resource name
+    bodysafe:
+      nested: True
+      format: json
+      custom_headers:
+        SRV-KEY: bodysafe_secure_toronto_opendata_SRV_KEY
+        USER-KEY: secure_toronto_opendata_USER_KEY
+      url: https://secure.toronto.ca/opendata/bs_od/full_list/v1?format=json
+      attributes:
+        - id: estId
+          type: int
+          info:
+            notes: "Establishment ID"
+        - id: estName
+          type: text
+          info:
+            notes: "Establishment Name"
+        - id: addrFull
+          type: text
+          info:
+            notes: "Address of Estrablishment"
+        - id: srvType
+          type: text
+          info:
+            notes: "Type of services offered by Establishment"
+        - id: insStatus
+          type: text
+          info:
+            notes: "Status of the inspection (ex: Pass)"
+        - id: insDate
+          type: date
+          info:
+            notes: "Date of inspection"
+        - id: observation
+          type: text
+          info:
+            notes: "Notes on the observations made during inspection"
+        - id: infCategory
+          type: text
+          info:
+            notes: "Category of infraction"
+        - id: defDesc
+          type: text
+          info:
+            notes: "Description of infraction"
+        - id: infType
+          type: text
+          info:
+            notes: "Type of infraction"
+        - id: actionDesc
+          type: text
+          info:
+            notes: "Description of action taken"
+        - id: OutcomeDate
+          type: text
+          info:
+            notes: "Date of outcome"
+        - id: OutcomeDesc
+          type: date
+          info:
+            notes: "Description of outcome"
+        - id: fineAmount
+          type: int
+          info:
+            notes: "Amount of fine given"
+        - id: geometry
+          type: text
+          info:
+            notes: ""
+        
+        
