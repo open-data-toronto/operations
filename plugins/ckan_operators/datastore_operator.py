@@ -9,6 +9,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import List
 
+from ckan_operators import nested_file_readers
+
 import ckanapi
 import pandas as pd
 from airflow.models.baseoperator import BaseOperator
@@ -511,10 +513,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         return output
 
     def read_json_file(self):
-
-        #TODO logic here to find data if its hiding in a child attribute
-
-        return json.load( open(self.data_path, "r"))
+        return json.load( open(self.data_path, "r", encoding="latin-1"))
 
     def read_xlsx_file(self):
         workbook = openpyxl.load_workbook(self.data_path)
@@ -535,15 +534,22 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "csv": self.read_csv_file,
             "geojson": self.read_json_file,
             "json": self.read_json_file,
-            "xlsx": self.read_xlsx_file
+            "xlsx": self.read_xlsx_file,
         }
+
+        # use a custom reader if the config is nested
+        if self.config.get("nested", None):
+            nested_readers = nested_file_readers.nested_readers
+            return nested_readers[ self.config["url"] ](self.data_path)
+
         if "zip" in self.config.keys():
             if self.config["zip"]:
                 self.data_path = self.data_path[ self.config["filename"] ]
 
         return readers[self.config["format"].lower()]()
     
-    
+
+
     # parse file attributes into correct data types in a dict based on input fields
     def parse_file(self, read_file):
         # init output
@@ -556,11 +562,12 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "float": self.clean_float,
             "timestamp": self.clean_date_format,
             "date": self.clean_date_format,
-        }
+        }                        
 
-        # convert each column in each row
+        # otherwise if input is tabular, convert each column in each input row
         for row in read_file:
             new_row = {}
+
             # for each attribute ...
             for i in range(len(self.config["attributes"])):
                 

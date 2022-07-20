@@ -194,7 +194,8 @@ def create_dag(dag_id,
                     task_id="download_" + resource_name,
                     file_url=resource["url"],
                     dir=TMP_DIR,
-                    filename=resource["url"].split("/")[-1]
+                    filename=resource["url"].split("/")[-1],
+                    custom_headers=resource.get("custom_headers", {}),
                 )
 
             # AGOL files:
@@ -212,12 +213,13 @@ def create_dag(dag_id,
 
             # Non AGOL flat JSON files:
             elif not resource.get("agol", False):
-                if resource["format"] == "json":
+                if resource["format"] == "json" or (resource["format"] == "geojson" and resource.get("nested")):
                     tasks_list["download_" + resource_name] = DownloadFileOperator(
                         task_id="download_" + resource_name,
                         file_url=resource["url"],
                         dir=TMP_DIR,
-                        filename=resource["url"].split("/")[-1]
+                        filename=resource["url"].split("/")[-1],
+                        custom_headers=resource.get("custom_headers", {}),
                     )
             
                 # Non AGOL flat GEOJSON files:
