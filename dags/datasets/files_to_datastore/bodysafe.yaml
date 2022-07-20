@@ -60,7 +60,7 @@ bodysafe:
     # resource name
     bodysafe:
       nested: True
-      format: json
+      format: geojson
       custom_headers:
         SRV-KEY: bodysafe_secure_toronto_opendata_SRV_KEY
         USER-KEY: secure_toronto_opendata_USER_KEY
