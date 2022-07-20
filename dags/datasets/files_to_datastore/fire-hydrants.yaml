@@ -1,0 +1,79 @@
+# package name
+fire-hydrants:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Fire Hydrants"
+  date_published: "2019-07-23 16:30:45.457004"
+  refresh_rate: Monthly
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Toronto Water
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Locations and mapping
+    - Public safety
+    - Water
+  tags: 
+    - name: fire
+      vocabulary_id: null
+    - name: fire hydrants
+      vocabulary_id: null
+    
+  information_url: null
+  excerpt: Location of all city owned fire hydrants in Toronto
+  limitations: null
+  notes: This dataset contains the location of all City owned fire hydrants in Toronto.
+
+  resources:
+    # resource name
+    Fire Hydrants Data:
+      agol: True
+      format: geojson
+      url: https://services5.arcgis.com/MFwjjnaTnj9B3bil/arcgis/rest/services/Hydrant_View/FeatureServer/0
+      attributes:
+        - id: OBJECTID
+          type: text
+          info:
+            notes: null
+        - id: FACILITYID
+          type: text
+          info:
+            notes: null
+        - id: LOCDESC
+          type: text
+          info:
+            notes: null
+        - id: OWNEDBY
+          type: text
+          info:
+            notes: null
+        - id: MAINTBY
+          type: text
+          info:
+            notes: null
+        - id: ADDR_KEY
+          type: int
+          info:
+            notes: null
+        - id: FIELDVERIFIED
+          type: text
+          info:
+            notes: null
+        - id: GLOBALID
+          type: text
+          info:
+            notes: null
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: null
+        
