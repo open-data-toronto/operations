@@ -1,0 +1,142 @@
+# package name
+central-intake-calls:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Central Intake calls"
+  date_published: "2022-07-11 14:18:24.389728"
+  refresh_rate: Monthly
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Shelter, Support & Housing Administration
+  owner_section: Service Planning & Integrity
+  owner_unit: Business Intelligence
+  owner_email: sshadata@toronto.ca
+
+  civic_issues: 
+    - affordable_housing
+  topics: 
+    - Community services
+  tags: 
+    - name: shelter
+      vocabulary_id: null
+
+  information_url: https://www.toronto.ca/community-people/housing-shelter/homeless-help/central-intake/
+  excerpt: This data set provides information about calls to the Central Intake service, which offers referrals to emergency shelter and other overnight accommodation.
+  limitations: null
+  notes: |
+    If you are in need of emergency shelter space, please call the City of Toronto’s Central Intake line at 416-338-4766 or 1-877-338-3398.
+    
+    This catalogue entry provides two data sets related to calls to Central Intake. 
+    
+    Central Intake is a City-operated, 24/7 telephone-based service that offers referrals to emergency shelter and other overnight accommodation, as well as information about other homelessness services. These two data sets provide information about calls received by Central Intake, the outcomes of those calls, and the number of individuals who could not be matched to a shelter space each day.
+    
+    The first, **Central Intake Service Queue Data**, provides counts of the number of unique individuals who contacted Central Intake to access emergency shelter but were not matched to a shelter space. Generated through Central Intake caseworkers' use of the City's Shelter Management Information System (SMIS), the data are reported as a count for every operational day.
+    
+    The SMIS service queue for Central Intake records when a bed is requested for a caller seeking a shelter space. Those callers who could not be matched to an available space that suits their needs at the time of their call remain in the queue until they can be provided a referral or until the closeout process at the end of the night (i.e. 4:00 a.m.).
+    
+    Service Queue data combines data exported from the Central Intake service queue at 4:00 a.m., with manually coded outcome data based on the review of each individual's SMIS records for the day. SSHA began collecting data on how many people remain unmatched in the service queue over a 24 hour period at the beginning of November 2020. Given the manual nature of the preparation of the data in this data set, this file will be updated on a monthly basis. Data will be reported separately for every operational day in that month.
+    
+    The second data set, **Central Intake Call Wrap-Up Codes Data**, provides counts of calls answered by Central Intake, classified by the nature of the call.  When a call is handled by a caseworker at Central Intake, the caseworker assigns a wrap-up code to the call. This tracking allows for analysis of call trends.
+    
+    Central Intake uses 13 distinct wrap-up codes to code the calls they receive. This data set provides a daily summary of the number of calls received by each call wrap-up code. The data are manually retrieved from the City's call centre database reports. Given the manual nature of the preparation of the data in this data set, this file will be updated on a monthly basis. Data will be reported separately for every operational day in that month.
+    
+    Please note that while the wrap-up codes provide information related to the volume and type of calls answered by Central Intake, the data do not track requests made by unique individuals nor the ultimate outcomes of referrals.
+
+    Please also note that the previews and Data Features below only show information pertaining to the Central Intake Call Wrap-Up Codes Data dataset.
+    
+  resources:
+    # resource name
+    Central Intake Call Wrap-Up Codes Data:
+      format: csv
+      url: http://opendata.toronto.ca/shelter.support.housing.administration/central-intake-calls/central intake - wrap-up codes.csv
+      attributes:
+        - id: Date
+          type: date
+          info:
+            notes: The calendar date to which all call counts in this data set apply.
+        - id: Total calls handled
+          type: int
+          info:
+            notes: The number of calls answered by Central Intake staff.
+        - id: Total calls coded
+          type: int
+          info:
+            notes: The total number of calls answered that were assigned a wrap-up code by Central Intake staff.
+        - id: Code 1A - Referral to a Sleeping/Resting Space
+          type: int
+          info:
+            notes: The number of calls coded as a referral to an available sleeping/resting space.
+        - id: Code 1B - External Transfer to AWHL
+          type: int
+          info:
+            notes: The number of calls coded as an external warm transfer (i.e. the caseworker stays on the line until the referral is completed) to the Assaulted Women's Help Line (AWHL)
+        - id: Code 1C - Referral to Eviction Prevention Service
+          type: int
+          info:
+            notes: The number of calls coded as a referral to an Eviction Prevention or Shelter Diversion service. 
+        - id: Code 1D - Declined Shelter/Resting Space
+          type: int
+          info:
+            notes: The number of calls in which the caller declined all available spaces, or is service restricted from all available options.
+        - id: Code 2A - Internal Transfer to CI
+          type: int
+          info:
+            notes: The number of calls coded as an internal transfer to another Caseworker or Shift Leader within Central Intake.
+        - id: Code 2B - External Transfer - Homelessness-related
+          type: int
+          info:
+            notes: The number of calls coded as an external transfer outside of Central Intake to a service or resource related to homelessness and prevention services.
+        - id: Code 2C - Information - Homelessness & Prevention Services
+          type: int
+          info:
+            notes: The number of calls coded as resulting in information being provided to individuals and families that is relevant to homelessness and prevention services.
+        - id: Code 2D - Information - Non-Homelessness-related
+          type: int
+          info:
+            notes: The number of calls coded as resulting in information being provided to individuals and families that is not specifically relevant to homelessness and prevention services.
+        - id: Code 3A - Shelter Space Unavailable - Family
+          type: int
+          info:
+            notes: The number of calls coded as not resulting in a referral for a family space because shelter space is unavailable. This code is used only for callers who are being placed on the family placement list for the first time each day. The family placement list is a separate service queue used to manage placement of families into available family shelter spaces.
+        - id: Code 3B - Shelter Space Unavailable - Individuals/Couples
+          type: int
+          info:
+            notes: The number of calls coded as not resulting in a referral for an individual or a couple because shelter space is unavailable. This code is used only for callers who are being placed on the service queue for the first time each day.
+        - id: Code 3C - Follow-up / Check on Placement
+          type: int
+          info:
+            notes: The number of calls coded as seeking follow-up on an existing request for shelter. This code is used if the client is already on an existing individual service queue or family placement list, or is following up on a referral that has already been made for them.
+        - id: Code 4A - Dead Air
+          type: int
+          info:
+            notes: The number of all interactions that did not result in call completion. No connection was made to a caller for a period of 30 seconds, either after the caller was greeted or after the call was answered.
+        - id: Code 4B - Disconnected - No Outcome
+          type: int
+          info:
+            notes: The number of calls where after making connection with the caller, the call was disconnected or ended prematurely before reaching a service outcome. 
+    Central Intake Service Queue Data:
+      format: csv
+      url: http://opendata.toronto.ca/shelter.support.housing.administration/central-intake-calls/central intake - service queue.csv
+      attributes:
+        - id: Date
+          type: date
+          info:
+            notes: Operational date for the data, uses the date before midnight to refer to the evening of service. A closeout completed at 4:00 am on the morning of August 1, 2022 would be recorded as operational date July 31, 2022.
+        - id: Unmatched callers
+          type: int
+          info:
+            notes: Total individuals who were not able to be offered a space over the past 24 hours, at time of closeout at 4am. 
+        - id: Single call
+          type: int
+          info:
+            notes: Number of unmatched callers who had called Central Intake a single time on this date.
+        - id: Repeat caller
+          type: int
+          info:
+            notes: Number of unmatched callers who had called Central Intake two or more times on this date.
+        
