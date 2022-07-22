@@ -385,7 +385,7 @@ for config_file in os.listdir(CONFIG_FOLDER):
                 "retries": 2,
                 "retry_delay": 3,
                 "on_failure_callback": task_failure_slack_alert,
-                "start_date": datetime(2022, 4, 25, 0, 0, 0),
+                "start_date": datetime(2022, 7, 22, 0, 0, 0),
                 "config_folder": CONFIG_FOLDER,
                 "pool": "ckan_pool",
                 "tags": ["dataset", "yaml"]
