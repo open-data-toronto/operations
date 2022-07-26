@@ -392,6 +392,10 @@ annual-energy-consumption:
 #  Cafe TO Locations:
 #    format: shp
 #    url: http://opendata.toronto.ca/transportation.services/cafe-to/Cafe_TO_Locations_with_Years.zip
+basement-flooding-by-ward:
+  basement-flooding-by-ward:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.water/basement-flooding-by-ward/Basement-flooding-by-ward_Jun 30 2022.xlsx
 freedom-of-information-requests-summary:
   foi-request-summary-2011:
     format: xls
@@ -426,3 +430,4 @@ freedom-of-information-requests-summary:
   foi-request-summary-2021:
     format: xlsx
     url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2021.xlsx
+
