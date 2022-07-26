@@ -321,7 +321,7 @@ def combine_configs(**kwargs):
 
                         })
                 # if the resource isnt in the NiFi or Airflow configs, AND it's not a datastore cache file, then keep it with empty ETL info
-                if resource["name"] not in [config["target_resource_name"] for config in configs] and resource["is_datastore_cache_file"] in [False, "false", "False"]:
+                if resource["name"] not in [config["target_resource_name"] for config in configs] and resource.get("is_datastore_cache_file", False) in [False, "false", "False"]:
                     output.append({
                         "package_id": package.get("name", None),
                         "resource_name": resource["name"],
