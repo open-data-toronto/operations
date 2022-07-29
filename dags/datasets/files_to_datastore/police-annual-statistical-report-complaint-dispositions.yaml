@@ -42,7 +42,7 @@ police-annual-statistical-report-complaint-dispositions:
     Complaint Dispositions:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Complaint_Dispositions__ASR_PCF_TBL_003/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Complaint_Dispositions_ASR_PCF_TBL_003/FeatureServer/0/
       attributes:
         - id: "ObjectId"
           type: "int"
