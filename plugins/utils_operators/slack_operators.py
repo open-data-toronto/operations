@@ -1,6 +1,7 @@
 # slack_operators.py - logic for sending failure and success messages from airflow to slack
 
 import logging
+import os
 from pathlib import Path
 
 from airflow.models.baseoperator import BaseOperator
@@ -14,8 +15,7 @@ from airflow.models import Variable
 ## Init airflow variables
 ACTIVE_ENV = Variable.get("active_env")
 SLACK_CONN_ID = 'slack' if ACTIVE_ENV == "prod" else "slack_dev"
-AIRFLOW_URLS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-AIRFLOW_URL = AIRFLOW_URLS[ ACTIVE_ENV ]["address"]
+AIRFLOW_URL = Variable.get("airflow_urls", deserialize_json=True)[ ACTIVE_ENV ]
 USERNAME = "Operator" if ACTIVE_ENV == "prod" else "airflow-test"
 
 slack_webhook_token = BaseHook.get_connection(SLACK_CONN_ID).password
