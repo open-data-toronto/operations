@@ -1296,14 +1296,6 @@ traffic-volumes-at-intersections-for-all-modes:
       format: csv
       url: http://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_locations.csv
       attributes:
-        - id: count_id
-          type: int
-          info:
-            notes: Unique identified for the traffic study conducted to gather count data. This corresponds with the count_id field in the raw_data_[decade] table.
-        - id: count_date
-          type: date
-          info:
-            notes: Date of count
         - id: location_id
           type: int
           info:
