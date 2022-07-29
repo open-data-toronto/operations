@@ -1,7 +1,7 @@
 # package name
 traffic-volumes-at-intersections-for-all-modes:
   # DAG info
-  schedule: "@once" #"0 22 * * *"
+  schedule: "0 22 * * *"
   dag_owner_name: Mackenzie
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
