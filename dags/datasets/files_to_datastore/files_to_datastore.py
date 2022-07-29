@@ -375,6 +375,8 @@ for config_file in os.listdir(CONFIG_FOLDER):
         dag_owner_name = config[package_name]["dag_owner_name"]
         dag_owner_email = config[package_name]["dag_owner_email"]
 
+        pool = "ckan_pool" if len(config[package_name]["resources"]) < 4 else 'big_job_pool'
+
         default_args = airflow_utils.get_default_args(
             {
                 "owner": dag_owner_name,
@@ -387,7 +389,7 @@ for config_file in os.listdir(CONFIG_FOLDER):
                 "on_failure_callback": task_failure_slack_alert,
                 "start_date": datetime(2022, 7, 22, 0, 0, 0),
                 "config_folder": CONFIG_FOLDER,
-                "pool": "ckan_pool",
+                "pool": pool,
                 "tags": ["dataset", "yaml"]
             }
         )

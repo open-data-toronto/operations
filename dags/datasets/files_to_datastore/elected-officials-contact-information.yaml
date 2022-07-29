@@ -113,11 +113,11 @@ elected-officials-contact-information:
           info:
             notes: ""
         - id: "DATE_EFFECTIVE"
-          type: date
+          type: timestamp
           info:
             notes: ""
         - id: "DATE_EXPIRY"
-          type: date
+          type: timestamp
           info:
             notes: ""
         - id: "AREA_ATTR_ID"
