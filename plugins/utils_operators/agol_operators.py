@@ -234,12 +234,19 @@ class AGOLDownloadFileOperator(BaseOperator):
 
 
     def write_to_file(self, data, filepath):
-        # write the data to a file
+        # write the data to a file dict by dict to avoid memory errors
         with open(filepath, "w") as f:
-            f.write(data)
+            f.write("[")
+
+            for item in data[:-1]:
+                json.dump(item, f)
+                f.write(",")
+            
+            json.dump(data[-1], f)
+            f.write("]")
 
         checksum = hashlib.md5()
-        checksum.update(data.encode('utf-8'))
+        #checksum.update(data.encode('utf-8'))
 
         return checksum
 
@@ -252,12 +259,15 @@ class AGOLDownloadFileOperator(BaseOperator):
         self.set_path(ti)
 
         # Store data in memory
+        print("Getting data from agol")
         res = self.parse_data_from_agol()
         last_modified = res["last_modified"]
 
         # write data to a file, get checksum
-        data = json.dumps(res["data"])
-        checksum = self.write_to_file(data, self.path)
+        #data = json.dumps(res["data"])
+        print("Putting AGOL Data into a file")
+        checksum = self.write_to_file(res["data"], self.path)
+        print("AGOL Data saved to a file: " + str(self.path))
 
         # write fields to a file
         fields = json.dumps(res["fields"])
