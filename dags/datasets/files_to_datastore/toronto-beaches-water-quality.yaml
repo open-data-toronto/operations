@@ -1,0 +1,78 @@
+# package name
+toronto-beaches-water-quality:
+  # DAG info
+  schedule: "0 21 * * *"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Toronto Beaches Water Quality"
+  date_published: "2019-07-23 16:41:20.503792"
+  refresh_rate: Daily
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Toronto Public Health
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: 
+    - Climate Change
+  topics: 
+    - Environment
+    - Health
+    - Public safety
+    - Water
+  tags: 
+    - name: beaches
+      vocabulary_id: null
+    - name: water quality
+      vocabulary_id: null
+
+  information_url: https://www.toronto.ca/community-people/health-wellness-care/health-inspections-monitoring/swimsafe/beach-water-quality/
+  excerpt: The Beach Water Sampling Program for the City of Toronto is a co-operative effort between Toronto Public Health, Toronto Water, the Marine Police Unit, Parks and Recreation Department.
+  limitations: null
+  notes: |
+    The Beach Water Sampling Program for the City of Toronto is a co-operative effort between Toronto Public Health, Toronto Water, the Marine Police Unit, Parks and Recreation Department. It is implemented in accordance with the requirements of the Ministry of Health Beach Management Protocol (January 01, 1998) in order to reduce the incidence of water-borne illness in the population.
+    
+    Data is collected only from the first week of June to first week of September of each year. Eleven of the city's beaches are tested daily during this time period. Includes the names of the 11 beaches where water was tested for E. coli on a daily basis.
+  
+  resources:
+    # resource name
+    toronto-beaches-water-quality:
+      nested: True
+      format: geojson
+      custom_headers:
+        SRV-KEY: toronto-beaches-water-quality_secure_toronto_opendata_SRV_KEY
+        USER-KEY: secure_toronto_opendata_USER_KEY
+      url: https://secure.toronto.ca/opendata/adv_od/beach_results/v1?format=json&startDate=2000-01-01&endDate=9999-01-01
+      attributes:
+        - id: beachId
+          type: int
+          info:
+            notes: ""
+        - id: beachName
+          type: text
+          info:
+            notes: ""
+        - id: siteName
+          type: text
+          info:
+            notes: ""
+        - id: collectionDate
+          type: date
+          info:
+            notes: ""
+        - id: eColi
+          type: int
+          info:
+            notes: ""
+        - id: comments
+          type: text
+          info:
+            notes: ""
+        - id: geometry
+          type: text
+          info:
+            notes: ""
