@@ -103,10 +103,30 @@ def bodysafe(data_path):
                                 }
                             )
     return output
-        
+
+
+def toronto_beaches_water_quality(data_path):
+    input = json.load( open(data_path, "r", encoding="latin-1"))
+    output = []
+
+    for item in input:
+        output.append(
+            {
+                "beachId": item["beachId"],
+                "beachName": item["beachName"],
+                "siteName": item["siteName"],
+                "collectionDate": item["collectionDate"],
+                "eColi": item["eColi"],
+                "comments": item["comments"],
+                "geometry": json.dumps({ "type": "Point", "coordinates": [item["lon"], item["lat"] ] }),
+            }
+        )
+
+    return output
 
 
 
 nested_readers = {
-    "https://secure.toronto.ca/opendata/bs_od/full_list/v1?format=json": bodysafe
+    "https://secure.toronto.ca/opendata/bs_od/full_list/v1?format=json": bodysafe,
+    "https://secure.toronto.ca/opendata/adv_od/beach_results/v1?format=json&startDate=2000-01-01&endDate=9999-01-01": toronto_beaches_water_quality,
 }
