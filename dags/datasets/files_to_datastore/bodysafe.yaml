@@ -111,11 +111,11 @@ bodysafe:
           info:
             notes: "Description of action taken"
         - id: OutcomeDate
-          type: text
+          type: date
           info:
             notes: "Date of outcome"
         - id: OutcomeDesc
-          type: date
+          type: text
           info:
             notes: "Description of outcome"
         - id: fineAmount
