@@ -77,7 +77,7 @@ bodysafe:
         - id: addrFull
           type: text
           info:
-            notes: "Address of Estrablishment"
+            notes: "Address of Establishment"
         - id: srvType
           type: text
           info:
