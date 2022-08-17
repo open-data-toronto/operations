@@ -4,6 +4,9 @@ import csv
 import logging
 import codecs
 import openpyxl
+import time
+import itertools
+import hashlib
 
 from datetime import datetime
 from pathlib import Path
@@ -468,10 +471,10 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         assert isinstance(input, str), "Utils clean_date_format() function can only receive strings - it instead received {}".format(type(input))
 
         format_dict = {
-            "%Y-%m-%dT%H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S.%f",
-            "%Y-%m-%d %H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S.%f",
-            "%Y-%m-%dT%H:%M:%S": "%Y-%m-%dT%H:%M:%S.%f",
-            "%Y-%m-%d %H:%M:%S": "%Y-%m-%dT%H:%M:%S.%f",
+            "%Y-%m-%dT%H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S",
+            "%Y-%m-%d %H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S",
+            "%Y-%m-%dT%H:%M:%S": "%Y-%m-%dT%H:%M:%S",
+            "%Y-%m-%d %H:%M:%S": "%Y-%m-%dT%H:%M:%S",
             "%Y-%m-%d": "%Y-%m-%d",
             "%d-%b-%Y": "%Y-%m-%d",
             "%d-%b-%y": "%Y-%m-%d",
@@ -479,7 +482,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "%m-%d-%y": "%Y-%m-%d",
             "%m-%d-%Y": "%Y-%m-%d",
             "%d-%m-%y": "%Y-%m-%d",
-            "%Y%m%d%H%M%S": "%Y-%m-%dT%H:%M:%S.%f",
+            "%Y%m%d%H%M%S": "%Y-%m-%dT%H:%M:%S",
             "%d%m%Y": "%Y-%m-%d",
             "%d%b%Y": "%Y-%m-%d",
         }
@@ -664,87 +667,79 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
         if self.data_path_task_id and self.data_path_task_key:
             self.data_path = ti.xcom_pull(task_ids=self.data_path_task_id)[self.data_path_task_key]
 
-        # read and parse file
+        # read and parse incoming data - parsed data is already trasnformed and its columns are renamed to match what might be in the datastore already
         read_file = self.read_file()
         parsed_data = self.parse_file(read_file)
+        print("data parsed")
 
-        # get existing resource contents and ensure the datastore resource exists
-        max_chunk_size = 32000
+        # if the incoming and incumbent data are a different length, green light an update
         try:
-            record_count = self.ckan.action.datastore_search(id=self.resource_id, limit=0)["total"]
-            datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size)
-            
-            # if the resource is too big to get in a single call, make multiple calls
-            if record_count >= max_chunk_size:
-                iteration = 1
-                next_chunk = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, offset=max_chunk_size*iteration)
-                datastore_resource["records"].append( next_chunk["records"] )
-                while len(next_chunk["records"]):
-                    next_chunk = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, offset=max_chunk_size*iteration)
-                    datastore_resource["records"].append( next_chunk["records"] )
-                    iteration += 1
+            datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=1)
+            record_count = datastore_resource["total"]
         except Exception as e:
             logging.error(e)
-            logging.info("Resource {} isn't in the datastore - update the existing dataset")
+            logging.info("Resource {} isn't in the datastore - update the existing dataset".format( self.resource_name ))
             return "update_resource_" + self.resource_name
 
-        # if the data is a different length, green light an update
-        if len(parsed_data) != datastore_resource["total"]:
-            logging.info("Incoming record count {} doesnt match current record count {}".format( str(len(parsed_data)) , str(len(datastore_resource["records"])) ) )
+        if len(parsed_data) != record_count:
+            logging.info("Incoming record count {} doesnt match current record count {}".format( str(len(parsed_data)) , str(record_count) ) )
             return "update_resource_" + self.resource_name
+
+        print("matching record counts")
 
         # remove _id column from existing datastore_resource
         datastore_record = datastore_resource["records"][0]
         del datastore_record["_id"]
         # if the data has different column names, green light an update
+        # TODO: check for columns renamed in YAML processing
         if parsed_data[0].keys() != datastore_record.keys():
             logging.info("Column names dont match between current and incoming data")
             logging.info("Current attributes:" + str( datastore_record.keys() ))
             logging.info("Incoming attributes:" + str(parsed_data[0].keys()) )
             return "update_resource_" + self.resource_name
 
+        print("matching column names")
+
+        # If the dataset is "large", we dont do a record by record comparison as we dont have enough memory in the EC2s right now (July 2022)
+        if record_count > 500000:
+            return "dont_update_resource_" + self.resource_name
+
+        # Record by record comparison
+        print("Starting record by record comparison")
+        max_chunk_size = 32000
+        datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, include_total=False, fields=list(datastore_record.keys()))
         
-
-        # rearrange data so if the content is the same, the whole list of dicts matches
-        #if any( [("source_name" in attribute.keys() or "target_name" in attribute.keys()) for attribute in self.config["attributes"]] ):
-        #    logging.info("COLUMN MAPPING!")
-        #    return "update_resource_" + self.resource_name
-
-        # Sort the data by all attributes (which we concatenate together into a single compound key)
-        parsed_data = sorted(parsed_data, key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) 
-        datastore_resource["records"] = sorted(parsed_data, key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) 
+        # if the resource is too big to get in a single call, make multiple calls
+        if record_count >= max_chunk_size:
+            iteration = 1
+            next_chunk = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, offset=max_chunk_size*iteration, include_total=False, fields=list(datastore_record.keys()))
+            datastore_resource["records"].append( next_chunk["records"] )
+            while len(next_chunk["records"]):
+                next_chunk = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, offset=max_chunk_size*iteration, include_total=False, fields=list(datastore_record.keys()))
+                datastore_resource["records"].append( next_chunk["records"] )
+                iteration += 1
         
-        # list of functions used to convert input to desired data_type
-        formatters = {
-            "text": str,
-            "int": self.clean_int,
-            "float": self.clean_float,
-            "timestamp": self.clean_date_format,
-            "date": self.clean_date_format,
-        }
+        print("data loaded from CKAN")
 
-        for i in range(len(parsed_data)):
-            #print("ITERATION: " + str(i))
-            # if theres column name mapping, capture it in your comparison
-            for attribute in self.config['attributes']:
-                if "source_name" in attribute.keys() and "target_name" in attribute[i].keys():
-                    logging.info("REMAPPING A COLUMN: " + str(attribute))
-                    attribute["id"] = attribute["target_name"]
-                
-                # now check each attribute's values in each dataset and make sure they match
-                logging.info("attribute: " + str(attribute["id"]))
-                # ensure we're transforming incumbent and new data in the same way
-                formatter = formatters[attribute["type"]]
+        incoming = iter(sorted(parsed_data, key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) )
+        print("incoming data sorted and put in generators :) ")
 
-                #print( formatter(parsed_data[i][ attribute["id"] ])   )
-                #print( formatter(datastore_resource["records"][i][ attribute["id"] ])  )
-                
-                if formatter(parsed_data[i][ attribute["id"] ]) != formatter(datastore_resource["records"][i][ attribute["id"] ]):
-                    logging.info("Incoming record(s) dont match existing records. Details below:")
-                    logging.info("new data: " + str(parsed_data[i]))
-                    logging.info("old data: " + str(datastore_resource["records"][i]))
-                    logging.info(parsed_data[i][ attribute["id"] ])
-                    logging.info(datastore_resource["records"][i][ attribute["id"] ])
+        incumbent = iter(sorted(datastore_resource["records"], key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) )
+        print("incumbent data sorted and put in generators :) ")
+        
+        print(type(incoming))
+        print(type(incumbent))
+
+        # if there are any non-overlapping (distinct) records between the two sets, green light an update
+        while True:
+            try:
+                incoming_record = next(incoming)
+                incumbent_record = next(incumbent)
+                if incoming_record != incumbent_record:
+                    logging.info("incoming and incumbent data dont match")
+                    logging.info(incoming_record)
+                    logging.info(incumbent_record)
                     return "update_resource_" + self.resource_name
+            except StopIteration:
+                return "dont_update_resource_" + self.resource_name
 
-        return "dont_update_resource_" + self.resource_name

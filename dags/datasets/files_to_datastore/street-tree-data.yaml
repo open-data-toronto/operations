@@ -50,10 +50,10 @@ street-tree-data:
       format: geojson
       url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_TMMS_TREE/FeatureServer/0
       attributes:
-        #- id: "OBJECTID"
-        #  type: "int"
-        #  info:
-        #    notes: ""
+        - id: "OBJECTID"
+          type: "int"
+          info:
+            notes: ""
         - id: "STRUCTID"
           type: "text"
           info:
