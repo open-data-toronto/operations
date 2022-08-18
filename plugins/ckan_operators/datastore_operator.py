@@ -704,42 +704,33 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
         if record_count > 500000:
             return "dont_update_resource_" + self.resource_name
 
+        
+
         # Record by record comparison
         print("Starting record by record comparison")
         max_chunk_size = 32000
         datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, include_total=False, fields=list(datastore_record.keys()))
-        
+        for incumbent_record in datastore_resource["records"]:
+            if incumbent_record in parsed_data:
+                continue
+            elif incumbent_record not in datastore_resource["records"]:
+                return "update_resource_" + self.resource_name
+
         # if the resource is too big to get in a single call, make multiple calls
         if record_count >= max_chunk_size:
             iteration = 1
-            next_chunk = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, offset=max_chunk_size*iteration, include_total=False, fields=list(datastore_record.keys()))
-            datastore_resource["records"].append( next_chunk["records"] )
-            while len(next_chunk["records"]):
-                next_chunk = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, offset=max_chunk_size*iteration, include_total=False, fields=list(datastore_record.keys()))
-                datastore_resource["records"].append( next_chunk["records"] )
+            #datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, offset=max_chunk_size*iteration, include_total=False, fields=list(datastore_record.keys()))
+            #datastore_resource["records"].append( next_chunk["records"] )
+            while len(datastore_resource["records"]):
+                datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, offset=max_chunk_size*iteration, include_total=False, fields=list(datastore_record.keys()))
+                for incumbent_record in datastore_resource["records"]:
+                    if incumbent_record in parsed_data:
+                        continue
+                    elif incumbent_record not in datastore_resource["records"]:
+                        return "update_resource_" + self.resource_name
+                #datastore_resource["records"].append( next_chunk["records"] )
                 iteration += 1
         
-        print("data loaded from CKAN")
 
-        incoming = iter(sorted(parsed_data, key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) )
-        print("incoming data sorted and put in generators :) ")
-
-        incumbent = iter(sorted(datastore_resource["records"], key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) )
-        print("incumbent data sorted and put in generators :) ")
-        
-        print(type(incoming))
-        print(type(incumbent))
-
-        # if there are any non-overlapping (distinct) records between the two sets, green light an update
-        while True:
-            try:
-                incoming_record = next(incoming)
-                incumbent_record = next(incumbent)
-                if incoming_record != incumbent_record:
-                    logging.info("incoming and incumbent data dont match")
-                    logging.info(incoming_record)
-                    logging.info(incumbent_record)
-                    return "update_resource_" + self.resource_name
-            except StopIteration:
-                return "dont_update_resource_" + self.resource_name
+        return "dont_update_resource_" + self.resource_name
 
