@@ -433,6 +433,9 @@ freedom-of-information-requests-summary:
 community-grants-allocations:
   community-grants-allocations-2020:
     format: xlsx
+    url: http://opendata.toronto.ca/social.development.finance.administration/community-grants/community-grants-allocations-2020.xlsx
+  community-grants-allocations-2020-additions:
+    format: xlsx
     url: http://opendata.toronto.ca/social.development.finance.administration/community-grants/MISSING 2020 EED Community Grants Allocations.xlsx
   community-grants-allocations-2021:
     format: xlsx
