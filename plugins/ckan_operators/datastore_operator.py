@@ -501,15 +501,58 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
     # reads a csv and returns a list of dicts - one dict for each row
     def read_csv_file(self):
         output = []
+
+        # we'll try to detect lat, long attributes here and put them into a geometry attribute
+        # it's important to note that incoming CSVs with geometries MUST be in EPSG 4326
+        # it's also important to note that this logic will only work with point data, not line or polygon
+        latitude_attributes = ["lat", "latitude", "y"]
+        longitude_attributes = ["long", "longitude", "x"]
+        self.geometry_needs_parsing = False
+
         dictreader = csv.DictReader(codecs.open(self.data_path, "rbU", "latin1"))
+
+        # looking for possible lat long attributes if there isnt a geometry object already...
+        # (dictreader object cant be indexed, so we start a loop, go through the first item, then break the loop)
+        for firstrow in dictreader:
+            print("DICTREADER LOOP")
+            print(firstrow)
+            if "geometry" not in firstrow.keys() and "geometry" in [ attr.get("id", None) for attr in self.config["attributes"] ]:
+                for attr in firstrow.keys():
+                    print(attr.lower())
+                    print(latitude_attributes)
+                    print(longitude_attributes)
+
+                    print(attr.lower() in latitude_attributes)
+                    print(attr.lower() in longitude_attributes)
+                    
+                    if attr.lower() in latitude_attributes:
+                        latitude_attribute = attr
+                        self.geometry_needs_parsing = True
+                        print("NEEDS PARSING")
+
+                    if attr.lower() in longitude_attributes:
+                        longitude_attribute = attr
+                        self.geometry_needs_parsing = True
+                        print("NEEDS PARSING")
+                break
+
+        dictreader = csv.DictReader(codecs.open(self.data_path, "rbU", "latin1"))      
         for row in dictreader:
             # strip each attribute name - CKAN requires it
             output_row = {}
             for attr in row.keys():
                 output_row[ attr.strip() ] = row[attr]
+            if self.geometry_needs_parsing:
+                print("--------- THIS DATA HAS GEOMETRY THAT NEEDS PARSING")
+                output_row[ "geometry" ] = json.dumps({ "type": "Point", "coordinates": [float(row[longitude_attribute]), float(row[latitude_attribute]) ] })
+                print(output)
+
             output.append(output_row)
 
         logging.info("Read {} records from {}".format( len(output), self.data_path))
+
+        print(output)
+
         return output
 
     def read_json_file(self):
@@ -524,7 +567,12 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         column_names = [ col.value for col in worksheet[1] ]
 
         for row in worksheet.iter_rows(min_row=2):
-            output.append( { column_names[i]: self.clean_string(row[i].value) for i in range(len(row)) })
+            output_row = { column_names[i]: self.clean_string(row[i].value) for i in range(len(row)) }
+            if self.geometry_needs_parsing:
+                output_row[ "geometry" ] = json.dumps({ "type": "Point", "coordinates": [row[longitude_attribute], row[latitude_attribute] ] })
+
+            output.append( output_row )
+
 
         return output
 
@@ -564,7 +612,10 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "date": self.clean_date_format,
         }                        
 
-        # otherwise if input is tabular, convert each column in each input row
+        # if input is tabular, convert each column in each input row
+        print(" ========= Does this file need geometric parsing?" + str(self.geometry_needs_parsing))
+        print(" ========= === File contents:" + str(read_file))
+        
         for row in read_file:
             new_row = {}
 
