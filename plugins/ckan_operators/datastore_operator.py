@@ -514,26 +514,17 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         # looking for possible lat long attributes if there isnt a geometry object already...
         # (dictreader object cant be indexed, so we start a loop, go through the first item, then break the loop)
         for firstrow in dictreader:
-            print("DICTREADER LOOP")
-            print(firstrow)
+            
             if "geometry" not in firstrow.keys() and "geometry" in [ attr.get("id", None) for attr in self.config["attributes"] ]:
                 for attr in firstrow.keys():
-                    print(attr.lower())
-                    print(latitude_attributes)
-                    print(longitude_attributes)
-
-                    print(attr.lower() in latitude_attributes)
-                    print(attr.lower() in longitude_attributes)
-                    
+                      
                     if attr.lower() in latitude_attributes:
                         latitude_attribute = attr
                         self.geometry_needs_parsing = True
-                        print("NEEDS PARSING")
 
                     if attr.lower() in longitude_attributes:
                         longitude_attribute = attr
-                        self.geometry_needs_parsing = True
-                        print("NEEDS PARSING")
+                        self.geometry_needs_parsing = True                       
                 break
 
         dictreader = csv.DictReader(codecs.open(self.data_path, "rbU", "latin1"))      
@@ -543,15 +534,12 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             for attr in row.keys():
                 output_row[ attr.strip() ] = row[attr]
             if self.geometry_needs_parsing:
-                print("--------- THIS DATA HAS GEOMETRY THAT NEEDS PARSING")
                 output_row[ "geometry" ] = json.dumps({ "type": "Point", "coordinates": [float(row[longitude_attribute]), float(row[latitude_attribute]) ] })
-                print(output)
+                
 
             output.append(output_row)
 
         logging.info("Read {} records from {}".format( len(output), self.data_path))
-
-        print(output)
 
         return output
 
@@ -578,12 +566,10 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                 if column_names[attr_index].lower() in latitude_attributes:
                     latitude_attribute = attr_index
                     self.geometry_needs_parsing = True
-                    print("NEEDS PARSING")
 
                 if column_names[attr_index].lower() in longitude_attributes:
                     longitude_attribute = attr_index
                     self.geometry_needs_parsing = True
-                    print("NEEDS PARSING")
 
         for row in worksheet.iter_rows(min_row=2):
             output_row = { column_names[i]: self.clean_string(row[i].value) for i in range(len(row)) }
@@ -591,7 +577,6 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                 output_row[ "geometry" ] = json.dumps({ "type": "Point", "coordinates": [row[longitude_attribute].value, row[latitude_attribute].value ] })
 
             output.append( output_row )
-
 
         return output
 
@@ -632,9 +617,6 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         }                        
 
         # if input is tabular, convert each column in each input row
-        print(" ========= Does this file need geometric parsing?" + str(self.geometry_needs_parsing))
-        print(" ========= === File contents:" + str(read_file))
-        
         for row in read_file:
             new_row = {}
 
