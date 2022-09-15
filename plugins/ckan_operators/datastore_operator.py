@@ -566,10 +566,29 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         output = []
         column_names = [ col.value for col in worksheet[1] ]
 
+        # we'll try to detect lat, long attributes here and put them into a geometry attribute
+        # it's important to note that incoming CSVs with geometries MUST be in EPSG 4326
+        # it's also important to note that this logic will only work with point data, not line or polygon
+        latitude_attributes = ["lat", "latitude", "y"]
+        longitude_attributes = ["long", "longitude", "x"]
+        self.geometry_needs_parsing = False
+
+        if "geometry" not in column_names and "geometry" in [ attr.get("id", None) for attr in self.config["attributes"] ]:
+            for attr_index in range(len(column_names)):
+                if column_names[attr_index].lower() in latitude_attributes:
+                    latitude_attribute = attr_index
+                    self.geometry_needs_parsing = True
+                    print("NEEDS PARSING")
+
+                if column_names[attr_index].lower() in longitude_attributes:
+                    longitude_attribute = attr_index
+                    self.geometry_needs_parsing = True
+                    print("NEEDS PARSING")
+
         for row in worksheet.iter_rows(min_row=2):
             output_row = { column_names[i]: self.clean_string(row[i].value) for i in range(len(row)) }
             if self.geometry_needs_parsing:
-                output_row[ "geometry" ] = json.dumps({ "type": "Point", "coordinates": [row[longitude_attribute], row[latitude_attribute] ] })
+                output_row[ "geometry" ] = json.dumps({ "type": "Point", "coordinates": [row[longitude_attribute].value, row[latitude_attribute].value ] })
 
             output.append( output_row )
 
