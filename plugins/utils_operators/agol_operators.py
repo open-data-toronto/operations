@@ -26,6 +26,7 @@ AGOL_CKAN_TYPE_MAP =  {
     "esriFieldTypeOID": "int",
     "esriFieldTypeDouble": "float",
     "esriFieldTypeSmallInteger": "int",
+    "esriFieldTypeSingle": "text",
 }
 
 # list of attributes that are redundant when geometry is present in a response
