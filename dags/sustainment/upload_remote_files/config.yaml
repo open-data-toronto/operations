@@ -242,9 +242,12 @@ development-charge-revenues:
   DC Revenues (2020):
     format: xlsx
     url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2020).xlsx
-  #DC Revenues (2021):
-  #  format: xlsx
-  #  url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2021).xlsx
+  DC Revenues (2021):
+    format: xlsx
+    url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2021).xlsx
+  DC Revenues (2022):
+    format: xlsx
+    url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2022).xlsx
 ttc-bus-delay-data:
   ttc-bus-delay-data-readme:
     format: xlsx
@@ -440,3 +443,7 @@ community-grants-allocations:
   community-grants-allocations-2021:
     format: xlsx
     url: http://opendata.toronto.ca/social.development.finance.administration/community-grants/2021 Community Grants Allocation - Final 3.xlsx
+report-request-log-city-council-and-its-committees:
+  Report Request Log PDF:
+    format: PDF
+    url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog.pdf
