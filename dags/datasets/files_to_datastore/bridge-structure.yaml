@@ -1,5 +1,5 @@
 # package name
-bridges-elevated-roadways-and-culverts-in-toronto:
+bridge-structure:
   # DAG info
   schedule: "30 9 1 * *"
   dag_owner_name: Mackenzie
@@ -45,7 +45,7 @@ bridges-elevated-roadways-and-culverts-in-toronto:
   
   resources:
     # resource name
-    bridges-elevated-roadways-and-culverts:
+    bridges-structure:
       agol: True
       format: geojson
       url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_BRIDGE_STRUCTURE/FeatureServer/0
