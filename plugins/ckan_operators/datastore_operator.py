@@ -804,22 +804,29 @@ class CheckCkanResourceDescriptionOperator(BaseOperator):
 
     def execute(self, context):
         ti = context['ti']
+        # Get full package name list
         package_list = ti.xcom_pull(task_ids = self.input_dag_id)
         result_info = {}
         for package_name in package_list:
             url = self.address + "api/3/action/package_show?id=" + package_name
             resources = requests.get(url).json()['result']['resources']
+            # Iterate over all resources in a package
             for resource in resources:
+                # Perform analysis only when datastore is active
                 if str(resource["datastore_active"]) == "True":
+                    # Send datastore_search request
                     url = self.address + "api/3/action/datastore_search?resource_id=" + resource["id"]
                     fields = requests.get(url).json()['result']['fields']
 
+                    # check "info" field exists and "notes" is not empty
                     field_flag = [True if ('info' in item.keys()) and (item['info']['notes'] is not None) else False for item in fields]
+                    # resource_flag == true, means that resource dont have ANY column name descriptions
                     resource_flag = all([flag is False for flag in field_flag])
 
                     if resource_flag:
                         logging.warning(f'Resource description MISSING! package id or name: {package_name} resource id: {resource["id"]}')
                         
+                        # collect package and resource info for missing descriptions
                         if package_name in result_info:
                             result_info[package_name] = result_info[package_name] + ', ' + resource["id"]
                         else:

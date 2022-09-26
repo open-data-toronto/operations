@@ -29,7 +29,7 @@ with DAG(
                 "retries": 2,
                 "retry_delay": 3,
                 "on_failure_callback": task_failure_slack_alert,
-                "tags": ["dataset", "yaml"]
+                "tags": ["sustainment"]
             },
     description='Datastore description check, send notification to slack if description missing',
     schedule_interval="@once",
