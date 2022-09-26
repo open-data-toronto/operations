@@ -15,6 +15,7 @@ from typing import List
 from ckan_operators import nested_file_readers
 
 import ckanapi
+import requests
 import pandas as pd
 from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
@@ -785,4 +786,46 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
         
 
         return "dont_update_resource_" + self.resource_name
+
+class CheckCkanResourceDescriptionOperator(BaseOperator):
+    """
+    Check if the description of a resource is missing
+    """
+    @apply_defaults
+    def __init__(
+        self,
+        input_dag_id: str = None,
+        address : str = None,
+        **kwargs
+    ) -> None:
+        super().__init__(**kwargs)
+        self.input_dag_id = input_dag_id
+        self.address = address
+
+    def execute(self, context):
+        ti = context['ti']
+        package_list = ti.xcom_pull(task_ids = self.input_dag_id)
+        result_info = {}
+        for package_name in package_list:
+            url = self.address + "api/3/action/package_show?id=" + package_name
+            resources = requests.get(url).json()['result']['resources']
+            for resource in resources:
+                if str(resource["datastore_active"]) == "True":
+                    url = self.address + "api/3/action/datastore_search?resource_id=" + resource["id"]
+                    fields = requests.get(url).json()['result']['fields']
+
+                    field_flag = [True if ('info' in item.keys()) and (item['info']['notes'] is not None) else False for item in fields]
+                    resource_flag = all([flag is False for flag in field_flag])
+
+                    if resource_flag:
+                        logging.warning(f'Resource description MISSING! package id or name: {package_name} resource id: {resource["id"]}')
+                        
+                        if package_name in result_info:
+                            result_info[package_name] = result_info[package_name] + ', ' + resource["id"]
+                        else:
+                            result_info[package_name] = resource["id"]
+
+                    else:
+                        logging.info('Resource description OK!')
+        return {"package_and_resource": result_info}
 
