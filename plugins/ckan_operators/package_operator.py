@@ -213,3 +213,23 @@ class AssertIdenticalPackagesOperator(BaseOperator):
                 return {"result": True}
 
         # TODO: add logic for comparing only packages and not lists of packages
+
+class GetCkanPackageListOperator(BaseOperator):
+    """
+    Get full package list
+    """
+    @apply_defaults
+    def __init__(
+        self,
+        address: str,
+        apikey: str,
+        **kwargs
+    ) -> None:
+        super().__init__(**kwargs)
+        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+
+
+    def execute(self, context):
+        package_list = self.ckan.action.package_list()
+        logging.info(f'package list {package_list}')
+        return package_list
