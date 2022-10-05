@@ -537,8 +537,10 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             output_row = {}
             for attr in row.keys():
                 output_row[ attr.strip() ] = row[attr]
-            if self.geometry_needs_parsing:
+            if self.geometry_needs_parsing and row[longitude_attribute] and row[latitude_attribute]:
                 output_row[ "geometry" ] = json.dumps({ "type": "Point", "coordinates": [float(row[longitude_attribute]), float(row[latitude_attribute]) ] })
+            elif self.geometry_needs_parsing and not row[longitude_attribute] and not row[latitude_attribute]:
+                output_row[ "geometry" ] = None
                 
 
             output.append(output_row)
