@@ -1,7 +1,7 @@
 # package name
 licensed-child-care-centres:
   # DAG info
-  schedule: "@once"
+  schedule: "0 17 * * *"
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
 
