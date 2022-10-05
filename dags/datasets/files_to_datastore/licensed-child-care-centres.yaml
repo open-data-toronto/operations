@@ -30,11 +30,8 @@ licensed-child-care-centres:
   limitations: null
   notes: |
     A dataset of all Licensed Child Care Centres in the City of Toronto including their capacities by age group.
-    
-    Projection: Unprojected Lat Long, NAD27 datum
 
-    Website http://www.toronto.ca/children/gcmapx.htm
-
+    Website [http://www.toronto.ca/children/gcmapx.htm](http://www.toronto.ca/children/gcmapx.htm)
 
   resources:
     # resource name
