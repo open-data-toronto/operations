@@ -1,0 +1,164 @@
+# package name
+bicycle-thefts:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: Bicycle Thefts
+  date_published: "2020-08-18 14:33:07.070323"
+  refresh_rate: Annually
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: null
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: []
+
+  information_url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Bicycle_Thefts/FeatureServer
+  excerpt: This dataset contains Bicycle Thefts occurrences.
+  limitations: This dataset contains Bicycle Thefts occurrences from 2014-2020. The location of crime occurrences have been deliberately offset to the nearest road intersection node to protect the privacy of parties involved in the occurrence. Due to the offset of occurrence location, the numbers by Division and Neighbourhood may not reflect the exact count of occurrences reported within these geographies. Therefore, the Toronto Police Service does not guarantee the accuracy, completeness, timeliness of the data and it should not be compared to any other source of crime data.
+  notes: |
+    This dataset contains Bicycle Thefts occurrences by reported date and details regarding the stolen item where available.
+    
+    This data includes all bicycle theft occurrences reported to the Toronto Police Service, including those where the location has not been able to be verified. As a result, coordinate fields may appear blank. Likewise, this includes occurrences where the coordinate location is outside the City of Toronto.
+    
+    Note: The City of Toronto Neighbourhoods identified in this dataset correspond with the 140 neighbourhoods.
+    
+    Supporting documentation can be found [here](https://torontops.maps.arcgis.com/sharing/rest/content/items/c0b17f1888544078bf650f3b8b04d35d/data).
+    
+  resources:
+    # resource name
+    bicycle-thefts:
+      agol: True
+      format: geojson
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Bicycle_Thefts/FeatureServer/0
+      attributes:
+        - id: "event_unique_id"
+          type: "text"
+          info:
+            notes: "Event Occurrence Identifier"
+        - id: "Primary_Offence"
+          type: "text"
+          info:
+            notes: "Offence related to the occurrence"
+        - id: "Occurrence_Date"
+          type: "timestamp"
+          info:
+            notes: "Date of occurrence"
+        - id: "Occurrence_Year"
+          type: "int"
+          info:
+            notes: "Occurrence year"
+        - id: "Occurrence_Month"
+          type: "text"
+          info:
+            notes: "Occurrence Month"
+        - id: "Occurrence_DayOfWeek"
+          type: "text"
+          info:
+            notes: "Day of Week Theft Occurred"
+        - id: "Occurrence_DayOfMonth"
+          type: "int"
+          info:
+            notes: "Day of Month Theft Occurred"
+        - id: "Occurrence_DayOfYear"
+          type: "int"
+          info:
+            notes: "Day of Year Theft Occurred"
+        - id: "Occurrence_Hour"
+          type: "int"
+          info:
+            notes: "Hour Theft Occurred"
+        - id: "Report_Date"
+          type: "timestamp"
+          info:
+            notes: "Date Theft was Reported"
+        - id: "Report_Year"
+          type: "int"
+          info:
+            notes: "Year Theft was Reported"
+        - id: "Report_Month"
+          type: "text"
+          info:
+            notes: "Month Theft was Reported"
+        - id: "Report_DayOfWeek"
+          type: "text"
+          info:
+            notes: "Day of Week Theft was Reported"
+        - id: "Report_DayOfMonth"
+          type: "int"
+          info:
+            notes: "Day of Month Theft was Reported"
+        - id: "Report_DayOfYear"
+          type: "int"
+          info:
+            notes: "Day of Year Theft was Reported"
+        - id: "Report_Hour"
+          type: "int"
+          info:
+            notes: "Hour Theft was Reported"
+        - id: "Division"
+          type: "text"
+          info:
+            notes: "Police Division where event occurred"
+        - id: "City"
+          type: "text"
+          info:
+            notes: "City where event occurred"
+        - id: "Hood_ID"
+          type: "text"
+          info:
+            notes: "City of Toronto Neighbourhood Identifier"
+        - id: "NeighbourhoodName"
+          type: "text"
+          info:
+            notes: "Name of Neighbourhood where Homicide Occurred"
+        - id: "Location_Type"
+          type: "text"
+          info:
+            notes: "Location Type where event occurred"
+        - id: "Premises_Type"
+          type: "text"
+          info:
+            notes: "Premises Type of Occurrence"
+        - id: "Bike_Make"
+          type: "text"
+          info:
+            notes: "Bicycle Make"
+        - id: "Bike_Model"
+          type: "text"
+          info:
+            notes: "Bicycle Model"
+        - id: "Bike_Type"
+          type: "text"
+          info:
+            notes: "Bicycle Type"
+        - id: "Bike_Speed"
+          type: "int"
+          info:
+            notes: "Bicycle Speed"
+        - id: "Bike_Colour"
+          type: "text"
+          info:
+            notes: "Bicycle Colour"
+        - id: "Cost_of_Bike"
+          type: "text"
+          info:
+            notes: "Cost of Bicycle"
+        - id: "Status"
+          type: "text"
+          info:
+            notes: "Status of event"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+         
