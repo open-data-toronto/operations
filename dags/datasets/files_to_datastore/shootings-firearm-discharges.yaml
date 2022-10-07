@@ -1,0 +1,128 @@
+# package name
+shootings-firearm-discharges:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: "Shootings & Firearm Discharges"
+  date_published: "2021-03-23 13:40:25.910943"
+  refresh_rate: Annually
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: null
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: tag
+      vocabulary_id: null
+
+  information_url: https://data.torontopolice.on.ca/datasets/d7568853afda4d108bec6df0e80815d0_0
+  excerpt: This dataset contains all shooting-related occurrences reported to the Toronto Police Service.
+  limitations: The location of crime occurrences have been deliberately offset to the nearest road intersection node to protect the privacy of parties involved in the occurrence. Due to the offset of occurrence location, the numbers by Division and Neighbourhood may not reflect the exact count of occurrences reported within these geographies. Therefore, the Toronto Police Service does not guarantee the accuracy, completeness, timeliness of the data and it should not be compared to any other source of crime data.
+  notes: |
+    This dataset contains all shooting-related occurrences reported to the Toronto Police Service.
+
+    As there is no criminal offence code for shootings, a shooting occurrence number may also be present in other data sets including, but not limited to, assault and robbery.
+
+    In 2014, the Toronto Police Service changed records management systems. For occurrences prior to this date, coordinates are limited, therefore for some events with NULL coordinates the neighbourhood will be identified as ‘NSA’ to indicate ‘Not Specified Area.
+
+    Shooting incidents in this dataset include both firearm discharges and shooting events, which are defined below.
+
+
+    **Shooting Event/Occurrence**
+
+    Any incident in which a projectile is discharged from a firearm (as defined under the Criminal Code of Canada) and injures a person. This excludes events such as suicide and police involved firearm discharges.
+
+
+    **Firearm Discharge**
+
+    Any incident where evidence exists that a projectile was discharged from a firearm (as defined under the Criminal Code of Canada) including accidental discharge (non-police), celebratory fire, drive-by etc.
+
+
+    **Persons Injured (previously classified as “victims”)**
+
+    A person who was struck by a bullet(s) as a result of the discharge of a firearm (as defined under the Criminal Code of Canada). This excludes events such as suicide, police-involved event or where the weapon used was not a real firearm (such as pellet gun, air pistol, “sim-munition” etc.)
+
+
+    **Injury Levels:**
+
+
+    * **Death**: Where the injured person (as defined above) has died as a result of injuries sustained from a bullet(s).
+
+
+    * **Injuries**: Where the injured person (as defined above) has non-fatal physical injuries as a result of a bullet(s).
+
+
+    Note: The City of Toronto Neighbourhoods identified in this dataset correspond with the 140 neighbourhoods.
+
+
+    Supporting documentation can be found [here](https://torontops.maps.arcgis.com/sharing/rest/content/items/c0b17f1888544078bf650f3b8b04d35d/data).
+
+  resources:
+    # resource name
+    shootings-firearm-discharges:
+      agol: True
+      format: geojson
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Shootings_and_Firearm_Discharges/FeatureServer/0
+      attributes:
+        - id: "Event_Unique_ID"
+          type: "text"
+          info:
+            notes: "Occurrence Number"
+        - id: "Occurrence_Date"
+          type: "timestamp"
+          info:
+            notes: "Date Shooting Occurred"
+        - id: "Occurrence_year"
+          type: "int"
+          info:
+            notes: "Year Shooting Occurred"
+        - id: "Month"
+          type: "text"
+          info:
+            notes: "Month Shooting Occurred"
+        - id: "Day_of_week"
+          type: "text"
+          info:
+            notes: "Day of Week Shooting Occurred"
+        - id: "Occurrence_Hour"
+          type: "int"
+          info:
+            notes: "Hour Shooting Occurred"
+        - id: "Time_Range"
+          type: "text"
+          info:
+            notes: "Time Range Shooting Occurred"
+        - id: "Division"
+          type: "text"
+          info:
+            notes: "Police Division where Shooting Occurred"
+        - id: "Death"
+          type: "int"
+          info:
+            notes: "Count of Deaths Resulted from Shooting"
+        - id: "Injuries"
+          type: "int"
+          info:
+            notes: "Count of Injuries Resulted from Shooting"
+        - id: "Hood_ID"
+          type: "text"
+          info:
+            notes: "Identifier of Neighbourhood where Homicide Occurred"
+        - id: "Neighbourhood"
+          type: "text"
+          info:
+            notes: "Name of Neighbourhood where Homicide Occurred"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+        
