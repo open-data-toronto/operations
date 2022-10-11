@@ -1,0 +1,125 @@
+# package name
+mental-health-apprehensions:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: "Mental Health Act Apprehensions"
+  date_published: "2022-10-07 13:52:25.910943"
+  refresh_rate: Annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: tag
+      vocabulary_id: null
+
+  information_url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/MHA_Apprehensions/FeatureServer
+  excerpt: This dataset includes all mental health apprehensions made from 2014 to June 30,2022.
+  limitations: |
+    A unique event number should not be interpreted as an apprehension of a distinct individual. An individual may have been apprehended multiple times under the Mental Health Act, with each apprehension recorded using a unique event number. 
+
+    The location of occurrences has been deliberately offset to the nearest road intersection node to protect the privacy of parties involved in the occurrence. Due to the offset of occurrence location, the numbers by Division and Neighbourhood may not reflect the exact count of occurrences reported within these geographies. The Toronto Police Service does not guarantee the accuracy, completeness, timeliness of the data and it should not be compared to any other source of crime data.
+  notes: |
+    This dataset includes all Mental Health Act (MHA) Apprehensions pursuant to the [Mental Health Act](https://www.ontario.ca/laws/statute/90m07#BK34). Each event number is a distinct MHA Apprehension and this dataset is queried based on reported date. 
+
+
+    **MHA Apprehension types are as follows:**
+
+
+    * Section 15 (Form 1 - Physician - Application for Psychiatric Assessment);
+    * Section 16 (Form 2 – Justice of the Peace – Order for Examination);
+    * Section 17 (Police Officer’s Power of Apprehension);
+    * Section 28 (1) (Form 9 - Elopee - Order for Return); and, 
+    * Section 33.4 (Form 47 - Community Treatment Order for Examination).
+
+  resources:
+    # resource name
+    mental-health-apprehensions:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Mental_Health_Act_Apprehensions/FeatureServer/0
+      attributes:
+        - id: "EventUniqueID"
+          type: "text"
+          info:
+            notes: "Event Number"
+        - id: "ReportDate"
+          type: "timestamp"
+          info:
+            notes: "Date MHA Apprehension was Reported"
+        - id: "ReportYear"
+          type: "int"
+          info:
+            notes: "Year MHA Apprehension was Reported"
+        - id: "ReportMonth"
+          type: "text"
+          info:
+            notes: "Month MHA Apprehension was Reported"
+        - id: "ReportDayofWeek"
+          type: "text"
+          info:
+            notes: "Day of Week MHA Apprehension was Reported"
+        - id: "ReportHour"
+          type: "int"
+          info:
+            notes: "Hour MHA Apprehension was Reported"
+        - id: "OccurrenceDate"
+          type: "timestamp"
+          info:
+            notes: "Date of MHA Apprehension"
+        - id: "OccurrenceYear"
+          type: "int"
+          info:
+            notes: "Year MHA Apprehension Occurred"
+        - id: "OccurrenceMonth"
+          type: "text"
+          info:
+            notes: "Month MHA Apprehension Occurred"
+        - id: "OccurrenceDayofWeek"
+          type: "text"
+          info:
+            notes: "Day of Week MHA Apprehension Occurred"
+        - id: "OccurrenceHour"
+          type: "int"
+          info:
+            notes: "Hour MHA Apprehension Occurred"
+        - id: "ApprehensionType"
+          type: "text"
+          info:
+            notes: "The section applied when apprehending an individual pursuant to the Mental Health Act"
+        - id: "Division"
+          type: "text"
+          info:
+            notes: "Police Division where MHA Apprehension Occurred"
+        - id: "HoodID"
+          type: "text"
+          info:
+            notes: "Neighbourhood ID"
+        - id: "NeighbourhoodName"
+          type: "text"
+          info:
+            notes: "Name of Neighbourhood"
+        - id: "PremisesType"
+          type: "text"
+          info:
+            notes: "Premises type of MHA Apprehension"
+        - id: "Sex"
+          type: "text"
+          info:
+            notes: "Sex of Person Apprehended"
+        - id: "AgeGroup"
+          type: "text"
+          info:
+            notes: "Age category of Person Apprehended"
+        
