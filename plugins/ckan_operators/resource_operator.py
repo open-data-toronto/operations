@@ -66,9 +66,8 @@ class GetOrCreateResourceOperator(BaseOperator):
             if self.resource_name_task_id and self.resource_name_task_key:
                 self.resource_name = ti.xcom_pull(task_ids=self.resource_name_task_id)[self.resource_name_task_key]
 
-            # find which resource in the package matches the input name
-            # this search ignores suffixes to the resource name, like date ranges
-            if r["name"] == self.resource_name or r["name"][:len(self.resource_name)] == self.resource_name:
+            # find which resource in the package matches the input resource name
+            if r["name"] == self.resource_name :
                 self.resource = r
                 return True
              
