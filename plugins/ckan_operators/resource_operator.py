@@ -67,7 +67,7 @@ class GetOrCreateResourceOperator(BaseOperator):
                 self.resource_name = ti.xcom_pull(task_ids=self.resource_name_task_id)[self.resource_name_task_key]
 
             # find which resource in the package matches the input resource name
-            if r["name"] == self.resource_name :
+            if r["name"] == self.resource_name:
                 self.resource = r
                 return True
              
