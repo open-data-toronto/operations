@@ -8,7 +8,7 @@ indoor-ice-rinks:
   # mandatory package attributes
   title: "Indoor Ice Rinks"
   date_published: "2019-07-23 17:37:01.74896"
-  refresh_rate: Daily
+  refresh_rate: As available
   dataset_category: Map
 
   # optional package attributes
