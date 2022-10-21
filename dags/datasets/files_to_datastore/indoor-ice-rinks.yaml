@@ -1,0 +1,125 @@
+# package name
+indoor-ice-rinks:
+  # DAG info
+  schedule: "@once" #"15 19 * * *"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Indoor Ice Rinks"
+  date_published: "2019-07-23 17:37:01.74896"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Parks, Forestry & Recreation
+  owner_section: null
+  owner_unit: null
+  owner_email: pfrdatagovernance@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Locations and mapping
+    - Community services
+    - Parks and recreation
+  tags: 
+    - name: ice rink
+      vocabulary_id: null
+    - name: indoor ice rink
+      vocabulary_id: null
+
+  information_url: https://www.toronto.ca/explore-enjoy/recreation/skating-winter-sports/public-leisure-skating/#location=&lat=&lng=
+  excerpt: This dataset contains information on arenas, community centres, and recreation centres with indoor ice rinks, operated by Parks, Forestry, and Recreation Division of the City of Toronto.
+  limitations: null
+  notes: |
+    This dataset includes information on arenas, community centres, and recreation centres with indoor ice pads owned by the City of Toronto.
+    The dataset provides details on ice pad size according to Hockey Canada Line Markings diagrams approved by Hockey Canada, and location information.
+    The indoor ice rinks information you'll find in this dataset include the following:
+    + Parent Asset Name
+    + Asset ID
+    + Asset Name
+    + Public Name
+    + Pad Length
+    + Pad Width
+    + Permit Classification
+    + Ice Pad Size Category
+    + Operated By
+    + Boards (Ice Rink)
+    + Address
+    + Postal Code
+    + Community Council Area
+    + Ward
+    + X, Y Coordinate
+    **Note:**
+    The dataset contains information about indoor ice rinks owned by the City of Toronto and operated by either by the Parks, Forestry, and Recreation Division or another City of Toronto Corporation or Agency. All other indoor ice rinks (either public access, or private) are out of scope of this dataset.
+    **Lakeshore Arena Corporation:** 
+    The Lakeshore Arena Corporation is a City corporation that manages the Lakeshore Arena (operating as the Ford Performance Centre), a marquee four-pad ice arena in the South Etobicoke area of Toronto. The Lakeshore Arena offers ice rentals, leagues, public skating, drop-in programs, tournaments and special events to the local community. 
+    **Arena Boards:**
+    Eight arenas in Toronto are operated by volunteer Arena Boards of Management (Arena Boards). The board-run arenas provide indoor ice sport facilities and other recreational spaces such as community rooms and banquet halls. Programs offered include hockey and figure skating and leisure skating. Some arenas also offer dry floor rentals (i.e., floor hockey) in the summer. These services are complemented by snack bars, pro-shops, and meeting rooms rentals at some locations.
+  resources:
+    # resource name
+    indoor-ice-rinks-data:
+      format: xlsx
+      url: http://opendata.toronto.ca/parks.forestry.recreation/indoor-ice-rinks/indoor-ice-rinks-data.xlsx
+      sheet: Sheet1
+      attributes:
+        - id: Parent Asset Name
+          type: "text"
+          info:
+            notes: "Name of the parent asset"
+        - id: Asset ID
+          type: "int"
+          info:
+            notes: "Parks, Forestry, and Recreation Unique Identifier of the asset"
+        - id: Asset Name
+          type: "text"
+          info:
+            notes: "Name of the asset"
+        - id: Public Name
+          type: "text"
+          info:
+            notes: "Name of the indoor ice rink as commonly used by public."
+        - id: Pad Length
+          type: "int"
+          info:
+            notes: "Length of an ice pad in feet"
+        - id: Pad Width
+          type: "int"
+          info:
+            notes: "Width of an ice pad in feet"
+        - id: Permit Classification
+          type: "text"
+          info:
+            notes: ""
+        - id: Ice Pad Size Category
+          type: "text"
+          info:
+            notes: "Type of the ice pad field depending on the size "
+        - id: Operated By
+          type: "text"
+          info:
+            notes: ""
+        - id: Boards (Ice Rink)
+          type: "text"
+          info:
+            notes: ""
+        - id: Address
+          type: "text"
+          info:
+            notes: "Street address of the arena or centre, where the ice pad is located. In some cases, address of the arena/centre coincides with the address of the park."
+        - id: Postal Code
+          type: "text"
+          info:
+            notes: ""
+        - id: Community Council Area
+          type: "text"
+          info:
+            notes: ""
+        - id: Ward
+          type: "text"
+          info:
+            notes: "The political boundary that divides the City of Toronto"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
