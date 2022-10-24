@@ -1,0 +1,120 @@
+# package name
+toronto-fire-services-run-areas:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: "Toronto Fire Services Run Areas"
+  date_published: "2019-07-23 18:06:12.741188"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Fire Services
+  owner_section: null
+  owner_unit: null
+  owner_email: FireAnalytics@toronto.ca
+
+  civic_issues: Poverty reduction
+  topics: 
+    - Locations and mapping,Public safety
+  tags: 
+    - name: tag
+      vocabulary_id: null
+
+  information_url: https://www.toronto.ca/community-people/public-safety-alerts/understanding-emergency-services/
+  excerpt: Run areas are a fire station's first response area.
+  limitations: null
+  notes: |
+    A run area is a geographical area in proximity to a fire station that is normally served by the personnel and apparatus from that facility in the event of a fire, rescue or other emergency. There are 82 run areas in the City of Toronto. Run area boundaries have been derived from the Computer Aided Dispatch (CAD) system. This shapefile provides an approximate representation of the run area boundaries in the CAD system.
+
+  resources:
+    # resource name
+    toronto-fire-services-run-areas:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_TFS_RUN_AREA/FeatureServer/0
+      attributes:
+        - id: "AREA_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "DATE_EFFECTIVE"
+          type: "timestamp"
+          info:
+            notes: ""
+        - id: "DATE_EXPIRY"
+          type: "timestamp"
+          info:
+            notes: ""
+        - id: "AREA_ATTR_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "AREA_TYPE_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "PARENT_AREA_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "AREA_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_CLASS_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "AREA_CLASS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_SHORT_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_LONG_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "FEATURE_CODE"
+          type: "int"
+          info:
+            notes: ""
+        - id: "FEATURE_CODE_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "RUN_AREA"
+          type: "text"
+          info:
+            notes: ""
+        - id: "TRANS_ID_CREATE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "TRANS_ID_EXPIRE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+        - id: "OBJECTID"
+          type: "int"
+          info:
+            notes: ""
+        
