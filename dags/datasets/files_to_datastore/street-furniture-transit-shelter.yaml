@@ -1,0 +1,124 @@
+# package name
+street-furniture-transit-shelter:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Street Furniture - Transit Shelter"
+  date_published: "2019-07-23 16:33:52.94697"
+  refresh_rate: Semi-annually
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: Sandro.Tersigni@toronto.ca
+
+  civic_issues: 
+    - Mobility
+  topics: 
+    - City government
+    - Culture and tourism
+    - Locations and mapping
+    - Transportation
+  tags: 
+    - name: bus shelter
+      vocabulary_id: null
+    - name: transit shelter
+      vocabulary_id: null
+    - name: ttc shelter
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: Transit shelter location and asset type data for installations owned and maintained by Astral Media Outdoor under the City of Toronto's Coordinated Street Furniture Program.
+  limitations: null
+  notes: |
+    The City of Toronto entered into a 20-year contractual agreement with Astral Out-of-Home in 2007 for the installation and maintenance of up to 25,000 street furniture elements including up to 6,000 transit shelters.  This program is a public-private partnership wherein Astral Out-of-Home manufactures, owns, cleans, and repairs all of their street furniture within the City of Toronto.
+    
+  resources:
+    # resource name
+    Transit shelter data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_PRAI_TRANSIT_SHELTERS/FeatureServer/0
+      attributes:
+        - id: OBJECTID
+          type: text
+          info:
+            notes: null
+        - id: ID
+          type: text
+          info:
+            notes: null
+        - id: ADDRESSNUMBERTEXT
+          type: text
+          info:
+            notes: null
+        - id: ADDRESSSTREET
+          type: text
+          info:
+            notes: null
+        - id: FRONTINGSTREET
+          type: text
+          info:
+            notes: null
+        - id: SIDE
+          type: text
+          info:
+            notes: null
+        - id: FROMSTREET
+          type: text
+          info:
+            notes: null
+        - id: DIRECTION
+          type: text
+          info:
+            notes: null
+        - id: SITEID
+          type: text
+          info:
+            notes: null
+        - id: WARD
+          type: text
+          info:
+            notes: null
+        - id: BIA
+          type: text
+          info:
+            notes: null
+        - id: ASSETTYPE
+          type: text
+          info:
+            notes: null
+        - id: STATUS
+          type: text
+          info:
+            notes: null
+        - id: STYLE
+          type: text
+          info:
+            notes: null
+        - id: BARCODE
+          type: text
+          info:
+            notes: null
+        - id: POSTERBOARD
+          type: text
+          info:
+            notes: null
+        - id: POSTERBOARDSTATUS
+          type: text
+          info:
+            notes: null
+        - id: SDE_STATE_ID
+          type: float
+          info:
+            notes: null
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: null
+        
