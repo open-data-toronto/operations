@@ -1,0 +1,101 @@
+# package name
+green-spaces:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Green Spaces"
+  date_published: "2019-07-23 17:47:38.364157"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Parks, Forestry & Recreation
+  owner_section: null
+  owner_unit: null
+  owner_email: gcc@toronto.ca
+
+  civic_issues: 
+    - Climate change
+  topics: 
+    - City government
+    - Locations and mapping
+    - Parks and recreation
+  tags: 
+    - name: green space
+      vocabulary_id: null
+    - name: parks
+      vocabulary_id: null
+    - name: public park
+      vocabulary_id: null
+    
+
+  information_url: "www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/neighbourhood-profiles/about-toronto-neighbourhoods/"
+  excerpt: "Boundaries of Toronto Neighbourhoods."
+  limitations: null
+  notes: |
+    Green Spaces is a geospatial dataset of polygons that is a point-in-time generalized representation of existing parks and open spaces within the City of Toronto. Green Spaces includes public parks, beaches, parts of ravines, golf courses, cemeteries, and other open space areas such as those offered by various private institutions. These spaces may or may not be publicly accessible and are either publicly owned/maintained or they are privately owned/maintained. Green Spaces is not an exhaustive dataset of all the public and private parks and open spaces within the City. It does not encompass all areas protected by the Ravine and Natural Feature Protection By-Law, by Environmentally Significant Areas or by Natural Heritage Areas.  
+    Green Spaces is primarily intended to visualize our existing overall parks and open space system. It is used to symbolize the green coloured areas in many of the City's mapping products such as Toronto's Interactive Map or the Toronto Parkland Strategy[1]. On [Toronto's Interactive Map](https://map.toronto.ca/maps/map.jsp?app=TorontoMaps_v2), the light green areas are City of Toronto owned and/or operated Parks while the darker green areas are all other types of green spaces. 
+    This dataset is jointly maintained by the Geospatial Competency Centre (GCC) and the Parks, Forestry & Recreation division (PFR). The attribute field in this dataset titled "AREA_CLASS" indicates whether the GCC or PFR maintain the data and the type of green space it is.
+    
+    **PFR Green Spaces**  
+    PFR Green Spaces are owned and/or operated by the City of Toronto and are derived from PFR's Parkland Asset Repository. They include the area classes: Park, Golf Course, Cemetery, Hydro Field/Utility Corridor, and others. Representation of Green Spaces can change overtime – due to new park acquisitions, development/reconfiguration of land etc. – PFR works to continuously improve the City-PFR-owned portions of this dataset as new information arises. 
+    
+    **GCC Green Spaces (GCC needs to author this section)**  
+    All other Green Spaces were created by the GCC and include area classes with the prefix of "OTHER_". These green spaces were derived through a city-wide parcel analysis undertaken in 2018?
+    [1]This Green Spaces layer cannot be used to reproduce the results of the [2019 Parkland Strategy](https://www.toronto.ca/city-government/accountability-operations-customer-service/long-term-vision-plans-and-strategies/parkland-strategy/), however the GCC Green Spaces portions of the dataset was used to help visualize Other Open Spaces in "Figure 06: Toronto’s Parks and Open Space Network" of the report. The Toronto Parkland Strategy is currently in the process of being updated and new parkland data is not yet finalized.
+  resources:
+    # resource name
+    Green Spaces:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_CITY_GREEN_SPACE/FeatureServer/0
+      attributes:
+        - id: "AREA_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "AREA_ATTR_ID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "PARENT_AREA_ID"
+          type: "int"
+          info:
+            notes: ""
+
+        - id: "AREA_CLASS_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "AREA_CLASS"
+          type: "text"
+          info:
+            notes: ""
+            
+        - id: "AREA_SHORT_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_LONG_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "OBJECTID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
