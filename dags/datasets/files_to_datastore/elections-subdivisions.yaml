@@ -1,0 +1,103 @@
+# package name
+elections-subdivisions:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: Elections Subdivisions
+  date_published: "2019-07-23 16:33:52.94697"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Locations and mapping
+    - City government
+  tags: 
+    - name: elections
+      vocabulary_id: null
+    - name: voting subdivisions
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: Polygon data that depicts the Election Polling Subdivisions for the 2022, 2018, 2014, 2010 and 2006 Municipal Elections for the City of Toronto.
+  limitations: null
+  notes: |
+    Polygon data that depicts the Election Polling Subdivisions for the 2022, 2018, 2014, 2010 and 2006 Municipal Elections for the City of Toronto.The files work well with the GCC Centreline file and the address points file.
+    
+  resources:
+    # resource name
+    voting-subdivisions-2022:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_VOTING_SUBDIVISION/FeatureServer/0
+      attributes:
+        - id: AREA_ID
+          type: float
+          info:
+            notes: null
+        - id: AREA_ATTR_ID
+          type: float
+          info:
+            notes: null
+        - id: AREA_TYPE_ID
+          type: float
+          info:
+            notes: null
+        - id: PARENT_AREA_ID
+          type: float
+          info:
+            notes: null
+        - id: AREA_TYPE
+          type: text
+          info:
+            notes: null
+        - id: AREA_CLASS_ID
+          type: float
+          info:
+            notes: null
+        - id: AREA_CLASS
+          type: text
+          info:
+            notes: null
+        - id: AREA_SHORT_CODE
+          type: text
+          info:
+            notes: null
+        - id: AREA_LONG_CODE
+          type: text
+          info:
+            notes: null
+        - id: AREA_NAME
+          type: text
+          info:
+            notes: null
+        - id: AREA_DESC
+          type: text
+          info:
+            notes: null
+        - id: FEATURE_CODE
+          type: int
+          info:
+            notes: null
+        - id: FEATURE_CODE_DESC
+          type: text
+          info:
+            notes: null
+        - id: VOTER_COUNT
+          type: int
+          info:
+            notes: null
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: null
+        
