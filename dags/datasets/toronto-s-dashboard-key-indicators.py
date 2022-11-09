@@ -34,8 +34,8 @@ from utils_operators.file_operators import DownloadFileOperator
 from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
 
 RESOURCE_NAME = "Toronto progress portal - Key metrics"
-tpp_measure_url = "https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_measures"
-tpp_narratives_url = "https://contrib.wp.intra.prod-toronto.ca/app_content/tpp_narratives/"
+tpp_measure_url = "https://www.toronto.ca/app_content/tpp_measures"
+tpp_narratives_url = "https://www.toronto.ca/app_content/tpp_narratives/"
 PACKAGE_NAME = "toronto-s-dashboard-key-indicators"
 EXPECTED_COLUMNS = [
     "measure_id",		
