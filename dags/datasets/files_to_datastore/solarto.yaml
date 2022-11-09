@@ -18,7 +18,7 @@ solarto:
   owner_email: SolarTO@toronto.ca
 
   civic_issues: 
-    - climate_change
+    - Climate change
   topics: 
     - Locations and mapping
     - Community services
@@ -69,7 +69,7 @@ solarto:
         - id: system_cost
           type: int
           info:
-            notes: "The upfront cost of the solar PV system in dollars. The System Cost is based on the System Size and the average solar installation rates in Toronto. A estimated  $/Watt rate ranging from $3/watt to $2,2/watt (dependent on system size) is applied to calculate cost:"
+            notes: "The upfront cost of the solar PV system in dollars. The System Cost is based on the System Size and the average solar installation rates in Toronto. A estimated  $/Watt rate ranging from $3/watt to $2,2/watt (dependent on system size) is applied to calculate cost"
         - id: first_year_bill_savings
           type: int
           info:
