@@ -1,0 +1,156 @@
+# This file is migrated from NiFi
+cultural-hotspot-points-of-interest:
+  schedule: '@once'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Cultural Hotspot - Points of Interest
+  date_published: '2019-07-23 16:59:24.498'
+  refresh_rate: Annually
+  dataset_category: Map
+  owner_division: Economic Development & Culture
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: Locations and mapping,Culture and tourism
+  tags:
+  - name: culture
+    vocabulary_id: null
+  - name: events
+    vocabulary_id: null
+  - name: hotspot
+    vocabulary_id: null
+  - name: points of interest
+    vocabulary_id: null
+  information_url: http://toronto.ca/culturalhotspot
+  excerpt: This dataset contains information relating to Arts & Culture Services'
+    Cultural Hotspot, featuring public art, green space, arts and cultural centres,
+    libraries, restaurants and more.
+  limitations: null
+  notes: "\r\nCultural Hotspot spans a vast geographic area and many local neighbourhoods\
+    \ with unique features. This dataset contains information about points of interest\
+    \ for residents and visitors to enjoy including public art, murals, buildings\
+    \ with historic or architectural significance, green spaces, restaurants and more.\r\
+    \n"
+  resources:
+    points-of-interest:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/Cultural_loop/FeatureServer/0
+      attributes:
+      - id: LoopsGuide
+        type: text
+        info:
+          notes: ''
+      - id: Loop
+        type: int
+        info:
+          notes: ''
+      - id: TourNum
+        type: int
+        info:
+          notes: ''
+      - id: OrderNum
+        type: int
+        info:
+          notes: ''
+      - id: LoopTourName
+        type: text
+        info:
+          notes: ''
+      - id: LoopTourURL
+        type: text
+        info:
+          notes: ''
+      - id: TourLabel
+        type: text
+        info:
+          notes: ''
+      - id: SiteName
+        type: text
+        info:
+          notes: ''
+      - id: Neighbourhood
+        type: text
+        info:
+          notes: ''
+      - id: TourType
+        type: text
+        info:
+          notes: ''
+      - id: Duration
+        type: text
+        info:
+          notes: ''
+      - id: EntryType
+        type: text
+        info:
+          notes: ''
+      - id: Interests
+        type: text
+        info:
+          notes: ''
+      - id: DirectionsTransit
+        type: text
+        info:
+          notes: ''
+      - id: DirectionsCar
+        type: text
+        info:
+          notes: ''
+      - id: Description
+        type: text
+        info:
+          notes: ''
+      - id: Address
+        type: text
+        info:
+          notes: ''
+      - id: ExternalLink
+        type: text
+        info:
+          notes: ''
+      - id: ImageCredit
+        type: text
+        info:
+          notes: ''
+      - id: ImageCreditExternalLink
+        type: text
+        info:
+          notes: ''
+      - id: ImageAltText
+        type: text
+        info:
+          notes: ''
+      - id: ImageURL
+        type: text
+        info:
+          notes: ''
+      - id: ThumbURL
+        type: text
+        info:
+          notes: ''
+      - id: ImageOrientation
+        type: text
+        info:
+          notes: ''
+      - id: test1
+        type: text
+        info:
+          notes: ''
+      - id: test2
+        type: text
+        info:
+          notes: ''
+      - id: test3
+        type: text
+        info:
+          notes: ''
+      - id: ObjectId
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

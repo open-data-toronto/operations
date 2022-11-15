@@ -1,0 +1,116 @@
+# This file is migrated from NiFi
+covid-19-immunization-clinics:
+  schedule: '@once'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: COVID-19 Immunization Clinics
+  date_published: '2021-03-22 14:22:13.32068'
+  refresh_rate: Daily
+  dataset_category: Map
+  owner_division: Toronto Public Health
+  owner_section: null
+  owner_unit: null
+  owner_email: publichealth@toronto.ca
+  civic_issues: null
+  topics: Health
+  tags: []
+  information_url: 'https://www.toronto.ca/home/covid-19/covid-19-protect-yourself-others/covid-19-vaccines/covid-19-how-to-get-vaccinated/covid-19-future-city-operated-immunization-clinics/#location=&lat=&lng= '
+  excerpt: 'This dataset includes information about City-operated immunization clinics
+    in Toronto. '
+  limitations: "Please note there may be additional immunization clinics that are\
+    \ not captured in this data. \r\n"
+  notes: "The City of Toronto\u2019s Immunization Task Force is readying nine City-operated\
+    \ COVID-19 immunization clinics to open when vaccine supply is secured by the\
+    \ Government of Canada and the Province of Ontario provides direction to open.\
+    \ The clinics are in strategically-located areas of the city and are part of an\
+    \ overall Vaccination Program that includes mobile clinics and response teams\
+    \ to ensure priority neighbourhoods and vulnerable populations have access to\
+    \ immunization and are part of a wider community plan that involves health sector\
+    \ partners, including hospitals and other community health organizations. This\
+    \ dataset includes information about City-operated immunization clinics. \r\n"
+  resources:
+    covid-19-immunization-clinics:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_Immunization_Clinics/FeatureServer/0
+      attributes:
+      - id: locationId
+        type: text
+        info:
+          notes: ''
+      - id: locationName
+        type: text
+        info:
+          notes: ''
+      - id: locationType
+        type: text
+        info:
+          notes: ''
+      - id: address
+        type: text
+        info:
+          notes: ''
+      - id: city
+        type: text
+        info:
+          notes: ''
+      - id: postal_code
+        type: text
+        info:
+          notes: ''
+      - id: addressInfo
+        type: text
+        info:
+          notes: ''
+      - id: dates
+        type: text
+        info:
+          notes: ''
+      - id: hours
+        type: text
+        info:
+          notes: ''
+      - id: info
+        type: text
+        info:
+          notes: ''
+      - id: phone
+        type: text
+        info:
+          notes: ''
+      - id: phoneExt
+        type: text
+        info:
+          notes: ''
+      - id: phoneAlt
+        type: text
+        info:
+          notes: ''
+      - id: phoneAltExt
+        type: text
+        info:
+          notes: ''
+      - id: website
+        type: text
+        info:
+          notes: ''
+      - id: Data_Source
+        type: text
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: Date_Added
+        type: text
+        info:
+          notes: ''
+      - id: wardName
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

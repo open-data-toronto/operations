@@ -1,0 +1,67 @@
+# This file is migrated from NiFi
+automated-speed-enforcement-locations:
+  schedule: '@once'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Automated Speed Enforcement Locations
+  date_published: '2020-11-13 14:34:58.460825'
+  refresh_rate: Daily
+  dataset_category: Map
+  owner_division: Transportation Services
+  owner_section: 'Permits and Enforcement'
+  owner_unit: Automated Enforcement
+  owner_email: ASE@toronto.ca
+  civic_issues: Mobility
+  topics: Transportation,Locations and mapping
+  tags:
+  - name: driving
+    vocabulary_id: null
+  - name: enforcement
+    vocabulary_id: null
+  - name: speed
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/ASE
+  excerpt: This dataset includes the active and planned locations of the City of Toronto's
+    Automated Speed Enforcement systems by latitude and longitude.
+  limitations: null
+  notes: "Automated Speed Enforcement (ASE) is an automated system that uses a camera\
+    \ and a speed measurement\r\ndevice to detect and capture images of vehicles travelling\
+    \ in excess of the posted speed limit. It is designed to\r\nwork in tandem with\
+    \ other methods and strategies, including engineering measures, education initiatives\
+    \ and\r\ntraditional police enforcement. ASE is focused on altering driver behaviour\
+    \ to decrease speeding and increase\r\nsafety.\r\n\r\nThis dataset includes the\
+    \ active and planned locations of City of Toronto's Automated Speed Enforcement\r\
+    \nsystems by latitude and longitude.\r\n\r\nFor a list of historical locations,\
+    \ please visit the Automated Speed Enforcement website or contact us at the\r\n\
+    email listed."
+  resources:
+    Automated Speed Enforcement Locations:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_SPEED_CAMERAS/FeatureServer/0
+      attributes:
+      - id: Location_Code
+        type: text
+        info:
+          notes: A unique identifier for each Automated Speed Enforcement System
+      - id: Ward
+        type: text
+        info:
+          notes: 'The City of Toronto Ward where the ASE System is located'
+      - id: Status
+        type: text
+        info:
+          notes: The status of the ASE system of whether it is currently active or
+            whether it is a planned to be active at a future date
+      - id: location
+        type: text
+        info:
+          notes: The location of the ASE system by street name
+      - id: FID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: 'Coordinates'
