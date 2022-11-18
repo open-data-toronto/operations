@@ -1,0 +1,52 @@
+# This file is migrated from NiFi
+secondary-plans:
+  schedule: "0 0 * * *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Secondary Plans
+  date_published: '2019-07-23 17:30:33.993276'
+  refresh_rate: Annually
+  dataset_category: Map
+  owner_division: City Planning
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: Mobility
+  topics: Development and infrastructure,Locations and mapping
+  tags:
+  - name: development
+    vocabulary_id: null
+  - name: planning
+    vocabulary_id: null
+  - name: secondary plans
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/planning-development/official-plan-guidelines/
+  excerpt: Secondary Plans current as of the 2015 Plan Consolidation
+  limitations: null
+  notes: "Secondary Plans are more detailed local development policies to guide growth\r\nand change in a defined area of the City.\r\n\r\n"
+  resources:
+    Secondary Plans Data 2017:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CP_SECONDARY_PLAN/FeatureServer/0
+      attributes:
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: SECONDARY_PLAN_NUMBER
+        type: text
+        info:
+          notes: ''
+      - id: SECONDARY_PLAN_NAME
+        type: text
+        info:
+          notes: ''
+      - id: STATUS
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

@@ -1,0 +1,103 @@
+# This file is migrated from NiFi
+street-furniture-bench:
+  schedule: "0 3 * * *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Street Furniture - Bench
+  date_published: '2021-10-15 19:32:57.111689'
+  refresh_rate: Semi-annually
+  dataset_category: Map
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: Sandro.Tersigni@toronto.ca
+  civic_issues: null
+  topics: City government,Culture and tourism,Locations and mapping,Transportation
+  tags:
+  - name: bench
+    vocabulary_id: null
+  - name: pedestrian seating
+    vocabulary_id: null
+  - name: seating
+    vocabulary_id: null
+  information_url: null
+  excerpt: Bench location and asset type data for installations owned and maintained
+    by Astral Media Outdoor under the City of Toronto's Coordinated Street Furniture
+    Program.
+  limitations: null
+  notes: "The City of Toronto entered into a 20-year contractual agreement with Astral\r\
+    \nOut-of-Home in 2007 for the installation and maintenance of up to 25,000\r\n\
+    street furniture elements including up to 2,500 benches.  This program is a\r\n\
+    public-private partnership wherein Astral Out-of-Home manufactures, owns,\r\n\
+    cleans, and repairs all of their street furniture within the City of Toronto.\r\
+    \n\r\n"
+  resources:
+    Street furniture-Bench data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_Geospatial_PRAI_Bench_View/FeatureServer/0
+      attributes:
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: ID
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESSNUMBERTEXT
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESSSTREET
+        type: text
+        info:
+          notes: ''
+      - id: FRONTINGSTREET
+        type: text
+        info:
+          notes: ''
+      - id: SIDE
+        type: text
+        info:
+          notes: ''
+      - id: FROMSTREET
+        type: text
+        info:
+          notes: ''
+      - id: DIRECTION
+        type: text
+        info:
+          notes: ''
+      - id: SITEID
+        type: text
+        info:
+          notes: ''
+      - id: WARD
+        type: text
+        info:
+          notes: ''
+      - id: BIA
+        type: text
+        info:
+          notes: ''
+      - id: ASSETTYPE
+        type: text
+        info:
+          notes: ''
+      - id: STATUS
+        type: text
+        info:
+          notes: ''
+      - id: BARCODE
+        type: text
+        info:
+          notes: ''
+      - id: SDE_STATE_ID
+        type: float
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

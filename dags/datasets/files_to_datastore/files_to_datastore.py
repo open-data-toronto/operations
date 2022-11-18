@@ -84,7 +84,8 @@ def create_dag(dag_id,
     with DAG(
         dag_id=dag_id,
         default_args=default_args,
-        schedule_interval=schedule
+        schedule_interval=schedule,
+        catchup = False # By default Airflow tries to complete all "missed" DAGs since start_date, should be turned off
     ) as dag:
 
         # init list of resource names

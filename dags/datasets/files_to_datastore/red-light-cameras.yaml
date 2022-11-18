@@ -1,0 +1,151 @@
+# This file is migrated from NiFi
+red-light-cameras:
+  schedule: "0 4 * * *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Red Light Cameras
+  date_published: '2019-07-23 17:56:31.216945'
+  refresh_rate: Daily
+  dataset_category: Map
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: ' TorontoRLC@toronto.ca'
+  civic_issues: Mobility
+  topics: Locations and mapping,Public safety,Transportation
+  tags:
+  - name: red light
+    vocabulary_id: null
+  - name: red light camera
+    vocabulary_id: null
+  - name: traffic camera
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/traffic-management/
+  excerpt: This dataset identifies the intersections in Toronto where red light cameras
+    are located.
+  limitations: null
+  notes: "Red Light Camera (RLC) is an automated system which photographs vehicles\
+    \ that run red lights. Generally, the camera is triggered when a vehicle enters\
+    \ the intersection (passes the stop-bar) after the traffic signal has turned red.\
+    \ The camera will take two time-stamped photographs of the vehicle: one is taken\
+    \ as the vehicle approaches the stop line and the second is taken as the vehicle\
+    \ moves through the intersection. RLC is focused on altering driver behaviour\
+    \ to eliminate red-light running and increase safety for all road users. \r\n\r\
+    \nThis dataset identifies the intersections in Toronto where Red Light Cameras\
+    \ are located.\r\n\r\nFor a list of historical (including de-commissioned) locations,\
+    \ please visit the Red Light Camera website or contact us at the email listed.\r\
+    \n\r\n"
+  resources:
+    Red Light Cameras Data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_RED_LIGHT_CAMERA/FeatureServer/0
+      attributes:
+      - id: INTERSECTION_ID
+        type: int
+        info:
+          notes: ''
+      - id: LINEAR_NAME_FULL_1
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_FULL_2
+        type: text
+        info:
+          notes: ''
+      - id: MI_PRINX
+        type: int
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: ID
+        type: int
+        info:
+          notes: ''
+      - id: CLIENT_STREET_1
+        type: text
+        info:
+          notes: ''
+      - id: CLIENT_STREET_2
+        type: text
+        info:
+          notes: ''
+      - id: RLC
+        type: text
+        info:
+          notes: ''
+      - id: TCS
+        type: text
+        info:
+          notes: ''
+      - id: NAME
+        type: text
+        info:
+          notes: ''
+      - id: ADDITIONAL_INFO
+        type: text
+        info:
+          notes: ''
+      - id: MAIN
+        type: text
+        info:
+          notes: ''
+      - id: SIDE1
+        type: text
+        info:
+          notes: ''
+      - id: SIDE2
+        type: text
+        info:
+          notes: ''
+      - id: MID_BLOCK
+        type: text
+        info:
+          notes: ''
+      - id: PRIVATE_ACCESS
+        type: text
+        info:
+          notes: ''
+      - id: DISTRICT
+        type: text
+        info:
+          notes: ''
+      - id: WARD_1
+        type: text
+        info:
+          notes: ''
+      - id: WARD_2
+        type: text
+        info:
+          notes: ''
+      - id: WARD_3
+        type: text
+        info:
+          notes: ''
+      - id: WARD_4
+        type: text
+        info:
+          notes: ''
+      - id: POLICE_DIVISION_1
+        type: text
+        info:
+          notes: ''
+      - id: POLICE_DIVISION_2
+        type: text
+        info:
+          notes: ''
+      - id: POLICE_DIVISION_3
+        type: text
+        info:
+          notes: ''
+      - id: ACTIVATION_DATE
+        type: timestamp
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''
