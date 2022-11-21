@@ -1,6 +1,6 @@
 # This file is migrated from NiFi
 covid-19-immunization-clinics:
-  schedule: '@once'
+  schedule: "45 14 * * *"
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
   title: COVID-19 Immunization Clinics

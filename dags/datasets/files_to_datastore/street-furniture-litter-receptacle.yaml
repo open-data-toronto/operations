@@ -1,6 +1,6 @@
 # This file is migrated from NiFi
 street-furniture-litter-receptacle:
-  schedule: "0 3 * * *"
+  schedule: "0 3 1 1,6 *"
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
   title: Street Furniture - Litter Receptacle

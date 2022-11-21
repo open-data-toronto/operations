@@ -1,6 +1,6 @@
 # This file is migrated from NiFi
 business-improvement-areas:
-  schedule: '@once'
+  schedule: "0 3 * * 5"
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
   title: Business Improvement Areas

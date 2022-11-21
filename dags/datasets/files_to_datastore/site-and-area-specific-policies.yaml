@@ -1,6 +1,6 @@
 # This file is migrated from NiFi
 site-and-area-specific-policies:
-  schedule: "0 1 * * *"
+  schedule: "@once"
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
   title: Site and area Specific policies

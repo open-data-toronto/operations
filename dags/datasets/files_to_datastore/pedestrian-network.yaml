@@ -1,6 +1,6 @@
 # This file is migrated from NiFi
 pedestrian-network:
-  schedule: "0 7 1 11 *"
+  schedule: "@once"
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
   title: Pedestrian Network

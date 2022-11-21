@@ -1,6 +1,6 @@
 # This file is migrated from NiFi
 community-council-boundaries:
-  schedule: '@once'
+  schedule: "@once"
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
   title: Community Council Boundaries

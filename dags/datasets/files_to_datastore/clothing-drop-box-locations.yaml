@@ -1,6 +1,6 @@
 # This file is migrated from NiFi
 clothing-drop-box-locations:
-  schedule: '@once'
+  schedule: "15 6 3 * *"
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
   title: Clothing Drop-Box Locations
