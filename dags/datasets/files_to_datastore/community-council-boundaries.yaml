@@ -1,0 +1,67 @@
+# This file is migrated from NiFi
+community-council-boundaries:
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Community Council Boundaries
+  date_published: '2019-07-23 16:49:01.881288'
+  refresh_rate: As available
+  dataset_category: Map
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: City government,Locations and mapping
+  tags:
+  - name: community council boundary
+    vocabulary_id: null
+  information_url: null
+  excerpt: This is a geo-spatial file that outlines the service districts of the City
+    of Toronto.
+  limitations: null
+  notes: "This is a geo-spatial file that outlines the service districts of the City\
+    \ of\r\nToronto.\r\n\r\nThis is a GIS polygon file that is best used when it is\
+    \ overlaid with the City\r\nof Toronto Street Centreline GIS file.\r\n\r\n"
+  resources:
+    Community Council Boundaries Data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_COMMUNITY_COUNCIL/FeatureServer/0
+      attributes:
+      - id: AREA_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_ATTR_ID
+        type: float
+        info:
+          notes: ''
+      - id: PARENT_AREA_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_SHORT_CODE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_LONG_CODE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_NAME
+        type: text
+        info:
+          notes: ''
+      - id: AREA_DESC
+        type: text
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

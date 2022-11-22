@@ -1,0 +1,100 @@
+# This file is migrated from NiFi
+pedestrian-network:
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Pedestrian Network
+  date_published: '2019-08-29 15:49:09.917562'
+  refresh_rate: As available
+  dataset_category: Map
+  owner_division: Information & Technology
+  owner_section: Geospatial Competency Centre
+  owner_unit: Data Analytics and Visualization Team
+  owner_email: gcc@toronto.ca
+  civic_issues: Affordable housing,Poverty reduction,Mobility,Climate change
+  topics: Transportation,Locations and mapping,Parks and recreation
+  tags: []
+  information_url: null
+  excerpt: This data is based on the sidewalk inventory from Transportation Services,
+    Toronto road centrelines, and manual collection from aerial imagery. Pednet is
+    integrated with centerline intersections, traffic signals, pedestrian crosswalks
+    and crossovers, traffic signal data from Transportation Services as well as other
+    City of Toronto datasets.
+  limitations: 'Pednet is focused on topological accuracy, over geographic accuracy
+    and has known limitations in completeness and classifications. This was an attempt
+    to semi-automate the creation of a pedestrian network model for accessibility
+    routing. '
+  notes: "The Pedestrian Network (pednet) was created by the DAV team at the City\
+    \ of Toronto, and it is based on the sidewalk inventory from Transportation Services,\
+    \ Toronto road centrelines, and manual collection from aerial imagery. Pednet\
+    \ is integrated with centerline intersections, traffic signals, pedestrian crosswalks\
+    \ and crossovers, traffic signal data from Transportation Services as well as\
+    \ other City of Toronto datasets.\r\n\r\nPednet was built using a variety of open\
+    \ source libraries such as NetworkX, Pandana, Quantum GIS, and Space syntax, as\
+    \ well as production mapping tools from ESRI\u2019s ArcPro/ArcMap. The project\
+    \ source code can be found on DAV\u2019s GitHub account here, which includes the\
+    \ semi-automated offsetting method from the Sidewalk Inventory and the analytical\
+    \ procedures undertaken.\r\n\r\nPednet is a data model resembling a network graph\
+    \ (edges and nodes) weighted by linear distance. Shortest routes were calculated\
+    \ from every building centroid in the city to the nearest nth amenity at the maximum\
+    \ distance of 5000m. Walk times were calculated in the nearest minutes, using\
+    \ the prescribed 1.0m/per-second velocity used by Transportation services. Two\
+    \ separate versions of pednet were created in this iteration of the project: \r\
+    \n\r\n1) using actual linear distances as network weights, and \r\n\r\n2) where\
+    \ crosswalks were \u201Cextended\u201D by 20% of their length to impose additional\
+    \ impedance to their distances and walk times. \r\n\r\nFor every address within\
+    \ the City of Toronto, the walk times were calculated to various amenities like\
+    \ schools, libraries, hospitals, supermarkets, TTC stops and convenience stores\
+    \ see Section 3. Walk times were assigned to individual addresses as attributes.\
+    \ We then aggregated all these walk times to the census tract level and calculated\
+    \ the minimum, maximum, standard deviation, median, and average walk times. We\
+    \ used these aggregated values to both: \r\n\r\n1) relate walkability measures\
+    \ to Statistics Canada Census data for socio-demographic analysis, as well as\
+    \ \r\n\r\n2) the building footprints, pednet centerlines, and census tract area\
+    \ boundaries to be used in choropleth maps contained within the following sections."
+  resources:
+    Pedestrian Network Data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_PEDESTRIAN_NETWORK/FeatureServer/0
+      attributes:
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: ROAD_TYPE
+        type: text
+        info:
+          notes: ''
+      - id: SIDEWALK_CODE
+        type: float
+        info:
+          notes: ''
+      - id: SIDEWALK_DESCRIPTION
+        type: text
+        info:
+          notes: ''
+      - id: CROSSWALK
+        type: int
+        info:
+          notes: ''
+      - id: CROSSWALK_TYPE
+        type: text
+        info:
+          notes: ''
+      - id: PX
+        type: text
+        info:
+          notes: ''
+      - id: PX_TYPE
+        type: text
+        info:
+          notes: ''
+      - id: LENGTH
+        type: float
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

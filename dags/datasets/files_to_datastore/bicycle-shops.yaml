@@ -1,0 +1,136 @@
+# This file is migrated from NiFi
+bicycle-shops:
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Bicycle Shops
+  date_published: '2019-07-23 16:40:08.084498'
+  refresh_rate: Will not be Refreshed
+  dataset_category: Map
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: Business,Locations and mapping,Transportation
+  tags:
+  - name: bike shops
+    vocabulary_id: null
+  - name: bike stores
+    vocabulary_id: null
+  - name: biking
+    vocabulary_id: null
+  - name: cycling
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/cycling
+  excerpt: "This dataset has been retired. Transportation is no longer promoting and\
+    \ updating the bike shop listings.\r\nA geospatial file that shows where bicycle\
+    \ shops are located in Toronto. "
+  limitations: This dataset is no longer being maintained
+  notes: "__This datast is no longer being maintained. It has been retired as of April\
+    \ 15, 2019__\r\n\r\nThis dataset contains the locations of bicycle shops located\
+    \ in the City of\r\nToronto.\r\n\r\nThis data set may not be representative of\
+    \ the whole City of Toronto. There\r\nmay be information that has been missed\
+    \ and may no longer be accurate.\r\n\r\n"
+  resources:
+    Bicycle Shops Data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_BICYCLE_SHOP/FeatureServer/0
+      attributes:
+      - id: ADDRESS_POINT_ID
+        type: int
+        info:
+          notes: ''
+      - id: ADDRESS_NUMBER
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_FULL
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESS_FULL
+        type: text
+        info:
+          notes: ''
+      - id: POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: MUNICIPALITY
+        type: text
+        info:
+          notes: ''
+      - id: CITY
+        type: text
+        info:
+          notes: ''
+      - id: WARD
+        type: text
+        info:
+          notes: ''
+      - id: PLACE_NAME
+        type: text
+        info:
+          notes: ''
+      - id: GENERAL_USE_CODE
+        type: int
+        info:
+          notes: ''
+      - id: CENTRELINE_ID
+        type: int
+        info:
+          notes: ''
+      - id: LO_NUM
+        type: int
+        info:
+          notes: ''
+      - id: LO_NUM_SUF
+        type: text
+        info:
+          notes: ''
+      - id: HI_NUM
+        type: int
+        info:
+          notes: ''
+      - id: HI_NUM_SUF
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_ID
+        type: float
+        info:
+          notes: ''
+      - id: ID
+        type: int
+        info:
+          notes: ''
+      - id: NAME
+        type: text
+        info:
+          notes: ''
+      - id: UNIT
+        type: text
+        info:
+          notes: ''
+      - id: PHONE
+        type: text
+        info:
+          notes: ''
+      - id: EMAIL
+        type: text
+        info:
+          notes: ''
+      - id: RENTAL
+        type: text
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

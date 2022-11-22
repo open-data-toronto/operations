@@ -1,0 +1,104 @@
+# This file is migrated from NiFi
+street-furniture-information-pillar-wayfinding-structure:
+  schedule: "0 2 1 1,6 *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Street Furniture - Information Pillar-Wayfinding Structure
+  date_published: '2019-07-23 18:02:30.159936'
+  refresh_rate: Semi-annually
+  dataset_category: Map
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: Sandro.Tersigni@toronto.ca
+  civic_issues: null
+  topics: City government,Culture and tourism,Locations and mapping,Transportation
+  tags:
+  - name: information pillar
+    vocabulary_id: null
+  - name: pedestrian wayfinding
+    vocabulary_id: null
+  - name: wayfinding structure
+    vocabulary_id: null
+  information_url: null
+  excerpt: Information Pillar/Wayfinding Structure location and asset type data for
+    installations owned and maintained by Astral Media Outdoor under the City of Toronto's
+    Coordinated Street Furniture Program.
+  limitations: null
+  notes: "The City of Toronto entered into a 20-year contractual agreement with Astral\r\
+    \nOut-of-Home in 2007 for the installation and maintenance of up to 25,000\r\n\
+    street furniture elements including up to 85 information pillar/wayfinding\r\n\
+    structures with advertisement and 60 non-advertisement structures.  This\r\nprogram\
+    \ is a public-private partnership wherein Astral Out-of-Home\r\nmanufactures,\
+    \ owns, cleans, and repairs all of their street furniture within\r\nthe City of\
+    \ Toronto.\r\n\r\n"
+  resources:
+    Street furniture-Information pillar data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_Geospatial_PRAI_Info_Pillar_View/FeatureServer/0
+      attributes:
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: ID
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESSNUMBERTEXT
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESSSTREET
+        type: text
+        info:
+          notes: ''
+      - id: FRONTINGSTREET
+        type: text
+        info:
+          notes: ''
+      - id: SIDE
+        type: text
+        info:
+          notes: ''
+      - id: FROMSTREET
+        type: text
+        info:
+          notes: ''
+      - id: DIRECTION
+        type: text
+        info:
+          notes: ''
+      - id: SITEID
+        type: text
+        info:
+          notes: ''
+      - id: WARD
+        type: text
+        info:
+          notes: ''
+      - id: BIA
+        type: text
+        info:
+          notes: ''
+      - id: ASSETTYPE
+        type: text
+        info:
+          notes: ''
+      - id: STATUS
+        type: text
+        info:
+          notes: ''
+      - id: BARCODE
+        type: text
+        info:
+          notes: ''
+      - id: SDE_STATE_ID
+        type: float
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

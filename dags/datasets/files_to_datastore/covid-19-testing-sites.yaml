@@ -1,0 +1,318 @@
+# This file is migrated from NiFi
+covid-19-testing-sites:
+  schedule: "45 14 * * *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: COVID-19 Testing Sites
+  date_published: '2021-03-22 14:21:25.002865'
+  refresh_rate: Daily
+  dataset_category: Map
+  owner_division: Toronto Public Health
+  owner_section: null
+  owner_unit: null
+  owner_email: publichealth@toronto.ca
+  civic_issues: null
+  topics: Health
+  tags:
+  - name: assessment centres
+    vocabulary_id: null
+  - name: covid19
+    vocabulary_id: null
+  information_url: 'https://www.toronto.ca/home/covid-19/covid-19-what-you-should-do/covid-19-have-symptoms-or-been-exposed/covid-19-assessment-centres/covid-19-assessment-centres-pharmacies/#location=&lat=&lng= '
+  excerpt: "This dataset includes information about COVID-19 testing locations in\
+    \ Toronto. \r\n"
+  limitations: "Please note there may be additional pop-up testing sites that are\
+    \ not included in this data.\r\n"
+  notes: "\r\nCOVID-19 testing is coordinated by the provincial government and local\
+    \ healthcare system, including hospitals, community health centres, pharmacies\
+    \ and other community agencies. Testing occurs at locations across the City of\
+    \ Toronto, including at permanent assessment centres, temporary pop-up sites that\
+    \ operate only on specific days/times to address community needs, and pharmacies.\
+    \ \r\n\r\nThis dataset includes information on COVID-19 testing locations in Toronto.\r\
+    \n"
+  resources:
+    covid-19-testing-sites:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_COVID_19_Assessment_Centre_Location/FeatureServer/0
+      attributes:
+      - id: locationId
+        type: text
+        info:
+          notes: ''
+      - id: locationName
+        type: text
+        info:
+          notes: ''
+      - id: locationType
+        type: text
+        info:
+          notes: ''
+      - id: address
+        type: text
+        info:
+          notes: ''
+      - id: city
+        type: text
+        info:
+          notes: ''
+      - id: postal_code
+        type: text
+        info:
+          notes: ''
+      - id: addressInfo
+        type: text
+        info:
+          notes: ''
+      - id: dates
+        type: text
+        info:
+          notes: ''
+      - id: hours
+        type: text
+        info:
+          notes: ''
+      - id: info
+        type: text
+        info:
+          notes: ''
+      - id: phone
+        type: text
+        info:
+          notes: ''
+      - id: phoneExt
+        type: text
+        info:
+          notes: ''
+      - id: phoneAlt
+        type: text
+        info:
+          notes: ''
+      - id: phoneAltExt
+        type: text
+        info:
+          notes: ''
+      - id: website
+        type: text
+        info:
+          notes: ''
+      - id: accessibility
+        type: text
+        info:
+          notes: ''
+      - id: sameDayAppt
+        type: text
+        info:
+          notes: ''
+      - id: active
+        type: text
+        info:
+          notes: ''
+      - id: temporarily_closed
+        type: text
+        info:
+          notes: ''
+      - id: pharmacy
+        type: text
+        info:
+          notes: ''
+      - id: operated_by
+        type: text
+        info:
+          notes: ''
+      - id: location_name_fr
+        type: text
+        info:
+          notes: ''
+      - id: operated_by_fr
+        type: text
+        info:
+          notes: ''
+      - id: address_fr
+        type: text
+        info:
+          notes: ''
+      - id: province
+        type: text
+        info:
+          notes: ''
+      - id: PHU
+        type: text
+        info:
+          notes: ''
+      - id: PHU_fr
+        type: text
+        info:
+          notes: ''
+      - id: monday
+        type: text
+        info:
+          notes: ''
+      - id: tuesday
+        type: text
+        info:
+          notes: ''
+      - id: wednesday
+        type: text
+        info:
+          notes: ''
+      - id: thursday
+        type: text
+        info:
+          notes: ''
+      - id: friday
+        type: text
+        info:
+          notes: ''
+      - id: saturday
+        type: text
+        info:
+          notes: ''
+      - id: sunday
+        type: text
+        info:
+          notes: ''
+      - id: appointments
+        type: text
+        info:
+          notes: ''
+      - id: online_appointments
+        type: text
+        info:
+          notes: ''
+      - id: phone_appointments
+        type: text
+        info:
+          notes: ''
+      - id: walk_ins
+        type: text
+        info:
+          notes: ''
+      - id: symptomatic
+        type: text
+        info:
+          notes: ''
+      - id: drive_through
+        type: text
+        info:
+          notes: ''
+      - id: general_population
+        type: text
+        info:
+          notes: ''
+      - id: children_under_2
+        type: text
+        info:
+          notes: ''
+      - id: age_threshold
+        type: text
+        info:
+          notes: ''
+      - id: weeks_pregnant
+        type: text
+        info:
+          notes: ''
+      - id: french_language_services
+        type: text
+        info:
+          notes: ''
+      - id: accessible
+        type: text
+        info:
+          notes: ''
+      - id: asl_interpretation
+        type: text
+        info:
+          notes: ''
+      - id: first_nations
+        type: text
+        info:
+          notes: ''
+      - id: free_parking
+        type: text
+        info:
+          notes: ''
+      - id: paid_parking
+        type: text
+        info:
+          notes: ''
+      - id: public_transit
+        type: text
+        info:
+          notes: ''
+      - id: additional_information
+        type: text
+        info:
+          notes: ''
+      - id: additional_information_fr
+        type: text
+        info:
+          notes: ''
+      - id: Monday_Open
+        type: text
+        info:
+          notes: ''
+      - id: Monday_Closed
+        type: text
+        info:
+          notes: ''
+      - id: Tuesday_Open
+        type: text
+        info:
+          notes: ''
+      - id: Tuesday_Closed
+        type: text
+        info:
+          notes: ''
+      - id: Wednesday_Open
+        type: text
+        info:
+          notes: ''
+      - id: Wednesday_Closed
+        type: text
+        info:
+          notes: ''
+      - id: Thursday_Open
+        type: text
+        info:
+          notes: ''
+      - id: Thursday_Closed
+        type: text
+        info:
+          notes: ''
+      - id: Friday_Open
+        type: text
+        info:
+          notes: ''
+      - id: Friday_Closed
+        type: text
+        info:
+          notes: ''
+      - id: Saturday_Open
+        type: text
+        info:
+          notes: ''
+      - id: Saturday_Closed
+        type: text
+        info:
+          notes: ''
+      - id: Sunday_Open
+        type: text
+        info:
+          notes: ''
+      - id: Sunday_Closed
+        type: text
+        info:
+          notes: ''
+      - id: Data_Source
+        type: text
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

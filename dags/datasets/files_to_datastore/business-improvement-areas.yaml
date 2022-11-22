@@ -1,0 +1,79 @@
+# This file is migrated from NiFi
+business-improvement-areas:
+  schedule: "0 3 * * 5"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Business Improvement Areas
+  date_published: '2019-07-23 16:45:34.043754'
+  refresh_rate: Weekly
+  dataset_category: Map
+  owner_division: Economic Development & Culture
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: Business,Locations and mapping
+  tags:
+  - name: bia
+    vocabulary_id: null
+  - name: business improvement area
+    vocabulary_id: null
+  information_url: null
+  excerpt: Boundaries for the active Business Improvement Areas within the City of
+    Toronto.
+  limitations: null
+  notes: "A Business Improvement Area (BIA) is an association of commercial property\r\
+    \nowners and tenants within a defined area who work in partnership with the City\r\
+    \nto create thriving, competitive, and safe business areas that attract\r\nshoppers,\
+    \ diners, tourists, and new businesses.  The BIA layer represents the\r\nactive\
+    \ BIAs in the City of Toronto that has been enacted by Council.  Each BIA\r\n\
+    has been defined by a by-law and is represented by a Board of Management.  The\r\
+    \nlayer is updated as BIAs are created, amended or deleted by Council. This file\r\
+    \nis a polygon file and is best utilized with the Toronto Street Centreline\r\n\
+    Dataset.\r\n\r\n"
+  resources:
+    Business Improvement Areas Data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_BUSINESS_IMPROVEMENT_AREA/FeatureServer/0
+      attributes:
+      - id: AREA_ID
+        type: float
+        info:
+          notes: ''
+      - id: DATE_EFFECTIVE
+        type: timestamp
+        info:
+          notes: ''
+      - id: AREA_ATTR_ID
+        type: float
+        info:
+          notes: ''
+      - id: PARENT_AREA_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_SHORT_CODE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_LONG_CODE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_NAME
+        type: text
+        info:
+          notes: ''
+      - id: AREA_DESC
+        type: text
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

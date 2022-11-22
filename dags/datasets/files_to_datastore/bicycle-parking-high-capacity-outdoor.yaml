@@ -1,0 +1,143 @@
+# This file is migrated from NiFi
+bicycle-parking-high-capacity-outdoor:
+  schedule: "0 3 * * *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Bicycle Parking - High Capacity (Outdoor)
+  date_published: '2019-07-23 16:34:00.669785'
+  refresh_rate: Daily
+  dataset_category: Map
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: Mobility
+  topics: Locations and mapping,Transportation
+  tags:
+  - name: bicycle parking
+    vocabulary_id: null
+  - name: bike racks
+    vocabulary_id: null
+  - name: bike stations
+    vocabulary_id: null
+  - name: cycling
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/cycling
+  excerpt: A geospatial file that shows where all of the High Capacity Outdoor Bicycle
+    Parking locations in the City of Toronto.
+  limitations: null
+  notes: "This dataset identifies the location of all outdoor high capacity bicycle\r\
+    \nparking installed by the City of Toronto.  This includes bicycle parking such\r\
+    \nas bike corrals and bike shelters.\r\n\r\nThis data set may not be representative\
+    \ of the whole City of Toronto. There\r\nmay be information that has been missed\
+    \ and may no longer be accurate.\r\n\r\n"
+  resources:
+    Bicycle Parking Map Data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_BICYCLE_PARKING_ON_STREET//FeatureServer/0
+      attributes:
+      - id: ADDRESS_POINT_ID
+        type: int
+        info:
+          notes: ''
+      - id: ADDRESS_NUMBER
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_FULL
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESS_FULL
+        type: text
+        info:
+          notes: ''
+      - id: POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: MUNICIPALITY
+        type: text
+        info:
+          notes: ''
+      - id: CITY
+        type: text
+        info:
+          notes: ''
+      - id: WARD
+        type: text
+        info:
+          notes: ''
+      - id: PLACE_NAME
+        type: text
+        info:
+          notes: ''
+      - id: GENERAL_USE_CODE
+        type: int
+        info:
+          notes: ''
+      - id: CENTRELINE_ID
+        type: int
+        info:
+          notes: ''
+      - id: LO_NUM
+        type: int
+        info:
+          notes: ''
+      - id: LO_NUM_SUF
+        type: text
+        info:
+          notes: ''
+      - id: HI_NUM
+        type: int
+        info:
+          notes: ''
+      - id: HI_NUM_SUF
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_ID
+        type: float
+        info:
+          notes: ''
+      - id: ID
+        type: int
+        info:
+          notes: ''
+      - id: PARKING_TYPE
+        type: text
+        info:
+          notes: ''
+      - id: FLANKING
+        type: text
+        info:
+          notes: ''
+      - id: BICYCLE_CAPACITY
+        type: int
+        info:
+          notes: ''
+      - id: SIZE_M
+        type: text
+        info:
+          notes: ''
+      - id: YEAR_INSTALLED
+        type: int
+        info:
+          notes: ''
+      - id: BY_LAW
+        type: text
+        info:
+          notes: ''
+      - id: DETAILS
+        type: text
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

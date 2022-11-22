@@ -1,0 +1,81 @@
+# This file is migrated from NiFi
+former-municipality-boundaries:
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Former Municipality Boundaries
+  date_published: '2019-07-23 17:30:33.993276'
+  refresh_rate: As available
+  dataset_category: Map
+  owner_division: Information & Technology
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: Mobility
+  topics: City government,Locations and mapping
+  tags:
+  - name: former municipal boundaries
+    vocabulary_id: null
+  - name: pre-amalgamation
+    vocabulary_id: null
+  information_url: null
+  excerpt: This data is in an ESRI GIS Shape file format that outlines the geographical
+    administrative areas of the former six municipalities in the City of Toronto pre
+    amalgamation.
+  limitations: null
+  notes: "Field Name - Description/Definition  \r\nAREA_ID - Internal geographic identifier\
+    \  \r\nAREA_NAME - Name of the former municipality  \r\nOBJECTID - Internal unique\
+    \ object ID  \r\n\r\n\r\nThis data is a GIS file that outlines the geographical\
+    \ area of the former six\r\nmunicipalities in the City of Toronto.\r\n\r\nThis\
+    \ data set is used for historical purposes and reflects the former level of\r\n\
+    municipal government that existed when the six former Municipalities where in\r\
+    \nplace (i.e. Etobicoke, North York, Scarborough, York, East York and former\r\
+    \nToronto). Today it is often referred to and sometimes still used by city\r\n\
+    divisions or citizens.\r\n\r\nThis is the final version and has been retired and\
+    \ replaced with the ONE City\r\nof Toronto Boundary.\r\n\r\n"
+  resources:
+    Former Municipality Boundaries Data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/FORMER_MUNICIPALITY/FeatureServer/0
+      attributes:
+      - id: AREA_ID
+        type: float
+        info:
+          notes: ''
+      - id: DATE_EFFECTIVE
+        type: timestamp
+        info:
+          notes: ''
+      - id: AREA_ATTR_ID
+        type: float
+        info:
+          notes: ''
+      - id: PARENT_AREA_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_SHORT_CODE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_LONG_CODE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_NAME
+        type: text
+        info:
+          notes: ''
+      - id: AREA_DESC
+        type: text
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''
