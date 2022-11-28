@@ -85,52 +85,56 @@ package_metadata = {
 }
 
 def cron_to_english(cron):
-    print(cron)
-    working = cron.split(" ")
-    # If there arent 5 parts to the input, assume were not parsing a cron and leave the value as is
-    if len(working) != 5:
+    try:
+        working = cron.split(" ")
+        # If there arent 5 parts to the input, assume were not parsing a cron and leave the value as is
+        if len(working) != 5:
+            return cron
+
+        # time
+        if working[0] == "*" and working[1] == "*":
+            time = "Every Minute"
+        elif working[0] == "*" and working[1] != "*":
+            time = "Every Minute from {}:00 to {}:59UTC".format(working[1], working[1])
+        elif working[0] != "*" and working[1] == "*":
+            if len(working[0]) == 1:
+                working[0] = "0" + working[0]
+            time = "At {} minutes past every hour".format(working[0])
+        else:
+            if len(working[0]) == 1:
+                working[0] = "0" + working[0]
+            time = "At {}:{}UTC".format(working[1], working[0])
+
+
+        # day 
+        day = 'Every Day'
+        if working[2] != "*" and isinstance(float(working[2]), float):
+            day = "On calendar day {}".format(working[2]) 
+
+        month = "of Every Month"
+        if working[3] != "*" and isinstance(float(working[3]), float):
+            month = "of the Month of {}".format(calendar.month_name[int(working[3])])
+        elif working[3] != "*" and isinstance(working[3], str):
+            month = working[3]
+
+        # weekday 
+        weekday = ''
+        if "-" in str(working[4]):
+            range = working[4].split("-")
+            print(range)
+            weekday = "Only from {} to {}".format( calendar.day_name[int(range[0]) - 1], calendar.day_name[int(range[1]) - 1])
+        elif working[4] != "*" and isinstance(float(working[4]), float):
+            weekday = "Only on {}".format(calendar.day_name[int(working[4]) - 1])
+        elif working[4] != "*" and isinstance(working[4], str):
+            weekday = "Only on " + working[4]
+
+        output = time + " " + day + " " + month + " " + weekday
+
+        return output
+    
+    except Exception as e:
         return cron
 
-    # time
-    if working[0] == "*" and working[1] == "*":
-        time = "Every Minute"
-    elif working[0] == "*" and working[1] != "*":
-        time = "Every Minute from {}:00 to {}:59UTC".format(working[1], working[1])
-    elif working[0] != "*" and working[1] == "*":
-        if len(working[0]) == 1:
-            working[0] = "0" + working[0]
-        time = "At {} minutes past every hour".format(working[0])
-    else:
-        if len(working[0]) == 1:
-            working[0] = "0" + working[0]
-        time = "At {}:{}UTC".format(working[1], working[0])
-
-
-    # day 
-    day = 'Every Day'
-    if working[2] != "*" and isinstance(float(working[2]), float):
-        day = "On calendar day {}".format(working[2]) 
-
-    month = "of Every Month"
-    if working[3] != "*" and isinstance(float(working[3]), float):
-        month = "of the Month of {}".format(calendar.month_name[int(working[3])])
-    elif working[3] != "*" and isinstance(working[3], str):
-        month = working[3]
-
-    # weekday 
-    weekday = ''
-    if "-" in str(working[4]):
-        range = working[4].split("-")
-        print(range)
-        weekday = "Only from {} to {}".format( calendar.day_name[int(range[0]) - 1], calendar.day_name[int(range[1]) - 1])
-    elif working[4] != "*" and isinstance(float(working[4]), float):
-        weekday = "Only on {}".format(calendar.day_name[int(working[4]) - 1])
-    elif working[4] != "*" and isinstance(working[4], str):
-        weekday = "Only on " + working[4]
-
-    output = time + " " + day + " " + month + " " + weekday
-
-    return output
 
     
 
