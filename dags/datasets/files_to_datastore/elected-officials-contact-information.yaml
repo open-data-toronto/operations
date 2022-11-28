@@ -33,6 +33,71 @@ elected-officials-contact-information:
   notes: This dataset contains contact information of the Mayor and the 25 Councillors elected to City of Toronto Council (2018-2022 term). The information includes the elected official's name, electoral area (e.g. ward for Councillors, City of Toronto for Mayor), phone number, address, email address, fax number, photo (URL) and web address.
   resources:
     # resource name
+    2022-2026 Elected Officials Contact Info:
+      format: xlsx
+      sheet: Toront_Elected_Officials_0217
+      url: http://opendata.toronto.ca/city.clerks.office/elected-officials-contact-information/2022-2026-elected-officials-contact.xlsx
+      attributes:
+        - id: "District name"
+          type: "text"
+          info:
+            notes: "Jurisdiction in which the elected official serves"
+        - id: "District ID"
+          type: "text"
+          info:
+            notes: "The district/area for which the Mayor or councillor was elected"
+        - id: "Primary role"
+          type: "text"
+          info:
+            notes: "Elected official's role"
+        - id: "First name"
+          type: "text"
+          info:
+            notes: "Elected official's first name"
+        - id: "Last name"
+          type: "text"
+          info:
+            notes: "Elected official's last name"
+        - id: "Email"
+          type: "text"
+          info:
+            notes: Elected official's email adress""
+        - id: "Photo URL"
+          type: "text"
+          info:
+            notes: "Online address where a photo of the elected official is available"
+        - id: "Website"
+          type: "text"
+          info:
+            notes: City of Toronto's web page linking to the mayor and councillor's contact information""
+        - id: "Address line 1"
+          type: "text"
+          info:
+            notes: "First line of address"
+        - id: "Address line 2"
+          type: "text"
+          info:
+            notes: "Second line of address"
+        - id: "Locality"
+          type: "text"
+          info:
+            notes: "Part of address"
+        - id: "Postal code"
+          type: "text"
+          info:
+            notes: "Part of address"
+        - id: "Province"
+          type: "text"
+          info:
+            notes: "Part of address"
+        - id: "Phone"
+          type: "text"
+          info:
+            notes: Phone Number""
+        - id: "Personal Website"
+          type: "text"
+          info:
+            notes: "Elected official's personal website, if available "
     2018-2022 Elected Officials Contact Info:
       format: xlsx
       sheet: Toront_Elected_Officials_0217
@@ -97,7 +162,7 @@ elected-officials-contact-information:
         - id: "Fax"
           type: "text"
           info:
-            notes: Fax number""
+            notes: Fax number
         - id: "Personal Website"
           type: "text"
           info:
