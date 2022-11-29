@@ -1,0 +1,129 @@
+# package name
+toronto-district-school-board-locations:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Toronto District School Board Locations"
+  date_published: "2019-07-23 17:47:38.364157"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: 311 Toronto
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Community services
+    - Locations and mapping
+  tags: 
+    - name: school locations
+      vocabulary_id: null
+    - name: schools
+      vocabulary_id: null
+    - name: toronto district school board
+      vocabulary_id: null
+    - name: tdsb
+      vocabulary_id: null
+    
+
+  information_url: "http://www.tdsb.on.ca/MOSS/asp_apps/find_your_school/landing.asp"
+  excerpt: "This data set contains the location of the Toronto District Schools. The data is collected and maintained by the Planning Division of the Toronto District School Board."
+  limitations: null
+  notes: The data is collected and maintained by the Planning Division of the Toronto District School Board in order to support daily operations at the Board. This point file is best used when it is overlaid with the City of Toronto's street and address coverage.
+  
+  resources:
+    Toronto District School Board Locations:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_SCHOOL_TDSB/FeatureServer/0
+      attributes:
+      - id: ID
+        type: int
+        info:
+          notes: ''
+      - id: SCH_NAME
+        type: text
+        info:
+          notes: 'Name of school'
+      - id: ADDRESS
+        type: text
+        info:
+          notes: 'Street portion of school Postal address'
+      - id: CITY
+        type: text
+        info:
+          notes: 'City portion of school postal address'
+      - id: POSTAL_CODE
+        type: text
+        info:
+          notes: 'School postal code'
+      - id: MET_PANEL_ID
+        type: text
+        info:
+          notes: 'School type identifier. E for Elementary, S for Secondary'
+      - id: ADDRESS_POINT_ID
+        type: float
+        info:
+          notes: ''
+      - id: ADDRESS_NUMBER
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_FULL
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESS_FULL
+        type: text
+        info:
+          notes: ''
+      - id: MUNICIPALITY
+        type: text
+        info:
+          notes: ''
+      - id: PLACE_NAME
+        type: text
+        info:
+          notes: ''
+      - id: GENERAL_USE_CODE
+        type: int
+        info:
+          notes: ''
+      - id: CENTRELINE_ID
+        type: int
+        info:
+          notes: ''
+      - id: LO_NUM
+        type: int
+        info:
+          notes: ''
+      - id: LO_NUM_SUF
+        type: text
+        info:
+          notes: ''
+      - id: HI_NUM
+        type: int
+        info:
+          notes: ''
+      - id: HI_NUM_SUF
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_ID
+        type: float
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''
