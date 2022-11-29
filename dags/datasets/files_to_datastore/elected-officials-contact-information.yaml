@@ -61,7 +61,7 @@ elected-officials-contact-information:
         - id: "Email"
           type: "text"
           info:
-            notes: Elected official's email adress""
+            notes: Elected official's email adress
         - id: "Photo URL"
           type: "text"
           info:
@@ -69,7 +69,7 @@ elected-officials-contact-information:
         - id: "Website"
           type: "text"
           info:
-            notes: City of Toronto's web page linking to the mayor and councillor's contact information""
+            notes: City of Toronto's web page linking to the mayor and councillor's contact information
         - id: "Address line 1"
           type: "text"
           info:
@@ -93,7 +93,7 @@ elected-officials-contact-information:
         - id: "Phone"
           type: "text"
           info:
-            notes: Phone Number""
+            notes: Phone Number
         - id: "Personal Website"
           type: "text"
           info:
@@ -126,7 +126,7 @@ elected-officials-contact-information:
         - id: "Email"
           type: "text"
           info:
-            notes: Elected official's email adress""
+            notes: Elected official's email adress
         - id: "Photo URL"
           type: "text"
           info:
@@ -134,7 +134,7 @@ elected-officials-contact-information:
         - id: "Website"
           type: "text"
           info:
-            notes: City of Toronto's web page linking to the mayor and councillor's contact information""
+            notes: City of Toronto's web page linking to the mayor and councillor's contact information
         - id: "Address line 1"
           type: "text"
           info:
@@ -158,7 +158,7 @@ elected-officials-contact-information:
         - id: "Phone"
           type: "text"
           info:
-            notes: Phone Number""
+            notes: Phone Number
         - id: "Fax"
           type: "text"
           info:
@@ -167,105 +167,3 @@ elected-officials-contact-information:
           type: "text"
           info:
             notes: "Elected official's personal website, if available "
-
-    Ward and Elected Councillor:
-      agol: True
-      format: geojson
-      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_WARD_COUNCILLOR/FeatureServer/0
-      attributes:
-        - id: "AREA_ID"
-          type: "float"
-          info:
-            notes: ""
-        - id: "DATE_EFFECTIVE"
-          type: timestamp
-          info:
-            notes: ""
-        - id: "DATE_EXPIRY"
-          type: timestamp
-          info:
-            notes: ""
-        - id: "AREA_ATTR_ID"
-          type: "float"
-          info:
-            notes: ""
-        - id: "AREA_TYPE_ID"
-          type: "float"
-          info:
-            notes: ""
-        - id: "PARENT_AREA_ID"
-          type: "float"
-          info:
-            notes: ""
-        - id: "AREA_TYPE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "AREA_CLASS_ID"
-          type: "float"
-          info:
-            notes: ""
-        - id: "AREA_CLASS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "AREA_SHORT_CODE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "AREA_LONG_CODE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "AREA_NAME"
-          type: "text"
-          info:
-            notes: ""
-        - id: "AREA_DESC"
-          type: "text"
-          info:
-            notes: ""
-        - id: "FEATURE_CODE"
-          type: "int"
-          info:
-            notes: ""
-        - id: "FEATURE_CODE_DESC"
-          type: "text"
-          info:
-            notes: ""
-        - id: "TRANS_ID_CREATE"
-          type: "float"
-          info:
-            notes: ""
-        - id: "TRANS_ID_EXPIRE"
-          type: "float"
-          info:
-            notes: ""
-        - id: "OBJECTID"
-          type: "int"
-          info:
-            notes: ""
-        - id: "WARD_NUMBER"
-          type: "float"
-          info:
-            notes: ""
-        - id: "COUNCILLOR"
-          type: "text"
-          info:
-            notes: ""
-        - id: "PHONE_NUMBER"
-          type: "text"
-          info:
-            notes: ""
-        - id: "EMAIL_ADDRESS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "URL_LINK"
-          type: "text"
-          info:
-            notes: ""
-        - id: "geometry"
-          type: "text"
-          info:
-            notes: ""
