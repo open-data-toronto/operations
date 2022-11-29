@@ -61,7 +61,7 @@ elected-officials-contact-information:
         - id: "Email"
           type: "text"
           info:
-            notes: Elected official's email adress""
+            notes: Elected official's email adress
         - id: "Photo URL"
           type: "text"
           info:
@@ -69,7 +69,7 @@ elected-officials-contact-information:
         - id: "Website"
           type: "text"
           info:
-            notes: City of Toronto's web page linking to the mayor and councillor's contact information""
+            notes: City of Toronto's web page linking to the mayor and councillor's contact information
         - id: "Address line 1"
           type: "text"
           info:
@@ -93,7 +93,7 @@ elected-officials-contact-information:
         - id: "Phone"
           type: "text"
           info:
-            notes: Phone Number""
+            notes: Phone Number
         - id: "Personal Website"
           type: "text"
           info:
@@ -126,7 +126,7 @@ elected-officials-contact-information:
         - id: "Email"
           type: "text"
           info:
-            notes: Elected official's email adress""
+            notes: Elected official's email adress
         - id: "Photo URL"
           type: "text"
           info:
@@ -134,7 +134,7 @@ elected-officials-contact-information:
         - id: "Website"
           type: "text"
           info:
-            notes: City of Toronto's web page linking to the mayor and councillor's contact information""
+            notes: City of Toronto's web page linking to the mayor and councillor's contact information
         - id: "Address line 1"
           type: "text"
           info:
@@ -158,7 +158,7 @@ elected-officials-contact-information:
         - id: "Phone"
           type: "text"
           info:
-            notes: Phone Number""
+            notes: Phone Number
         - id: "Fax"
           type: "text"
           info:
