@@ -1,0 +1,135 @@
+# package name
+wards-and-elected-councillors:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Wards and Elected Councillors"
+  date_published: "2019-07-23 17:47:38.364157"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - City government
+  tags: 
+    - name: wards councillors
+      vocabulary_id: null
+    - name: councillors
+      vocabulary_id: null
+
+  information_url: "http://www.toronto.ca/councillors"
+  excerpt: "This dataset contains contact information, by ward, for councillors elected to City of Toronto Council."
+  limitations: null
+  notes: This dataset contains contact information, by ward, for councillors elected to City of Toronto Council.
+  resources:
+    # resource name
+    Ward and Elected Councillor:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_WARD_COUNCILLOR/FeatureServer/0
+      attributes:
+        - id: "AREA_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "DATE_EFFECTIVE"
+          type: date
+          info:
+            notes: ""
+        - id: "DATE_EXPIRY"
+          type: date
+          info:
+            notes: ""
+        - id: "AREA_ATTR_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "AREA_TYPE_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "PARENT_AREA_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "AREA_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_CLASS_ID"
+          type: "float"
+          info:
+            notes: ""
+        - id: "AREA_CLASS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_SHORT_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_LONG_CODE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "AREA_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "FEATURE_CODE"
+          type: "int"
+          info:
+            notes: ""
+        - id: "FEATURE_CODE_DESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "TRANS_ID_CREATE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "TRANS_ID_EXPIRE"
+          type: "float"
+          info:
+            notes: ""
+        - id: "OBJECTID"
+          type: "int"
+          info:
+            notes: ""
+        - id: "WARD_NUMBER"
+          type: "float"
+          info:
+            notes: ""
+        - id: "COUNCILLOR"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PHONE_NUMBER"
+          type: "text"
+          info:
+            notes: ""
+        - id: "EMAIL_ADDRESS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "URL_LINK"
+          type: "text"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
