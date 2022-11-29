@@ -1,7 +1,7 @@
 # package name
 street-tree-data:
   # DAG info
-  schedule: "0 0 4 2 *"
+  schedule: "0 20 4 * *"
   dag_owner_name: Mackenzie
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
@@ -91,6 +91,10 @@ street-tree-data:
           info:
             notes: ""
         - id: "WARD"
+          type: "text"
+          info:
+            notes: ""
+        - id: "BOTANICAL_NAME"
           type: "text"
           info:
             notes: ""

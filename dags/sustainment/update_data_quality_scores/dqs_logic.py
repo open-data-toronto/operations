@@ -46,8 +46,7 @@ def read_datastore(ckan, rid, rows=10000):
     df = pd.DataFrame(records).drop("_id", axis=1)
 
     if "geometry" in df.columns:
-        df["geometry"] = df["geometry"].apply(lambda x: shape(json.loads(x)))
-
+        df["geometry"] = df["geometry"].apply(lambda x: shape(json.loads(x)) if x != "None" else None)
         df = gpd.GeoDataFrame(df, crs="epsg:4326")
 
     return df, [x for x in result["fields"] if x["id"] != "_id"]
@@ -127,7 +126,7 @@ def prepare_and_normalize_scores(**kwargs):
 
 def score_catalogue(**kwargs):
     ti = kwargs.pop("ti")
-    packages = ti.xcom_pull(task_ids="get_all_packages")
+    packages = ti.xcom_pull(task_ids="get_all_packages") # can break package list into segments if needed
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
     METADATA_FIELDS = kwargs.pop("METADATA_FIELDS")
     TIME_MAP = kwargs.pop("TIME_MAP")
@@ -205,7 +204,7 @@ def score_catalogue(**kwargs):
         for f in columns:
             if (
                 "info" in f
-                and len(f["info"]["notes"])
+                and (f["info"]["notes"] is not None)
                 and f["info"]["notes"].strip() != f["id"]
             ):
                 metrics["desc_columns"] += 1 / len(columns)
@@ -255,7 +254,7 @@ def score_catalogue(**kwargs):
         if p["name"].lower() == "tags":
             continue
         for r in p["resources"]:
-            if "datastore_active" not in r or not r["datastore_active"]:
+            if "datastore_active" not in r or str(r["datastore_active"]).lower() == 'false':
                 continue
 
             content, fields = read_datastore(ckan, r["id"])

@@ -24,7 +24,10 @@ theft-from-motor-vehicle:
 
   information_url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/Theft_from_Motor_Vehicle/FeatureServer
   excerpt: This dataset includes the Crime Data by Neighbourhood. Counts are available for Assault, Auto Theft, Break and Enter, Robbery, Theft Over, Homicide, Shooting & Firearm Discharges, and Theft from Motor Vehicle.
-  limitations: The location of crime occurrences have been deliberately offset to the nearest road intersection node to protect the privacy of parties involved in the occurrence. Due to the offset of occurrence location, the numbers by Division and Neighbourhood may not reflect the exact count of occurrences reported within these geographies. Therefore, the Toronto Police Service does not guarantee the accuracy, completeness, timeliness of the data and it should not be compared to any other source of crime data.
+  limitations: |
+    The location of crime occurrences have been deliberately offset to the nearest road intersection node to protect the privacy of parties involved in the occurrence. Due to the offset of occurrence location, the numbers by Division and Neighbourhood may not reflect the exact count of occurrences reported within these geographies. Therefore, the Toronto Police Service does not guarantee the accuracy, completeness, timeliness of the data and it should not be compared to any other source of crime data.
+  
+    For certain datasets, certain coordinate information will appear to be 0, 0 in instances where the specific location was unable to be validated or geocoded. These locations may still have a division/neighbourhood associated to them if the general location was identified. For locations identified outside the city of Toronto limits, or invalidated locations, the division/neighbourhood designation will be ‘NSA’ to indicate ‘Not Specified Area.’
   notes: |
     This dataset includes all Theft from Motor Vehicle occurrences by reported date. The Theft from Motor Vehicle offences include Theft from Motor Vehicle Under and Theft from Motor Vehicle Over. This data is provided at the offence and/or victim level, therefore one occurrence number may have several rows of data associated to the various offences used to categorize the occurrence. 
     
@@ -44,7 +47,7 @@ theft-from-motor-vehicle:
         - id: "event_unique_id"
           type: "text"
           info:
-            notes: ""
+            notes: "Event Occurrence Identifier"
         - id: "Division"
           type: "text"
           info:
@@ -125,22 +128,18 @@ theft-from-motor-vehicle:
           type: "int"
           info:
             notes: "Hour Offence Occurred"
-        - id: "MCI"
+        - id: "mci_category"
           type: "text"
           info:
             notes: "MCI Category of Occurrence"
         - id: "Hood_ID"
-          type: "int"
+          type: "text"
           info:
             notes: "Identifier of Neighbourhood"
         - id: "Neighbourhood"
           type: "text"
           info:
             notes: "Name of Neighbourhood"
-        - id: "ObjectId"
-          type: "text"
-          info:
-            notes: ""
         - id: "geometry"
           type: "text"
           info:

@@ -129,7 +129,7 @@ major-crime-indicators:
           type: "int"
           info:
             notes: "Hour Offence Occurred"
-        - id: "MCI"
+        - id: "mci_category"
           type: "text"
           info:
             notes: "MCI Category of Occurrence"
@@ -141,9 +141,5 @@ major-crime-indicators:
           type: "text"
           info:
             notes: "Name of Neighbourhood"
-        - id: "ObjectId"
-          type: "text"
-          info:
-            notes: ""
         
         

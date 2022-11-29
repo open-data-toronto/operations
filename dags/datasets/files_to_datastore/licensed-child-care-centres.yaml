@@ -1,0 +1,113 @@
+# package name
+licensed-child-care-centres:
+  # DAG info
+  schedule: "0 17 * * *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: "Licensed Child Care Centres"
+  date_published: "2019-07-23 17:39:29.065675"
+  refresh_rate: Daily
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Children's Services
+  owner_section: null
+  owner_unit: null
+  owner_email: childcare@toronto.ca
+
+  civic_issues: 
+    - affordable_housing
+  topics: 
+    - Community services
+  tags: 
+    - name: childcare
+      vocabulary_id: null
+
+  information_url: https://www.toronto.ca/community-people/children-parenting/children-programs-activities/licensed-child-care/
+  excerpt: Licensed Child Care Centres in the City of Toronto including their capacities by age group.
+  limitations: null
+  notes: |
+    A dataset of all Licensed Child Care Centres in the City of Toronto including their capacities by age group.
+
+    Website [http://www.toronto.ca/children/gcmapx.htm](http://www.toronto.ca/children/gcmapx.htm)
+
+  resources:
+    # resource name
+    Child care centres:
+      format: csv
+      url: http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv
+      attributes:
+        - id: "LOC_ID"
+          type: "int"
+          info:
+            notes: "Unique identifier"
+        - id: "LOC_NAME"
+          type: "text"
+          info:
+            notes: "Name of the child care centre"
+        - id: "AUSPICE"
+          type: "text"
+          info:
+            notes: "Operating auspice (Commercial, Non Profit or Public)"
+        - id: "ADDRESS"
+          type: "text"
+          info:
+            notes: "Address street number, street name, street type, street direction, and unit"
+        - id: "PCODE"
+          type: "text"
+          info:
+            notes: "Address postal code"
+        - id: "ward"
+          type: "int"
+          info:
+            notes: "City ward number"
+        - id: "PHONE"
+          type: "text"
+          info:
+            notes: "Child care centre area code and telephone and extension"
+        - id: "bldg_type"
+          type: "text"
+          info:
+            notes: "Type of building"
+        - id: "BLDGNAME"
+          type: "text"
+          info:
+            notes: "Name of the building the child care centre is located in"
+        - id: "IGSPACE"
+          type: "int"
+          info:
+            notes: "Child care spaces for infants 0-18 months"
+        - id: "TGSPACE"
+          type: "int"
+          info:
+            notes: "Child care spaces for toddlers 18-30 months"
+        - id: "PGSPACE"
+          type: "int"
+          info:
+            notes: "Child care spaces for preschoolers 30 months up until they enter grade one"
+        - id: "KGSPACE"
+          type: "int"
+          info:
+            notes: "Child care spaces for children in full-day kindergarten"
+        - id: "SGSPACE"
+          type: "int"
+          info:
+            notes: "Child care spaces for children grade one and up"
+        - id: "TOTSPACE"
+          type: "int"
+          info:
+            notes: "Child care spaces for all age groups"
+        - id: "subsidy"
+          type: "text"
+          info:
+            notes: "Centre has a fee subsidy contract (Yes/No)"
+        - id: "run_date"
+          type: "text"
+          info:
+            notes: "Date of the last query to the source system of the data"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""

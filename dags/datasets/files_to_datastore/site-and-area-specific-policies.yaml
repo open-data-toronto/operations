@@ -1,0 +1,81 @@
+# This file is migrated from NiFi
+site-and-area-specific-policies:
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Site and area Specific policies
+  date_published: '2019-07-23 17:59:43.69208'
+  refresh_rate: Annually
+  dataset_category: Map
+  owner_division: City Planning
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: Mobility,Fiscal responsibility
+  topics: Development and infrastructure,Locations and mapping
+  tags:
+  - name: city planning
+    vocabulary_id: null
+  - name: official plan
+    vocabulary_id: null
+  - name: planning
+    vocabulary_id: null
+  - name: site area and specific policy
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/planning-development/official-plan-guidelines/
+  excerpt: Site and Area Specific Policies have been completed to reflect the 2015
+    Official Plan Consolidation.
+  limitations: null
+  notes: "Throughout the City are sites and areas that require policies that vary\
+    \ from\r\none or more of the provisions of the Official Plan and may require a\
+    \ further\r\nlayer of local policy direction for an area. In most cases, the site\
+    \ and area\r\nspecific policies provide direction on land use.\r\n\r\n**Note:**\
+    \ The Site Area and Specific Policies shapefile does contain polygons\r\nwhich\
+    \ are intended to overlap as the policy areas are not mutually exclusive.\r\n\
+    The drawing order of polygons is software-dependent and cannot be controlled\r\
+    \nby City Planning when preparing the shapefile. It is suggested to change the\r\
+    \nstyling of the polygons to be outlines only with no fill. This will allow\r\n\
+    users to view the overlapping polygons, as they will not completely cover one\r\
+    \nanother.\r\n\r\n\r\n\r\n"
+  resources:
+    Site and Area Specific Policies Data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CP_SITE_AREA_SPEC_POLICIES//FeatureServer/0
+      attributes:
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: SASP_NO
+        type: text
+        info:
+          notes: ''
+      - id: OPA_NO
+        type: text
+        info:
+          notes: ''
+      - id: MODIFICATION_NO
+        type: text
+        info:
+          notes: ''
+      - id: APPLICATION_NO
+        type: text
+        info:
+          notes: ''
+      - id: LOCATION
+        type: text
+        info:
+          notes: ''
+      - id: EFFECTIVE_YEAR
+        type: text
+        info:
+          notes: ''
+      - id: NOTES
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

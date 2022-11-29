@@ -1,0 +1,140 @@
+# This file is migrated from NiFi
+bicycle-parking-racks:
+  schedule: "0 4 1 */3 *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Bicycle Parking Racks
+  date_published: '2019-07-23 16:39:52.142429'
+  refresh_rate: Quarterly
+  dataset_category: Map
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: Mobility
+  topics: Development and infrastructure,Locations and mapping,Transportation
+  tags:
+  - name: bicycle
+    vocabulary_id: null
+  - name: bicycle parking
+    vocabulary_id: null
+  - name: bike
+    vocabulary_id: null
+  - name: bike parking
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/cycling-in-toronto
+  excerpt: Bicycle parking racks installed by the Cycling Infrastructure and Programs
+    Unit
+  limitations: null
+  notes: "Shapefile of permanent and seasonal multiple-capacity bicycle parking racks\r\
+    \ninstalled and managed by the Cycling Infrastructure and Programs Unit\r\n\r\n"
+  resources:
+    Bicycle Parking Racks Data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_BICYCLE_PARKING_RACK/FeatureServer/0
+      attributes:
+      - id: ADDRESS_POINT_ID
+        type: int
+        info:
+          notes: ''
+      - id: ADDRESS_NUMBER
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_FULL
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESS_FULL
+        type: text
+        info:
+          notes: ''
+      - id: POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: MUNICIPALITY
+        type: text
+        info:
+          notes: ''
+      - id: CITY
+        type: text
+        info:
+          notes: ''
+      - id: CENTRELINE_ID
+        type: int
+        info:
+          notes: ''
+      - id: LO_NUM
+        type: int
+        info:
+          notes: ''
+      - id: LO_NUM_SUF
+        type: text
+        info:
+          notes: ''
+      - id: HI_NUM
+        type: int
+        info:
+          notes: ''
+      - id: HI_NUM_SUF
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_ID
+        type: float
+        info:
+          notes: ''
+      - id: WARD_NAME
+        type: text
+        info:
+          notes: ''
+      - id: MI_PRINX
+        type: int
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: CAPACITY
+        type: int
+        info:
+          notes: ''
+      - id: MULTIMODAL
+        type: text
+        info:
+          notes: ''
+      - id: SEASONAL
+        type: text
+        info:
+          notes: ''
+      - id: SHELTERED
+        type: text
+        info:
+          notes: ''
+      - id: SURFACE
+        type: text
+        info:
+          notes: ''
+      - id: STATUS
+        type: text
+        info:
+          notes: ''
+      - id: LOCATION
+        type: text
+        info:
+          notes: ''
+      - id: NOTES
+        type: text
+        info:
+          notes: ''
+      - id: MAP_CLASS
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

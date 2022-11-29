@@ -1,0 +1,134 @@
+# package name
+bridge-structure:
+  # DAG info
+  schedule: "30 9 1 * *"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Bridges, Elevated Roadways, and Culverts in Toronto"
+  date_published: "2019-07-23 16:41:50.960152"
+  refresh_rate: Annually
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Engineering & Construction Services
+  owner_section: null
+  owner_unit: null
+  owner_email: Shelton.Udayakumara@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Development and infrastructure
+    - Locations and mapping
+  tags: 
+    - name: elevated roadways
+      vocabulary_id: null
+    - name: culverts
+      vocabulary_id: null
+    - name: bridges
+      vocabulary_id: null
+      
+  information_url: http://www.toronto.ca/bridges
+  excerpt: The dataset contains bridges, elevated roadways, and culverts information and their location information. The dataset is limited to the City of Toronto geographical boundary.
+  limitations: null
+  notes: |
+    The dataset contains bridges, elevated roadways, and culverts information and their location information. The dataset is limited to the City of Toronto geographical boundary. The dataset is presented in two formats as ESRI Point Shapefile and accessible MS Excel file. Each record in the datasets has Structure Id, Structure Type, Structure Class, Location Description, Ownership, Year Built, Steward, Category, Ward No, District No, and Contact Information. With each record, there are 2 sets of coordinates identifying the location in WGS1984 datum Longitude & Latitude coordinate system and NAD1927 datum (1974 adjustment) & projected in 3 degree modified transverse mercator (3MTM) zone10 coordinate system.
+    
+    For the purpose of providing information in this dataset, the term 'structure' is defined as constructed items that are used by the public in the City of Toronto (City). This dataset provides information about the following structures: Bridges with the span of 3 metres or more, Culverts with an opening of 3 metres or more, and the Elevated Components of the F.G. Gardiner Expressway.
+    
+    This dataset contains the City's Transportation Services (TS) fully or partially owned structures, City's Parks, Forestry & Recreation Services (PFRS) owned structures, Toronto & Region Conservation Authority (TRCA) owned structures managed by PFRS, and the Ontario Ministry of Transportation (MTO) owned structures in the City. The information associated with structures was retrieved from the data sources from the City's TS Bridge Management System, City's PFRS Assets Management System, and MTO published bridge data from Ontario Open Data.
+    
+    The historical version of the dataset (project's Phase-1) has been published to the City of Toronto Open Data catalogue under 'Transportation' category with the title 'Transportation Division Bridge Data'. Historical version access link: [Transportation Division Bridge Data](https://open.toronto.ca/dataset/transportation-division-bridge-data)
+    
+    Users who need updated and new information related to bridges, elevated roadways, and culverts should refer to the current version of the dataset published to the Open Data catalogue with the title as 'Bridges, Elevated Roadways, and Culverts in Toronto'.
+  
+  resources:
+    # resource name
+    bridges-structure:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_BRIDGE_STRUCTURE/FeatureServer/0
+      attributes:
+        - id: OBJECTID
+          type: text
+          info:
+            notes: ""
+        - id: STR_ID
+          type: text
+          info:
+            notes: ""
+        - id: STR_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: STR_USE
+          type: text
+          info:
+            notes: ""
+        - id: LOC_DESC
+          type: text
+          info:
+            notes: ""
+        - id: YEAR_BUILT
+          type: text
+          info:
+            notes: ""
+        - id: CONDITION
+          type: text
+          info:
+            notes: ""
+        - id: LAST_INSP
+          type: text
+          info:
+            notes: ""
+        - id: VALI_YEAR
+          type: text
+          info:
+            notes: ""
+        - id: NEXT_INSP
+          type: text
+          info:
+            notes: ""
+        - id: CON_AGENCY
+          type: text
+          info:
+            notes: ""
+        - id: CON_METHOD
+          type: text
+          info:
+            notes: ""
+        - id: CATEGORY
+          type: text
+          info:
+            notes: ""
+        - id: WARD_NO
+          type: int
+          info:
+            notes: ""
+        - id: WARD_NAME
+          type: text
+          info:
+            notes: ""
+        - id: PHOTO_THUM
+          type: text
+          info:
+            notes: ""
+        - id: PHOTO_MAIN
+          type: text
+          info:
+            notes: ""
+        - id: WESS_DIST
+          type: int
+          info:
+            notes: ""
+        - id: VERT_CLEAR
+          type: text
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+        
+        

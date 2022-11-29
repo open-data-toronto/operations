@@ -84,7 +84,8 @@ def create_dag(dag_id,
     with DAG(
         dag_id=dag_id,
         default_args=default_args,
-        schedule_interval=schedule
+        schedule_interval=schedule,
+        catchup = False # By default Airflow tries to complete all "missed" DAGs since start_date, should be turned off
     ) as dag:
 
         # init list of resource names
@@ -194,7 +195,8 @@ def create_dag(dag_id,
                     task_id="download_" + resource_name,
                     file_url=resource["url"],
                     dir=TMP_DIR,
-                    filename=resource["url"].split("/")[-1]
+                    filename=resource["url"].split("/")[-1],
+                    custom_headers=resource.get("custom_headers", {}),
                 )
 
             # AGOL files:
@@ -212,12 +214,13 @@ def create_dag(dag_id,
 
             # Non AGOL flat JSON files:
             elif not resource.get("agol", False):
-                if resource["format"] == "json":
+                if resource["format"] == "json" or (resource["format"] == "geojson" and resource.get("nested")):
                     tasks_list["download_" + resource_name] = DownloadFileOperator(
                         task_id="download_" + resource_name,
                         file_url=resource["url"],
                         dir=TMP_DIR,
-                        filename=resource["url"].split("/")[-1]
+                        filename=resource["url"].split("/")[-1],
+                        custom_headers=resource.get("custom_headers", {}),
                     )
             
                 # Non AGOL flat GEOJSON files:
@@ -375,6 +378,8 @@ for config_file in os.listdir(CONFIG_FOLDER):
         dag_owner_name = config[package_name]["dag_owner_name"]
         dag_owner_email = config[package_name]["dag_owner_email"]
 
+        pool = "ckan_pool" if len(config[package_name]["resources"]) < 4 else 'big_job_pool'
+
         default_args = airflow_utils.get_default_args(
             {
                 "owner": dag_owner_name,
@@ -385,9 +390,9 @@ for config_file in os.listdir(CONFIG_FOLDER):
                 "retries": 2,
                 "retry_delay": 3,
                 "on_failure_callback": task_failure_slack_alert,
-                "start_date": datetime(2022, 4, 25, 0, 0, 0),
+                "start_date": datetime(2022, 8, 8, 0, 0, 0),
                 "config_folder": CONFIG_FOLDER,
-                "pool": "ckan_pool",
+                "pool": pool,
                 "tags": ["dataset", "yaml"]
             }
         )

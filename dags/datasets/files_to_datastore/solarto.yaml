@@ -1,0 +1,106 @@
+# package name
+solarto:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "SolarTO"
+  date_published: "2022-11-09 18:47:49.923838"
+  refresh_rate: Annually
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Environment & Energy
+  owner_section: Public Energy Initiatives – New Developments
+  owner_unit: null
+  owner_email: SolarTO@toronto.ca
+
+  civic_issues: 
+    - Climate change
+  topics: 
+    - Locations and mapping
+    - Community services
+    - Environment
+  tags: 
+    - name: solar
+      
+  information_url: null
+  excerpt: The City of Toronto’s SolarTO Map was created through a Geographic Information Systems (GIS) analysis of Light Detection and Ranging (LiDAR) data. The Map calculates the solar potential of rooftops in Toronto.
+  limitations: Solar potential is based on the entire “parcel” and not the address of the building. For properties with multiple addresses in a parcel (such as semi-detached houses, row houses, multi-unit buildings, commercial centers, etc.), the Map will aggregate the solar potential of all buildings in the parcel and the result will be inaccurate. Dataset works best if you open it with GIS software.
+  notes: |
+    The City of Toronto’s SolarTO Map was created through a Geographic Information Systems (GIS) analysis of Light Detection and Ranging (LiDAR) data. The software takes into account geographical latitude, as well as the sun’s daily position throughout the year. When users input their address, the Map generates an estimate of solar photovoltaic (PV) system size that can fit on the roof, its cost, savings and payback period in addition to greenhouse gas emission reduction calculations.
+  resources:
+    # resource name
+    solarto-map:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_BuildingSolarPotential/FeatureServer/0
+      attributes:
+        - id: objectid
+          type: text
+          info:
+            notes: ""
+        - id: structureid
+          type: text
+          info:
+            notes: ""
+        - id: roofsize
+          type: float
+          info:
+            notes: "Total roof area measured in square metres."
+        - id: rooftop_sqft
+          type: float
+          info:
+            notes: "Total roof area measured in square feet."
+        - id: roof_size800k
+          type: float
+          info:
+            notes: "Total roof area that receives at least 800 kWh of (kilowatt hours) of solar radiation per square metre. Based on industry best practices, the SolarTO Map uses certain criteria to identify a suitable rooftop, one of which is that the rooftop receive at least receives at least 800 kWh of solar radiation per square meter. "
+        - id: annual_electricity_generation_k
+          type: int
+          info:
+            notes: "Estimated annual electricity production of the proposed rooftop solar system measured in kWh. To estimate Annual Electricity Generation the following assumptions are used: 15% panel efficiency and 86% performance ratio. These values indicate that the solar panels are capable of converting 15% of incoming solar radiation into electricity, and 86% of that electricity is maintained, while 14% is lost due to soiling, inverter inefficiency, wiring, etc."
+        - id: system_size
+          type: float
+          info:
+            notes: "The size of the solar photovoltaic (PV) system that can fit on the rooftop, measured in kilowatts (kW). It is assumed that 1 kW of solar will generate 1,150 kWh/year, based on average solar radiation in Toronto. The System Size is calculated by dividing the Annual Electricity Generation (kwh) by 1,150 kWh."
+        - id: system_cost
+          type: int
+          info:
+            notes: "The upfront cost of the solar PV system in dollars. The System Cost is based on the System Size and the average solar installation rates in Toronto. A estimated  $/Watt rate ranging from $3/watt to $2,2/watt (dependent on system size) is applied to calculate cost"
+        - id: first_year_bill_savings
+          type: int
+          info:
+            notes: "Estimated electricity bill savings over the first year of operation of the solar PV system in dollars. Calculated by multiplying the average utility rate (assumed to be $0.156/kWh) with the Annual Electricity Generation (kWh). Solar PV projects connected to the grid participate in the Net Metering program. When solar panels produce more electricity than consumed onsite, the Net Metering program allows users to feed the excess energy to the grid in exchange for bill credits. These credits can be used to offset the cost of electricity used from the grid. For example, Toronto hydro (time of use) rates average about $0.156/kWh, so you save this much with each kWh your solar panels generate."
+        - id: f_25_year_bill_savings
+          type: int
+          info:
+            notes: "Estimated total electricity bill savings over the first 25 years of operation of the solar PV system in dollars. It is assumed that savings will grow by 4.5%/year - assuming that the price of electricity will escalate by 5 per cent every year and solar panel performance will degrade by 0.5 per cent per year."
+        - id: payback_period
+          type: float
+          info:
+            notes: "The payback period refers to the number of years it will take to recover the cost of the solar PV system through the savings generated by the solar PV system. The payback period is based on annual electricity bill savings minus the upfront cost of the solar system."
+        - id: annual_ghg_reduction_kg
+          type: int
+          info:
+            notes: "Greenhouse gas reduction is based on the reduced consumption from the grid and it's associated GHGs each year, measured in kilograms of carbon dioxide equivalent (kg of CO2e). It is assumed that solar will offset 0.07 kg (000.07 tonnes) of CO2e (carbon dioxide equivalent) for each kWh of solar electricity produced."
+        - id: total_ghg_reduction_kg
+          type: int
+          info:
+            notes: "Total GHG emission reduction over 25 years measured in kg of CO2e. The typical warranty period of solar panels is 25 years. Total GHG Reduction is based on the projected increase of emissions from the grid. It is assumed that solar will offset 0.07 kg (000.07 tonnes) of CO2e (carbon dioxide equivalent) for each kWh of solar electricity produced."
+        - id: trees_grown_for_10_years
+          type: int
+          info:
+            notes: "The number of trees grown for 10 years that would be equivalent to the Total GHG Reduction of the proposed solar PV system. It is assumed that each tree, defined as a medium growth coniferous or deciduous tree, planted in an urban setting and allowed to grow for 10 years, sequesters 60 kg of CO2."
+        - id: cars_off_the_road
+          type: int
+          info:
+            notes: "The number of cars that would need to be taken off the road to be equivalent to the Total GHG Reduction of the proposed solar PV system. It is assumed that each passenger vehicle (defined as a 2-axle 4-tire vehicle, including passenger cars, vans, pickup trucks, and sport/utility vehicles) contributes approximately 4,603 kg of CO2 per year."
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+        
+        

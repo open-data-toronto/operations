@@ -4,12 +4,18 @@ import csv
 import logging
 import codecs
 import openpyxl
+import time
+import itertools
+import hashlib
 
 from datetime import datetime
 from pathlib import Path
 from typing import List
 
+from ckan_operators import nested_file_readers
+
 import ckanapi
+import requests
 import pandas as pd
 from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
@@ -466,10 +472,10 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         assert isinstance(input, str), "Utils clean_date_format() function can only receive strings - it instead received {}".format(type(input))
 
         format_dict = {
-            "%Y-%m-%dT%H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S.%f",
-            "%Y-%m-%d %H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S.%f",
-            "%Y-%m-%dT%H:%M:%S": "%Y-%m-%dT%H:%M:%S.%f",
-            "%Y-%m-%d %H:%M:%S": "%Y-%m-%dT%H:%M:%S.%f",
+            "%Y-%m-%dT%H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S",
+            "%Y-%m-%d %H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S",
+            "%Y-%m-%dT%H:%M:%S": "%Y-%m-%dT%H:%M:%S",
+            "%Y-%m-%d %H:%M:%S": "%Y-%m-%dT%H:%M:%S",
             "%Y-%m-%d": "%Y-%m-%d",
             "%d-%b-%Y": "%Y-%m-%d",
             "%d-%b-%y": "%Y-%m-%d",
@@ -477,7 +483,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "%m-%d-%y": "%Y-%m-%d",
             "%m-%d-%Y": "%Y-%m-%d",
             "%d-%m-%y": "%Y-%m-%d",
-            "%Y%m%d%H%M%S": "%Y-%m-%dT%H:%M:%S.%f",
+            "%Y%m%d%H%M%S": "%Y-%m-%dT%H:%M:%S",
             "%d%m%Y": "%Y-%m-%d",
             "%d%b%Y": "%Y-%m-%d",
         }
@@ -499,22 +505,52 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
     # reads a csv and returns a list of dicts - one dict for each row
     def read_csv_file(self):
         output = []
+
+        # we'll try to detect lat, long attributes here and put them into a geometry attribute
+        # it's important to note that incoming CSVs with geometries MUST be in EPSG 4326
+        # it's also important to note that this logic will only work with point data, not line or polygon
+        latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
+        longitude_attributes = ["long", "longitude", "x", "x coordinate"]
+        self.geometry_needs_parsing = False
+
         dictreader = csv.DictReader(codecs.open(self.data_path, "rbU", "latin1"))
+
+        # looking for possible lat long attributes if there isnt a geometry object already...
+        # (dictreader object cant be indexed, so we start a loop, go through the first item, then break the loop)
+        for firstrow in dictreader:
+            
+            if "geometry" not in firstrow.keys() and "geometry" in [ attr.get("id", None) for attr in self.config["attributes"] ]:
+                for attr in firstrow.keys():
+                      
+                    if attr.lower() in latitude_attributes:
+                        latitude_attribute = attr
+                        self.geometry_needs_parsing = True
+
+                    if attr.lower() in longitude_attributes:
+                        longitude_attribute = attr
+                        self.geometry_needs_parsing = True                       
+                break
+
+        dictreader = csv.DictReader(codecs.open(self.data_path, "rbU", "latin1"))      
         for row in dictreader:
             # strip each attribute name - CKAN requires it
             output_row = {}
             for attr in row.keys():
                 output_row[ attr.strip() ] = row[attr]
+            if self.geometry_needs_parsing and row[longitude_attribute] and row[latitude_attribute]:
+                output_row[ "geometry" ] = json.dumps({ "type": "Point", "coordinates": [float(row[longitude_attribute]), float(row[latitude_attribute]) ] })
+            elif self.geometry_needs_parsing and not row[longitude_attribute] and not row[latitude_attribute]:
+                output_row[ "geometry" ] = None
+                
+
             output.append(output_row)
 
         logging.info("Read {} records from {}".format( len(output), self.data_path))
+
         return output
 
     def read_json_file(self):
-
-        #TODO logic here to find data if its hiding in a child attribute
-
-        return json.load( open(self.data_path, "r"))
+        return json.load( open(self.data_path, "r", encoding="latin-1"))
 
     def read_xlsx_file(self):
         workbook = openpyxl.load_workbook(self.data_path)
@@ -524,8 +560,29 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         output = []
         column_names = [ col.value for col in worksheet[1] ]
 
+        # we'll try to detect lat, long attributes here and put them into a geometry attribute
+        # it's important to note that incoming CSVs with geometries MUST be in EPSG 4326
+        # it's also important to note that this logic will only work with point data, not line or polygon
+        latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
+        longitude_attributes = ["long", "longitude", "x", "x coordinate"]
+        self.geometry_needs_parsing = False
+
+        if "geometry" not in column_names and "geometry" in [ attr.get("id", None) for attr in self.config["attributes"] ]:
+            for attr_index in range(len(column_names)):
+                if column_names[attr_index].lower() in latitude_attributes:
+                    latitude_attribute = attr_index
+                    self.geometry_needs_parsing = True
+
+                if column_names[attr_index].lower() in longitude_attributes:
+                    longitude_attribute = attr_index
+                    self.geometry_needs_parsing = True
+
         for row in worksheet.iter_rows(min_row=2):
-            output.append( { column_names[i]: self.clean_string(row[i].value) for i in range(len(row)) })
+            output_row = { column_names[i]: self.clean_string(row[i].value) for i in range(len(row)) }
+            if self.geometry_needs_parsing:
+                output_row[ "geometry" ] = json.dumps({ "type": "Point", "coordinates": [row[longitude_attribute].value, row[latitude_attribute].value ] })
+
+            output.append( output_row )
 
         return output
 
@@ -535,15 +592,22 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "csv": self.read_csv_file,
             "geojson": self.read_json_file,
             "json": self.read_json_file,
-            "xlsx": self.read_xlsx_file
+            "xlsx": self.read_xlsx_file,
         }
+
+        # use a custom reader if the config is nested
+        if self.config.get("nested", None):
+            nested_readers = nested_file_readers.nested_readers
+            return nested_readers[ self.config["url"] ](self.data_path)
+
         if "zip" in self.config.keys():
             if self.config["zip"]:
                 self.data_path = self.data_path[ self.config["filename"] ]
 
         return readers[self.config["format"].lower()]()
     
-    
+
+
     # parse file attributes into correct data types in a dict based on input fields
     def parse_file(self, read_file):
         # init output
@@ -556,11 +620,12 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "float": self.clean_float,
             "timestamp": self.clean_date_format,
             "date": self.clean_date_format,
-        }
+        }                        
 
-        # convert each column in each row
+        # if input is tabular, convert each column in each input row
         for row in read_file:
             new_row = {}
+
             # for each attribute ...
             for i in range(len(self.config["attributes"])):
                 
@@ -657,87 +722,119 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
         if self.data_path_task_id and self.data_path_task_key:
             self.data_path = ti.xcom_pull(task_ids=self.data_path_task_id)[self.data_path_task_key]
 
-        # read and parse file
+        # read and parse incoming data - parsed data is already trasnformed and its columns are renamed to match what might be in the datastore already
         read_file = self.read_file()
         parsed_data = self.parse_file(read_file)
+        print("data parsed")
 
-        # get existing resource contents and ensure the datastore resource exists
-        max_chunk_size = 32000
+        # if the incoming and incumbent data are a different length, green light an update
         try:
-            record_count = self.ckan.action.datastore_search(id=self.resource_id, limit=0)["total"]
-            datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size)
-            
-            # if the resource is too big to get in a single call, make multiple calls
-            if record_count >= max_chunk_size:
-                iteration = 1
-                next_chunk = self.ckan.action.datastore_search(id=self.resource["id"], limit=max_chunk_size, offset=max_chunk_size*iteration)
-                datastore_resource["records"].append( next_chunk["records"] )
-                while len(next_chunk["records"]):
-                    next_chunk = self.ckan.action.datastore_search(id=self.resource["id"], limit=max_chunk_size, offset=max_chunk_size*iteration)
-                    datastore_resource["records"].append( next_chunk["records"] )
-                    iteration += 1
+            datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=1)
+            record_count = datastore_resource["total"]
         except Exception as e:
             logging.error(e)
-            logging.info("Resource {} isn't in the datastore - update the existing dataset")
+            logging.info("Resource {} isn't in the datastore - update the existing dataset".format( self.resource_name ))
             return "update_resource_" + self.resource_name
 
-        # if the data is a different length, green light an update
-        if len(parsed_data) != len(datastore_resource["records"]):
-            logging.info("Incoming record count {} doesnt match current record count {}".format( str(len(parsed_data)) , str(len(datastore_resource["records"])) ) )
+        if len(parsed_data) != record_count:
+            logging.info("Incoming record count {} doesnt match current record count {}".format( str(len(parsed_data)) , str(record_count) ) )
             return "update_resource_" + self.resource_name
+
+        print("matching record counts")
 
         # remove _id column from existing datastore_resource
         datastore_record = datastore_resource["records"][0]
         del datastore_record["_id"]
         # if the data has different column names, green light an update
+        # TODO: check for columns renamed in YAML processing
         if parsed_data[0].keys() != datastore_record.keys():
             logging.info("Column names dont match between current and incoming data")
             logging.info("Current attributes:" + str( datastore_record.keys() ))
             logging.info("Incoming attributes:" + str(parsed_data[0].keys()) )
             return "update_resource_" + self.resource_name
 
+        print("matching column names")
+
+        # If the dataset is "large", we dont do a record by record comparison as we dont have enough memory in the EC2s right now (July 2022)
+        if record_count > 500000:
+            return "dont_update_resource_" + self.resource_name
+
         
 
-        # rearrange data so if the content is the same, the whole list of dicts matches
-        #if any( [("source_name" in attribute.keys() or "target_name" in attribute.keys()) for attribute in self.config["attributes"]] ):
-        #    logging.info("COLUMN MAPPING!")
-        #    return "update_resource_" + self.resource_name
+        # Record by record comparison
+        print("Starting record by record comparison")
+        max_chunk_size = 32000
+        datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, include_total=False, fields=list(datastore_record.keys()))
+        for incumbent_record in datastore_resource["records"]:
+            if incumbent_record in parsed_data:
+                continue
+            elif incumbent_record not in datastore_resource["records"]:
+                return "update_resource_" + self.resource_name
 
-        # Sort the data by all attributes (which we concatenate together into a single compound key)
-        parsed_data = sorted(parsed_data, key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) 
-        datastore_resource["records"] = sorted(parsed_data, key=lambda d: "".join(str(d[key]) for key in list(parsed_data[0].keys())) ) 
+        # if the resource is too big to get in a single call, make multiple calls
+        if record_count >= max_chunk_size:
+            iteration = 1
+            #datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, offset=max_chunk_size*iteration, include_total=False, fields=list(datastore_record.keys()))
+            #datastore_resource["records"].append( next_chunk["records"] )
+            while len(datastore_resource["records"]):
+                datastore_resource = self.ckan.action.datastore_search(id=self.resource_id, limit=max_chunk_size, offset=max_chunk_size*iteration, include_total=False, fields=list(datastore_record.keys()))
+                for incumbent_record in datastore_resource["records"]:
+                    if incumbent_record in parsed_data:
+                        continue
+                    elif incumbent_record not in datastore_resource["records"]:
+                        return "update_resource_" + self.resource_name
+                #datastore_resource["records"].append( next_chunk["records"] )
+                iteration += 1
         
-        # list of functions used to convert input to desired data_type
-        formatters = {
-            "text": str,
-            "int": self.clean_int,
-            "float": self.clean_float,
-            "timestamp": self.clean_date_format,
-            "date": self.clean_date_format,
-        }
-
-        for i in range(len(parsed_data)):
-            #print("ITERATION: " + str(i))
-            # if theres column name mapping, capture it in your comparison
-            for attribute in self.config['attributes']:
-                if "source_name" in attribute.keys() and "target_name" in attribute[i].keys():
-                    logging.info("REMAPPING A COLUMN: " + str(attribute))
-                    attribute["id"] = attribute["target_name"]
-                
-                # now check each attribute's values in each dataset and make sure they match
-                logging.info("attribute: " + str(attribute["id"]))
-                # ensure we're transforming incumbent and new data in the same way
-                formatter = formatters[attribute["type"]]
-
-                #print( formatter(parsed_data[i][ attribute["id"] ])   )
-                #print( formatter(datastore_resource["records"][i][ attribute["id"] ])  )
-                
-                if formatter(parsed_data[i][ attribute["id"] ]) != formatter(datastore_resource["records"][i][ attribute["id"] ]):
-                    logging.info("Incoming record(s) dont match existing records. Details below:")
-                    logging.info("new data: " + str(parsed_data[i]))
-                    logging.info("old data: " + str(datastore_resource["records"][i]))
-                    logging.info(parsed_data[i][ attribute["id"] ])
-                    logging.info(datastore_resource["records"][i][ attribute["id"] ])
-                    return "update_resource_" + self.resource_name
 
         return "dont_update_resource_" + self.resource_name
+
+class CheckCkanResourceDescriptionOperator(BaseOperator):
+    """
+    Check if the description of a resource is missing
+    """
+    @apply_defaults
+    def __init__(
+        self,
+        input_dag_id: str = None,
+        address : str = None,
+        **kwargs
+    ) -> None:
+        super().__init__(**kwargs)
+        self.input_dag_id = input_dag_id
+        self.address = address
+
+    def execute(self, context):
+        ti = context['ti']
+        # Get full package name list
+        package_list = ti.xcom_pull(task_ids = self.input_dag_id)
+        result_info = {}
+        for package_name in package_list:
+            url = self.address + "api/3/action/package_show?id=" + package_name
+            resources = requests.get(url).json()['result']['resources']
+            # Iterate over all resources in a package
+            for resource in resources:
+                # Perform analysis only when datastore is active
+                if str(resource["datastore_active"]) == "True":
+                    # Send datastore_search request
+                    url = self.address + "api/3/action/datastore_search?resource_id=" + resource["id"]
+                    fields = requests.get(url).json()['result']['fields']
+
+                    # check "info" field exists and "notes" is not empty
+                    field_flag = [True if ('info' in item.keys()) and (item['info']['notes'] is not None) else False for item in fields]
+                    # resource_flag == true, means that resource dont have ANY column name descriptions
+                    resource_flag = all([flag is False for flag in field_flag])
+
+                    if resource_flag:
+                        logging.warning(f'Resource description MISSING! package id or name: {package_name} resource id: {resource["id"]}')
+                        
+                        # collect package and resource info for missing descriptions
+                        if package_name in result_info:
+                            result_info[package_name] = result_info[package_name] + ', ' + resource["id"]
+                        else:
+                            result_info[package_name] = resource["id"]
+
+                    else:
+                        logging.info('Resource description OK!')
+        return {"package_and_resource": result_info}
+

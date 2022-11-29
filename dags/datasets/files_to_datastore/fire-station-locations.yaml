@@ -1,0 +1,100 @@
+# This file is migrated from NiFi
+fire-station-locations:
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Fire Station Locations
+  date_published: '2019-07-23 17:15:21.03949'
+  refresh_rate: As available
+  dataset_category: Map
+  owner_division: Fire Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: Locations and mapping,Public safety
+  tags:
+  - name: fire stations
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/fire/stations/
+  excerpt: DGN  file contains City of Toronto fire station locations (XY coordinates
+    ) and an Excel spreadsheet with same coordinates
+  limitations: null
+  notes: "\r\nDGN file contains City of Toronto fire station locations (XY coordinates\
+    \ ) and an Excel spreadsheet with same coordinates\r\n\r\nThe file contains the\
+    \ location of all fire stations and station numbers within the City of Toronto.\
+    \ The locations are identified by XY (latitude and longitude) coordinates.\r\n"
+  resources:
+    fire-station-locations:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_FIRE_FACILITY/FeatureServer/0
+      attributes:
+      - id: ADDRESS_POINT_ID
+        type: float
+        info:
+          notes: ''
+      - id: ADDRESS_NUMBER
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_FULL
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESS
+        type: text
+        info:
+          notes: ''
+      - id: MUNICIPALITY_NAME
+        type: text
+        info:
+          notes: ''
+      - id: CENTRELINE_ID
+        type: int
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: ID
+        type: int
+        info:
+          notes: ''
+      - id: STATION
+        type: int
+        info:
+          notes: ''
+      - id: YEAR_BUILD
+        type: int
+        info:
+          notes: ''
+      - id: WARD
+        type: int
+        info:
+          notes: ''
+      - id: WARD_NAME
+        type: text
+        info:
+          notes: ''
+      - id: TYPE_DESC
+        type: text
+        info:
+          notes: ''
+      - id: PUBLIC_ED_OFFICE
+        type: text
+        info:
+          notes: ''
+      - id: FIRE_PREV_OFFICE
+        type: text
+        info:
+          notes: ''
+      - id: FIRE_OTHER
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

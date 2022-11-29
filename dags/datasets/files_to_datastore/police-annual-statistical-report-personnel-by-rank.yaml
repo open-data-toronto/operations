@@ -41,7 +41,7 @@ police-annual-statistical-report-personnel-by-rank:
     Personnel by Rank:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Personnel_by_Rank__ASR_PB_TBL_002/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Personnel_by_Rank_ASR_PB_TBL_002/FeatureServer/0/
       attributes:
         - id: "ObjectId"
           type: "int"

@@ -25,7 +25,7 @@ from utils_operators.slack_operators import task_success_slack_alert, task_failu
 
 
 SRC_URL = "http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv"  # noqa: E501
-PACKAGE_NAME = "licensed-child-care-centres"
+PACKAGE_NAME = "licensed-child-care-centres-old"
 RESOURCE_NAME = "Child care centres"
 
 EXPECTED_COLUMNS = [

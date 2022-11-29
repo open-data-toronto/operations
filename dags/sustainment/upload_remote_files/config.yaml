@@ -139,10 +139,10 @@ municipal-licensing-and-standards-investigation-activity:
 non-regulated-lead-sample:
   non-regulated-lead-sample-from-2014-to-present-csv:
     format: zip
-    url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_csv.zip
-  non-regulated-lead-sample-from-2014-to-present-xml:
-    format: zip
-    url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
+    url: http://opendata.toronto.ca/toronto.water/non-regulated-lead-sample/leadsampling_csv.zip
+#  non-regulated-lead-sample-from-2014-to-present-xml:
+#    format: zip
+#    url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
 outbreaks-in-toronto-healthcare-institutions:
   Outbreaks in Toronto Healthcare Institutions-2020:
     format: xls
@@ -228,7 +228,7 @@ imagination-manufacturing-innovation-and-technology-imit-program-recipients:
 small-business-property-tax-subclass-eligible-properties:
   Small Business Subclass Report - 2022:
     format: xlsx
-    url: http://opendata.toronto.ca/revenue.services/small-business-property-tax-subclass-eligible-properties/Small Business Subclass Report - March 24 2022.xlsx
+    url: http://opendata.toronto.ca/revenue.services/small-business-property-tax-subclass-eligible-properties/Small Business Subclass - current.xlsx
 development-charge-revenues:
   DC Revenues (2017):
     format: xlsx
@@ -242,9 +242,12 @@ development-charge-revenues:
   DC Revenues (2020):
     format: xlsx
     url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2020).xlsx
-  #DC Revenues (2021):
-  #  format: xlsx
-  #  url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2021).xlsx
+  DC Revenues (2021):
+    format: xlsx
+    url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2021).xlsx
+  DC Revenues (2022):
+    format: xlsx
+    url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2022).xlsx
 ttc-bus-delay-data:
   ttc-bus-delay-data-readme:
     format: xlsx
@@ -275,7 +278,7 @@ ttc-bus-delay-data:
     url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2021.xlsx
   ttc-bus-delay-data-2022:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-2022.xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2022.xlsx
 ttc-streetcar-delay-data:
   ttc-streetcar-delay-data-readme:
     format: xlsx
@@ -306,7 +309,7 @@ ttc-streetcar-delay-data:
     url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2021.xlsx
   ttc-streetcar-delay-data-2022:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-2022.xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2022.xlsx
 ttc-subway-delay-data:
   ttc-subway-delay-data-readme:
     format: xlsx
@@ -392,6 +395,10 @@ annual-energy-consumption:
 #  Cafe TO Locations:
 #    format: shp
 #    url: http://opendata.toronto.ca/transportation.services/cafe-to/Cafe_TO_Locations_with_Years.zip
+basement-flooding-by-ward:
+  basement-flooding-by-ward:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.water/basement-flooding-by-ward/Basement-flooding-by-ward_Jun 30 2022.xlsx
 freedom-of-information-requests-summary:
   foi-request-summary-2011:
     format: xls
@@ -426,3 +433,42 @@ freedom-of-information-requests-summary:
   foi-request-summary-2021:
     format: xlsx
     url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2021.xlsx
+  foi-request-summary-2022:
+    format: xlsx
+    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2022.xlsx
+  Glossary of Short Forms:
+    format: doc
+    url: http://opendata.toronto.ca/city.clerks.office/foi/Glossary of Short Forms  updated  August 29, 2022.doc
+community-grants-allocations:
+  community-grants-allocations-2020:
+    format: xlsx
+    url: http://opendata.toronto.ca/social.development.finance.administration/community-grants/community-grants-allocations-2020.xlsx
+  community-grants-allocations-2020-additions:
+    format: xlsx
+    url: http://opendata.toronto.ca/social.development.finance.administration/community-grants/MISSING 2020 EED Community Grants Allocations.xlsx
+  community-grants-allocations-2021:
+    format: xlsx
+    url: http://opendata.toronto.ca/social.development.finance.administration/community-grants/2021 Community Grants Allocation - Final 3.xlsx
+report-request-log-city-council-and-its-committees:
+  Report Request Log PDF:
+    format: PDF
+    url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog.pdf
+cost-of-living-in-toronto-for-low-income-households:
+  2022 Income Scenario - With Subsidies:
+    format: csv
+    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-with subsidies v2.csv
+  2022 Income Scenario - Without Subsidies, Average Rent:
+    format: csv
+    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-without subsidies_average rent v2.csv
+  2022 Income Scenario - Without Subsidies, Market Rent:
+    format: csv
+    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-without subsidies_market rent v2.csv
+  2022 Income Scenario - With Subsidies Readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-with-subsidies-readme .xlsx
+  2022 Income Scenario - Without Subsidies, Average Rent Readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-without-subsidies-average-rent-readme .xlsx
+  2022 Income Scenario - Without Subsidies, Market Rent Readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-without-subsidies-market-rent-readme .xlsx

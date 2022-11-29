@@ -1,0 +1,113 @@
+# This file is migrated from NiFi
+wellbeing-youth-aboriginal-youth-services:
+  schedule: "0 0 1 2,5,8,11 *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Wellbeing Youth- Aboriginal Youth Services
+  date_published: '2020-02-28 17:47:36.574417'
+  refresh_rate: Quarterly
+  dataset_category: Map
+  owner_division: Social Development, Finance & Administration
+  owner_section: null
+  owner_unit: null
+  owner_email: spar@toronto.ca
+  civic_issues: null
+  topics: null
+  tags:
+  - name: toronto
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/wellbeing-toronto/
+  excerpt: This data was derived from the Wellbeing Toronto - Youth Services data.
+    These are programs and services focused on the needs of youth in the First Nations,
+    Inuit and Metis communities.
+  limitations: null
+  notes: Programs and services focused on the needs of youth in the First Nations,
+    Inuit and Metis communities. Taxonomoy-based search of 211Toronto's database.
+    For additional information and for the latest version of this data, please contact
+    Findhelp/211 at info@findhelp.ca.
+  resources:
+    Aboriginal Services:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_YOUTH_ABORIGINAL/FeatureServer/0
+      attributes:
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: AGENCY_NAME
+        type: text
+        info:
+          notes: ''
+      - id: ORGANIZATION_ADDRESS
+        type: text
+        info:
+          notes: ''
+      - id: NEIGHBOURHOOD
+        type: text
+        info:
+          notes: ''
+      - id: OFFICE_PHONE
+        type: text
+        info:
+          notes: ''
+      - id: EMAIL
+        type: text
+        info:
+          notes: ''
+      - id: WEBSITE
+        type: text
+        info:
+          notes: ''
+      - id: ELIGIBILITY
+        type: text
+        info:
+          notes: ''
+      - id: DESCRIPTION_SERVICE
+        type: text
+        info:
+          notes: ''
+      - id: APPLICATION
+        type: text
+        info:
+          notes: ''
+      - id: LANGUAGES
+        type: text
+        info:
+          notes: ''
+      - id: ACCESSIBILITY
+        type: text
+        info:
+          notes: ''
+      - id: HOURS
+        type: text
+        info:
+          notes: ''
+      - id: LEGAL_STATUS
+        type: text
+        info:
+          notes: ''
+      - id: DATE_UPDATED
+        type: timestamp
+        info:
+          notes: ''
+      - id: ADDRESS_POINT_ID
+        type: float
+        info:
+          notes: ''
+      - id: ADDRESS_FULL
+        type: text
+        info:
+          notes: ''
+      - id: MUNICIPALITY
+        type: text
+        info:
+          notes: ''
+      - id: POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

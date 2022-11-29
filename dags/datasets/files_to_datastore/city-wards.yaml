@@ -1,0 +1,111 @@
+# This file is migrated from NiFi
+city-wards:
+  schedule: "0 1 1 1,6 *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: City Wards
+  date_published: '2019-07-23 16:47:43.599698'
+  refresh_rate: Semi-annually
+  dataset_category: Map
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: Mobility
+  topics: City government,Locations and mapping
+  tags:
+  - name: city wards
+    vocabulary_id: null
+  information_url: null
+  excerpt: The City of Toronto is divided into municipal wards
+  limitations: null
+  notes: "The City of Toronto is divided into municipal wards. This dataset includes:\r\
+    \n\r\n  * The boundaries for the City of Toronto's 25 wards were established using\
+    \ the Provincial electoral ridings with minor adjustments to reflect Toronto's\
+    \ boundaries and will be used to conduct the 2018 general municipal election.\
+    \  They will come into force on December 1, 2018. _  \r\n_\r\n\r\n  * The current\
+    \ boundaries for the City of Toronto's 44 municipal wards that are in effect until\
+    \ November 30, 2018.\r\n  * The boundaries that were established as a result of\
+    \ the Ward Boundary Review for the City of Toronto's 47 wards\r\n\r\n"
+  resources:
+    City Wards Data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_CITY_WARD/FeatureServer/0
+      attributes:
+      - id: AREA_ID
+        type: float
+        info:
+          notes: ''
+      - id: DATE_EFFECTIVE
+        type: timestamp
+        info:
+          notes: ''
+      - id: DATE_EXPIRY
+        type: timestamp
+        info:
+          notes: ''
+      - id: AREA_ATTR_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_TYPE_ID
+        type: float
+        info:
+          notes: ''
+      - id: PARENT_AREA_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_TYPE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_CLASS_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_CLASS
+        type: text
+        info:
+          notes: ''
+      - id: AREA_SHORT_CODE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_LONG_CODE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_NAME
+        type: text
+        info:
+          notes: ''
+      - id: AREA_DESC
+        type: text
+        info:
+          notes: ''
+      - id: FEATURE_CODE
+        type: int
+        info:
+          notes: ''
+      - id: FEATURE_CODE_DESC
+        type: text
+        info:
+          notes: ''
+      - id: TRANS_ID_CREATE
+        type: float
+        info:
+          notes: ''
+      - id: TRANS_ID_EXPIRE
+        type: float
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

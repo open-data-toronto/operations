@@ -1,0 +1,108 @@
+# This file is migrated from NiFi
+clothing-drop-box-locations:
+  schedule: "15 6 3 * *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Clothing Drop-Box Locations
+  date_published: '2019-07-23 16:48:28.280643'
+  refresh_rate: Monthly
+  dataset_category: Map
+  owner_division: Municipal Licensing & Standards
+  owner_section: null
+  owner_unit: null
+  owner_email: Fiona.chapman@toronto.ca
+  civic_issues: Poverty reduction
+  topics: Community services,Locations and mapping,Permits and licenses
+  tags:
+  - name: clothing drop box
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/permits-licences-bylaws/clothing-drop-box-operator-licence/clothing-drop-box-location-permit/?t=1568037808
+  excerpt: Toronto Municipal Code Chapter 395, Clothing Drop Boxes, requires that
+    all clothing drop boxes placed on private or public property display a permit.
+    This dataset provides information on businesses that own permits for clothing
+    drop boxes and the locations of the drop boxes.
+  limitations: "- This data set contains all clothing drop box permits issued from\
+    \ October 1st, 2019 onward.  Cancelled permits will have a date in the \"Cancellation\
+    \ Date\" field.\r\n\r\n- Earlier permit data can be found in this data set: [\"\
+    Municipal Licensing and Standards - Business Licences and Permits\"](https://open.toronto.ca/dataset/municipal-licensing-and-standards-business-licences-and-permits/).\
+    \  Filter for \"CLOTHING DROP BOX LOCATION PERMIT\" \u2013 the permit numbers\
+    \ will start with \"P90\".\r\n\r\n- Each clothing drop box operator must also\
+    \ hold a \"Clothing Drop Box Operator\" business licence.  Those licences can\
+    \ be found in this data set: [\"Municipal Licensing and Standards - Business Licences\
+    \ and Permits\"](https://open.toronto.ca/dataset/municipal-licensing-and-standards-business-licences-and-permits/).\
+    \  Filter for \"CLOTHING DROP BOX OPERATOR\" \u2013 the licence numbers will start\
+    \ with \"B90\".\r\n\r\n- Investigation activity (such as complaints or service\
+    \ requests related to clothing drop boxes and collected through 311) is not available\
+    \ in this set or in the [\"Municipal Licensing and Standards - Investigation Activity\"\
+    ](https://open.toronto.ca/dataset/municipal-licensing-and-standards-investigation-activity/)\
+    \ and the [\"311 Service Requests\"](https://open.toronto.ca/dataset/311-service-requests-customer-initiated/)\
+    \ data sets.\r\n"
+  notes: "This dataset provides information on the location and operators of permitted\
+    \ clothing drop boxes.\r\n\r\nThe Clothing Drop Box by-law ensures that the public\
+    \ is aware of where used clothing donations are going, creates a registry of clothing\
+    \ box owners, and deters litter and unsightly views for residents.\r\n\r\nToronto\
+    \ Municipal Code [Chapter 395](https://www.toronto.ca/legdocs/bylaws/2013/law0599.pdf),\
+    \ \"Clothing Drop Boxes\", requires that all clothing drop box operators obtain\
+    \ a location permit for each box. All operators, including charitable organizations,\
+    \ must display the permit sticker on the box. \r\n\r\n\r\n* For more information\
+    \ refer to the [clothing drop box operator licence](https://www.toronto.ca/services-payments/permits-licences-bylaws/clothing-drop-box-operator-licence/?t=1568037891)\
+    \ or [clothing drop box permit](https://www.toronto.ca/services-payments/permits-licences-bylaws/clothing-drop-box-operator-licence/clothing-drop-box-location-permit/?t=1568037808)\
+    \ pages.\r\n"
+  resources:
+    Clothing Drop-Box Locations:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/Clothing_Drop_Box/FeatureServer/0
+      attributes:
+      - id: Permit_No
+        type: text
+        info:
+          notes: 'Unique permit number assigned to each drop box by the City of Toronto '
+      - id: Permit_Sticker_No
+        type: text
+        info:
+          notes: Unique Clothing drop box sticker number assigned by City of Toronto
+      - id: Permit_Class
+        type: text
+        info:
+          notes: Clothing drop box type e.g For Profit , Non-Profit
+      - id: Permit_Holder
+        type: text
+        info:
+          notes: 'Clothing drop box operator name '
+      - id: Permit_Address_Street_No
+        type: text
+        info:
+          notes: Clothing drop box location street number
+      - id: Permit_Address_Street_Name
+        type: text
+        info:
+          notes: Clothing drop box location street name
+      - id: Permit_Address_Unit
+        type: text
+        info:
+          notes: 'Clothing drop box location unit '
+      - id: Permit_Address_Postal_Code
+        type: text
+        info:
+          notes: Clothing drop box location postal code
+      - id: Permit_Address_Ward
+        type: int
+        info:
+          notes: Ward that the clothing drop box is located in
+      - id: Permit_Contact_Phone_No_
+        type: text
+        info:
+          notes: Contact number for a clothing drop box
+      - id: Issue_Date
+        type: text
+        info:
+          notes: Issuance date for a clothing drop box permit
+      - id: Cancellation_Date
+        type: text
+        info:
+          notes: 'Cancellation date for a clothing drop box permit '
+      - id: geometry
+        type: text
+        info:
+          notes: ''

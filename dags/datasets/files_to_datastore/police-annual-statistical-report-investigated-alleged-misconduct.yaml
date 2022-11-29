@@ -41,7 +41,7 @@ police-annual-statistical-report-investigated-alleged-misconduct:
     Investigated Alleged Misconduct:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Investigated_Alleged_Misconduct__ASR_PCF_TBL_002/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Investigated_Alleged_Misconduct_ASR_PCF_TBL_002/FeatureServer/0/
       attributes:
         - id: "ObjectId"
           type: "int"

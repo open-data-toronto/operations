@@ -1,0 +1,115 @@
+# This file is migrated from NiFi
+on-street-permit-parking-area-maps:
+  schedule: "0 4 * * *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: On-Street Permit Parking Area Maps
+  date_published: '2019-07-23 17:48:06.130429'
+  refresh_rate: Daily
+  dataset_category: Map
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: Mobility
+  topics: Locations and mapping,Transportation
+  tags:
+  - name: maps
+    vocabulary_id: null
+  - name: on-street
+    vocabulary_id: null
+  - name: parking
+    vocabulary_id: null
+  - name: permit
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/transportation/onstreet/
+  excerpt: Polygons are used to define the boundaries of permit parking areas so permit
+    parking holders can visually identify where their parking permit will authorize
+    them to park.
+  limitations: null
+  notes: "**FID -** System field\r\n\r\n**Feature Id Shape -** Feature Type (polygon)\r\
+    \n\r\n**Area_id -** Parking permit area identifier\r\n\r\nPermit parking areas\
+    \ within the City of Toronto are presented in map format.\r\nThis file is best\
+    \ viewed when overlaid with the City of Toronto Centreline\r\nfile.\r\n\r\n"
+  resources:
+    On-Street Permit Parking Area Map Data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_PERMIT_PARKING_AREA/FeatureServer/0
+      attributes:
+      - id: AREA_ID
+        type: float
+        info:
+          notes: ''
+      - id: DATE_EFFECTIVE
+        type: timestamp
+        info:
+          notes: ''
+      - id: DATE_EXPIRY
+        type: timestamp
+        info:
+          notes: ''
+      - id: AREA_ATTR_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_TYPE_ID
+        type: float
+        info:
+          notes: ''
+      - id: PARENT_AREA_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_TYPE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_CLASS_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_CLASS
+        type: text
+        info:
+          notes: ''
+      - id: AREA_SHORT_CODE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_LONG_CODE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_NAME
+        type: text
+        info:
+          notes: ''
+      - id: AREA_DESC
+        type: text
+        info:
+          notes: ''
+      - id: FEATURE_CODE
+        type: int
+        info:
+          notes: ''
+      - id: FEATURE_CODE_DESC
+        type: text
+        info:
+          notes: ''
+      - id: TRANS_ID_CREATE
+        type: float
+        info:
+          notes: ''
+      - id: TRANS_ID_EXPIRE
+        type: float
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

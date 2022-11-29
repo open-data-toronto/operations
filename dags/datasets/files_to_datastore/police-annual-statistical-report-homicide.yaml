@@ -1,0 +1,79 @@
+# package name
+police-annual-statistical-report-homicide:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: Police Annual Statistical Report - Homicides
+  date_published: "2020-08-18 14:31:25.49913"
+  refresh_rate: Annually
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: null
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: []
+
+  information_url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Homicide_ASR_RC_TBL_002/FeatureServer
+  excerpt: This dataset includes all Homicides occurrences by occurred date.
+  limitations: |
+    This dataset includes all Homicides from 2004 to 2020.  The location of crime occurrences have been deliberately offset to the nearest road intersection node to protect the privacy of parties involved in the occurrence. Due to the offset of occurrence location, the numbers by Division and Neighbourhood may not reflect the exact count of occurrences reported within these geographies. Therefore, the Toronto Police Service does not guarantee the accuracy, completeness, timeliness of the data and it should not be compared to any other source of crime data. Divisional Boundary changes took effect in 2011.
+
+    This data is related to table (ASR-RC-TBL-002) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+
+    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+  notes: |
+    This dataset includes all Homicides occurrences by occurred date.
+
+    Note: The City of Toronto Neighbourhoods identified in this dataset correspond with the 140 neighbourhoods.
+
+    Supporting documentation can be found [here](https://torontops.maps.arcgis.com/sharing/rest/content/items/c0b17f1888544078bf650f3b8b04d35d/data).
+    
+  resources:
+    # resource name
+    Homicides:
+      agol: True
+      format: geojson
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Homicide_ASR_RC_TBL_002/FeatureServer/0
+      attributes:
+        - id: "Event_Unique_Id"
+          type: "text"
+          info:
+            notes: "General Occurrence Number"
+        - id: "Occurrence_year"
+          type: "int"
+          info:
+            notes: "Year Homicide Occurred"
+        - id: "Division"
+          type: "text"
+          info:
+            notes: "Police Division where Homicide Occurred"
+        - id: "Homicide_Type"
+          type: "text"
+          info:
+            notes: "Type of Homicide"
+        - id: "Occurrence_Date"
+          type: "timestamp"
+          info:
+            notes: "Date Homicide Occurred"
+        - id: "Hood_ID"
+          type: "int"
+          info:
+            notes: "Identificator of Neighbourhood where Homicide Occurred"
+        - id: "Neighbourhood"
+          type: "text"
+          info:
+            notes: "Name of Neighbourhood where Homicide Occurred"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+         
