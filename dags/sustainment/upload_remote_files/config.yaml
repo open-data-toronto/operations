@@ -33,10 +33,10 @@ toronto-economic-bulletin:
 3d-massing:
   3D Massing (WGS84):
     format: shp
-    url: http://opendata.toronto.ca/city.planning/3d-massing/2021/3DMassingShapefile_2021_WGS84.zip
+    url: http://opendata.toronto.ca/city.planning/3d-massing/2022/3DMassingMultipatch_2022_WGS84.zip
   3D Massing Multipatch (WGS84):
     format: shp
-    url: http://opendata.toronto.ca/city.planning/3d-massing/2021/3DMassingMultipatch_2021_WGS84.zip
+    url: http://opendata.toronto.ca/city.planning/3d-massing/2022/3DMassingShapefile_2022_WGS84.zip
   Tile Locator Reference File (PDF):
     format: pdf
     url: http://opendata.toronto.ca/city.planning/3d-massing/3DContextMassing_Tile_Locator.pdf
@@ -442,6 +442,9 @@ freedom-of-information-requests-summary:
 community-grants-allocations:
   community-grants-allocations-2020:
     format: xlsx
+    url: http://opendata.toronto.ca/social.development.finance.administration/community-grants/community-grants-allocations-2020.xlsx
+  community-grants-allocations-2020-additions:
+    format: xlsx
     url: http://opendata.toronto.ca/social.development.finance.administration/community-grants/MISSING 2020 EED Community Grants Allocations.xlsx
   community-grants-allocations-2021:
     format: xlsx
@@ -450,3 +453,22 @@ report-request-log-city-council-and-its-committees:
   Report Request Log PDF:
     format: PDF
     url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog.pdf
+cost-of-living-in-toronto-for-low-income-households:
+  2022 Income Scenario - With Subsidies:
+    format: csv
+    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-with subsidies v2.csv
+  2022 Income Scenario - Without Subsidies, Average Rent:
+    format: csv
+    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-without subsidies_average rent v2.csv
+  2022 Income Scenario - Without Subsidies, Market Rent:
+    format: csv
+    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-without subsidies_market rent v2.csv
+  2022 Income Scenario - With Subsidies Readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-with-subsidies-readme .xlsx
+  2022 Income Scenario - Without Subsidies, Average Rent Readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-without-subsidies-average-rent-readme .xlsx
+  2022 Income Scenario - Without Subsidies, Market Rent Readme:
+    format: xlsx
+    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-without-subsidies-market-rent-readme .xlsx
