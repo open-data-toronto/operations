@@ -1,0 +1,204 @@
+cost-of-living-in-toronto-for-low-income-households:
+  schedule: '@once'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Cost of living in Toronto for low-income households
+  date_published: '2022-11-10 04:32:53.172094'
+  refresh_rate: Annually
+  dataset_category: Table
+  owner_division: Social Development, Finance & Administration
+  owner_section: Social Planning & Research
+  owner_unit: Poverty Reduction Strategy Office
+  owner_email: PRSO@toronto.ca
+  civic_issues: poverty_reduction
+  topics: null
+  tags: []
+  information_url: https://www.toronto.ca/city-government/accountability-operations-customer-service/long-term-vision-plans-and-strategies/poverty-reduction-strategy/food-security-in-toronto-poverty-reduction-strategy/
+  excerpt: 'Low-income households struggle to pay for the basic costs of living. These
+    income scenarios describe affordability of shelter, nutritious food, childcare
+    and transportation relative to income. '
+  limitations: "+\tScenarios describe estimated values only, rounded to the nearest\
+    \ dollar.\r\n+\tIncome is estimated using a May/June 2022 reference period to\
+    \ align with Nutritious Food Basket data collection. Thus, tax year 2020 has been\
+    \ utilized in calculations.\r\n+\tIncome amounts include all entitlements available\
+    \ to Ontario residents; therefore, they are maximum amounts. Actual income amounts\
+    \ may be lower if residents do not file their income tax and/or do not apply for\
+    \ all available tax credits.\r\n"
+  notes: "The City of Toronto monitors the affordability of food annually using the\
+    \ Nutritious Food Basket (NFB) costing tool. While food prices have increased\
+    \ considerably in recent months, the inability to purchase food is not because\
+    \ food prices are too high. Rather, people with low incomes do not have enough\
+    \ money to cover the cost of basic expenses, including nutritious food.  As such,\
+    \ NFB data is best viewed in relation to income, alongside other local basic expenses.\
+    \  \r\n\r\nThe dataset describes the affordability of food and other basic expenses\
+    \ relative to income for nine household scenarios. \r\n\r\n+\tScenarios were selected\
+    \ to reflect household characteristics that increase the risk of being food insecure,\
+    \ including reliance on social assistance as the main source of income, single-parent\
+    \ households, and rental housing. A median income scenario has also been included\
+    \ as a comparator. \r\n+\tIncome, including federal and provincial tax benefits,\
+    \ and the cost of four basic living expenses - shelter, food, childcare, and transportation\
+    \ - are estimated for each scenario. \r\n+\tResults show the amount of money remaining\
+    \ at the end of the month for each household. \r\n\r\nThree versions of the scenarios\
+    \ were created to describe:\r\n\r\n+\tIncome scenarios with subsidies: Subsidies\
+    \ can substantially reduce a households\u2019 monthly expenses. Local subsidies\
+    \ for rent (Rent-Geared-to-Income), childcare (Childcare Fee Subsidy), and transit\
+    \ (Fair Pass) are accounted for in this file. \r\n+\tIncome scenarios without\
+    \ subsidies + average rent: In this file, rental costs are based on average rent,\
+    \ as measured by the Canadian Mortgage and Housing Corporation (CMHC). \r\n+\t\
+    Income scenarios without subsidies + market rent: Rental costs are based on average\
+    \ market rent (as of June 2022), as measured by the Toronto Regional Real Estate\
+    \ Board (TRREB).\r\n"
+  resources:
+    2022 Income Scenario - With Subsidies:
+      format: csv
+      url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-with%20subsidies%20v2.csv
+      attributes:
+        - id: Category
+          type: text
+          info:
+            notes: ''
+        - id: Item
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 1: Family of Four, Ontario Works'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 2: Family of Four, Full-Time Minimum Wage Earner'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 3: Family of Four, Median Income'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 4: Single Parent Household with 2 Children, Ontario Works'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 5: One person Household, Ontario Works'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 6: One Person Household, Ontario Disability Support Program'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 7: One Person Household, Old Age Security /Guaranteed Annual Income
+            Supplement'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 8: Married Couple, Ontario Disability Support Program'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 9: Single Person Household, Full-Time Minimum Wage Earner'
+          type: text
+          info:
+            notes: ''
+    2022 Income Scenario - Without Subsidies - Average Rent:
+      format: csv
+      url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-without%20subsidies_average%20rent%20v2.csv
+      attributes:
+        - id: Category
+          type: text
+          info:
+            notes: ''
+        - id: Item
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 1: Family of Four, Ontario Works'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 2: Family of Four, Full-Time Minimum Wage Earner'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 3: Family of Four, Median Income'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 4: Single Parent Household with 2 Children, Ontario Works'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 5: One person Household, Ontario Works'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 6: One Person Household, Ontario Disability Support Program'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 7: One Person Household, Old Age Security /Guaranteed Annual Income
+            Supplement'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 8: Married Couple, Ontario Disability Support Program'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 9: Single Person Household, Full-Time Minimum Wage Earner'
+          type: text
+          info:
+            notes: ''
+    2022 Income Scenario - Without Subsidies - Market Rent:
+      format: csv
+      url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-without%20subsidies_market%20rent%20v2.csv
+      attributes:
+        - id: Category
+          type: text
+          info:
+            notes: ''
+        - id: Item
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 1: Family of Four, Ontario Works'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 2: Family of Four, Full-Time Minimum Wage Earner'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 3: Family of Four, Median Income'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 4: Single Parent Household with 2 Children, Ontario Works'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 5: One person Household, Ontario Works'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 6: One Person Household, Ontario Disability Support Program'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 7: One Person Household, Old Age Security /Guaranteed Annual Income
+            Supplement'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 8: Married Couple, Ontario Disability Support Program'
+          type: text
+          info:
+            notes: ''
+        - id: 'Scenario 9: Single Person Household, Full-Time Minimum Wage Earner'
+          type: text
+          info:
+            notes: ''
+
+
+        
+
+
+

@@ -1,0 +1,126 @@
+# This file is migrated from filestore
+municipal-licensing-and-standards-business-licences-and-permits:
+  schedule: '@once'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Municipal Licensing and Standards - Business Licences and Permits
+  date_published: '2019-07-23 17:45:19.090726'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: Municipal Licensing & Standards
+  owner_section: null
+  owner_unit: null
+  owner_email: MLSBusinessLicence@toronto.ca
+  civic_issues: null
+  topics: Business,Permits and licenses
+  tags:
+  - name: busincess licence
+    vocabulary_id: null
+  - name: business permit
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/permits-licences/
+  excerpt: " businesses in Toronto require a business licence. Municipal Licensing
+    & Standards (ML&S) issues licences to various types of businesses and trades,
+    as well as some mobile businesses in the City."
+  limitations: null
+  notes: " **Category -** Type of licence or permit  \r\n\r\n**Licence No -** Number\
+    \ of licence issued by City of Toronto  \r\n\r\n**Operating Name -** Name that\
+    \ company operates under  \r\n\r\n**Issued -** Date of issue of licence/permit\
+    \ \r\n\r\n**Client Name -** Name that the licence is issued to \r\n\r\n**Business\
+    \ Phone -** Client Business Phone Number \r\n\r\n**Business Phone Ext. -** Client\
+    \ Business Phone Extension Number \r\n\r\n**Licence Address Line 1 -** First line\
+    \ of client's business address  \r\n\r\n**Licence Address Line 2 -** Client address\
+    \ town and province  \r\n\r\n**Licence Address Line 3 -** Client address postal\
+    \ code \r\n\r\n**Conditions -** Restriction on the licence/permit as recorded\
+    \ in the licensing system \r\n\r\n**Free Form Conditions Line 1 -** Restriction/comment\
+    \ on the licence/permit \r\n\r\n**Free Form Conditions Line 2 -** Continuation\
+    \ of line 1  \r\n\r\n**Plate No. -** Licence identifying plate, issued to most\
+    \ vehicles\r\n\r\n**Endorsements -** Activity permitted under the licence\r\n\r\
+    \n**Cancel Date -** Date the license or permit was cancelled.\r\n\r\n**Last Record\
+    \ Update -** Date this record was last updated\r\n\r\n \r\n\r\nSome businesses\
+    \ in Toronto require a business licence. Municipal Licensing & Standards (ML&S)\
+    \ issues licences to various types of businesses and trades, as well as some mobile\
+    \ businesses in the City. This dataset contains information about specific categories\
+    \ of licences and permits incuding the licence/permit category, licence number,\
+    \ operating name, date issued, client's name, business address, business phone\
+    \ number, etc.\r\n\r\nDataset does not include licences/permits for personal licensees\
+    \ such as burlesque entertainer, holistic practitioners, taxi cab drivers.\r\n"
+  resources:
+    Business licences data:
+      format: csv
+      url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
+      attributes:
+      - id: Category
+        type: 'text'
+        info:
+          notes: 'Type of licence or permit'
+      - id: Licence No.
+        type: 'text'
+        info:
+          notes: 'Number. of licence issued by City of Toronto'
+      - id: Operating Name
+        type: 'text'
+        info:
+          notes: 'Name that company operates under'
+      - id: Issued
+        type: 'text'
+        info:
+          notes: 'Date of issue of licence/permit'
+      - id: Client Name
+        type: 'text'
+        info:
+          notes: 'Name that the licence is issued to'
+      - id: Business Phone
+        type: 'text'
+        info:
+          notes: 'Client Business Phone Number'
+      - id: Business Phone Ext.
+        type: 'text'
+        info:
+          notes: 'Client Business Phone Extension Number'
+      - id: Licence Address Line 1
+        type: 'text'
+        info:
+          notes: "First line of client's business address"
+      - id: Licence Address Line 2
+        type: 'text'
+        info:
+          notes: 'Client address town and province'
+      - id: Licence Address Line 3
+        type: 'text'
+        info:
+          notes: 'Client address postal code'
+      - id: Conditions
+        type: 'text'
+        info:
+          notes: 'Restriction on the licence/permit recorded in the licensing system'
+      - id: Free Form Conditions Line 1
+        type: 'text'
+        info:
+          notes: 'Restriction/comment on the licence/permit'
+      - id: Free Form Conditions Line 2
+        type: 'text'
+        info:
+          notes: 'Continuation of line 1'
+      - id: Plate No.
+        type: 'text'
+        info:
+          notes: 'Licence identifying plate, issued to most vehicles'
+      - id: Endorsements
+        type: 'text'
+        info:
+          notes: 'Activity permitted under the licence'
+      - id: Cancel Date
+        type: 'timestamp'
+        info:
+          notes: 'Date the license or permit was cancelled'
+      - id: Last Record Update
+        type: 'timestamp'
+        info:
+          notes: ''
+
+
+
+
+
+
