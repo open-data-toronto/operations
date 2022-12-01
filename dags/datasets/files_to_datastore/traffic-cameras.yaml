@@ -5,7 +5,7 @@ traffic-cameras:
   title: Traffic Cameras
   date_published: '2019-07-23 18:06:38.545973'
   refresh_rate: As available
-  dataset_category: Table
+  dataset_category: Map
   owner_division: Transportation Services
   owner_section: null
   owner_unit: null
@@ -47,14 +47,6 @@ traffic-cameras:
           type: text
           info:
             notes: 'Each camera has a unique number associated with it.'
-        - id: Latitude
-          type: text
-          info:
-            notes: ''
-        - id: Longitude
-          type: text
-          info:
-            notes: ''
         - id: Main Road
           type: text
           info:
@@ -87,4 +79,8 @@ traffic-cameras:
           type: text
           info:
             notes: 'URL containing a static image looking West'
+        - id: geometry
+          type: text
+          info:
+            notes: ''
 
