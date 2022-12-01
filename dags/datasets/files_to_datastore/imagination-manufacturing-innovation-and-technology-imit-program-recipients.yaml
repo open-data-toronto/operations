@@ -1,5 +1,5 @@
 imagination-manufacturing-innovation-and-technology-imit-program-recipients:
-  schedule: '@once'
+  schedule: '0 4 1 */3 *'
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
   title: Imagination, Manufacturing, Innovation and Technology (IMIT) Program Recipients

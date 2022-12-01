@@ -125,10 +125,10 @@ school-safety-zone-watch-your-speed-program-detailed-speed-counts:
   Stationary count detailed 2021:
     format: zip
     url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2021.zip
-municipal-licensing-and-standards-business-licences-and-permits:
-  Business licences data:
-    format: csv
-    url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
+# municipal-licensing-and-standards-business-licences-and-permits:
+#   Business licences data:
+#     format: csv
+#     url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
 municipal-licensing-and-standards-investigation-activity:
   Investigation Activities (CSV ZIP):
     format: zip
@@ -188,15 +188,15 @@ report-request-log-city-council-and-its-committees:
 #    format: shp
 #    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v2.zip
 traffic-cameras:
-  Traffic Camera List (CSV):
-    format: csv
-    url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.csv
-  Traffic Camera List (JSON):
-    format: json
-    url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.json
-  Traffic Camera List (XML):
-    format: xml
-    url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.xml
+  # Traffic Camera List (CSV):
+  #   format: csv
+  #   url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.csv
+  # Traffic Camera List (JSON):
+  #   format: json
+  #   url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.json
+  # Traffic Camera List (XML):
+  #   format: xml
+  #   url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.xml
   Traffic Camera List (XSD):
     format: xsd
     url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.xsd
@@ -218,13 +218,13 @@ ttc-routes-and-schedules:
 #   utility-cut-permits-documentation:
 #     format: zip
 #     url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp_doc.zip
-imagination-manufacturing-innovation-and-technology-imit-program-recipients:
-  IMIT Program Recipients (CSV):
-    format: csv
-    url: http://opendata.toronto.ca/economic.development.culture/imagination-manufacturing-innovation-and-technology-imit-program-recipients/IMIT_Report.csv
-  IMIT Program Recipients (Excel):
-    format: xlsx
-    url: http://opendata.toronto.ca/economic.development.culture/imagination-manufacturing-innovation-and-technology-imit-program-recipients/IMIT_Report.xlsx
+# imagination-manufacturing-innovation-and-technology-imit-program-recipients:
+#   IMIT Program Recipients (CSV):
+#     format: csv
+#     url: http://opendata.toronto.ca/economic.development.culture/imagination-manufacturing-innovation-and-technology-imit-program-recipients/IMIT_Report.csv
+#   IMIT Program Recipients (Excel):
+#     format: xlsx
+#     url: http://opendata.toronto.ca/economic.development.culture/imagination-manufacturing-innovation-and-technology-imit-program-recipients/IMIT_Report.xlsx
 small-business-property-tax-subclass-eligible-properties:
   Small Business Subclass Report - 2022:
     format: xlsx
