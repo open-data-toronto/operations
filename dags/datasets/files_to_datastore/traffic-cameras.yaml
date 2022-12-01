@@ -1,0 +1,86 @@
+traffic-cameras:
+  schedule: '0 8 * * *'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Traffic Cameras
+  date_published: '2019-07-23 18:06:38.545973'
+  refresh_rate: As available
+  dataset_category: Map
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: Mobility
+  topics: Transportation
+  tags:
+  - name: traffic camera
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/rescu/index.htm
+  excerpt: This dataset contains all the locations (latitude, longitude) of the traffic
+    cameras within the City of Toronto. Associated/Reference URLs are also included
+    with this dataset.
+  limitations: null
+  notes: "\n\nThe Traffic Camera dataset contains the location and number for every\
+    \ Traffic camera in the City of Toronto. These datasets will be updated within\
+    \ 2 minutes when cameras are added, changed, or removed.    \n  \nThe camera list\
+    \ files can be found at: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/\n\
+    \ntmcearthcameras.csv - CSV, camera list in CSV  \ntmcearthcameras.json - json\
+    \ formatted list.  \ntmcearthcamerassn.json - json formatted file containing the\
+    \ timestamp of the list files.  \ntmcearthcameras.xml - xml formatted list.  \n\
+    TMCEarthCameras.xsd - xml schema document.  \n  \nThe dataset includes the number,\
+    \ name, WGS84 information (latitude, longitude), comparison directions (1- Looking\
+    \ North, 2-Looking East, 3-Looking South and 4-Looking West), and camera group.\
+    \     \n  \nThe camera images associated with the dataset can be found at: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/CameraImages.\
+    \  \n  \nAnd the comparison images can be found at: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/ComparisonImages.\
+    \  \n  \nThe camera image file name is created as follows:  \nloc####.jpg - where\
+    \ #### is the camera number. (i.e. loc1234.jpg)  \n  \nThe camera comparison image\
+    \ file names are created as follows:  \nloc####D.jpg - where #### is the camera\
+    \ number and D is the direction. (i.e. loc1234e.jpg and loc1234w.jpg)  \n  \n\n\
+    \nThe camera images are displayed on the City's website at http://www.toronto.ca/rescu/index.htmor\
+    \ http://www.toronto.ca/rescu/list.htm\n"
+  resources:
+    Traffic Camera List:
+      format: csv
+      url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.csv
+      attributes:
+        - id: Camera Number
+          type: text
+          info:
+            notes: 'Each camera has a unique number associated with it.'
+        - id: Main Road
+          type: text
+          info:
+            notes: 'Main road name'
+        - id: Cross Street
+          type: text
+          info:
+            notes: 'Closest cross road name'
+        - id: Group
+          type: text
+          info:
+            notes: ''
+        - id: Traffic Image
+          type: text
+          info:
+            notes: 'URL containing the most recent camera image'
+        - id: North Reference Static Image
+          type: text
+          info:
+            notes: 'URL containing a static image looking North'
+        - id: East Reference Static Image
+          type: text
+          info:
+            notes: 'URL containing a static image looking East'
+        - id: South Reference Static Image
+          type: text
+          info:
+            notes: 'URL containing a static image looking South'
+        - id: West Reference Static Image
+          type: text
+          info:
+            notes: 'URL containing a static image looking West'
+        - id: geometry
+          type: text
+          info:
+            notes: ''
+

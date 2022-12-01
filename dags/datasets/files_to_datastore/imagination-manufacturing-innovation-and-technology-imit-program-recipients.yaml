@@ -1,0 +1,58 @@
+imagination-manufacturing-innovation-and-technology-imit-program-recipients:
+  schedule: '0 4 1 */3 *'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Imagination, Manufacturing, Innovation and Technology (IMIT) Program Recipients
+  date_published: '2021-10-15 19:28:39.909053'
+  refresh_rate: Quarterly
+  dataset_category: Table
+  owner_division: Economic Development & Culture
+  owner_section: Business Retention & Expansion
+  owner_unit: Business Growth Services
+  owner_email: incentives@toronto.ca
+  civic_issues: Fiscal responsibility
+  topics: null
+  tags: []
+  information_url: https://www.toronto.ca/business-economy/business-operation-growth/business-incentives/imagination-manufacturing-innovation-and-technology-imit-program/
+  excerpt: This dataset provides information on approved IMIT grant recipients in
+    the City of Toronto.
+  limitations: null
+  notes: "Toronto\u2019s Imagination, Manufacturing, Innovation and Technology (IMIT)\
+    \ business incentive supports new building construction and/or building expansion\
+    \ in targeted sectors and areas across the city. The program is designed to provide\
+    \ assistance in the form of a series of annual grants, which represent a portion\
+    \ of the increase in municipal property taxes, to eligible owners who undertake\
+    \ development for specific employment uses. The grants are designed to stimulate\
+    \ building construction and expansion within key sectors of the economy. This\
+    \ dataset provides information on approved IMIT grant recipients."
+  resources:
+    IMIT Program Recipients:
+      format: csv
+      url: http://opendata.toronto.ca/economic.development.culture/imagination-manufacturing-innovation-and-technology-imit-program-recipients/IMIT_Report.csv
+      attributes:
+        - id: Approved IMIT Property
+          type: text
+          info:
+            notes: ''
+        - id: Registered Property Owner
+          type: text
+          info:
+            notes: ''
+        - id: First Year of Grant Period
+          type: text
+          info:
+            notes: ''
+        - id: Proposed Total Gross Floor Area (sq.ft.)
+          type: int
+          info:
+            notes: ''
+        - id: Is the site considered a Brownfield?
+          type: text
+          info:
+            notes: ''
+        - id: IMIT Eligible Use
+          type: text
+          info:
+            notes: ''
+
+
