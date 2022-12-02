@@ -1,0 +1,150 @@
+# package name
+police-race-and-identity-based-data-collection-arrests-strip-searches:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Police Race and Identity Based Data - Arrests and Strip Searches"
+  date_published: "2022-12-02T19:41:10.391098"
+  refresh_rate: Will not be Refreshed
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: rbdc  
+      vocabulary_id: null
+    - name: race
+      vocabulary_id: null
+    - name: ethnicity
+      vocabulary_id: null
+    - name: arrests
+      vocabulary_id: null
+    - name: strip search
+      vocabulary_id: null
+    - name: strip searches
+      vocabulary_id: null
+
+  information_url: https://data.torontopolice.on.ca/
+  excerpt: This dataset includes information related to all arrests and strip searches specifically related to the race and identity-based data collection (RBDC) strategy.
+  limitations: null
+  notes: |
+    This dataset includes information related to all arrests and strip searches. A strip search refers to a search conducted by a police officer on a person, which includes the removal of some or all clothing and a visual inspection of the body. The dataset also includes indicators of whether a person was booked at a police station within 24 hours following a particular arrest event. Due to issues with the booking template, there may be some records where a person was strip searched, but the data does not indicate a booking (i.e., value = 0); in those cases, the user should presume a booking took place. 
+    The location of arrest is aggregated to the Division level and refers to where the arrest took place within Division boundaries. Users should not interpret location as the Division to which the arresting officer was assigned. For some arrests, the location could not be geo-coded or the arrest took place outside of City of Toronto boundaries in other jurisdictions; these are indicated by XX. The age of person arrested and/or strip searched is their age at the time of the arrest, as given to the arresting officer. 
+
+  resources:
+    # resource name
+    Arrests and Strip Searches:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/RBDC_ARR_TBL_001/FeatureServer/0/
+      attributes:
+        - id: Arrest_Year
+          type: int
+          info:
+            notes: Year of arrest
+        - id: Arrest_Month
+          type: text
+          info:
+            notes: Month of arrest in quarters (Jan-Mar, Apr-June, Jul-Sept, Oct-Dec)
+        - id: EventID
+          type: int
+          info:
+            notes: Randomized ID value - Incident related to the arrest
+        - id: ArrestID
+          type: int
+          info:
+            notes: Randomized ID value – Arrest event
+        - id: PersonID
+          type: int
+          info:
+            notes: Randomized ID value – Unique Person
+        - id: Perceived_Race
+          type: text
+          info:
+            notes: Officer's perception of the person's race
+        - id: Sex
+          type: text
+          info:
+            notes: Arrested person's sex
+        - id: Age_group__at_arrest_
+          type: text
+          info:
+            notes: Arrested person's age at time of arrest
+        - id: Youth_at_arrest__under_18_years
+          type: text
+          info:
+            notes: 
+        - id: ArrestLocDiv
+          type: text
+          info:
+            notes: Location of Arrest (Division)
+        - id: StripSearch
+          type: int
+          info:
+            notes: Person was strip searched following arrest
+        - id: Booked
+          type: int
+          info:
+            notes: Person was booked at the station
+        - id: Occurrence_Category
+          type: text
+          info:
+            notes: Most serious offence or incident type associated with the arrest
+        - id: Actions_at_arrest___Concealed_i
+          type: int
+          info:
+            notes: The Person's actions at the time of arrest -- concealing items
+        - id: Actions_at_arrest___Combative__
+          type: int
+          info:
+            notes: The Person's actions at the time of arrest -- combative, violent or biting/spitting behaviours
+        - id: Actions_at_arrest___Resisted__d
+          type: int
+          info:
+            notes: The Person's actions at the time of arrest -- resisted arrest, defensive or attempted escape
+        - id: Actions_at_arrest___Mental_inst
+          type: int
+          info:
+            notes: The Person's actions at the time of arrest -- appeared mentally unstable
+        - id: Actions_at_arrest___Assaulted_o
+          type: int
+          info:
+            notes: The Person's actions at the time of arrest -- assaulted officer
+        - id: Actions_at_arrest___Cooperative
+          type: int
+          info:
+            notes: The Person's actions at the time of arrest -- cooperative
+        - id: SearchReason_CauseInjury
+          type: text
+          info:
+            notes: Reason for search -- items to cause injury
+        - id: SearchReason_AssistEscape
+          type: text
+          info:
+            notes: Reason for search -- items to assist escape 
+        - id: SearchReason_PossessWeapons
+          type: text
+          info:
+            notes: Reason for search -- possess weapons
+        - id: SearchReason_PossessEvidence
+          type: text
+          info:
+            notes: Reason for search -- possess evidence
+        - id: ItemsFound
+          type: text
+          info:
+            notes: Items were found during a strip search
+        - id: ObjectId
+          type: int
+          info:
+            notes: "Unique identifier from the source system"
