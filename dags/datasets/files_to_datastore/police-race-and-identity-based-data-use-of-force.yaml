@@ -1,0 +1,228 @@
+# package name
+police-race-and-identity-based-data-use-of-force:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Police Race and Identity Based Data - Use of Force"
+  date_published: "2022-12-12T19:41:10.391098"
+  refresh_rate: Will not be Refreshed
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: rbdc  
+      vocabulary_id: null
+    - name: race
+      vocabulary_id: null
+    - name: ethnicity
+      vocabulary_id: null
+    - name: use of force
+      vocabulary_id: null
+
+  information_url: https://data.torontopolice.on.ca/
+  excerpt: This table provides police data for use of force incidents specifically related to the race and identity-based data collection (RBDC) strategy.
+  limitations: null
+  notes: |
+    This dataset contains summary table data of information from the provincial Use of Force Reports and occurrences that resulted in an enforcement action. The data used to produce these summary data comes from two sources: a) information about enforcement actions, such as calls for service types and occurrence categories, come from the Service’s Records Management System and b) information related to reported use of force, such as highest types of force and perceived weapons, comes from the provincial use of force reports. 
+    The data counts unique occurrences which resulted in a police enforcement action or incidents of reported use of force. Hence, there may be more than one person and more than one officer involved in enforcement action incident or reported use of force incident. Since the summary tables are of incidents, where there was more than one person, descriptors such as perceived race refer to the composition of person(s) involved in the enforcement action incident. For example, if the incident involved more than one person, each perceived to be of a different race or gender group, then the incident is categorized as a “multiple race group.” 
+    For the purpose of the race-based data analysis, the data includes all incidents which resulted in a police enforcement action and excludes other police interactions with the public, such as taking victim reports, routine traffic or pedestrian stops, or outreach events. Enforcement actions are occurrences where person(s) involved were arrested resulting in charges (including released at scene) or released without charges; received Provincial Offences Act Part III tickets; summons; cautions; diversions; apprehensions, mental health-related incidents as well as those identified as “subject” or “suspect” in an incident to which an officer attended. 
+    Reported use of force incident are those in which a Toronto Police Service officer used force and are required to submit a report under the Police Services Act, 1990. For the purposes of the race-based data analysis, it excludes reportable incidents in which force was used against animals, team reports, and incidents where an officer unintentionally discharged a Service weapon during training. Each reported use of force incident is counted once, regardless of the number of officers or subjects involved.
+
+  resources:
+    # resource name
+    Location of Occurrences:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/RBDC_UOF_TBL_003/FeatureServer/0
+      attributes:
+        - id: Type_of_Incident
+          type: text
+          info:
+            notes: "Reported use of force or enforcement action incidents"
+        - id: Location__Division_
+          type: int
+          info:
+            notes: "Location in which an occurrence took place"
+        - id: Perceived_Race_of_People_Involv
+          type: text
+          info:
+            notes: "Officer’s perception of individuals involved in the incident"
+        - id: Incident_Count
+          type: int
+          info:
+            notes: "Count of incidents"
+        - id: ObjectId
+          type: int
+          info:
+            notes: "Unique identifier from the source system"
+
+    Occurrence Category:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/RBDC_UOF_TBL_005/FeatureServer/0
+      attributes:
+        - id: Type_of_Incident
+          type: text
+          info:
+            notes: "Reported use of force or enforcement action incidents"
+        - id: Occurrence_Category
+          type: text
+          info:
+            notes: "Most serious offence or incident type associated with the occurrence or incident type"
+        - id: Perceived_Race_of_People_Involv
+          type: text
+          info:
+            notes: "Officer’s perception of individuals involved in the incident"
+        - id: Incident_Count
+          type: int
+          info:
+            notes: "Count of incidents"
+        - id: ObjectId
+          type: int
+          info:
+            notes: "Unique identifier from the source system"
+
+    Time of Day Trends:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/RBDC_UOF_TBL_002/FeatureServer/0
+      attributes:
+        - id: Type_of_Incident
+          type: text
+          info:
+            notes: "Reported use of force or enforcement action incidents"
+        - id: OccurredTime
+          type: text
+          info:
+            notes: "Time of occurrence in intervals"
+        - id: Perceived_Race_of_People_Involv
+          type: text
+          info:
+            notes: "Officer’s perception of individuals involved in the incident"
+        - id: Incident_Count
+          type: int
+          info:
+            notes: "Count of incidents"
+        - id: ObjectId
+          type: int
+          info:
+            notes: "Unique identifier from the source system"
+
+    Use of Force Types and Perceived Weapons:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/RBDC_UOF_TBL_007/FeatureServer/0
+      attributes:
+        - id: Weapons_Carried 
+          type: text
+          info:
+            notes: "In reported use of force incidents, officer’s perception of weapons carried by individuals at the time of decision to use force"
+        - id: Highest_Type_of_Force_Used 
+          type: text
+          info:
+            notes: "In reported use of force incidents, the highest type of force used across all officers involved in that incident"
+        - id: Perceived_Race_of_People_Involv
+          type: text
+          info:
+            notes: "Officer’s perception of individuals involved in the incident"
+        - id: Incident_Count
+          type: int
+          info:
+            notes: "Count of incidents"
+        - id: ObjectId
+          type: int
+          info:
+            notes: "Unique identifier from the source system"
+
+    Gender Composition:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/RBDC_UOF_TBL_006/FeatureServer/0/
+      attributes:
+        - id: Type_of_Incident  
+          type: text
+          info:
+            notes: "Reported use of force or enforcement action incidents"
+        - id: Gender_of_People_Involved  
+          type: text
+          info:
+            notes: "Perceived gender of people involved in the enforcement action incident"
+        - id: Perceived_Race_of_People_Involv
+          type: text
+          info:
+            notes: "Officer’s perception of individuals involved in the incident"
+        - id: Incident_Count
+          type: int
+          info:
+            notes: "Count of incidents"
+        - id: ObjectId
+          type: int
+          info:
+            notes: "Unique identifier from the source system"
+
+    Call Sources by Month:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/RBDC_UOF_TBL_001/FeatureServer/0/
+      attributes:
+        - id: Data_Type   
+          type: text
+          info:
+            notes: "Type of data – Call Source or Reported use of force incident"
+        - id: Description   
+          type: text
+          info:
+            notes: "The originating source of call for service to which an officer responds with an enforcement action, or a reportable use of force incident "
+        - id: OccurredYear   
+          type: int
+          info:
+            notes: "Year of occurrence"
+        - id: OccurredMonth 
+          type: text
+          info:
+            notes: "Month of occurrence"
+        - id: Incident_Count
+          type: int
+          info:
+            notes: "Count of incidents"
+        - id: ObjectId
+          type: int
+          info:
+            notes: "Unique identifier from the source system"
+
+    Call for Service Types:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/RBDC_UOF_TBL_004/FeatureServer/0/
+      attributes:
+        - id: Type_of_Incident  
+          type: text
+          info:
+            notes: "Reported use of force or enforcement action incidents"
+        - id: Call_for_Service_Type   
+          type: text
+          info:
+            notes: "An emergency or non-emergency call for police service that results in an enforcement action."
+        - id: Perceived_Race_of_People_Involv
+          type: text
+          info:
+            notes: "Officer’s perception of individuals involved in the incident"
+        - id: Incident_Count
+          type: int
+          info:
+            notes: "Count of incidents"
+        - id: ObjectId
+          type: int
+          info:
+            notes: "Unique identifier from the source system"
