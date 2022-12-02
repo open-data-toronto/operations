@@ -36,7 +36,7 @@ cafeto-curb-lane-parklet-cafe-locations:
     # resource name
     Cafe TO Locations:
       format: geojson
-      url: http://opendata.toronto.ca/transportation.services/cafe-to/CafeTO_Locations_with_Years.geojson
+      url: http://opendata.toronto.ca/transportation.services/cafe-to/CafeTO_Locations_with_Years_2022.geojson
       attributes:
         - id: "id"
           type: "text"
@@ -46,6 +46,10 @@ cafeto-curb-lane-parklet-cafe-locations:
           type: "text"
           info:
             notes: The BIA the location is in
+        - id: "interventi"
+          type: "text"
+          info:
+            notes: Type of closure (Café, Temporary Loading Zone, Public Parklet, Bicycle Parking)
         - id: "installati"
           type: "text"
           info:
