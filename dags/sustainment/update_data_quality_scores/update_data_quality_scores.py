@@ -15,7 +15,7 @@ from utils import airflow_utils, ckan_utils
 
 job_settings = {
     "description": "Calculates DQ scores across the catalogue",
-    "schedule": "0 0 * * 1,4",
+    "schedule": "0 18 * * 7",
     "start_date": datetime(2020, 11, 10, 5, 0, 0),
 }
 
