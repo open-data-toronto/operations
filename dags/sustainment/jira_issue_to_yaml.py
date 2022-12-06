@@ -64,7 +64,7 @@ def get_jira_issues():
 
 def write_to_yaml(**kwargs):
     '''Receives a json input and writes it to a YAML file'''
-    issues = kwargs["ti"].xcom_pull(task_ids=["get_jira_issues"])
+    issues = kwargs["ti"].xcom_pull(task_ids=["get_jira_issues"])[0]
 
     for issue in issues:
         package_id = issue["title"].lower().replace(" ", "")
