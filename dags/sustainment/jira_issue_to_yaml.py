@@ -9,6 +9,7 @@ import os
 import re
 from datetime import datetime
 from pathlib import Path
+from bs4 import BeautifulSoup
 
 from airflow import DAG
 from airflow.models import Variable
@@ -107,6 +108,9 @@ def get_jira_issues():
         issue_metadata = {
             "jira_issue_id": issue["key"],
             "jira_issue_url": issue["self"],
+            "schedule": "@once",
+            "dag_owner_name": fields["assignee"]["displayName"],
+            "dag_owner_email": fields["assignee"]["emailAddress"],
             "title": fields["summary"],
             "date_published": None,#datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"),
             "dataset_category": None,
