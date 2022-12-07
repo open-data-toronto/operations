@@ -1,0 +1,80 @@
+park-and-recreation-facility-study-areas:
+  jira_issue_id: DTSD-442
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/145282
+  schedule: '@once'
+  dag_owner_name: Mackenzie.Nichols4
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Park and Recreation Facility Study Areas
+  date_published: '2022-12-07 15:49:09.917562'
+  dataset_category: Map
+  refresh_rate: Quarterly
+  owner_division: Parks, Forestry & Recreation
+  owner_section: Parks Development and Capital Projects
+  owner_unit: Public Engagement Unit
+  owner_email: james.young@toronto.ca
+  civic_issues: null
+  topics:
+  - Development
+  - Locations and Mapping
+  - Parks and Recreation
+  tags:
+  - name: parks
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/planning-development/construction-new-facilities/park-facility-projects
+  excerpt: This dataset contains location data and a brief summary of studies which
+    are currently underway and the plans and strategies which guide park and recreation
+    facilities improvement projects.
+  limitations: "-\tThe dataset does not include planned projects which have not yet\
+    \ been initiated. -\t[project_name], [project_url], and/or [description] attributes\
+    \ may change over time if a project which began as a study becomes a plan or a\
+    \ strategy."
+  notes: Parks, Forestry and Recreation develops plans and strategies to help guide
+    how we invest in parks and recreation facilities. These plans and strategies are
+    informed by studies which investigate how communities are being served by their
+    parks and recreation facilities.
+  resources:
+    Park and Recreation Facility Study Areas:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_PFR_PDCP_Study_Areas/FeatureServer/0
+      attributes:
+      - id: OBJECTID
+        type: int
+        info:
+          notes: 'Unique identifier'
+      - id: project_name
+        type: text
+        info:
+          notes: 'Project name'
+      - id: project_url
+        type: text
+        info:
+          notes: 'The project page URL'
+      - id: status
+        type: text
+        info:
+          notes: 'Project status (values: [In progress], [Complete])'
+      - id: project_type
+        type: text
+        info:
+          notes: 'The project type (values: [Master Plan or Study])'
+      - id: image
+        type: text
+        info:
+          notes: 'A URL to an image which represents the project'
+      - id: description
+        type: text
+        info:
+          notes: 'A very brief description of the project'
+      - id: image_alt_text
+        type: text
+        info:
+          notes: 'Descriptive alt-text for the image at the URL in the image field'
+      - id: takedown_date
+        type: timestamp
+        info:
+          notes: 'The date at which the feature should be removed from'
+      - id: geometry
+        type: text
+        info:
+          notes: ''
