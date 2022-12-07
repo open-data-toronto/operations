@@ -1,0 +1,92 @@
+park-and-recreation-facility-projects:
+  jira_issue_id: DTSD-441
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/145281
+  schedule: '@once'
+  dag_owner_name: Mackenzie.Nichols4
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Park and Recreation Facility Projects
+  date_published: '2022-12-07 15:49:09.917562'
+  dataset_category: Map
+  refresh_rate: Weekly
+  owner_division: Parks, Forestry & Recreation
+  owner_section: null
+  owner_unit: null
+  owner_email: james.young@toronto.ca
+  civic_issues: null
+  topics:
+  - Development
+  - Locations and Mapping
+  - Parks and Recreation
+  tags:
+  - name: parks
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/planning-development/construction-new-facilities/park-facility-projects
+  excerpt: This dataset contains location data and a brief summary of current and
+    recently completed park and recreation facility projects.
+  limitations: Please see the attached Word for all Limitations until this is fixed
+  notes: A city builds parks and recreation facilities so its people can build community.
+    Investing in the right parks and facilities at the right times and in the right
+    places ensures our city is meeting the needs of its residents now and for future
+    generations.
+  resources:
+    Park and Recreation Facility Projects:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_PFR_PDCP_Projects/FeatureServer/0
+      attributes:
+      - id: objectid
+        type: int
+        info:
+          notes: 'Unique identifier'
+      - id: project_name
+        type: text
+        info:
+          notes: 'Project name'
+      - id: address
+        type: text
+        info:
+          notes: 'Asset address'
+      - id: status
+        type: text
+        info:
+          notes: 'Project status (values: [In progress], [Complete])'
+      - id: description
+        type: text
+        info:
+          notes: 'A very brief description of the project'
+      - id: image
+        type: text
+        info:
+          notes: 'A URL to an image which represents the project'
+      - id: project_url
+        type: text
+        info:
+          notes: 'The project page URL'
+      - id: project_type
+        type: text
+        info:
+          notes: 'The project type (values: [Park or Facility Improvements], [Playground Improvements], [New Park], [New Community Recreation Centre], [Master Plan or Study])'
+      - id: image_alt_text
+        type: text
+        info:
+          notes: 'Descriptive alt-text for the image at the URL in the image field'
+      - id: takedown_date
+        type: text
+        info:
+          notes: 'The date at which the feature should be removed from the dataset'
+      - id: ward_name
+        type: text
+        info:
+          notes: 'The name of the ward in which the project is taking place'
+      - id: ward_number
+        type: text
+        info:
+          notes: 'The number of the ward in which the project is taking place'
+      - id: globalid
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

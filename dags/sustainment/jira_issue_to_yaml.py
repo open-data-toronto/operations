@@ -44,7 +44,7 @@ def scrape_resource_content_from_agol(url):
         "esriFieldTypeDouble": "float",
         "esriFieldTypeSmallInteger": "int",
         "esriFieldTypeSingle": "text",
-        "esriFieldTypeGlobalID": "int",
+        "esriFieldTypeGlobalID": "text",
     }
 
     DELETE_FIELDS = [
@@ -113,6 +113,7 @@ def get_jira_issues():
             "date_published": None,#datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"),
             "dataset_category": None,
             "refresh_rate": fields["customfield_12166"][-1]["value"],
+            "dataset_category": "Table",
             "owner_division": fields["customfield_11827"][-1]["value"],
             "owner_section": fields["customfield_11958"],
             "owner_unit": fields["customfield_11959"],
