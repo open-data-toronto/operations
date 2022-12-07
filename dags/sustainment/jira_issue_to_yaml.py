@@ -86,8 +86,6 @@ def scrape_resource_content_from_agol(url):
     attributes.append({"id": "geometry", "type": "text", "info": {"notes": ""}})
     return attributes
 
-
-
 def get_jira_issues():
     '''Returns all "Publish Dataset" Jira issues' important metadata'''
     headers = {'Authorization': 'Basic ' + JIRA_APIKEY}
@@ -129,15 +127,26 @@ def get_jira_issues():
             "excerpt": fields["customfield_12244"]["content"][-1]["content"][-1]["text"],
             "limitations": fields["customfield_12245"],
             "notes": fields["description"]["content"][-1]["content"][-1]["text"],
+            "resources": {},
         }
 
         # If the issue has an AGOL link in it, extract its attributes
         if ("https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/" 
         in fields["customfield_12234"]):
-            pattern = r"https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/([A-Za-z0-9-_]*)/FeatureServer/0"
-            agol_url = re.search(pattern, fields["customfield_12234"])
+            pattern = r"(https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/.*/FeatureServer/0)"
+            agol_url = re.search(pattern, fields["customfield_12234"])[0]
+            print(agol_url)
             attributes = scrape_resource_content_from_agol(agol_url)
-            issue_metadata = dict(**issue_metadata, **attributes)
+            print(attributes)
+            # also add relevant configs for the yaml jobs to know what to parse
+            issue_metadata["resources"][fields["summary"]] = {
+                "format": "geojson",
+                "agol": True,
+                "url": agol_url,
+                "attributes": attributes,
+            }
+            
+            print(issue_metadata)
         output.append(issue_metadata)
 
     return output
@@ -145,10 +154,9 @@ def get_jira_issues():
 def write_to_yaml(**kwargs):
     '''Receives a json input and writes it to a YAML file'''
     issues = kwargs["ti"].xcom_pull(task_ids=["get_jira_issues"])[0]
-
-    print(DIR_PATH)
-
+    print(issues)
     for issue in issues:
+        print(issue)
         package_id = issue["title"].lower().replace(" ", "-")
         filename = package_id + ".yaml"
         with open(YAML_DIR_PATH / filename, "w") as file:
@@ -165,7 +173,7 @@ default_args = airflow_utils.get_default_args({
     "retries": 2,
     "retry_delay": 3,
     "on_failure_callback": task_failure_slack_alert,
-    "start_date": datetime(2022, 12, 8, 0, 0, 0),
+    "start_date": datetime(2022, 8, 8, 0, 0, 0),
     "tags": ["sustainment"],
 })
 
