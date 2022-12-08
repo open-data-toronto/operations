@@ -55,7 +55,7 @@ solid-waste-pickup-schedule:
         - id: "Organics"
           type: "text"
           info:
-            notes: "The Green Bin (Organics (Green Bin) is collected once a week."
+            notes: "The Organics is collected once a week."
         - id: "Garbage"
           type: "text"
           info:
@@ -77,7 +77,7 @@ solid-waste-pickup-schedule:
               - W	Wednesday
               - R	Thursday
               - F	Friday
-              - 0	NO collection
+              - 0	No collection
     pickup-schedule-2022:
       agol: False
       format: csv
