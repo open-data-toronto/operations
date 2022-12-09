@@ -25,7 +25,7 @@ park-and-recreation-facility-study-areas:
     are currently underway and the plans and strategies which guide park and recreation
     facilities improvement projects.
   limitations: "-\tThe dataset does not include planned projects which have not yet\
-    \ been initiated. -\t[project_name], [project_url], and/or [description] attributes\
+    \ been initiated. -\t[project\_name], [project\_url], and/or [description] attributes\
     \ may change over time if a project which began as a study becomes a plan or a\
     \ strategy."
   notes: Parks, Forestry and Recreation develops plans and strategies to help guide
@@ -57,7 +57,7 @@ park-and-recreation-facility-study-areas:
       - id: project_type
         type: text
         info:
-          notes: 'The project type (values: [Master Plan or Study])'
+          notes: "The project type (values: [Park or Facility Improvements], [Playground Improvements], [New Park], [New Community Recreation Centre], [Master Plan or Study])"
       - id: image
         type: text
         info:
