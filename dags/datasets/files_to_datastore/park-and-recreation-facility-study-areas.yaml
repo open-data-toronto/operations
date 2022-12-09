@@ -57,7 +57,7 @@ park-and-recreation-facility-study-areas:
       - id: project_type
         type: text
         info:
-          notes: "The project type (values: [Park or Facility Improvements], [Playground Improvements], [New Park], [New Community Recreation Centre], [Master Plan or Study])"
+          notes: 'The project type (values: [Master Plan or Study])'
       - id: image
         type: text
         info:
