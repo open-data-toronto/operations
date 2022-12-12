@@ -476,3 +476,7 @@ tenant-notification-for-rent-reduction:
   tenant-notification-for-rent-reduction-2022:
     format: xlsx
     url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2022.xlsx
+red-light-camera-annual-charges:
+  Red Light Camera Annual Charges:
+    format: xlsx
+    url: http://opendata.toronto.ca/transportation.services/red-light-camera-charges/rlc-annual-charges-2007-2022.xlsx
