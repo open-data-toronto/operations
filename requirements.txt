@@ -10,7 +10,8 @@ argcomplete==1.12.3
 attrs==20.3.0
 Babel==2.9.0
 bcrypt==3.2.0
-blinker==1.4
+blinker==1.4z
+bs4==0.0.1
 cached-property==1.5.2
 cattrs==1.5.0
 certifi==2020.12.5
