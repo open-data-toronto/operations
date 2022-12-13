@@ -1,7 +1,7 @@
 park-and-recreation-facility-projects:
   jira_issue_id: DTSD-441
   jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/145281
-  schedule: '@once'
+  schedule: '0 0 * * 6'
   dag_owner_name: Mackenzie.Nichols4
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Park and Recreation Facility Projects
