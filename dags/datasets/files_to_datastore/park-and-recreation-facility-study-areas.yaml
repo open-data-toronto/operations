@@ -1,7 +1,7 @@
 park-and-recreation-facility-study-areas:
   jira_issue_id: DTSD-442
   jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/145282
-  schedule: '@once'
+  schedule: '0 0 * 1 *'
   dag_owner_name: Mackenzie.Nichols4
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Park and Recreation Facility Study Areas
