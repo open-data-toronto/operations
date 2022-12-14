@@ -47,19 +47,19 @@ solid-waste-pickup-schedule:
         - id: "Schedule"
           type: "text"
           info:
-            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday."
+            notes: "Day of the week that waste is collected. Schedules include two daytime ones for each of Tuesday, Wednesday, Thursday and Friday."
         - id: "CollectionDate"
-          type: "timestamp"
+          type: "date"
           info:
             notes: "Actual date of waste collection"
         - id: "Organics"
           type: "text"
           info:
-            notes: "The Organics is collected once a week."
+            notes: "The [Organics(Green Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week."
         - id: "Garbage"
           type: "text"
           info:
-            notes: "Garbage is collected every other week, alternating with recycling."
+            notes: "[Garbage](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-garbage-bin/) is collected every other week, alternating with recycling."
         - id: "Recycling"
           type: "text"
           info:
