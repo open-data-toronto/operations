@@ -472,10 +472,10 @@ cost-of-living-in-toronto-for-low-income-households:
   2022 Income Scenario - Without Subsidies, Market Rent Readme:
     format: xlsx
     url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-without-subsidies-market-rent-readme .xlsx
-tenant-notification-for-rent-reduction:
-  tenant-notification-for-rent-reduction-2022:
-    format: xlsx
-    url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2022.xlsx
+# tenant-notification-for-rent-reduction:
+#   tenant-notification-for-rent-reduction-2022:
+#     format: xlsx
+#     url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2022.xlsx
 red-light-camera-annual-charges:
   Red Light Camera Annual Charges:
     format: xlsx
