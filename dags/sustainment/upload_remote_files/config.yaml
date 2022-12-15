@@ -14,9 +14,9 @@ heritage-conservation-districts:
     format: zip
     url: http://opendata.toronto.ca/city.planning/heritage-conservation-districts/HeritageConservationDistrict.zip
 heritage-register:
-  Heritage Register Data(2022):
+  Heritage Register Data:
     format: zip
-    url: http://opendata.toronto.ca/city.planning/heritage-register/HeritageRegister.zip
+    url: http://opendata.toronto.ca/city.planning/heritage-register/Heritage_Register_Address_Points_WGS84.zip
 monthly-communicable-disease-surveillance-data:
   Communicable disease surveillance data 2022:
     format: xlsx
