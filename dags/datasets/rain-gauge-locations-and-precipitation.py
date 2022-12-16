@@ -1,6 +1,7 @@
 import logging
 import os
 import tempfile
+import time
 from copy import deepcopy
 from datetime import datetime, timedelta
 from io import BytesIO
@@ -163,6 +164,7 @@ with DAG(
         records_to_load = []
         for site in rain_gauge_sites:
             records_to_load.extend(get_datapoints(site=site))
+            time.sleep(20)
 
         pd.DataFrame(records_to_load).to_csv(filepath, index=False)
 
