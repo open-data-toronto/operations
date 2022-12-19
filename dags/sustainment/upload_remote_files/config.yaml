@@ -480,3 +480,15 @@ red-light-camera-annual-charges:
   Red Light Camera Annual Charges:
     format: xlsx
     url: http://opendata.toronto.ca/transportation.services/red-light-camera-charges/rlc-annual-charges-2007-2022.xlsx
+
+##### agol ckan sync
+neighbourhood-improvement-areas:
+  NIA Methodology FAQ:
+    format: docx
+    url: http://opendata.toronto.ca/social.development.finance.administration/neighbourhood-improvement-areas/NIA Methodology FAQ.docx
+  TSNS 2020 NIA Census Tracts:
+    format: xlsx
+    url: http://opendata.toronto.ca/social.development.finance.administration/neighbourhood-improvement-areas/TSNS 2020 NIA Census Tracts.xlsx
+  TSNS 2020 NEI Methodological Documentation:
+    format: docx
+    url: http://opendata.toronto.ca/social.development.finance.administration/neighbourhood-improvement-areas/TSNS 2020 NEI Methodological Documentation-Final.docx
