@@ -1,0 +1,124 @@
+neighbourhood-improvement-areas:
+  schedule: '@once'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Neighbourhood Improvement Areas
+  date_published: '2019-07-23 17:47:02.810575'
+  refresh_rate: As available
+  dataset_category: Map
+  owner_division: Social Development, Finance & Administration
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: Affordable housing,Poverty reduction,Mobility
+  topics: Community services,Locations and mapping
+  tags:
+  - name: map
+    vocabulary_id: null
+  - name: neighbourhood
+    vocabulary_id: null
+  - name: nia
+    vocabulary_id: null
+  - name: priority areas
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/neighbourhoods
+  excerpt: Neighbourhood Improvement Areas are specially-selected and designated neighbourhoods
+    in the City of Toronto found to have inequities on several indicators of well-being.
+  limitations: null
+  notes: |
+    Neighbourhood Improvement Areas are specially-selected and designated neighbourhoods
+    in the City of Toronto found to have inequities on several indicators of well-being.
+    Currently 31 out of 140 neighbourhoods are designated as NIAs as part of the Toronto
+    Strong Neighbourhoods 2020 (TSNS2020) project. This dataset superceded the previous
+    13 Priority Areas in April 2014. For further details please read the technical
+    documentation found in the download package or visit www.toronto.ca/neighbourhoods.
+    For a link to the older 13 Priority Areas used between 2005 and 2013, go here:
+    [Priority Investment Neighbourhoods](https://open.toronto.ca/dataset/priority-investment-neighbourhoods)
+
+
+    Dataset is based on Statistics Canada''s 2011 Census Tracts, as found in the Census
+    Dictionary and Reference Geography Maps. Area of coverage is the city of Toronto
+    only. Dataset is based on Centreline dataset. This dataset works best with datasets
+    with the same projection.
+  resources:
+    Neighbourhood Improvement Areas:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_NEIGHBOURHOOD_IMPROVEMENT_AREA/FeatureServer/0
+      attributes:
+      - id: AREA_ID
+        type: float
+        info:
+          notes: ''
+      - id: DATE_EFFECTIVE
+        type: timestamp
+        info:
+          notes: ''
+      - id: DATE_EXPIRY
+        type: timestamp
+        info:
+          notes: ''
+      - id: AREA_ATTR_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_TYPE_ID
+        type: float
+        info:
+          notes: ''
+      - id: PARENT_AREA_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_TYPE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_CLASS_ID
+        type: float
+        info:
+          notes: ''
+      - id: AREA_CLASS
+        type: text
+        info:
+          notes: ''
+      - id: AREA_SHORT_CODE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_LONG_CODE
+        type: text
+        info:
+          notes: ''
+      - id: AREA_NAME
+        type: text
+        info:
+          notes: ''
+      - id: AREA_DESC
+        type: text
+        info:
+          notes: ''
+      - id: FEATURE_CODE
+        type: int
+        info:
+          notes: ''
+      - id: FEATURE_CODE_DESC
+        type: text
+        info:
+          notes: ''
+      - id: TRANS_ID_CREATE
+        type: float
+        info:
+          notes: ''
+      - id: TRANS_ID_EXPIRE
+        type: float
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''
