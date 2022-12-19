@@ -172,3 +172,131 @@ daily-shelter-overnight-service-occupancy-capacity:
           type: "text"
           info:
             notes: "Year crime was reported"
+    daily-shelter-overnight-service-occupancy-capacity-2022:
+      format: csv
+      url: http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-2022.csv
+      attributes:
+        - id: "OCCUPANCY_DATE"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "ORGANIZATION_ID"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "ORGANIZATION_NAME"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "SHELTER_ID"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "SHELTER_GROUP"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "LOCATION_ID"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "LOCATION_NAME"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "LOCATION_ADDRESS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "LOCATION_POSTAL_CODE"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "LOCATION_CITY"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "LOCATION_PROVINCE"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "PROGRAM_ID"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "PROGRAM_NAME"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "SECTOR"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "PROGRAM_MODEL"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "OVERNIGHT_SERVICE_TYPE"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "PROGRAM_AREA"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "SERVICE_USER_COUNT"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "CAPACITY_TYPE"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "CAPACITY_ACTUAL_BED"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "CAPACITY_FUNDING_BED"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "OCCUPIED_BEDS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "UNOCCUPIED_BEDS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "UNAVAILABLE_BEDS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "CAPACITY_ACTUAL_ROOM"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "CAPACITY_FUNDING_ROOM"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "OCCUPIED_ROOMS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "UNOCCUPIED_ROOMS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "UNAVAILABLE_ROOMS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "OCCUPANCY_RATE_BEDS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
+        - id: "OCCUPANCY_RATE_ROOMS"
+          type: "text"
+          info:
+            notes: "Year crime was reported"
