@@ -1,0 +1,112 @@
+intersection-file-city-of-toronto:
+  schedule: "0 9 * * *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Intersection File - City of Toronto
+  date_published: '2019-07-23 17:37:08.903277'
+  refresh_rate: Daily
+  dataset_category: Map
+  owner_division: Information & Technology
+  owner_section: null
+  owner_unit: null
+  owner_email: gcc@toronto.ca
+  civic_issues: Mobility
+  topics: Locations and mapping
+  tags:
+  - name: intersections
+    vocabulary_id: null
+  information_url: null
+  excerpt: A geospatial file containing all of the street intersections within the
+    City of Toronto
+  limitations: null
+  notes: "This data was collected for planning and mapping purposes and includes all\
+    \ intersections within the City of Toronto.\r\n\r\nThis data set is limited to\
+    \ the City of Toronto geographical boundary. It is a GIS file and works best when\
+    \ you open it with GIS software and overlay it with the City of Toronto Street\
+    \ Centreline.\r\n"
+  resources:
+    Centreline Intersection:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_CENTRELINE_INTERSECTION/FeatureServer/0
+      attributes:
+      - id: INTERSECTION_ID
+        type: int
+        info:
+          notes: 'Unique id of the intersection'
+      - id: DATE_EFFECTIVE
+        type: timestamp
+        info:
+          notes: ''
+      - id: DATE_EXPIRY
+        type: timestamp
+        info:
+          notes: ''
+      - id: ELEVATION_ID
+        type: int
+        info:
+          notes: 'Unique id of the elevation'
+      - id: INTERSECTION_DESC
+        type: text
+        info:
+          notes: 'Intersection Description: two cross streets'
+      - id: CLASSIFICATION
+        type: text
+        info:
+          notes: 'Intersection classification'
+      - id: CLASSIFICATION_DESC
+        type: text
+        info:
+          notes: 'Intersection classification description'
+      - id: NUMBER_OF_ELEVATIONS
+        type: int
+        info:
+          notes: 'Number of different elevation in the intersection'
+      - id: ELEVATION_FEATURE_CODE
+        type: int
+        info:
+          notes: 'Feature code of the elevation'
+      - id: ELEVATION_FEATURE_CODE_DESC
+        type: text
+        info:
+          notes: 'Feature code description of the elevation'
+      - id: ELEVATION_LEVEL
+        type: int
+        info:
+          notes: 'Elevation level number'
+      - id: ELEVATION
+        type: float
+        info:
+          notes: 'Elevation height'
+      - id: ELEVATION_UNIT
+        type: text
+        info:
+          notes: 'Elevation measurement unit'
+      - id: HEIGHT_RESTRICTION
+        type: float
+        info:
+          notes: 'Height restriction'
+      - id: HEIGHT_RESTRICTION_UNIT
+        type: text
+        info:
+          notes: 'Height restriction unit'
+      - id: STATE
+        type: int
+        info:
+          notes: ''
+      - id: TRANS_ID_CREATE
+        type: int
+        info:
+          notes: ''
+      - id: TRANS_ID_EXPIRE
+        type: int
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''
