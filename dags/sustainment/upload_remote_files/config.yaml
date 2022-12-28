@@ -176,10 +176,10 @@ registered-programs-and-drop-in-courses-offering:
   Registered programs and drop in courses offering data:
     format: xlsx
     url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
-report-request-log-city-council-and-its-committees:
-  Report Request Log:
-    format: xlsx
-    url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog.xls
+# report-request-log-city-council-and-its-committees:
+#   Report Request Log:
+#     format: xlsx
+#     url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog.xls
 #toronto-centreline-tcl:
 #  Centreline (wgs84) - geojson:
 #    format: zip
@@ -453,10 +453,19 @@ community-grants-allocations:
   community-grants-allocations-2021:
     format: xlsx
     url: http://opendata.toronto.ca/social.development.finance.administration/community-grants/2021 Community Grants Allocation - Final 3.xlsx
-report-request-log-city-council-and-its-committees:
-  Report Request Log PDF:
+report-request-log-city-council-and-its-committees: 
+  Report Request Log 2022-2026:
+    format: xlsx
+    url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog2022-2026.xlsx
+  Report Request Log 2022-2026 PDF:
     format: PDF
-    url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog.pdf
+    url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog2022-2026.pdf
+  Report Request Log 2018-2022:
+    format: xlsx
+    url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog2018-2022.xlsx
+  Report Request Log 2018-2022 PDF:
+    format: PDF
+    url: https://www.toronto.ca/legdocs/tmmis/reportrequestlog2018-2022.pdf
 cost-of-living-in-toronto-for-low-income-households:
   2022 Income Scenario - With Subsidies:
     format: csv
