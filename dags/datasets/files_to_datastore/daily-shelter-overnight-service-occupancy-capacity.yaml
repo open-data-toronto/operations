@@ -51,127 +51,127 @@ daily-shelter-overnight-service-occupancy-capacity:
         - id: "OCCUPANCY_DATE"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "ORGANIZATION_ID"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "ORGANIZATION_NAME"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "SHELTER_ID"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "SHELTER_GROUP"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "LOCATION_ID"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "LOCATION_NAME"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "LOCATION_ADDRESS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "LOCATION_POSTAL_CODE"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "LOCATION_CITY"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "LOCATION_PROVINCE"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "PROGRAM_ID"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "PROGRAM_NAME"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "SECTOR"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "PROGRAM_MODEL"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "OVERNIGHT_SERVICE_TYPE"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "PROGRAM_AREA"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "SERVICE_USER_COUNT"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "CAPACITY_TYPE"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "CAPACITY_ACTUAL_BED"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "CAPACITY_FUNDING_BED"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "OCCUPIED_BEDS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "UNOCCUPIED_BEDS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "UNAVAILABLE_BEDS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "CAPACITY_ACTUAL_ROOM"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "CAPACITY_FUNDING_ROOM"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "OCCUPIED_ROOMS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "UNOCCUPIED_ROOMS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "UNAVAILABLE_ROOMS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "OCCUPANCY_RATE_BEDS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "OCCUPANCY_RATE_ROOMS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
     daily-shelter-overnight-service-occupancy-capacity-2022:
       format: csv
       url: http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-2022.csv
@@ -179,124 +179,124 @@ daily-shelter-overnight-service-occupancy-capacity:
         - id: "OCCUPANCY_DATE"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "ORGANIZATION_ID"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "ORGANIZATION_NAME"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "SHELTER_ID"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "SHELTER_GROUP"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "LOCATION_ID"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "LOCATION_NAME"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "LOCATION_ADDRESS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "LOCATION_POSTAL_CODE"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "LOCATION_CITY"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "LOCATION_PROVINCE"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "PROGRAM_ID"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "PROGRAM_NAME"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "SECTOR"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "PROGRAM_MODEL"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "OVERNIGHT_SERVICE_TYPE"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "PROGRAM_AREA"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "SERVICE_USER_COUNT"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "CAPACITY_TYPE"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "CAPACITY_ACTUAL_BED"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "CAPACITY_FUNDING_BED"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "OCCUPIED_BEDS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "UNOCCUPIED_BEDS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "UNAVAILABLE_BEDS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "CAPACITY_ACTUAL_ROOM"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "CAPACITY_FUNDING_ROOM"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "OCCUPIED_ROOMS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "UNOCCUPIED_ROOMS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "UNAVAILABLE_ROOMS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "OCCUPANCY_RATE_BEDS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
         - id: "OCCUPANCY_RATE_ROOMS"
           type: "text"
           info:
-            notes: "Year crime was reported"
+            notes: ""
