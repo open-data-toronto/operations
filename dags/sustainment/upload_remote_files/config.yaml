@@ -143,19 +143,19 @@ non-regulated-lead-sample:
 #  non-regulated-lead-sample-from-2014-to-present-xml:
 #    format: zip
 #    url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
-outbreaks-in-toronto-healthcare-institutions:
-  Outbreaks in Toronto Healthcare Institutions-2020:
-    format: xls
-    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2020.xls
-  Outbreaks in Toronto Healthcare Institutions-2021:
-    format: xls
-    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2021.xls
-  Outbreaks in Toronto Healthcare Institutions-2022:
-    format: xls
-    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2022.xls
-  Outbreaks in Toronto Healthcare Institutions-2023:
-    format: xls
-    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2023.xls
+#outbreaks-in-toronto-healthcare-institutions:
+#  Outbreaks in Toronto Healthcare Institutions-2020:
+#    format: xls
+#    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2020.xls
+#  Outbreaks in Toronto Healthcare Institutions-2021:
+#    format: xls
+#    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2021.xls
+#  Outbreaks in Toronto Healthcare Institutions-2022:
+#    format: xls
+#    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2022.xls
+#  Outbreaks in Toronto Healthcare Institutions-2023:
+#    format: xls
+#    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2023.xls
 parking-ticket-trials:
   parking-ticket-trial-data:
     format: zip
