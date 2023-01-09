@@ -1,5 +1,5 @@
 members-of-toronto-city-council-meeting-attendance:
-  schedule: '@once'
+  schedule: "0 18 * * *"
   dag_owner_name: 'Mackenzie'
   dag_owner_email: 'mackenzie.nichols4@toronto.ca'
   title: Members of Toronto City Council - Meeting Attendance

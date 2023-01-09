@@ -1,5 +1,5 @@
 registry-of-declared-interest:
-  schedule: '@once'
+  schedule: "0 18 * * *"
   dag_owner_name: 'Mackenzie'
   dag_owner_email: 'mackenzie.nichols4@toronto.ca'
   title: Registry of Declared Interest

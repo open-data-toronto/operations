@@ -1,5 +1,5 @@
 city-council-and-committees-meeting-schedule-reports:
-  schedule: '@once'
+  schedule: '0 18 * * *'
   dag_owner_name: 'Mackenzie'
   dag_owner_email: 'mackenzie.nichols4@toronto.ca'
   title: City Council and Committees Meeting Schedule Reports
