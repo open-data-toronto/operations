@@ -1,0 +1,74 @@
+city-council-and-committees-meeting-schedule-reports:
+  schedule: '@once'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: City Council and Committees Meeting Schedule Reports
+  date_published: '2019-07-23 16:46:46.922652'
+  refresh_rate: As available
+  dataset_category: Table
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: City government
+  tags:
+  - name: city council
+    vocabulary_id: null
+  - name: council meeting
+    vocabulary_id: null
+  - name: council schedule
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/council
+  excerpt: This dataset contains the City Council and committee meeting schedules
+    as is published on http://www.toronto.ca/council
+  limitations: null
+  notes: "This open data set provides access to meeting schedule data extracted from\
+    \ TMMIS. You can also access previous term meeting schedule data.\r\nCity Council\
+    \ approves an annual meeting schedule for City Council, Committees and Community\
+    \ Councils.  Agencies, boards, tribunals and advisory bodies schedule their meetings\
+    \ around the Council approved schedule.  \r\n\r\nThe City Council meeting schedule\
+    \ is updated in real-time and always reflects the most accurate meeting information.\r\
+    \n\r\nThe open data set includes the date, start time and name of meeting.  The\
+    \ end time of the meeting is not reflective of how long a meeting will run; meetings\
+    \ are complete when all agenda items have been considered.\r\n\r\nIf you want\
+    \ to download the meeting data and upload to your calendar, use the following\
+    \ [instructions](https://www.toronto.ca/legdocs/tmmis/calendarupload.pdf).  Please\
+    \ note the meeting details are static once uploaded; they will not be automatically\
+    \ updated if the meeting is rescheduled or canceled."
+
+  resources:
+    # resource name
+    meeting-schedule-all-committees-2022-2026:
+      format: csv
+      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_MEETING_SCHEDULE_2022_2026.csv
+      attributes:
+        - id: Term
+          type: text
+          info:
+            notes: ""
+        - id: Committee
+          type: text
+          info:
+            notes: ""
+        - id: "MTG #"
+          type: text
+          info:
+            notes: ""
+        - id: Date
+          type: date
+          info:
+            notes: ""
+        - id: Start Time
+          type: text
+          info:
+            notes: ""
+        - id: End Time
+          type: text
+          info:
+            notes: ""
+        - id: Location
+          type: text
+          info:
+            notes: ""
+        
