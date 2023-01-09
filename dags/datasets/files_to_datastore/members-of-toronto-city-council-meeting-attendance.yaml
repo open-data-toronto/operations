@@ -1,0 +1,75 @@
+members-of-toronto-city-council-meeting-attendance:
+  schedule: "0 18 * * *"
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Members of Toronto City Council - Meeting Attendance
+  date_published: '2019-07-23 17:41:31.636528'
+  refresh_rate: As available
+  dataset_category: Table
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: clerk@toronto.ca
+  civic_issues: null
+  topics: City government
+  tags:
+  - name: city coucil
+    vocabulary_id: null
+  - name: council meeting attendance
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/council
+  excerpt: Access Attendance Reporting data for Members of Toronto City Council.
+  limitations: null
+  notes: "This dataset includes the legislative meeting attendance data for Members\
+    \ of Toronto City Council Meeting Attendance. \r\n\r\nFor official definitions\
+    \ and procedure by-law information, refer to the [City of Toronto Municipal Code,\
+    \ Chapter 27, Council Procedures](http://www.toronto.ca/legdocs/municode/1184_027.pdf)\r\
+    \n\r\n \r\n- The attendance record data for a meeting becomes available when the\
+    \ minutes for a meeting have been published. \r\n\r\n- A Member is recorded as\
+    \ being present if they attend any or all sessions of a meeting.\r\n\r\n- \"Closed\
+    \ Session\" indicates a session was closed to the public under section 27-38 of\
+    \ the Council Procedures by-law.\r\n\r\n- \"Roll Call\" indicates when a meeting\
+    \ chair \"called the roll\" to ensure quorum was present.\r\n"
+
+  resources:
+    # resource name
+    councillors-meeting-attendance-2022-2026:
+      format: csv
+      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_ATTENDANCE_2022_2026.csv
+      attributes:
+        - id: Term
+          type: text
+          info:
+            notes: ""
+        - id: First Name
+          type: text
+          info:
+            notes: ""
+        - id: Last Name
+          type: text
+          info:
+            notes: ""
+        - id: Committee
+          type: text
+          info:
+            notes: ""
+        - id: "MTG #"
+          type: text
+          info:
+            notes: ""
+        - id: Session Date
+          type: date
+          info:
+            notes: ""
+        - id: Session Type
+          type: text
+          info:
+            notes: ""
+        - id: Session Start-End Time
+          type: text
+          info:
+            notes: ""
+        - id: Present
+          type: text
+          info:
+            notes: ""

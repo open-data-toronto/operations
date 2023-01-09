@@ -1,7 +1,7 @@
 # package name
 members-of-toronto-city-council-voting-record:
   # DAG info
-  schedule: "@once"
+  schedule: "0 18 * * *"
   dag_owner_name: Mackenzie
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
@@ -50,10 +50,14 @@ members-of-toronto-city-council-voting-record:
 
   resources:
     # resource name
-    member-voting-record-2014-2018:
+    member-voting-record-2022-2026:
       format: csv
-      url:  http://opendata.toronto.ca/city.clerks.office/members-of-toronto-city-council-voting-record/Votes-(2014-2018)-2022-04-19_11-15_AM.csv
+      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_VOTE_2022_2026.csv
       attributes:
+        - id: Term
+          type: text
+          info:
+            notes: ""
         - id: First Name
           type: text
           info:
@@ -67,98 +71,10 @@ members-of-toronto-city-council-voting-record:
           info:
             notes: ""
         - id: Date/Time
-          type: text
+          type: timestamp
           info:
             notes: ""
         - id: "Agenda Item #"
-          type: text
-          info:
-            notes: ""
-        - id: Agenda Item Title
-          type: text
-          info:
-            notes: ""
-        - id: Motion Type
-          type: text
-          info:
-            notes: ""
-        - id: Vote
-          type: text
-          info:
-            notes: ""
-        - id: Result
-          type: text
-          info:
-            notes: ""
-        - id: Vote Description
-          type: text
-          info:
-            notes: ""
-    member-voting-record-2010-2014:
-      format: csv
-      url:  http://opendata.toronto.ca/city.clerks.office/members-of-toronto-city-council-voting-record/member-voting-record-2010-2014.csv
-      attributes:
-        - id: First Name
-          type: text
-          info:
-            notes: ""
-        - id: Last Name
-          type: text
-          info:
-            notes: ""
-        - id: Committee
-          type: text
-          info:
-            notes: ""
-        - id: Date/Time
-          type: text
-          info:
-            notes: ""
-        - id: "Agenda Item #"
-          type: text
-          info:
-            notes: ""
-        - id: Agenda Item Title
-          type: text
-          info:
-            notes: ""
-        - id: Motion Type
-          type: text
-          info:
-            notes: ""
-        - id: Vote
-          type: text
-          info:
-            notes: ""
-        - id: Result
-          type: text
-          info:
-            notes: ""
-        - id: Vote Description
-          type: text
-          info:
-            notes: ""
-    member-voting-record-2006-2010:
-      format: csv
-      url:  http://opendata.toronto.ca/city.clerks.office/members-of-toronto-city-council-voting-record/member-voting-record-2006-2010.csv
-      attributes:
-        - id: First Name
-          type: text
-          info:
-            notes: ""
-        - id: Last Name
-          type: text
-          info:
-            notes: ""
-        - id: Committee
-          type: text
-          info:
-            notes: ""
-        - id: Date/Time
-          type: text
-          info:
-            notes: ""
-        - id: "Agenda Item #" 
           type: text
           info:
             notes: ""

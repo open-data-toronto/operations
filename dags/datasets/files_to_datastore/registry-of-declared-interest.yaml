@@ -1,0 +1,99 @@
+registry-of-declared-interest:
+  schedule: "0 18 * * *"
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Registry of Declared Interest
+  date_published: '2019-07-23 17:56:54.95801'
+  refresh_rate: As available
+  dataset_category: Table
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: clerk@toronto.ca
+  civic_issues: null
+  topics: City government
+  tags:
+  - name: city council
+    vocabulary_id: null
+  - name: conflict of interest
+    vocabulary_id: null
+  - name: declared interest
+    vocabulary_id: null
+  - name: member of council
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/council
+  excerpt: Effective March 1, 2019, the Municipal Conflict of Interest Act, (https://www.ontario.ca/laws/statute/90m50)
+    requires municipalities to make a registry of declarations of interest available
+    for public inspection. You can now generate and review the record of declared
+    interests for an individual Member of Council and download the report as comma-sep
+  limitations: null
+  notes: "Effective March 1, 2019, the [Municipal Conflict of Interest Act](https://www.ontario.ca/laws/statute/90m50),\
+    \ requires municipalities to make a registry of declarations of interest available\
+    \ for public inspection. These open data sets allow you to review the record of\
+    \ declared interests for Members of Council.  \r\n\r\n\r\nVerbal declarations\
+    \ are recorded and published as part of the minutes of each meeting. Changes to\
+    \ the Municipal Conflict of Interest Act now require Members to submit a written\
+    \ declaration in addition to making a verbal declaration. Both are captured in\
+    \ this registry as of March 1, 2019. Records prior to March 1, 2019 contain only\
+    \ verbal declarations and the Act does not require retroactive written declarations.\r\
+    \n\r\n\r\n**Description of the data**\r\n\r\nThe declaration data for an item\
+    \ becomes available when the minutes for a meeting have been published.\r\n\r\n\
+    - **Committee**: The name of the committee, board or Council where the item was\
+    \ considered and the declaration was made\r\n\r\n- **First Name**: First name\
+    \ of Member\r\n\r\n- **Last Name**: Last name of Member  \r\n\r\n- **Item**: The\
+    \ agenda item number as a hyperlink\r\n\r\n- **Item Title**: The agenda item title\r\
+    \n\r\n- **Receive Date**: The receive date is the date the written declaration\
+    \ was received by the Clerk.\r\n\r\n- **Verbal Declaration**: The verbal declaration\
+    \ as recorded by the Clerk or board secretary\r\n\r\n- **Verbal Declaration Date**:\
+    \ The date that the Member made the verbal declaration\r\n\r\n\r\nWritten declarations\
+    \ are links to a PDF copy of the original written document presented to the Clerk.\
+    \ If you require assistance with these documents, please contact the appropriate\
+    \ Committee or Council team.\r\nMembers listed also include public Members appointed\
+    \ to Boards by City Council.\r\n"
+
+  resources:
+    # resource name
+    declared-interest-2022-2026:
+      format: csv
+      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_DECLARED_INTEREST_2022_2026.csv
+      attributes:
+        - id: Term
+          type: text
+          info:
+            notes: ""
+        - id: First Name
+          type: text
+          info:
+            notes: ""
+        - id: Last Name
+          type: text
+          info:
+            notes: ""
+        - id: Committee
+          type: text
+          info:
+            notes: ""
+        - id: Item
+          type: text
+          info:
+            notes: ""
+        - id: Item Title
+          type: text
+          info:
+            notes: ""
+        - id: Verbal Declaration Date
+          type: date
+          info:
+            notes: ""
+        - id: Verbal Declaration
+          type: text
+          info:
+            notes: ""
+        - id: Written Declaration
+          type: text
+          info:
+            notes: ""
+        - id: Receive Date
+          type: date
+          info:
+            notes: ""
