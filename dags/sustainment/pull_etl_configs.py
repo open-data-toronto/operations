@@ -67,6 +67,25 @@ package_metadata = {
     "notes": "",
 }
 
+# FME
+def get_fme_configs(**kwargs):
+    """Grab FME ETL metadata from file in NAS"""
+    fme_configs_url = ("http://opendata.toronto.ca/"
+                       "technology.services/_OpenData_fmeserver_jobs_list/"
+                       "FMEServer_publishing_jobs.json")
+
+    fme_response = json.loads(requests.get(fme_configs_url).text)
+
+    for item in fme_response["items"]:
+        fme_response[i]["engine"] = "FME"
+        fme_response[i]["target_package_name"] = None
+        fme_response[i]["target_resource_name"] = None
+        fme_response[i]["source_data"] = None
+        fme_response[i]["schedule"] = None
+        fme_response[i]["config_location"] = item["name"]
+        fme_response[i]["od_owner"] = "FME"
+        fme_response[i]["etl_description"] = None
+
 
 # NIFI
 def get_nifi_configs(**kwargs):
