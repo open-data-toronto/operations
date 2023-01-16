@@ -322,6 +322,7 @@ def create_dag(dag_id,
                 data_path_task_key = "data_path",
                 config = resource,
                 trigger_rule = "all_success",
+                retries = 0,
             )
             
             # init a temp directory and get/create the package for the target data
