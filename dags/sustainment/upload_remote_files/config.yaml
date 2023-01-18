@@ -136,10 +136,10 @@ municipal-licensing-and-standards-investigation-activity:
   Investigation Activities (JSON ZIP):
     format: zip
     url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_json.zip
-non-regulated-lead-sample:
-  non-regulated-lead-sample-from-2014-to-present-csv:
-    format: zip
-    url: http://opendata.toronto.ca/toronto.water/non-regulated-lead-sample/leadsampling_csv.zip
+#non-regulated-lead-sample:
+#  non-regulated-lead-sample-from-2014-to-present-csv:
+#    format: zip
+#    url: http://opendata.toronto.ca/toronto.water/non-regulated-lead-sample/leadsampling_csv.zip
 #  non-regulated-lead-sample-from-2014-to-present-xml:
 #    format: zip
 #    url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
