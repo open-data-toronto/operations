@@ -1,0 +1,78 @@
+# package name
+non-regulated-lead-sample:
+  # DAG info
+  schedule: "15 6 * * *"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Non Regulated Lead Sample"
+  date_published: "2019-07-23 17:47:47.086475"
+  refresh_rate: Daily
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Water
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: 
+    - Climate change
+  topics: 
+    - Environment
+    - Public safety
+    - Water
+  tags: 
+    - name: lead pipes
+      vocabulary_id: null
+    - name: non-regulated lead sample
+      vocabulary_id: null
+    - name: water testing
+      vocabulary_id: null
+    
+  information_url: http://www.toronto.ca/leadpipes
+  excerpt: Non Regulated Lead sample results reported to the client during a specified date range.
+  limitations: null
+  notes: |
+    The City's Residential Lead Testing Program is a non-regulated program provided free of charge to residents concerned about the possibility of lead in their tap drinking water.
+    
+    Residents can pick up and drop off a water sample kit at one of six Toronto Public Health locations. While each kit contains detailed instructions on how to obtain an accurate tap water sample, the City of Toronto has no control over how or where a sample is obtained. Toronto Water provides lead test results to all residents who submit a test.
+    
+    To find out more about what the City is doing to reduce lead in drinking water, visit: [www.toronto.ca/leadpipes](http://www.toronto.ca/leadpipes)
+
+  resources:
+    # resource name
+    Non Regulated Lead Samples:
+      format: csv
+      url: http://opendata.toronto.ca/toronto.water/non-regulated-lead-sample/LeadSamples.csv
+      attributes:
+        - id: Sample Number          
+          type: int
+          info:
+            notes: "Laboratory sample ID. The City of Toronto has no control over how or where a sample is obtained."
+        - id: Sample Date          
+          type: date
+          info:
+            notes: "Sample Date is the date sample was collected by resident."
+        - id: PartialPostalCode          
+          type: text
+          info:
+            notes: "First three digits of postal code from residential property where sample was submitted from. For privacy reasons, only three digits of postal code is available on Open Data."
+        - source_name: OVAL  
+          target_name: Lead Amount (ppm)        
+          type: text
+          info:
+            notes: |
+              ppb = parts per billion 
+              µg/l = micrograms per litre
+              mg/l =milligrams per litre	
+              
+              The Ministry of the Environment and Climate Change's Ontario Regulation 169/03 sets the maximum acceptable concentration of lead in drinking water at 0.010 milligrams per litre (mg/l) or 10 parts per billion (ppb).
+
+
+
+        
+       
+        
+        
