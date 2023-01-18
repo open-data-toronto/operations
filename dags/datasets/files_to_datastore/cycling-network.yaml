@@ -1,16 +1,16 @@
-bikeways:
+cycling-network:
   schedule: '@once'
   dag_owner_name: Mackenzie
   dag_owner_email: 'mackenzie.nichols4@toronto.ca'
-  title: Bikeways
-  date_published: '2019-07-23 16:40:53.21739'
+  title: Cycling Network
+  date_published: '2023-01-18 12:40:53.21739'
   refresh_rate: Semi-annually
   dataset_category: Map
   owner_division: Transportation Services
-  owner_section: null
-  owner_unit: null
+  owner_section: Project Design and Management
+  owner_unit: Cycling and Pedestring Projects
   owner_email: cycling@toronto.ca
-  civic_issues: null
+  civic_issues: Mobility
   topics: Locations and mapping,Transportation
   tags:
   - name: bicycle lane
@@ -29,9 +29,8 @@ bikeways:
     vocabulary_id: null
   - name: bikeway network
     vocabulary_id: null
-  information_url: http://www.toronto.ca/cycling/map/index.htm
-  excerpt: The Toronto bikeways data contains bicycle lanes, signed bicycle routes
-    and pathways
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/cycling-in-toronto/torontos-cycling-infrastructure/
+  excerpt: This dataset shares the mapping details of Toronto's existing cycling network, including cycle tracks, bicycle lanes, contra-flow bicycle lanes, multi-use trails and on-street shared cycling connections.  
   limitations: null
   notes: "The Toronto bikeways dataset illustrates the existing cycling network across\
     \ the city, including both shared and dedicated bikeways. A summary of the network\
@@ -169,7 +168,7 @@ bikeways:
       - id: CONVERTED
         type: text
         info:
-          notes: ''
+          notes: 'Identifies bikeways routes that were initially shared space (sharrows, signed routes, etc) and have been converted to dedicated spaces or cycling facilities (i.e. bike lane, cycle tracks, multi-use trails).'
       - id: geometry
         type: text
         info:
