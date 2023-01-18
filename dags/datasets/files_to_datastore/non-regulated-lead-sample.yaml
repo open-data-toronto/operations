@@ -50,23 +50,28 @@ non-regulated-lead-sample:
         - id: Sample Number          
           type: int
           info:
-            notes: ""
+            notes: "Laboratory sample ID. The City of Toronto has no control over how or where a sample is obtained."
         - id: Sample Date          
           type: date
           info:
-            notes: ""
+            notes: "Sample Date is the date sample was collected by resident."
         - id: PartialPostalCode          
           type: text
           info:
-            notes: ""
-        - id: OVAL          
+            notes: "First three digits of postal code from residential property where sample was submitted from. For privacy reasons, only three digits of postal code is available on Open Data."
+        - source_name: OVAL  
+          target_name: Lead Amount (ppm)        
           type: text
           info:
-            notes: ""
-        - id: Lead Amount ppb          
-          type: float
-          info:
-            notes: ""
+            notes: |
+              ppb = parts per billion 
+              µg/l = micrograms per litre
+              mg/l =milligrams per litre	
+              
+              The Ministry of the Environment and Climate Change's Ontario Regulation 169/03 sets the maximum acceptable concentration of lead in drinking water at 0.010 milligrams per litre (mg/l) or 10 parts per billion (ppb).
+
+
+
         
        
         
