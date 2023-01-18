@@ -76,16 +76,8 @@ def get_fme_configs(**kwargs):
 
     fme_response = json.loads(requests.get(fme_configs_url).text)
 
-    for item in fme_response["items"]:
-        fme_response[i]["engine"] = "FME"
-        fme_response[i]["target_package_name"] = None
-        fme_response[i]["target_resource_name"] = None
-        fme_response[i]["source_data"] = None
-        fme_response[i]["schedule"] = None
-        fme_response[i]["config_location"] = item["name"]
-        fme_response[i]["od_owner"] = "FME"
-        fme_response[i]["etl_description"] = None
-
+    # return a list of FME job names
+    return {"output": [item["name"] for item in fme_response["items"]]}
 
 # NIFI
 def get_nifi_configs(**kwargs):
@@ -144,13 +136,10 @@ def get_nifi_configs(**kwargs):
                 nifi_response[i]["etl_description"] = None
 
         print(nifi_response)
-        # TODO: parse out the structure from these files into something
-        # flatter that can be used more easily below
         return {"output": nifi_response}
     except Exception as e:
         print("Failed while getting and parsing NiFi configs")
         print(e)
-        pass
 
 
 # Airflow
@@ -247,8 +236,8 @@ def get_airflow_configs(**kwargs):
     return {"output": airflow_configs}
 
 
-# Combine Configs w ckan resources
 def combine_configs(**kwargs):
+    """Puts configs together into single usable resource"""
     # init output
     output = []
 
@@ -259,9 +248,12 @@ def combine_configs(**kwargs):
     airflow_configs = kwargs["ti"].xcom_pull(task_ids="get_airflow_configs")[
         "output"
         ]
+    fme_configs = kwargs["ti"].xcom_pull(task_ids="get_fme_configs")[
+        "output"
+        ]
 
     # make a master list of etl configs
-    configs = nifi_configs + airflow_configs
+    configs = airflow_configs + nifi_configs
 
     # combine master list of etl configs with ckan resources
     # get packages
@@ -269,6 +261,7 @@ def combine_configs(**kwargs):
     print("There are {} package names".format(str(len(package_names))))
     print("There are {} nifi_configs".format(str(len(nifi_configs))))
     print("There are {} airflow_configs".format(str(len(airflow_configs))))
+    print("There are {} fme_configs".format(str(len(fme_configs))))
     for package_name in package_names:
         print("Now processing the following package name: " + package_name)
         # skip the tags dataset - we dont care about that as much
@@ -291,11 +284,15 @@ def combine_configs(**kwargs):
                         and package_name == config["target_package_name"]
                     ):
                         print("Matched! " + resource["name"])
+                        # if this is associated w FME, tag it as such
+                        fme = True if package_name in fme_configs else False
+
                         output.append(
                             {
                                 "package_id": package.get("name", None),
                                 "resource_name": resource["name"],
                                 "engine": config.get("engine", None),
+                                "fme": fme,
                                 "source_data": config.get(
                                     "source_data", None),
                                 "datastore_active": resource[
@@ -339,6 +336,7 @@ def combine_configs(**kwargs):
                             "package_id": package.get("name", None),
                             "resource_name": resource["name"],
                             "engine": None,
+                            "fme": False,
                             "source_data": None,
                             "datastore_active": resource["datastore_active"],
                             "refresh_rate": package.get("refresh_rate", None),
@@ -378,6 +376,7 @@ def combine_configs(**kwargs):
                             "package_id": package.get("name", None),
                             "resource_name": resource.get("name", None),
                             "engine": None,
+                            "fme": False,
                             "source_data": None,
                             "datastore_active": resource.get(
                                 "datastore_active", None),
@@ -460,6 +459,12 @@ with DAG(
         provide_context=True,
     )
 
+    get_fme_configs = PythonOperator(
+        task_id="get_fme_configs",
+        python_callable=get_fme_configs,
+        provide_context=True,
+    )
+
     combine_configs = PythonOperator(
         task_id="combine_configs",
         python_callable=combine_configs,
@@ -500,6 +505,7 @@ with DAG(
     (
         get_nifi_configs
         >> get_airflow_configs
+        >> get_fme_configs
         >> combine_configs
         >> get_or_create_package
         >> get_or_create_resource
