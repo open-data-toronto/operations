@@ -41,7 +41,7 @@ traffic-cameras:
   resources:
     Traffic Camera List:
       format: csv
-      url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.csv
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_TRAFFIC_CAMERA/FeatureServer/0
       attributes:
         - id: Camera Number
           type: text
