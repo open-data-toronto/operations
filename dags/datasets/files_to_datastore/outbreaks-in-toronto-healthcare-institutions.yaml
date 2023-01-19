@@ -54,7 +54,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "Street address of the institution"
-        - id: "Facility Setting"
+        - id: "Outbreak Setting"
           type: "text"
           info:
             notes: "The type of facility, in terms of the type of healthcare provided"
@@ -70,7 +70,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "The second aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
-        - id: "Date Reported to Public Health"
+        - id: "Date Outbreak Began"
           type: "date"
           info:
             notes: "The date the institution reports the outbreak to TPH"
@@ -95,7 +95,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "Street address of the institution"
-        - id: "Facility Setting"
+        - id: "Outbreak Setting"
           type: "text"
           info:
             notes: "The type of facility, in terms of the type of healthcare provided"
@@ -111,7 +111,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "The second aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
-        - id: "Date Reported to Public Health"
+        - id: "Date Outbreak Began"
           type: "date"
           info:
             notes: "The date the institution reports the outbreak to TPH"
@@ -136,7 +136,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "Street address of the institution"
-        - id: "Facility Setting"
+        - id: "Outbreak Setting"
           type: "text"
           info:
             notes: "The type of facility, in terms of the type of healthcare provided"
@@ -152,7 +152,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "The second aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
-        - id: "Date Reported to Public Health"
+        - id: "Date Outbreak Began"
           type: "date"
           info:
             notes: "The date the institution reports the outbreak to TPH"
@@ -177,7 +177,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "Street address of the institution"
-        - id: "Facility Setting"
+        - id: "Outbreak Setting"
           type: "text"
           info:
             notes: "The type of facility, in terms of the type of healthcare provided"
@@ -185,15 +185,15 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "The mode of transmission classification description of the outbreak"
-        - id: "Causative Agent-1"
+        - id: "Causative Agent - 1"
           type: "text"
           info:
             notes: "The first aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
-        - id: "Causative Agent-2"
+        - id: "Causative Agent - 2"
           type: "text"
           info:
             notes: "The second aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
-        - id: "Date Reported to Public Health"
+        - id: "Date Outbreak Began"
           type: "date"
           info:
             notes: "The date the institution reports the outbreak to TPH"
@@ -218,7 +218,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "Street address of the institution"
-        - id: "Facility Setting"
+        - id: "Outbreak Setting"
           type: "text"
           info:
             notes: "The type of facility, in terms of the type of healthcare provided"
@@ -234,7 +234,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "The second aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
-        - id: "Date Reported to Public Health"
+        - id: "Date Outbreak Began"
           type: "date"
           info:
             notes: "The date the institution reports the outbreak to TPH"
@@ -259,7 +259,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "Street address of the institution"
-        - id: "Facility Setting"
+        - id: "Outbreak Setting"
           type: "text"
           info:
             notes: "The type of facility, in terms of the type of healthcare provided"
@@ -275,7 +275,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "The second aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
-        - id: "Date Reported to Public Health"
+        - id: "Date Outbreak Began"
           type: "date"
           info:
             notes: "The date the institution reports the outbreak to TPH"
@@ -300,7 +300,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "Street address of the institution"
-        - id: "Facility Setting"
+        - id: "Outbreak Setting"
           type: "text"
           info:
             notes: "The type of facility, in terms of the type of healthcare provided"
@@ -316,7 +316,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "The second aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
-        - id: "Date Reported to Public Health"
+        - id: "Date Outbreak Began"
           type: "date"
           info:
             notes: "The date the institution reports the outbreak to TPH"
@@ -341,7 +341,7 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "Street address of the institution"
-        - id: "Facility Setting"
+        - id: "Outbreak Setting"
           type: "text"
           info:
             notes: "The type of facility, in terms of the type of healthcare provided"
@@ -349,15 +349,15 @@ outbreaks-in-toronto-healthcare-institutions:
           type: "text"
           info:
             notes: "The mode of transmission classification description of the outbreak"
-        - id: "Causative Agent-1"
+        - id: "Causative Agent"
           type: "text"
           info:
             notes: "The first aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
-        - id: "Causative Agent-2"
+        - id: "Etiological Agent2"
           type: "text"
           info:
             notes: "The second aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
-        - id: "Date Reported to Public Health"
+        - id: "Date Outbreak Began"
           type: "date"
           info:
             notes: "The date the institution reports the outbreak to TPH"
