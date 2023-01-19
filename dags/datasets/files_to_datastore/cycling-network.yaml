@@ -56,7 +56,7 @@ cycling-network:
     \ segment, which is measured in centreline metres. \r\n\r\nBikeways installed\
     \ prior to 2001 are shown with an install year of 2001.\r\n\r\n"
   resources:
-    bikeways:
+    cycling-network:
       format: geojson
       agol: true
       url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CYCLING_INFRASTRUCTURE/FeatureServer/0
@@ -127,7 +127,7 @@ cycling-network:
             - Multi-Use Trail 
             - Cycle Track
 
-            As an example, on a contra-flow route with sharrows on one side, and contra-flow bike lane on the other side, the lowest classified cycling infrastructure type on this street would be the "Sharrows". If the street only has one type of cycling infrastructure on both sides, then the input would be the same for both "INFRA_LOWO" and "INFRA_HIGH".  
+            As an example, on a contra-flow route with sharrows on one side, and contra-flow bike lane on the other side, the lowest classified cycling infrastructure type on this street would be the "Sharrows". If the street only has one type of cycling infrastructure on both sides, then the input would be the same for both "INFRA\_LOWO" and "INFRA\_HIGH".  
 
       - id: SEPA_LOWORDER
         type: text
