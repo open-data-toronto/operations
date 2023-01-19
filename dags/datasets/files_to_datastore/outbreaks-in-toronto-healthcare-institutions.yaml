@@ -43,7 +43,7 @@ outbreaks-in-toronto-healthcare-institutions:
     # resource name
     ob_report_2023:
       format: xls
-      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2023.xls
+      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2023.xlsx
       attributes:
         - id: "Institution Name"
           type: "text"
@@ -83,7 +83,7 @@ outbreaks-in-toronto-healthcare-institutions:
             notes: "Institutional outbreaks remain active until they have been declared over and the public health investigation is closed."
     ob_report_2022:
       format: xls
-      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2022.xls
+      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2022.xlsx
       attributes:
         - id: "Institution Name"
           type: "text"
@@ -123,7 +123,7 @@ outbreaks-in-toronto-healthcare-institutions:
             notes: "Institutional outbreaks remain active until they have been declared over and the public health investigation is closed."
     ob_report_2021:
       format: xls
-      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2021.xls
+      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2021.xlsx
       attributes:
         - id: "Institution Name"
           type: "text"
@@ -163,7 +163,7 @@ outbreaks-in-toronto-healthcare-institutions:
             notes: "Institutional outbreaks remain active until they have been declared over and the public health investigation is closed."
     ob_report_2020:
       format: xls
-      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2020.xls
+      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2020.xlsx
       attributes:
         - id: "Institution Name"
           type: "text"
@@ -203,7 +203,7 @@ outbreaks-in-toronto-healthcare-institutions:
             notes: "Institutional outbreaks remain active until they have been declared over and the public health investigation is closed."
     ob_report_2019:
       format: xls
-      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2019.xls
+      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2019.xlsx
       attributes:
         - id: "Institution Name"
           type: "text"
@@ -243,7 +243,7 @@ outbreaks-in-toronto-healthcare-institutions:
             notes: "Institutional outbreaks remain active until they have been declared over and the public health investigation is closed."
     ob_report_2018:
       format: xls
-      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2018.xls
+      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2018.xlsx
       attributes:
         - id: "Institution Name"
           type: "text"
@@ -283,7 +283,7 @@ outbreaks-in-toronto-healthcare-institutions:
             notes: "Institutional outbreaks remain active until they have been declared over and the public health investigation is closed."
     ob_report_2017:
       format: xls
-      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2017.xls
+      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2017.xlsx
       attributes:
         - id: "Institution Name"
           type: "text"
@@ -323,7 +323,7 @@ outbreaks-in-toronto-healthcare-institutions:
             notes: "Institutional outbreaks remain active until they have been declared over and the public health investigation is closed."
     ob_report_2016:
       format: xls
-      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2016.xls
+      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2016.xlsx
       attributes:
         - id: "Institution Name"
           type: "text"
