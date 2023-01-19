@@ -1,0 +1,187 @@
+cycling-network:
+  schedule: '@once'
+  dag_owner_name: Mackenzie
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Cycling Network
+  date_published: '2023-01-18 12:40:53.21739'
+  refresh_rate: Semi-annually
+  dataset_category: Map
+  owner_division: Transportation Services
+  owner_section: Project Design and Management
+  owner_unit: Cycling and Pedestring Projects
+  owner_email: cycling@toronto.ca
+  civic_issues: Mobility
+  topics: Locations and mapping,Transportation
+  tags:
+  - name: bicycle lane
+    vocabulary_id: null
+  - name: bicycle path
+    vocabulary_id: null
+  - name: bicycle route
+    vocabulary_id: null
+  - name: bike lane
+    vocabulary_id: null
+  - name: bike pathway
+    vocabulary_id: null
+  - name: bike route
+    vocabulary_id: null
+  - name: bike trail
+    vocabulary_id: null
+  - name: bikeway network
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/cycling-in-toronto/torontos-cycling-infrastructure/
+  excerpt: This dataset shares the mapping details of Toronto's existing cycling network, including cycle tracks, bicycle lanes, contra-flow bicycle lanes, multi-use trails and on-street shared cycling connections.  
+  limitations: null
+  notes: "The Toronto bikeways dataset illustrates the existing cycling network across\
+    \ the city, including both shared and dedicated bikeways. A summary of the network\
+    \ status is available at toronto.ca/cyclingnetwork \r\n\r\nThe Toronto bikeways\
+    \ dataset contains the following types of bikeways: cycle tracks, bicycle lanes\
+    \ (including buffered bike lanes and contra-flow bike lanes), neighbourhood routes\
+    \ with sharrows (including wayfinding sharrows), multi-use trails (including off-road\
+    \ and in-boulevard), as well as signed cycling routes. \r\n\r\nThere are two fields\
+    \ that reference the bikeway type because some streets have different infrastructure\
+    \ on each side of the roadway. \"INFRA-HIGH\" refers to the highest classified\
+    \ cycling infrastructure type installed on this segment. \"INFRA-LOW\" refers\
+    \ to the lowest classified cycling infrastructure type. The hierarchy is based\
+    \ on the quality and comfort of the bikeway type, with routes that are shared\
+    \ with vehicles as the lowest comfort, and the greater the separation / dedicated\
+    \ space, the higher the comfort and classification.\r\n\r\nFor example, on a contra-flow\
+    \ bike lane route with sharrows in the other direction, the highest classified\
+    \ cycling infrastructure type on this street is the contra-flow bike lane, and\
+    \ the lower order infrastructure is the sharrows. If the street has the same type\
+    \ of cycling infrastructure on both sides, then the input is the same for both\
+    \ \"INFRA-LOW\" and \"INFRA-HIGH\". If there is a bikeway on only one side of\
+    \ a street, the bikeway type is listed under \"INFRA-HIGH\", and the \"INFRA-LOW\"\
+    \ field is blank.\r\n\r\nThe \"SHAPE_LENGTH\" field identifies the length of the\
+    \ segment, which is measured in centreline metres. \r\n\r\nBikeways installed\
+    \ prior to 2001 are shown with an install year of 2001.\r\n\r\n"
+  resources:
+    cycling-network:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CYCLING_INFRASTRUCTURE/FeatureServer/0
+      attributes:
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: SEGMENT_ID
+        type: int
+        info:
+          notes: 'Number given to a segment within the data. The assigned follows a consecutive sequential order.'
+      - id: INSTALLED
+        type: int
+        info:
+          notes: 'The year in which the cycling infrastructure was originally installed.'
+      - id: UPGRADED
+        type: int
+        info:
+          notes: 'The year in which the cycling infrastructure received upgrades, without changing from shared space to dedicated space. For example, if a bike lane is upgraded to a cycle track, or a signed route is upgraded to a sharrow wayfinding route.  Upgrades can be undertaken using pavement markings or physical separation.'
+      - id: PRE_AMALGAMATION
+        type: text
+        info:
+          notes: 'Yes/No on if it was installed before amalgamation.'
+      - id: STREET_NAME
+        type: text
+        info:
+          notes: 'The name of the street where the cycling infrastructure is located.'
+      - id: FROM_STREET
+        type: text
+        info:
+          notes: 'The beginning of the boundary, the street name for which the cycling infrastructure segment starts.'
+      - id: TO_STREET
+        type: text
+        info:
+          notes: 'The end of the boundary, the street name for which the cycling infrastructure segment ends.'
+      - id: ROADCLASS
+        type: text
+        info:
+          notes: 'Classification of road (ex. Arterial, Collector, Local)'
+      - id: CNPCLASS
+        type: text
+        info:
+          notes: 'Type of road (ex. Fast Busy Street, Quiet Street)'
+      - id: SURFACE
+        type: text
+        info:
+          notes: 'Surface Material of infrastructure'
+      - id: OWNER
+        type: text
+        info:
+          notes: ''
+      - id: DIR_LOWORDER
+        type: text
+        info:
+          notes: ''
+      - id: INFRA_LOWORDER
+        type: text
+        info:
+          notes: |
+            Refers to the lowest classified cycling infrastructure type installed on this segment. In order of lowest to highest:
+            - Signed Route 
+            - Wayfinding Sharrows 
+            - Sharrows 
+            - Contra-flow Bike Lane 
+            - Bike Lane  
+            - Bike Lane – Buffered 
+            - Multi-Use Trail 
+            - Cycle Track
+
+            As an example, on a contra-flow route with sharrows on one side, and contra-flow bike lane on the other side, the lowest classified cycling infrastructure type on this street would be the "Sharrows". If the street only has one type of cycling infrastructure on both sides, then the input would be the same for both "INFRA\_LOWO" and "INFRA\_HIGH".  
+
+      - id: SEPA_LOWORDER
+        type: text
+        info:
+          notes: ''
+      - id: SEPB_LOWORDER
+        type: text
+        info:
+          notes: ''
+      - id: ORIG_LOWORDER_INFRA
+        type: text
+        info:
+          notes: ''
+      - id: DIR_HIGHORDER
+        type: text
+        info:
+          notes: ''
+      - id: INFRA_HIGHORDER
+        type: text
+        info:
+          notes: 'Refers to the highest classified cycling infrastructure type installed on this segment, as outlined above. '
+      - id: SEPA_HIGHORDER
+        type: text
+        info:
+          notes: ''
+      - id: SEPB_HIGHORDER
+        type: text
+        info:
+          notes: ''
+      - id: ORIG_HIGHORDER
+        type: text
+        info:
+          notes: ''
+      - id: BYLAWED
+        type: text
+        info:
+          notes: ''
+      - id: EDITOR
+        type: text
+        info:
+          notes: ''
+      - id: LAST_EDIT_DATE
+        type: timestamp
+        info:
+          notes: ''
+      - id: UPGRADE_DESCRIPTION
+        type: text
+        info:
+          notes: ''
+      - id: CONVERTED
+        type: text
+        info:
+          notes: 'Identifies bikeways routes that were initially shared space (sharrows, signed routes, etc) and have been converted to dedicated spaces or cycling facilities (i.e. bike lane, cycle tracks, multi-use trails).'
+      - id: geometry
+        type: text
+        info:
+          notes: ''
