@@ -68,43 +68,43 @@ cycling-network:
       - id: SEGMENT_ID
         type: int
         info:
-          notes: ''
+          notes: 'Number given to a segment within the data. The assigned follows a consecutive sequential order.'
       - id: INSTALLED
         type: int
         info:
-          notes: ''
+          notes: 'The year in which the cycling infrastructure was originally installed.'
       - id: UPGRADED
         type: int
         info:
-          notes: ''
+          notes: 'The year in which the cycling infrastructure received upgrades, without changing from shared space to dedicated space. For example, if a bike lane is upgraded to a cycle track, or a signed route is upgraded to a sharrow wayfinding route.  Upgrades can be undertaken using pavement markings or physical separation.'
       - id: PRE_AMALGAMATION
         type: text
         info:
-          notes: ''
+          notes: 'Yes/No on if it was installed before amalgamation.'
       - id: STREET_NAME
         type: text
         info:
-          notes: ''
+          notes: 'The name of the street where the cycling infrastructure is located.'
       - id: FROM_STREET
         type: text
         info:
-          notes: ''
+          notes: 'The beginning of the boundary, the street name for which the cycling infrastructure segment starts.'
       - id: TO_STREET
         type: text
         info:
-          notes: ''
+          notes: 'The end of the boundary, the street name for which the cycling infrastructure segment ends.'
       - id: ROADCLASS
         type: text
         info:
-          notes: ''
+          notes: 'Classification of road (ex. Arterial, Collector, Local)'
       - id: CNPCLASS
         type: text
         info:
-          notes: ''
+          notes: 'Type of road (ex. Fast Busy Street, Quiet Street)'
       - id: SURFACE
         type: text
         info:
-          notes: ''
+          notes: 'Surface Material of infrastructure'
       - id: OWNER
         type: text
         info:
@@ -116,7 +116,19 @@ cycling-network:
       - id: INFRA_LOWORDER
         type: text
         info:
-          notes: ''
+          notes: |
+            Refers to the lowest classified cycling infrastructure type installed on this segment. In order of lowest to highest:
+            - Signed Route 
+            - Wayfinding Sharrows 
+            - Sharrows 
+            - Contra-flow Bike Lane 
+            - Bike Lane  
+            - Bike Lane – Buffered 
+            - Multi-Use Trail 
+            - Cycle Track
+
+            As an example, on a contra-flow route with sharrows on one side, and contra-flow bike lane on the other side, the lowest classified cycling infrastructure type on this street would be the "Sharrows". If the street only has one type of cycling infrastructure on both sides, then the input would be the same for both "INFRA_LOWO" and "INFRA_HIGH".  
+
       - id: SEPA_LOWORDER
         type: text
         info:
@@ -136,7 +148,7 @@ cycling-network:
       - id: INFRA_HIGHORDER
         type: text
         info:
-          notes: ''
+          notes: 'Refers to the highest classified cycling infrastructure type installed on this segment, as outlined above. '
       - id: SEPA_HIGHORDER
         type: text
         info:
