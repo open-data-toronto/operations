@@ -1,0 +1,66 @@
+# package name
+police-facility-locations:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: "Police Facility Locations"
+  date_published: "2019-07-23 17:53:20.170577"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Locations and mapping
+    - Public safety
+  tags: 
+    - name: police facility
+      vocabulary_id: null
+    - name: police station
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: A geographical point shape file that depicts the police facility locations.
+  limitations: The previous static Police Facilities Location file has been updated to reflect more accurate data. There were errors found in the previously available file. Please refer to the data below.
+  notes: A geographical point shape file that depicts the police facility locations.
+
+  resources:
+    # resource name
+    Police Facility Locations:
+      agol: True
+      format: geojson
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Police_Facilities/FeatureServer/0/
+      attributes:
+        - id: OBJECTID_1
+          type: int
+          info:
+            notes: ""
+        - id: FACILITY
+          type: text
+          info:
+            notes: "Name of the facility"
+        - id: ORGANIZATION
+          type: text
+          info:
+            notes: ""
+        - id: ADDRESS
+          type: text
+          info:
+            notes: "Address of the facility"
+        - id: POSTAL_CODE
+          type: text
+          info:
+            notes: "Postal code"
+        - id: geometry
+          type: text
+          info:
+            notes: ""
+        
