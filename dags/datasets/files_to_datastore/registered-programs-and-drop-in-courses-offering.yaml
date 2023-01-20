@@ -1,0 +1,322 @@
+registered-programs-and-drop-in-courses-offering:
+  schedule: '45 5 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Registered Programs and Drop In Courses Offering
+  date_published: '2019-07-23 17:56:46.636617'
+  refresh_rate: Weekly
+  dataset_category: Document
+  owner_division: Parks, Forestry & Recreation
+  owner_section: null
+  owner_unit: null
+  owner_email: pfr@toronto.ca
+  civic_issues: null
+  topics: Community services,Parks and recreation
+  tags:
+  - name: drop in
+    vocabulary_id: null
+  - name: drop-in program
+    vocabulary_id: null
+  - name: parks and rec
+    vocabulary_id: null
+  - name: rec programs
+    vocabulary_id: null
+  - name: recreation
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/explore-enjoy/recreation/
+  excerpt: This dataset contains information on City's registered and drop-in recreation
+    programs and locations.
+  limitations: null
+  notes: "City of Toronto has a multitude of exciting programs for all ages. Whether\
+    \ public is looking for swimming, fitness, skating, skiing, arts and crafts or\
+    \ dance Parks, Forestry, and Recreation Division of the City of Toronto has something\
+    \ for everyone.\r\n\r\nInformation presented in this dataset is used as data source\
+    \ for [Parks, Forestry, and Recreation website](https://www.toronto.ca/services-payments/venues-facilities-bookings/booking-park-recreation-facilities/parks-and-recreation-facilities/).\
+    \ For examples of registered and drop-in recreation programs at particular locations\
+    \ please refer to: [Examples.](https://www.toronto.ca/data/parks/prd/facilities/complex/85/index.html)\r\
+    \n\r\n**Dataset contains 4 tabs:**\r\n\r\n  1. **Registered Programs**. Each row\
+    \ of the spreadsheet describes a course of a registered program. Course_ID is\
+    \ unique identifier. Recreational programs fall under various categories. A registered\
+    \ program course runs under an activity, on schedule, and has boundaries in regards\
+    \ age of a registrant. You can get information on course location from Locations\
+    \ tab by LocationID. There are multiple courses running at one location.\r\n \
+    \ 2. **Drop-in**. Each row of the spreadsheet describes a drop-in course. Drop-In\
+    \ Course is a program offered within PFR facilities where registration is not\
+    \ required. Drop-In Participation is an informal involvement in a program where\
+    \ space may permit in an activity, and allow for a pay as you go option (e.g.\
+    \ fitness class, Aquafit class). A drop-in course runs under a category, on schedule,\
+    \ and has boundaries in regards age of registrants. You can get information on\
+    \ course location from Locations tab by LocationID. There are multiple courses\
+    \ running at one location.\r\n  3. **Locations**. Each row of the spreadsheet\
+    \ describes a location. LocationID is unique identifier. A location has a name,\
+    \ is characterized by a type (park, rec centre), address, and short description,\
+    \ may be fully or partially accessible, and may have a parent location.\r\n  4.\
+    \ **Facilities**. Each row of the spreadsheet describes a facility. FacilityID\
+    \ is unique identifier. Facility is described by a Type (Display Name) and has\
+    \ multiple assets. 'Facility Rating' column contains values of facility rates\
+    \ (used to learn about amenities that might be available at each facility  - see\
+    \ metadata). Facilities of some types can be permitted - 'Permit' column contains\
+    \ information on necessary permit. You can get information on facility's location\
+    \ from Locations tab by LocationID. Every location has multiple facilities.\r\n\
+    \r\n\r\n\r\n  \r\nThe source of the data is Parks, Forestry & Recreation SQL Server\
+    \ database that combines information from the City of Toronto Recreation Management\
+    \ System and Parks, Forestry & Recreation Asset Management System. The dataset\
+    \ updates are scheduled daily **at 8:00 AM.**\r\n\r\n**Comments:  \r\n** The file\
+    \ contains data on recreation programs presented in the City of Toronto Parks,\
+    \ Forestry, and Recreation web site. The information in data repositories that\
+    \ are sources for the website is updated on daily and reflects situation as of\
+    \ **1 day** prior to dataset update. Changes might not be reflected right away\
+    \ in the dataset due to processing lags. Examples of such are program cancellations,\
+    \ community centres closures, locations change, etc. In cases where data changes\
+    \ require additional time for implementation this gap may exceed 24 hours. The\
+    \ Parks, Forestry, and Recreation Division makes every effort to keep this Open\
+    \ Data set updated and accurate.\r\n"
+  resources:
+    Registered Programs:
+      format: xlsx
+      sheet: "Registered Programs"
+      url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
+      attributes:
+      - id: "Course_ID"
+        type: int
+        info:
+          notes: 'Unique identifier of a course. Course is an individual program instance offered by PF&R.'
+      - id: "Location ID"
+        type: int
+        info:
+          notes: 'Unique identifier of the location where the facility is located. Refer to Locations spreadsheet'
+      - id: "Activity Title"
+        type: text
+        info:
+          notes: 'Title of activity. Activity is hierarchical level that categorizes a recreation program. Activity = Program. Multiple courses run for an activity (for a recreational program).'
+      - id: "Course Title"
+        type: text
+        info:
+          notes: 'Title of a course. Course is an individual program instance offered by PF&R.'
+      - id: "Activity Description"
+        type: text
+        info:
+          notes: 'Description of the activity'
+      - id: "Days of The Week"
+        type: text
+        info:
+          notes: 'Days of weeks the course is offered on'
+      - id: "From To"
+        type: text
+        info:
+          notes: 'Date boundaries when the course is offered'
+      - id: "Start Hour"
+        type: int
+        info:
+          notes: 'Start hour (24 hours range)'
+      - id: "Start Min"
+        type: int
+        info:
+          notes: 'Start min'
+      - id: "End Hour"
+        type: int
+        info:
+          notes: 'End hour (24 hours range)'
+      - id: "End Min"
+        type: int
+        info:
+          notes: 'End min'
+      - id: "Start Date"
+        type: date
+        info:
+          notes: 'Date when the course starts'
+      - id: "eFun URL"
+        type: text
+        info:
+          notes: "URL to the course's program details and registration on eFUN website - PF&R Interface for registration to recreation programs."
+      - id: "Min Age"
+        type: int
+        info:
+          notes: 'Minimum age required to register for the course  - age in months'
+      - id: "Max Age"
+        type: int
+        info:
+          notes: 'Maximum age limit to register for the course - age in months'
+      - id: "Program Category"
+        type: text
+        info:
+          notes: "Category of recreational program - top-level hierarchical level of programs classification. F.ex., 'General Interest Arts - Adult' and 'Hip Hop - Child' are activities/programs of"
+      - id: "Registration Date"
+        type: date
+        info:
+          notes: 'Start of registration.'
+      - id: "Status / Information"
+        type: text
+        info:
+          notes: |
+            Information regarding current status of the course.
+            There are three scenarios which is based on start date and registration deadline date of program: 
+            1. If Start Date is less than present date: This course has started
+            2. If Registration Date is less than present date: This course is open for registration
+            3. If Registration Date is greater than present date: This course is not presently available for Internet Registration.
+
+    Drop-in:
+      format: xlsx
+      sheet: "Drop-in"
+      url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
+      attributes:
+      - id: "Location ID"
+        type: int
+        info:
+          notes: 'Unique identifier of the location where the facility is located. Refer to Locations spreadsheet'
+      - id: "Course_ID"
+        type: int
+        info:
+          notes: 'Unique identifier of the course'
+      - id: "Course Title"
+        type: text
+        info:
+          notes: 'Title of a drop-in course'
+      - id: "Age Min"
+        type: int
+        info:
+          notes: 'Minimum age required to register for the course minimum allowable age in months'
+      - id: "Age Max"
+        type: int
+        info:
+          notes: 'Maximum age limit to register for the course, maximum allowable age in months'
+      - id: "Date From"
+        type: date
+        info:
+          notes: 'First date of the Date Range when the course runs'
+      - id: "Date Range"
+        type: text
+        info:
+          notes: 'Calendar range when the course runs'
+      - id: "Start Date Time"
+        type: timestamp
+        info:
+          notes: 'Start time of the course'
+      - id: "Start Hour"
+        type: int
+        info:
+          notes: 'Start hour (24 hours range)'
+      - id: "Start Minute"
+        type: int
+        info:
+          notes: 'Start min'
+      - id: "End Hour"
+        type: int
+        info:
+          notes: 'End hour (24 hours range)'
+      - id: "End Min"
+        type: int
+        info:
+          notes: 'End min'
+      - id: "Category"
+        type: text
+        info:
+          notes: "Category of recreational program - top-level hierarchical level of programs classification. F.ex., 'Aquafit', 'Lane Swim', 'Leisure Swim: Preschool', and 'DROP-IN: Swimming - All Ages' are drop-in programs of 'Swimming' category; 'Stretch and Strength', 'Weight Room/Fitness Centre - Adult', and other drop-in fitness programs/activities belong to 'Fitness' category."
+      - id: "First Date"
+        type: date
+        info:
+          notes: 'First date when the course runs.'
+      - id: "Last Date"
+        type: date
+        info:
+          notes: 'Last date of the course'
+    Locations:
+      format: xlsx
+      sheet: "Locations"
+      url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
+      attributes:
+      - id: "Location ID"
+        type: int
+        info:
+          notes: 'Unique identifier of location'
+      - id: "Parent Location ID"
+        type: int
+        info:
+          notes: "Parent location. Use this column to track child-parent relations within location. If parent location ID is equal to Location ID there is no relation, i.e. the location does not have any parents and/or sibling-locations and is not a child location for any location."
+      - id: "Location Name"
+        type: text
+        info:
+          notes: 'Name of the location'
+      - id: "Location Type"
+        type: text
+        info:
+          notes: 'Type of the complex where courses run'
+      - id: "Accessibility"
+        type: text
+        info:
+          notes: 'Type or level of accessibility of a location (pools, arenas, community centres).'
+      - id: "Intersection"
+        type: text
+        info:
+          notes: 'Roads intersection of the location. In the website this information in displayed as: "Near: Intersection"'
+      - id: "TTC Information"
+        type: text
+        info:
+          notes: 'TTC related guidelines'
+      - id: "District"
+        type: text
+        info:
+          notes: 'An administrative area of the City'
+      - id: "Street No"
+        type: text
+        info:
+          notes: 'Street number'
+      - id: "Street No Suffix"
+        type: text
+        info:
+          notes: 'Suffix'
+      - id: "Street Name"
+        type: text
+        info:
+          notes: 'Street name'
+      - id: "Street Type"
+        type: text
+        info:
+          notes: 'Street type'
+      - id: "Street Direction"
+        type: text
+        info:
+          notes: 'Street direction'
+      - id: "Postal Code"
+        type: text
+        info:
+          notes: 'Postal code'
+      - id: "Description"
+        type: text
+        info:
+          notes: 'Description of the location.'
+    Facilities:
+      format: xlsx
+      sheet: "Facilities"
+      url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
+      attributes:
+      - id: "Facility ID"
+        type: int
+        info:
+          notes: 'Unique identifier of the facility'
+      - id: "Location ID"
+        type: int
+        info:
+          notes: 'Unique identifier of the location where the facility is located. Refer to Locations spreadsheet'
+      - id: "Facility Type (Display Name)"
+        type: text
+        info:
+          notes: 'Type of facility - as it is displayed on web pages. Is a distinctive facility component or complex. A facility type enables certain types of programming (e.g. swimming, skating, basketball, etc.) (i.e. indoor/outdoor pool, indoor/outdoor dry/ice pad, gymnasia, community school/centre).'
+      - id: "Permit"
+        type: text
+        info:
+          notes: 'Type of permit needed for the facility, if applies'
+      - id: "FacilityType"
+        type: text
+        info:
+          notes: 'Type of facility. Is a distinctive facility component or complex. A facility type enables certain types of programming (e.g. swimming, skating, basketball, etc.) (i.e. indoor/outdoor pool, indoor/outdoor dry/ice pad, gymnasia, community school/centre).'
+      - id: "Facility Rating"
+        type: text
+        info:
+          notes: 'Rate of the facility. Use the Facility Rating Criteria to learn more about amenities that might be available at each facility: http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=ca60dada600f0410VgnVCM10000071d60f89RCRD&vgnextchannel=0a4adada600f0410VgnVCM10000071d60f89RCRD&vgnextfmt=default#FacilityRatingCriteria'
+      - id: "Asset Name"
+        type: text
+        info:
+          notes: 'Name of the asset in the facility.'
+      
+      
