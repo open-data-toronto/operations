@@ -1,7 +1,7 @@
 # package name
 outbreaks-in-toronto-healthcare-institutions:
   # DAG info
-  schedule: "0 15 * * *"
+  schedule: "0 16 * * *"
   dag_owner_name: Mackenzie
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
@@ -31,13 +31,15 @@ outbreaks-in-toronto-healthcare-institutions:
 
   information_url: null
   excerpt: This dataset includes list of outbreaks in Toronto healthcare institutions - including hospitals, long-term care homes, and retirement homes - which are currently active, those that have been declared over for the current calendar year.  Year-to-date data for the current year are updated weekly, each Thursday.
-  limitations: The data in this spreadsheet are subject to change as public health investigations into reported cases and continuous quality improvement initiatives are ongoing, and additional cases continue to be reported. **The data will be completely refreshed and overwritten on a weekly basis*, extracted at 8:30 AM on the Tuesday of a given week, and posted on the Wednesday. Please note that these numbers may differ from those posted elsewhere, as data are extracted at different times, and from different sources.
+  limitations: null
   notes: |
     Under the Ontario [Health Protection and Promotion Act](https://www.ontario.ca/laws/statute/90h07) (HPPA), healthcare institutions (hospitals, long-term care homes and retirement homes) are required to monitor staff and patients/residents for signs and symptoms of gastroenteric (e.g., nausea, vomiting, diarrhea, fever) and respiratory (e.g., cough, runny nose, sore throat, fever) infections. Healthcare institutions must also actively look for, detect and report suspected and/or confirmed outbreaks to their local public health unit.  An outbreak is defined as a localized increase (e.g. in an institution, or a specific ward or floor within an institution) in the rate of infection or illness, above that which is expected.
     
     Under the HPPA, Toronto Public Health is required to respond to reports of suspected and confirmed outbreaks of gastroenteric and respiratory illness. Toronto Public Health works with healthcare institutions to prevent and control institutional outbreaks, including the use of best practices in infection prevention and control.
     
-    To view the most recently available data please select the 2022 year to date file, which is updated each Thursday.
+    The most recent dataset is updated weekly on Thursdays with data as of the Wednesday at 2pm.
+
+    *Please note that all instances of "Coronavirus*" in the datasets refer to the seasonal coronavirus, commonly identified as a causative agent for institutional respiratory outbreaks, and not COVID-19.
   
   resources:
     # resource name
