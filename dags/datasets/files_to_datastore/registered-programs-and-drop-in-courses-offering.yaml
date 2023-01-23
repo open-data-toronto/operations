@@ -5,7 +5,7 @@ registered-programs-and-drop-in-courses-offering:
   title: Registered Programs and Drop In Courses Offering
   date_published: '2019-07-23 17:56:46.636617'
   refresh_rate: Weekly
-  dataset_category: Document
+  dataset_category: Table
   owner_division: Parks, Forestry & Recreation
   owner_section: null
   owner_unit: null
@@ -313,7 +313,7 @@ registered-programs-and-drop-in-courses-offering:
       - id: "Facility Rating"
         type: text
         info:
-          notes: 'Rate of the facility. Use the Facility Rating Criteria to learn more about amenities that might be available at each facility: http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=ca60dada600f0410VgnVCM10000071d60f89RCRD&vgnextchannel=0a4adada600f0410VgnVCM10000071d60f89RCRD&vgnextfmt=default#FacilityRatingCriteria'
+          notes: 'Rate of the facility.'
       - id: "Asset Name"
         type: text
         info:
