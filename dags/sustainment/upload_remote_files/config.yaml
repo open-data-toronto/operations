@@ -190,7 +190,7 @@ rain-gauge-locations-and-precipitation:
 #  Centreline (wgs84) - shapefile:
 #    format: shp
 #    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v2.zip
-traffic-cameras:
+#traffic-cameras:
   # Traffic Camera List (CSV):
   #   format: csv
   #   url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.csv
@@ -200,12 +200,12 @@ traffic-cameras:
   # Traffic Camera List (XML):
   #   format: xml
   #   url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.xml
-  Traffic Camera List (XSD):
-    format: xsd
-    url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.xsd
-  Traffic Camera List (update timestamp):
-    format: json
-    url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcamerassn.json
+  #Traffic Camera List (XSD):
+  #  format: xsd
+  #  url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.xsd
+  #Traffic Camera List (update timestamp):
+  #  format: json
+  #  url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcamerassn.json
 triangular-irregular-network-tin:
   triangular-irregular-network:
     format: shp

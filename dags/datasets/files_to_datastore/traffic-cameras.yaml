@@ -1,7 +1,7 @@
 traffic-cameras:
   schedule: '0 8 * * *'
-  dag_owner_name: Yanan
-  dag_owner_email: yanan.zhang@toronto.ca
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Traffic Cameras
   date_published: '2019-07-23 18:06:38.545973'
   refresh_rate: As available
@@ -40,47 +40,108 @@ traffic-cameras:
     \ http://www.toronto.ca/rescu/list.htm\n"
   resources:
     Traffic Camera List:
-      format: csv
-      url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.csv
+      format: geojson
+      agol: True
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_TRAFFIC_CAMERA/FeatureServer/0
       attributes:
-        - id: Camera Number
+        - id: REC_ID
+          type: int
+          info:
+            notes: "The unique number associated with the camera."
+        #- id: SOURCE
+        #  type: text
+        #  info:
+        #    notes: "" 
+        - id: IMAGEURL
           type: text
           info:
-            notes: 'Each camera has a unique number associated with it.'
-        - id: Main Road
+            notes: "Traffic Image URL containing the most recent camera image. This image is refreshed every 3 minutes." 
+        - id: REFURL1
           type: text
           info:
-            notes: 'Main road name'
-        - id: Cross Street
+            notes: "North Reference Static Image" 
+        - id: DIRECTION1
           type: text
           info:
-            notes: 'Closest cross road name'
-        - id: Group
+            notes: "Fixed 'North' if comparison image exists" 
+        - id: REFURL2
           type: text
           info:
-            notes: ''
-        - id: Traffic Image
+            notes: "East Reference Static Image" 
+        - id: DIRECTION2
           type: text
           info:
-            notes: 'URL containing the most recent camera image'
-        - id: North Reference Static Image
+            notes: "Fixed 'East' if comparison image exists" 
+        - id: MAINROAD
           type: text
           info:
-            notes: 'URL containing a static image looking North'
-        - id: East Reference Static Image
+            notes: "Main road name" 
+        #- id: MR_LINEAR_NAME_ID
+        #  type: float
+        #  info:
+        #    notes: ""
+        #- id: FROMROAD
+        #  type: text
+        #  info:
+        #    notes: "" 
+        #- id: FR_LINEAR_NAME_ID
+        #  type: float
+        #  info:
+        #    notes: ""
+        #- id: TOROAD
+        #  type: text
+        #  info:
+        #    notes: "" 
+        #- id: TR_LINEAR_NAME_ID
+        #  type: float
+        #  info:
+        #    notes: ""
+        #- id: STARTTIME
+        #  type: date
+        #  info:
+        #    notes: "" 
+        #- id: ENDTIME
+        #  type: date
+        #  info:
+        #    notes: "" 
+        - id: CROSSROAD
           type: text
           info:
-            notes: 'URL containing a static image looking East'
-        - id: South Reference Static Image
+            notes: "Closest road name." 
+        #- id: CR_LINEAR_NAME_ID
+        #  type: float
+        #  info:
+        #    notes: ""
+        #- id: LONGITUDE
+        #  type: float
+        #  info:
+        #    notes: ""
+        #- id: LATITUDE
+        #  type: float
+        #  info:
+        #    notes: ""
+        - id: OBJECTID
           type: text
           info:
-            notes: 'URL containing a static image looking South'
-        - id: West Reference Static Image
+            notes: "" 
+        - id: REFURL3
           type: text
           info:
-            notes: 'URL containing a static image looking West'
+            notes: "South Reference Static Image" 
+        - id: DIRECTION3
+          type: text
+          info:
+            notes: "Fixed 'South' if comparison image exists" 
+        - id: REFURL4
+          type: text
+          info:
+            notes: "West Reference Static Image" 
+        - id: DIRECTION4
+          type: text
+          info:
+            notes: "Fixed 'West' if comparison image exists" 
         - id: geometry
           type: text
           info:
             notes: ''
-
+        
