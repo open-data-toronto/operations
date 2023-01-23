@@ -175,10 +175,10 @@ rain-gauge-locations-and-precipitation:
   Rain gauge notes:
     format: zip
     url: http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/raingaugenotes.zip
-registered-programs-and-drop-in-courses-offering:
-  Registered programs and drop in courses offering data:
-    format: xlsx
-    url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
+#registered-programs-and-drop-in-courses-offering:
+#  Registered programs and drop in courses offering data:
+#    format: xlsx
+#    url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
 # report-request-log-city-council-and-its-committees:
 #   Report Request Log:
 #     format: xlsx
