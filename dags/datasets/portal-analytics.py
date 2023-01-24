@@ -29,7 +29,7 @@ ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
 
 
 reports = {
-    "Page Views": "d5e04184c0d348a77267b235b40a7044",
+    "Page Views": "acd19558f6734dfc187e1add2680e287",
     "Page URL and File Clicks": "4213a24217ec4d77c8ec441bed6cc86e",
     "Search Terms": "tb9gvo6qd7",
 }
@@ -186,9 +186,7 @@ with DAG(
     def get_filename_date_format(**kwargs):
         period_range = kwargs["period_range"]
 
-        if period_range == "weekly":
-            filename_date_format = "%Y%m%d"
-        elif period_range == "monthly":
+        if period_range == "monthly":
             filename_date_format = "%Y%m"
 
         return filename_date_format
@@ -206,7 +204,7 @@ with DAG(
         ]
 
         if not dates_loaded:
-            return datetime(2021, 8, 30)
+            return datetime(2020, 12, 2)
 
         return max(dates_loaded)
     
@@ -220,13 +218,13 @@ with DAG(
             logging.info("Calculating months to load")
             periods_to_load = []
 
+            logging.info(f"--------{latest_loaded}--------")
             begin = latest_loaded + timedelta(days=32)
             month_end_day = calendar.monthrange(begin.year, begin.month)[1]
             end = datetime(begin.year, begin.month, month_end_day)
             logging.info(f"-------{begin}--{month_end_day}--{end}--")
 
             while end < datetime.now():
-                logging.info(f"-----periodstoload-----{periods_to_load}------")
                 periods_to_load.append(
                     {
                         "begin": datetime.strftime(begin, "%Y/%m/1/0"),
@@ -234,12 +232,13 @@ with DAG(
                     }
                 )
 
-                begin = begin + timedelta(days=32)
-                month_end_day = calendar.monthrange(begin.year, begin.month)[1]
-                end = datetime(begin.year, begin.month, month_end_day)
-                
-                logging.info(f"---begin----{begin}--monthEndDay-{month_end_day}---end---{end}--")
+                begin = begin + timedelta(days=31)
 
+                if begin.month == 12:
+                    end = datetime(begin.year, begin.month, 31)
+                else:
+                    end = datetime(begin.year, begin.month + 1, 1) + timedelta(days=-1)
+                
             return periods_to_load
         
         return months(latest_loaded)
