@@ -1,0 +1,67 @@
+chemical-tracking-chemtrac:
+  schedule: '5 3 * * *'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Chemical Tracking (ChemTrac)
+  date_published: '2019-07-23 16:46:12.27667'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: Toronto Public Health
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: Public safety,Health,Environment
+  tags:
+    - name: air contaminant
+      vocabulary_id: null
+    - name: chemical tracking
+      vocabulary_id: null
+    - name: chemtrac
+      vocabulary_id: null
+    - name: priority substance 
+      vocabulary_id: null
+  information_url: http://www.toronto.ca/health/chemtrac/index.htm
+  excerpt: This dataset report information each year about the use and release of
+    25 'priority substances' as contaminants in Toronto's environment and of concern
+    for health.
+  limitations: null
+  notes: "Municipal Code Chapter 423, Environmental Reporting and Disclosure By-law,\r\
+    \nrequires that certain facilities that exceed the specified thresholds, report\r\
+    \ninformation each year about thel use and release of 25 \"priority substances\"\
+    \r\n(as identified in the by-law\r\nhttp://www.toronto.ca/legdocs/municode/1184_423.pdf).\
+    \ These priority\r\nsubstances are found as contaminants in Toronto's environment\
+    \ (mostly air) and\r\nare of concern for health.\r\n\r\nThe by-law came into effect\
+    \ on January 1, 2010 and the first deadline for\r\nreporting of 2010 data was\
+    \ June 30, 2011.\r\n\r\nThis ChemTrac data set contains chemical tracking information\
+    \ submitted\r\ndirectly online by staff from each facility and includes the facility\
+    \ type,\r\naddress, number of employees, contact information, use and release\
+    \ of priority\r\nsubstances.\r\n\r\nSome companies that are below the thresholds\
+    \ volunteered the chemical use\r\ninformation, even though they are not legally\
+    \ obligated to disclose.\r\n\r\nThe purpose of disclosing the data is to inform\
+    \ the public of these facilities\r\nand encourage businesses and the public to\
+    \ pursue environmental improvements\r\nto reduce the use and release of these\
+    \ 25 \"priority substances\".  The first\r\ndataset to be disclosed through Open\
+    \ Data will cover the year 2010.\r\n\r\n"
+  
+  resources:
+    Chemical Tracking:
+      format: json
+      url: https://secure.toronto.ca/opendata/ctpd/chemicals/v1?format=json
+      attributes:
+      - id: id
+        type: int
+        info:
+          notes: 'An internal unique identifier for the chemical being referenced'
+      - id: chemicalName
+        type: text
+        info:
+          notes: 'The official chemical name'
+      - id: casNo
+        type: text
+        info:
+          notes: 'The Chemical Abstracts Service number is an industry unique identifier for each chemical (optional)'
+      - id: description
+        type: text
+        info:
+          notes: 'Detail description of the chemical and its effect to environment, human, animals and etc.'
