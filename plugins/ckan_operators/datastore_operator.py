@@ -511,7 +511,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         # it's important to note that incoming CSVs with geometries MUST be in EPSG 4326
         # it's also important to note that this logic will only work with point data, not line or polygon
         latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
-        longitude_attributes = ["long", "lng", "longitude", "x", "x coordinate"]
+        longitude_attributes = ["long", "longitude", "x", "x coordinate"]
         self.geometry_needs_parsing = False
 
         dictreader = csv.DictReader(codecs.open(self.data_path, "rbU", "latin1"))
@@ -565,7 +565,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         # it's important to note that incoming CSVs with geometries MUST be in EPSG 4326
         # it's also important to note that this logic will only work with point data, not line or polygon
         latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
-        longitude_attributes = ["long", "lng", "longitude", "x", "x coordinate"]
+        longitude_attributes = ["long", "longitude", "x", "x coordinate"]
         self.geometry_needs_parsing = False
 
         if "geometry" not in column_names and "geometry" in [ attr.get("id", None) for attr in self.config["attributes"] ]:
