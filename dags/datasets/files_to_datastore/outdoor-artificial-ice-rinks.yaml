@@ -1,0 +1,117 @@
+outdoor-artificial-ice-rinks:
+  schedule: '@once'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Outdoor Artificial Ice Rinks
+  date_published: '2019-07-23 17:48:48.066766'
+  refresh_rate: Annually
+  dataset_category: Map
+  owner_division: Parks, Forestry & Recreation
+  owner_section: null
+  owner_unit: null
+  owner_email: pfrdatagovernance@toronto.ca
+  civic_issues: null
+  topics: Parks and recreation
+  tags:
+  - name: ice rink
+    vocabulary_id: null
+  - name: outdoor ice rink
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/data/parks/prd/facilities/outdoor-rinks/index.html
+  excerpt: 'This dataset contains information on outdoor artificial ice rinks and
+    skate trails maintained by Parks, Forestry, and Recreation Division of the City
+    of Toronto.'
+  limitations: null
+  notes: |
+    This dataset includes data on outdoor Artificial Ice Rinks (AIR) and skate trails maintained by the City of Toronto Parks, Forestry and Recreation (PFR) division.
+
+    The City operates more than 50 locations with outdoor rinks and skating trails, consisting of approximately 70 ice pads and skating trails.
+    
+    Artificial ice rinks are located in parks, on playgrounds, at Community Recreation Centres, and at Civic Centre Squares. The dataset provides details on location information, ice rink (i.e. pad) size and lighting conditions. 
+    
+      The outdoor artificial ice rinks and skate trails information found in this dataset include: 
+
+    *	Parent Asset Name
+    *	Asset ID
+    *	Asset Name
+    *	Park Name
+    *	Public Name
+    *	Pad Length
+    *	Pad Width
+    *	Ice Pad Type
+    *	Boards (Ice Rink)
+    *	Lit Area
+    *	Community Council Area
+    *	Ward
+    *	Address
+    
+    The data provided is sourced from the City of Toronto Parks, Forestry and Recreation Asset Management System. The dataset has been validated on-site by parks supervisors and through necessary inter-divisional staff. 
+    
+    **Note**:
+    
+    This dataset only contains information about outdoor artificial ice rinks and skate trails maintained by Parks, Forestry and Recreation Division of the City of Toronto. Natural ice rinks are not included in this dataset and more information can be found on [Toronto.ca/rec](https://www.toronto.ca/explore-enjoy/recreation/). All other outdoor ice rinks and skate trails (either public, or private) are out of scope of this dataset.
+
+  resources:
+    # resource name
+    Outdoor Ice Rinks:
+      format: xlsx
+      sheet: Sheet1
+      url: http://opendata.toronto.ca/parks.forestry.recreation/outdoor-ice-rinks/outdoor-ice-rinks-data-4326.xlsx
+      attributes:
+        - id: "Parent Asset Name"
+          type: "text"
+          info:
+            notes: "Name of the parent asset"
+        - id: "Asset ID"
+          type: "text"
+          info:
+            notes: "Parks, Forestry, and Recreation Unique Identifier of the asset"
+        - id: "Asset Name"
+          type: "text"
+          info:
+            notes: "Name of the asset"
+        - id: "Public Name"
+          type: "text"
+          info:
+            notes: "Name of the indoor ice rink as commonly used by public"
+        - id: "Pad Length (ft.)"
+          type: "text"
+          info:
+            notes: "Length of an ice pad in feet"
+        - id: "Pad Width (ft.)"
+          type: "text"
+          info:
+            notes: "Width of an ice pad in feet"
+        - id: "Ice Pad Type"
+          type: "text"
+          info:
+            notes: "Ex: Outdoor Ice Pad, Skate Rail"
+        - id: "Boards (Ice Rink)"
+          type: "text"
+          info:
+            notes: "Identifies if the rink has boards or not"
+        - id: "Rink is Lit"
+          type: "text"
+          info:
+            notes: "Yes or No"
+        - id: "Address"
+          type: "text"
+          info:
+            notes: "Street address of the park, where the ice pad is located. In some cases, address of the arena/centre coincides with the address of the park"
+        - id: "Postal Code"
+          type: "text"
+          info:
+            notes: "The postal code is a six-character uniformly structured, alphanumeric code in the form “ANA NAN” where “A” is an alphabetic character and “N” is a numeric"
+        - id: "Community Council Area"
+          type: "text"
+          info:
+            notes: "An administrative area of the City"
+        - id: "Ward"
+          type: "text"
+          info:
+            notes: "The political boundary that divides the City of Toronto into 25 areas"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+        
