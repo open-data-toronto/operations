@@ -9,7 +9,7 @@ outdoor-artificial-ice-rinks:
   owner_division: Parks, Forestry & Recreation
   owner_section: null
   owner_unit: null
-  owner_email: opendata@toronto.ca
+  owner_email: pfrdatagovernance@toronto.ca
   civic_issues: null
   topics: Parks and recreation
   tags:
@@ -22,33 +22,35 @@ outdoor-artificial-ice-rinks:
     skate trails maintained by Parks, Forestry, and Recreation Division of the City
     of Toronto.'
   limitations: null
-  notes: "\n\nThis dataset includes data on outdoor Artificial Ice Rinks (AIR) and\
-    \ skate trails maintained by the City of Toronto PF&R Division.\n\nThere are about\
-    \ 50 City of Toronto outdoor artificial ice rink locations.\n\nArtificial ice\
-    \ rinks are located in parks, on playgrounds, building grounds, or at the squares.\
-    \ The dataset provides details on ice rink size, whether the rink is lit or not,\
-    \ and location information.\n\nEvery AIR is identified by (X, Y) GIS coordinate.\n\
-    \n \n\nThus, outdoor artificial ice rinks and skate trails information you'll\
-    \ find in this dataset is the following:\n\n  * Outdoor Artificial Ice Rink ID\n\
-    \  * Asset Name\n  * Park Name  \n  * Public Name\n  * Rink Size     \n  * Lit\
-    \ Area\n  * District        \n  * Ward           \n  * Address\n  * X, Y Coordinate\n\
-    \n\n\n \n\nThe source of the data is the City of Toronto Parks, Forestry & Recreation\
-    \ Asset Management System. Dataset has gone through necessary inter-divisional\
-    \ validation and on-site validation with parks supervisors.\n\n**Note:**\n\nThe\
-    \ dataset contains information about outdoor artificial ice rinks and skate trails\
-    \ maintained by Parks, Forestry, and Recreation Division of the City of Toronto.\
-    \ All other outdoor ice rinks and skate trails (either public, or private) are\
-    \ out of scope of this dataset.\n\nValid date range of the data is 2016. As per\
-    \ official opening of PFR outdoor artificial ice rinks in Fall/early Winter 2016,\
-    \ the data has gone through necessary business validation. Some values may be\
-    \ missing from the dataset. These will be added as data is captured and recorded\
-    \ by PFR. Official refresh of the data is planned annually before or during AIR\
-    \ openings.\n\nThe following rinks are under construction and/or are currently\
-    \ closed. Data for this rinks may changes:\n\n  * 14291   QUEENSWAY RINK - Outdoor\
-    \ Artificial Ice Rink\n  * 14290   PRINCE OF WALES RINK - Outdoor Artificial Ice\
-    \ Rink\n  * 14297   RIVERDALE PARK EAST - Outdoor Artificial Ice Rink\n  * 60122\
-    \   MCCOWAN DISTRICT PARK - Outdoor Artificial Ice Rink\n\n\n\n \n\nThe values\
-    \ will be added as data is captured and recorded by PFR.\n"
+  notes: |
+    This dataset includes data on outdoor Artificial Ice Rinks (AIR) and skate trails maintained by the City of Toronto Parks, Forestry and Recreation (PFR) division.
+
+    The City operates more than 50 locations with outdoor rinks and skating trails, consisting of approximately 70 ice pads and skating trails.
+    
+    Artificial ice rinks are located in parks, on playgrounds, at Community Recreation Centres, and at Civic Centre Squares. The dataset provides details on location information, ice rink (i.e. pad) size and lighting conditions. 
+    
+      The outdoor artificial ice rinks and skate trails information found in this dataset include: 
+
+    *	Parent Asset Name
+    *	Asset ID
+    *	Asset Name
+    *	Park Name
+    *	Public Name
+    *	Pad Length
+    *	Pad Width
+    *	Ice Pad Type
+    *	Boards (Ice Rink)
+    *	Lit Area
+    *	Community Council Area
+    *	Ward
+    *	Address
+    
+    The data provided is sourced from the City of Toronto Parks, Forestry and Recreation Asset Management System. The dataset has been validated on-site by parks supervisors and through necessary inter-divisional staff. 
+    
+    **Note**:
+    
+    This dataset only contains information about outdoor artificial ice rinks and skate trails maintained by Parks, Forestry and Recreation Division of the City of Toronto. Natural ice rinks are not included in this dataset and more information can be found on [Toronto.ca/rec](https://www.toronto.ca/explore-enjoy/recreation/). All other outdoor ice rinks and skate trails (either public, or private) are out of scope of this dataset.
+
   resources:
     # resource name
     Outdoor Ice Rinks:
