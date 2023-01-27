@@ -1,0 +1,252 @@
+motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
+  schedule: '@once'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Motor Vehicle Collisions involving Killed or Seriously Injured Persons
+  date_published: '2020-08-18 14:14:31.515915'
+  refresh_rate: Annually
+  dataset_category: Map
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: null
+  owner_email: Analytics.Innovation@torontopolice.on.ca
+  civic_issues: null
+  topics: Public safety
+  tags:
+  - name: Accidents
+    vocabulary_id: null
+  - name: Kill
+    vocabulary_id: null
+  - name: Traffic
+    vocabulary_id: null
+  - name: injured
+    vocabulary_id: null
+  information_url: https://data.torontopolice.on.ca/datasets/ksi
+  excerpt: "This dataset includes all traffic collisions events where a person was\
+    \ either Killed or Seriously Injured (KSI) from 2006 \u2013 2021."
+  limitations: "This dataset includes all traffic collisions events where a person\
+    \ was either Killed or Seriously Injured (KSI) from 2006 \u2013 2021.  The location\
+    \ of crime occurrences have been deliberately offset to the nearest road intersection\
+    \ node to protect the privacy of parties involved in the occurrence. Due to the\
+    \ offset of occurrence location, the numbers by Division and Neighbourhood may\
+    \ not reflect the exact count of occurrences reported within these geographies.\
+    \ Therefore, the Toronto Police Service does not guarantee the accuracy, completeness,\
+    \ timeliness of the data and it should not be compared to any other source of\
+    \ crime data."
+  notes: "This dataset includes all traffic collisions events where a person was either\
+    \ Killed or Seriously Injured (KSI) from 2006 \u2013 2021.\r\n\r\n"
+  resources:
+    Motor Vehicle Collisions with KSI Data:
+      agol: True
+      format: geojson
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/KSI/FeatureServer/0/
+      attributes:
+        - id: "ACCNUM"
+          type: text
+          info:
+            notes: Accident Number
+        - id: "YEAR"
+          type: int
+          info:
+            notes: Year Collision Occurred
+        - id: "DATE"
+          type: date
+          info:
+            notes: Date Collision Occurred
+        - id: "TIME"
+          type: text
+          info:
+            notes: Time Collision Occurred
+        - id: "STREET1"
+          type: text
+          info:
+            notes: Street Collision Occurred
+        - id: "STREET2"
+          type: text
+          info:
+            notes: Street Collision Occurred
+        - id: "OFFSET"
+          type: text
+          info:
+            notes: Distance and direction of the Collision
+        - id: "ROAD_CLASS"
+          type: text
+          info:
+            notes: Road Classification
+        - id: "DISTRICT"
+          type: text
+          info:
+            notes: City District
+        - id: "WARDNUM"
+          type: int
+          info:
+            notes: City of Toronto Ward
+        - id: "LOCCOORD"
+          type: text
+          info:
+            notes: Location Coordinate
+        - id: "ACCLOC"
+          type: text
+          info:
+            notes: Collision Location
+        - id: "TRAFFCTL"
+          type: text
+          info:
+            notes: Traffic Control Type
+        - id: "VISIBILITY"
+          type: text
+          info:
+            notes: Environment Condition
+        - id: "LIGHT"
+          type: text
+          info:
+            notes: Light Condition
+        - id: "RDSFCOND"
+          type: text
+          info:
+            notes: Road Surface Condition
+        - id: "ACCLASS"
+          type: text
+          info:
+            notes: Classification of Accident
+        - id: "IMPACTYPE"
+          type: text
+          info:
+            notes: Initial Impact Type
+        - id: "INVTYPE"
+          type: text
+          info:
+            notes: Involvement Type
+        - id: "INVAGE"
+          type: text
+          info:
+            notes: Age of Involved Party
+        - id: "INJURY"
+          type: text
+          info:
+            notes: Severity of Injury
+        - id: "FATAL_NO"
+          type: text
+          info:
+            notes: Sequential Number
+        - id: "INITDIR"
+          type: text
+          info:
+            notes: Initial Direction of Travel
+        - id: "VEHTYPE"
+          type: text
+          info:
+            notes: Type of Vehicle
+        - id: "MANOEUVER"
+          type: text
+          info:
+            notes: Vehicle Manouever
+        - id: "DRIVACT"
+          type: text
+          info:
+            notes: Apparent Driver Action
+        - id: "DRIVCOND"
+          type: text
+          info:
+            notes: Driver Condition
+        - id: "PEDTYPE"
+          type: text
+          info:
+            notes: Pedestrian Crash Type - detail
+        - id: "PEDACT"
+          type: text
+          info:
+            notes: Pedestrian Action
+        - id: "PEDCOND"
+          type: text
+          info:
+            notes: Condition of Pedestrian
+        - id: "CYCLISTYPE"
+          type: text
+          info:
+            notes: Cyclist Crash Type - detail
+        - id: "CYCACT"
+          type: text
+          info:
+            notes: Cyclist Action
+        - id: "CYCCOND"
+          type: text
+          info:
+            notes: Cyclist Condition
+        - id: "PEDESTRIAN"
+          type: text
+          info:
+            notes: Pedestrian Involved In Collision
+        - id: "CYCLIST"
+          type: text
+          info:
+            notes: Cyclists Involved in Collision
+        - id: "AUTOMOBILE"
+          type: text
+          info:
+            notes: Driver Involved in Collision
+        - id: "MOTORCYCLE"
+          type: text
+          info:
+            notes: Motorcyclist Involved in Collision
+        - id: "TRUCK"
+          type: text
+          info:
+            notes: Truck Driver Involved in Collision
+        - id: "TRSN_CITY_VEH"
+          type: text
+          info:
+            notes: Transit or City Vehicle Involved in Collision
+        - id: "EMERG_VEH"
+          type: text
+          info:
+            notes: Emergency Vehicle Involved in Collision
+        - id: "PASSENGER"
+          type: text
+          info:
+            notes: Passenger Involved in Collision
+        - id: "SPEEDING"
+          type: text
+          info:
+            notes: Speeding Related Collision
+        - id: "AG_DRIV"
+          type: text
+          info:
+            notes: Aggressive and Distracted Driving Collision
+        - id: "REDLIGHT"
+          type: text
+          info:
+            notes: Red Light Related Collision
+        - id: "ALCOHOL"
+          type: text
+          info:
+            notes: Alcohol Related Collision
+        - id: "DISABILITY"
+          type: text
+          info:
+            notes: Medical or Physical Disability Related Collision
+        - id: "HOOD_158"
+          type: text
+          info:
+            notes: Unique ID for City of Toronto Neighbourhood (new)
+        - id: "NEIGHBOURHOOD_158"
+          type: text
+          info:
+            notes: City of Toronto Neighbourhood name (new)
+        - id: "HOOD_140"
+          type: text
+          info:
+            notes: Unique ID for City of Toronto Neighbourhood (old)
+        - id: "NEIGHBOURHOOD_140"
+          type: text
+          info:
+            notes: City of Toronto Neighbourhood name (old)
+        - id: "DIVISION"
+          type: text
+          info:
+            notes: Toronto Police Service Division
+        - id: "geometry"
+          type: text
+          info:
+            notes: ""
+        
