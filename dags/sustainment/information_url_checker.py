@@ -33,7 +33,6 @@ with DAG(
 ) as dag:
     
     def information_url_checker(**kwargs):
-        #package = kwargs.pop("ti").xcom_pull(task_ids="get_or_create_package")
         ti = kwargs.pop("ti")
         package_list = ti.xcom_pull(task_ids="get_package_list")
         address = kwargs.pop("address")
@@ -44,14 +43,21 @@ with DAG(
             response = requests.get(url).json()['result']
             if "information_url" in response.keys():
                 information_url = response['information_url']
+                if 'http' in information_url:
+                    call = information_url
+                else:
+                    call = 'https://' + information_url
+                logging.info(f"{call}")
                 try:
-                    response = requests.get(information_url)
+                    response = requests.get(call)
                     status = response.status_code
                     reason = response.reason
-                    logging.info(f"---Status-{status}--Reason--{reason}---{package_name}----{information_url}----------")
+                    logging.info(f"---Status-{status}---Reason--{reason}---{package_name}----{call}----------")
+                    if status == 404:
+                        result_info[package_name] = "Page Not Found:  "+ information_url
                 except:
-                    logging.info(f"---ERROR: Failed to establish connection---{package_name}----{information_url}")
-                    result_info[package_name] = information_url
+                    logging.info(f"---ERROR: Failed to establish connection---{package_name}----{call}")
+                    result_info[package_name] = "Hmmm… can't reach this page:  " + information_url
 
             else:
                 information_url = None
