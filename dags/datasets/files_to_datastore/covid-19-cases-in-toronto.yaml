@@ -121,18 +121,18 @@ covid-19-cases-in-toronto:
 
               __Active:__ All other cases
 
-        - id: "Currently Hospitalized"
-          type: "text"
-          info:
-            notes: "Cases that are currently admitted to hospital (i.e., no discharge date reported)."
-        - id: "Currently in ICU"
-          type: "text"
-          info:
-            notes: "Cases that are currently admitted to the intensive care unit (ICU) (i.e. no discharge date reported)."
-        - id: "Currently Intubated"
-          type: "text"
-          info:
-            notes: "Cases that were intubated related to their COVID-19 infection (includes cases that are currently intubated and those that have been discharged or deceased)."
+        #- id: "Currently Hospitalized"
+        #  type: "text"
+        #  info:
+        #    notes: "Cases that are currently admitted to hospital (i.e., no discharge date reported)."
+        #- id: "Currently in ICU"
+        #  type: "text"
+        #  info:
+        #    notes: "Cases that are currently admitted to the intensive care unit (ICU) (i.e. no discharge date reported)."
+        #- id: "Currently Intubated"
+        #  type: "text"
+        #  info:
+        #    notes: "Cases that were intubated related to their COVID-19 infection (includes cases that are currently intubated and those that have been discharged or deceased)."
         - id: "Ever Hospitalized"
           type: "text"
           info:
