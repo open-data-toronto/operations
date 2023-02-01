@@ -1,5 +1,6 @@
 """
-    This dag checks problematic inforamtion_url on a dataset page, send notification to slack on problematic urls
+    This dag checks problematic inforamtion_url on a dataset page, send
+    notification to slack on problematic urls
 """
 
 import requests
@@ -34,7 +35,10 @@ with DAG(
         "on_failure_callback": task_failure_slack_alert,
         "tags": ["sustainment"],
     },
-    description="Check if information_url(Under dataset description section) accessible, send notification to slack on failure urls",
+    description=(
+        "Check if information_url(Under dataset description section)"
+        " accessible, send notification to slack on failure urls"
+    ),
     schedule_interval="0 8 * * 0",
     start_date=datetime(2023, 1, 27, 0, 0, 0),
     catchup=False,
@@ -63,7 +67,10 @@ with DAG(
                     status_code = response.status_code
                     reason = response.reason
                     logging.info(
-                        f"---Status-{status_code}---Reason--{reason}---{package_name}----{call}----------"
+                        (
+                            f"---Status-{status_code}---Reason--{reason}--"
+                            f"--{package_name}----{call}----------"
+                        )
                     )
                     if 300 <= status_code < 400:
                         result_info[package_name] = (
@@ -79,11 +86,15 @@ with DAG(
                                 "Client Error:  " + information_url
                             )
                     elif status_code >= 500:
-                        result_info[package_name] = "Server Error:  " + information_url
+                        result_info[package_name] = "Server Error:  "
+                        +information_url
 
                 except requests.ConnectionError:
                     logging.info(
-                        f"---ERROR: Failed to establish connection---{package_name}----{call}"
+                        (
+                            "--ERROR: Failed to establish connection"
+                            f"---{package_name}--{call}"
+                        )
                     )
                     result_info[package_name] = (
                         "Hmmm… can't reach this page:  " + information_url
