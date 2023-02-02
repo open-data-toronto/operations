@@ -22,6 +22,10 @@ CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = CKAN_CREDS[ACTIVE_ENV]["address"]
 CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]
 
+# List of website we ignore for now,
+# since they are accessible but probably not allowed api calls
+white_list = ["www.ttc.ca", "www.ttc.ca/"]
+
 with DAG(
     "information-url-checker",
     default_args={
@@ -74,20 +78,29 @@ with DAG(
                     )
                     if 300 <= status_code < 400:
                         result_info[package_name] = (
-                            "Redirected URL:  " + information_url
+                            "Redirected URL:  "
+                            + str(status_code)
+                            + " "
+                            + information_url
                         )
                     elif 400 <= status_code < 500:
                         if status_code == 404:
                             result_info[package_name] = (
-                                "Page Not Found:  " + information_url
+                                "Page Not Found: "
+                                + str(status_code)
+                                + " "
+                                + information_url
                             )
-                        else:
+                        elif call.split("://")[1] not in white_list:
                             result_info[package_name] = (
-                                "Client Error:  " + information_url
+                                "Client Error: "
+                                + str(status_code)
+                                + " "
+                                + information_url
                             )
                     elif status_code >= 500:
-                        result_info[package_name] = "Server Error:  "
-                        +information_url
+                        result_info[package_name] = "Server Error: "
+                        +str(status_code) + "" + information_url
 
                 except requests.ConnectionError:
                     logging.info(
