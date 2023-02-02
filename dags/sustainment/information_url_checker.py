@@ -24,7 +24,7 @@ CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]
 
 # List of website we ignore for now,
 # since they are accessible but probably not allowed api calls
-white_list = ["www.ttc.ca", "www.ttc.ca/"]
+white_list = ["www.ttc.ca"]
 
 with DAG(
     "information-url-checker",
@@ -91,7 +91,7 @@ with DAG(
                                 + " "
                                 + information_url
                             )
-                        elif call.split("://")[1] not in white_list:
+                        elif call.split("://")[1].rstrip('/"') not in white_list:
                             result_info[package_name] = (
                                 "Client Error: "
                                 + str(status_code)
@@ -100,7 +100,7 @@ with DAG(
                             )
                     elif status_code >= 500:
                         result_info[package_name] = "Server Error: "
-                        +str(status_code) + "" + information_url
+                        +str(status_code) + " " + information_url
 
                 except requests.ConnectionError:
                     logging.info(
