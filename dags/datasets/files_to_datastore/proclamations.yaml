@@ -1,0 +1,80 @@
+proclamations:
+  schedule: '@once'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Proclamations
+  date_published: '2023-02-01 17:48:08.232559'
+  refresh_rate: Monthly
+  dataset_category: Document
+  owner_division: City Clerk's Office
+  owner_section: Strategic Protocol & External Relations
+  owner_unit: Community Recognition Team
+  owner_email: annette.velhopereira@toronto.ca
+  civic_issues: affordable_housing
+  topics: City government
+  tags: 
+    - name: holidays
+      vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/awards-tributes/tributes/proclamations-congratulatory-scrolls-and-letters-of-greeting/proclamations/
+  excerpt: Proclamations used for public awareness campaigns, charitable fundraising
+    campaigns, arts and cultural celebrations and special honours issued by the Mayor
+    of Toronto
+  limitations: null
+  notes: Proclamations are used for public awareness campaigns, charitable fundraising
+    campaigns, arts and cultural celebrations and special honours on the recommendation
+    of the Mayor.
+  resources:
+    2019-proclamations:
+      format: xlsx
+      sheet: "2019"
+      url: http://opendata.toronto.ca/city.clerks.office/proclamations/Proclamations.xlsx
+      attributes:
+        - id: "Name"
+          type: "text"
+          info:
+            notes: "Name of the proclamation"
+        - id: "Date"
+          type: "text"
+          info:
+            notes: "Date range of the proclamation's duration"
+    2020-proclamations:
+      format: xlsx
+      sheet: "2020"
+      url: http://opendata.toronto.ca/city.clerks.office/proclamations/Proclamations.xlsx
+      attributes:
+        - id: "Name"
+          type: "text"
+          info:
+            notes: "Name of the proclamation"
+        - id: "Date"
+          type: "text"
+          info:
+            notes: "Date range of the proclamation's duration"
+    2021-proclamations:
+      format: xlsx
+      sheet: "2021"
+      url: http://opendata.toronto.ca/city.clerks.office/proclamations/Proclamations.xlsx
+      attributes:
+        - id: "Name"
+          type: "text"
+          info:
+            notes: "Name of the proclamation"
+        - id: "Date"
+          type: "text"
+          info:
+            notes: "Date range of the proclamation's duration"
+    2022-proclamations:
+      format: xlsx
+      sheet: "2022"
+      url: http://opendata.toronto.ca/city.clerks.office/proclamations/Proclamations.xlsx
+      attributes:
+        - id: "Name"
+          type: "text"
+          info:
+            notes: "Name of the proclamation"
+        - id: "Date"
+          type: "text"
+          info:
+            notes: "Date range of the proclamation's duration"
+    
+
