@@ -2,7 +2,6 @@ import ckanapi
 import requests
 import logging
 import calendar
-import os
 import shutil
 import zipfile
 from datetime import datetime, timedelta
@@ -16,7 +15,11 @@ from airflow.operators.python import PythonOperator, BranchPythonOperator
 from ckan_operators.package_operator import GetOrCreatePackageOperator
 
 from utils import airflow_utils, ckan_utils
-from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
+from utils_operators.slack_operators import (
+    task_success_slack_alert,
+    task_failure_slack_alert,
+    GenericSlackOperator,
+)
 
 
 # init hardcoded vars for these dags
@@ -31,7 +34,6 @@ ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
 reports = {
     "Page Views": "acd19558f6734dfc187e1add2680e287",
     "Page URL and File Clicks": "4213a24217ec4d77c8ec441bed6cc86e",
-    "Search Terms": "tb9gvo6qd7",
 }
 
 args = {
@@ -44,46 +46,62 @@ args = {
     "limit": "400",
 }
 
-package_name = "portal-analytics"
+package_name = "open-data-web-analytics"
 
-package_metadata = {'title': 'Portal Analytics', 
-                    'date_published': '2023-01-13', 
-                    'refresh_rate': 'Monthly', 
-                    'dataset_category': 'Document', 
-                    'owner_division': 'Information & Technology', 
-                    'owner_section': None, 
-                    'owner_unit': None, 
-                    'owner_email': 'opendata@toronto.ca', 
-                    'civic_issues': None, 
-                    'topics': 'City government', 
-                    'tags': [{'name': 'analytics', 'vocabulary_id': None}, {'name': 'statistics', 'vocabulary_id': None}, {'name': 'portal analytics', 'vocabulary_id': None}, {'name': 'visits', 'vocabulary_id': None}], 
-                    'information_url': None, 
-                    'excerpt': "This dataset contains portal analytics (statistics) capturing visitors' usage of datasets published on the Open Data Portal.", 
-                    'limitations': None,
-                    'notes': "\r\n\r\nThis dataset contains portal analytics (statistics) capturing visitors' usage of datasets published on the City of Toronto [Open Data Portal](https://open.toronto.ca/catalogue/).\r\n"}
+package_metadata = {
+    "title": "Open Data Web Analytics",
+    "date_published": "2023-01-13",
+    "refresh_rate": "Monthly",
+    "dataset_category": "Document",
+    "owner_division": "Information & Technology",
+    "owner_section": None,
+    "owner_unit": None,
+    "owner_email": "opendata@toronto.ca",
+    "civic_issues": None,
+    "topics": "City government",
+    "tags": [
+        {"name": "analytics", "vocabulary_id": None},
+        {"name": "statistics", "vocabulary_id": None},
+        {"name": "web analytics", "vocabulary_id": None},
+        {"name": "open data", "vocabulary_id": None},
+        {"name": "usage", "vocabulary_id": None},
+    ],
+    "information_url": None,
+    "excerpt": """This dataset contains web analytics (statistics)
+                capturing visitors' usage of datasets published on
+                the City of Toronto Open Data Portal.
+                """,
+    "limitations": None,
+    "notes": """\r\n\r\nThis dataset contains web analytics (statistics)
+                capturing visitors' usage of datasets published on
+                the City of Toronto 
+                [Open Data Portal](https://open.toronto.ca).\r\n""",
+}
 
 with DAG(
-    'portal-analytics',
+    "open-data-web-analytics",
     default_args={
-                "owner": "Yanan",
-                "depends_on_past": False,
-                "email": "yanan.zhang@toronto.ca",
-                "email_on_failure": False,
-                "email_on_retry": False,
-                "retries": 2,
-                "retry_delay": 3,
-                "on_failure_callback": task_failure_slack_alert,
-                "tags": ["sustainment"]
-            },
-    description='Report stats for datasets on Open Data Portal',
-    schedule_interval="@once",
+        "owner": "Yanan",
+        "depends_on_past": False,
+        "email": "yanan.zhang@toronto.ca",
+        "email_on_failure": False,
+        "email_on_retry": False,
+        "retries": 2,
+        "retry_delay": 3,
+        "on_failure_callback": task_failure_slack_alert,
+        "tags": ["sustainment"],
+    },
+    description="Report stats for datasets on Open Data Portal",
+    schedule_interval="0 1 1 * *",
     start_date=datetime(2023, 1, 10, 0, 0, 0),
-    catchup = False,
+    catchup=False,
 ) as dag:
 
     # Generate summarization report
-    def generate_summary_report(report_name, report_id, begin, end, account_id, user, password):
-        
+    def generate_summary_report(
+        report_name, report_id, begin, end, account_id, user, password
+    ):
+
         # generte oracle infinity API call
         qs = "&".join(["{}={}".format(k, v) for k, v in args.items()])
         prefix = f"https://api.oracleinfinity.io/v1/account/{account_id}/dataexport"
@@ -97,11 +115,11 @@ with DAG(
         assert status == 200, f"Response code: {status}. Reason: {response.reason}"
 
         return response
-    
+
     def is_resource_new(**kwargs):
         package = kwargs.pop("ti").xcom_pull(task_ids="get_or_create_package")
         resource_name = kwargs.pop("resource_name")
-        
+
         if package["resources"] is None:
             return "create_new_resource"
         else:
@@ -151,7 +169,7 @@ with DAG(
         logging.info(res)
 
         return save_path
-    
+
     def download_data(**kwargs):
         ti = kwargs.pop("ti")
         resource = ti.xcom_pull(task_ids="get_resource")
@@ -162,9 +180,7 @@ with DAG(
         save_path = tmp_dir / f'src{Path(resource["url"]).suffix}'
 
         with open(save_path, "wb") as fd:
-            for chunk in r.iter_content(
-                chunk_size=128
-            ):  
+            for chunk in r.iter_content(chunk_size=128):
                 fd.write(chunk)
 
         return save_path
@@ -182,7 +198,7 @@ with DAG(
             target_dir.mkdir()
 
         return target_dir
-    
+
     def get_filename_date_format(**kwargs):
         period_range = kwargs["period_range"]
 
@@ -191,7 +207,6 @@ with DAG(
 
         return filename_date_format
 
-    
     def determine_latest_period_loaded(**kwargs):
         ti = kwargs.pop("ti")
         data_fp = Path(ti.xcom_pull(task_ids="unzip_data"))
@@ -207,12 +222,11 @@ with DAG(
             return datetime(2020, 12, 2)
 
         return max(dates_loaded)
-    
+
     # calculate months to load
     def calculate_periods_to_load(**kwargs):
         ti = kwargs.pop("ti")
         latest_loaded = ti.xcom_pull(task_ids="determine_latest_period_loaded")
-        period_range = kwargs["period_range"]
 
         def months(latest_loaded):
             logging.info("Calculating months to load")
@@ -238,11 +252,11 @@ with DAG(
                     end = datetime(begin.year, begin.month, 31)
                 else:
                     end = datetime(begin.year, begin.month + 1, 1) + timedelta(days=-1)
-                
+
             return periods_to_load
-        
+
         return months(latest_loaded)
-    
+
     def make_new_extract_folders(**kwargs):
         logging.info("Created directory for storing extracts")
 
@@ -354,7 +368,10 @@ with DAG(
         path = Path(ti.xcom_pull(task_ids="zip_files"))
         resource = ti.xcom_pull(task_ids="get_resource")
 
-        res = ckan.action.resource_patch(id=resource["id"], upload=open(path, "rb"),)
+        res = ckan.action.resource_patch(
+            id=resource["id"],
+            upload=open(path, "rb"),
+        )
 
         return res
 
@@ -391,33 +408,32 @@ with DAG(
             prod_webhook=active_env == "prod",
             active_env=active_env,
         )
-    
-    
+
     # get or create package
     get_or_create_package = GetOrCreatePackageOperator(
-        task_id = "get_or_create_package",
-        address = ckan_address,
-        apikey = ckan_apikey,
-        package_name_or_id = package_name,
-        package_metadata = package_metadata,
+        task_id="get_or_create_package",
+        address=ckan_address,
+        apikey=ckan_apikey,
+        package_name_or_id=package_name,
+        package_metadata=package_metadata,
     )
-    
+
     create_tmp_dir = PythonOperator(
         task_id="create_tmp_data_dir",
         python_callable=airflow_utils.create_dir_with_dag_name,
-        op_kwargs={"dag_id": "portal-analytics", "dir_variable_name": "tmp_dir"},
-        )
+        op_kwargs={"dag_id": "open-data-web-analytics", "dir_variable_name": "tmp_dir"},
+    )
 
     is_resource_new_branch = BranchPythonOperator(
         task_id="is_resource_new",
         python_callable=is_resource_new,
-        op_kwargs={"resource_name": "portal-analytics-monthly-report"},
+        op_kwargs={"resource_name": "open-data-web-analytics-monthly-report"},
     )
 
     create_resource = PythonOperator(
         task_id="create_new_resource",
         python_callable=create_new_resource,
-        op_kwargs={"resource_name": "portal-analytics-monthly-report"},
+        op_kwargs={"resource_name": "open-data-web-analytics-monthly-report"},
     )
 
     no_new_resource = DummyOperator(task_id="do_not_create_new_resource")
@@ -426,32 +442,36 @@ with DAG(
         task_id="get_resource",
         python_callable=get_resource,
         trigger_rule="none_failed",
-        op_kwargs={"resource_name": "portal-analytics-monthly-report"},
+        op_kwargs={"resource_name": "open-data-web-analytics-monthly-report"},
     )
 
     get_data = PythonOperator(
-        task_id="download_data", python_callable=download_data,
+        task_id="download_data",
+        python_callable=download_data,
     )
 
-    unzip_files = PythonOperator(task_id="unzip_data", python_callable=unzip_data,)
-    
+    unzip_files = PythonOperator(
+        task_id="unzip_data",
+        python_callable=unzip_data,
+    )
+
     filename_date_format = PythonOperator(
         task_id="get_filename_date_format",
         python_callable=get_filename_date_format,
         op_kwargs={"period_range": "monthly"},
     )
-    
+
     latest_loaded = PythonOperator(
         task_id="determine_latest_period_loaded",
         python_callable=determine_latest_period_loaded,
     )
-    
+
     periods_to_load = PythonOperator(
         task_id="calculate_periods_to_load",
         python_callable=calculate_periods_to_load,
         op_kwargs={"period_range": "monthly"},
     )
-    
+
     no_new_periods_to_load = DummyOperator(task_id="no_new_periods_to_load")
 
     new_periods_to_load = DummyOperator(task_id="new_periods_to_load")
@@ -459,77 +479,77 @@ with DAG(
     new_data_to_load = BranchPythonOperator(
         task_id="are_there_new_periods",
         python_callable=are_there_new_periods,
-        op_kwargs={"resource_name": "portal-analytics-monthly-report"},
+        op_kwargs={"resource_name": "open-data-web-analytics-monthly-report"},
     )
 
     staging_folder = PythonOperator(
         task_id="make_staging_folder",
         python_callable=make_staging_folder,
-        op_kwargs={"resource_name": "portal-analytics-monthly-report"},
+        op_kwargs={"resource_name": "open-data-web-analytics-monthly-report"},
     )
-    
+
     extract_complete = DummyOperator(task_id="extract_complete")
 
     extract_new = PythonOperator(
-        task_id="extract_new", python_callable=make_new_extract_folders,
+        task_id="extract_new",
+        python_callable=make_new_extract_folders,
     )
-    
+
     page_views = PythonOperator(
         task_id="page_views",
         python_callable=extract_new_report,
         op_kwargs={"report_name": "Page Views"},
     )
-    
+
     page_url_and_file_clicks = PythonOperator(
         task_id="page_url_and_file_clicks",
         python_callable=extract_new_report,
         op_kwargs={"report_name": "Page URL and File Clicks"},
     )
-    
-    search_terms = PythonOperator(
-        task_id="search_terms",
-        python_callable=extract_new_report,
-        op_kwargs={"report_name": "Search Terms"},
-    )
-    
+
     copy_previous = PythonOperator(
-        task_id="copy_previous", python_callable=copy_previous_to_staging,
+        task_id="copy_previous",
+        python_callable=copy_previous_to_staging,
     )
 
     zip_resource_files = PythonOperator(
         task_id="zip_files",
         python_callable=zip_files,
-        op_kwargs={"resource_name": "portal-analytics-monthly-report"},
+        op_kwargs={"resource_name": "open-data-web-analytics-monthly-report"},
     )
 
-    upload_data = PythonOperator(task_id="upload_zip", python_callable=upload_zip,)
+    upload_data = PythonOperator(
+        task_id="upload_zip",
+        python_callable=upload_zip,
+    )
 
     msg = PythonOperator(
-        task_id="build_message", 
+        task_id="build_message",
         python_callable=build_message,
-        op_kwargs={"period_range": "monthly"},   
+        op_kwargs={"period_range": "monthly"},
     )
 
     send_notification = PythonOperator(
-        task_id="send_success_msg", python_callable=send_success_msg,
+        task_id="send_success_msg",
+        python_callable=send_success_msg,
     )
 
     delete_tmp_dir = PythonOperator(
         task_id="delete_tmp_dir",
         python_callable=airflow_utils.delete_tmp_data_dir,
-        op_kwargs={"dag_id": "portal-analytics", "recursively": True},
+        op_kwargs={"dag_id": "open-data-web-analytics", "recursively": True},
         trigger_rule="none_failed",
     )
-   
+
     # create task flow
-    get_or_create_package  >> is_resource_new_branch
+    get_or_create_package >> is_resource_new_branch
 
     is_resource_new_branch >> create_resource
 
     is_resource_new_branch >> no_new_resource
 
     [create_resource, no_new_resource] >> get_resource >> get_data >> unzip_files
-    
+
     [unzip_files, filename_date_format] >> latest_loaded
 
     latest_loaded >> periods_to_load >> new_data_to_load
@@ -540,16 +560,24 @@ with DAG(
 
     new_data_to_load >> no_new_periods_to_load
 
-    new_data_to_load >> new_periods_to_load >> staging_folder >> [
-        extract_new,
-        copy_previous,
-    ]
+    (
+        new_data_to_load
+        >> new_periods_to_load
+        >> staging_folder
+        >> [
+            extract_new,
+            copy_previous,
+        ]
+    )
 
-    extract_new >> [
-        page_views,
-        page_url_and_file_clicks,
-        search_terms,
-    ] >> extract_complete
+    (
+        extract_new
+        >> [
+            page_views,
+            page_url_and_file_clicks,
+        ]
+        >> extract_complete
+    )
 
     msg >> send_notification
 
