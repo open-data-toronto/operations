@@ -508,3 +508,11 @@ neighbourhood-improvement-areas:
   TSNS 2020 NEI Methodological Documentation:
     format: docx
     url: http://opendata.toronto.ca/social.development.finance.administration/neighbourhood-improvement-areas/TSNS 2020 NEI Methodological Documentation-Final.docx
+
+311-service-requests-customer-initiated:
+  311 Service Requests 2022:
+    format: zip
+    url: https://www.toronto.ca/data/311/opendata/servicerequest/SR2022.zip
+  311 Service Requests 2023:
+    format: zip
+    url: https://www.toronto.ca/data/311/opendata/servicerequest/SR2023.zip
