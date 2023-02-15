@@ -1,0 +1,100 @@
+dinesafe:
+  schedule: '@once'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Dinesafe
+  date_published: '2019-07-23 17:04:01.187902'
+  refresh_rate: Daily
+  dataset_category: Map
+  owner_division: Toronto Public Health
+  owner_section: null
+  owner_unit: null
+  owner_email: PublicHealth@toronto.ca
+  civic_issues: null
+  topics: Public safety,Health
+  tags:
+  - name: dinesafe
+    vocabulary_id: null
+  - name: food
+    vocabulary_id: null
+  - name: health inspection
+    vocabulary_id: null
+  - name: restaurant
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/health-wellness-care/health-programs-advice/food-safety/dinesafe/
+  excerpt: Snapshot of the information to the public concerning the Toronto Public
+    Health Food Premises Inspection and Disclosure system. The data set is as current
+    as the date of the extraction.
+  limitations: null
+  notes: "DineSafe is Toronto Public Health\u2019s food safety program that inspects\
+    \ all establishments serving and preparing food. Each inspection results in a\
+    \ pass, a conditional pass or a closed notice."
+
+  resources:
+    # resource name
+    Dinesafe:
+      format: csv
+      url: https://secure.toronto.ca/opendata/ds/od_csv/v1?format=csv
+      attributes:
+        - id: "Rec #"
+          type: int
+          info:
+            notes: Unique ID fo ran entire record in this dataset
+        - id: Establishment ID
+          type: int
+          info:
+            notes: Unique identifier for an establishment
+        - id: Inspection ID
+          type: int
+          info:
+            notes: Unique ID for an inspection
+        - id: Establishment Name
+          type: text
+          info:
+            notes: Business name of the establishment
+        - id: Establishment Type
+          type: text
+          info:
+            notes: Establishment type ie restaurant, mobile cart
+        - id: Establishment Address
+          type: text
+          info:
+            notes: Municipal address of the establishment
+        - id: Establishment Status
+          type: text
+          info:
+            notes: Pass, Conditional Pass, Closed
+        - id: Min. Inspections Per Year
+          type: text
+          info:
+            notes: Every eating and drinking establishment in the City of Toronto receives a minimum of 1, 2, or 3 inspections each year depending on the specific type of establishment, the food preparation processes, volume and type of food served and other related criteria. Low risk premises that offer for sale only pre-packaged non-hazardous food shall be inspected once every two years. The inspection frequency for these low risk premises is shown as "O" (Other) on the report and in the data set
+        - id: Infraction Details
+          type: text
+          info:
+            notes: Description of the Infraction
+        - id: Inspection Date
+          type: date
+          info:
+            notes: Calendar date the inspection was conducted
+        - id: Severity
+          type: text
+          info:
+            notes:  Level of the infraction, i.e. S - Significant, M - Minor, C - Crucial
+        - id: Action
+          type: text
+          info:
+            notes: Enforcement activity based on the infractions noted during a food safety inspection
+        - id: Outcome
+          type: text
+          info:
+            notes: The registered court decision resulting from the issuance of a ticket or summons for outstanding infractions to the Health Protection and Promotion Act
+        - id: Amount Fined
+          type: float
+          info:
+            notes: Fine determined in a court outcome
+        - id: geometry
+          type: text
+          info:
+            notes: ""
+        
+            
