@@ -1,11 +1,11 @@
 dinesafe:
-  schedule: '@once'
+  schedule: '0 2 * * *'
   dag_owner_name: 'Mackenzie'
   dag_owner_email: 'mackenzie.nichols4@toronto.ca'
   title: Dinesafe
   date_published: '2019-07-23 17:04:01.187902'
   refresh_rate: Daily
-  dataset_category: Map
+  dataset_category: Table
   owner_division: Toronto Public Health
   owner_section: null
   owner_unit: null
@@ -92,9 +92,13 @@ dinesafe:
           type: float
           info:
             notes: Fine determined in a court outcome
-        - id: geometry
-          type: text
+        - id: Latitude
+          type: float
           info:
-            notes: ""
+            notes: "Latitude of establishment"
+        - id: Longitude
+          type: float
+          info:
+            notes: "Longitude of establishment"
         
             
