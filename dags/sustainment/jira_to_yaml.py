@@ -1,7 +1,11 @@
 """Creates a yaml config for CoT OD Airflow ETL from an OD Jira Ticket
    Assign Jira ticket Id using Configuration JSON before triggering DAG,
-   e.g. {"jira_ticket_id": "DTSD-876"}, please note string need to be
-   double quoted.
+   
+   e.g. {"jira_ticket_id": ["DTSD-876", "DTSD-391"]},
+   
+   please note string need to be double quoted.
+   
+   Please make sure AUTHENTICATED before sending Jira API calls.
 """
 
 import requests
@@ -14,15 +18,14 @@ from pathlib import Path
 
 from airflow import DAG
 from airflow.models import Variable
-from airflow.operators.bash import BashOperator
-from airflow.operators.dummy import DummyOperator
-from airflow.models.baseoperator import chain
 
 from utils import airflow_utils
-from utils_operators.slack_operators import task_success_slack_alert
-from utils_operators.slack_operators import task_failure_slack_alert
-from utils_operators.slack_operators import GenericSlackOperator
-from airflow.operators.python import BranchPythonOperator, PythonOperator
+from utils_operators.slack_operators import (
+    GenericSlackOperator,
+    task_failure_slack_alert,
+    task_success_slack_alert
+)
+from airflow.operators.python import PythonOperator
 
 
 JIRA_URL = "https://toronto.atlassian.net/rest/api/3/search?jql=type=11468"
@@ -191,8 +194,12 @@ with DAG(
         """Receives a json input and writes it to a YAML file"""
 
         logging.info(f"Generating yaml file: {filename}")
-        with open(YAML_DIR_PATH / filename, "w") as file:
-            yaml.dump(issue_content, file, sort_keys=False)
+        try:
+            with open(YAML_DIR_PATH / filename, "w") as file:
+                yaml.dump(issue_content, file, sort_keys=False)
+        except PermissionError:
+            message = "Note: yaml file already exist, please double check!"
+            raise Exception(message)
         return {"filename": filename}
 
     def close_ticket(jira_issue_id):
@@ -202,7 +209,7 @@ with DAG(
             + "/transitions"
         )
         payload = json.dumps(
-            {"transition": {"id": jira_issue_transitions_mapping["Closed"]}}
+            {"transition": {"id": jira_issue_transitions_mapping["In Progress"]}}
         )
 
         headers = {
