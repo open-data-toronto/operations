@@ -1,11 +1,12 @@
-"""Creates a yaml config for CoT OD Airflow ETL from an OD Jira Ticket
-   Assign Jira ticket Id using Configuration JSON before triggering DAG,
-   
-   e.g. {"jira_ticket_id": ["DTSD-876", "DTSD-391"]},
-   
-   please note string need to be double quoted.
-   
-   Please make sure AUTHENTICATED before sending Jira API calls.
+"""
+    Creates a yaml config for CoT OD Airflow ETL from an OD Jira Ticket
+    Assign Jira ticket Id using Configuration JSON before triggering DAG,
+
+    e.g. {"jira_ticket_id": ["DTSD-876", "DTSD-391"]},
+
+    please note string need to be double quoted.
+
+    Please make sure AUTHENTICATED before sending Jira API calls.
 """
 
 import requests
@@ -23,18 +24,17 @@ from utils import airflow_utils
 from utils_operators.slack_operators import (
     GenericSlackOperator,
     task_failure_slack_alert,
-    task_success_slack_alert
 )
 from airflow.operators.python import PythonOperator
 
 
 JIRA_URL = "https://toronto.atlassian.net/rest/api/3/search?jql=type=11468"
+JIRA_API_KEY = Variable.get("jira_apikey")
 DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
 YAML_DIR_PATH = DIR_PATH / "datasets" / "files_to_datastore"
 
 # headers for authenticate jira api calls
-headers = {
-    }
+headers = {"Authorization": JIRA_API_KEY}
 
 # Create a mapping between jira issue transition name and id
 jira_issue_transitions_mapping = {
@@ -212,15 +212,13 @@ with DAG(
             {"transition": {"id": jira_issue_transitions_mapping["In Progress"]}}
         )
 
-        headers = {
-            
-        }
+        headers = {"Authorization": JIRA_API_KEY, "Content-Type": "application/json"}
 
         response = requests.request("POST", url, headers=headers, data=payload)
         logging.info(f"Status: {response.status_code}, Ticket has been closed.")
 
     def get_all_jira_issues(**kwargs):
-        """Generate all yamls for "Publish Dataset" Jira issues'"""
+        """Generate all yamls for "Publish Dataset" Jira issues"""
 
         input_ticket_ids = kwargs.pop("ti").xcom_pull(task_ids="get_jira_ticket_id")[
             "jira_ticket_id"
@@ -242,7 +240,7 @@ with DAG(
 
                 issue_content = grab_issue_content(issue)
                 if issue_content:
-                    filename = "".join(list(issue_content.keys())) + "-test.yaml"
+                    filename = "".join(list(issue_content.keys())) + ".yaml"
                     # write data to yaml file
                     write_issue_content_to_yaml(issue_content, filename)
                     # close current ticket
@@ -251,7 +249,8 @@ with DAG(
                 else:
                     output_list[
                         issue["key"]
-                    ] = "Request for updating existing dataset, no need to generate yaml."
+                    ] = ("Request for updating existing dataset," +
+                         " no need to generate yaml.")
             else:
                 continue
 

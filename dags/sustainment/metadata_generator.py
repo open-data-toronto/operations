@@ -1,3 +1,13 @@
+"""
+    This script can be used to grab ckan package metadata from existing packages;
+    Remember assign following parameters to generate yamls.
+
+        - dag_owner_name,
+        - dag_owner_email,
+        - package_names, e.g. {"package_names": ["traffic-cameras"]}
+
+    Please assign package_names using Configuration JSON before triggering DAG.
+"""
 import requests
 import logging
 import yaml
@@ -16,7 +26,6 @@ from utils_operators.slack_operators import (
 )
 from ckan_operators.package_operator import GetCkanPackageListOperator
 from airflow.operators.python import PythonOperator
-from bs4 import BeautifulSoup
 
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
@@ -149,7 +158,7 @@ with DAG(
             # generate metadata for each package
             metadata = metadata_generator(ckan_url, YAML_METADATA, PACKAGE_METADATA)
             
-            filename = package_name + "-test.yaml"
+            filename = package_name + ".yaml"
             write_to_yaml(filename, metadata)
             output_list[package_name] = ":done_green:" + filename
 
@@ -186,7 +195,7 @@ with DAG(
         message_content_task_key="generated-yaml-list",
         message_body="",
     )
-    
+
     (
         [get_input_packages, ckan_package_list] >>
         validate_input_packages >>
