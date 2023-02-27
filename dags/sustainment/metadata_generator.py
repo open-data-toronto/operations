@@ -154,7 +154,6 @@ with DAG(
 
         for package_name in input_package_list:
             ckan_url = CKAN + "api/3/action/package_show?id=" + package_name
-            logging.info(ckan_url)
             # generate metadata for each package
             metadata = metadata_generator(ckan_url, YAML_METADATA, PACKAGE_METADATA)
             
