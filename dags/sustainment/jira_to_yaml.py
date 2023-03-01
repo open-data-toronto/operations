@@ -27,6 +27,10 @@ from utils_operators.slack_operators import (
 )
 from airflow.operators.python import PythonOperator
 
+CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
+
+# we need ckan prod address to get a full list of packages
+CKAN = CKAN_CREDS["prod"]["address"]
 
 JIRA_URL = "https://toronto.atlassian.net/rest/api/3/search?jql=type=11468"
 JIRA_API_KEY = Variable.get("jira_apikey")
@@ -59,6 +63,31 @@ mapping = {
     "excerpt": "customfield_12244",
     "limitations": "customfield_12252",
 }
+
+YAML_METADATA = {  # DAG info
+    "schedule": "@once",
+    "dag_owner_name": "",  # dag owner name
+    "dag_owner_email": "",  # dag owner email
+}
+
+PACKAGE_METADATA = [  # mandatory package attributes
+    "title",
+    "date_published",
+    "refresh_rate",
+    "dataset_category",
+    # optional package attributes
+    "owner_division",
+    "owner_section",
+    "owner_unit",
+    "owner_email",
+    "civic_issues",
+    "topics",
+    "tags",
+    "information_url",
+    "excerpt",
+    "limitations",
+    "notes",
+]
 
 # init DAG
 default_args = airflow_utils.get_default_args(
@@ -111,7 +140,6 @@ with DAG(
 
     def grab_issue_content(issue):
 
-        logging.info(issue)
         fields = issue["fields"]
 
         # check request type
@@ -177,6 +205,7 @@ with DAG(
                     0
                 ]["text"]
                 if fields[mapping["limitations"]]
+                and (fields[mapping["limitations"]]["content"])
                 else None,
                 "notes": fields["description"]["content"][0]["content"][0]["text"]
                 if fields["description"]
@@ -184,25 +213,23 @@ with DAG(
                 "resources": {},
             }
             print(issue_metadata)
-            package_id = fields["summary"].lower().replace(" ", "-")
+            package_id = fields["summary"].lower().replace("/", " ").replace(" ", "-")
 
             return {package_id: issue_metadata}
-        else:
-            logging.info("This is a request for updating exisitng dataset.")
 
-    def write_issue_content_to_yaml(issue_content, filename):
+    def write_to_yaml(content, filename):
         """Receives a json input and writes it to a YAML file"""
 
         logging.info(f"Generating yaml file: {filename}")
         try:
             with open(YAML_DIR_PATH / filename, "w") as file:
-                yaml.dump(issue_content, file, sort_keys=False)
+                yaml.dump(content, file, sort_keys=False)
         except PermissionError:
             message = "Note: yaml file already exist, please double check!"
             raise Exception(message)
         return {"filename": filename}
 
-    def close_ticket(jira_issue_id):
+    def process_ticket(jira_issue_id):
         url = (
             "https://toronto.atlassian.net/rest/api/3/issue/"
             + jira_issue_id
@@ -215,7 +242,32 @@ with DAG(
         headers = {"Authorization": JIRA_API_KEY, "Content-Type": "application/json"}
 
         response = requests.request("POST", url, headers=headers, data=payload)
-        logging.info(f"Status: {response.status_code}, Ticket has been closed.")
+        logging.info(f"Status: {response.status_code}, Ticket has been processed.")
+
+    # grab metadata content
+    def metadata_generator(ckan_url, yaml_metadata, package_metadata):
+        response = requests.get(ckan_url).json()
+        ckan_metadata_content = response["result"]
+
+        ckan_metadata_fields = ckan_metadata_content.keys()
+
+        for field in package_metadata:
+            if field in ckan_metadata_fields:
+                if field == "tags":
+                    tags_content = ckan_metadata_content["tags"]
+                    tags_yaml = []
+                    for i in range(len(tags_content)):
+                        tag = {}
+                        tag["name"] = tags_content[i]["display_name"]
+                        tag["vocabulary_id"] = None
+                        tags_yaml.append(tag)
+                    yaml_metadata[field] = tags_yaml
+                else:
+                    yaml_metadata[field] = ckan_metadata_content[field]
+            else:
+                yaml_metadata[field] = None
+        metadata = {ckan_metadata_content["name"]: yaml_metadata}
+        return metadata
 
     def get_all_jira_issues(**kwargs):
         """Generate all yamls for "Publish Dataset" Jira issues"""
@@ -238,19 +290,30 @@ with DAG(
                     f"Jira Ticket Id: {issue['key']} and Request Type: {request_type}"
                 )
 
-                issue_content = grab_issue_content(issue)
-                if issue_content:
+                if request_type == "Publish Dataset":
+                    issue_content = grab_issue_content(issue)
                     filename = "".join(list(issue_content.keys())) + ".yaml"
                     # write data to yaml file
-                    write_issue_content_to_yaml(issue_content, filename)
-                    # close current ticket
-                    close_ticket(issue["key"])
-                    output_list[issue["key"]] = ":done_green:" + filename
-                else:
-                    output_list[
-                        issue["key"]
-                    ] = ("Request for updating existing dataset," +
-                         " no need to generate yaml.")
+                    write_to_yaml(issue_content, filename)
+                    # process current ticket
+                    process_ticket(issue["key"])
+                    output_list[issue["key"]] = (
+                        "Publish Dataset :done_green:" + filename
+                    )
+                if request_type == "Update Dataset":
+                    package_name = (
+                        issue["fields"]["summary"].split("/dataset/")[1].strip("//")
+                    )
+                    ckan_url = CKAN + "api/3/action/package_show?id=" + package_name
+                    logging.info(ckan_url)
+
+                    # grab metadata
+                    metadata = metadata_generator(
+                        ckan_url, YAML_METADATA, PACKAGE_METADATA
+                    )
+                    filename = package_name + ".yaml"
+                    write_to_yaml(metadata, filename)
+                    output_list[issue["key"]] = "Update Dataset :done_green:" + filename
             else:
                 continue
 
