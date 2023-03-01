@@ -460,7 +460,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         else:
             return None
 
-    def clean_date_format(self, input):
+    def clean_date_format(self, input, input_format=None):
         # loops through the list of formats and tries to return an input string into a datetime of one of those formats
        
         if input == None:
@@ -489,18 +489,22 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "%d%b%Y": "%Y-%m-%d",
         }
 
-        for format in format_dict.keys():
-            try:
-                input = input.replace("/", "-")
-                datetime_object = datetime.strptime(input, format)
-                output = datetime_object.strftime(format_dict[format])
-                #print("{} format worked with {} - returning {} as {}".format( format, input, format_dict[format], output) )
-                #print("returning: " + output)
-                return output
-            except ValueError as e:
-                #print("Format {} in clean_date_format() doesnt match input string {}".format(format, input))
-                #print(e)
-                pass
+        if input_format:
+            input = input.replace("/", "-")
+            input_format = input_format.replace("/", "-")
+            datetime_object = datetime.strptime(input, input_format)
+            output = datetime_object.strftime(format_dict[input_format])
+            return output
+
+        else:
+            for format in format_dict.keys():
+                try:
+                    input = input.replace("/", "-")
+                    datetime_object = datetime.strptime(input, format)
+                    output = datetime_object.strftime(format_dict[format])
+                    return output
+                except ValueError as e:
+                    pass
         
 
     # reads a csv and returns a list of dicts - one dict for each row
@@ -637,6 +641,9 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                 else:
                     src = row[self.config["attributes"][i]["id"]]
 
+                # if date column, consider hardcoded format attribute 
+                if self.config["attributes"][i]["type"] in ["date", "timestamp"]:
+                    new_row[self.config["attributes"][i]["id"]] = formatters[ self.config["attributes"][i]["type"] ](src, self.config["attributes"][i].get("format", None))
                 new_row[self.config["attributes"][i]["id"]] = formatters[ self.config["attributes"][i]["type"] ](src)
             output.append( new_row )
 
