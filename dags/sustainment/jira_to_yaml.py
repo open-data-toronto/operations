@@ -7,6 +7,9 @@
     please note string need to be double quoted.
 
     Please make sure AUTHENTICATED before sending Jira API calls.
+    
+    For "Publish Dataset" request, generate a yaml file based on Jira Ticket Input.
+    For "Update Dataset" request, generate a yaml based on existing package's metadata.
 """
 
 import requests
@@ -70,7 +73,8 @@ YAML_METADATA = {  # DAG info
     "dag_owner_email": "",  # dag owner email
 }
 
-PACKAGE_METADATA = [  # mandatory package attributes
+PACKAGE_METADATA = [  
+    # mandatory package attributes
     "title",
     "date_published",
     "refresh_rate",
@@ -304,15 +308,18 @@ with DAG(
                     package_name = (
                         issue["fields"]["summary"].split("/dataset/")[1].strip("//")
                     )
+                    logging.info(package_name)
                     ckan_url = CKAN + "api/3/action/package_show?id=" + package_name
-                    logging.info(ckan_url)
 
                     # grab metadata
                     metadata = metadata_generator(
                         ckan_url, YAML_METADATA, PACKAGE_METADATA
                     )
                     filename = package_name + ".yaml"
+                    # write data to yaml file
                     write_to_yaml(metadata, filename)
+                    # process current ticket
+                    process_ticket(issue["key"])
                     output_list[issue["key"]] = "Update Dataset :done_green:" + filename
             else:
                 continue
@@ -339,7 +346,7 @@ with DAG(
 
     slack_notificaiton = GenericSlackOperator(
         task_id="slack_notificaiton",
-        message_header=(" Task Succeeded, Succefully Generated :yaml: !"),
+        message_header=(" Task Succeeded, Successfully Generated :yaml: !"),
         message_content_task_id="get_all_jira_issues",
         message_content_task_key="generated-yaml-list",
         message_body="",
