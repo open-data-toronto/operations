@@ -7,9 +7,11 @@
     please note string need to be double quoted.
 
     Please make sure AUTHENTICATED before sending Jira API calls.
-    
-    For "Publish Dataset" request, generate a yaml file based on Jira Ticket Input.
-    For "Update Dataset" request, generate a yaml based on existing package's metadata.
+
+    For "Publish Dataset" request, generate a yaml file based on
+    Jira Ticket Input;
+    For "Update Dataset" request, generate a yaml based on
+    existing package's metadata.
 """
 
 import requests
@@ -73,7 +75,7 @@ YAML_METADATA = {  # DAG info
     "dag_owner_email": "",  # dag owner email
 }
 
-PACKAGE_METADATA = [  
+PACKAGE_METADATA = [
     # mandatory package attributes
     "title",
     "date_published",
@@ -129,7 +131,8 @@ with DAG(
 
     def validate_jira_ticket(**kwargs):
         # make sure input jira ticket id exists
-        input_ticket_ids = kwargs.pop("ti").xcom_pull(task_ids="get_jira_ticket_id")[
+        input_ticket_ids = kwargs.pop("ti").\
+            xcom_pull(task_ids="get_jira_ticket_id")[
             "jira_ticket_id"
         ]
 
@@ -150,7 +153,8 @@ with DAG(
         request_type = fields["customfield_10502"]["requestType"]["name"]
         if request_type == "Publish Dataset":
             logging.info(
-                "This is a request for publishing dataset, generating yaml file!"
+                ("This is a request for publishing dataset," +
+                 "generating yaml file!")
             )
 
             # assign relevant metadata from jira to a dict
@@ -240,10 +244,14 @@ with DAG(
             + "/transitions"
         )
         payload = json.dumps(
-            {"transition": {"id": jira_issue_transitions_mapping["In Progress"]}}
+            {"transition": {
+                "id": jira_issue_transitions_mapping["In Progress"]
+            }}
         )
 
-        headers = {"Authorization": JIRA_API_KEY, "Content-Type": "application/json"}
+        headers = {
+                    "Authorization": JIRA_API_KEY,
+                    "Content-Type": "application/json"}
 
         response = requests.request("POST", url, headers=headers, data=payload)
         logging.info(f"Status: {response.status_code}, Ticket has been processed.")
@@ -287,9 +295,8 @@ with DAG(
 
         for issue in issues:
             if issue["key"] in input_ticket_ids:
-                request_type = issue["fields"]["customfield_10502"]["requestType"][
-                    "name"
-                ]
+                request_type = issue["fields"]["customfield_10502"][
+                    "requestType"]["name"]
                 logging.info(
                     f"Jira Ticket Id: {issue['key']} and Request Type: {request_type}"
                 )
@@ -344,8 +351,8 @@ with DAG(
         provide_context=True,
     )
 
-    slack_notificaiton = GenericSlackOperator(
-        task_id="slack_notificaiton",
+    slack_notification = GenericSlackOperator(
+        task_id="slack_notification",
         message_header=(" Task Succeeded, Successfully Generated :yaml: !"),
         message_content_task_id="get_all_jira_issues",
         message_content_task_key="generated-yaml-list",
@@ -356,5 +363,5 @@ with DAG(
         get_jira_ticket_id
         >> validate_jira_ticket
         >> get_all_jira_issues
-        >> slack_notificaiton
+        >> slack_notification
     )
