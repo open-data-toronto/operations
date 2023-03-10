@@ -558,6 +558,12 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             input_format = input_format.replace("/", "-")
             datetime_object = datetime.strptime(input, input_format)
             output = datetime_object.strftime(format_dict[input_format])
+            print("=================================")
+            print(input_format)
+            print(input)
+            print(output)
+            print(format_dict[input_format])
+            print("=================================")
             return output
 
         else:
@@ -747,9 +753,10 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                     new_row[self.config["attributes"][i]["id"]] = formatters[
                         self.config["attributes"][i]["type"]
                     ](src, self.config["attributes"][i].get("format", None))
-                new_row[self.config["attributes"][i]["id"]] = formatters[
-                    self.config["attributes"][i]["type"]
-                ](src)
+                else:
+                    new_row[self.config["attributes"][i]["id"]] = formatters[
+                        self.config["attributes"][i]["type"]
+                    ](src)
             output.append(new_row)
 
         logging.info("Cleaned {} records".format(len(output)))
