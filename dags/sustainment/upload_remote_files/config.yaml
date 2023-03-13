@@ -535,12 +535,12 @@ parking-tickets:
   parking-tickets-2021:
     format: zip
     url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2021.zip
-  parking-tickets-2020:
-    format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2020.zip
-  parking-tickets-2019:
-    format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2019.zip
+#  parking-tickets-2020:
+#    format: zip
+#    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2020.zip
+#  parking-tickets-2019:
+#    format: zip
+#    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2019.zip
   parking-tickets-2018:
     format: zip
     url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2018.zip
