@@ -558,12 +558,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             input_format = input_format.replace("/", "-")
             datetime_object = datetime.strptime(input, input_format)
             output = datetime_object.strftime(format_dict[input_format])
-            print("=================================")
-            print(input_format)
-            print(input)
-            print(output)
-            print(format_dict[input_format])
-            print("=================================")
+
             return output
 
         else:
