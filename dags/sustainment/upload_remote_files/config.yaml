@@ -531,50 +531,50 @@ neighbourhood-improvement-areas:
 parking-tickets:
   parking-tickets-2022:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2022.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2022.zip
   parking-tickets-2021:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2021.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2021.zip
 #  parking-tickets-2020:
 #    format: zip
-#    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2020.zip
+#    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2020.zip
 #  parking-tickets-2019:
 #    format: zip
-#    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2019.zip
+#    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2019.zip
   parking-tickets-2018:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2018.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2018.zip
   parking-tickets-2017:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2017.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2017.zip
   parking-tickets-2016:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2016.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2016.zip
   parking-tickets-2015:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2015.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2015.zip
   parking-tickets-2014:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2014.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2014.zip
   parking-tickets-2014:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2014.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2014.zip
   parking-tickets-2013:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2013.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2013.zip
   parking-tickets-2012:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2012.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2012.zip
   parking-tickets-2011:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2011.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2011.zip
   parking-tickets-2010:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2010.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2010.zip
   parking-tickets-2009:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2009.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2009.zip
   parking-tickets-2008:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking-tickets-2008.zip
+    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2008.zip
   
