@@ -1,5 +1,5 @@
 traffic-cameras:
-  schedule: '0 8 * * *'
+  schedule: '0 19 * * *'
   dag_owner_name: Mackenzie
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Traffic Cameras
