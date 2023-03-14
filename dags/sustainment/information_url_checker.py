@@ -43,7 +43,7 @@ with DAG(
         "Check if information_url(Under dataset description section)"
         " accessible, send notification to slack on failure urls"
     ),
-    schedule_interval="0 8 * * 0",
+    schedule_interval="0 17 * * 0",
     start_date=datetime(2023, 1, 27, 0, 0, 0),
     catchup=False,
 ) as dag:
