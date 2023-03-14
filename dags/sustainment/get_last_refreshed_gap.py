@@ -10,6 +10,11 @@ import os
 from utils import airflow_utils
 from utils import ckan_utils
 
+from utils_operators.slack_operators import (
+    GenericSlackOperator,
+    task_failure_slack_alert,
+)
+
 job_settings = {
     "description": "Gets datasets behind expected refresh date",
     "schedule": "30 04 * * 3",
@@ -32,19 +37,21 @@ TIME_MAP = {
     "annually": 365,
 }
 
+def parse_datetime(input):
+    for format in [
+        "%Y-%m-%dT%H:%M:%S.%f",
+        "%Y-%m-%d %H:%M:%S.%f",
+        "%Y-%m-%dT%H:%M:%S",
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%d"
+    ]:
+        try:
+            return datetime.strptime(input, format)
 
-def send_success_msg(**kwargs):
-    msg = kwargs.pop("ti").xcom_pull(task_ids="build_message")
-    airflow_utils.message_slack(name=job_name, **msg)
+        except ValueError:
+            pass
 
-
-def send_failure_msg(self):
-    airflow_utils.message_slack(
-        name=job_name, message_type="error", msg="Job not finished",
-    )
-
-
-def get_packages_behind_refresh(**kwargs):
+def get_packages_behind(**kwargs):
     packages = kwargs.pop("ti").xcom_pull(task_ids="get_packages")
     run_time = datetime.utcnow()
 
@@ -54,11 +61,13 @@ def get_packages_behind_refresh(**kwargs):
     for p in packages:
         refresh_rate = p.pop("refresh_rate").lower()
 
-        if refresh_rate not in TIME_MAP.keys() or p["is_retired"]:
+        if (refresh_rate not in TIME_MAP.keys() or 
+                p.get("is_retired", True) in ["true", "True", True]):
             continue
 
         last = p.pop("last_refreshed")
-        last = datetime.strptime(last, "%Y-%m-%dT%H:%M:%S.%f")
+        last = parse_datetime(last)
+        logging.info(last)
 
         days_behind = (run_time - last).days
         next_refreshed = last + timedelta(days=TIME_MAP[refresh_rate])
@@ -73,10 +82,16 @@ def get_packages_behind_refresh(**kwargs):
                 "next": next_refreshed.strftime("%Y-%m-%d"),
                 "days": days_behind,
             }
+            logging.info(row)
             packages_behind.append(row)
             logging.info("{name}: Behind {days} days. {email}".format(**row))
 
-    return packages_behind
+    # sort list of dicts by days behind
+    sortedlist = sorted(packages_behind, key=lambda d: d["days"], reverse=True)
+
+    output = sortedlist[:5]
+
+    return output
 
 
 def build_notification_message(**kwargs):
@@ -92,12 +107,14 @@ def build_notification_message(**kwargs):
 
     return {
         "message_type": "success",
-        "msg": "\n".join(lines),
+        "msg": "\n" + "\n".join(lines),
     }
 
 
 default_args = airflow_utils.get_default_args(
-    {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"]}
+    {
+        "on_failure_callback": task_failure_slack_alert, 
+        "start_date": job_settings["start_date"]}
 )
 
 with DAG(
@@ -118,7 +135,7 @@ with DAG(
     get_packages_behind = PythonOperator(
         task_id="get_packages_behind",
         provide_context=True,
-        python_callable=get_packages_behind_refresh,
+        python_callable=get_packages_behind,
     )
 
     build_message = PythonOperator(
@@ -127,10 +144,12 @@ with DAG(
         python_callable=build_notification_message,
     )
 
-    send_notification = PythonOperator(
+    send_notification = GenericSlackOperator(
         task_id="send_notification",
-        provide_context=True,
-        python_callable=send_success_msg,
+        message_header="Top 5 Stalest Datasets",
+        message_content_task_id="build_message",
+        message_content_task_key="msg",
+        message_body="",
     )
 
     packages >> get_packages_behind >> build_message >> send_notification
