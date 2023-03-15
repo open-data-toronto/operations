@@ -101,6 +101,7 @@ def prepare_and_normalize_scores(**kwargs):
     df["score_norm"] = MinMaxScaler().fit_transform(df[["score"]])
 
     df = df.groupby("package").mean()
+    logging.info(f"dataframe: {df[['accessibility','score','score_norm']]}")
 
     labels = list(BINS.keys())
 
@@ -179,7 +180,20 @@ def score_catalogue(**kwargs):
             )
 
         return np.mean(list(metrics.values()))
-
+    
+    def score_filestore_metadata(package):
+        metrics = {
+            "desc_dataset": 0,
+        }
+        for field in METADATA_FIELDS:
+            if (
+                field in package
+                and package[field]
+                and not (field == "owner_email" and "opendata" in package[field])
+            ):
+                metrics["desc_dataset"] += 1 / len(METADATA_FIELDS)
+        return np.mean(list(metrics.values()))
+        
     def score_metadata(package, columns):
         """
         How easy is it to understand the context of the data?
@@ -243,35 +257,52 @@ def score_catalogue(**kwargs):
         """
         return 1 - (np.sum(len(data) - data.count()) / np.prod(data.shape))
 
-    def score_accessibility(resource):
+    def score_accessibility(p, resource):
         """
         Is data available via APIs?
         """
-        return 1 if "extract_job" in resource and resource["extract_job"] else 0.5
+        metrics = {}
+        metrics["extract_job"] = 1 if "extract_job" in resource and resource["extract_job"] else 0.5
+        metrics["tags"] = 1 if "tags" in p and (p["num_tags"] > 0) else 0.5
+        
+        return np.mean(list(metrics.values()))
 
     data = []
     for p in packages:
+        logging.info(f"Starting Process Package: {p['name']}")
         if p["name"].lower() == "tags":
             continue
         for r in p["resources"]:
             if "datastore_active" not in r or str(r["datastore_active"]).lower() == 'false':
-                continue
-
-            content, fields = read_datastore(ckan, r["id"])
-
-            records = {
+                
+                # filestore score
+                records = {
                 "package": p["name"],
                 "resource": r["name"],
-                "usability": score_usability(fields, content),
-                "metadata": score_metadata(p, fields),
+                "usability": 0,
+                "metadata": score_filestore_metadata(p),
                 "freshness": score_freshness(p),
-                "completeness": score_completeness(content),
-                "accessibility": score_accessibility(r),
-            }
+                "completeness": 0,
+                "accessibility": score_accessibility(p,r),
+                }
+                logging.info(f"-------Filestore: Package Name {p['name']}")
+                    
+            else:
 
+                content, fields = read_datastore(ckan, r["id"])
+
+                records = {
+                    "package": p["name"],
+                    "resource": r["name"],
+                    "usability": score_usability(fields, content),
+                    "metadata": score_metadata(p, fields),
+                    "freshness": score_freshness(p),
+                    "completeness": score_completeness(content),
+                    "accessibility": score_accessibility(p, r),
+                }
+                logging.info(f"{p['name']}: {r['name']} - {len(content)} records")
+            logging.info(records)
             data.append(records)
-
-            logging.info(f"{p['name']}: {r['name']} - {len(content)} records")
 
     pd.DataFrame(data).to_parquet(filepath, engine="fastparquet", compression=None)
 

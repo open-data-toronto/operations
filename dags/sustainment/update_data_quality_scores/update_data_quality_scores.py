@@ -27,7 +27,7 @@ CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 
-METADATA_FIELDS = ["collection_method", "limitations", "topics", "owner_email"]
+METADATA_FIELDS = ["collection_method", "limitations", "topics", "owner_email", "civic_issues", "information_url"]
 
 TIME_MAP = {
     "daily": 1,
@@ -120,6 +120,8 @@ def add_model_to_resource(**kwargs):
     ti = kwargs.pop("ti")
     model_resource = ti.xcom_pull(task_ids="create_resource_for_model")
     weights = ti.xcom_pull(task_ids="calculate_model_weights")
+    for i, (dim, wgt) in enumerate(zip(DIMENSIONS, weights)):
+        logging.info(f"num {i}, dim {dim}, wgt {wgt}")
 
     model_resource["models"][MODEL_VERSION] = {
         "aggregation_methods": {
@@ -183,6 +185,8 @@ def insert_scores(**kwargs):
 
     df = pd.read_parquet(final_scores_path)
     logging.info(f"Inserting to datastore_resource: {RESOURCE_SCORES}")
+    records = df.to_dict(orient="records")
+    logging.info(records[:5])
     CKAN.action.datastore_upsert(
         method="insert",
         resource_id=datastore_resource["id"],
@@ -196,7 +200,13 @@ def insert_scores(**kwargs):
 
 
 default_args = airflow_utils.get_default_args(
-    {"on_failure_callback": send_failure_msg, "start_date": job_settings["start_date"], "pool": "big_job_pool"}
+    {
+        "on_failure_callback": send_failure_msg, 
+        "start_date": job_settings["start_date"], 
+        "pool": "big_job_pool",
+        "retries": 1,
+        "retry_delay": 3,
+    }
 )
 
 
