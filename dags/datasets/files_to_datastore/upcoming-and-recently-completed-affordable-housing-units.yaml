@@ -36,20 +36,12 @@ upcoming-and-recently-completed-affordable-housing-units:
   - name: upcoming
     vocabulary_id: null
   information_url: null
-  excerpt: This dataset contains upcoming and recently completed affordable rental
-    homes that are in development in the City of Toronto and that have received an
-    initial approval from City Council either for financial incentives through City
-    housing programs (e.g., Open Door, Housing Now) or through a redevelopment application,
-    and that are not yet occupied.
+  excerpt: This section contains data on upcoming affordable rental homes that are in development and have received an approval from City Council either as initial approval for financial incentives through a City housing program
   limitations: null
-  notes: This dataset corresponds with a map and contains upcoming and recently completed
-    affordable rental homes that are in development in the City of Toronto and that
-    have received an initial approval from City Council either for financial incentives
-    through City housing programs (e.g., Open Door, Housing Now) or through a redevelopment
-    application, and that are not yet occupied. The dataset highlights affordable
-    rental homes that are still at a pre-construction stage of the development process,
-    homes that are currently under construction and homes that have been recently
-    completed.
+  notes: |
+    This section contains data on upcoming affordable rental homes that are in development and have received an approval from City Council either as initial approval for financial incentives through a City housing program (for example, Open Door, Housing Now, etc.) or as part of a development application (for example, through the former Section 37 density bonusing regulation, Community Benefits Charge, etc.), since January 1, 2017. The data highlights affordable rental homes that are still in the pre-construction stage of the development process, homes that are currently under construction, and homes that have been recently completed.
+    These affordable rental homes meet the City’s current definition of affordable rental housing, with rent, including utilities, at or below 100 per cent of Average Market Rent (AMR).
+
   resources: 
     Social and Affordable Housing:
       format: csv

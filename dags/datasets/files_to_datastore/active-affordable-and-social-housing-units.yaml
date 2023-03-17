@@ -39,7 +39,7 @@ active-affordable-and-social-housing-units:
   resources: 
     Social and Affordable Housing:
       format: csv
-      url: http://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv.csv
+      url: http://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv
       attributes:
         - id: Quarter
           type: "text"
