@@ -1,0 +1,139 @@
+demolition-and-replacement-of-rental-housing-units:
+  jira_issue_id: DTSD-1479
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/156847
+  schedule: '30 2 1 * *'
+  dag_owner_name: Mackenzie.Nichols4
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Demolition and Replacement of Rental Housing Units
+  date_published: '2023-03-17 13:37:15.520956'
+  dataset_category: Table
+  refresh_rate: Quarterly
+  owner_division: City Planning
+  owner_section: Strategic Initiatives, Policy & Analysis
+  owner_unit: Policy
+  owner_email: housingplan@toronto.ca
+  civic_issues: Affordable Housing
+  topics:
+  - Development
+  tags:
+  - name: Affordable
+    vocabulary_id: null
+  - name: Housing
+    vocabulary_id: null
+  - name: demolition
+    vocabulary_id: null
+  - name: planning
+    vocabulary_id: null
+  - name: rental
+    vocabulary_id: null
+  - name: replacement
+    vocabulary_id: null
+  - name: severance
+    vocabulary_id: null
+  - name: units
+    vocabulary_id: null
+  information_url: null
+  excerpt: 'This dataset contains information pertaining to projects that have been
+    approved since January 1, 2018 for the demolition and replacement
+    of six or more rental units, including affordable, mid-range and high-end units. '
+  limitations: null
+  notes: This dataset contains information pertaining to projects that have been approved
+    since January 1, 2018 for the demolition and replacement
+    of six or more rental units, including affordable, mid-range and high-end units.
+
+    1. List only encompasses non-delegated RH applications proposing the demolition or conversion of 6 or more existing rental units and were approved by Toronto City Council after January 1, 2018
+
+    2. Approval dates for RH applications with 6 or more rental units are the dates on which applications were approved and adopted by City Council.
+
+    3. Affordable Rent is defined as "Housing where the total monthly shelter costs are at or below one times Average Market Rent by unit type, as reported by CMHC"; Mid-Range Rent is "Housing where the total monthly shelter costs exceed Affordable Rent but fall below one and one-half times Average Market Rent by unit type, as reported by CMHC"; and High-End Rent is "Housing where the total monthly shelter costs exceed Mid-Range Rents" 
+
+
+  resources: 
+    Rental Demolition and Replacement:
+      format: csv
+      url: http://opendata.toronto.ca/city.planning/demolition-and-replacement-of-rental-housing-units/Rental Demolition and Replacement.csv
+      attributes:
+        - id: IBMS Address
+          type: "text"
+          info:
+            notes: "where the application encompasses a site with multiple addresses, this is the main address under which all accompanying addresses are organized in the City's Integrated Business Management System (IMBS)."
+        - id: Address of Existing Rental Building
+          type: "text"
+          info:
+            notes: "the address of the existing rental property to be demolished/converted. This excludes buildings with owner-occupied units and commercial homes. "
+        - id: RH File Number
+          type: "text"
+          info:
+            notes: "a unique number assigned to a Rental Housing Demolition and Conversion application to track it through the planning approvals process."
+        - id: (Post 2018) Ward
+          type: int
+          info:
+            notes: "Current municipal ward where the project is located. "
+        - id: City Council Approval Date
+          type: date
+          format: "%d-%b-%y"
+          info:
+            notes: "the date City Council approved the Rental Housing Demolition and Conversion application. "
+        - id: Link to Staff Report
+          type: "text"
+          info:
+            notes: "a hyper-link that directs you to the Council-adopted recommendations on the Rental Housing Demolition and Conversion application and associated City Planning staff report. "
+        - id: Type
+          type: "text"
+          info:
+            notes: |
+              for sites containing 6 or more existing rental dwelling units, indicates if the application is for demolition or conversion (condominium conversion or severance), and if the application affects social housing units. 
+              
+              * Demolition:  The removal of all or part of a building, including interior renovations or alterations, that results in a change to the number of dwelling units or dwelling units by bedroom type. 
+              
+              * Conversion: the severance of land containing 6 or more rental units  where the resulting parcels contain fewer than 6 rental units, conversion of rental housing to a non-residential use, or conversion of rental housing to a non-rental residential use (e.g. condominium ownership) 
+
+        - id: Date of Issuance
+          type: text
+          info:
+            notes: "the date on which one of the following occurs, as applicable: Issuance of First Demolition Permit (for demolition), Condominium Registration Date (for conversion to condominium), or Certificate of Official Date (for severance).  "
+        - id: Demolition/Building Alterations Folder No
+          type: "text"
+          info:
+            notes: "a unique number assigned to a Building Permit application encompassing the demolition or conversion associated with the Rental Housing Demolition and Conversion application. "
+        - source_name: Total Units
+          target_name: Total Rental Homes for Demolition
+          type: "text"
+          info:
+            notes: "the total number of demolished housing. "
+        - source_name: Affordable Rent
+          target_name: Affordable Rental Homes for Demolition
+          type: "text"
+          info:
+            notes: "the number of demolished housing where the total monthly shelter costs are at or below one times Average Market Rent by unit type, as reported by CMHC "
+        - source_name: Mid-Range Rent
+          target_name: Mid-Range Rental Homes for Demolition
+          type: "text"
+          info:
+            notes: "the number of demolished housing where the total monthly shelter costs exceed Affordable Rent but fall below one and one-half times Average Market Rent by unit type, as reported by CMHC "
+        - source_name: High-End Rent
+          target_name: High-End Rental Homes for Demolition
+          type: "text"
+          info:
+            notes: "the number of demolished housing where the total monthly shelter costs exceed Mid-Range Rents "
+        - source_name: Total2 Units
+          target_name: Total Rental Homes Replaced
+          type: "text"
+          info:
+            notes: "the total number of replaced housing. "
+        - source_name: Affordable2 Rent
+          target_name: Affordable Rental Homes Replaced
+          type: "text"
+          info:
+            notes: "the number of replaced housing where the total monthly shelter costs are at or below one times Average Market Rent by unit type, as reported by CMHC "
+        - source_name: Mid-Range2 Rent
+          target_name: Mid-Range Rental Homes Replaced
+          type: "text"
+          info:
+            notes: "the number of replaced housing where the total monthly shelter costs exceed Affordable Rent but fall below one and one-half times Average Market Rent by unit type, as reported by CMHC "
+        - source_name: High-End2 Rent
+          target_name: High-End Rental Homes Replaced
+          type: "text"
+          info:
+            notes: "the number of replaced housing where the total monthly shelter costs exceed Mid-Range Rents"
+        
