@@ -6,7 +6,7 @@ demolition-and-replacement-of-rental-housing-units:
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Demolition and Replacement of Rental Housing Units
   date_published: '2023-03-17 13:37:15.520956'
-  dataset_category: null
+  dataset_category: Table
   refresh_rate: Quarterly
   owner_division: City Planning
   owner_section: Strategic Initiatives, Policy & Analysis
@@ -57,7 +57,7 @@ demolition-and-replacement-of-rental-housing-units:
           type: "text"
           info:
             notes: "where the application encompasses a site with multiple addresses, this is the main address under which all accompanying addresses are organized in the City's Integrated Business Management System (IMBS)."
-        - id: Address(es) of Existing Rental Buildings to be Demolished/Converted (excludes buildings w/ owner-occupied units/commercial, etc. if they do not include rental housing)
+        - id: Address of Existing Rental Building
           type: "text"
           info:
             notes: "the address of the existing rental property to be demolished/converted. This excludes buildings with owner-occupied units and commercial homes. "
@@ -71,7 +71,7 @@ demolition-and-replacement-of-rental-housing-units:
             notes: "Current municipal ward where the project is located. "
         - id: City Council Approval Date
           type: date
-          format: "%d-%m-%Y"
+          format: "%d-%b-%y"
           info:
             notes: "the date City Council approved the Rental Housing Demolition and Conversion application. "
         - id: Link to Staff Report
@@ -88,45 +88,52 @@ demolition-and-replacement-of-rental-housing-units:
               
               * Conversion: the severance of land containing 6 or more rental units  where the resulting parcels contain fewer than 6 rental units, conversion of rental housing to a non-residential use, or conversion of rental housing to a non-rental residential use (e.g. condominium ownership) 
 
-        - id: Date of Issuance of First Demolition Permit / Condominium Registration Date / Certificate of Official Date
-          type: date
-          format: "%d-%m-%Y"
+        - id: Date of Issuance
+          type: text
           info:
             notes: "the date on which one of the following occurs, as applicable: Issuance of First Demolition Permit (for demolition), Condominium Registration Date (for conversion to condominium), or Certificate of Official Date (for severance).  "
         - id: Demolition/Building Alterations Folder No
           type: "text"
           info:
             notes: "a unique number assigned to a Building Permit application encompassing the demolition or conversion associated with the Rental Housing Demolition and Conversion application. "
-        - id: Total Units
+        - source_name: Total Units
+          target_name: Total Rental Homes for Demolition
           type: "text"
           info:
-            notes: ""
-        - id: Affordable Rent
+            notes: "the total number of demolished housing. "
+        - source_name: Affordable Rent
+          target_name: Affordable Rental Homes for Demolition
           type: "text"
           info:
-            notes: ""
-        - id: Mid-Range Rent
+            notes: "the number of demolished housing where the total monthly shelter costs are at or below one times Average Market Rent by unit type, as reported by CMHC "
+        - source_name: Mid-Range Rent
+          target_name: Mid-Range Rental Homes for Demolition
           type: "text"
           info:
-            notes: ""
-        - id: High-End Rent
+            notes: "the number of demolished housing where the total monthly shelter costs exceed Affordable Rent but fall below one and one-half times Average Market Rent by unit type, as reported by CMHC "
+        - source_name: High-End Rent
+          target_name: High-End Rental Homes for Demolition
           type: "text"
           info:
-            notes: ""
-        - id: Total2 Units
+            notes: "the number of demolished housing where the total monthly shelter costs exceed Mid-Range Rents "
+        - source_name: Total2 Units
+          target_name: Total Rental Homes Replaced
           type: "text"
           info:
-            notes: ""
-        - id: Affordable2 Rent
+            notes: "the total number of replaced housing. "
+        - source_name: Affordable2 Rent
+          target_name: Affordable Rental Homes Replaced
           type: "text"
           info:
-            notes: ""
-        - id: Mid-Range2 Rent
+            notes: "the number of replaced housing where the total monthly shelter costs are at or below one times Average Market Rent by unit type, as reported by CMHC "
+        - source_name: Mid-Range2 Rent
+          target_name: Mid-Range Rental Homes Replaced
           type: "text"
           info:
-            notes: ""
-        - id: High-End2 Rent
+            notes: "the number of replaced housing where the total monthly shelter costs exceed Affordable Rent but fall below one and one-half times Average Market Rent by unit type, as reported by CMHC "
+        - source_name: High-End2 Rent
+          target_name: High-End Rental Homes Replaced
           type: "text"
           info:
-            notes: ""
+            notes: "the number of replaced housing where the total monthly shelter costs exceed Mid-Range Rents"
         

@@ -1,0 +1,141 @@
+centralized-waiting-list-activity-for-social-housing:
+  jira_issue_id: DTSD-1477
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/156841
+  schedule: '15 4 1 * *'
+  dag_owner_name: Mackenzie.Nichols4
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Centralized Waiting List Activity for Social Housing
+  date_published: '2023-03-17 13:37:16.873122'
+  dataset_category: Table
+  refresh_rate: Quarterly
+  owner_division: Housing Secretariat
+  owner_section: 'Housing Stability Services '
+  owner_unit: 'Access to Housing '
+  owner_email: housingplan@toronto.ca
+  civic_issues: Affordable Housing
+  topics:
+  - Development
+  tags:
+  - name: Housing
+    vocabulary_id: null
+  - name: Rent-geared-to-income
+    vocabulary_id: null
+  - name: Social
+    vocabulary_id: null
+  - name: Subsidized
+    vocabulary_id: null
+  - name: Waitlist
+    vocabulary_id: null
+  - name: access
+    vocabulary_id: null
+  - name: application
+    vocabulary_id: null
+  - name: apply
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/employment-social-support/housing-support/rent-geared-to-income-subsidy/
+  excerpt: This dataset contains the activity of the Centralized Waiting List (CWL),
+    which is made up of applicants  for Social, or Rent-Geared-To-Income (RGI), Housing
+    units in Toronto since 2019.
+  limitations: null
+  notes: 'This dataset contains the activity of the Centralized Waiting List (CWL)
+    since 2019. The CWL is made up of applicants for Social, or Rent-Geared-To-Income
+    (RGI), Housing units in Toronto. '
+  resources: 
+    Centralized Waitlist for Social Housing:
+      format: csv
+      url: http://opendata.toronto.ca/housing.secretariat/Waitlist Data.csv
+      attributes:
+        - source_name: "Category"
+          target_name: "Quarter/Year"
+          type: text
+          info:
+            notes: "The quarter and/or year"
+        - id: "New/reactivated"
+          type: text
+          info:
+            notes: "the number of active applications from the Centralized Waiting List for RGI housing that are added to the waitlist for the quarter, whether they are brand new applicants, or are applicants that were previously inactive but have since reactivated their file."
+        - id: "Housed"
+          type: text
+          info:
+            notes: "these applicants have been housed from the Centralized Waiting List for RGI housing and will no longer be active in the next quarter."
+        - id: "Inactive/cancelled"
+          type: text
+          info:
+            notes: "these applications from the Centralized Waiting List for RGI housing are no longer active and will be removed in the next quarter."
+        - id: "Total active waiting list"
+          type: text
+          info:
+            notes: "For applications on the Centralized Waiting List for RGI housing that are active during the quarter or year"
+        - id: "Household no dependents"
+          type: text
+          info:
+            notes: "households without dependents on file (children under age 18, adults with physical or mental disabilities that prevent them from living independently or who are living with their parents/legal guardians and are full-time students)"
+        - id: "Household with dependents"
+          type: text
+          info:
+            notes: "households with  dependents on file (children under age 18, adults with physical or mental disabilities that prevent them from living independently or who are living with their parents/legal guardians and are full-time students)"
+        - id: "Seniors"
+          type: text
+          info:
+            notes: "Households where the main applicant is 65 years of age or older and would qualify for senior housing units when available on the waiting list."
+        - id: "Total"
+          type: text
+          info:
+            notes: "The total number of applicants"
+        - id: "Room"
+          type: text
+          info:
+            notes: "A single room"
+        - id: "Bachelor"
+          type: text
+          info:
+            notes: "A bachelor unit"
+        - id: "1 Bedroom"
+          type: text
+          info:
+            notes: "Unit with 1 bedroom"
+        - id: "2 Bedroom"
+          type: text
+          info:
+            notes: "Unit with 2 bedrooms"
+        - id: "3 Bedroom"
+          type: text
+          info:
+            notes: "Unit with 3 bedrooms"
+        - id: "4 Bedroom"
+          type: text
+          info:
+            notes: "Unit with 4 bedrooms"
+        - id: "5 Bedroom"
+          type: text
+          info:
+            notes: "Unit with 5+ bedrooms"
+        - id: "Special Priority"
+          type: text
+          info:
+            notes: "Survivors of family/domestic abuse and human trafficking"
+        - id: "Terminally ill"
+          type: text
+          info:
+            notes: "Terminally ill applicants who have less than two years to live"
+        - id: "Over housed"
+          type: text
+          info:
+            notes: "Tenants already living in subsidized units that are over housed, occupying a larger unit than required according to Local Occupancy Standards, and need to move into a smaller unit"
+        - id: "Homeless/Youth/Separated families"
+          type: text
+          info:
+            notes: "Applicants experiencing homelessness, or youth who are 16 or 17 years old at the time of applying for rent-geared-to-income housing"
+        - id: "General list"
+          type: text
+          info:
+            notes: "All other applicants"
+        - id: "Toronto Community Housing Corporation"
+          type: text
+          info:
+            notes: "households housed in TCHC/TSHC"
+        - id: "Co-op/PNP/ Rent Supplement"
+          type: text
+          info:
+            notes: "any social housing provider that is not a part of TCHC/TSHC."
+        
