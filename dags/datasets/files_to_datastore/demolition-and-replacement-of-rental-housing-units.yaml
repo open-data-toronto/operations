@@ -1,7 +1,7 @@
 demolition-and-replacement-of-rental-housing-units:
   jira_issue_id: DTSD-1479
   jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/156847
-  schedule: '@once'
+  schedule: '30 2 1 * *'
   dag_owner_name: Mackenzie.Nichols4
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Demolition and Replacement of Rental Housing Units
