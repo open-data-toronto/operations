@@ -1,7 +1,7 @@
 upcoming-and-recently-completed-affordable-housing-units:
   jira_issue_id: DTSD-1481
   jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/156849
-  schedule: '@once'
+  schedule: '45 4 1 * *'
   dag_owner_name: Mackenzie.Nichols4
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Affordable Housing Pipeline
@@ -114,28 +114,28 @@ upcoming-and-recently-completed-affordable-housing-units:
           type: "text"
           info:
             notes: "The year construction started on this project"
-        - id: Shoring-Excavation_Issued
-          type: "date"
-          format: "%m/%d/%Y"
-          info:
-            notes: "The date a shoring or excavation permit was issued"
-        - id: Shoring-Excavation_Num
-          type: "text"
-          info:
-            notes: "The shoring or excavation permit number"
-        - id: New_Building_Permit_Issued
-          type: "date"
-          format: "%m/%d/%Y"
-          info:
-            notes: "The date a new building permit was issued for this project"
+        #- id: Shoring-Excavation_Issued
+        #  type: "date"
+        #  format: "%m/%d/%Y"
+        #  info:
+        #    notes: "The date a shoring or excavation permit was issued"
+        #- id: Shoring-Excavation_Num
+        #  type: "text"
+        #  info:
+        #    notes: "The shoring or excavation permit number"
+        #- id: New_Building_Permit_Issued
+        #  type: "date"
+        #  format: "%m/%d/%Y"
+        #  info:
+        #    notes: "The date a new building permit was issued for this project"
         #- id: New_Building_Permit_Closed
         #  type: "text"
         #  info:
         #    notes: ""
-        - id: New_Building_Permit_App_Num
-          type: "text"
-          info:
-            notes: "The new building permit application number"
+        #- id: New_Building_Permit_App_Num
+        #  type: "text"
+        #  info:
+        #    notes: "The new building permit application number"
         - id: Actual_Construction_Completion
           type: "text"
           info:
@@ -149,18 +149,26 @@ upcoming-and-recently-completed-affordable-housing-units:
           type: "text"
           info:
             notes: "The occupancy permit number"
-        - id: Units_Built_Num
-          type: "int"
-          info:
-            notes: "The number of units completed"
-        - id: Length_of_Affordability_Years
+        #- id: Units_Built_Num
+        #  type: "int"
+        #  info:
+        #    notes: "The number of units completed"
+        #- id: Length_of_Affordability_Years
+        #  type: "text"
+        #  info:
+        #    notes: "The number of years this project will maintain its affordable units for"
+        #- id: Depth_of_Affordability_Pct
+        #  type: "text"
+        #  info:
+        #    notes: "The depth of affordability of the units, expressed as a percentage of Average Market Rent"
+        - id: AREA_LONG_CODE
           type: "text"
           info:
-            notes: "The number of years this project will maintain its affordable units for"
-        - id: Depth_of_Affordability_Pct
+            notes: "Neighbourhood code"
+        - id: AREA_NAME
           type: "text"
           info:
-            notes: "The depth of affordability of the units, expressed as a percentage of Average Market Rent"
+            notes: "Neighbourhood name"
         - id: geometry
           type: "text"
           info:
