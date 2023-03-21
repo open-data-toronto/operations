@@ -47,10 +47,10 @@ upcoming-and-recently-completed-affordable-housing-units:
       format: csv
       url: http://opendata.toronto.ca/housing.secretariat/COT_affordable_rental_housing.csv
       attributes:
-        - id: ID
-          type: "text"
-          info:
-            notes: "Unique ID for each project "
+        #- id: ID
+        #  type: "text"
+        #  info:
+        #    notes: "Unique ID for each project "
         - id: Address
           type: "text"
           info:
@@ -72,23 +72,23 @@ upcoming-and-recently-completed-affordable-housing-units:
           format: "%m/%d/%Y"
           info:
             notes: "The initial date when Council approved financial incentives to a project, and where the number of units is stated. If this date is not available, then the date when Council approved the number of units through another type of report (Housing Now, By-Law Zoning) is used"
-        - id: Intl_Aff_Rent_Units_App
-          type: "int"
-          info:
-            notes: "The initial number of affordable rental units approved"
-        - id: Rcnt_Units_App
-          type: "int"
-          info:
-            notes: "The most recent number of approved affordable rental units"
+        #- id: Intl_Aff_Rent_Units_App
+        #  type: "int"
+        #  info:
+        #    notes: "The initial number of affordable rental units approved"
+        #- id: Rcnt_Units_App
+        #  type: "int"
+        #  info:
+        #    notes: "The most recent number of approved affordable rental units"
         - id: First_Planning_Approval_date
           type: "date"
           format: "%m/%d/%Y"
           info:
             notes: "The date on which the Official Plan and/or Zoning By-law Amendment application was approved in principle by Toronto City Council or the Ontario Land Tribunal (OLT). For Minor Variance applications (MV), the date the application is approved in principle by the Committee of Adjustment or, if appealed, by the Toronto Local Appeal Body (TLAB) or OLT."
-        - id: Affordable_Units_Conf_first
-          type: "text"
-          info:
-            notes: "The number of affordable rental units approved through Planning approval"
+        #- id: Affordable_Units_Conf_first
+        #  type: "text"
+        #  info:
+        #    notes: "The number of affordable rental units approved through Planning approval"
         - id: IBMS_Folder_Num
           type: "text"
           info:
@@ -149,10 +149,10 @@ upcoming-and-recently-completed-affordable-housing-units:
           type: "text"
           info:
             notes: "The Occupancy Permit # for a project; used to determine construction completion"
-        #- id: Units_Built_Num
-        #  type: "int"
-        #  info:
-        #    notes: "The number of units completed"
+        - id: Units_Built_Num
+          type: "int"
+          info:
+            notes: "The number of units completed"
         #- id: Length_of_Affordability_Years
         #  type: "text"
         #  info:
