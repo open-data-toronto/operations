@@ -12,9 +12,18 @@ from geopandas import gpd
 from nltk.corpus import wordnet
 from shapely.geometry import shape
 from sklearn.preprocessing import MinMaxScaler
+from airflow.models import Variable
+import os
+import ckanapi
 
 nltk.download("wordnet")
 
+ACTIVE_ENV = Variable.get("active_env")
+CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
+CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
+
+DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
+SCORES_PATH = DIR_PATH / "update_data_quality_scores"
 
 def parse_datetime(input):
     for format in [
@@ -101,7 +110,6 @@ def prepare_and_normalize_scores(**kwargs):
     df["score_norm"] = MinMaxScaler().fit_transform(df[["score"]])
 
     df = df.groupby("package").mean()
-    logging.info(f"dataframe: {df[['accessibility','score','score_norm']]}")
 
     labels = list(BINS.keys())
 
@@ -121,9 +129,27 @@ def prepare_and_normalize_scores(**kwargs):
     filepath = tmp_dir / f"{filename}.parquet"
 
     df.to_parquet(filepath, engine="fastparquet", compression=None)
+    
+    score_file_path = SCORES_PATH / f"scores.csv"
+    df.to_csv(score_file_path)
 
     return str(filepath)
 
+def get_etl_inventory(package_name):
+    etl_intentory = CKAN.action.package_show(id=package_name)
+    rid = etl_intentory["resources"][0]["id"]
+   
+    has_more = True
+    records = []
+    while has_more:
+        result = CKAN.action.datastore_search(id=rid, limit=5000, offset=len(records))
+
+        records += result["records"]
+        has_more = len(records) < result["total"]
+
+    df = pd.DataFrame(records).drop("_id", axis=1)
+    
+    return df
 
 def score_catalogue(**kwargs):
     ti = kwargs.pop("ti")
@@ -257,25 +283,43 @@ def score_catalogue(**kwargs):
         """
         return 1 - (np.sum(len(data) - data.count()) / np.prod(data.shape))
 
-    def score_accessibility(p, resource):
+    def score_accessibility(p, resource, dataset_type):
         """
         Is data available via APIs?
         """
         metrics = {}
-        metrics["extract_job"] = 1 if "extract_job" in resource and resource["extract_job"] else 0.5
         metrics["tags"] = 1 if "tags" in p and (p["num_tags"] > 0) else 0.5
+        
+        if dataset_type == "filestore":
+            if resource["name"] in etl_intentory["resource_name"].values.tolist():
+                engine_info = etl_intentory.loc[etl_intentory['resource_name'] == resource["name"], 'engine'].iloc[0]  
+            else:
+                engine_info = None
+            logging.info(f"{resource['name']}, Engine Info: {engine_info}")
+
+            metrics["pipeline"] = 1 if engine_info else 0.5
+            
+        if dataset_type == "datastore":
+            metrics["pipeline"] = 1
         
         return np.mean(list(metrics.values()))
 
     data = []
+    etl_intentory = get_etl_inventory("od-etl-configs")
+    
     for p in packages:
-        logging.info(f"Starting Process Package: {p['name']}")
+        logging.info(f"---------Package: {p['name']}")
         if p["name"].lower() == "tags":
             continue
-        for r in p["resources"]:
-            if "datastore_active" not in r or str(r["datastore_active"]).lower() == 'false':
-                
-                # filestore score
+        # skip retired dataset for evaluation
+        if "is_retired" in p and (str(p.get("is_retired")).lower() == "true"):
+            logging.info(f"Dataset {p['name']} is retired.")
+            continue
+        
+        # filestore score
+        if p["dataset_category"] in ["Document", "Website"]:
+            
+            for r in p["resources"]:
                 records = {
                 "package": p["name"],
                 "resource": r["name"],
@@ -283,11 +327,15 @@ def score_catalogue(**kwargs):
                 "metadata": score_filestore_metadata(p),
                 "freshness": score_freshness(p),
                 "completeness": 0,
-                "accessibility": score_accessibility(p,r),
+                "accessibility": score_accessibility(p, r, "filestore"),
                 }
-                logging.info(f"-------Filestore: Package Name {p['name']}")
-                    
-            else:
+                logging.info(f"Filestore Score: Package Name {p['name']}")
+                data.append(records)
+                logging.info(records)
+        else:
+            for r in p["resources"]:
+                if "datastore_active" not in r or str(r["datastore_active"]).lower() == 'false':
+                    continue
 
                 content, fields = read_datastore(ckan, r["id"])
 
@@ -298,10 +346,12 @@ def score_catalogue(**kwargs):
                     "metadata": score_metadata(p, fields),
                     "freshness": score_freshness(p),
                     "completeness": score_completeness(content),
-                    "accessibility": score_accessibility(p, r),
+                    "accessibility": score_accessibility(p, r, "datastore"),
                 }
-                logging.info(f"{p['name']}: {r['name']} - {len(content)} records")
-            logging.info(records)
+                
+                logging.info(f"Datastore Score {p['name']}: {r['name']} - {len(content)} records")
+                logging.info(records)
+            
             data.append(records)
 
     pd.DataFrame(data).to_parquet(filepath, engine="fastparquet", compression=None)
