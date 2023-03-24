@@ -25,134 +25,7 @@ CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
 SCORES_PATH = DIR_PATH / "update_data_quality_scores"
 
-def parse_datetime(input):
-    for format in [
-        "%Y-%m-%dT%H:%M:%S.%f",
-        "%Y-%m-%d %H:%M:%S.%f",
-        "%Y-%m-%dT%H:%M:%S",
-        "%Y-%m-%d %H:%M:%S",
-        "%Y-%m-%d"
-    ]:
-        try:
-            delta = dt.strptime(input, format)
-            days = (dt.utcnow() - delta).days
-            return days
-        except ValueError:
-            pass
-
-def read_datastore(ckan, rid, rows=10000):
-    records = []
-
-    # is_geospatial = False
-
-    has_more = True
-    while has_more:
-        result = ckan.action.datastore_search(id=rid, limit=rows, offset=len(records))
-
-        records += result["records"]
-        has_more = len(records) < result["total"]
-
-    df = pd.DataFrame(records).drop("_id", axis=1)
-
-    if "geometry" in df.columns:
-        df["geometry"] = df["geometry"].apply(lambda x: shape(json.loads(x)) if x != "None" else None)
-        df = gpd.GeoDataFrame(df, crs="epsg:4326")
-
-    return df, [x for x in result["fields"] if x["id"] != "_id"]
-
-
-def calculate_model_weights(method="sr", **kwargs):
-    dims = kwargs.pop("dimensions")
-    N = len(dims)
-
-    if method == "sr":
-        denom = np.array(
-            [((1 / (i + 1)) + ((N + 1 - (i + 1)) / N)) for i, x in enumerate(dims)]
-        ).sum()
-        weights = [
-            ((1 / (i + 1)) + ((N + 1 - (i + 1)) / N)) / denom
-            for i, x in enumerate(dims)
-        ]
-    elif method == "rs":
-        denom = np.array([(N + 1 - (i + 1)) for i, x in enumerate(dims)]).sum()
-        weights = [(N + 1 - (i + 1)) / denom for i, x in enumerate(dims)]
-    elif method == "rr":
-        denom = np.array([1 / (i + 1) for i, x in enumerate(dims)]).sum()
-        weights = [(1 / (i + 1)) / denom for i, x in enumerate(dims)]
-    elif method == "re":
-        exp = 0.2
-        denom = np.array([(N + 1 - (i + 1)) ** exp for i, x in enumerate(dims)]).sum()
-        weights = [(N + 1 - (i + 1)) ** exp / denom for i, x in enumerate(dims)]
-    else:
-        raise Exception("Invalid weighting method provided")
-
-    return weights
-
-
-def prepare_and_normalize_scores(**kwargs):
-    ti = kwargs.pop("ti")
-    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
-    raw_scores_path = Path(ti.xcom_pull(task_ids="score_catalogue"))
-    weights = ti.xcom_pull(task_ids="calculate_model_weights")
-    logging.info(weights)
-    BINS = kwargs.pop("BINS")
-    MODEL_VERSION = kwargs.pop("MODEL_VERSION")
-    DIMENSIONS = kwargs.pop("DIMENSIONS")
-
-    df = pd.read_parquet(raw_scores_path).set_index(["package", "resource"], drop=True)
-
-    scores = pd.DataFrame([weights] * len(df.index))
-    scores.index = df.index
-    scores.columns = DIMENSIONS
-
-    scores = df.multiply(scores)
-
-    df["score"] = scores.sum(axis=1)
-    df["score_norm"] = MinMaxScaler().fit_transform(df[["score"]])
-
-    df = df.groupby("package").mean()
-
-    labels = list(BINS.keys())
-
-    bins = [-1]
-    bins.extend(BINS.values())
-
-    df["grade"] = pd.cut(df["score_norm"], bins=bins, labels=labels)
-    df["grade_norm"] = pd.cut(df["score_norm"], bins=bins, labels=labels)
-
-    df["recorded_at"] = dt.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-    df["version"] = MODEL_VERSION
-
-    df = df.reset_index()
-    df = df.round(2)
-
-    filename = "final_scores"
-    filepath = tmp_dir / f"{filename}.parquet"
-
-    df.to_parquet(filepath, engine="fastparquet", compression=None)
-    
-    score_file_path = SCORES_PATH / f"scores.csv"
-    df.to_csv(score_file_path)
-
-    return str(filepath)
-
-def get_etl_inventory(package_name):
-    etl_intentory = CKAN.action.package_show(id=package_name)
-    rid = etl_intentory["resources"][0]["id"]
-   
-    has_more = True
-    records = []
-    while has_more:
-        result = CKAN.action.datastore_search(id=rid, limit=5000, offset=len(records))
-
-        records += result["records"]
-        has_more = len(records) < result["total"]
-
-    df = pd.DataFrame(records).drop("_id", axis=1)
-    
-    return df
-
-def score_catalogue(**kwargs):
+def explanation_code_catalogue(**kwargs):
     ti = kwargs.pop("ti")
     packages = ti.xcom_pull(task_ids="get_all_packages") # can break package list into segments if needed
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
@@ -207,8 +80,8 @@ def score_catalogue(**kwargs):
             )
 
         return np.mean(list(metrics.values()))
-    
-    def score_metadata(package, columns = None):
+        
+     def score_metadata(package, columns = None):
         """
         How easy is it to understand the context of the data?
 
@@ -228,6 +101,7 @@ def score_catalogue(**kwargs):
             ):
                 metrics["desc_dataset"] += 1 / len(METADATA_FIELDS)
         
+        # For datastore only
         if columns:
             metrics["desc_columns"] = 0 # Does the metadata describe the data well?
         
@@ -240,6 +114,13 @@ def score_catalogue(**kwargs):
                     metrics["desc_columns"] += 1 / len(columns)
 
         return np.mean(list(metrics.values()))
+    
+    def metadata_explanation_code(package):
+        output = []
+        for field in METADATA_FIELDS:
+            if field not in package pr field is None:
+                output.append(field)
+        return ",".join(output)
 
     def score_freshness(package):
         """
@@ -314,7 +195,7 @@ def score_catalogue(**kwargs):
                 "package": p["name"],
                 "resource": r["name"],
                 "usability": 0,
-                "metadata": score_metadata(p),
+                "metadata": score_filestore_metadata(p),
                 "freshness": score_freshness(p),
                 "completeness": 0,
                 "accessibility": score_accessibility(p, r, "filestore"),

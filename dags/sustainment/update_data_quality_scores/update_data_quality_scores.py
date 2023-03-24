@@ -27,7 +27,7 @@ CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 
-METADATA_FIELDS = ["collection_method", "limitations", "topics", "owner_email", "civic_issues", "information_url"]
+METADATA_FIELDS = ["notes", "limitations", "topics", "owner_email", "civic_issues", "information_url"]
 
 TIME_MAP = {
     "daily": 1,
