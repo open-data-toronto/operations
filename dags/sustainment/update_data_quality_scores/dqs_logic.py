@@ -152,19 +152,7 @@ def get_etl_inventory(package_name):
     
     return df
 
-def score_catalogue(**kwargs):
-    ti = kwargs.pop("ti")
-    packages = ti.xcom_pull(task_ids="get_all_packages") # can break package list into segments if needed
-    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
-    METADATA_FIELDS = kwargs.pop("METADATA_FIELDS")
-    TIME_MAP = kwargs.pop("TIME_MAP")
-
-    ckan = kwargs.pop("ckan")
-
-    filename = "raw_scores"
-    filepath = tmp_dir / f"{filename}.parquet"
-
-    def score_usability(columns, data):
+def score_usability(columns, data):
         """
         How easy is it to use the data given how it is organized/structured?
 
@@ -208,92 +196,105 @@ def score_catalogue(**kwargs):
 
         return np.mean(list(metrics.values()))
     
-    def score_metadata(package, columns = None):
-        """
-        How easy is it to understand the context of the data?
+def score_metadata(package, metadata_fields, columns = None):
+    """
+    How easy is it to understand the context of the data?
 
-        TODOs:
-            * Measure the quality of the metadata as well
-        """
+    TODOs:
+        * Measure the quality of the metadata as well
+    """
 
-        metrics = {
-            "desc_dataset": 0,  # Does the metadata describe the dataset well?
-        }
+    metrics = {
+        "desc_dataset": 0,  # Does the metadata describe the dataset well?
+    }
 
-        for field in METADATA_FIELDS:
-            if (
-                field in package
-                and package[field]
-                and not (field == "owner_email" and "opendata" in package[field])
-            ):
-                metrics["desc_dataset"] += 1 / len(METADATA_FIELDS)
-        
-        if columns:
-            metrics["desc_columns"] = 0 # Does the metadata describe the data well?
-        
-            for f in columns:
-                if (
-                    "info" in f
-                    and (f["info"]["notes"] is not None)
-                    and f["info"]["notes"].strip() != f["id"]
-                ):
-                    metrics["desc_columns"] += 1 / len(columns)
-
-        return np.mean(list(metrics.values()))
-
-    def score_freshness(package):
-        """
-        How up to date is the data?
-        """
-
-        metrics = {}
-
-        rr = package["refresh_rate"].lower()
-
-        if rr == "real-time":
-            return 1
-        elif (
-            rr in TIME_MAP and "last_refreshed" in package and package["last_refreshed"]
-        ):            
-            days = parse_datetime( package["last_refreshed"] )
+    for field in metadata_fields:
+        if (
+            field in package
+            and package[field]
+            and not (field == "owner_email" and "opendata" in package[field])
+        ):
+            metrics["desc_dataset"] += 1 / len(metadata_fields)
     
-            # Greater than 2 periods have a score of 0
-            metrics["elapse_periods"] = max(0, 1 - math.floor(days / TIME_MAP[rr]) / 2)
+    if columns:
+        metrics["desc_columns"] = 0 # Does the metadata describe the data well?
+    
+        for f in columns:
+            if (
+                "info" in f
+                and (f["info"]["notes"] is not None)
+                and f["info"]["notes"].strip() != f["id"]
+            ):
+                metrics["desc_columns"] += 1 / len(columns)
 
-            # Decrease the score starting from ~0.5 years to ~3 years
-            metrics["elapse_days"] = 1 - (1 / (1 + np.exp(4 * (2.25 - days / 365))))
+    return np.mean(list(metrics.values()))
 
-            return np.mean(list(metrics.values()))
+def score_freshness(package, time_map):
+    """
+    How up to date is the data?
+    """
 
-        return 0
+    metrics = {}
 
-    def score_completeness(data):
-        """
-        How much of the data is missing?
-        """
-        return 1 - (np.sum(len(data) - data.count()) / np.prod(data.shape))
+    rr = package["refresh_rate"].lower()
 
-    def score_accessibility(p, resource, dataset_type):
-        """
-        Is data available via APIs?
-        """
-        metrics = {}
-        metrics["tags"] = 1 if "tags" in p and (p["num_tags"] > 0) else 0.5
-        
-        if dataset_type == "filestore":
-            if resource["name"] in etl_intentory["resource_name"].values.tolist():
-                engine_info = etl_intentory.loc[etl_intentory['resource_name'] == resource["name"], 'engine'].iloc[0]  
-            else:
-                engine_info = None
-            logging.info(f"{resource['name']}, Engine Info: {engine_info}")
+    if rr == "real-time":
+        return 1
+    elif (
+        rr in time_map and "last_refreshed" in package and package["last_refreshed"]
+    ):            
+        days = parse_datetime( package["last_refreshed"] )
 
-            metrics["pipeline"] = 1 if engine_info else 0.5
-            
-        if dataset_type == "datastore":
-            metrics["pipeline"] = 1
-        
+        # Greater than 2 periods have a score of 0
+        metrics["elapse_periods"] = max(0, 1 - math.floor(days / time_map[rr]) / 2)
+
+        # Decrease the score starting from ~0.5 years to ~3 years
+        metrics["elapse_days"] = 1 - (1 / (1 + np.exp(4 * (2.25 - days / 365))))
+
         return np.mean(list(metrics.values()))
 
+    return 0
+
+def score_completeness(data):
+    """
+    How much of the data is missing?
+    """
+    return 1 - (np.sum(len(data) - data.count()) / np.prod(data.shape))
+
+def score_accessibility(p, resource, dataset_type, etl_intentory):
+    """
+    Is data available via APIs? Have tags?
+    """
+    metrics = {}
+    metrics["tags"] = 1 if "tags" in p and (p["num_tags"] > 0) else 0.5
+    
+    if dataset_type == "filestore":
+        if resource["name"] in etl_intentory["resource_name"].values.tolist():
+            engine_info = etl_intentory.loc[etl_intentory['resource_name'] == resource["name"], 'engine'].iloc[0]  
+        else:
+            engine_info = None
+        logging.info(f"{resource['name']}, Engine Info: {engine_info}")
+
+        metrics["pipeline"] = 1 if engine_info else 0.5
+        
+    if dataset_type == "datastore":
+        metrics["pipeline"] = 1
+    
+    return np.mean(list(metrics.values()))
+
+
+def score_catalogue(**kwargs):
+    ti = kwargs.pop("ti")
+    packages = ti.xcom_pull(task_ids="get_all_packages") # can break package list into segments if needed
+    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+    METADATA_FIELDS = kwargs.pop("METADATA_FIELDS")
+    TIME_MAP = kwargs.pop("TIME_MAP")
+
+    ckan = kwargs.pop("ckan")
+
+    filename = "raw_scores"
+    filepath = tmp_dir / f"{filename}.parquet"
+    
     data = []
     etl_intentory = get_etl_inventory("od-etl-configs")
     
@@ -314,14 +315,16 @@ def score_catalogue(**kwargs):
                 "package": p["name"],
                 "resource": r["name"],
                 "usability": 0,
-                "metadata": score_metadata(p),
-                "freshness": score_freshness(p),
+                "metadata": score_metadata(p, METADATA_FIELDS),
+                "freshness": score_freshness(p, TIME_MAP),
                 "completeness": 0,
-                "accessibility": score_accessibility(p, r, "filestore"),
+                "accessibility": score_accessibility(p, r, "filestore", etl_intentory),
                 }
                 logging.info(f"Filestore Score: Package Name {p['name']}")
                 data.append(records)
                 logging.info(records)
+        
+        #filestore score
         else:
             for r in p["resources"]:
                 if "datastore_active" not in r or str(r["datastore_active"]).lower() == 'false':
@@ -333,10 +336,10 @@ def score_catalogue(**kwargs):
                     "package": p["name"],
                     "resource": r["name"],
                     "usability": score_usability(fields, content),
-                    "metadata": score_metadata(p, fields),
-                    "freshness": score_freshness(p),
+                    "metadata": score_metadata(p, METADATA_FIELDS, fields),
+                    "freshness": score_freshness(p, TIME_MAP),
                     "completeness": score_completeness(content),
-                    "accessibility": score_accessibility(p, r, "datastore"),
+                    "accessibility": score_accessibility(p, r, "datastore", etl_intentory),
                 }
                 
                 logging.info(f"Datastore Score {p['name']}: {r['name']} - {len(content)} records")

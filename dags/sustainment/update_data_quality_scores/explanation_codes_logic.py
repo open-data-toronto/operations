@@ -13,6 +13,7 @@ from nltk.corpus import wordnet
 from shapely.geometry import shape
 from sklearn.preprocessing import MinMaxScaler
 from airflow.models import Variable
+from sustainment.update_data_quality_scores import dqs_logic 
 import os
 import ckanapi
 
@@ -37,7 +38,7 @@ def explanation_code_catalogue(**kwargs):
     filename = "raw_scores"
     filepath = tmp_dir / f"{filename}.parquet"
 
-    def score_usability(columns, data):
+    def usability_explanation_code(columns, data):
         """
         How easy is it to use the data given how it is organized/structured?
 
@@ -71,112 +72,69 @@ def explanation_code_catalogue(**kwargs):
 
             if not f["id"] == "geometry" and data[f["id"]].nunique() <= 1:
                 metrics["col_constant"] -= 1 / len(columns)
-
-        if isinstance(data, gpd.GeoDataFrame):
-            counts = data["geometry"].is_valid.value_counts()
-
-            metrics["geo_validity"] = (
-                1 - (counts[False] / (len(data) * 0.05)) if False in counts else 1
-            )
-
-        return np.mean(list(metrics.values()))
+            
+        col_names_message = "Colnames relative hard to understand." if metrics["col_names"] <= 0.25 else ""
+        col_constant_messgae = "So many constant columns." if metrics["col_constant"] <= 0.6 else ""
         
-     def score_metadata(package, columns = None):
-        """
-        How easy is it to understand the context of the data?
-
-        TODOs:
-            * Measure the quality of the metadata as well
-        """
-
-        metrics = {
-            "desc_dataset": 0,  # Does the metadata describe the dataset well?
-        }
-
-        for field in METADATA_FIELDS:
-            if (
-                field in package
-                and package[field]
-                and not (field == "owner_email" and "opendata" in package[field])
-            ):
-                metrics["desc_dataset"] += 1 / len(METADATA_FIELDS)
+        usability_message = col_names_message + col_constant_messgae
         
-        # For datastore only
-        if columns:
-            metrics["desc_columns"] = 0 # Does the metadata describe the data well?
-        
-            for f in columns:
-                if (
-                    "info" in f
-                    and (f["info"]["notes"] is not None)
-                    and f["info"]["notes"].strip() != f["id"]
-                ):
-                    metrics["desc_columns"] += 1 / len(columns)
-
-        return np.mean(list(metrics.values()))
+        return usability_message
     
     def metadata_explanation_code(package):
         output = []
         for field in METADATA_FIELDS:
             if field not in package pr field is None:
                 output.append(field)
-        return ",".join(output)
-
-    def score_freshness(package):
-        """
-        How up to date is the data?
-        """
-
-        metrics = {}
+        
+        metadata_message = ",".join(output)
+        
+        return metadata_message
+    
+    def freshness_explanation_code(package):
 
         rr = package["refresh_rate"].lower()
 
-        if rr == "real-time":
-            return 1
-        elif (
-            rr in TIME_MAP and "last_refreshed" in package and package["last_refreshed"]
-        ):            
+        if rr in TIME_MAP and "last_refreshed" in package and package["last_refreshed"]:            
             days = parse_datetime( package["last_refreshed"] )
     
-            # Greater than 2 periods have a score of 0
-            metrics["elapse_periods"] = max(0, 1 - math.floor(days / TIME_MAP[rr]) / 2)
+            # calculate elapse periods
+            elapse_periods = (days - TIME_MAP[rr]) / TIME_MAP[rr]
+            elapse_period_message = f"{elapse_periods} refresh rate periods behind." if elapse_periods >= 3 else ""   
 
-            # Decrease the score starting from ~0.5 years to ~3 years
-            metrics["elapse_days"] = 1 - (1 / (1 + np.exp(4 * (2.25 - days / 365))))
+            # calculate elapse days
+            elapse_days_message = f" {days} days behind." if days > 365 else ""
+            
+            freshness_message = elapse_period_message + elapse_days_message
+            
+        return freshness_message
 
-            return np.mean(list(metrics.values()))
-
-        return 0
-
-    def score_completeness(data):
+    def completeness_explanation_code(data):
         """
         How much of the data is missing?
         """
-        return 1 - (np.sum(len(data) - data.count()) / np.prod(data.shape))
-
-    def score_accessibility(p, resource, dataset_type):
-        """
-        Is data available via APIs?
-        """
-        metrics = {}
-        metrics["tags"] = 1 if "tags" in p and (p["num_tags"] > 0) else 0.5
+        missing_rate = (1 - (np.sum(len(data) - data.count()) / np.prod(data.shape))) * 100
+        completeness_message = f"{missing_rate} of data is missing" if missing_rate >= 50 else ""
         
+        return completeness_message
+    
+    def accessibility_explanation_code(p, resource, dataset_type):
+        tags_message = "" if "tags" in p and (p["num_tags"] > 0) else "missing tags."
         if dataset_type == "filestore":
             if resource["name"] in etl_intentory["resource_name"].values.tolist():
                 engine_info = etl_intentory.loc[etl_intentory['resource_name'] == resource["name"], 'engine'].iloc[0]  
             else:
                 engine_info = None
-            logging.info(f"{resource['name']}, Engine Info: {engine_info}")
 
-            metrics["pipeline"] = 1 if engine_info else 0.5
+            pipeline_message = "" if engine_info else "no pipeline asscociated."
             
-        if dataset_type == "datastore":
-            metrics["pipeline"] = 1
+        pipeline_message = "" if dataset_type == "datastore"
         
-        return np.mean(list(metrics.values()))
-
+        accessibility_message = pipeline_message + tags_message
+        
+        return accessibility_message
+    
     data = []
-    etl_intentory = get_etl_inventory("od-etl-configs")
+    etl_intentory = dqs_logic.get_etl_inventory("od-etl-configs")
     
     for p in packages:
         logging.info(f"---------Package: {p['name']}")
@@ -187,7 +145,7 @@ def explanation_code_catalogue(**kwargs):
             logging.info(f"Dataset {p['name']} is retired.")
             continue
         
-        # filestore score
+        # filestore code
         if p["dataset_category"] in ["Document", "Website"]:
             
             for r in p["resources"]:
@@ -195,15 +153,17 @@ def explanation_code_catalogue(**kwargs):
                 "package": p["name"],
                 "resource": r["name"],
                 "usability": 0,
-                "metadata": score_filestore_metadata(p),
-                "freshness": score_freshness(p),
+                "metadata": score_metadata(p, METADATA_FIELDS),
+                "freshness": score_freshness(p, TIME_MAP),
                 "completeness": 0,
-                "accessibility": score_accessibility(p, r, "filestore"),
+                "accessibility": score_accessibility(p, r, "filestore", etl_intentory),
                 }
                 logging.info(f"Filestore Score: Package Name {p['name']}")
                 data.append(records)
                 logging.info(records)
         else:
+        
+            # datastore code
             for r in p["resources"]:
                 if "datastore_active" not in r or str(r["datastore_active"]).lower() == 'false':
                     continue
@@ -213,11 +173,16 @@ def explanation_code_catalogue(**kwargs):
                 records = {
                     "package": p["name"],
                     "resource": r["name"],
-                    "usability": score_usability(fields, content),
-                    "metadata": score_metadata(p, fields),
-                    "freshness": score_freshness(p),
-                    "completeness": score_completeness(content),
-                    "accessibility": score_accessibility(p, r, "datastore"),
+                    "usability": dqs_logic.score_usability(fields, content),
+                    "usability_code": usability_code(fields, content),
+                    "metadata": dqs_logic.score_metadata(p, METADATA_FIELDS, fields),
+                    "metadata_code": metadata_code(p, fields),
+                    "freshness": dqs_logic.score_freshness(p, TIME_MAP),
+                    "freshness_code": freshness_code(p),
+                    "completeness": dqs_logic.score_completeness(content),
+                    "completeness_code": completeness_code(content)
+                    "accessibility": dqs_logic.score_accessibility(p, r, "datastore", etl_intentory),
+                    "accessibility_code": accessibility_code(p, r, "datastore", etl_intentory)
                 }
                 
                 logging.info(f"Datastore Score {p['name']}: {r['name']} - {len(content)} records")
