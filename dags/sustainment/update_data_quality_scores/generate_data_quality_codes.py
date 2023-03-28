@@ -42,25 +42,9 @@ TIME_MAP = {
     "annually": 365,
 }
 
-RESOURCE_MODEL = "scoring-models"
-MODEL_VERSION = "v0.1.0"
 
-RESOURCE_SCORES = "quality-scores-explanation-codes"
+RESOURCE_EXPLANATION_CODES = "quality-scores-explanation-codes"
 PACKAGE_DQS = "catalogue-quality-scores"
-
-DIMENSIONS = [
-    "usability",
-    "metadata",
-    "freshness",
-    "completeness",
-    "accessibility",
-]  # Ranked in order
-
-BINS = {
-    "Bronze": 0.6,
-    "Silver": 0.8,
-    "Gold": 1,
-}
 
 
 def send_success_msg(**kwargs):
@@ -68,17 +52,6 @@ def send_success_msg(**kwargs):
     airflow_utils.message_slack(
         name=JOB_NAME, **msg, active_env=ACTIVE_ENV, prod_webhook=ACTIVE_ENV == "prod",
     )
-
-
-def send_failure_msg(self):
-    airflow_utils.message_slack(
-        name=JOB_NAME,
-        message_type="error",
-        msg="Job not finished",
-        active_env=ACTIVE_ENV,
-        prod_webhook=ACTIVE_ENV == "prod",
-    )
-
 
 def get_dqs_dataset_resources():
     try:
@@ -92,83 +65,23 @@ def get_dqs_dataset_resources():
     return {r["name"]: r for r in framework.pop("resources")}
 
 
-def create_resource_for_model(**kwargs):
-    ti = kwargs.pop("ti")
-    resources = ti.xcom_pull(task_ids="get_dqs_dataset_resources")
-
-    if RESOURCE_MODEL not in resources and CKAN.apikey:
-        logging.info(f"Creating resource for model: {RESOURCE_MODEL}")
-        r = requests.post(
-            f"{CKAN.address}/api/3/action/resource_create",
-            data={
-                "package_id": PACKAGE_DQS,
-                "name": RESOURCE_MODEL,
-                "format": "json",
-                "is_preview": False,
-                "is_zipped": False,
-            },
-            headers={"Authorization": CKAN.apikey},
-            files={"upload": (f"{RESOURCE_MODEL}.json", json.dumps({}))},
-        )
-
-        resources[RESOURCE_MODEL] = r.json()["result"]
-
-    headers = {"Authorization": CKAN.apikey}
-
-    models = requests.get(resources[RESOURCE_MODEL]["url"], headers=headers)
-
-    return {"models": models.json(), "resource": resources[RESOURCE_MODEL]}
-
-
-def add_model_to_resource(**kwargs):
-    ti = kwargs.pop("ti")
-    model_resource = ti.xcom_pull(task_ids="create_resource_for_model")
-    weights = ti.xcom_pull(task_ids="calculate_model_weights")
-    for i, (dim, wgt) in enumerate(zip(DIMENSIONS, weights)):
-        logging.info(f"num {i}, dim {dim}, wgt {wgt}")
-
-    model_resource["models"][MODEL_VERSION] = {
-        "aggregation_methods": {
-            "metrics_to_dimension": "avg",
-            "dimensions_to_score": "sum_and_reciprocal",
-        },
-        "dimensions": [
-            {"name": dim, "rank": i + 1, "weights": wgt}
-            for i, (dim, wgt) in enumerate(zip(DIMENSIONS, weights))
-        ],
-        "bins": BINS,
-    }
-
-    return model_resource
-
-
-def upload_models_to_resource(**kwargs):
-    ti = kwargs.pop("ti")
-    model_resource = ti.xcom_pull(task_ids="add_model_to_resource")
-
-    res = requests.post(
-        f"{CKAN.address}/api/3/action/resource_patch",
-        data={"id": model_resource["resource"]["id"]},
-        headers={"Authorization": CKAN.apikey},
-        files={
-            "upload": (f"{RESOURCE_MODEL}.json", json.dumps(model_resource["models"]),)
-        },
-    )
-
-    return res.json()
-
-
 def create_explanation_code_resource(**kwargs):
     ti = kwargs.pop("ti")
     resources = ti.xcom_pull(task_ids="get_dqs_dataset_resources")
-    df = ti.xcom_pull(task_ids="score_catalogue")
+    explanation_code_path = Path(ti.xcom_pull(task_ids="explanation_code_catalogue"))
+    df = pd.read_parquet(explanation_code_path)
+    
+    score_file_path = SCORES_PATH / f"scores.csv"
+    df.to_csv(score_file_path)
+    
+    logging.info(df.columns.values)
 
-    if RESOURCE_SCORES not in resources:
-        logging.info(f"Creating scores resource: {RESOURCE_SCORES}")
-        resources[RESOURCE_SCORES] = CKAN.action.datastore_create(
+    if RESOURCE_EXPLANATION_CODES not in resources:
+        logging.info(f"Creating scores resource: {RESOURCE_EXPLANATION_CODES}")
+        resources[RESOURCE_EXPLANATION_CODES] = CKAN.action.datastore_create(
             resource={
                 "package_id": PACKAGE_DQS,
-                "name": RESOURCE_SCORES,
+                "name": RESOURCE_EXPLANATION_CODES,
                 "format": "csv",
                 "is_preview": True,
                 "is_zipped": True,
@@ -177,18 +90,18 @@ def create_explanation_code_resource(**kwargs):
             records=[],
         )
     else:
-        logging.info(f" {PACKAGE_DQS}: {RESOURCE_SCORES} already exists")
+        logging.info(f" {PACKAGE_DQS}: {RESOURCE_EXPLANATION_CODES} already exists")
 
-    return resources[RESOURCE_SCORES]
+    return resources[RESOURCE_EXPLANATION_CODES]
 
 
 def insert_scores(**kwargs):
     ti = kwargs.pop("ti")
-    final_scores_path = Path(ti.xcom_pull(task_ids="prepare_and_normalize_scores"))
+    explanation_code_path = Path(ti.xcom_pull(task_ids="explanation_code_catalogue"))
     datastore_resource = ti.xcom_pull(task_ids="create_explanation_code_resource")
 
-    df = pd.read_parquet(final_scores_path)
-    logging.info(f"Inserting to datastore_resource: {RESOURCE_SCORES}")
+    df = pd.read_parquet(explanation_code_path)
+    logging.info(f"Inserting to datastore_resource: {RESOURCE_EXPLANATION_CODES}")
     records = df.to_dict(orient="records")
     logging.info(records[:5])
     CKAN.action.datastore_upsert(
@@ -233,12 +146,6 @@ with DAG(
         op_kwargs={"dag_id": JOB_NAME, "dir_variable_name": "tmp_dir"},
     )
 
-    model_weights = PythonOperator(
-        task_id="calculate_model_weights",
-        python_callable=dqs_logic.calculate_model_weights,
-        op_kwargs={"dimensions": DIMENSIONS},
-    )
-
     packages = PythonOperator(
         task_id="get_all_packages",
         python_callable=ckan_utils.get_all_packages,
@@ -249,27 +156,9 @@ with DAG(
         task_id="get_dqs_dataset_resources", python_callable=get_dqs_dataset_resources,
     )
 
-    framework_resource = PythonOperator(
-        task_id="create_resource_for_model",
-        python_callable=create_resource_for_model,
-        provide_context=True,
-    )
-
-    add_run_model = PythonOperator(
-        task_id="add_model_to_resource",
-        python_callable=add_model_to_resource,
-        provide_context=True,
-    )
-
-    upload_models = PythonOperator(
-        task_id="upload_models_to_resource",
-        python_callable=upload_models_to_resource,
-        provide_context=True,
-    )
-
-    raw_scores = PythonOperator(
+    raw_scores_explanation_codes = PythonOperator(
         task_id="explanation_code_catalogue",
-        python_callable=dq.explanation_code_catalogue,
+        python_callable=explanation_codes_logic.explanation_code_catalogue,
         op_kwargs={
             "ckan": CKAN,
             "METADATA_FIELDS": METADATA_FIELDS,
@@ -278,22 +167,10 @@ with DAG(
         provide_context=True,
     )
 
-    final_scores = PythonOperator(
-        task_id="prepare_and_normalize_scores",
-        python_callable=dqs_logic.prepare_and_normalize_scores,
-        op_kwargs={
-            "ckan": CKAN,
-            "DIMENSIONS": DIMENSIONS,
-            "BINS": BINS,
-            "MODEL_VERSION": MODEL_VERSION,
-        },
-        provide_context=True,
-    )
-
-    delete_raw_scores_tmp_file = PythonOperator(
-        task_id="delete_raw_scores_tmp_file",
+    delete_raw_scores_explanation_code_tmp_file = PythonOperator(
+        task_id="delete_raw_scores_explanation_code_tmp_file",
         python_callable=airflow_utils.delete_file,
-        op_kwargs={"task_ids": ["score_catalogue"]},
+        op_kwargs={"task_ids": ["explanation_code_catalogue"]},
         provide_context=True,
     )
 
@@ -305,13 +182,6 @@ with DAG(
 
     add_scores = PythonOperator(
         task_id="insert_scores", python_callable=insert_scores, provide_context=True,
-    )
-
-    delete_final_scores_tmp_file = PythonOperator(
-        task_id="delete_final_scores_tmp_file",
-        python_callable=airflow_utils.delete_file,
-        op_kwargs={"task_ids": ["prepare_and_normalize_scores"]},
-        provide_context=True,
     )
 
     send_notification = PythonOperator(
@@ -326,14 +196,8 @@ with DAG(
         op_kwargs={"dag_id": JOB_NAME},
     )
 
-    dqs_package_resources >> framework_resource
-    [framework_resource, model_weights] >> add_run_model
-    [packages, create_tmp_dir] >> raw_scores
-    [raw_scores, model_weights] >> final_scores
-    final_scores >> explanation_code_resource
-    final_scores >> delete_raw_scores_tmp_file
-    add_run_model >> upload_models
-    explanation_code_resource >> add_scores
-    add_scores >> delete_final_scores_tmp_file
-    [upload_models, add_scores] >> send_notification
-    [delete_final_scores_tmp_file, delete_raw_scores_tmp_file] >> delete_tmp_dir
+    
+    dqs_package_resources >> [packages, create_tmp_dir] >> raw_scores_explanation_codes 
+    raw_scores_explanation_codes >> explanation_code_resource >> add_scores
+    add_scores >> [delete_raw_scores_explanation_code_tmp_file, send_notification] 
+    delete_raw_scores_explanation_code_tmp_file>> delete_tmp_dir

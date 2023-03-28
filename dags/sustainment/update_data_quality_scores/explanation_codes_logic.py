@@ -35,17 +35,12 @@ def explanation_code_catalogue(**kwargs):
 
     ckan = kwargs.pop("ckan")
 
-    filename = "raw_scores"
+    filename = "data_quality_explanation_code"
     filepath = tmp_dir / f"{filename}.parquet"
 
     def usability_explanation_code(columns, data):
         """
         How easy is it to use the data given how it is organized/structured?
-
-        TODO's:
-            * level of nested fields?
-            * long vs. wide?
-            * if ID columns given, are these ID's common across datasets?
         """
 
         def parse_col_name(s):
@@ -80,31 +75,33 @@ def explanation_code_catalogue(**kwargs):
         
         return usability_message
     
-    def metadata_explanation_code(package):
+    def metadata_explanation_code(package, metadata_fields):
         output = []
-        for field in METADATA_FIELDS:
-            if field not in package pr field is None:
+        for field in metadata_fields:
+            if field not in package or field is None:
                 output.append(field)
         
         metadata_message = ",".join(output)
         
         return metadata_message
     
-    def freshness_explanation_code(package):
+    def freshness_explanation_code(package, time_map):
 
         rr = package["refresh_rate"].lower()
 
-        if rr in TIME_MAP and "last_refreshed" in package and package["last_refreshed"]:            
-            days = parse_datetime( package["last_refreshed"] )
+        if rr in time_map and "last_refreshed" in package and package["last_refreshed"]:            
+            days = dqs_logic.parse_datetime( package["last_refreshed"] )
     
             # calculate elapse periods
-            elapse_periods = (days - TIME_MAP[rr]) / TIME_MAP[rr]
-            elapse_period_message = f"{elapse_periods} refresh rate periods behind." if elapse_periods >= 3 else ""   
+            elapse_periods = (days - time_map[rr]) / time_map[rr]
+            elapse_period_message = f"{elapse_periods} {time_map[rr]} behind." if elapse_periods >= 2 else ""   
 
             # calculate elapse days
             elapse_days_message = f" {days} days behind." if days > 365 else ""
             
             freshness_message = elapse_period_message + elapse_days_message
+        else:
+            freshness_message = ""
             
         return freshness_message
 
@@ -112,22 +109,22 @@ def explanation_code_catalogue(**kwargs):
         """
         How much of the data is missing?
         """
-        missing_rate = (1 - (np.sum(len(data) - data.count()) / np.prod(data.shape))) * 100
+        missing_rate = (np.sum(len(data) - data.count()) / np.prod(data.shape)) * 100
         completeness_message = f"{missing_rate} of data is missing" if missing_rate >= 50 else ""
         
         return completeness_message
     
-    def accessibility_explanation_code(p, resource, dataset_type):
+    def accessibility_explanation_code(p, resource, package_type, etl_intentory):
         tags_message = "" if "tags" in p and (p["num_tags"] > 0) else "missing tags."
-        if dataset_type == "filestore":
+        if package_type == "filestore":
             if resource["name"] in etl_intentory["resource_name"].values.tolist():
                 engine_info = etl_intentory.loc[etl_intentory['resource_name'] == resource["name"], 'engine'].iloc[0]  
             else:
                 engine_info = None
 
             pipeline_message = "" if engine_info else "no pipeline asscociated."
-            
-        pipeline_message = "" if dataset_type == "datastore"
+        else:   
+            pipeline_message = ""
         
         accessibility_message = pipeline_message + tags_message
         
@@ -136,7 +133,7 @@ def explanation_code_catalogue(**kwargs):
     data = []
     etl_intentory = dqs_logic.get_etl_inventory("od-etl-configs")
     
-    for p in packages:
+    for p in packages[:20]:
         logging.info(f"---------Package: {p['name']}")
         if p["name"].lower() == "tags":
             continue
@@ -153,10 +150,15 @@ def explanation_code_catalogue(**kwargs):
                 "package": p["name"],
                 "resource": r["name"],
                 "usability": 0,
-                "metadata": score_metadata(p, METADATA_FIELDS),
-                "freshness": score_freshness(p, TIME_MAP),
+                "usability_code": "Not Applicable",
+                "metadata": dqs_logic.score_metadata(p, METADATA_FIELDS),
+                "metadata_code": metadata_explanation_code(p, METADATA_FIELDS),
+                "freshness": dqs_logic.score_freshness(p, TIME_MAP),
+                "freshness_code": freshness_explanation_code(p, TIME_MAP),
                 "completeness": 0,
-                "accessibility": score_accessibility(p, r, "filestore", etl_intentory),
+                "completeness_code": "Not Applicable",
+                "accessibility": dqs_logic.score_accessibility(p, r, "filestore", etl_intentory),
+                "accessibility_code": accessibility_explanation_code(p, r, "datastore", etl_intentory)
                 }
                 logging.info(f"Filestore Score: Package Name {p['name']}")
                 data.append(records)
@@ -168,21 +170,21 @@ def explanation_code_catalogue(**kwargs):
                 if "datastore_active" not in r or str(r["datastore_active"]).lower() == 'false':
                     continue
 
-                content, fields = read_datastore(ckan, r["id"])
+                content, fields = dqs_logic.read_datastore(ckan, r["id"])
 
                 records = {
                     "package": p["name"],
                     "resource": r["name"],
                     "usability": dqs_logic.score_usability(fields, content),
-                    "usability_code": usability_code(fields, content),
+                    "usability_code": usability_explanation_code(fields, content),
                     "metadata": dqs_logic.score_metadata(p, METADATA_FIELDS, fields),
-                    "metadata_code": metadata_code(p, fields),
+                    "metadata_code": metadata_explanation_code(p, METADATA_FIELDS),
                     "freshness": dqs_logic.score_freshness(p, TIME_MAP),
-                    "freshness_code": freshness_code(p),
+                    "freshness_code": freshness_explanation_code(p, TIME_MAP),
                     "completeness": dqs_logic.score_completeness(content),
-                    "completeness_code": completeness_code(content)
+                    "completeness_code": completeness_explanation_code(content),
                     "accessibility": dqs_logic.score_accessibility(p, r, "datastore", etl_intentory),
-                    "accessibility_code": accessibility_code(p, r, "datastore", etl_intentory)
+                    "accessibility_code": accessibility_explanation_code(p, r, "datastore", etl_intentory)
                 }
                 
                 logging.info(f"Datastore Score {p['name']}: {r['name']} - {len(content)} records")
