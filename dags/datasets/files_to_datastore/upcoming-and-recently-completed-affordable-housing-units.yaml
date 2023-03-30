@@ -43,7 +43,7 @@ upcoming-and-recently-completed-affordable-housing-units:
     These affordable rental homes meet the City's current definition of affordable rental housing, with rent, including utilities, at or below 100 per cent of Average Market Rent (AMR).
 
   resources: 
-    Social and Affordable Housing:
+    Affordable Rental Housing Pipeline:
       format: csv
       url: http://opendata.toronto.ca/housing.secretariat/COT_affordable_rental_housing.csv
       attributes:
