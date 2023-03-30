@@ -81,7 +81,7 @@ def explanation_code_catalogue(**kwargs):
             if field not in package or field is None:
                 output.append(field)
         
-        metadata_message = ",".join(output)
+        metadata_message = f"Missing Fields: {','.join(output)}" if output else ""
         
         return metadata_message
     
@@ -93,11 +93,11 @@ def explanation_code_catalogue(**kwargs):
             days = dqs_logic.parse_datetime( package["last_refreshed"] )
     
             # calculate elapse periods
-            elapse_periods = (days - time_map[rr]) / time_map[rr]
-            elapse_period_message = f"{elapse_periods} {time_map[rr]} behind." if elapse_periods >= 2 else ""   
+            elapse_periods = round((days - time_map[rr]) / time_map[rr])
+            elapse_period_message = f"{elapse_periods} periods behind, should be refreshed {rr}." if elapse_periods >= 2 else ""   
 
             # calculate elapse days
-            elapse_days_message = f" {days} days behind." if days > 365 else ""
+            elapse_days_message = f" {days} days elapsed." if days > 180 else ""
             
             freshness_message = elapse_period_message + elapse_days_message
         else:
@@ -110,12 +110,12 @@ def explanation_code_catalogue(**kwargs):
         How much of the data is missing?
         """
         missing_rate = (np.sum(len(data) - data.count()) / np.prod(data.shape)) * 100
-        completeness_message = f"{missing_rate} of data is missing" if missing_rate >= 50 else ""
+        completeness_message = f"{missing_rate} of data is missing" if missing_rate >= 40 else ""
         
         return completeness_message
     
     def accessibility_explanation_code(p, resource, package_type, etl_intentory):
-        tags_message = "" if "tags" in p and (p["num_tags"] > 0) else "missing tags."
+        tags_message = "" if "tags" in p and (p["num_tags"] > 0) else " missing tags."
         if package_type == "filestore":
             if resource["name"] in etl_intentory["resource_name"].values.tolist():
                 engine_info = etl_intentory.loc[etl_intentory['resource_name'] == resource["name"], 'engine'].iloc[0]  
@@ -133,7 +133,7 @@ def explanation_code_catalogue(**kwargs):
     data = []
     etl_intentory = dqs_logic.get_etl_inventory("od-etl-configs")
     
-    for p in packages[:20]:
+    for p in packages:
         logging.info(f"---------Package: {p['name']}")
         if p["name"].lower() == "tags":
             continue
@@ -147,6 +147,7 @@ def explanation_code_catalogue(**kwargs):
             
             for r in p["resources"]:
                 records = {
+                "type": "filestore",
                 "package": p["name"],
                 "resource": r["name"],
                 "usability": 0,
@@ -158,7 +159,7 @@ def explanation_code_catalogue(**kwargs):
                 "completeness": 0,
                 "completeness_code": "Not Applicable",
                 "accessibility": dqs_logic.score_accessibility(p, r, "filestore", etl_intentory),
-                "accessibility_code": accessibility_explanation_code(p, r, "datastore", etl_intentory)
+                "accessibility_code": accessibility_explanation_code(p, r, "filestore", etl_intentory)
                 }
                 logging.info(f"Filestore Score: Package Name {p['name']}")
                 data.append(records)
@@ -173,6 +174,7 @@ def explanation_code_catalogue(**kwargs):
                 content, fields = dqs_logic.read_datastore(ckan, r["id"])
 
                 records = {
+                    "type": "datastore",
                     "package": p["name"],
                     "resource": r["name"],
                     "usability": dqs_logic.score_usability(fields, content),
@@ -193,5 +195,9 @@ def explanation_code_catalogue(**kwargs):
             data.append(records)
 
     pd.DataFrame(data).to_parquet(filepath, engine="fastparquet", compression=None)
+    df = pd.read_parquet(filepath)
+    
+    explanation_code_file_path = SCORES_PATH / f"explanation_code.csv"
+    df.to_csv(explanation_code_file_path)
 
     return str(filepath)

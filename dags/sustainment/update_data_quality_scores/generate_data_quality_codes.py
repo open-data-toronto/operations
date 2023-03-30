@@ -71,9 +71,6 @@ def create_explanation_code_resource(**kwargs):
     explanation_code_path = Path(ti.xcom_pull(task_ids="explanation_code_catalogue"))
     df = pd.read_parquet(explanation_code_path)
     
-    score_file_path = SCORES_PATH / f"scores.csv"
-    df.to_csv(score_file_path)
-    
     logging.info(df.columns.values)
 
     if RESOURCE_EXPLANATION_CODES not in resources:
