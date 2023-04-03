@@ -24,8 +24,8 @@ mental-health-apprehensions:
     - name: tag
       vocabulary_id: null
 
-  information_url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/MHA_Apprehensions/FeatureServer
-  excerpt: This dataset includes all mental health apprehensions made from 2014 to June 30,2022.
+  information_url: https://data.torontopolice.on.ca/maps/mental-health-act-apprehensions-open-data
+  excerpt: This dataset includes all mental health apprehensions made by the Toronto Police Service.
   limitations: |
     A unique event number should not be interpreted as an apprehension of a distinct individual. An individual may have been apprehended multiple times under the Mental Health Act, with each apprehension recorded using a unique event number. 
 
@@ -43,83 +43,110 @@ mental-health-apprehensions:
     * Section 28 (1) (Form 9 - Elopee - Order for Return); and, 
     * Section 33.4 (Form 47 - Community Treatment Order for Examination).
 
+    Note: Fields have been included for both the old 140 City of Toronto Neighbourhoods structure as well as the new 158 City of Toronto Neighbourhoods structure
+
   resources:
     # resource name
     mental-health-apprehensions:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Mental_Health_Act_Apprehensions/FeatureServer/0
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/Mental_Health_Act_Apprehensions_Open_Data/FeatureServer/0
       attributes:
-        - id: "EventUniqueID"
-          type: "text"
+        - id: EVENT_UNIQUE_ID
+          type: text
           info:
-            notes: "Event Number"
-        - id: "ReportDate"
-          type: "timestamp"
+            notes: Offence Number
+        - id: REPORT_DATE
+          type: date
           info:
-            notes: "Date MHA Apprehension was Reported"
-        - id: "ReportYear"
-          type: "int"
+            notes: Date Offence was Reported
+        - id: REPORT_YEAR
+          type: float
           info:
-            notes: "Year MHA Apprehension was Reported"
-        - id: "ReportMonth"
-          type: "text"
+            notes: Year Offence was Reported
+        - id: REPORT_MONTH
+          type: text
           info:
-            notes: "Month MHA Apprehension was Reported"
-        - id: "ReportDayofWeek"
-          type: "text"
+            notes: Month Offence was Reported
+        - id: REPORT_DOW
+          type: text
           info:
-            notes: "Day of Week MHA Apprehension was Reported"
-        - id: "ReportHour"
-          type: "int"
+            notes: Day of the Month Offence was Reported
+        - id: REPORT_DOY
+          type: float
           info:
-            notes: "Hour MHA Apprehension was Reported"
-        - id: "OccurrenceDate"
-          type: "timestamp"
+            notes: Day of the Year Offence was Reported
+        - id: REPORT_DAY
+          type: float
           info:
-            notes: "Date of MHA Apprehension"
-        - id: "OccurrenceYear"
-          type: "int"
+            notes: Day of the Week Offence was Reported
+        - id: REPORT_HOUR
+          type: float
           info:
-            notes: "Year MHA Apprehension Occurred"
-        - id: "OccurrenceMonth"
-          type: "text"
+            notes: Hour Offence was Reported
+        - id: OCC_DATE
+          type: date
           info:
-            notes: "Month MHA Apprehension Occurred"
-        - id: "OccurrenceDayofWeek"
-          type: "text"
+            notes: Date of Offence
+        - id: OCC_YEAR
+          type: float
           info:
-            notes: "Day of Week MHA Apprehension Occurred"
-        - id: "OccurrenceHour"
-          type: "int"
+            notes: Year Offence Occurred
+        - id: OCC_MONTH
+          type: text
           info:
-            notes: "Hour MHA Apprehension Occurred"
-        - id: "ApprehensionType"
-          type: "text"
+            notes: Month Offence Occurred
+        - id: OCC_DOY
+          type: float
           info:
-            notes: "The section applied when apprehending an individual pursuant to the Mental Health Act"
-        - id: "Division"
-          type: "text"
+            notes: Day of the Month Offence Occurred
+        - id: OCC_DAY
+          type: float
           info:
-            notes: "Police Division where MHA Apprehension Occurred"
-        - id: "HoodID"
-          type: "text"
+            notes: Day of the Year Offence Occurred
+        - id: OCC_DOW
+          type: text
           info:
-            notes: "Neighbourhood ID"
-        - id: "NeighbourhoodName"
-          type: "text"
+            notes: Day of the Week Offence Occurred
+        - id: OCC_HOUR
+          type: float
           info:
-            notes: "Name of Neighbourhood"
-        - id: "PremisesType"
-          type: "text"
+            notes: Hour Offence Occurred
+        - id: DIVISION
+          type: text
           info:
-            notes: "Premises type of MHA Apprehension"
-        - id: "Sex"
-          type: "text"
+            notes: Police Division where Offence Occurred
+        - id: PREMISES_TYPE
+          type: text
           info:
-            notes: "Sex of Person Apprehended"
-        - id: "AgeGroup"
-          type: "text"
+            notes: Premises Type of Offence
+        - id: APPREHENSION_TYPE
+          type: text
           info:
-            notes: "Age category of Person Apprehended"
+            notes: The section applied when apprehending an individual pursuant to the Mental Health Act
+        - id: SEX
+          type: text
+          info:
+            notes: Sex of Person Apprehended
+        - id: AGE_COHORT
+          type: text
+          info:
+            notes: Age category of Person Apprehended
+        - id: HOOD_158
+          type: text
+          info:
+            notes: Identifier of Neighbourhood using City of Toronto's new 158 neighbourhood structure
+        - id: NEIGHBOURHOOD_158
+          type: text
+          info:
+            notes: Name of Neighbourhood using City of Toronto's new 158 neighbourhood structure
+        - id: HOOD_140
+          type: text
+          info:
+            notes: Identifier of Neighbourhood using City of Toronto's old 140 neighbourhood structure
+        - id: NEIGHBOURHOOD_140
+          type: text
+          info:
+            notes: Name of Neighbourhood using City of Toronto's old 140 neighbourhood structure
+        
         
