@@ -22,7 +22,7 @@ bicycle-thefts:
     - Public safety
   tags: []
 
-  information_url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Bicycle_Thefts/FeatureServer
+  information_url: https://data.torontopolice.on.ca/maps/bicycle-thefts-open-data
   excerpt: This dataset contains Bicycle Thefts occurrences.
   limitations: This dataset contains Bicycle Thefts occurrences from 2014-2020. The location of crime occurrences have been deliberately offset to the nearest road intersection node to protect the privacy of parties involved in the occurrence. Due to the offset of occurrence location, the numbers by Division and Neighbourhood may not reflect the exact count of occurrences reported within these geographies. Therefore, the Toronto Police Service does not guarantee the accuracy, completeness, timeliness of the data and it should not be compared to any other source of crime data.
   notes: |
@@ -30,133 +30,119 @@ bicycle-thefts:
     
     This data includes all bicycle theft occurrences reported to the Toronto Police Service, including those where the location has not been able to be verified. As a result, coordinate fields may appear blank. Likewise, this includes occurrences where the coordinate location is outside the City of Toronto.
     
-    Note: The City of Toronto Neighbourhoods identified in this dataset correspond with the 140 neighbourhoods.
-    
-    Supporting documentation can be found [here](https://torontops.maps.arcgis.com/sharing/rest/content/items/c0b17f1888544078bf650f3b8b04d35d/data).
+    Note: Fields have been included for both the old 140 City of Toronto Neighbourhoods structure as well as the new 158 City of Toronto Neighbourhoods structure 
     
   resources:
     # resource name
     bicycle-thefts:
       agol: True
       format: geojson
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Bicycle_Thefts/FeatureServer/0
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/Bicycle_Thefts_Open_Data/FeatureServer/0
       attributes:
-        - id: "event_unique_id"
-          type: "text"
+        - id: EVENT_UNIQUE_ID
+          type: text
           info:
-            notes: "Event Occurrence Identifier"
-        - id: "Primary_Offence"
-          type: "text"
+            notes: Offence Number
+        - id: PRIMARY_OFFENCE
+          type: text
           info:
-            notes: "Offence related to the occurrence"
-        - id: "Occurrence_Date"
-          type: "timestamp"
+            notes: Primary Offence Type
+        - id: OCC_DATE
+          type: date
           info:
-            notes: "Date of occurrence"
-        - id: "Occurrence_Year"
-          type: "int"
+            notes: Date of Offence
+        - id: OCC_YEAR
+          type: float
           info:
-            notes: "Occurrence year"
-        - id: "Occurrence_Month"
-          type: "text"
+            notes: Year Offence Occurred
+        - id: OCC_MONTH
+          type: text
           info:
-            notes: "Occurrence Month"
-        - id: "Occurrence_DayOfWeek"
-          type: "text"
+            notes: Month Offence Occurred
+        - id: OCC_DOW
+          type: text
           info:
-            notes: "Day of Week Theft Occurred"
-        - id: "Occurrence_DayOfMonth"
-          type: "int"
+            notes: Day of the Month Offence Occurred
+        - id: OCC_DAY
+          type: float
           info:
-            notes: "Day of Month Theft Occurred"
-        - id: "Occurrence_DayOfYear"
-          type: "int"
+            notes: Day of the Year Offence Occurred
+        - id: OCC_DOY
+          type: float
           info:
-            notes: "Day of Year Theft Occurred"
-        - id: "Occurrence_Hour"
-          type: "int"
+            notes: Day of the Week Offence Occurred
+        - id: OCC_HOUR
+          type: float
           info:
-            notes: "Hour Theft Occurred"
-        - id: "Report_Date"
-          type: "timestamp"
+            notes: Hour Offence Occurred
+        - id: REPORT_DATE
+          type: date
           info:
-            notes: "Date Theft was Reported"
-        - id: "Report_Year"
-          type: "int"
+            notes: Date Offence was Reported
+        - id: REPORT_YEAR
+          type: float
           info:
-            notes: "Year Theft was Reported"
-        - id: "Report_Month"
-          type: "text"
+            notes: Year Offence was Reported
+        - id: REPORT_MONTH
+          type: text
           info:
-            notes: "Month Theft was Reported"
-        - id: "Report_DayOfWeek"
-          type: "text"
+            notes: Month Offence was Reported
+        - id: REPORT_DOW
+          type: text
           info:
-            notes: "Day of Week Theft was Reported"
-        - id: "Report_DayOfMonth"
-          type: "int"
+            notes: Day of the Month Offence was Reported
+        - id: REPORT_DAY
+          type: float
           info:
-            notes: "Day of Month Theft was Reported"
-        - id: "Report_DayOfYear"
-          type: "int"
+            notes: Day of the Year Offence was Reported
+        - id: REPORT_DOY
+          type: float
           info:
-            notes: "Day of Year Theft was Reported"
-        - id: "Report_Hour"
-          type: "int"
+            notes: Day of the Week Offence was Reported
+        - id: REPORT_HOUR
+          type: float
           info:
-            notes: "Hour Theft was Reported"
-        - id: "Division"
-          type: "text"
+            notes: Hour Offence was Reported
+        - id: DIVISION
+          type: text
           info:
-            notes: "Police Division where event occurred"
-        - id: "City"
-          type: "text"
+            notes: Police Division where Offence Occurred
+        - id: LOCATION_TYPE
+          type: text
           info:
-            notes: "City where event occurred"
-        - id: "Hood_ID"
-          type: "text"
+            notes: Location Type of Offence
+        - id: PREMISES_TYPE
+          type: text
           info:
-            notes: "City of Toronto Neighbourhood Identifier"
-        - id: "NeighbourhoodName"
-          type: "text"
+            notes: Premises Type of Offence
+        - id: BIKE_MAKE
+          type: text
           info:
-            notes: "Name of Neighbourhood where Homicide Occurred"
-        - id: "Location_Type"
-          type: "text"
+            notes: Make of Bicycle
+        - id: BIKE_MODEL
+          type: text
           info:
-            notes: "Location Type where event occurred"
-        - id: "Premises_Type"
-          type: "text"
+            notes: Model of Bicycle
+        - id: BIKE_TYPE
+          type: text
           info:
-            notes: "Premises Type of Occurrence"
-        - id: "Bike_Make"
-          type: "text"
+            notes: Type of Bicycle
+        - id: BIKE_SPEED
+          type: float
           info:
-            notes: "Bicycle Make"
-        - id: "Bike_Model"
-          type: "text"
+            notes: Speed of Bicycle
+        - id: BIKE_COLOUR
+          type: text
           info:
-            notes: "Bicycle Model"
-        - id: "Bike_Type"
-          type: "text"
+            notes: Colour of Bicycle
+        - id: BIKE_COST
+          type: float
           info:
-            notes: "Bicycle Type"
-        - id: "Bike_Speed"
-          type: "int"
+            notes: Cost of Bicycle
+        - id: STATUS
+          type: text
           info:
-            notes: "Bicycle Speed"
-        - id: "Bike_Colour"
-          type: "text"
-          info:
-            notes: "Bicycle Colour"
-        - id: "Cost_of_Bike"
-          type: "text"
-          info:
-            notes: "Cost of Bicycle"
-        - id: "Status"
-          type: "text"
-          info:
-            notes: "Status of event"
+            notes: Status of Bicycle
         - id: "geometry"
           type: "text"
           info:
