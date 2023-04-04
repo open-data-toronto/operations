@@ -16,6 +16,7 @@ from utils_operators.slack_operators import (
     GenericSlackOperator,
     task_failure_slack_alert,
 )
+from ckan_operators.resource_operator import GetOrCreateResourceOperator
 
 job_settings = {
     "description": "Calculates DQ scores across the catalogue",
@@ -28,6 +29,8 @@ JOB_NAME = "generate_data_quality_codes"
 
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
+CKAN_ADDRESS = CKAN_CREDS[ACTIVE_ENV]["address"]
+CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 
@@ -74,18 +77,34 @@ def create_explanation_code_resource(**kwargs):
     logging.info(df.columns.values)
 
     if RESOURCE_EXPLANATION_CODES not in resources:
-        logging.info(f"Creating scores resource: {RESOURCE_EXPLANATION_CODES}")
-        resources[RESOURCE_EXPLANATION_CODES] = CKAN.action.datastore_create(
-            resource={
+        logging.info(f"Creating explanation code resource: {RESOURCE_EXPLANATION_CODES}")
+        fields = []
+        for x in df.columns.values:
+            if x in ['usability', 'metadata', 'freshness', 'completeness', 'accessibility']:
+                datatype = "numeric"
+            else:
+                datatype = "text"
+            fields.append({"id": x, "type": datatype, "info": ''})
+        logging.info(fields)
+        
+        r = requests.post(
+            f"{CKAN_ADDRESS}/api/3/action/datastore_create",
+            data= json.dumps(dict(
+                resource={
                 "package_id": PACKAGE_DQS,
                 "name": RESOURCE_EXPLANATION_CODES,
                 "format": "csv",
                 "is_preview": True,
-                "is_zipped": True,
-            },
+                }
+            ,
             fields=[{"id": x} for x in df.columns.values],
             records=[],
+            )),
+            headers={"Authorization": CKAN_APIKEY, 'Content-Type': 'application/json'},
         )
+        logging.info(r.json())
+        resources[RESOURCE_EXPLANATION_CODES] = r.json()["result"]
+
     else:
         logging.info(f" {PACKAGE_DQS}: {RESOURCE_EXPLANATION_CODES} already exists")
 
@@ -103,7 +122,7 @@ def insert_scores(**kwargs):
     logging.info(records[:5])
     CKAN.action.datastore_upsert(
         method="insert",
-        resource_id=datastore_resource["id"],
+        resource_id=datastore_resource["resource_id"],
         records=df.to_dict(orient="records"),
     )
 
@@ -176,6 +195,21 @@ with DAG(
         python_callable=create_explanation_code_resource,
         provide_context=True,
     )
+    
+    # get_or_create_explanation_code_resource = GetOrCreateResourceOperator(
+    #     task_id="get_or_create_explanation_code_resource",
+    #     address=CKAN_ADDRESS,
+    #     apikey=CKAN_APIKEY,
+    #     package_name_or_id=PACKAGE_DQS,
+    #     resource_name=RESOURCE_EXPLANATION_CODES,
+    #     resource_attributes=dict(
+    #         format="csv",
+    #         is_preview=True,
+    #         url_type="datastore",
+    #         extract_job=f"Airflow: {PACKAGE_DQS}",
+    #         package_id=PACKAGE_DQS
+    #     ),
+    # )
 
     add_scores = PythonOperator(
         task_id="insert_scores", python_callable=insert_scores, provide_context=True,

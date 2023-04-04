@@ -109,8 +109,8 @@ def explanation_code_catalogue(**kwargs):
         """
         How much of the data is missing?
         """
-        missing_rate = (np.sum(len(data) - data.count()) / np.prod(data.shape)) * 100
-        completeness_message = f"{missing_rate} of data is missing" if missing_rate >= 40 else ""
+        missing_rate = round((np.sum(len(data) - data.count()) / np.prod(data.shape)) * 100)
+        completeness_message = f"{missing_rate} % of data is missing" if missing_rate >= 40 else ""
         
         return completeness_message
     
@@ -147,7 +147,7 @@ def explanation_code_catalogue(**kwargs):
             
             for r in p["resources"]:
                 records = {
-                "type": "filestore",
+                "store_type": "filestore",
                 "package": p["name"],
                 "resource": r["name"],
                 "usability": 0,
@@ -174,7 +174,7 @@ def explanation_code_catalogue(**kwargs):
                 content, fields = dqs_logic.read_datastore(ckan, r["id"])
 
                 records = {
-                    "type": "datastore",
+                    "store_type": "datastore",
                     "package": p["name"],
                     "resource": r["name"],
                     "usability": dqs_logic.score_usability(fields, content),
