@@ -22,7 +22,7 @@ police-annual-statistical-report-homicide:
     - Public safety
   tags: []
 
-  information_url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Homicide_ASR_RC_TBL_002/FeatureServer
+  information_url: https://data.torontopolice.on.ca/maps/homicides-open-data-asr-rc-tbl-002
   excerpt: This dataset includes all Homicides occurrences by occurred date.
   limitations: |
     This dataset includes all Homicides from 2004 to 2020.  The location of crime occurrences have been deliberately offset to the nearest road intersection node to protect the privacy of parties involved in the occurrence. Due to the offset of occurrence location, the numbers by Division and Neighbourhood may not reflect the exact count of occurrences reported within these geographies. Therefore, the Toronto Police Service does not guarantee the accuracy, completeness, timeliness of the data and it should not be compared to any other source of crime data. Divisional Boundary changes took effect in 2011.
@@ -33,45 +33,67 @@ police-annual-statistical-report-homicide:
   notes: |
     This dataset includes all Homicides occurrences by occurred date.
 
-    Note: The City of Toronto Neighbourhoods identified in this dataset correspond with the 140 neighbourhoods.
-
-    Supporting documentation can be found [here](https://torontops.maps.arcgis.com/sharing/rest/content/items/c0b17f1888544078bf650f3b8b04d35d/data).
+    Note: Fields have been included for both the old 140 City of Toronto Neighbourhoods structure as well as the new 158 City of Toronto Neighbourhoods structure 
     
   resources:
     # resource name
     Homicides:
       agol: True
       format: geojson
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Homicide_ASR_RC_TBL_002/FeatureServer/0
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/Homicides_Open_Data_ASR_RC_TBL_002/FeatureServer/0
       attributes:
-        - id: "Event_Unique_Id"
-          type: "text"
+        - id: EVENT_UNIQUE_ID
+          type: text
           info:
-            notes: "General Occurrence Number"
-        - id: "Occurrence_year"
-          type: "int"
+            notes: Offence Number
+        - id: OCC_DATE
+          type: text
           info:
-            notes: "Year Homicide Occurred"
-        - id: "Division"
-          type: "text"
+            notes: Date of Offence
+        - id: OCC_YEAR
+          type: float
           info:
-            notes: "Police Division where Homicide Occurred"
-        - id: "Homicide_Type"
-          type: "text"
+            notes: Year Offence Occurred
+        - id: OCC_MONTH
+          type: text
           info:
-            notes: "Type of Homicide"
-        - id: "Occurrence_Date"
-          type: "timestamp"
+            notes: Month Offence Occurred
+        - id: OCC_DAY
+          type: float
           info:
-            notes: "Date Homicide Occurred"
-        - id: "Hood_ID"
-          type: "int"
+            notes: Day of the Month Offence Occurred
+        - id: OCC_DOW
+          type: text
           info:
-            notes: "Identificator of Neighbourhood where Homicide Occurred"
-        - id: "Neighbourhood"
-          type: "text"
+            notes: Day of the Week Offence Occurred
+        - id: OCC_DOY
+          type: float
           info:
-            notes: "Name of Neighbourhood where Homicide Occurred"
+            notes: Day of the Year Offence Occurred
+        - id: DIVISION
+          type: text
+          info:
+            notes: Police Division where Offence Occurred
+        - id: HOMICIDE_TYPE
+          type: text
+          info:
+            notes: Type of Homicide (Shooting, Stabbing, Other)
+        - id: HOOD_158
+          type: text
+          info:
+            notes: Identifier of Neighbourhood using City of Toronto's new 158 neighbourhood structure
+        - id: NEIGHBOURHOOD_158
+          type: text
+          info:
+            notes: Name of Neighbourhood using City of Toronto's new 158 neighbourhood structure
+        - id: HOOD_140
+          type: text
+          info:
+            notes: Identifier of Neighbourhood using City of Toronto's old 140 neighbourhood structure
+        - id: NEIGHBOURHOOD_140
+          type: text
+          info:
+            notes: Name of Neighbourhood using City of Toronto's old 140 neighbourhood structure
         - id: "geometry"
           type: "text"
           info:

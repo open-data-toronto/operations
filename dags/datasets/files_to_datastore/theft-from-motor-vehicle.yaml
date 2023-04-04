@@ -20,10 +20,12 @@ theft-from-motor-vehicle:
   civic_issues: null
   topics: 
     - Public safety
-  tags: []
+  tags: 
+    - stealing
+    - crime
 
   information_url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/Theft_from_Motor_Vehicle/FeatureServer
-  excerpt: This dataset includes the Crime Data by Neighbourhood. Counts are available for Assault, Auto Theft, Break and Enter, Robbery, Theft Over, Homicide, Shooting & Firearm Discharges, and Theft from Motor Vehicle.
+  excerpt: This dataset includes all Theft from Motor Vehicle offices by reported date.
   limitations: |
     The location of crime occurrences have been deliberately offset to the nearest road intersection node to protect the privacy of parties involved in the occurrence. Due to the offset of occurrence location, the numbers by Division and Neighbourhood may not reflect the exact count of occurrences reported within these geographies. Therefore, the Toronto Police Service does not guarantee the accuracy, completeness, timeliness of the data and it should not be compared to any other source of crime data.
   
@@ -35,111 +37,107 @@ theft-from-motor-vehicle:
     
     This data includes all MCI occurrences reported to the Toronto Police Service, including those where the location has not been able to be verified. As a result, coordinate fields may appear blank. Likewise, this includes occurrences where the coordinate location is outside the City of Toronto.
     
-    Note: The City of Toronto Neighbourhoods identified in this dataset correspond with the 140 neighbourhoods.
+    Note: Fields have been included for both the old 140 City of Toronto Neighbourhoods structure as well as the new 158 City of Toronto Neighbourhoods structure
     
   resources:
     # resource name
     theft-from-motor-vehicle:
       agol: True
       format: geojson
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/Theft_from_Motor_Vehicle/FeatureServer/0
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/Theft_From_Motor_Vehicle_Open_Data/FeatureServer/0
       attributes:
-        - id: "event_unique_id"
-          type: "text"
+        - id: "EVENT_UNIQUE_ID"
+          type: text
           info:
-            notes: "Event Occurrence Identifier"
-        - id: "Division"
-          type: "text"
+            notes: Offence Number
+        - id: "REPORT_DATE"
+          type: date
           info:
-            notes: "Police Division where Offence Occurred"
-        - id: "occurrencedate"
-          type: "timestamp"
+            notes: Date Offence was Reported
+        - id: "OCC_DATE"
+          type: date
           info:
-            notes: "Date of Offence"
-        - id: "reporteddate"
-          type: "timestamp"
+            notes: Date of Offence
+        - id: "REPORT_YEAR"
+          type: float
           info:
-            notes: "Date Offence was Reported"
-        - id: "location_type"
-          type: "text"
+            notes: Year Offence was Reported
+        - id: "REPORT_MONTH"
+          type: text
           info:
-            notes: "Location Type of Offence"
-        - id: "premises_type"
-          type: "text"
+            notes: Month Offence was Reported
+        - id: "REPORT_DAY"
+          type: float
           info:
-            notes: "Premises Type of Offence"
-        - id: "ucr_code"
-          type: "int"
+            notes: Day of the Month Offence was Reported
+        - id: "REPORT_DOY"
+          type: float
           info:
-            notes: "UCR Code for Offence"
-        - id: "ucr_ext"
-          type: "int"
+            notes: Day of the Year Offence was Reported
+        - id: "REPORT_DOW"
+          type: text
           info:
-            notes: "UCR Extension for Offence"
-        - id: "Offence"
-          type: "text"
+            notes: Day of the Week Offence was Reported
+        - id: "REPORT_HOUR"
+          type: float
           info:
-            notes: "Title of Offence"
-        - id: "reportedyear"
-          type: "int"
+            notes: Hour Offence was Reported
+        - id: "OCC_YEAR"
+          type: float
           info:
-            notes: "Year Offence was Reported"
-        - id: "reportedmonth"
-          type: "text"
+            notes: Year Offence Occurred
+        - id: "OCC_MONTH"
+          type: text
           info:
-            notes: "Month Offence was Reported"
-        - id: "reportedday"
-          type: "int"
+            notes: Month Offence Occurred
+        - id: "OCC_DAY"
+          type: float
           info:
-            notes: "Day of the Month Offence was Reported"
-        - id: "reporteddayofyear"
-          type: "int"
+            notes: Day of the Month Offence Occurred
+        - id: "OCC_DOY"
+          type: float
           info:
-            notes: "Day of the Year Offence was Reported"
-        - id: "reporteddayofweek"
-          type: "text"
+            notes: Day of the Year Offence Occurred
+        - id: "OCC_DOW"
+          type: text
           info:
-            notes: "Day of the Week Offence was Reported"
-        - id: "reportedhour"
-          type: "int"
+            notes: Day of the Week Offence Occurred
+        - id: "OCC_HOUR"
+          type: float
           info:
-            notes: "Hour Offence was Reported"
-        - id: "occurrenceyear"
-          type: "int"
+            notes: Hour Offence Occurred
+        - id: "DIVISION"
+          type: text
           info:
-            notes: "Year Offence Occurred"
-        - id: "occurrencemonth"
-          type: "text"
+            notes: Police Division where Offence Occurred
+        - id: "LOCATION_TYPE"
+          type: text
           info:
-            notes: "Month Offence Occurred"
-        - id: "occurrenceday"
-          type: "int"
+            notes: Location Type of Offence
+        - id: "PREMISES_TYPE"
+          type: text
           info:
-            notes: "Day of the Month Offence Occurred"
-        - id: "occurrencedayofyear"
-          type: "int"
+            notes: Premises Type of Offence
+        - id: "UCR_CODE"
+          type: float
           info:
-            notes: "Day of the Year Offence Occurred"
-        - id: "occurrencedayofweek"
-          type: "text"
+            notes: UCR Code for Offence
+        - id: "UCR_EXT"
+          type: float
           info:
-            notes: "Day of the Year Offence Occurred"
-        - id: "occurrencehour"
-          type: "int"
+            notes: UCR Extension for Offence
+        - id: "OFFENCE"
+          type: text
           info:
-            notes: "Hour Offence Occurred"
-        - id: "mci_category"
-          type: "text"
+            notes: Title of Offence
+        - id: "MCI_CATEGORY"
+          type: text
           info:
-            notes: "MCI Category of Occurrence"
-        - id: "Hood_ID"
-          type: "text"
+            notes: MCI Category of Occurrence
+        - id: "HOOD_158"
+          type: text
           info:
-            notes: "Identifier of Neighbourhood"
-        - id: "Neighbourhood"
-          type: "text"
-          info:
-            notes: "Name of Neighbourhood"
+            notes: Identifier of Neighbourhood using City of Toronto's new 158 neighbourhood structure
         - id: "geometry"
           type: "text"
           info:

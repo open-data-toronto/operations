@@ -1,0 +1,109 @@
+persons-in-crisis-calls-for-service-attended:
+  jira_issue_id: DTSD-1707
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/158889
+  schedule: '@once'
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Persons in Crisis Calls for Service Attended
+  date_published: '2023-03-31 15:11:39.512288'
+  dataset_category: Map
+  refresh_rate: Semi-annually
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca
+  civic_issues: Poverty reduction
+  topics:
+  - Public Safety
+  tags:
+  - name: PIC
+    vocabulary_id: null
+  information_url: https://data.torontopolice.on.ca/maps/persons-in-crisis-calls-for-service-attended-open-data
+  excerpt: This dataset includes all calls for service attended by the Toronto Police
+    Service for persons in crisis.
+  limitations: |
+    The location of calls for service have been deliberately offset to
+    the nearest road intersection node to protect the privacy of parties involved
+    in the occurrence. Due to the offset of occurrence location, the numbers by Division
+    and Neighbourhood may not reflect the exact count of occurrences reported within
+    these geographies. The Toronto Police Service does not guarantee the accuracy,
+    completeness, timeliness of the data and it should not be compared to any other
+    source of crime data.
+
+    Note: Fields have been included for both the old 140 City of Toronto Neighbourhoods structure as well as the new 158 City of Toronto Neighbourhoods structure
+  notes: 'This dataset includes all Persons in Crisis (PIC) calls for service attended
+    (CFSA) which includes the following Event Types: Attempt Suicide, Person in Crisis,
+    Elopee, Jumper, Overdose and Threaten Suicide. This dataset includes only events
+    that were attended by an officer of the Toronto Police Service (TPS), but excludes
+    events attended by TPS members in Parking, Marine, Court or Primary Report Intake
+    Management and Entry (PRIME). This dataset is queried based on reported date.'
+  resources: 
+    Persons in Crisis - Calls for Service Attended:
+      agol: True
+      format: geojson
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Persons_in_Crisis_Calls_for_Service_Attended_Open_Data/FeatureServer/0/
+      attributes:
+        - id: "OBJECTID"
+          type: "text"
+          info:
+            notes: ""
+        - id: "EVENT_ID"
+          type: "float"
+          info:
+            notes: "Event Number"
+        - id: "EVENT_DATE"
+          type: "date"
+          info:
+            notes: "Date of Event"
+        - id: "EVENT_YEAR"
+          type: "float"
+          info:
+            notes: "Year of Event"
+        - id: "EVENT_MONTH"
+          type: "text"
+          info:
+            notes: "Month of Event"
+        - id: "EVENT_DOW"
+          type: "text"
+          info:
+            notes: "Day of Week of Event"
+        - id: "EVENT_HOUR"
+          type: "float"
+          info:
+            notes: "Hour of Event"
+        - id: "EVENT_TYPE"
+          type: "text"
+          info:
+            notes: "Agency specified field that is used to describe the Event "
+        - id: "DIVISION"
+          type: "text"
+          info:
+            notes: "Police Division of Event"
+        - id: "OCCURRENCE_CREATED"
+          type: "text"
+          info:
+            notes: "Indicates whether an Occurrence was created or not"
+        - id: "APPREHENSION_MADE"
+          type: "text"
+          info:
+            notes: "Indicates whether a Mental Health Act (MHA) Apprehension was made or not"
+        - id: "HOOD_158"
+          type: "text"
+          info:
+            notes: "Identifier of Neighbourhood using City of Toronto's new 158 neighbourhood structure"
+        - id: "NEIGHBOURHOOD_158"
+          type: "text"
+          info:
+            notes: "Name of Neighbourhood using City of Toronto's new 158 neighbourhood structure"
+        - id: "HOOD_140"
+          type: "text"
+          info:
+            notes: "Identifier of Neighbourhood using City of Toronto's old 140 neighbourhood structure"
+        - id: "NEIGHBOURHOOD_140"
+          type: "text"
+          info:
+            notes: "Name of Neighbourhood using City of Toronto's old 140 neighbourhood structure"
+        - id: "F_num_removed"
+          type: "float"
+          info:
+            notes: ""
