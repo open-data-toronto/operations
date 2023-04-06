@@ -159,7 +159,8 @@ def explanation_code_catalogue(**kwargs):
                 "completeness": 0,
                 "completeness_code": "Not Applicable",
                 "accessibility": dqs_logic.score_accessibility(p, r, "filestore", etl_intentory),
-                "accessibility_code": accessibility_explanation_code(p, r, "filestore", etl_intentory)
+                "accessibility_code": accessibility_explanation_code(p, r, "filestore", etl_intentory),
+                "recorded_at": dt.now().strftime("%Y-%m-%dT%H:%M:%S")
                 }
                 logging.info(f"Filestore Score: Package Name {p['name']}")
                 data.append(records)
@@ -186,18 +187,17 @@ def explanation_code_catalogue(**kwargs):
                     "completeness": dqs_logic.score_completeness(content),
                     "completeness_code": completeness_explanation_code(content),
                     "accessibility": dqs_logic.score_accessibility(p, r, "datastore", etl_intentory),
-                    "accessibility_code": accessibility_explanation_code(p, r, "datastore", etl_intentory)
+                    "accessibility_code": accessibility_explanation_code(p, r, "datastore", etl_intentory),
+                    "recorded_at": dt.now().strftime("%Y-%m-%dT%H:%M:%S")
                 }
                 
                 logging.info(f"Datastore Score {p['name']}: {r['name']} - {len(content)} records")
                 logging.info(records)
             
             data.append(records)
+    df = pd.DataFrame(data)
+    df = df.round(2)
 
-    pd.DataFrame(data).to_parquet(filepath, engine="fastparquet", compression=None)
-    df = pd.read_parquet(filepath)
+    df.to_parquet(filepath, engine="fastparquet", compression=None)
     
-    explanation_code_file_path = SCORES_PATH / f"explanation_code.csv"
-    df.to_csv(explanation_code_file_path)
-
     return str(filepath)

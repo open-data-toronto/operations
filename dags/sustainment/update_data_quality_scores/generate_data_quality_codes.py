@@ -68,67 +68,57 @@ def get_dqs_dataset_resources():
     return {r["name"]: r for r in framework.pop("resources")}
 
 
-def create_explanation_code_resource(**kwargs):
-    ti = kwargs.pop("ti")
-    resources = ti.xcom_pull(task_ids="get_dqs_dataset_resources")
-    explanation_code_path = Path(ti.xcom_pull(task_ids="explanation_code_catalogue"))
-    df = pd.read_parquet(explanation_code_path)
-    
-    logging.info(df.columns.values)
-
-    if RESOURCE_EXPLANATION_CODES not in resources:
-        logging.info(f"Creating explanation code resource: {RESOURCE_EXPLANATION_CODES}")
-        fields = []
-        for x in df.columns.values:
-            if x in ['usability', 'metadata', 'freshness', 'completeness', 'accessibility']:
-                datatype = "numeric"
-            else:
-                datatype = "text"
-            fields.append({"id": x, "type": datatype, "info": ''})
-        logging.info(fields)
-        
-        r = requests.post(
-            f"{CKAN_ADDRESS}/api/3/action/datastore_create",
-            data= json.dumps(dict(
-                resource={
-                "package_id": PACKAGE_DQS,
-                "name": RESOURCE_EXPLANATION_CODES,
-                "format": "csv",
-                "is_preview": True,
-                }
-            ,
-            fields=[{"id": x} for x in df.columns.values],
-            records=[],
-            )),
-            headers={"Authorization": CKAN_APIKEY, 'Content-Type': 'application/json'},
-        )
-        logging.info(r.json())
-        resources[RESOURCE_EXPLANATION_CODES] = r.json()["result"]
-
-    else:
-        logging.info(f" {PACKAGE_DQS}: {RESOURCE_EXPLANATION_CODES} already exists")
-
-    return resources[RESOURCE_EXPLANATION_CODES]
-
-
 def insert_scores(**kwargs):
     ti = kwargs.pop("ti")
     explanation_code_path = Path(ti.xcom_pull(task_ids="explanation_code_catalogue"))
-    datastore_resource = ti.xcom_pull(task_ids="create_explanation_code_resource")
+    datastore_resource = ti.xcom_pull(task_ids="get_or_create_explanation_code_resource")
 
     df = pd.read_parquet(explanation_code_path)
-    logging.info(f"Inserting to datastore_resource: {RESOURCE_EXPLANATION_CODES}")
+    
     records = df.to_dict(orient="records")
     logging.info(records[:5])
-    CKAN.action.datastore_upsert(
+    
+    # collecting datastore fields
+    fields = []
+    for x in df.columns.values:
+        if x in ['usability', 'metadata', 'freshness', 'completeness', 'accessibility']:
+            datatype = "float8"
+        elif x == "recorded_at":
+            datatype = "timestamp"
+        else:
+            datatype = "text"
+        fields.append({"id": x, "type": datatype, "info": ''})
+    
+    # insert into datastore
+    try:
+        logging.info(f"Inserting to datastore_resource: {RESOURCE_EXPLANATION_CODES}")
+        CKAN.action.datastore_upsert(
         method="insert",
-        resource_id=datastore_resource["resource_id"],
+        resource_id=datastore_resource["id"],
         records=df.to_dict(orient="records"),
     )
+        
+    except Exception as e:
+        # Create datastore resource if no existing one.
+        logging.error(e)
+        logging.info(
+            "Datastore doesn't exist, creating data store resource {} ".format(
+                RESOURCE_EXPLANATION_CODES
+            )
+        )
+        
+        CKAN.action.datastore_create(
+            id=datastore_resource["id"], 
+            fields=fields,
+            records=records,
+            force=True
+        )
+        
+        logging.info(f"Inserting to datastore_resource: {RESOURCE_EXPLANATION_CODES}")
 
     return {
         "message_type": "success",
-        "msg": f"Data quality scores calculated for {df.shape[0]} datasets",
+        "msg": f"Data quality scores calculated for {df.shape[0]} resources",
     }
 
 
@@ -189,27 +179,22 @@ with DAG(
         op_kwargs={"task_ids": ["explanation_code_catalogue"]},
         provide_context=True,
     )
-
-    explanation_code_resource = PythonOperator(
-        task_id="create_explanation_code_resource",
-        python_callable=create_explanation_code_resource,
-        provide_context=True,
-    )
     
-    # get_or_create_explanation_code_resource = GetOrCreateResourceOperator(
-    #     task_id="get_or_create_explanation_code_resource",
-    #     address=CKAN_ADDRESS,
-    #     apikey=CKAN_APIKEY,
-    #     package_name_or_id=PACKAGE_DQS,
-    #     resource_name=RESOURCE_EXPLANATION_CODES,
-    #     resource_attributes=dict(
-    #         format="csv",
-    #         is_preview=True,
-    #         url_type="datastore",
-    #         extract_job=f"Airflow: {PACKAGE_DQS}",
-    #         package_id=PACKAGE_DQS
-    #     ),
-    # )
+    get_or_create_explanation_code_resource = GetOrCreateResourceOperator(
+        task_id="get_or_create_explanation_code_resource",
+        address=CKAN_ADDRESS,
+        apikey=CKAN_APIKEY,
+        package_name_or_id=PACKAGE_DQS,
+        resource_name=RESOURCE_EXPLANATION_CODES,
+        resource_attributes=dict(
+            format="csv",
+            is_preview=True,
+            url_type="datastore",
+            extract_job=f"Airflow: {PACKAGE_DQS}",
+            package_id=PACKAGE_DQS,
+            url = "placeholder"
+        ),
+    )
 
     add_scores = PythonOperator(
         task_id="insert_scores", python_callable=insert_scores, provide_context=True,
@@ -228,7 +213,7 @@ with DAG(
     )
 
     
-    dqs_package_resources >> [packages, create_tmp_dir] >> raw_scores_explanation_codes 
-    raw_scores_explanation_codes >> explanation_code_resource >> add_scores
+    [packages, create_tmp_dir] >> raw_scores_explanation_codes 
+    [dqs_package_resources, raw_scores_explanation_codes] >> get_or_create_explanation_code_resource >> add_scores
     add_scores >> [delete_raw_scores_explanation_code_tmp_file, send_notification] 
     delete_raw_scores_explanation_code_tmp_file>> delete_tmp_dir
