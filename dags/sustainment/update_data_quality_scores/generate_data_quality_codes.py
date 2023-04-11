@@ -64,6 +64,9 @@ def get_dqs_dataset_resources():
         raise Exception("Not authorized to search for packages")
     except ckanapi.NotFound:
         raise Exception(f"DQS package not found: {PACKAGE_DQS}")
+    
+    for file in os.listdir('/data/tmp/generate_data_quality_codes'):
+        logging.info(file)
 
     return {r["name"]: r for r in framework.pop("resources")}
 
@@ -115,10 +118,9 @@ def insert_scores(**kwargs):
         )
         
         logging.info(f"Inserting to datastore_resource: {RESOURCE_EXPLANATION_CODES}")
-
     return {
         "message_type": "success",
-        "msg": f"Data quality scores calculated for {df.shape[0]} resources",
+        "msg": f":done_green: Data quality codes generated for {df.shape[0]} resources",
     }
 
 
@@ -156,10 +158,6 @@ with DAG(
         task_id="get_all_packages",
         python_callable=ckan_utils.get_all_packages,
         op_args=[CKAN],
-    )
-
-    dqs_package_resources = PythonOperator(
-        task_id="get_dqs_dataset_resources", python_callable=get_dqs_dataset_resources,
     )
 
     raw_scores_explanation_codes = PythonOperator(
@@ -214,6 +212,6 @@ with DAG(
 
     
     [packages, create_tmp_dir] >> raw_scores_explanation_codes 
-    [dqs_package_resources, raw_scores_explanation_codes] >> get_or_create_explanation_code_resource >> add_scores
+    raw_scores_explanation_codes >> get_or_create_explanation_code_resource >> add_scores
     add_scores >> [delete_raw_scores_explanation_code_tmp_file, send_notification] 
     delete_raw_scores_explanation_code_tmp_file>> delete_tmp_dir
