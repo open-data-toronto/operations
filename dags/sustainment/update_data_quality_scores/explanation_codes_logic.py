@@ -1,6 +1,4 @@
-import json
 import logging
-import math
 import re
 from datetime import datetime as dt
 from pathlib import Path
@@ -8,12 +6,9 @@ from pathlib import Path
 import nltk
 import numpy as np
 import pandas as pd
-from geopandas import gpd
 from nltk.corpus import wordnet
-from shapely.geometry import shape
-from sklearn.preprocessing import MinMaxScaler
 from airflow.models import Variable
-from sustainment.update_data_quality_scores import dqs_logic 
+from sustainment.update_data_quality_scores import dqs_logic
 import os
 import ckanapi
 
@@ -26,9 +21,12 @@ CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
 SCORES_PATH = DIR_PATH / "update_data_quality_scores"
 
+
 def explanation_code_catalogue(**kwargs):
     ti = kwargs.pop("ti")
-    packages = ti.xcom_pull(task_ids="get_all_packages") # can break package list into segments if needed
+    packages = ti.xcom_pull(
+        task_ids="get_all_packages"
+    )  # can break package list into segments if needed
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
     METADATA_FIELDS = kwargs.pop("METADATA_FIELDS")
     TIME_MAP = kwargs.pop("TIME_MAP")
@@ -67,72 +65,87 @@ def explanation_code_catalogue(**kwargs):
 
             if not f["id"] == "geometry" and data[f["id"]].nunique() <= 1:
                 metrics["col_constant"] -= 1 / len(columns)
-            
-        col_names_message = "Colnames relative hard to understand." if metrics["col_names"] <= 0.25 else ""
-        col_constant_messgae = "So many constant columns." if metrics["col_constant"] <= 0.6 else ""
-        
+
+        col_names_message = (
+            "Colnames relative hard to understand."
+            if metrics["col_names"] <= 0.25
+            else ""
+        )
+        col_constant_messgae = (
+            "So many constant columns." if metrics["col_constant"] <= 0.6 else ""
+        )
+
         usability_message = col_names_message + col_constant_messgae
-        
+
         return usability_message
-    
+
     def metadata_explanation_code(package, metadata_fields):
         output = []
         for field in metadata_fields:
             if field not in package or field is None:
                 output.append(field)
-        
-        metadata_message = f"Missing Fields: {','.join(output)}" if output else ""
-        
-        return metadata_message
-    
-    def freshness_explanation_code(package, time_map):
 
+        metadata_message = f"Missing Fields: {','.join(output)}" if output else ""
+
+        return metadata_message
+
+    def freshness_explanation_code(package, time_map):
         rr = package["refresh_rate"].lower()
 
-        if rr in time_map and "last_refreshed" in package and package["last_refreshed"]:            
-            days = dqs_logic.parse_datetime( package["last_refreshed"] )
-    
+        if rr in time_map and "last_refreshed" in package and package["last_refreshed"]:
+            days = dqs_logic.parse_datetime(package["last_refreshed"])
+
             # calculate elapse periods
             elapse_periods = round((days - time_map[rr]) / time_map[rr])
-            elapse_period_message = f"{elapse_periods} periods behind, should be refreshed {rr}." if elapse_periods >= 2 else ""   
+            elapse_period_message = (
+                f"{elapse_periods} periods behind, should be refreshed {rr}."
+                if elapse_periods >= 2
+                else ""
+            )
 
             # calculate elapse days
             elapse_days_message = f" {days} days elapsed." if days > 180 else ""
-            
+
             freshness_message = elapse_period_message + elapse_days_message
         else:
             freshness_message = ""
-            
+
         return freshness_message
 
     def completeness_explanation_code(data):
         """
         How much of the data is missing?
         """
-        missing_rate = round((np.sum(len(data) - data.count()) / np.prod(data.shape)) * 100)
-        completeness_message = f"{missing_rate} % of data is missing" if missing_rate >= 40 else ""
-        
+        missing_rate = round(
+            (np.sum(len(data) - data.count()) / np.prod(data.shape)) * 100
+        )
+        completeness_message = (
+            f"{missing_rate} % of data is missing" if missing_rate >= 40 else ""
+        )
+
         return completeness_message
-    
+
     def accessibility_explanation_code(p, resource, package_type, etl_intentory):
         tags_message = "" if "tags" in p and (p["num_tags"] > 0) else " missing tags."
         if package_type == "filestore":
             if resource["name"] in etl_intentory["resource_name"].values.tolist():
-                engine_info = etl_intentory.loc[etl_intentory['resource_name'] == resource["name"], 'engine'].iloc[0]  
+                engine_info = etl_intentory.loc[
+                    etl_intentory["resource_name"] == resource["name"], "engine"
+                ].iloc[0]
             else:
                 engine_info = None
 
             pipeline_message = "" if engine_info else "no pipeline asscociated."
-        else:   
+        else:
             pipeline_message = ""
-        
+
         accessibility_message = pipeline_message + tags_message
-        
+
         return accessibility_message
-    
+
     data = []
     etl_intentory = dqs_logic.get_etl_inventory("od-etl-configs")
-    
+
     for p in packages:
         logging.info(f"---------Package: {p['name']}")
         if p["name"].lower() == "tags":
@@ -141,35 +154,40 @@ def explanation_code_catalogue(**kwargs):
         if "is_retired" in p and (str(p.get("is_retired")).lower() == "true"):
             logging.info(f"Dataset {p['name']} is retired.")
             continue
-        
+
         # filestore code
         if p["dataset_category"] in ["Document", "Website"]:
-            
             for r in p["resources"]:
                 records = {
-                "store_type": "filestore",
-                "package": p["name"],
-                "resource": r["name"],
-                "usability": 0,
-                "usability_code": "Not Applicable",
-                "metadata": dqs_logic.score_metadata(p, METADATA_FIELDS),
-                "metadata_code": metadata_explanation_code(p, METADATA_FIELDS),
-                "freshness": dqs_logic.score_freshness(p, TIME_MAP),
-                "freshness_code": freshness_explanation_code(p, TIME_MAP),
-                "completeness": 0,
-                "completeness_code": "Not Applicable",
-                "accessibility": dqs_logic.score_accessibility(p, r, "filestore", etl_intentory),
-                "accessibility_code": accessibility_explanation_code(p, r, "filestore", etl_intentory),
-                "recorded_at": dt.now().strftime("%Y-%m-%dT%H:%M:%S")
+                    "store_type": "filestore",
+                    "package": p["name"],
+                    "resource": r["name"],
+                    "usability": 0,
+                    "usability_code": "Not Applicable",
+                    "metadata": dqs_logic.score_metadata(p, METADATA_FIELDS),
+                    "metadata_code": metadata_explanation_code(p, METADATA_FIELDS),
+                    "freshness": dqs_logic.score_freshness(p, TIME_MAP),
+                    "freshness_code": freshness_explanation_code(p, TIME_MAP),
+                    "completeness": 0,
+                    "completeness_code": "Not Applicable",
+                    "accessibility": dqs_logic.score_accessibility(
+                        p, r, "filestore", etl_intentory
+                    ),
+                    "accessibility_code": accessibility_explanation_code(
+                        p, r, "filestore", etl_intentory
+                    ),
+                    "recorded_at": dt.now().strftime("%Y-%m-%dT%H:%M:%S"),
                 }
                 logging.info(f"Filestore Score: Package Name {p['name']}")
                 data.append(records)
                 logging.info(records)
         else:
-        
             # datastore code
             for r in p["resources"]:
-                if "datastore_active" not in r or str(r["datastore_active"]).lower() == 'false':
+                if (
+                    "datastore_active" not in r
+                    or str(r["datastore_active"]).lower() == "false"
+                ):
                     continue
 
                 content, fields = dqs_logic.read_datastore(ckan, r["id"])
@@ -186,18 +204,24 @@ def explanation_code_catalogue(**kwargs):
                     "freshness_code": freshness_explanation_code(p, TIME_MAP),
                     "completeness": dqs_logic.score_completeness(content),
                     "completeness_code": completeness_explanation_code(content),
-                    "accessibility": dqs_logic.score_accessibility(p, r, "datastore", etl_intentory),
-                    "accessibility_code": accessibility_explanation_code(p, r, "datastore", etl_intentory),
-                    "recorded_at": dt.now().strftime("%Y-%m-%dT%H:%M:%S")
+                    "accessibility": dqs_logic.score_accessibility(
+                        p, r, "datastore", etl_intentory
+                    ),
+                    "accessibility_code": accessibility_explanation_code(
+                        p, r, "datastore", etl_intentory
+                    ),
+                    "recorded_at": dt.now().strftime("%Y-%m-%dT%H:%M:%S"),
                 }
-                
-                logging.info(f"Datastore Score {p['name']}: {r['name']} - {len(content)} records")
+
+                logging.info(
+                    f"Datastore Score {p['name']}: {r['name']} - {len(content)} records"
+                )
                 logging.info(records)
-            
-            data.append(records)
+
+                data.append(records)
     df = pd.DataFrame(data)
-    df = df.round(2)
+    df = df.round(3)
 
     df.to_parquet(filepath, engine="fastparquet", compression=None)
-    
+
     return str(filepath)
