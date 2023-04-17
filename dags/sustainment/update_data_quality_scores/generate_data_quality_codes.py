@@ -32,10 +32,8 @@ CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 METADATA_FIELDS = [
     "notes",
-    "limitations",
     "topics",
     "owner_email",
-    "civic_issues",
     "information_url",
 ]
 
@@ -124,8 +122,9 @@ def insert_scores(**kwargs):
     return {
         "message_type": "success",
         "msg": (
-            ":done_green: Data quality explanation codes generated"
-            + f"for {df.shape[0]} resources"
+            ":done_green: Data quality explanation codes generated "
+            + f"for {len(df['package'].unique().tolist())} packages, "
+            + f"{df.shape[0]} resources"
         ),
     }
 

@@ -11,6 +11,7 @@ from airflow.models import Variable
 from sustainment.update_data_quality_scores import dqs_logic
 import os
 import ckanapi
+import requests
 
 nltk.download("wordnet")
 
@@ -20,6 +21,27 @@ CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
 SCORES_PATH = DIR_PATH / "update_data_quality_scores"
+
+
+def information_url_checker(information_url):
+    result_info = ""
+    if "http" in information_url:
+        call = information_url
+    else:
+        call = "https://" + information_url
+
+    # record probametic url
+    try:
+        response = requests.get(call)
+        status_code = response.status_code
+
+        if status_code == 404:
+            result_info = "Information URL Page Not Found: " + information_url
+
+    except requests.ConnectionError:
+        result_info = "Can't reach Information URL:  " + information_url
+
+    return result_info
 
 
 def explanation_code_catalogue(**kwargs):
@@ -53,7 +75,7 @@ def explanation_code_catalogue(**kwargs):
 
         metrics = {
             "col_names": 0,  # Column names easy to understand?
-            "col_constant": 1,  # Columns where all values are constant?
+            "col_constant": [],  # Columns where all values are constant?
         }
 
         for f in columns:
@@ -64,7 +86,7 @@ def explanation_code_catalogue(**kwargs):
                 metrics["col_names"] += (1 if not is_camel else 0.5) / len(columns)
 
             if not f["id"] == "geometry" and data[f["id"]].nunique() <= 1:
-                metrics["col_constant"] -= 1 / len(columns)
+                metrics["col_constant"].append(f["id"])
 
         col_names_message = (
             "Colnames relative hard to understand."
@@ -72,7 +94,9 @@ def explanation_code_catalogue(**kwargs):
             else ""
         )
         col_constant_messgae = (
-            "So many constant columns." if metrics["col_constant"] <= 0.6 else ""
+            f"Constant columns: {','.join(metrics['col_constant'])}"
+            if metrics["col_constant"]
+            else ""
         )
 
         usability_message = col_names_message + col_constant_messgae
@@ -84,8 +108,13 @@ def explanation_code_catalogue(**kwargs):
         for field in metadata_fields:
             if field not in package or field is None:
                 output.append(field)
+            elif field == "owner_email" and "opendata" in package[field]:
+                output.append("owner_email is opendata@toronto.ca ")
+            elif field == "information_url":
+                url_message = information_url_checker(package[field])
+                output.append(url_message)
 
-        metadata_message = f"Missing Fields: {','.join(output)}" if output else ""
+        metadata_message = f"Actionable Fields: {','.join(output)}" if output else ""
 
         return metadata_message
 

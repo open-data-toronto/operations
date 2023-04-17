@@ -25,13 +25,14 @@ CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
 SCORES_PATH = DIR_PATH / "update_data_quality_scores"
 
+
 def parse_datetime(input):
     for format in [
         "%Y-%m-%dT%H:%M:%S.%f",
         "%Y-%m-%d %H:%M:%S.%f",
         "%Y-%m-%dT%H:%M:%S",
         "%Y-%m-%d %H:%M:%S",
-        "%Y-%m-%d"
+        "%Y-%m-%d",
     ]:
         try:
             delta = dt.strptime(input, format)
@@ -39,6 +40,7 @@ def parse_datetime(input):
             return days
         except ValueError:
             pass
+
 
 def read_datastore(ckan, rid, rows=10000):
     records = []
@@ -55,7 +57,9 @@ def read_datastore(ckan, rid, rows=10000):
     df = pd.DataFrame(records).drop("_id", axis=1)
 
     if "geometry" in df.columns:
-        df["geometry"] = df["geometry"].apply(lambda x: shape(json.loads(x)) if x != "None" else None)
+        df["geometry"] = df["geometry"].apply(
+            lambda x: shape(json.loads(x)) if x != "None" else None
+        )
         df = gpd.GeoDataFrame(df, crs="epsg:4326")
 
     return df, [x for x in result["fields"] if x["id"] != "_id"]
@@ -94,7 +98,6 @@ def prepare_and_normalize_scores(**kwargs):
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
     raw_scores_path = Path(ti.xcom_pull(task_ids="score_catalogue"))
     weights = ti.xcom_pull(task_ids="calculate_model_weights")
-    logging.info(weights)
     BINS = kwargs.pop("BINS")
     MODEL_VERSION = kwargs.pop("MODEL_VERSION")
     DIMENSIONS = kwargs.pop("DIMENSIONS")
@@ -130,16 +133,14 @@ def prepare_and_normalize_scores(**kwargs):
     filepath = tmp_dir / f"{filename}.parquet"
 
     df.to_parquet(filepath, engine="fastparquet", compression=None)
-    
-    score_file_path = SCORES_PATH / f"scores.csv"
-    df.to_csv(score_file_path)
 
     return str(filepath)
+
 
 def get_etl_inventory(package_name):
     etl_intentory = CKAN.action.package_show(id=package_name)
     rid = etl_intentory["resources"][0]["id"]
-   
+
     has_more = True
     records = []
     while has_more:
@@ -149,54 +150,56 @@ def get_etl_inventory(package_name):
         has_more = len(records) < result["total"]
 
     df = pd.DataFrame(records).drop("_id", axis=1)
-    
+
     return df
 
+
 def score_usability(columns, data):
-        """
-        How easy is it to use the data given how it is organized/structured?
+    """
+    How easy is it to use the data given how it is organized/structured?
 
-        TODO's:
-            * level of nested fields?
-            * long vs. wide?
-            * if ID columns given, are these ID's common across datasets?
-        """
+    TODO's:
+        * level of nested fields?
+        * long vs. wide?
+        * if ID columns given, are these ID's common across datasets?
+    """
 
-        def parse_col_name(s):
-            camel_to_snake = re.sub(
-                "([a-z0-9])([A-Z])", r"\1_\2", re.sub("(.)([A-Z][a-z]+)", r"\1_\2", s)
-            ).lower()
+    def parse_col_name(s):
+        camel_to_snake = re.sub(
+            "([a-z0-9])([A-Z])", r"\1_\2", re.sub("(.)([A-Z][a-z]+)", r"\1_\2", s)
+        ).lower()
 
-            return (
-                camel_to_snake == s,
-                [x for x in re.split(r"-|_|\s", camel_to_snake) if len(x)],
-            )
+        return (
+            camel_to_snake == s,
+            [x for x in re.split(r"-|_|\s", camel_to_snake) if len(x)],
+        )
 
-        metrics = {
-            "col_names": 0,  # Column names easy to understand?
-            "col_constant": 1,  # Columns where all values are constant?
-        }
+    metrics = {
+        "col_names": 0,  # Column names easy to understand?
+        "col_constant": 1,  # Columns where all values are constant?
+    }
 
-        for f in columns:
-            is_camel, words = parse_col_name(f["id"])
-            eng_words = [w for w in words if len(wordnet.synsets(w))]
+    for f in columns:
+        is_camel, words = parse_col_name(f["id"])
+        eng_words = [w for w in words if len(wordnet.synsets(w))]
 
-            if len(eng_words) / len(words) > 0.8:
-                metrics["col_names"] += (1 if not is_camel else 0.5) / len(columns)
+        if len(eng_words) / len(words) > 0.8:
+            metrics["col_names"] += (1 if not is_camel else 0.5) / len(columns)
 
-            if not f["id"] == "geometry" and data[f["id"]].nunique() <= 1:
-                metrics["col_constant"] -= 1 / len(columns)
+        if not f["id"] == "geometry" and data[f["id"]].nunique() <= 1:
+            metrics["col_constant"] -= 1 / len(columns)
 
-        if isinstance(data, gpd.GeoDataFrame):
-            counts = data["geometry"].is_valid.value_counts()
+    if isinstance(data, gpd.GeoDataFrame):
+        counts = data["geometry"].is_valid.value_counts()
 
-            metrics["geo_validity"] = (
-                1 - (counts[False] / (len(data) * 0.05)) if False in counts else 1
-            )
+        metrics["geo_validity"] = (
+            1 - (counts[False] / (len(data) * 0.05)) if False in counts else 1
+        )
 
-        return np.mean(list(metrics.values()))
-    
-def score_metadata(package, metadata_fields, columns = None):
+    return np.mean(list(metrics.values()))
+
+
+def score_metadata(package, metadata_fields, columns=None):
     """
     How easy is it to understand the context of the data?
 
@@ -215,10 +218,10 @@ def score_metadata(package, metadata_fields, columns = None):
             and not (field == "owner_email" and "opendata" in package[field])
         ):
             metrics["desc_dataset"] += 1 / len(metadata_fields)
-    
+
     if columns:
-        metrics["desc_columns"] = 0 # Does the metadata describe the data well?
-    
+        metrics["desc_columns"] = 0  # Does the metadata describe the data well?
+
         for f in columns:
             if (
                 "info" in f
@@ -228,6 +231,7 @@ def score_metadata(package, metadata_fields, columns = None):
                 metrics["desc_columns"] += 1 / len(columns)
 
     return np.mean(list(metrics.values()))
+
 
 def score_freshness(package, time_map):
     """
@@ -240,10 +244,8 @@ def score_freshness(package, time_map):
 
     if rr == "real-time":
         return 1
-    elif (
-        rr in time_map and "last_refreshed" in package and package["last_refreshed"]
-    ):            
-        days = parse_datetime( package["last_refreshed"] )
+    elif rr in time_map and "last_refreshed" in package and package["last_refreshed"]:
+        days = parse_datetime(package["last_refreshed"])
 
         # Greater than 2 periods have a score of 0
         metrics["elapse_periods"] = max(0, 1 - math.floor(days / time_map[rr]) / 2)
@@ -255,11 +257,13 @@ def score_freshness(package, time_map):
 
     return 0
 
+
 def score_completeness(data):
     """
     How much of the data is missing?
     """
     return 1 - (np.sum(len(data) - data.count()) / np.prod(data.shape))
+
 
 def score_accessibility(p, resource, dataset_type, etl_intentory):
     """
@@ -267,25 +271,26 @@ def score_accessibility(p, resource, dataset_type, etl_intentory):
     """
     metrics = {}
     metrics["tags"] = 1 if "tags" in p and (p["num_tags"] > 0) else 0.5
-    
+
     if dataset_type == "filestore":
         if resource["name"] in etl_intentory["resource_name"].values.tolist():
-            engine_info = etl_intentory.loc[etl_intentory['resource_name'] == resource["name"], 'engine'].iloc[0]  
+            engine_info = etl_intentory.loc[
+                etl_intentory["resource_name"] == resource["name"], "engine"
+            ].iloc[0]
         else:
             engine_info = None
-        logging.info(f"{resource['name']}, Engine Info: {engine_info}")
 
-        metrics["pipeline"] = 1 if engine_info else 0.5
-        
+        metrics["pipeline"] = 0.6 if engine_info else 0.2
+
     if dataset_type == "datastore":
         metrics["pipeline"] = 1
-    
+
     return np.mean(list(metrics.values()))
 
 
 def score_catalogue(**kwargs):
     ti = kwargs.pop("ti")
-    packages = ti.xcom_pull(task_ids="get_all_packages") # can break package list into segments if needed
+    packages = ti.xcom_pull(task_ids="get_all_packages")
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
     METADATA_FIELDS = kwargs.pop("METADATA_FIELDS")
     TIME_MAP = kwargs.pop("TIME_MAP")
@@ -294,10 +299,11 @@ def score_catalogue(**kwargs):
 
     filename = "raw_scores"
     filepath = tmp_dir / f"{filename}.parquet"
-    
-    data = []
+
+    filestore_records = []
+    datastore_records = []
     etl_intentory = get_etl_inventory("od-etl-configs")
-    
+
     for p in packages:
         logging.info(f"---------Package: {p['name']}")
         if p["name"].lower() == "tags":
@@ -306,28 +312,32 @@ def score_catalogue(**kwargs):
         if "is_retired" in p and (str(p.get("is_retired")).lower() == "true"):
             logging.info(f"Dataset {p['name']} is retired.")
             continue
-        
+
         # filestore score
         if p["dataset_category"] in ["Document", "Website"]:
-            
             for r in p["resources"]:
                 records = {
-                "package": p["name"],
-                "resource": r["name"],
-                "usability": 0,
-                "metadata": score_metadata(p, METADATA_FIELDS),
-                "freshness": score_freshness(p, TIME_MAP),
-                "completeness": 0,
-                "accessibility": score_accessibility(p, r, "filestore", etl_intentory),
+                    "package": p["name"],
+                    "resource": r["name"],
+                    "usability": 0,
+                    "metadata": score_metadata(p, METADATA_FIELDS),
+                    "freshness": score_freshness(p, TIME_MAP),
+                    "completeness": 0,
+                    "accessibility": score_accessibility(
+                        p, r, "filestore", etl_intentory
+                    ),
                 }
                 logging.info(f"Filestore Score: Package Name {p['name']}")
-                data.append(records)
+                filestore_records.append(records)
                 logging.info(records)
-        
-        #filestore score
+
+        # datastore score
         else:
             for r in p["resources"]:
-                if "datastore_active" not in r or str(r["datastore_active"]).lower() == 'false':
+                if (
+                    "datastore_active" not in r
+                    or str(r["datastore_active"]).lower() == "false"
+                ):
                     continue
 
                 content, fields = read_datastore(ckan, r["id"])
@@ -339,14 +349,35 @@ def score_catalogue(**kwargs):
                     "metadata": score_metadata(p, METADATA_FIELDS, fields),
                     "freshness": score_freshness(p, TIME_MAP),
                     "completeness": score_completeness(content),
-                    "accessibility": score_accessibility(p, r, "datastore", etl_intentory),
+                    "accessibility": score_accessibility(
+                        p, r, "datastore", etl_intentory
+                    ),
                 }
-                
-                logging.info(f"Datastore Score {p['name']}: {r['name']} - {len(content)} records")
-                logging.info(records)
-            
-            data.append(records)
 
-    pd.DataFrame(data).to_parquet(filepath, engine="fastparquet", compression=None)
+                logging.info(
+                    f"Datastore Score {p['name']}: {r['name']} - {len(content)} records"
+                )
+                logging.info(records)
+
+                datastore_records.append(records)
+
+    df_filestore = pd.DataFrame(filestore_records)
+    df_datastore = pd.DataFrame(datastore_records)
+    logging.info(df_filestore.shape[0])
+    logging.info(df_datastore.shape[0])
+
+    # assign mean value of datastore for filestore dimension "usability" and "completeness"
+    df_filestore["usability"] = [df_datastore["usability"].mean()] * df_filestore.shape[
+        0
+    ]
+    df_filestore["completeness"] = [
+        df_datastore["completeness"].mean()
+    ] * df_filestore.shape[0]
+
+    logging.info(df_filestore["usability"].head(5))
+    logging.info(df_datastore["completeness"].head(5))
+    df = df_datastore.append(df_filestore, ignore_index=True)
+
+    df.to_parquet(filepath, engine="fastparquet", compression=None)
 
     return str(filepath)
