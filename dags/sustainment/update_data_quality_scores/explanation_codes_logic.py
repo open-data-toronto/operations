@@ -10,18 +10,8 @@ from nltk.corpus import wordnet
 from airflow.models import Variable
 from sustainment.update_data_quality_scores import dqs_logic
 import os
-import ckanapi
 import requests
-
-nltk.download("wordnet")
-
-ACTIVE_ENV = Variable.get("active_env")
-CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
-
-DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
-SCORES_PATH = DIR_PATH / "update_data_quality_scores"
-
+import math
 
 def information_url_checker(information_url):
     result_info = ""
@@ -43,6 +33,18 @@ def information_url_checker(information_url):
 
     return result_info
 
+def attribue_description_check(columns):
+    counter = 0
+    for f in columns:
+        if (
+            "info" in f
+            and (f["info"]["notes"] is not None)
+            and f["info"]["notes"].strip() != f["id"]
+        ):
+            counter += 1 
+    
+    return counter == 0
+    
 
 def explanation_code_catalogue(**kwargs):
     ti = kwargs.pop("ti")
@@ -52,6 +54,7 @@ def explanation_code_catalogue(**kwargs):
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
     METADATA_FIELDS = kwargs.pop("METADATA_FIELDS")
     TIME_MAP = kwargs.pop("TIME_MAP")
+    PENALTY_MAP = kwargs.pop("PENALTY_MAP")
 
     ckan = kwargs.pop("ckan")
 
@@ -103,41 +106,55 @@ def explanation_code_catalogue(**kwargs):
 
         return usability_message
 
-    def metadata_explanation_code(package, metadata_fields):
-        output = []
+    def metadata_explanation_code(package, metadata_fields, columns=None):
+        missing_fields = []
+        email_message = ""
+        url_message = ""
         for field in metadata_fields:
             if field not in package or field is None:
-                output.append(field)
+                missing_fields.append(field)
             elif field == "owner_email" and "opendata" in package[field]:
-                output.append("owner_email is opendata@toronto.ca ")
+                email_message = "owner_email is opendata@toronto.ca;"
             elif field == "information_url":
                 url_message = information_url_checker(package[field])
-                output.append(url_message)
 
-        metadata_message = f"Actionable Fields: {','.join(output)}" if output else ""
+        missing_fields_message = (
+            f"Missing Fields: {','.join(missing_fields)};" if missing_fields else ""
+        )
 
+        metadata_message = (
+            missing_fields_message + email_message + url_message
+        )
+        
+        if columns:
+            is_empty = attribue_description_check(columns)
+            data_attributes_message = "attribute description missing." if is_empty else ""
+        
+            metadata_message = metadata_message + data_attributes_message
+            
         return metadata_message
 
     def freshness_explanation_code(package, time_map):
+        freshness_message = ""
         rr = package["refresh_rate"].lower()
-
-        if rr in time_map and "last_refreshed" in package and package["last_refreshed"]:
+        
+        if "last_refreshed" in package and package["last_refreshed"]:
             days = dqs_logic.parse_datetime(package["last_refreshed"])
+            logging.info(f"elapse days: {days}, refresh_rate: {rr}")
 
-            # calculate elapse periods
-            elapse_periods = round((days - time_map[rr]) / time_map[rr])
-            elapse_period_message = (
-                f"{elapse_periods} periods behind, should be refreshed {rr}."
-                if elapse_periods >= 2
-                else ""
-            )
+            if rr == "as available":
+                freshness_message = "2+ years since last refreshed." if days > (365*2) else ""
+        
+            if rr in time_map:
+                # calculate elapse periods
+                elapse_periods = math.floor((days - time_map[rr]) / time_map[rr])
+                elapse_period_message = (
+                    f"{elapse_periods} periods behind, should be refreshed {rr}."
+                    if elapse_periods >= 1
+                    else ""
+                )
 
-            # calculate elapse days
-            elapse_days_message = f" {days} days elapsed." if days > 180 else ""
-
-            freshness_message = elapse_period_message + elapse_days_message
-        else:
-            freshness_message = ""
+                freshness_message = elapse_period_message
 
         return freshness_message
 
@@ -149,7 +166,7 @@ def explanation_code_catalogue(**kwargs):
             (np.sum(len(data) - data.count()) / np.prod(data.shape)) * 100
         )
         completeness_message = (
-            f"{missing_rate} % of data is missing" if missing_rate >= 40 else ""
+            f"{missing_rate} % of data is missing" if missing_rate >= 50 else ""
         )
 
         return completeness_message
@@ -173,7 +190,7 @@ def explanation_code_catalogue(**kwargs):
         return accessibility_message
 
     data = []
-    etl_intentory = dqs_logic.get_etl_inventory("od-etl-configs")
+    etl_intentory = dqs_logic.get_etl_inventory("od-etl-configs", ckan)
 
     for p in packages:
         logging.info(f"---------Package: {p['name']}")
@@ -188,14 +205,13 @@ def explanation_code_catalogue(**kwargs):
         if p["dataset_category"] in ["Document", "Website"]:
             for r in p["resources"]:
                 records = {
-                    "store_type": "filestore",
                     "package": p["name"],
                     "resource": r["name"],
                     "usability": 0,
                     "usability_code": "Not Applicable",
                     "metadata": dqs_logic.score_metadata(p, METADATA_FIELDS),
                     "metadata_code": metadata_explanation_code(p, METADATA_FIELDS),
-                    "freshness": dqs_logic.score_freshness(p, TIME_MAP),
+                    "freshness": dqs_logic.score_freshness(p, TIME_MAP, PENALTY_MAP),
                     "freshness_code": freshness_explanation_code(p, TIME_MAP),
                     "completeness": 0,
                     "completeness_code": "Not Applicable",
@@ -206,6 +222,7 @@ def explanation_code_catalogue(**kwargs):
                         p, r, "filestore", etl_intentory
                     ),
                     "recorded_at": dt.now().strftime("%Y-%m-%dT%H:%M:%S"),
+                    "store_type": "filestore",
                 }
                 logging.info(f"Filestore Score: Package Name {p['name']}")
                 data.append(records)
@@ -222,14 +239,13 @@ def explanation_code_catalogue(**kwargs):
                 content, fields = dqs_logic.read_datastore(ckan, r["id"])
 
                 records = {
-                    "store_type": "datastore",
                     "package": p["name"],
                     "resource": r["name"],
                     "usability": dqs_logic.score_usability(fields, content),
                     "usability_code": usability_explanation_code(fields, content),
                     "metadata": dqs_logic.score_metadata(p, METADATA_FIELDS, fields),
-                    "metadata_code": metadata_explanation_code(p, METADATA_FIELDS),
-                    "freshness": dqs_logic.score_freshness(p, TIME_MAP),
+                    "metadata_code": metadata_explanation_code(p, METADATA_FIELDS, fields),
+                    "freshness": dqs_logic.score_freshness(p, TIME_MAP, PENALTY_MAP),
                     "freshness_code": freshness_explanation_code(p, TIME_MAP),
                     "completeness": dqs_logic.score_completeness(content),
                     "completeness_code": completeness_explanation_code(content),
@@ -240,6 +256,7 @@ def explanation_code_catalogue(**kwargs):
                         p, r, "datastore", etl_intentory
                     ),
                     "recorded_at": dt.now().strftime("%Y-%m-%dT%H:%M:%S"),
+                    "store_type": "datastore",
                 }
 
                 logging.info(

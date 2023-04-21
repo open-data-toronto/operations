@@ -14,17 +14,8 @@ from shapely.geometry import shape
 from sklearn.preprocessing import MinMaxScaler
 from airflow.models import Variable
 import os
-import ckanapi
 
 nltk.download("wordnet")
-
-ACTIVE_ENV = Variable.get("active_env")
-CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
-
-DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
-SCORES_PATH = DIR_PATH / "update_data_quality_scores"
-
 
 def parse_datetime(input):
     for format in [
@@ -137,14 +128,14 @@ def prepare_and_normalize_scores(**kwargs):
     return str(filepath)
 
 
-def get_etl_inventory(package_name):
-    etl_intentory = CKAN.action.package_show(id=package_name)
+def get_etl_inventory(package_name, ckan):
+    etl_intentory = ckan.action.package_show(id=package_name)
     rid = etl_intentory["resources"][0]["id"]
 
     has_more = True
     records = []
     while has_more:
-        result = CKAN.action.datastore_search(id=rid, limit=5000, offset=len(records))
+        result = ckan.action.datastore_search(id=rid, limit=5000, offset=len(records))
 
         records += result["records"]
         has_more = len(records) < result["total"]
@@ -233,7 +224,7 @@ def score_metadata(package, metadata_fields, columns=None):
     return np.mean(list(metrics.values()))
 
 
-def score_freshness(package, time_map):
+def score_freshness(package, time_map, penalty_map):
     """
     How up to date is the data?
     """
@@ -242,14 +233,17 @@ def score_freshness(package, time_map):
 
     rr = package["refresh_rate"].lower()
 
-    if rr == "real-time":
+    if rr in ["real-time", "as available"]:
         return 1
     elif rr in time_map and "last_refreshed" in package and package["last_refreshed"]:
         days = parse_datetime(package["last_refreshed"])
-
-        # Greater than 2 periods have a score of 0
-        metrics["elapse_periods"] = max(0, 1 - math.floor(days / time_map[rr]) / 2)
-
+     
+        elapse_periods = max(0, (days - time_map[rr]) / time_map[rr])
+        metrics["elapse_periods"] = max(
+            0, 1 - elapse_periods / penalty_map[rr]
+        )
+        logging.info(metrics["elapse_periods"])
+        
         # Decrease the score starting from ~0.5 years to ~3 years
         metrics["elapse_days"] = 1 - (1 / (1 + np.exp(4 * (2.25 - days / 365))))
 
@@ -262,7 +256,12 @@ def score_completeness(data):
     """
     How much of the data is missing?
     """
-    return 1 - (np.sum(len(data) - data.count()) / np.prod(data.shape))
+    missing_rate = (np.sum(len(data) - data.count()) / np.prod(data.shape))
+    
+    if missing_rate >= 0.5:
+        return 1 - (np.sum(len(data) - data.count()) / np.prod(data.shape))
+    else:
+        return 1
 
 
 def score_accessibility(p, resource, dataset_type, etl_intentory):
@@ -302,7 +301,7 @@ def score_catalogue(**kwargs):
 
     filestore_records = []
     datastore_records = []
-    etl_intentory = get_etl_inventory("od-etl-configs")
+    etl_intentory = get_etl_inventory("od-etl-configs", ckan)
 
     for p in packages:
         logging.info(f"---------Package: {p['name']}")
@@ -321,7 +320,7 @@ def score_catalogue(**kwargs):
                     "resource": r["name"],
                     "usability": 0,
                     "metadata": score_metadata(p, METADATA_FIELDS),
-                    "freshness": score_freshness(p, TIME_MAP),
+                    "freshness": score_freshness(p, TIME_MAP, PENALTY_MAP),
                     "completeness": 0,
                     "accessibility": score_accessibility(
                         p, r, "filestore", etl_intentory
@@ -374,8 +373,7 @@ def score_catalogue(**kwargs):
         df_datastore["completeness"].mean()
     ] * df_filestore.shape[0]
 
-    logging.info(df_filestore["usability"].head(5))
-    logging.info(df_datastore["completeness"].head(5))
+    
     df = df_datastore.append(df_filestore, ignore_index=True)
 
     df.to_parquet(filepath, engine="fastparquet", compression=None)

@@ -27,7 +27,7 @@ ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN_ADDRESS = CKAN_CREDS[ACTIVE_ENV]["address"]
 CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]
-CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
+ckan = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 
 METADATA_FIELDS = [
@@ -46,6 +46,14 @@ TIME_MAP = {
     "annually": 365,
 }
 
+PENALTY_MAP = {
+    "daily": 7,  # 7 days behind causes score of 0
+    "weekly": 4,  # 4 weeks behind causes score of 0
+    "monthly": 2,  # 2 months behind causes score of 0
+    "quarterly": 2,  # 2 quarters behind causes score of 0
+    "semi-annually": 2,  # 2 periods (1 year) causes score of 0
+    "annually": 0.5,  # half a year (0.5 periods) causes a score of 0
+}
 
 RESOURCE_EXPLANATION_CODES = "quality-scores-explanation-codes"
 PACKAGE_DQS = "catalogue-quality-scores"
@@ -59,18 +67,6 @@ def send_success_msg(**kwargs):
         active_env=ACTIVE_ENV,
         prod_webhook=ACTIVE_ENV == "prod",
     )
-
-
-def get_dqs_dataset_resources():
-    try:
-        framework = CKAN.action.package_show(id=PACKAGE_DQS)
-        logging.info(f"Found DQS Package: {PACKAGE_DQS}")
-    except ckanapi.NotAuthorized:
-        raise Exception("Not authorized to search for packages")
-    except ckanapi.NotFound:
-        raise Exception(f"DQS package not found: {PACKAGE_DQS}")
-
-    return {r["name"]: r for r in framework.pop("resources")}
 
 
 def insert_scores(**kwargs):
@@ -99,7 +95,7 @@ def insert_scores(**kwargs):
     # insert into datastore
     try:
         logging.info(f"Inserting to datastore_resource: {RESOURCE_EXPLANATION_CODES}")
-        CKAN.action.datastore_upsert(
+        ckan.action.datastore_upsert(
             method="insert",
             resource_id=datastore_resource["id"],
             records=df.to_dict(orient="records"),
@@ -114,7 +110,7 @@ def insert_scores(**kwargs):
             )
         )
 
-        CKAN.action.datastore_create(
+        ckan.action.datastore_create(
             id=datastore_resource["id"], fields=fields, records=records, force=True
         )
 
@@ -161,16 +157,17 @@ with DAG(
     packages = PythonOperator(
         task_id="get_all_packages",
         python_callable=ckan_utils.get_all_packages,
-        op_args=[CKAN],
+        op_args=[ckan],
     )
 
     raw_scores_explanation_codes = PythonOperator(
         task_id="explanation_code_catalogue",
         python_callable=explanation_codes_logic.explanation_code_catalogue,
         op_kwargs={
-            "ckan": CKAN,
+            "ckan": ckan,
             "METADATA_FIELDS": METADATA_FIELDS,
             "TIME_MAP": TIME_MAP,
+            "PENALTY_MAP": PENALTY_MAP,
         },
         provide_context=True,
     )
