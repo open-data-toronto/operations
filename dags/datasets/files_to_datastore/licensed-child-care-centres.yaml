@@ -107,6 +107,10 @@ licensed-child-care-centres:
           type: "text"
           info:
             notes: "Date of the last query to the source system of the data"
+        - id: "cwelcc_flag"
+          type: "text"
+          info:
+            notes: "'Y' indicates space participates in CWELCC, blank indicates it does not'"
         - id: "geometry"
           type: "text"
           info:
