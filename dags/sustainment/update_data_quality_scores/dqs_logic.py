@@ -1,6 +1,5 @@
 import json
 import logging
-import math
 import re
 from datetime import datetime as dt
 from pathlib import Path
@@ -12,10 +11,9 @@ from geopandas import gpd
 from nltk.corpus import wordnet
 from shapely.geometry import shape
 from sklearn.preprocessing import MinMaxScaler
-from airflow.models import Variable
-import os
 
 nltk.download("wordnet")
+
 
 def parse_datetime(input):
     for format in [
@@ -224,7 +222,7 @@ def score_metadata(package, metadata_fields, columns=None):
     return np.mean(list(metrics.values()))
 
 
-def score_freshness(package, time_map, penalty_map):
+def score_freshness(package, time_map, penalty_map, threshold_map):
     """
     How up to date is the data?
     """
@@ -237,15 +235,12 @@ def score_freshness(package, time_map, penalty_map):
         return 1
     elif rr in time_map and "last_refreshed" in package and package["last_refreshed"]:
         days = parse_datetime(package["last_refreshed"])
-     
         elapse_periods = max(0, (days - time_map[rr]) / time_map[rr])
-        metrics["elapse_periods"] = max(
-            0, 1 - elapse_periods / penalty_map[rr]
-        )
-        logging.info(metrics["elapse_periods"])
-        
-        # Decrease the score starting from ~0.5 years to ~3 years
-        metrics["elapse_days"] = 1 - (1 / (1 + np.exp(4 * (2.25 - days / 365))))
+        a, b = threshold_map[penalty_map[rr]]
+        metrics["elapse_periods"] = 1 - (1 / (1 + np.exp(a * (b - elapse_periods))))
+
+        # # Decrease the score starting from ~0.5 years to ~3 years
+        # metrics["elapse_days"] = 1 - (1 / (1 + np.exp(4 * (2.25 - days / 365))))
 
         return np.mean(list(metrics.values()))
 
@@ -256,8 +251,8 @@ def score_completeness(data):
     """
     How much of the data is missing?
     """
-    missing_rate = (np.sum(len(data) - data.count()) / np.prod(data.shape))
-    
+    missing_rate = np.sum(len(data) - data.count()) / np.prod(data.shape)
+
     if missing_rate >= 0.5:
         return 1 - (np.sum(len(data) - data.count()) / np.prod(data.shape))
     else:
@@ -293,6 +288,8 @@ def score_catalogue(**kwargs):
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
     METADATA_FIELDS = kwargs.pop("METADATA_FIELDS")
     TIME_MAP = kwargs.pop("TIME_MAP")
+    PENALTY_MAP = kwargs.pop("PENALTY_MAP")
+    THRESHOLD_MAP = kwargs.pop("THRESHOLD_MAP")
 
     ckan = kwargs.pop("ckan")
 
@@ -320,7 +317,9 @@ def score_catalogue(**kwargs):
                     "resource": r["name"],
                     "usability": 0,
                     "metadata": score_metadata(p, METADATA_FIELDS),
-                    "freshness": score_freshness(p, TIME_MAP, PENALTY_MAP),
+                    "freshness": score_freshness(
+                        p, TIME_MAP, PENALTY_MAP, THRESHOLD_MAP
+                    ),
                     "completeness": 0,
                     "accessibility": score_accessibility(
                         p, r, "filestore", etl_intentory
@@ -373,7 +372,6 @@ def score_catalogue(**kwargs):
         df_datastore["completeness"].mean()
     ] * df_filestore.shape[0]
 
-    
     df = df_datastore.append(df_filestore, ignore_index=True)
 
     df.to_parquet(filepath, engine="fastparquet", compression=None)

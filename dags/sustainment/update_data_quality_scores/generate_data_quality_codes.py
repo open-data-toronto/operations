@@ -55,6 +55,9 @@ PENALTY_MAP = {
     "annually": 0.5,  # half a year (0.5 periods) causes a score of 0
 }
 
+# Mapping between penalty threshold and equation parameters
+THRESHOLD_MAP = {7: (2.0, 3.5), 4: (3.5, 2), 2: (6.9, 1), 0.5: (27.6, 0.25)}
+
 RESOURCE_EXPLANATION_CODES = "quality-scores-explanation-codes"
 PACKAGE_DQS = "catalogue-quality-scores"
 
@@ -168,6 +171,7 @@ with DAG(
             "METADATA_FIELDS": METADATA_FIELDS,
             "TIME_MAP": TIME_MAP,
             "PENALTY_MAP": PENALTY_MAP,
+            "THRESHOLD_MAP": THRESHOLD_MAP,
         },
         provide_context=True,
     )

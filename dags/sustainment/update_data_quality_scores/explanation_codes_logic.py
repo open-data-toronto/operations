@@ -7,11 +7,12 @@ import nltk
 import numpy as np
 import pandas as pd
 from nltk.corpus import wordnet
-from airflow.models import Variable
 from sustainment.update_data_quality_scores import dqs_logic
-import os
 import requests
 import math
+
+nltk.download("wordnet")
+
 
 def information_url_checker(information_url):
     result_info = ""
@@ -33,6 +34,7 @@ def information_url_checker(information_url):
 
     return result_info
 
+
 def attribue_description_check(columns):
     counter = 0
     for f in columns:
@@ -41,10 +43,10 @@ def attribue_description_check(columns):
             and (f["info"]["notes"] is not None)
             and f["info"]["notes"].strip() != f["id"]
         ):
-            counter += 1 
-    
+            counter += 1
+
     return counter == 0
-    
+
 
 def explanation_code_catalogue(**kwargs):
     ti = kwargs.pop("ti")
@@ -55,6 +57,7 @@ def explanation_code_catalogue(**kwargs):
     METADATA_FIELDS = kwargs.pop("METADATA_FIELDS")
     TIME_MAP = kwargs.pop("TIME_MAP")
     PENALTY_MAP = kwargs.pop("PENALTY_MAP")
+    THRESHOLD_MAP = kwargs.pop("THRESHOLD_MAP")
 
     ckan = kwargs.pop("ckan")
 
@@ -84,9 +87,8 @@ def explanation_code_catalogue(**kwargs):
         for f in columns:
             is_camel, words = parse_col_name(f["id"])
             eng_words = [w for w in words if len(wordnet.synsets(w))]
-
             if len(eng_words) / len(words) > 0.8:
-                metrics["col_names"] += (1 if not is_camel else 0.5) / len(columns)
+                metrics["col_names"] += 1 / len(columns)
 
             if not f["id"] == "geometry" and data[f["id"]].nunique() <= 1:
                 metrics["col_constant"].append(f["id"])
@@ -122,29 +124,33 @@ def explanation_code_catalogue(**kwargs):
             f"Missing Fields: {','.join(missing_fields)};" if missing_fields else ""
         )
 
-        metadata_message = (
-            missing_fields_message + email_message + url_message
-        )
-        
+        metadata_message = missing_fields_message + email_message + url_message
+
         if columns:
             is_empty = attribue_description_check(columns)
-            data_attributes_message = "attribute description missing." if is_empty else ""
-        
+            data_attributes_message = (
+                "attribute description missing." if is_empty else ""
+            )
+
             metadata_message = metadata_message + data_attributes_message
-            
+
         return metadata_message
 
     def freshness_explanation_code(package, time_map):
         freshness_message = ""
         rr = package["refresh_rate"].lower()
-        
+
         if "last_refreshed" in package and package["last_refreshed"]:
             days = dqs_logic.parse_datetime(package["last_refreshed"])
             logging.info(f"elapse days: {days}, refresh_rate: {rr}")
 
             if rr == "as available":
-                freshness_message = "2+ years since last refreshed." if days > (365*2) else ""
-        
+                freshness_message = (
+                    "Data refreshed as available, 2+ years since last refreshed."
+                    if days > (365 * 2)
+                    else ""
+                )
+
             if rr in time_map:
                 # calculate elapse periods
                 elapse_periods = math.floor((days - time_map[rr]) / time_map[rr])
@@ -211,7 +217,9 @@ def explanation_code_catalogue(**kwargs):
                     "usability_code": "Not Applicable",
                     "metadata": dqs_logic.score_metadata(p, METADATA_FIELDS),
                     "metadata_code": metadata_explanation_code(p, METADATA_FIELDS),
-                    "freshness": dqs_logic.score_freshness(p, TIME_MAP, PENALTY_MAP),
+                    "freshness": dqs_logic.score_freshness(
+                        p, TIME_MAP, PENALTY_MAP, THRESHOLD_MAP
+                    ),
                     "freshness_code": freshness_explanation_code(p, TIME_MAP),
                     "completeness": 0,
                     "completeness_code": "Not Applicable",
@@ -244,8 +252,12 @@ def explanation_code_catalogue(**kwargs):
                     "usability": dqs_logic.score_usability(fields, content),
                     "usability_code": usability_explanation_code(fields, content),
                     "metadata": dqs_logic.score_metadata(p, METADATA_FIELDS, fields),
-                    "metadata_code": metadata_explanation_code(p, METADATA_FIELDS, fields),
-                    "freshness": dqs_logic.score_freshness(p, TIME_MAP, PENALTY_MAP),
+                    "metadata_code": metadata_explanation_code(
+                        p, METADATA_FIELDS, fields
+                    ),
+                    "freshness": dqs_logic.score_freshness(
+                        p, TIME_MAP, PENALTY_MAP, THRESHOLD_MAP
+                    ),
                     "freshness_code": freshness_explanation_code(p, TIME_MAP),
                     "completeness": dqs_logic.score_completeness(content),
                     "completeness_code": completeness_explanation_code(content),
