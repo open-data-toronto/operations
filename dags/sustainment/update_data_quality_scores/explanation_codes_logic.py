@@ -27,10 +27,10 @@ def information_url_checker(information_url):
         status_code = response.status_code
 
         if status_code == 404:
-            result_info = "Information URL Page Not Found: " + information_url
+            result_info = "~bad_info_url"
 
     except requests.ConnectionError:
-        result_info = "Can't reach Information URL:  " + information_url
+        result_info = "~bad_info_url"
 
     return result_info
 
@@ -94,12 +94,12 @@ def explanation_code_catalogue(**kwargs):
                 metrics["col_constant"].append(f["id"])
 
         col_names_message = (
-            "Colnames relative hard to understand."
+            "~colnames_unclear"
             if metrics["col_names"] <= 0.25
             else ""
         )
         col_constant_messgae = (
-            f"Constant columns: {','.join(metrics['col_constant'])}"
+            f"~constant_cols:{','.join(metrics['col_constant'])}"
             if metrics["col_constant"]
             else ""
         )
@@ -116,12 +116,12 @@ def explanation_code_catalogue(**kwargs):
             if field not in package or field is None:
                 missing_fields.append(field)
             elif field == "owner_email" and "opendata" in package[field]:
-                email_message = "owner_email is opendata@toronto.ca;"
+                email_message = "~owner_is_opendata"
             elif field == "information_url":
                 url_message = information_url_checker(package[field])
 
         missing_fields_message = (
-            f"Missing Fields: {','.join(missing_fields)};" if missing_fields else ""
+            f"~metadata_missing:{','.join(missing_fields)}" if missing_fields else ""
         )
 
         metadata_message = missing_fields_message + email_message + url_message
@@ -129,7 +129,7 @@ def explanation_code_catalogue(**kwargs):
         if columns:
             is_empty = attribue_description_check(columns)
             data_attributes_message = (
-                "attribute description missing." if is_empty else ""
+                "~data_def_missing" if is_empty else ""
             )
 
             metadata_message = metadata_message + data_attributes_message
@@ -146,7 +146,7 @@ def explanation_code_catalogue(**kwargs):
 
             if rr == "as available":
                 freshness_message = (
-                    "Data refreshed as available, 2+ years since last refreshed."
+                    "~stale"
                     if days > (365 * 2)
                     else ""
                 )
@@ -155,7 +155,7 @@ def explanation_code_catalogue(**kwargs):
                 # calculate elapse periods
                 elapse_periods = math.floor((days - time_map[rr]) / time_map[rr])
                 elapse_period_message = (
-                    f"{elapse_periods} periods behind, should be refreshed {rr}."
+                    f"~periods_behind:{elapse_periods}"
                     if elapse_periods >= 1
                     else ""
                 )
@@ -172,13 +172,13 @@ def explanation_code_catalogue(**kwargs):
             (np.sum(len(data) - data.count()) / np.prod(data.shape)) * 100
         )
         completeness_message = (
-            f"{missing_rate} % of data is missing" if missing_rate >= 50 else ""
+            f"~significant_missing_data" if missing_rate >= 50 else ""
         )
 
         return completeness_message
 
     def accessibility_explanation_code(p, resource, package_type, etl_intentory):
-        tags_message = "" if "tags" in p and (p["num_tags"] > 0) else " missing tags."
+        tags_message = "" if "tags" in p and (p["num_tags"] > 0) else "~no_tags"
         if package_type == "filestore":
             if resource["name"] in etl_intentory["resource_name"].values.tolist():
                 engine_info = etl_intentory.loc[
@@ -187,7 +187,7 @@ def explanation_code_catalogue(**kwargs):
             else:
                 engine_info = None
 
-            pipeline_message = "" if engine_info else "no pipeline asscociated."
+            pipeline_message = "" if engine_info else "~no_pipeline_found"
         else:
             pipeline_message = ""
 
