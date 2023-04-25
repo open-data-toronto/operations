@@ -19,7 +19,7 @@ request_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/service
 # init the directory where the data will be written to
 current_folder = os.path.dirname(os.path.realpath(__file__))
 dir = current_folder + "/tmp_dir"
-filename = "agol_data.json"
+filename = "agol_data.csv"
 
 # make sure there isn't already a file where this test will be writing to
 if os.path.exists(dir + "/" + filename):

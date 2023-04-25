@@ -132,17 +132,18 @@ class AGOLDownloadFileOperator(BaseOperator):
         res = requests.get(url)
         assert res.status_code == 200, f"Status code response: {res.status_code}"
         
-        ckan_fields = []
+        ckan_fieldnames = []
         for field in res.json()["fields"]:
-            if field["name"].lower() not in [*DELETE_FIELDS, *self.delete_col]:
-                ckan_fields.append({
-                    "id": field["name"],
-                    "type": AGOL_CKAN_TYPE_MAP[field["type"]],
-                })
+            if field["name"].lower() not in [*DELETE_FIELDS, *self.delete_col]:            
+                ckan_fieldnames.append(field["name"])
 
-        logging.info("Utils parsed the following fields: {}".format(ckan_fields))
+        # check if geometry in response too
+        if "geometry" in res.json()["features"][0].keys():
+            ckan_fieldnames.append("geometry")
+
+        logging.info("Utils parsed the following fields: {}".format(ckan_fieldnames))
             
-        return ckan_fields
+        return ckan_fieldnames
 
     def agol_response_to_csv(self, query_url):
         logging.info(f"  getting features from AGOL")
@@ -157,9 +158,10 @@ class AGOLDownloadFileOperator(BaseOperator):
             "f": "geojson",
             "resultType": "standard",
             "resultOffset": offset,
+            "outFields": ",".join([f for f in self.fieldnames if f!="geometry"])
         }
         with open(self.path, "w") as f:
-            writer = csv.DictWriter(f, self.fields)
+            writer = csv.DictWriter(f, self.fieldnames)
             writer.writeheader()
             while overflow is True:
                 # As long as there are more records to get on another request
@@ -180,17 +182,15 @@ class AGOLDownloadFileOperator(BaseOperator):
                 for object in geojson["features"]:
                     this_record = object["properties"]
                     this_record["geometry"] = object["geometry"]
-                    data.append(object)
+                    data.append(this_record)
 
                 records += len(data)
 
                 print(data)
 
                 # now we write this chunk to a csv
-                writer.writerows(rows_generator)
+                writer.writerows(data)
 
-
-                
                 # prepare the next request, if needed
                 if "exceededTransferLimit" in geojson:
                     overflow = geojson["exceededTransferLimit"] is True
@@ -219,7 +219,7 @@ class AGOLDownloadFileOperator(BaseOperator):
         self.set_path(ti)
 
         # get fields [{"id":field_name, "type": ckan_data_type}...]
-        self.fields = self.get_fields(self.request_url)
+        self.fieldnames = self.get_fields(self.request_url)
 
         # write agol data to local CSV
         self.agol_response_to_csv(self.request_url)
