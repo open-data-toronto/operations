@@ -22,11 +22,8 @@ dir = current_folder + "/tmp_dir"
 filename = "agol_data.csv"
 
 # make sure there isn't already a file where this test will be writing to
-if os.path.exists(dir + "/" + filename):
-    os.remove( dir + "/" + filename )
-
-if os.path.exists(dir + "/fields_" + filename):
-    os.remove( dir + "/fields_" + filename )
+#if os.path.exists(dir + "/" + filename):
+#    os.remove( dir + "/" + filename )
 
 # init the dag for the tests
 dag = DAG(dag_id='anydag', start_date=datetime.now())
@@ -52,8 +49,11 @@ ti = TaskInstance(task=task, execution_date=datetime.now())
 
 def test_execute():
     # checks all keys are present in operator output
-    output = task.execute(ti.get_template_context())
-    print(output)
+    task.execute(ti.get_template_context())
+    assert False
+    
+    #output = task.execute(ti.get_template_context())
+    #print(output)
     #keys = output.keys()
     #assert "data_path" in keys
     #assert "fields_path" in keys
