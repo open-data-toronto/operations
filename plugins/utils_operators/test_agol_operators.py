@@ -5,6 +5,8 @@ import requests
 import os
 import hashlib
 import json
+import types
+import csv
 
 from datetime import datetime
 
@@ -39,45 +41,45 @@ task = AGOLDownloadFileOperator(
 
 ti = TaskInstance(task=task, execution_date=datetime.now())
 
-#def test_parse_data_from_agol():
-#    # checks if the operator parses agol data properly
-#    # and gets more than one record returned
-#    assert len(task.parse_data_from_agol()) > 1
-#
-#    # checks if returned data is an array
-#    assert type(task.parse_data_from_agol()["data"]) == list
+def test_get_fields():
+    # checks if the operator parses agol data properly
+    # and gets more than one field
+    fields = task.get_fields(request_url)
+
+    assert len(fields) > 1
+
+    # checks if returned data is an array of strings
+    assert type(fields) == list
+    assert all([isinstance(f, str) for f in fields])
+
+def test_agol_generator():
+    # checks that making a generator from agol works as expected
+    fields = task.get_fields(request_url)
+
+    # checks if generator
+    assert isinstance(task.agol_generator(request_url, fields), types.GeneratorType)
+
+    # checks if contents are dicts
+    for i in task.agol_generator(request_url, fields):
+        assert isinstance(i, dict)
 
 def test_execute():
     # checks all keys are present in operator output
-    task.execute(ti.get_template_context())
-    assert False
+    output = task.execute(ti.get_template_context())
     
-    #output = task.execute(ti.get_template_context())
-    #print(output)
-    #keys = output.keys()
-    #assert "data_path" in keys
-    #assert "fields_path" in keys
-    #assert "last_modified" in keys
-    #assert "checksum" in keys
+    keys = output.keys()
+    assert "data_path" in keys
+    assert "needs_update" in keys
+    
 
 
-    # checks if data file is created in proper location and contains correct data
-    #with open( output["data_path"] ) as f:
-    #    filedata = json.load(f)
-    #    assert filedata
-#
-    ## checks if fields file is in proper location and contains correct fields
-    #with open( output["fields_path"] ) as f:
-    #    fields_data = json.load(f)
-#
-    #with open( current_folder + "/test_agol_operators_fields.json" ) as f:
-    #    test_fields_data = json.load(f)
-#
-    #assert fields_data == test_fields_data
-    #
-#
-    ## checks if checksums match
-    #with open( current_folder + "/test_agol_operators_checksum.txt" ) as f:
-    #    file_checksum = f.read()
-    #
-    #assert output["checksum"] == file_checksum
+    # checks if data file contains correct data
+    with open( output["data_path"] ) as f:
+        filedata = csv.reader(f)
+
+        # check record count
+        res = requests.get(request_url + "/query?where=1%3D1&returnCountOnly=true&f=pjson")
+        correct_count = json.loads(res.text)["count"]
+        test_count = sum(1 for row in filedata) - 1 # exclude header
+
+        assert correct_count == test_count

@@ -123,7 +123,7 @@ class AGOLDownloadFileOperator(BaseOperator):
         return ckan_fieldnames
 
 
-    def agol_generator(self, query_url):
+    def agol_generator(self, query_url, fieldnames):
         '''yields chunks of AGOL records'''
         logging.info(f"  getting features from AGOL")
 
@@ -136,7 +136,7 @@ class AGOLDownloadFileOperator(BaseOperator):
             "f": "geojson",
             "resultType": "standard",
             "resultOffset": offset,
-            "outFields": ",".join([f for f in self.fieldnames if f!="geometry"])
+            "outFields": ",".join([f for f in fieldnames if f!="geometry"])
         }
 
         while overflow is True:
@@ -174,12 +174,12 @@ class AGOLDownloadFileOperator(BaseOperator):
             query_string_params["resultOffset"] = offset
 
 
-    def agol_to_csv(self, query_url, path):
+    def agol_to_csv(self, query_url, path, fieldnames):
         '''write agol records to CSV on disk'''        
         with open(path, "w") as f:
-            writer = csv.DictWriter(f, self.fieldnames)
+            writer = csv.DictWriter(f, fieldnames)
             writer.writeheader()
-            writer.writerows(self.agol_generator(query_url))
+            writer.writerows(self.agol_generator(query_url, fieldnames))
                
             f.close()
 
@@ -195,10 +195,10 @@ class AGOLDownloadFileOperator(BaseOperator):
         self.set_path(ti)
 
         # get fields [{"id":field_name, "type": ckan_data_type}...]
-        self.fieldnames = self.get_fields(self.request_url)
+        fieldnames = self.get_fields(self.request_url)
 
         # write new agol data to local temp CSV
-        self.agol_to_csv(self.request_url, self.path + "-temp")
+        self.agol_to_csv(self.request_url, self.path + "-temp", fieldnames)
 
         # get new and old data's hashes
         new_hash = misc_utils.file_to_md5(self.path + "-temp")
