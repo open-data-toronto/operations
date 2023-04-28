@@ -40,7 +40,8 @@ def attribue_description_check(columns):
     for f in columns:
         if (
             "info" in f
-            and (f["info"]["notes"] is not None)
+            and (f["info"]["notes"] != None)
+            and (f["info"]["notes"] != "")
             and f["info"]["notes"].strip() != f["id"]
         ):
             counter += 1
@@ -80,22 +81,22 @@ def explanation_code_catalogue(**kwargs):
             )
 
         metrics = {
-            "col_names": 0,  # Column names easy to understand?
+            "col_names": 1,  # Column names easy to understand?
             "col_constant": [],  # Columns where all values are constant?
         }
 
         for f in columns:
             is_camel, words = parse_col_name(f["id"])
             eng_words = [w for w in words if len(wordnet.synsets(w))]
-            if len(eng_words) / len(words) > 0.8:
-                metrics["col_names"] += 1 / len(columns)
+            if len(eng_words) / len(words) <= 0.2:
+                metrics["col_names"] -= 1 / len(columns)
 
             if not f["id"] == "geometry" and data[f["id"]].nunique() <= 1:
                 metrics["col_constant"].append(f["id"])
 
         col_names_message = (
             "~colnames_unclear"
-            if metrics["col_names"] <= 0.25
+            if metrics["col_names"] <= 0.5
             else ""
         )
         col_constant_messgae = (
@@ -180,6 +181,7 @@ def explanation_code_catalogue(**kwargs):
     def accessibility_explanation_code(p, resource, package_type, etl_intentory):
         tags_message = "" if "tags" in p and (p["num_tags"] > 0) else "~no_tags"
         if package_type == "filestore":
+            package_type_message = "~filestore_resource"
             if resource["name"] in etl_intentory["resource_name"].values.tolist():
                 engine_info = etl_intentory.loc[
                     etl_intentory["resource_name"] == resource["name"], "engine"
@@ -189,9 +191,10 @@ def explanation_code_catalogue(**kwargs):
 
             pipeline_message = "" if engine_info else "~no_pipeline_found"
         else:
+            package_type_message = ""
             pipeline_message = ""
 
-        accessibility_message = pipeline_message + tags_message
+        accessibility_message = pipeline_message + tags_message + package_type_message
 
         return accessibility_message
 

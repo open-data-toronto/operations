@@ -27,7 +27,12 @@ CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 
-METADATA_FIELDS = ["notes", "limitations", "topics", "owner_email", "civic_issues", "information_url"]
+METADATA_FIELDS = [
+    "notes",
+    "topics",
+    "owner_email",
+    "information_url",
+]
 
 TIME_MAP = {
     "daily": 1,
@@ -37,6 +42,19 @@ TIME_MAP = {
     "semi-annually": 52 * 7 / 2,
     "annually": 365,
 }
+
+PENALTY_MAP = {
+    "daily": 7,  # 7 days behind causes score of 0
+    "weekly": 4,  # 4 weeks behind causes score of 0
+    "monthly": 2,  # 2 months behind causes score of 0
+    "quarterly": 2,  # 2 quarters behind causes score of 0
+    "semi-annually": 2,  # 2 periods (1 year) causes score of 0
+    "annually": 0.5,  # half a year (0.5 periods) causes a score of 0
+}
+
+# Mapping between penalty threshold and equation parameters
+# The values are derived based on solving a system of sigmoid function.
+THRESHOLD_MAP = {7: (2.0, 3.5), 4: (3.5, 2), 2: (6.9, 1), 0.5: (27.6, 0.25)}
 
 RESOURCE_MODEL = "scoring-models"
 MODEL_VERSION = "v0.1.0"
@@ -62,7 +80,10 @@ BINS = {
 def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="insert_scores")
     airflow_utils.message_slack(
-        name=JOB_NAME, **msg, active_env=ACTIVE_ENV, prod_webhook=ACTIVE_ENV == "prod",
+        name=JOB_NAME,
+        **msg,
+        active_env=ACTIVE_ENV,
+        prod_webhook=ACTIVE_ENV == "prod",
     )
 
 
@@ -147,7 +168,10 @@ def upload_models_to_resource(**kwargs):
         data={"id": model_resource["resource"]["id"]},
         headers={"Authorization": CKAN.apikey},
         files={
-            "upload": (f"{RESOURCE_MODEL}.json", json.dumps(model_resource["models"]),)
+            "upload": (
+                f"{RESOURCE_MODEL}.json",
+                json.dumps(model_resource["models"]),
+            )
         },
     )
 
@@ -201,8 +225,8 @@ def insert_scores(**kwargs):
 
 default_args = airflow_utils.get_default_args(
     {
-        "on_failure_callback": send_failure_msg, 
-        "start_date": job_settings["start_date"], 
+        "on_failure_callback": send_failure_msg,
+        "start_date": job_settings["start_date"],
         "pool": "big_job_pool",
         "retries": 1,
         "retry_delay": 3,
@@ -218,7 +242,6 @@ with DAG(
     tags=["sustainment"],
     catchup=False,
 ) as dag:
-
     create_tmp_dir = PythonOperator(
         task_id="create_tmp_data_dir",
         python_callable=airflow_utils.create_dir_with_dag_name,
@@ -238,7 +261,8 @@ with DAG(
     )
 
     dqs_package_resources = PythonOperator(
-        task_id="get_dqs_dataset_resources", python_callable=get_dqs_dataset_resources,
+        task_id="get_dqs_dataset_resources",
+        python_callable=get_dqs_dataset_resources,
     )
 
     framework_resource = PythonOperator(
@@ -266,6 +290,8 @@ with DAG(
             "ckan": CKAN,
             "METADATA_FIELDS": METADATA_FIELDS,
             "TIME_MAP": TIME_MAP,
+            "PENALTY_MAP": PENALTY_MAP,
+            "THRESHOLD_MAP": THRESHOLD_MAP,
         },
         provide_context=True,
     )
@@ -296,7 +322,9 @@ with DAG(
     )
 
     add_scores = PythonOperator(
-        task_id="insert_scores", python_callable=insert_scores, provide_context=True,
+        task_id="insert_scores",
+        python_callable=insert_scores,
+        provide_context=True,
     )
 
     delete_final_scores_tmp_file = PythonOperator(

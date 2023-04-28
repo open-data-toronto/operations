@@ -56,6 +56,7 @@ PENALTY_MAP = {
 }
 
 # Mapping between penalty threshold and equation parameters
+# The values are derived based on solving a system of sigmoid function.
 THRESHOLD_MAP = {7: (2.0, 3.5), 4: (3.5, 2), 2: (6.9, 1), 0.5: (27.6, 0.25)}
 
 RESOURCE_EXPLANATION_CODES = "quality-scores-explanation-codes"

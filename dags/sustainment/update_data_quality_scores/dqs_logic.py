@@ -164,7 +164,7 @@ def score_usability(columns, data):
         )
 
     metrics = {
-        "col_names": 0,  # Column names easy to understand?
+        "col_names": 1,  # Column names easy to understand?
         "col_constant": 1,  # Columns where all values are constant?
     }
 
@@ -172,8 +172,8 @@ def score_usability(columns, data):
         is_camel, words = parse_col_name(f["id"])
         eng_words = [w for w in words if len(wordnet.synsets(w))]
 
-        if len(eng_words) / len(words) > 0.8:
-            metrics["col_names"] += (1 if not is_camel else 0.5) / len(columns)
+        if len(eng_words) / len(words) < 0.2:
+            metrics["col_names"] -= 1 / len(columns)
 
         if not f["id"] == "geometry" and data[f["id"]].nunique() <= 1:
             metrics["col_constant"] -= 1 / len(columns)
@@ -345,7 +345,9 @@ def score_catalogue(**kwargs):
                     "resource": r["name"],
                     "usability": score_usability(fields, content),
                     "metadata": score_metadata(p, METADATA_FIELDS, fields),
-                    "freshness": score_freshness(p, TIME_MAP),
+                    "freshness": score_freshness(
+                        p, TIME_MAP, PENALTY_MAP, THRESHOLD_MAP
+                    ),
                     "completeness": score_completeness(content),
                     "accessibility": score_accessibility(
                         p, r, "datastore", etl_intentory
