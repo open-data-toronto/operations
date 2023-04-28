@@ -101,7 +101,7 @@ class DownloadFileOperator(BaseOperator):
         assert res.status_code == 200, f"Response status: {res.status_code}"
 
         with open(self.path, "wb") as f:
-            for chunk in r.iter_content(chunk_size=8192): 
+            for chunk in res.iter_content(chunk_size=8192): 
                 f.write(chunk)
 
 
