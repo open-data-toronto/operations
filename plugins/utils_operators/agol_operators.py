@@ -17,22 +17,21 @@ from utils import misc_utils
 
 class AGOLDownloadFileOperator(BaseOperator):
     """
-    Downloads data from AGOL URL and saves as CSV provided directory using provided filename.
-    Any "geometry" from AGOL will be stringified and put into the CSV's "geometry" column.
-    This will always overwrite an existing file, if it's there.
-    This is because we are not interested in versioning AGOL data - only pulling the latest from AGOL.
+    Downloads data from AGOL URL 
+    If new data != old data on the server, old data is replaced
+    Data is saved as CSV provided directory using provided filename
+    
 
     Expects the following inputs:
-        - request_url - reference to the url where this operator will grab the data
+        - request_url - reference to url where this operator will grab data
         - dir - directory where the response from the above will be saved
         - filename - name of the file to be made
-        each of the three above can be given with an actual value, or with a reference to a task_id and task_key that returns the value
+        Each of the three above can be given with an actual value, or with a
+        reference to a task_id and task_key that returns the value
 
     Returns a dictionary containing:
-        - path: path to saved file containing data
-        - last_modified: timestamp file was last_modified (from the request)
-        - fields_path: path to file containing fields
-        - checksum: md5 hash of the download's contents
+        - data_path - path on server to newest data's file
+        - needs_update - whether the existing file was replaced by a new one
     """
 
     @apply_defaults
@@ -71,7 +70,6 @@ class AGOLDownloadFileOperator(BaseOperator):
     
     def set_path(self, ti):
         # init the filepath to the file we will create
-        # how this is done depends on whether the operator received task ids/keys, or actual values 
         if self.dir_task_id and self.dir_task_key:
             self.dir = ti.xcom_pull(task_ids=self.dir_task_id)[self.dir_task_key]
 
@@ -194,7 +192,7 @@ class AGOLDownloadFileOperator(BaseOperator):
         # create target filepath
         self.set_path(ti)
 
-        # get fields [{"id":field_name, "type": ckan_data_type}...]
+        # get fieldnames
         fieldnames = self.get_fields(self.request_url)
 
         # write new agol data to local temp CSV

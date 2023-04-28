@@ -74,7 +74,7 @@ def test_execute():
 
 
     # checks if data file contains correct data
-    with open( output["data_path"] ) as f:
+    with open(output["data_path"]) as f:
         filedata = csv.reader(f)
 
         # check record count
