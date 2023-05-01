@@ -154,9 +154,8 @@ class AGOLDownloadFileOperator(BaseOperator):
             # get the properties out of each returned object
             for object in geojson["features"]:
                 this_record = object["properties"]
-                this_record["geometry"] = object["geometry"]
+                this_record["geometry"] = json.dumps(object["geometry"])
                 yield(this_record)
-
 
             # prepare the next request, if needed
             if "exceededTransferLimit" in geojson:
@@ -200,14 +199,19 @@ class AGOLDownloadFileOperator(BaseOperator):
 
         # get new and old data's hashes
         new_hash = misc_utils.file_to_md5(self.path + "-temp")
-        old_hash = misc_utils.file_to_md5(self.path)
+        if not os.path.isfile(self.path):
+            old_hash = "no_old_file"
+        else:
+            old_hash = misc_utils.file_to_md5(self.path)
 
         # if new and old files dont match, replace old with new
         if new_hash != old_hash:
+            logging.info("New data does not match old data's hash")
             shutil.move(self.path + "-temp", self.path)
             needs_update = True
         # otherwise, get rid of the new "-temp" file
         else:
+            logging.info("New data matches old data's hash")
             os.remove(self.path + "-temp")
             needs_update = False
         
