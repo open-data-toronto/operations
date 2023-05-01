@@ -45,8 +45,14 @@ def is_resource_new(get_or_create_resource_task_id, resource_name, **kwargs):
     return "existing_" + resource_name
 
 # branch logic - depends on whether the existing resource needs updating
-def does_resource_need_update(delta_check_task_id, **kwargs):
-    return kwargs["ti"].xcom_pull(task_ids=delta_check_task_id)
+def does_resource_need_update(download_task_id, resource_name, **kwargs):
+    #return kwargs["ti"].xcom_pull(task_ids=delta_check_task_id)
+    resource = kwargs["ti"].xcom_pull(task_ids=download_task_id)
+
+    if resource["needs_update"]:
+        return "update_resource_" + resource_name
+
+    return "dont_update_resource_" + resource_name
 
 # create slack message logic
 def build_message_fcn(config, **kwargs):
@@ -261,7 +267,7 @@ def create_dag(dag_id,
             tasks_list["does_" + resource_name + "_need_update"] = BranchPythonOperator(
                 task_id="does_" + resource_name + "_need_update", 
                 python_callable=does_resource_need_update,
-                op_kwargs={"delta_check_task_id": "delta_check_" + resource_name }
+                op_kwargs={"download_task_id": "download_" + resource_name, "resource_name": resource_name }
             )
 
             tasks_list["new_" + resource_name] = DummyOperator(task_id="new_" + resource_name)
@@ -272,18 +278,18 @@ def create_dag(dag_id,
 
             tasks_list["prepare_update_" + resource_name] = DummyOperator(task_id="prepare_update_" + resource_name, trigger_rule="one_success")
 
-            tasks_list["delta_check_" + resource_name] = DeltaCheckOperator(
-                task_id="delta_check_" + resource_name,
-                address = CKAN,
-                apikey = CKAN_APIKEY,
-                resource_id_task_id = "get_or_create_resource_" + resource_name,
-                resource_id_task_key = "id",
-                data_path_task_id = "download_" + resource_name,
-                data_path_task_key = "data_path",
-                config = resource,
-                #trigger_rule = "one_success",
-                resource_name = resource_name
-            )
+            #tasks_list["delta_check_" + resource_name] = DeltaCheckOperator(
+            #    task_id="delta_check_" + resource_name,
+            #    address = CKAN,
+            #    apikey = CKAN_APIKEY,
+            #    resource_id_task_id = "get_or_create_resource_" + resource_name,
+            #    resource_id_task_key = "id",
+            #    data_path_task_id = "download_" + resource_name,
+            #    data_path_task_key = "data_path",
+            #    config = resource,
+            #    #trigger_rule = "one_success",
+            #    resource_name = resource_name
+            #)
 
             # backup an existing resource
             tasks_list["backup_resource_" + resource_name] = BackupDatastoreResourceOperator(
@@ -335,7 +341,8 @@ def create_dag(dag_id,
             tasks_list["new_or_existing_" + resource_name] >> [tasks_list["new_" + resource_name], tasks_list["existing_" + resource_name]]
             
             # for each resource, if the resource changed then update it ... otherwise dont touch it
-            tasks_list["existing_" + resource_name] >> tasks_list["delta_check_" + resource_name] >> tasks_list["does_" + resource_name + "_need_update"] >> [tasks_list["update_resource_" + resource_name], tasks_list["dont_update_resource_" + resource_name]]  
+            tasks_list["existing_" + resource_name] >> tasks_list["does_" + resource_name + "_need_update"] >> [tasks_list["update_resource_" + resource_name], tasks_list["dont_update_resource_" + resource_name]]  
+            # tasks_list["existing_" + resource_name] >> tasks_list["delta_check_" + resource_name] >> tasks_list["does_" + resource_name + "_need_update"] >> [tasks_list["update_resource_" + resource_name], tasks_list["dont_update_resource_" + resource_name]]  
 
             # if the resource didnt change, dont touch it
             tasks_list["dont_update_resource_" + resource_name] >> done_inserting_into_datastore
