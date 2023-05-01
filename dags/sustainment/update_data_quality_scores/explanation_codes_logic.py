@@ -10,6 +10,7 @@ from nltk.corpus import wordnet
 from sustainment.update_data_quality_scores import dqs_logic
 import requests
 import math
+from geopandas import gpd
 
 nltk.download("wordnet")
 
@@ -40,7 +41,7 @@ def attribue_description_check(columns):
     for f in columns:
         if (
             "info" in f
-            and (f["info"]["notes"] != None)
+            and (f["info"]["notes"] is not None)
             and (f["info"]["notes"] != "")
             and f["info"]["notes"].strip() != f["id"]
         ):
@@ -94,18 +95,25 @@ def explanation_code_catalogue(**kwargs):
             if not f["id"] == "geometry" and data[f["id"]].nunique() <= 1:
                 metrics["col_constant"].append(f["id"])
 
-        col_names_message = (
-            "~colnames_unclear"
-            if metrics["col_names"] <= 0.5
-            else ""
-        )
+        col_names_message = "~colnames_unclear" if metrics["col_names"] <= 0.5 else ""
         col_constant_messgae = (
             f"~constant_cols:{','.join(metrics['col_constant'])}"
             if metrics["col_constant"]
             else ""
         )
+        geo_validity_message = ""
+        if isinstance(data, gpd.GeoDataFrame):
+            counts = data["geometry"].is_valid.value_counts()
 
-        usability_message = col_names_message + col_constant_messgae
+            geo_validity_message = (
+                "~invalid_geospatial"
+                if (False in counts and (counts[False] / (len(data) * 0.05) > 0.01))
+                else ""
+            )
+
+        usability_message = (
+            col_names_message + col_constant_messgae + geo_validity_message
+        )
 
         return usability_message
 
@@ -129,9 +137,7 @@ def explanation_code_catalogue(**kwargs):
 
         if columns:
             is_empty = attribue_description_check(columns)
-            data_attributes_message = (
-                "~data_def_missing" if is_empty else ""
-            )
+            data_attributes_message = "~data_def_missing" if is_empty else ""
 
             metadata_message = metadata_message + data_attributes_message
 
@@ -146,19 +152,13 @@ def explanation_code_catalogue(**kwargs):
             logging.info(f"elapse days: {days}, refresh_rate: {rr}")
 
             if rr == "as available":
-                freshness_message = (
-                    "~stale"
-                    if days > (365 * 2)
-                    else ""
-                )
+                freshness_message = "~stale" if days > (365 * 2) else ""
 
             if rr in time_map:
                 # calculate elapse periods
                 elapse_periods = math.floor((days - time_map[rr]) / time_map[rr])
                 elapse_period_message = (
-                    f"~periods_behind:{elapse_periods}"
-                    if elapse_periods >= 1
-                    else ""
+                    f"~periods_behind:{elapse_periods}" if elapse_periods >= 1 else ""
                 )
 
                 freshness_message = elapse_period_message
@@ -172,9 +172,7 @@ def explanation_code_catalogue(**kwargs):
         missing_rate = round(
             (np.sum(len(data) - data.count()) / np.prod(data.shape)) * 100
         )
-        completeness_message = (
-            f"~significant_missing_data" if missing_rate >= 50 else ""
-        )
+        completeness_message = "~significant_missing_data" if missing_rate >= 50 else ""
 
         return completeness_message
 
@@ -232,7 +230,6 @@ def explanation_code_catalogue(**kwargs):
                     "accessibility_code": accessibility_explanation_code(
                         p, r, "filestore", etl_intentory
                     ),
-                    "recorded_at": dt.now().strftime("%Y-%m-%dT%H:%M:%S"),
                     "store_type": "filestore",
                 }
                 logging.info(f"Filestore Score: Package Name {p['name']}")
@@ -270,7 +267,6 @@ def explanation_code_catalogue(**kwargs):
                     "accessibility_code": accessibility_explanation_code(
                         p, r, "datastore", etl_intentory
                     ),
-                    "recorded_at": dt.now().strftime("%Y-%m-%dT%H:%M:%S"),
                     "store_type": "datastore",
                 }
 
@@ -282,6 +278,7 @@ def explanation_code_catalogue(**kwargs):
                 data.append(records)
     df = pd.DataFrame(data)
     df = df.round(3)
+    df["recorded_at"] = dt.now().strftime("%Y-%m-%dT%H:%M:%S")
 
     df.to_parquet(filepath, engine="fastparquet", compression=None)
 

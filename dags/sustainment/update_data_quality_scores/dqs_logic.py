@@ -167,16 +167,19 @@ def score_usability(columns, data):
         "col_names": 1,  # Column names easy to understand?
         "col_constant": 1,  # Columns where all values are constant?
     }
+    scores = 1
 
     for f in columns:
         is_camel, words = parse_col_name(f["id"])
         eng_words = [w for w in words if len(wordnet.synsets(w))]
 
-        if len(eng_words) / len(words) < 0.2:
-            metrics["col_names"] -= 1 / len(columns)
+        if len(eng_words) / len(words) <= 0.2:
+            scores -= 1 / len(columns)
 
         if not f["id"] == "geometry" and data[f["id"]].nunique() <= 1:
             metrics["col_constant"] -= 1 / len(columns)
+
+    metrics["col_names"] = scores if scores <= 0.5 else 1
 
     if isinstance(data, gpd.GeoDataFrame):
         counts = data["geometry"].is_valid.value_counts()
@@ -239,8 +242,8 @@ def score_freshness(package, time_map, penalty_map, threshold_map):
         a, b = threshold_map[penalty_map[rr]]
         metrics["elapse_periods"] = 1 - (1 / (1 + np.exp(a * (b - elapse_periods))))
 
-        # # Decrease the score starting from ~0.5 years to ~3 years
-        # metrics["elapse_days"] = 1 - (1 / (1 + np.exp(4 * (2.25 - days / 365))))
+        # Decrease the score starting from ~0.5 years to ~3 years
+        metrics["elapse_days"] = 1 - (1 / (1 + np.exp(4 * (2.25 - days / 365))))
 
         return np.mean(list(metrics.values()))
 
