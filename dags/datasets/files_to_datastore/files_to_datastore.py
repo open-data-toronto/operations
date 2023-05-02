@@ -20,7 +20,7 @@ from utils_operators.slack_operators import task_success_slack_alert, task_failu
 from utils_operators.directory_operator import CreateLocalDirectoryOperator, DeleteLocalDirectoryOperator
 from ckan_operators.package_operator import GetOrCreatePackageOperator
 from ckan_operators.resource_operator import GetOrCreateResourceOperator
-from ckan_operators.datastore_operator import BackupDatastoreResourceOperator, DeleteDatastoreResourceOperator, InsertDatastoreFromYAMLConfigOperator, RestoreDatastoreResourceBackupOperator, DeltaCheckOperator
+from ckan_operators.datastore_operator import BackupDatastoreResourceOperator, DeleteDatastoreResourceOperator, InsertDatastoreFromYAMLConfigOperator, RestoreDatastoreResourceBackupOperator, DeltaCheckOperator, CSVStreamToDatastoreYAMLOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from utils_operators.agol_operators import AGOLDownloadFileOperator
 
@@ -318,18 +318,32 @@ def create_dag(dag_id,
             )
 
             # intelligently insert new records into an emptied resource based on input yaml config
-            tasks_list["insert_records_" + resource_name] = InsertDatastoreFromYAMLConfigOperator(
-                task_id="insert_records_" + resource_name,
-                address = CKAN,
-                apikey = CKAN_APIKEY,
-                resource_id_task_id = "get_or_create_resource_" + resource_name,
-                resource_id_task_key = "id",
-                data_path_task_id = "download_" + resource_name,
-                data_path_task_key = "data_path",
-                config = resource,
-                trigger_rule = "all_success",
-                retries = 0,
-            )
+            if resource["format"].lower() == "csv" or resource.get("agol", None):
+                tasks_list["insert_records_" + resource_name] = CSVStreamToDatastoreYAMLOperator(
+                    task_id="insert_records_" + resource_name,
+                    address = CKAN,
+                    apikey = CKAN_APIKEY,
+                    resource_id_task_id = "get_or_create_resource_" + resource_name,
+                    resource_id_task_key = "id",
+                    data_path_task_id = "download_" + resource_name,
+                    data_path_task_key = "data_path",
+                    config = resource,
+                    trigger_rule = "all_success",
+                    retries = 0,
+                )
+            else:
+                tasks_list["insert_records_" + resource_name] = InsertDatastoreFromYAMLConfigOperator(
+                    task_id="insert_records_" + resource_name,
+                    address = CKAN,
+                    apikey = CKAN_APIKEY,
+                    resource_id_task_id = "get_or_create_resource_" + resource_name,
+                    resource_id_task_key = "id",
+                    data_path_task_id = "download_" + resource_name,
+                    data_path_task_key = "data_path",
+                    config = resource,
+                    trigger_rule = "all_success",
+                    retries = 0,
+                )
             
             # init a temp directory and get/create the package for the target data
             tmp_dir >> get_or_create_package

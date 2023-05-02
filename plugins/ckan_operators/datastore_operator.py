@@ -8,6 +8,7 @@ import openpyxl
 from datetime import datetime
 from pathlib import Path
 from typing import List
+from utils import misc_utils
 
 from ckan_operators import nested_file_readers
 
@@ -499,78 +500,6 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         self.config = config
         self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
-    def clean_string(self, input):
-        if input is None:
-            return ""
-        if not isinstance(input, str):
-            return str(input)
-        else:
-            return str(input).strip()
-
-    def clean_int(self, input):
-        if input:
-            return int(input)
-        else:
-            return None
-
-    def clean_float(self, input):
-        if input:
-            return float(input)
-        else:
-            return None
-
-    def clean_date_format(self, input, input_format=None):
-        # loops through the list of formats and tries to return an input
-        # string into a datetime of one of those formats
-
-        if input is None:
-            return
-
-        if len(input) == 0:
-            return
-
-        assert isinstance(
-            input, str
-        ), "Utils.clean_date_format() accepts strings - it got {}".format(
-            type(input)
-        )
-
-        format_dict = {
-            "%Y-%m-%dT%H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S",
-            "%Y-%m-%d %H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S",
-            "%Y-%m-%dT%H:%M:%S": "%Y-%m-%dT%H:%M:%S",
-            "%Y-%m-%d %H:%M:%S": "%Y-%m-%dT%H:%M:%S",
-            "%Y-%m-%d": "%Y-%m-%d",
-            "%d-%b-%Y": "%Y-%m-%d",
-            "%d-%b-%y": "%Y-%m-%d",
-            "%b-%d-%Y": "%Y-%m-%d",
-            "%m-%d-%y": "%Y-%m-%d",
-            "%m-%d-%Y": "%Y-%m-%d",
-            "%d-%m-%y": "%Y-%m-%d",
-            "%d-%m-%Y": "%Y-%m-%d",
-            "%Y%m%d%H%M%S": "%Y-%m-%dT%H:%M:%S",
-            "%d%m%Y": "%Y-%m-%d",
-            "%d%b%Y": "%Y-%m-%d",
-        }
-
-        if input_format:
-            input = input.replace("/", "-")
-            input_format = input_format.replace("/", "-")
-            datetime_object = datetime.strptime(input, input_format)
-            output = datetime_object.strftime(format_dict[input_format])
-
-            return output
-
-        else:
-            for format in format_dict.keys():
-                try:
-                    input = input.replace("/", "-")
-                    datetime_object = datetime.strptime(input, format)
-                    output = datetime_object.strftime(format_dict[format])
-                    return output
-                except ValueError:
-                    pass
-
     # reads a csv and returns a list of dicts - one dict for each row
     def read_csv_file(self):
         output = []
@@ -705,9 +634,8 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             nested_readers = nested_file_readers.nested_readers
             return nested_readers[self.config["url"]](self.data_path)
 
-        if "zip" in self.config.keys():
-            if self.config["zip"]:
-                self.data_path = self.data_path[self.config["filename"]]
+        if self.config.get("agol", None):
+            return readers["csv"]()
 
         return readers[self.config["format"].lower()]()
 
@@ -719,10 +647,10 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         # list of functions used to convert input to desired data_type
         formatters = {
             "text": str,
-            "int": self.clean_int,
-            "float": self.clean_float,
-            "timestamp": self.clean_date_format,
-            "date": self.clean_date_format,
+            "int": misc_utils.clean_int,
+            "float": misc_utils.clean_float,
+            "timestamp": misc_utils.clean_date_format,
+            "date": misc_utils.clean_date_format,
         }
 
         # if input is tabular, convert each column in each input row
@@ -1012,3 +940,193 @@ class CheckCkanResourceDescriptionOperator(BaseOperator):
                     else:
                         logging.info("Resource description OK!")
         return {"package_and_resource": result_info}
+
+
+class CSVStreamToDatastoreYAMLOperator(BaseOperator):
+    """
+    Streams a CSV file's data into a datastore resource based YAML config
+    """
+
+    @apply_defaults
+    def __init__(
+        self,
+        address: str,
+        apikey: str,
+        resource_id: str = None,
+        resource_id_task_id: str = None,
+        resource_id_task_key: str = None,
+        data_path: str = None,
+        data_path_task_id: str = None,
+        data_path_task_key: str = None,
+        config: dict = {},
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+        self.resource_id = resource_id
+        self.resource_id_task_id = resource_id_task_id
+        self.resource_id_task_key = resource_id_task_key
+        self.data_path = data_path
+        self.data_path_task_id = data_path_task_id
+        self.data_path_task_key = data_path_task_key
+         
+        self.config = config
+        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+
+        # this var will be reset later if there are geometry fields that need 
+        # to be put into a geometry object
+        self.geometry_needs_parsing = False
+
+
+    def read_file(self):
+        '''reads CSV at input filepath and returns generator'''
+
+        # make sure input filepath is CSV
+        #assert self.data_path.endswith(".csv")
+
+        # get fieldnames from first row of CSV
+        with open(self.data_path, "r") as f:
+            self.fieldnames = next(csv.reader(f))
+            f.close()
+
+        # return generator
+        return misc_utils.csv_to_generator(self.data_path, self.fieldnames)
+
+    def does_geometry_need_parsing(self):
+        '''determines if geometric attributes need to be parsed into a 
+        geometry object, then finds those geometric attributes'''
+
+        latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
+        longitude_attributes = ["long", "longitude", "x", "x coordinate"]
+
+        # check if there are supposed to be geometric fields
+        if "geometry" not in self.fieldnames and "geometry" in [
+            attr.get("id", None) for attr in self.config["attributes"]
+        ]:
+            # geometry needs to be parsed 
+            # lets find which columns hold geometric data
+            self.geometry_needs_parsing = True
+
+            for attr_index in range(len(fieldnames)):
+                if fieldnames[attr_index].lower() in latitude_attributes:
+                    self.latitude_attribute = attr_index
+
+                if fieldnames[attr_index].lower() in longitude_attributes:
+                    self.longitude_attribute = attr_index
+
+
+    def parse_data(self, input_data):
+        '''receives one row of data as a dict, returns CKAN-friendly data'''
+
+        output = {} 
+
+        # map geometric columns to geometry column, if needed
+        if self.geometry_needs_parsing:
+            output["geometry"] = json.dumps(
+                {
+                    "type": "Point",
+                    "coordinates": [
+                        input_data[self.longitude_attribute].value,
+                        input_data[self.latitude_attribute].value,
+                    ],
+                }
+            )
+
+        # list of functions used to convert input to desired data_type
+        formatters = {
+            "text": str,
+            "int": misc_utils.clean_int,
+            "float": misc_utils.clean_float,
+            "timestamp": misc_utils.clean_date_format,
+            "date": misc_utils.clean_date_format,
+        }
+
+
+        for i in range(len(self.config["attributes"])):
+            # if geometry was parsed above, we dont need to do it again
+            if self.geometry_needs_parsing and self.config["attributes"][i]["id"] == "geometry":
+                continue
+
+            # map source column names to target column names, where needed
+            if (
+                "source_name" in self.config["attributes"][i].keys()
+                and "target_name" in self.config["attributes"][i].keys()
+            ):
+                self.config["attributes"][i]["id"] = self.config["attributes"][i][
+                    "target_name"
+                ]
+                src = input_data[self.config["attributes"][i]["source_name"]]
+            else:
+                src = input_data[self.config["attributes"][i]["id"]]
+
+            # massage data values so CKAN will ingest it
+
+            # if date column, consider hardcoded format attribute
+            if self.config["attributes"][i]["type"] in ["date", "timestamp"]:
+                output[self.config["attributes"][i]["id"]] = formatters[
+                    self.config["attributes"][i]["type"]
+                ](src, self.config["attributes"][i].get("format", None))
+            # if not a date column, consider another formatter
+            else:
+                output[self.config["attributes"][i]["id"]] = formatters[
+                    self.config["attributes"][i]["type"]
+                ](src)
+
+
+        return output
+
+
+    def insert_into_ckan(self, records):
+        '''receives data as list of dicts, puts that data in CKAN'''
+
+        self.ckan.action.datastore_create(
+            id=self.resource_id,
+            fields=self.config["attributes"],
+            records=records,
+            force=True,
+        )
+
+
+    def execute(self, context):
+
+        logging.info(self.resource_id)
+        logging.info(self.resource_id_task_id)
+        logging.info(self.resource_id_task_key)
+        logging.info(self.data_path)
+        logging.info(self.data_path_task_id)
+        logging.info(self.data_path_task_key)
+
+        # init task instance from context
+        ti = context["ti"]
+
+        # assign important vars if provided from other tasks
+        if self.resource_id_task_id and self.resource_id_task_key:
+            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[
+                self.resource_id_task_key
+            ]
+
+        if self.data_path_task_id and self.data_path_task_key:
+            self.data_path = ti.xcom_pull(task_ids=self.data_path_task_id)[
+                self.data_path_task_key
+            ]
+
+        # init csv generator
+        csv_generator = self.read_file()
+
+        # init some vars so batch calls to CKAN API
+        total_count = 0
+        this_count = 0
+        this_batch = []
+        batch_size = 20000
+
+        for row in csv_generator:
+            total_count += 1
+            this_count += 1
+            this_batch.append(self.parse_data(row))
+
+            # when this batch is the max size, insert the data into CKAN
+            if len(this_batch) >= batch_size:
+                self.insert_into_ckan(this_batch)
+                this_batch = []
+                this_count = 0
+
+                

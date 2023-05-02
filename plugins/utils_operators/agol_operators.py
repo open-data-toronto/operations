@@ -214,6 +214,8 @@ class AGOLDownloadFileOperator(BaseOperator):
             logging.info("New data matches old data's hash")
             os.remove(self.path + "-temp")
             needs_update = False
+
+        logging.info(self.path)
         
         return {
                 "data_path": self.path,
