@@ -11,6 +11,7 @@ from sustainment.update_data_quality_scores import dqs_logic
 import requests
 import math
 from geopandas import gpd
+from sklearn.preprocessing import MinMaxScaler
 
 nltk.download("wordnet")
 
@@ -49,6 +50,55 @@ def attribue_description_check(columns):
 
     return counter == 0
 
+def prepare_and_normalize_scores(**kwargs):
+    ti = kwargs.pop("ti")
+    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
+    raw_explanation_code_path = Path(ti.xcom_pull(task_ids="explanation_code_catalogue"))
+    weights = ti.xcom_pull(task_ids="calculate_model_weights")
+    BINS = kwargs.pop("BINS")
+    DIMENSIONS = kwargs.pop("DIMENSIONS")
+
+    df = pd.read_parquet(raw_explanation_code_path).set_index(["package", "resource"], drop=True)
+
+    scores = pd.DataFrame([weights] * len(df.index))
+    scores.index = df.index
+    scores.columns = DIMENSIONS
+    
+    df_scores = df.loc[:, DIMENSIONS]
+    df_codes = df.loc[:, ~df.columns.isin(DIMENSIONS)]
+    scores = df_scores.multiply(scores)
+    
+    df_scores["score"] = scores.sum(axis=1)
+    df_scores["score_norm"] = MinMaxScaler().fit_transform(df_scores[["score"]])
+
+    df_scores = df_scores.groupby("package").mean()
+
+    labels = list(BINS.keys())
+
+    bins = [-1]
+    bins.extend(BINS.values())
+
+    df_scores["grade"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
+    df_scores["grade_norm"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
+    
+    df_codes = df_codes.reset_index()
+   
+    # map the package level score to resource level
+    df_output = pd.merge(df_codes, df_scores, on=["package"], how='outer')
+    logging.info(df_output.columns)
+    logging.info(df_output[:5])
+    
+
+    df_output["recorded_at"] = dt.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    df_output = df_output.round(2)
+
+    filename = "final_scores_and_codes"
+    filepath = tmp_dir / f"{filename}.parquet"
+
+    df_output.to_parquet(filepath, engine="fastparquet", compression=None)
+
+    return str(filepath)
 
 def explanation_code_catalogue(**kwargs):
     ti = kwargs.pop("ti")
@@ -277,8 +327,6 @@ def explanation_code_catalogue(**kwargs):
 
                 data.append(records)
     df = pd.DataFrame(data)
-    df = df.round(3)
-    df["recorded_at"] = dt.now().strftime("%Y-%m-%dT%H:%M:%S")
 
     df.to_parquet(filepath, engine="fastparquet", compression=None)
 

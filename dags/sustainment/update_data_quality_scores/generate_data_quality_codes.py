@@ -8,7 +8,7 @@ import pandas as pd
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.python import PythonOperator
-from sustainment.update_data_quality_scores import explanation_codes_logic
+from sustainment.update_data_quality_scores import explanation_codes_logic, dqs_logic
 from utils import airflow_utils, ckan_utils
 from utils_operators.slack_operators import task_failure_slack_alert
 
@@ -59,9 +59,22 @@ PENALTY_MAP = {
 # The values are derived based on solving a system of sigmoid function.
 THRESHOLD_MAP = {7: (2.0, 3.5), 4: (3.5, 2), 2: (6.9, 1), 0.5: (27.6, 0.25)}
 
-RESOURCE_EXPLANATION_CODES = "quality-scores-explanation-codes"
+RESOURCE_EXPLANATION_CODES = "quality-scores-explanation-codes-and-scores"
 PACKAGE_DQS = "catalogue-quality-scores"
 
+DIMENSIONS = [
+    "usability",
+    "metadata",
+    "freshness",
+    "completeness",
+    "accessibility",
+]  # Ranked in order
+
+BINS = {
+    "Bronze": 0.6,
+    "Silver": 0.8,
+    "Gold": 1,
+}
 
 def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="insert_scores")
@@ -75,7 +88,7 @@ def send_success_msg(**kwargs):
 
 def insert_scores(**kwargs):
     ti = kwargs.pop("ti")
-    explanation_code_path = Path(ti.xcom_pull(task_ids="explanation_code_catalogue"))
+    explanation_code_path = Path(ti.xcom_pull(task_ids="prepare_and_normalize_scores"))
     datastore_resource = ti.xcom_pull(
         task_ids="get_or_create_explanation_code_resource"
     )
@@ -176,11 +189,35 @@ with DAG(
         },
         provide_context=True,
     )
+    
+    model_weights = PythonOperator(
+        task_id="calculate_model_weights",
+        python_callable=dqs_logic.calculate_model_weights,
+        op_kwargs={"dimensions": DIMENSIONS},
+    )
+    
+    prepare_and_normalize_scores = PythonOperator(
+        task_id="prepare_and_normalize_scores",
+        python_callable=explanation_codes_logic.prepare_and_normalize_scores,
+        op_kwargs={
+            "ckan": ckan,
+            "DIMENSIONS": DIMENSIONS,
+            "BINS": BINS,
+        },
+        provide_context=True,
+    )
 
     delete_raw_scores_explanation_code_tmp_file = PythonOperator(
         task_id="delete_raw_scores_explanation_code_tmp_file",
         python_callable=airflow_utils.delete_file,
         op_kwargs={"task_ids": ["explanation_code_catalogue"]},
+        provide_context=True,
+    )
+    
+    delete_final_scores_explanation_code_tmp_file = PythonOperator(
+        task_id="delete_final_scores_explanation_code_tmp_file",
+        python_callable=airflow_utils.delete_file,
+        op_kwargs={"task_ids": ["prepare_and_normalize_scores"]},
         provide_context=True,
     )
 
@@ -218,11 +255,8 @@ with DAG(
         op_kwargs={"dag_id": JOB_NAME},
     )
 
-    [packages, create_tmp_dir] >> raw_scores_explanation_codes
-    (
-        raw_scores_explanation_codes
-        >> get_or_create_explanation_code_resource
-        >> add_scores
-    )
-    add_scores >> [delete_raw_scores_explanation_code_tmp_file, send_notification]
+    [packages, create_tmp_dir] >> raw_scores_explanation_codes 
+    [raw_scores_explanation_codes, model_weights] >> prepare_and_normalize_scores >> get_or_create_explanation_code_resource >> add_scores
+    
+    add_scores >> [delete_raw_scores_explanation_code_tmp_file,delete_final_scores_explanation_code_tmp_file, send_notification]
     delete_raw_scores_explanation_code_tmp_file >> delete_tmp_dir
