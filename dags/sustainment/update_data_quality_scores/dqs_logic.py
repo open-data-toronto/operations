@@ -267,7 +267,7 @@ def score_accessibility(p, resource, dataset_type, etl_intentory):
     Is data available via APIs? Have tags?
     """
     metrics = {}
-    metrics["tags"] = 1 if "tags" in p and (p["num_tags"] > 0) else 0.5
+    metrics["tags"] = 1 if "tags" in p and (p["num_tags"] > 0) else 0.8
 
     if dataset_type == "filestore":
         if resource["name"] in etl_intentory["resource_name"].values.tolist():
@@ -277,7 +277,7 @@ def score_accessibility(p, resource, dataset_type, etl_intentory):
         else:
             engine_info = None
 
-        metrics["pipeline"] = 0.6 if engine_info else 0.2
+        metrics["pipeline"] = 0.7 if engine_info else 0.5
 
     if dataset_type == "datastore":
         metrics["pipeline"] = 1

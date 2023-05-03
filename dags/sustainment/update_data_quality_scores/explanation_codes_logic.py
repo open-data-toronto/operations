@@ -50,24 +50,29 @@ def attribue_description_check(columns):
 
     return counter == 0
 
+
 def prepare_and_normalize_scores(**kwargs):
     ti = kwargs.pop("ti")
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
-    raw_explanation_code_path = Path(ti.xcom_pull(task_ids="explanation_code_catalogue"))
+    raw_explanation_code_path = Path(
+        ti.xcom_pull(task_ids="explanation_code_catalogue")
+    )
     weights = ti.xcom_pull(task_ids="calculate_model_weights")
     BINS = kwargs.pop("BINS")
     DIMENSIONS = kwargs.pop("DIMENSIONS")
 
-    df = pd.read_parquet(raw_explanation_code_path).set_index(["package", "resource"], drop=True)
+    df = pd.read_parquet(raw_explanation_code_path).set_index(
+        ["package", "resource"], drop=True
+    )
 
     scores = pd.DataFrame([weights] * len(df.index))
     scores.index = df.index
     scores.columns = DIMENSIONS
-    
+
     df_scores = df.loc[:, DIMENSIONS]
     df_codes = df.loc[:, ~df.columns.isin(DIMENSIONS)]
     scores = df_scores.multiply(scores)
-    
+
     df_scores["score"] = scores.sum(axis=1)
     df_scores["score_norm"] = MinMaxScaler().fit_transform(df_scores[["score"]])
 
@@ -80,14 +85,29 @@ def prepare_and_normalize_scores(**kwargs):
 
     df_scores["grade"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
     df_scores["grade_norm"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
-    
+
     df_codes = df_codes.reset_index()
-   
+
+    # calculate median value for usability, completeness dimension for datastore
+    usability_median = df_scores["usability"].median()
+    completness_median = df_scores["completeness"].median()
+
     # map the package level score to resource level
-    df_output = pd.merge(df_codes, df_scores, on=["package"], how='outer')
+    df_output = pd.merge(df_codes, df_scores, on=["package"], how="outer")
+
+    # assign median value for usability and completeness dimensions to filestore
+    df_output["usability"] = df_output.apply(
+        lambda x: x["usability"] if x["store_type"] == "datastore" else usability_median,
+        axis=1,
+    )
+    df_output["completeness"] = df_output.apply(
+        lambda x: x["completeness"]
+        if x["store_type"] == "datastore"
+        else completness_median,
+        axis=1,
+    )
+
     logging.info(df_output.columns)
-    logging.info(df_output[:5])
-    
 
     df_output["recorded_at"] = dt.now().strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -99,6 +119,7 @@ def prepare_and_normalize_scores(**kwargs):
     df_output.to_parquet(filepath, engine="fastparquet", compression=None)
 
     return str(filepath)
+
 
 def explanation_code_catalogue(**kwargs):
     ti = kwargs.pop("ti")

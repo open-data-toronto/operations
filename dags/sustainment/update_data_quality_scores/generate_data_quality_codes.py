@@ -76,6 +76,7 @@ BINS = {
     "Gold": 1,
 }
 
+
 def send_success_msg(**kwargs):
     msg = kwargs.pop("ti").xcom_pull(task_ids="insert_scores")
     airflow_utils.message_slack(
@@ -189,13 +190,13 @@ with DAG(
         },
         provide_context=True,
     )
-    
+
     model_weights = PythonOperator(
         task_id="calculate_model_weights",
         python_callable=dqs_logic.calculate_model_weights,
         op_kwargs={"dimensions": DIMENSIONS},
     )
-    
+
     prepare_and_normalize_scores = PythonOperator(
         task_id="prepare_and_normalize_scores",
         python_callable=explanation_codes_logic.prepare_and_normalize_scores,
@@ -213,7 +214,7 @@ with DAG(
         op_kwargs={"task_ids": ["explanation_code_catalogue"]},
         provide_context=True,
     )
-    
+
     delete_final_scores_explanation_code_tmp_file = PythonOperator(
         task_id="delete_final_scores_explanation_code_tmp_file",
         python_callable=airflow_utils.delete_file,
@@ -255,8 +256,17 @@ with DAG(
         op_kwargs={"dag_id": JOB_NAME},
     )
 
-    [packages, create_tmp_dir] >> raw_scores_explanation_codes 
-    [raw_scores_explanation_codes, model_weights] >> prepare_and_normalize_scores >> get_or_create_explanation_code_resource >> add_scores
-    
-    add_scores >> [delete_raw_scores_explanation_code_tmp_file,delete_final_scores_explanation_code_tmp_file, send_notification]
+    [packages, create_tmp_dir] >> raw_scores_explanation_codes
+    (
+        [raw_scores_explanation_codes, model_weights]
+        >> prepare_and_normalize_scores
+        >> get_or_create_explanation_code_resource
+        >> add_scores
+    )
+
+    add_scores >> [
+        delete_raw_scores_explanation_code_tmp_file,
+        delete_final_scores_explanation_code_tmp_file,
+        send_notification,
+    ]
     delete_raw_scores_explanation_code_tmp_file >> delete_tmp_dir
