@@ -1088,13 +1088,7 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
 
     def execute(self, context):
 
-        logging.info(self.resource_id)
-        logging.info(self.resource_id_task_id)
-        logging.info(self.resource_id_task_key)
-        logging.info(self.data_path)
-        logging.info(self.data_path_task_id)
-        logging.info(self.data_path_task_key)
-
+        
         # init task instance from context
         ti = context["ti"]
 
@@ -1108,6 +1102,8 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
             self.data_path = ti.xcom_pull(task_ids=self.data_path_task_id)[
                 self.data_path_task_key
             ]
+        
+        logging.info(self.data_path)
 
         # init csv generator
         csv_generator = self.read_file()
@@ -1125,8 +1121,16 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
 
             # when this batch is the max size, insert the data into CKAN
             if len(this_batch) >= batch_size:
+                logging.info("Loading {}th records".format(str(total_count)))
                 self.insert_into_ckan(this_batch)
                 this_batch = []
                 this_count = 0
+
+        # insert the last batch into CKAN
+        if len(this_batch) != 0:
+            logging.info("Loading last records")
+            self.insert_into_ckan(this_batch)
+
+        logging.info("Inserted {} records into CKAN".format(str(total_count)))
 
                 
