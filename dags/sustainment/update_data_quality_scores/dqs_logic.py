@@ -218,14 +218,17 @@ def score_metadata(package, metadata_fields, columns=None):
             if (
                 "info" in f
                 and (f["info"]["notes"] is not None)
+                and (f["info"]["notes"] != "")
                 and f["info"]["notes"].strip() != f["id"]
             ):
                 metrics["desc_columns"] += 1 / len(columns)
 
+        return np.mean(list(metrics.values()))
+
     return np.mean(list(metrics.values()))
 
 
-def score_freshness(package, time_map, penalty_map, threshold_map):
+def score_freshness(package, time_map, penalty_map):
     """
     How up to date is the data?
     """
@@ -239,8 +242,7 @@ def score_freshness(package, time_map, penalty_map, threshold_map):
     elif rr in time_map and "last_refreshed" in package and package["last_refreshed"]:
         days = parse_datetime(package["last_refreshed"])
         elapse_periods = max(0, (days - time_map[rr]) / time_map[rr])
-        a, b = threshold_map[penalty_map[rr]]
-        metrics["elapse_periods"] = 1 - (1 / (1 + np.exp(a * (b - elapse_periods))))
+        metrics["elapse_periods"] = max(0, 1 - (elapse_periods / penalty_map[rr]) ** 2)
 
         # Decrease the score starting from ~0.5 years to ~3 years
         metrics["elapse_days"] = 1 - (1 / (1 + np.exp(4 * (2.25 - days / 365))))
@@ -292,7 +294,6 @@ def score_catalogue(**kwargs):
     METADATA_FIELDS = kwargs.pop("METADATA_FIELDS")
     TIME_MAP = kwargs.pop("TIME_MAP")
     PENALTY_MAP = kwargs.pop("PENALTY_MAP")
-    THRESHOLD_MAP = kwargs.pop("THRESHOLD_MAP")
 
     ckan = kwargs.pop("ckan")
 
@@ -320,9 +321,7 @@ def score_catalogue(**kwargs):
                     "resource": r["name"],
                     "usability": 0,
                     "metadata": score_metadata(p, METADATA_FIELDS),
-                    "freshness": score_freshness(
-                        p, TIME_MAP, PENALTY_MAP, THRESHOLD_MAP
-                    ),
+                    "freshness": score_freshness(p, TIME_MAP, PENALTY_MAP),
                     "completeness": 0,
                     "accessibility": score_accessibility(
                         p, r, "filestore", etl_intentory
@@ -348,9 +347,7 @@ def score_catalogue(**kwargs):
                     "resource": r["name"],
                     "usability": score_usability(fields, content),
                     "metadata": score_metadata(p, METADATA_FIELDS, fields),
-                    "freshness": score_freshness(
-                        p, TIME_MAP, PENALTY_MAP, THRESHOLD_MAP
-                    ),
+                    "freshness": score_freshness(p, TIME_MAP, PENALTY_MAP),
                     "completeness": score_completeness(content),
                     "accessibility": score_accessibility(
                         p, r, "datastore", etl_intentory

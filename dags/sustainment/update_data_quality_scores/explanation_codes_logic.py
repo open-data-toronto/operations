@@ -97,7 +97,9 @@ def prepare_and_normalize_scores(**kwargs):
 
     # assign median value for usability and completeness dimensions to filestore
     df_output["usability"] = df_output.apply(
-        lambda x: x["usability"] if x["store_type"] == "datastore" else usability_median,
+        lambda x: x["usability"]
+        if x["store_type"] == "datastore"
+        else usability_median,
         axis=1,
     )
     df_output["completeness"] = df_output.apply(
@@ -130,7 +132,6 @@ def explanation_code_catalogue(**kwargs):
     METADATA_FIELDS = kwargs.pop("METADATA_FIELDS")
     TIME_MAP = kwargs.pop("TIME_MAP")
     PENALTY_MAP = kwargs.pop("PENALTY_MAP")
-    THRESHOLD_MAP = kwargs.pop("THRESHOLD_MAP")
 
     ckan = kwargs.pop("ckan")
 
@@ -289,9 +290,7 @@ def explanation_code_catalogue(**kwargs):
                     "usability_code": "Not Applicable",
                     "metadata": dqs_logic.score_metadata(p, METADATA_FIELDS),
                     "metadata_code": metadata_explanation_code(p, METADATA_FIELDS),
-                    "freshness": dqs_logic.score_freshness(
-                        p, TIME_MAP, PENALTY_MAP, THRESHOLD_MAP
-                    ),
+                    "freshness": dqs_logic.score_freshness(p, TIME_MAP, PENALTY_MAP),
                     "freshness_code": freshness_explanation_code(p, TIME_MAP),
                     "completeness": 0,
                     "completeness_code": "Not Applicable",
@@ -326,9 +325,7 @@ def explanation_code_catalogue(**kwargs):
                     "metadata_code": metadata_explanation_code(
                         p, METADATA_FIELDS, fields
                     ),
-                    "freshness": dqs_logic.score_freshness(
-                        p, TIME_MAP, PENALTY_MAP, THRESHOLD_MAP
-                    ),
+                    "freshness": dqs_logic.score_freshness(p, TIME_MAP, PENALTY_MAP),
                     "freshness_code": freshness_explanation_code(p, TIME_MAP),
                     "completeness": dqs_logic.score_completeness(content),
                     "completeness_code": completeness_explanation_code(content),
@@ -347,6 +344,7 @@ def explanation_code_catalogue(**kwargs):
                 logging.info(records)
 
                 data.append(records)
+
     df = pd.DataFrame(data)
 
     df.to_parquet(filepath, engine="fastparquet", compression=None)
