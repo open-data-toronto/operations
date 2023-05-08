@@ -245,7 +245,7 @@ def score_freshness(package, time_map, penalty_map):
         metrics["elapse_periods"] = max(0, 1 - (elapse_periods / penalty_map[rr]) ** 2)
 
         # Decrease the score starting from ~0.5 years to ~3 years
-        metrics["elapse_days"] = 1 - (1 / (1 + np.exp(4 * (2.25 - days / 365))))
+        metrics["elapse_days"] = max(0, 1 - (days / (365 * 3)) ** 2)
 
         return np.mean(list(metrics.values()))
 

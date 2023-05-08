@@ -59,11 +59,11 @@ RESOURCE_EXPLANATION_CODES = "quality-scores-explanation-codes-and-scores"
 PACKAGE_DQS = "catalogue-quality-scores"
 
 DIMENSIONS = [
-    "usability",
     "metadata",
     "freshness",
-    "completeness",
     "accessibility",
+    "completeness",
+    "usability",
 ]  # Ranked in order
 
 BINS = {

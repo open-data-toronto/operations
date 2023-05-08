@@ -58,6 +58,8 @@ def prepare_and_normalize_scores(**kwargs):
         ti.xcom_pull(task_ids="explanation_code_catalogue")
     )
     weights = ti.xcom_pull(task_ids="calculate_model_weights")
+    #weights = [0.35, 0.35, 0.15, 0.1, 0.05]
+    logging.info(weights)
     BINS = kwargs.pop("BINS")
     DIMENSIONS = kwargs.pop("DIMENSIONS")
 
@@ -280,6 +282,7 @@ def explanation_code_catalogue(**kwargs):
             logging.info(f"Dataset {p['name']} is retired.")
             continue
 
+        division = p["owner_division"] if "owner_division" in p else None
         # filestore code
         if p["dataset_category"] in ["Document", "Website"]:
             for r in p["resources"]:
@@ -301,6 +304,7 @@ def explanation_code_catalogue(**kwargs):
                         p, r, "filestore", etl_intentory
                     ),
                     "store_type": "filestore",
+                    "division": division,
                 }
                 logging.info(f"Filestore Score: Package Name {p['name']}")
                 data.append(records)
@@ -336,6 +340,7 @@ def explanation_code_catalogue(**kwargs):
                         p, r, "datastore", etl_intentory
                     ),
                     "store_type": "datastore",
+                    "division": division,
                 }
 
                 logging.info(
