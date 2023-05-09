@@ -91,8 +91,10 @@ def prepare_and_normalize_scores(**kwargs):
     df_codes = df_codes.reset_index()
 
     # calculate median value for usability, completeness dimension for datastore
-    usability_median = df_scores["usability"].median()
-    completness_median = df_scores["completeness"].median()
+    usability_median = df.loc[df['store_type'] == "datastore", "usability"].median()
+    completness_median = df.loc[df['store_type'] == "datastore", "completeness"].median()
+    logging.info(f"Usability median: {usability_median}")
+    logging.info(f"Completeness median: {completness_median}")
 
     # map the package level score to resource level
     df_output = pd.merge(df_codes, df_scores, on=["package"], how="outer")
