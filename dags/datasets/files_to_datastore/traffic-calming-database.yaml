@@ -1,0 +1,76 @@
+# package name
+traffic-calming-database:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: Traffic Calming Database
+  date_published: "2023-05-11 14:33:07.070323"
+  refresh_rate: Semi-annually
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Transportation Services
+  owner_section: Project Design and Management
+  owner_unit: Vision Zero Project
+  owner_email: visionzeroto@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Transportation
+    - Environment
+  tags: 
+    - name: speed bumps
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: Vision Zero Project Unit uses this data to track and to visualize the location of traffic calming measurements such as traffic islands, speed cushion and speed humps.
+  limitations: null
+  notes: Vision Zero Project Unit uses this data to track and to visualize the location of traffic calming measurements such as traffic islands, speed cushion and speed humps. Currently Vision Zero Project Unit has this shown in our public Vision Zero dashboard.
+    
+  resources:
+    # resource name
+    Traffic Calming Database:
+      #agol: False
+      format: geojson
+      url: "http://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.geojson"
+      attributes:
+        - id: calm_id
+          type: int
+          info:
+            notes: Unique identifier that corresponds to each location that contains traffic calming implementations
+        - id: street
+          type: text
+          info:
+            notes: Street name and segment that contains traffic calming implementations
+        - id: intersecti
+          type: text
+          info:
+            notes: Cross street name that intersects with the street that contains traffic calming implementations
+        - id: intersec_1
+          type: text
+          info:
+            notes: Cross street name that intersects with the street that contains traffic calming implementations 
+        - id: spd_hump
+          type: int
+          info:
+            notes: Speed humps that have been installed on the street segment
+        - id: traf_islan
+          type: int
+          info:
+            notes: Traffic Islands that have been installed on the street segment
+        - id: spd_cush
+          type: int
+          info:
+            notes: Speed Cushions that have been installed on the street segment
+        - id: Installed
+          type: int
+          info:
+            notes: The latest year that the traffic calming implementation was installed
+        - id: geometry
+          type: text
+          info:
+            notes: ""
+        
