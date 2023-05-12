@@ -66,6 +66,9 @@ DIMENSIONS = [
     "usability",
 ]  # Ranked in order
 
+WEIGHTS_DATASTORE = [0.35, 0.35, 0.15, 0.1, 0.05]
+WEIGHTS_FILESTORE = [0.41, 0.41, 0.18]
+
 BINS = {
     "Bronze": 0.6,
     "Silver": 0.8,
@@ -186,12 +189,6 @@ with DAG(
         provide_context=True,
     )
 
-    model_weights = PythonOperator(
-        task_id="calculate_model_weights",
-        python_callable=dqs_logic.calculate_model_weights,
-        op_kwargs={"dimensions": DIMENSIONS},
-    )
-
     prepare_and_normalize_scores = PythonOperator(
         task_id="prepare_and_normalize_scores",
         python_callable=explanation_codes_logic.prepare_and_normalize_scores,
@@ -253,7 +250,7 @@ with DAG(
 
     [packages, create_tmp_dir] >> raw_scores_explanation_codes
     (
-        [raw_scores_explanation_codes, model_weights]
+        raw_scores_explanation_codes
         >> prepare_and_normalize_scores
         >> get_or_create_explanation_code_resource
         >> add_scores

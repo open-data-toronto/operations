@@ -12,9 +12,12 @@ import requests
 import math
 from geopandas import gpd
 from sklearn.preprocessing import MinMaxScaler
+import os
 
 nltk.download("wordnet")
 
+DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
+FILE_DIR_PATH = DIR_PATH / "sustainment" / "update_data_quality_scores"
 
 def information_url_checker(information_url):
     result_info = ""
@@ -57,15 +60,62 @@ def prepare_and_normalize_scores(**kwargs):
     raw_explanation_code_path = Path(
         ti.xcom_pull(task_ids="explanation_code_catalogue")
     )
-    weights = ti.xcom_pull(task_ids="calculate_model_weights")
-    #weights = [0.35, 0.35, 0.15, 0.1, 0.05]
-    logging.info(weights)
+    WEIGHTS_DATASTORE = [0.35, 0.35, 0.15, 0.1, 0.05]
+    WEIGHTS_FILESTORE = [0.41, 0.41, 0.18]  
     BINS = kwargs.pop("BINS")
     DIMENSIONS = kwargs.pop("DIMENSIONS")
 
     df = pd.read_parquet(raw_explanation_code_path).set_index(
         ["package", "resource"], drop=True
     )
+
+    # datastore
+    ds_df = df[df["store_type"] == "datastore"]
+    scores = pd.DataFrame([WEIGHTS_DATASTORE] * len(ds_df.index))
+    scores.index = ds_df.index
+    scores.columns = DIMENSIONS
+    logging.info(f"scores: {scores}")
+
+    ds_scores = ds_df.loc[:, DIMENSIONS]
+    logging.info(f"ds_scores: {ds_scores.reset_index(drop=False)}")
+    scores = ds_scores.multiply(scores)
+    logging.info(f"scores 1: {scores}")
+    ds_scores["score"] = scores.sum(axis=1)
+    logging.info(f"ds_scores 1: {ds_scores.reset_index(drop=False)}")
+    ds_scores = ds_scores.groupby("package").mean()
+    logging.info(f"ds_scores 2: {ds_scores}")
+    
+    # filestore
+    fs_df = df[df["store_type"] == "filestore"]
+    scores = pd.DataFrame([WEIGHTS_FILESTORE] * len(fs_df.index))
+    scores.index = fs_df.index
+    scores.columns = DIMENSIONS[:3]
+    
+    fs_scores = fs_df.loc[:, DIMENSIONS]
+    fs_scores_3d = fs_df.loc[:, DIMENSIONS[:3]]
+    scores = fs_scores_3d.multiply(scores)
+    fs_scores["score"] = scores.sum(axis=1)
+    fs_scores = fs_scores.groupby("package").mean() 
+    
+
+    df_scores = ds_scores.append(fs_scores, ignore_index=True)
+    df_scores["score_norm"] = MinMaxScaler().fit_transform(df_scores[["score"]])
+
+    labels = list(BINS.keys())
+
+    bins = [-1]
+    bins.extend(BINS.values())
+
+    df_scores["grade"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
+    df_scores["grade_norm"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
+
+    df_codes = df.loc[:, ~df.columns.isin(DIMENSIONS)]
+
+    # map the package level score to resource level
+    df_output = pd.merge(df_codes, df_scores, on=["package"], how="left")
+
+    logging.info(df_output.columns)
+
 
     scores = pd.DataFrame([weights] * len(df.index))
     scores.index = df.index
