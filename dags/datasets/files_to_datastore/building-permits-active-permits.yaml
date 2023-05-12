@@ -154,3 +154,7 @@ building-permits-active-permits:
           type: float
           info:
             notes: Floor area (in sq metres) covered by permit work
+        - id: BUILDER_NAME
+          type: text
+          info:
+            notes: Builder associated w the permit
