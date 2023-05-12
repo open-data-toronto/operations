@@ -237,15 +237,17 @@ def score_freshness(package, time_map, penalty_map):
 
     rr = package["refresh_rate"].lower()
 
-    if rr in ["real-time", "as available"]:
+    if rr in ["real-time", "as available", "will not be refreshed"]:
         return 1
     elif rr in time_map and "last_refreshed" in package and package["last_refreshed"]:
         days = parse_datetime(package["last_refreshed"])
         elapse_periods = max(0, (days - time_map[rr]) / time_map[rr])
         metrics["elapse_periods"] = max(0, 1 - (elapse_periods / penalty_map[rr]) ** 2)
 
-        # Decrease the score starting from ~0.5 years to ~3 years
-        metrics["elapse_days"] = max(0, 1 - (days / (365 * 3)) ** 2)
+        # Decrease the score starting from ~0.5 years to ~2 years
+        metrics["elapse_days"] = (
+            max(0, 1 - (days / (365 * 2)) ** 2) if days > 180 else 1
+        )
 
         return np.mean(list(metrics.values()))
 
@@ -282,7 +284,9 @@ def score_accessibility(p, resource, dataset_type, etl_intentory):
         metrics["pipeline"] = 0.7 if engine_info else 0.5
 
     if dataset_type == "datastore":
-        metrics["pipeline"] = 1
+        metrics["pipeline"] = (
+            1 if "extract_job" in resource and resource["extract_job"] else 0.6
+        )
 
     return np.mean(list(metrics.values()))
 

@@ -75,7 +75,6 @@ def prepare_and_normalize_scores(**kwargs):
     df_codes = df.loc[:, ~df.columns.isin(DIMENSIONS)]
     scores = df_scores.multiply(scores)
 
-    df_scores["score"] = scores.sum(axis=1)
     df_scores["score_norm"] = MinMaxScaler().fit_transform(df_scores[["score"]])
 
     df_scores = df_scores.groupby("package").mean()
@@ -90,28 +89,9 @@ def prepare_and_normalize_scores(**kwargs):
 
     df_codes = df_codes.reset_index()
 
-    # calculate median value for usability, completeness dimension for datastore
-    usability_median = df.loc[df['store_type'] == "datastore", "usability"].median()
-    completness_median = df.loc[df['store_type'] == "datastore", "completeness"].median()
-    logging.info(f"Usability median: {usability_median}")
-    logging.info(f"Completeness median: {completness_median}")
-
     # map the package level score to resource level
     df_output = pd.merge(df_codes, df_scores, on=["package"], how="outer")
 
-    # assign median value for usability and completeness dimensions to filestore
-    df_output["usability"] = df_output.apply(
-        lambda x: x["usability"]
-        if x["store_type"] == "datastore"
-        else usability_median,
-        axis=1,
-    )
-    df_output["completeness"] = df_output.apply(
-        lambda x: x["completeness"]
-        if x["store_type"] == "datastore"
-        else completness_median,
-        axis=1,
-    )
 
     logging.info(df_output.columns)
 
@@ -180,12 +160,8 @@ def explanation_code_catalogue(**kwargs):
         geo_validity_message = ""
         if isinstance(data, gpd.GeoDataFrame):
             counts = data["geometry"].is_valid.value_counts()
-
-            geo_validity_message = (
-                "~invalid_geospatial"
-                if (False in counts and (counts[False] / (len(data) * 0.05) > 0.01))
-                else ""
-            )
+            score = 1 - (counts[False] / (len(data) * 0.05)) if False in counts else 1
+            geo_validity_message = "~invalid_geospatial" if score < 1 else ""
 
         usability_message = (
             col_names_message + col_constant_messgae + geo_validity_message
@@ -266,7 +242,11 @@ def explanation_code_catalogue(**kwargs):
             pipeline_message = "" if engine_info else "~no_pipeline_found"
         else:
             package_type_message = ""
-            pipeline_message = ""
+            pipeline_message = (
+                ""
+                if "extract_job" in resource and resource["extract_job"]
+                else "~no_pipeline_found"
+            )
 
         accessibility_message = pipeline_message + tags_message + package_type_message
 
