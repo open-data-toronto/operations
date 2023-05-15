@@ -19,6 +19,7 @@ nltk.download("wordnet")
 DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
 FILE_DIR_PATH = DIR_PATH / "sustainment" / "update_data_quality_scores"
 
+
 def information_url_checker(information_url):
     result_info = ""
     if "http" in information_url:
@@ -60,8 +61,8 @@ def prepare_and_normalize_scores(**kwargs):
     raw_explanation_code_path = Path(
         ti.xcom_pull(task_ids="explanation_code_catalogue")
     )
-    WEIGHTS_DATASTORE = [0.35, 0.35, 0.15, 0.1, 0.05]
-    WEIGHTS_FILESTORE = [0.41, 0.41, 0.18]  
+    WEIGHTS_DATASTORE = kwargs.pop("WEIGHTS_DATASTORE")
+    WEIGHTS_FILESTORE = kwargs.pop("WEIGHTS_FILESTORE")
     BINS = kwargs.pop("BINS")
     DIMENSIONS = kwargs.pop("DIMENSIONS")
 
@@ -69,84 +70,50 @@ def prepare_and_normalize_scores(**kwargs):
         ["package", "resource"], drop=True
     )
 
-    # datastore
+    # Calculate Datastore weighted and overall score
     ds_df = df[df["store_type"] == "datastore"]
     scores = pd.DataFrame([WEIGHTS_DATASTORE] * len(ds_df.index))
     scores.index = ds_df.index
     scores.columns = DIMENSIONS
-    logging.info(f"scores: {scores}")
 
     ds_scores = ds_df.loc[:, DIMENSIONS]
-    logging.info(f"ds_scores: {ds_scores.reset_index(drop=False)}")
     scores = ds_scores.multiply(scores)
-    logging.info(f"scores 1: {scores}")
     ds_scores["score"] = scores.sum(axis=1)
-    logging.info(f"ds_scores 1: {ds_scores.reset_index(drop=False)}")
-    ds_scores = ds_scores.groupby("package").mean()
-    logging.info(f"ds_scores 2: {ds_scores}")
-    
-    # filestore
+    ds_scores = ds_scores.groupby("package").mean().reset_index(drop=False)
+    logging.info(f"Datastore package: {ds_scores.shape[0]}")
+
+    # Calculate Filestore weighted and overall score
     fs_df = df[df["store_type"] == "filestore"]
     scores = pd.DataFrame([WEIGHTS_FILESTORE] * len(fs_df.index))
     scores.index = fs_df.index
     scores.columns = DIMENSIONS[:3]
-    
+
     fs_scores = fs_df.loc[:, DIMENSIONS]
     fs_scores_3d = fs_df.loc[:, DIMENSIONS[:3]]
     scores = fs_scores_3d.multiply(scores)
     fs_scores["score"] = scores.sum(axis=1)
-    fs_scores = fs_scores.groupby("package").mean() 
-    
+    fs_scores = fs_scores.groupby("package").mean().reset_index(drop=False)
+    logging.info(f"Filestore package: {fs_scores.shape[0]}")
 
+    # Combine datastore and filestore, normalize overall score and assign bins
     df_scores = ds_scores.append(fs_scores, ignore_index=True)
     df_scores["score_norm"] = MinMaxScaler().fit_transform(df_scores[["score"]])
 
     labels = list(BINS.keys())
-
     bins = [-1]
     bins.extend(BINS.values())
 
     df_scores["grade"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
     df_scores["grade_norm"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
 
-    df_codes = df.loc[:, ~df.columns.isin(DIMENSIONS)]
-
-    # map the package level score to resource level
-    df_output = pd.merge(df_codes, df_scores, on=["package"], how="left")
-
-    logging.info(df_output.columns)
-
-
-    scores = pd.DataFrame([weights] * len(df.index))
-    scores.index = df.index
-    scores.columns = DIMENSIONS
-
-    df_scores = df.loc[:, DIMENSIONS]
-    df_codes = df.loc[:, ~df.columns.isin(DIMENSIONS)]
-    scores = df_scores.multiply(scores)
-
-    df_scores["score_norm"] = MinMaxScaler().fit_transform(df_scores[["score"]])
-
-    df_scores = df_scores.groupby("package").mean()
-
-    labels = list(BINS.keys())
-
-    bins = [-1]
-    bins.extend(BINS.values())
-
-    df_scores["grade"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
-    df_scores["grade_norm"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
-
-    df_codes = df_codes.reset_index()
+    df_codes = df.loc[:, ~df.columns.isin(DIMENSIONS)].reset_index(drop=False)
 
     # map the package level score to resource level
     df_output = pd.merge(df_codes, df_scores, on=["package"], how="outer")
 
-
     logging.info(df_output.columns)
 
     df_output["recorded_at"] = dt.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-
     df_output = df_output.round(2)
 
     filename = "final_scores_and_codes"
@@ -307,7 +274,7 @@ def explanation_code_catalogue(**kwargs):
 
     for p in packages:
         logging.info(f"---------Package: {p['name']}")
-        if p["name"].lower() == "tags":
+        if p["name"].lower() == "metadata-catalog":
             continue
         # skip retired dataset for evaluation
         if "is_retired" in p and (str(p.get("is_retired")).lower() == "true"):

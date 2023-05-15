@@ -196,6 +196,8 @@ with DAG(
             "ckan": ckan,
             "DIMENSIONS": DIMENSIONS,
             "BINS": BINS,
+            "WEIGHTS_DATASTORE": WEIGHTS_DATASTORE,
+            "WEIGHTS_FILESTORE": WEIGHTS_FILESTORE,
         },
         provide_context=True,
     )

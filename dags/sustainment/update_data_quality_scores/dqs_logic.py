@@ -236,13 +236,16 @@ def score_freshness(package, time_map, penalty_map):
     metrics = {}
 
     rr = package["refresh_rate"].lower()
-
-    if rr in ["real-time", "as available", "will not be refreshed"]:
-        return 1
-    elif rr in time_map and "last_refreshed" in package and package["last_refreshed"]:
+    if "last_refreshed" in package and package["last_refreshed"]:
         days = parse_datetime(package["last_refreshed"])
-        elapse_periods = max(0, (days - time_map[rr]) / time_map[rr])
-        metrics["elapse_periods"] = max(0, 1 - (elapse_periods / penalty_map[rr]) ** 2)
+
+        if rr in ["real-time", "as available", "will not be refreshed"]:
+            metrics["elapse_periods"] = 1
+        elif rr in time_map:
+            elapse_periods = max(0, (days - time_map[rr]) / time_map[rr])
+            metrics["elapse_periods"] = max(
+                0, 1 - (elapse_periods / penalty_map[rr]) ** 2
+            )
 
         # Decrease the score starting from ~0.5 years to ~2 years
         metrics["elapse_days"] = (
@@ -251,7 +254,9 @@ def score_freshness(package, time_map, penalty_map):
 
         return np.mean(list(metrics.values()))
 
-    return 0
+    else:
+        logging.info("Last_refreshed date empty.")
+        return 0
 
 
 def score_completeness(data):
@@ -271,7 +276,7 @@ def score_accessibility(p, resource, dataset_type, etl_intentory):
     Is data available via APIs? Have tags?
     """
     metrics = {}
-    metrics["tags"] = 1 if "tags" in p and (p["num_tags"] > 0) else 0.8
+    metrics["tags"] = 1 if "tags" in p and (p["num_tags"] > 0) else 0.5
 
     if dataset_type == "filestore":
         if resource["name"] in etl_intentory["resource_name"].values.tolist():
@@ -281,105 +286,11 @@ def score_accessibility(p, resource, dataset_type, etl_intentory):
         else:
             engine_info = None
 
-        metrics["pipeline"] = 0.7 if engine_info else 0.5
+        metrics["pipeline"] = 0.8 if engine_info else 0.5
 
     if dataset_type == "datastore":
         metrics["pipeline"] = (
-            1 if "extract_job" in resource and resource["extract_job"] else 0.6
+            1 if "extract_job" in resource and resource["extract_job"] else 0.5
         )
 
     return np.mean(list(metrics.values()))
-
-
-def score_catalogue(**kwargs):
-    ti = kwargs.pop("ti")
-    packages = ti.xcom_pull(task_ids="get_all_packages")
-    tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
-    METADATA_FIELDS = kwargs.pop("METADATA_FIELDS")
-    TIME_MAP = kwargs.pop("TIME_MAP")
-    PENALTY_MAP = kwargs.pop("PENALTY_MAP")
-
-    ckan = kwargs.pop("ckan")
-
-    filename = "raw_scores"
-    filepath = tmp_dir / f"{filename}.parquet"
-
-    filestore_records = []
-    datastore_records = []
-    etl_intentory = get_etl_inventory("od-etl-configs", ckan)
-
-    for p in packages:
-        logging.info(f"---------Package: {p['name']}")
-        if p["name"].lower() == "tags":
-            continue
-        # skip retired dataset for evaluation
-        if "is_retired" in p and (str(p.get("is_retired")).lower() == "true"):
-            logging.info(f"Dataset {p['name']} is retired.")
-            continue
-
-        # filestore score
-        if p["dataset_category"] in ["Document", "Website"]:
-            for r in p["resources"]:
-                records = {
-                    "package": p["name"],
-                    "resource": r["name"],
-                    "usability": 0,
-                    "metadata": score_metadata(p, METADATA_FIELDS),
-                    "freshness": score_freshness(p, TIME_MAP, PENALTY_MAP),
-                    "completeness": 0,
-                    "accessibility": score_accessibility(
-                        p, r, "filestore", etl_intentory
-                    ),
-                }
-                logging.info(f"Filestore Score: Package Name {p['name']}")
-                filestore_records.append(records)
-                logging.info(records)
-
-        # datastore score
-        else:
-            for r in p["resources"]:
-                if (
-                    "datastore_active" not in r
-                    or str(r["datastore_active"]).lower() == "false"
-                ):
-                    continue
-
-                content, fields = read_datastore(ckan, r["id"])
-
-                records = {
-                    "package": p["name"],
-                    "resource": r["name"],
-                    "usability": score_usability(fields, content),
-                    "metadata": score_metadata(p, METADATA_FIELDS, fields),
-                    "freshness": score_freshness(p, TIME_MAP, PENALTY_MAP),
-                    "completeness": score_completeness(content),
-                    "accessibility": score_accessibility(
-                        p, r, "datastore", etl_intentory
-                    ),
-                }
-
-                logging.info(
-                    f"Datastore Score {p['name']}: {r['name']} - {len(content)} records"
-                )
-                logging.info(records)
-
-                datastore_records.append(records)
-
-    df_filestore = pd.DataFrame(filestore_records)
-    df_datastore = pd.DataFrame(datastore_records)
-    logging.info(df_filestore.shape[0])
-    logging.info(df_datastore.shape[0])
-
-    # assign mean value of datastore for filestore dimension "usability" and "completeness"
-    df_filestore["usability"] = [df_datastore["usability"].mean()] * df_filestore.shape[
-        0
-    ]
-    df_filestore["completeness"] = [
-        df_datastore["completeness"].mean()
-    ] * df_filestore.shape[0]
-
-    df = df_datastore.append(df_filestore, ignore_index=True)
-
-    df.to_parquet(filepath, engine="fastparquet", compression=None)
-
-    return str(filepath)
