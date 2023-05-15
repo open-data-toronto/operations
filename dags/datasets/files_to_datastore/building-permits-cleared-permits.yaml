@@ -4,7 +4,7 @@ building-permits-cleared-permits:
   dag_owner_email: 'mackenzie.nichols4@toronto.ca'
   title: Building Permits - Cleared Permits
   date_published: '2019-07-23 16:43:18.706983'
-  refresh_rate: Weekly
+  refresh_rate: Daily
   dataset_category: Table
   owner_division: Toronto Building
   owner_section: null

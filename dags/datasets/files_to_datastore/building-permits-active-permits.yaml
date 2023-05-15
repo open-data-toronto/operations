@@ -4,7 +4,7 @@ building-permits-active-permits:
   dag_owner_email: 'mnichol4@toronto.ca'
   title: Building Permits - Active Permits
   date_published: '2019-07-23 16:43:02.720844'
-  refresh_rate: Weekly
+  refresh_rate: Daily
   dataset_category: Table
   owner_division: Toronto Building
   owner_section: null
