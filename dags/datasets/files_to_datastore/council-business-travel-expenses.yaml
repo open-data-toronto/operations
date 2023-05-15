@@ -1,0 +1,116 @@
+council-business-travel-expenses:
+  schedule: '@once'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Council Business Travel Expenses
+  date_published: '2019-07-23 18:26:56.84401'
+  refresh_rate: Quarterly
+  dataset_category: Document
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: Fiscal responsibility
+  topics: City government,Finance
+  tags:
+  - name: council
+    vocabulary_id: null
+  - name: councillor travel expense
+    vocabulary_id: null
+  - name: travel expense
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/council/budgets-and-expense-reports/
+  excerpt: Council Expenses - Business Travel Expenses
+  limitations: null
+  notes: '
+
+
+    Councillors who fulfill an official capacity with a municipal organization of
+    which the City is a member are reimbursed from the Council Business Travel Budget
+    for their travel costs related to Board and Committee meetings.  The Mayor, or
+    a Councillor designated by Mayor to attend meetings and conferences of mayoral
+    membership organizations will have the costs paid from the Council Business Travel
+    Budget. Councillors who are not Board or Committee members of the Federation of
+    Canadian Municipalities (FCM) and incur travel costs associated with attending
+    the FCM Annual Conference may be reimbursed from the Council Business Travel Budget.
+
+    '
+  resources:
+    # resource name
+    Council Business Travel Expenses - Current:
+      format: csv
+      url: http://opendata.toronto.ca/city.clerks.office/council-business-travel-expenses/Council Business Travel Expenses.csv
+      attributes:
+        - id: "Year"
+          type: "int"
+          info:
+            notes: ""
+        - id: "Ward"
+          type: "text"
+          info:
+            notes: ""
+        - id: "Councillor"
+          type: "text"
+          info:
+            notes: ""
+        - id: "Staff Salaries Budget Overage"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Office Equipment and Supplies"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Transportation, Kilometrage & Parking"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Communication"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Telecom Services"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Constituency & Business Meeting"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Advertising & Promotion"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Professional & Technical Services"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Conferences & Office Travel"
+          type: "float"
+          info:
+            notes: ""
+        - id: "City Hall/Civic Centre Rent & Constituency Office Expenses"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Constituency Office Lease Expenses Charged to Staff Salary Budget"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Other Expenses"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Other Recoveries"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Donations Received for Community Events"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Expenses Using Personal Funds"
+          type: "float"
+          info:
+            notes: ""
+        

@@ -1,0 +1,156 @@
+councillors-constituency-services-office-expense-reporting:
+  schedule: '@once'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Councillors' Constituency Services & Office Expense Reporting
+  date_published: '2019-07-23 16:58:47.421955'
+  refresh_rate: Quarterly
+  dataset_category: Table
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: City government,Finance
+  tags:
+  - name: council budget
+    vocabulary_id: null
+  - name: council expense
+    vocabulary_id: null
+  - name: council office expense
+    vocabulary_id: null
+  - name: council spending
+    vocabulary_id: null
+  information_url: http://app.toronto.ca/tcer_web
+  excerpt: Constituency services and office expense records by expenditure category
+    for Members of Council beginning in 2008.
+  limitations: null
+  notes: |
+    Each Councillor has a constituency services and office budget to pay for expenses that are allowable under the Constituency Services and Office Budget Policy*. This dataset contains Members of Toronto City Council total annual constituency services and office expenses broken down into categories (e.g. Office Equipment and Supplies, Conferences & Office Travel) . The budget per year is as follows:
+    * 2008 office expense budget - $53,100
+
+    * 2009 office expense budget - $53,100
+
+    * 2010 office expense budget - $50,445
+
+    * 2011 office expense budget - $30,000
+
+    * 2012 constituency services and office budget* - $30,000
+
+    * 2013 constituency services and office budget - $30,450
+
+    * 2014 constituency services and office budget - $30,815.40
+
+    * 2015 constituency services and office budget - $31,585.79
+
+    * 2016 constituency services and office budget - $32,059.58
+
+    * 2017 constituency services and office budget - $32,732.83
+
+    * 2018 constituency services and office budget - $33,420.22
+
+    * 2019 constituency services and office budget** - $50,000.00 
+
+    * 2020 constituency services and office budget - $51,005.00 
+
+    * 2021 constituency services and office budget - $51,158.02 
+
+    * 2022 constituency services and office budget - $52,616.02 
+
+    *The Office Expense Budget has been renamed the Constituency Services and Office Budget and the Councillor Expense Policy has been renamed the Constituency Services and Office Budget Policy as per City Council approval of EX21.9 on July 11, 2012.
+    **As per CC1.1 'Recalibrating City Council's Governance System for 26 Members' approved by City Council on December 4, 5 and 13, 2018, the annual Constituency Services and Office Budget was set at $50,000 for 2019.
+    The data provided is not in the same order as presented on the City's website.
+    
+    For 2018, the data is divided:
+    
+    * One part with data for the 44 wards up to November 30, 2018 including the Mayor's Office data for the full year
+    
+    * One part with data for the 25 wards from December 1, 2018
+    
+    Please Note:
+    2010, 2014, 2018 and 2022 are election years so the Constituency Services and Office Budget is a pro-rated amount based on the number of months or partial months in each term of office. Re-elected Councillors have available to them the balance of funds remaining as of Election Day except when there are changes to ward boundaries, where the pro-rated amounts for both terms will apply to all Councillors.
+
+    Therefore each Councillor had a constituency services and office budget of:
+    * $46,241.25 for January 1 - November 30, 2010; $4,203.75 for December 2010
+    * $28,247.45 for January 1 - November 30, 2014; $2,567.95 for December 2014
+    * $30,635.20 for January 1 - November 30, 2018; $2,785.02 for December 2018
+    * $46,039.02 for January 1 - November 14, 2022; $6,577.00 for November 15 - December 31, 2022
+
+  resources:
+    Council Office Expenses:
+      format: csv
+      url: http://opendata.toronto.ca/city.clerks.office/councillors-constituency-services-office-expense-reporting/CSOB Open Data.csv
+      attributes:
+        - id: "Year"
+          type: "text"
+          info:
+            notes: ""
+        - id: "Ward"
+          type: "text"
+          info:
+            notes: ""
+        - id: "Councillor"
+          type: "text"
+          info:
+            notes: ""
+        - id: "Staff Salaries Budget Overage"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Office Equipment and Supplies"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Transportation, Kilometrage & Parking"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Communication"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Telecom Services"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Constituency & Business Meeting"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Advertising & Promotion"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Professional & Technical Services"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Conferences & Office Travel"
+          type: "float"
+          info:
+            notes: ""
+        - id: "City Hall/Civic Centre Rent & Constituency Office Expenses"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Constituency Office Lease Expenses Charged to Staff Salary Budget"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Other Expenses"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Other Recoveries"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Donations Received for Community Events"
+          type: "float"
+          info:
+            notes: ""
+        - id: "Expenses Using Personal Funds"
+          type: "float"
+          info:
+            notes: ""
+    
