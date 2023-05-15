@@ -1,5 +1,5 @@
 building-permits-active-permits:
-  schedule: '@once'
+  schedule: '0 10 * * *'
   dag_owner_name: 'Mackenzie'
   dag_owner_email: 'mnichol4@toronto.ca'
   title: Building Permits - Active Permits
