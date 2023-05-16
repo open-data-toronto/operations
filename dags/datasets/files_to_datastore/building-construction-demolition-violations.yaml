@@ -1,0 +1,143 @@
+building-construction-demolition-violations:
+  schedule: '20 10 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Building Construction/Demolition Violations
+  date_published: '2023-05-04 00:43:18.706983'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: Toronto Building
+  owner_section: null
+  owner_unit: null
+  owner_email: Ryan.Persaud@toronto.ca
+  civic_issues: Fiscal responsibility
+  topics: Development
+  tags:
+  - name: building permit
+    vocabulary_id: null
+  - name: cleared permit
+    vocabulary_id: null
+  information_url: null
+  excerpt: This data set includes all Open and Closed building construction/demolition violation folders.
+  limitations: null
+  notes: This data set includes all Open and Closed building construction/demolition violation folders.
+
+  resources:
+    building-construction-demolition-violations:
+      format: csv
+      url: http://opendata.toronto.ca/toronto.building/building-construction-demolition-violations/building-construction-demolition-violations.csv
+      attributes:
+        - id: BRFOLDERRSN
+          type: text
+          info:
+            notes: ""
+        - id: BRFOLDER
+          type: text
+          info:
+            notes: ""
+        - id: BRINDATE
+          type: date
+          format: "%Y%m%d%H%M%S"
+          info:
+            notes: ""
+        - id: BRFINALDATE
+          type: date
+          format: "%Y%m%d%H%M%S"
+          info:
+            notes: ""
+        - id: BRSTATUSDESC
+          type: text
+          info:
+            notes: ""
+        - id: BRFOLDERNAME
+          type: text
+          info:
+            notes: ""
+        - id: DISTRICT
+          type: text
+          info:
+            notes: ""
+        - id: GRID
+          type: text
+          info:
+            notes: ""
+        - id: FOLDERRSN
+          type: text
+          info:
+            notes: ""
+        - id: PARENT
+          type: text
+          info:
+            notes: ""
+        - id: FOLDERNUMBER
+          type: text
+          info:
+            notes: ""
+        - id: FOLDERSECTION
+          type: text
+          info:
+            notes: ""
+        - id: INDATE
+          type: date
+          format: "%Y%m%d%H%M%S"
+          info:
+            notes: ""
+        - id: ISSUEDATE
+          type: date
+          format: "%Y%m%d%H%M%S"
+          info:
+            notes: ""
+        - id: FINALDATE
+          type: date
+          format: "%Y%m%d%H%M%S"
+          info:
+            notes: ""
+        - id: SITEADDRESS
+          type: text
+          info:
+            notes: ""
+        - id: STATUS
+          type: text
+          info:
+            notes: ""
+        - id: SUBTYPE
+          type: text
+          info:
+            notes: ""
+        - id: WORK
+          type: text
+          info:
+            notes: ""
+        - id: DISCIPLINE
+          type: text
+          info:
+            notes: ""
+        - id: PART39
+          type: text
+          info:
+            notes: ""
+        - id: INFOVALUE
+          type: text
+          info:
+            notes: ""
+        - id: DESCRIPTION
+          type: text
+          info:
+            notes: ""
+        - id: FOLDERCONDITION
+          type: text
+          info:
+            notes: ""
+        - id: STREET
+          type: text
+          info:
+            notes: ""
+        - id: STREETNUM
+          type: text
+          info:
+            notes: ""
+        - id: UNIT
+          type: text
+          info:
+            notes: ""
+        

@@ -1,0 +1,163 @@
+building-permits-cleared-permits:
+  schedule: '40 10 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Building Permits - Cleared Permits
+  date_published: '2019-07-23 16:43:18.706983'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: Toronto Building
+  owner_section: null
+  owner_unit: null
+  owner_email: Ryan.Persaud@toronto.ca
+  civic_issues: null
+  topics: Development and infrastructure,Permits and licenses
+  tags:
+  - name: building permit
+    vocabulary_id: null
+  - name: cleared permit
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/building/building_permits.htm
+  excerpt: Provides information on Building Permits completed/closed. Data is collected
+    from permit applications and updates made by City Staff when reviewing the application
+    and Inspecting the work on the issued permit.
+  limitations: "Information for applications where APPLICATION_DATE is earlier than Oct 1, 1999 is likely to\
+    \ be incomplete, because these were entered and processed on numerous pre-amalgamation\
+    \ legacy systems with varying data collection capabilities and standards.\r\n"
+  notes: Provides information on Building Permits completed/closed. Data is collected
+    from permit applications and updates made by City Staff when reviewing the application
+    and Inspecting the work on the issued permit.
+
+  resources:
+    Cleared Building Permits since 2017:
+      format: csv
+      url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits/building-permits-cleared-permits.csv
+      attributes:
+        - id: PERMIT_NUM
+          type: text
+          info:
+            notes: Last two digits of calendar year, plus IBMS-generated sequence
+        - id: REVISION_NUM
+          type: text
+          info:
+            notes: Two digit number identifying revisions to permit application made after permit issuance 
+        - id: PERMIT_TYPE
+          type: text
+          info:
+            notes: Text field describing the type of permit.
+        - id: STRUCTURE_TYPE
+          type: text
+          info:
+            notes: Identifies that type of structure the application relates to.
+        - id: WORK
+          type: text
+          info:
+            notes: Overall description of the type of work covered by application.
+        - id: STREET_NUM
+          type: text
+          info:
+            notes: Address - street number
+        - id: STREET_NAME
+          type: text
+          info:
+            notes: Address - street name
+        - id: STREET_TYPE
+          type: text
+          info:
+            notes: Address - street type
+        - id: STREET_DIRECTION
+          type: text
+          info:
+            notes: Address - street direction
+        - id: POSTAL
+          type: text
+          info:
+            notes: First 3 digits of postal code
+        - id: GEO_ID
+          type: text
+          info:
+            notes: City-defined, unique identifier for Property Address
+        - id: WARD_GRID
+          type: text
+          info:
+            notes: ""
+        - id: APPLICATION_DATE
+          type: date
+          format: "%Y%m%d%H%M%S"
+          info:
+            notes: Date that the application was received and entered into IBMS
+        - id: ISSUED_DATE
+          type: date
+          format: "%Y%m%d%H%M%S"
+          info:
+            notes: Date that the permit was issued.
+        - id: COMPLETED_DATE
+          type: date
+          format: "%Y%m%d%H%M%S"
+          info:
+            notes: Date work is complete and permit is cleared
+        - id: STATUS
+          type: text
+          info:
+            notes: Current status of application / permit
+        - id: DESCRIPTION
+          type: text
+          info:
+            notes: Description of work proposed in application
+        - id: CURRENT_USE
+          type: text
+          info:
+            notes: Use of the property at the time of application submission
+        - id: PROPOSED_USE
+          type: text
+          info:
+            notes: Use of the property after completion of work covered by permit
+        - id: DWELLING_UNITS_CREATED
+          type: text
+          info:
+            notes: Number of residential dwelling units created by completion of permit work. 
+        - id: DWELLING_UNITS_LOST
+          type: text
+          info:
+            notes: Number of residential dwelling units lost by completion of permit work.
+        - id: EST_CONST_COST
+          type: text
+          info:
+            notes: ""
+        - id: ASSEMBLY
+          type: float
+          info:
+            notes: Assembly Occupancy area (in sq metres) covered by permit work. (eg Restaurant, Library, Theatre)
+        - id: INSTITUTIONAL
+          type: float
+          info:
+            notes: Institutional Occupancy area (in sq metres) covered by permit work (eg Hospital, Nursing Home)
+        - id: RESIDENTIAL
+          type: float
+          info:
+            notes: Residential Occupancy area (in sq metres) covered by permit work
+        - id: BUSINESS_AND_PERSONAL_SERVICES
+          type: float
+          info:
+            notes: Business and Personal Services Occupancy area (in sq metres) covered by permit work (Office, Bank, Medical Clinic)
+        - id: MERCANTILE
+          type: float
+          info:
+            notes: Mercantile Occupancy area (in sq metres) covered by permit work (eg Department Store, Supermarket)
+        - id: INDUSTRIAL
+          type: float
+          info:
+            notes: Industrial Occupancy area (in sq metres) covered by permit work (eg Warehouse, Gas Station)
+        - id: INTERIOR_ALTERATIONS
+          type: float
+          info:
+            notes: Floor area (in sq metres) covered by permit work
+        - id: DEMOLITION
+          type: float
+          info:
+            notes: Floor area (in sq metres) covered by permit work
+        - id: BUILDER_NAME
+          type: text
+          info:
+            notes: Builder associated w the permit
+        
