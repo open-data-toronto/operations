@@ -35,7 +35,7 @@ with DAG(
         }
     ),
     description="Identifies empty datastore resources and send to Slack",
-    schedule_interval="5 15,18,21,0,3 * * *",
+    schedule_interval="5 4-14 * * *",
     tags=["sustainment"],
     catchup=False,
 ) as dag:
