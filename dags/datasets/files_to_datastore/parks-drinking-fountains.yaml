@@ -1,0 +1,105 @@
+parks-drinking-fountains:
+  schedule: '50 18 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Parks Drinking Water Sources
+  date_published: '2019-07-23 17:52:31.278482'
+  refresh_rate: Daily
+  dataset_category: Map
+  owner_division: Parks, Forestry & Recreation
+  owner_section: null
+  owner_unit: null
+  owner_email: pfrdatagovernance@toronto.ca
+  civic_issues: null
+  topics: Locations and mapping,Parks and recreation
+  tags:
+  - name: drinking fountain
+    vocabulary_id: null
+  - name: water fountain
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/explore-enjoy/recreation/washrooms-drinking-water-in-parks-recreational-facilities/
+  excerpt: Citywide coverage of Parks showing number of operational drinking fountains
+    in City Parks.
+  limitations: null
+  notes: |
+    This dataset includes data on drinking water sources (i.e. drinking fountains, bottle filling stations, dog fountains and combination units) operated by the City of Toronto Parks, Forestry and Recreation (PFR) division. Only drinking water sources that have been deemed as operational at the time of data validation exercise are included in this dataset. Drinking water sources have a "turn on" and "turn off" time period (turn on - May and turn off - October) and do not function throughout the entire year. 
+
+    Drinking water source information found in this dataset include: 
+
+    * Asset ID 
+    * Park Name 
+    * Alternative Asset Name 
+    * Drinking Water Source Type 
+    * Location Details 
+    * Address 
+
+    The operational status of a drinking water source is updated in near real-time by staff throughout the day. The most updated information can be found by accessing the JSON file linked below: 
+
+    [https://www.toronto.ca/data/parks/live/dws_allupdates.json](https://www.toronto.ca/data/parks/live/dws_allupdates.json)
+
+    
+    Operational Statuses include: 
+
+    * 0 = closed 
+    * 1 = open 
+    * 2 = service alert 
+
+    Every drinking water source is identified by (X, Y) GIS coordinates. 
+
+    Two files are available for download:
+
+    * Parks Drinking Water - List of park drinking water sources and their daily operational status.
+    * Location data - List of park drinking water sources and washroom facilities with geographic coordinates, as well as additional information including asset type, address, and location details. Note: Washroom buildings are included in the location data file and can be excluded by removing where [Type] = Washroom Building.
+
+
+    The data provided is sourced from the City of Toronto Parks, Forestry and Recreation Asset Management System. The dataset has been validated by on-site parks supervisors and through necessary inter-divisional staff. 
+
+    
+    **Note**:  
+
+    This dataset only contains information about drinking water sources operated by Parks, Forestry and Recreation division of the City of Toronto. All other City-owned drinking water sources are out of scope of this dataset. 
+
+    PFR publishes real-time updates directly on the [Parks and Recreation Washrooms and Drinking Water](https://www.toronto.ca/explore-enjoy/recreation/washrooms-drinking-water-in-parks-recreational-facilities/) webpage. 
+
+  resources:
+    Location Data:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_PFR_washroom_drinking_water_source/FeatureServer/0
+      attributes:      
+      - id: id
+        type: int
+        info:
+          notes: 'Parks, Forestry and Recreation Unique Identifier of the parent asset'
+      - id: asset_id
+        type: int
+        info:
+          notes: 'Parks, Forestry and Recreation Unique Identifier of the asset'
+      - id: location
+        type: text
+        info:
+          notes: 'Name of the parent asset'
+      - id: alternative_name
+        type: text
+        info:
+          notes: 'Is comprised of the name of the parent asset and a descriptor of the location'
+      - id: type
+        type: text
+        info:
+          notes: 'Drinking Water Fountain, Bottle Filling Station, Dog Fountain'
+      - id: location_details
+        type: text
+        info:
+          notes: 'A detailed description of where to find the asset'
+      - id: url
+        type: text
+        info:
+          notes: 'A link to the webpage of the parent asset'
+      - id: address
+        type: text
+        info:
+          notes: 'Street address of the park, where the drinking water source is located.'
+      - id: geometry
+        type: text
+        info:
+          notes: ''
