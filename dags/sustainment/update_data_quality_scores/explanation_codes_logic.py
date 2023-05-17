@@ -1,5 +1,4 @@
 import logging
-import re
 from datetime import datetime as dt
 from pathlib import Path
 
@@ -10,7 +9,6 @@ from nltk.corpus import wordnet
 from sustainment.update_data_quality_scores import dqs_logic
 import requests
 import math
-from geopandas import gpd
 from sklearn.preprocessing import MinMaxScaler
 import os
 
@@ -43,16 +41,19 @@ def information_url_checker(information_url):
 
 def attribue_description_check(columns):
     counter = 0
+    missing_cols = []
     for f in columns:
         if (
             "info" in f
             and (f["info"]["notes"] is not None)
             and (f["info"]["notes"] != "")
-            and f["info"]["notes"].strip() != f["id"]
         ):
             counter += 1
+        else:
+            if f["id"] != "geometry":
+                missing_cols.append(f["id"])
 
-    return counter == 0
+    return counter == 0, missing_cols
 
 
 def prepare_and_normalize_scores(**kwargs):
@@ -144,23 +145,13 @@ def explanation_code_catalogue(**kwargs):
         How easy is it to use the data given how it is organized/structured?
         """
 
-        def parse_col_name(s):
-            camel_to_snake = re.sub(
-                "([a-z0-9])([A-Z])", r"\1_\2", re.sub("(.)([A-Z][a-z]+)", r"\1_\2", s)
-            ).lower()
-
-            return (
-                camel_to_snake == s,
-                [x for x in re.split(r"-|_|\s", camel_to_snake) if len(x)],
-            )
-
         metrics = {
             "col_names": 1,  # Column names easy to understand?
             "col_constant": [],  # Columns where all values are constant?
         }
 
         for f in columns:
-            is_camel, words = parse_col_name(f["id"])
+            words = dqs_logic.parse_col_name(f["id"])
             eng_words = [w for w in words if len(wordnet.synsets(w))]
             if len(eng_words) / len(words) <= 0.2:
                 metrics["col_names"] -= 1 / len(columns)
@@ -174,15 +165,8 @@ def explanation_code_catalogue(**kwargs):
             if metrics["col_constant"]
             else ""
         )
-        geo_validity_message = ""
-        if isinstance(data, gpd.GeoDataFrame):
-            counts = data["geometry"].is_valid.value_counts()
-            score = 1 - (counts[False] / (len(data) * 0.05)) if False in counts else 1
-            geo_validity_message = "~invalid_geospatial" if score < 1 else ""
 
-        usability_message = (
-            col_names_message + col_constant_messgae + geo_validity_message
-        )
+        usability_message = col_names_message + col_constant_messgae
 
         return usability_message
 
@@ -205,8 +189,15 @@ def explanation_code_catalogue(**kwargs):
         metadata_message = missing_fields_message + email_message + url_message
 
         if columns:
-            is_empty = attribue_description_check(columns)
-            data_attributes_message = "~data_def_missing" if is_empty else ""
+            is_empty, missing_cols = attribue_description_check(columns)
+            if is_empty:
+                data_attributes_message = "~all_data_def_missing"
+            else:
+                data_attributes_message = (
+                    f"~missing_def_cols:{','.join(missing_cols)}"
+                    if missing_cols
+                    else ""
+                )
 
             metadata_message = metadata_message + data_attributes_message
 
@@ -220,7 +211,7 @@ def explanation_code_catalogue(**kwargs):
             days = dqs_logic.parse_datetime(package["last_refreshed"])
             logging.info(f"elapse days: {days}, refresh_rate: {rr}")
 
-            if rr == "as available":
+            if rr in ["real-time", "as available", "will not be refreshed"]:
                 freshness_message = "~stale" if days > (365 * 2) else ""
 
             if rr in time_map:

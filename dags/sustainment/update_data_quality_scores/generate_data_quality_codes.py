@@ -8,7 +8,7 @@ import pandas as pd
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.python import PythonOperator
-from sustainment.update_data_quality_scores import explanation_codes_logic, dqs_logic
+from sustainment.update_data_quality_scores import explanation_codes_logic
 from utils import airflow_utils, ckan_utils
 from utils_operators.slack_operators import task_failure_slack_alert
 
