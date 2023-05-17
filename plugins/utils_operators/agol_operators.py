@@ -50,6 +50,7 @@ class AGOLDownloadFileOperator(BaseOperator):
         filename_task_key: str = None,
 
         delete_col: list = [],
+        create_backup: bool = False,
 
         **kwargs,
     ) -> None:
@@ -67,6 +68,8 @@ class AGOLDownloadFileOperator(BaseOperator):
         self.filename_task_key = filename_task_key
 
         self.delete_col = delete_col
+        self.create_backup = create_backup
+        self.backup_path = None
     
     def set_path(self, ti):
         # init the filepath to the file we will create
@@ -207,6 +210,14 @@ class AGOLDownloadFileOperator(BaseOperator):
         # if new and old files dont match, replace old with new
         if new_hash != old_hash:
             logging.info("New data does not match old data's hash")
+            
+            # make a backup
+            if self.create_backup and os.path.exists(self.path):
+                # write backup and remember backup location
+                # we'll want to use or delete it later
+                self.backup_path = self.path + "-backup"
+                shutil.copy(self.path, self.backup_path)
+
             shutil.move(self.path + "-temp", self.path)
             needs_update = True
         # otherwise, get rid of the new "-temp" file
@@ -220,4 +231,5 @@ class AGOLDownloadFileOperator(BaseOperator):
         return {
                 "data_path": self.path,
                 "needs_update": needs_update,
+                "backup_path": self.backup_path
                 }

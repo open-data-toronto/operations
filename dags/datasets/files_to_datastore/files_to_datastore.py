@@ -203,6 +203,7 @@ def create_dag(dag_id,
                     dir=TMP_DIR,
                     filename=resource["url"].split("/")[-1],
                     custom_headers=resource.get("custom_headers", {}),
+                    create_backup=True,
                 )
 
             # AGOL files:
@@ -215,7 +216,8 @@ def create_dag(dag_id,
                         request_url=resource["url"],
                         dir=TMP_DIR,
                         filename=resource_name + "." + resource["format"],
-                        delete_col=delete_col
+                        delete_col=delete_col,
+                        create_backup=True,
                     )
 
             # Non AGOL flat JSON files:
@@ -227,6 +229,7 @@ def create_dag(dag_id,
                         dir=TMP_DIR,
                         filename=resource["url"].split("/")[-1],
                         custom_headers=resource.get("custom_headers", {}),
+                        create_backup=True,
                     )
             
                 # Non AGOL flat GEOJSON files:
@@ -235,7 +238,8 @@ def create_dag(dag_id,
                         task_id="download_" + resource_name,
                         file_url=resource["url"],
                         dir=TMP_DIR,
-                        filename=resource["url"].split("/")[-1]
+                        filename=resource["url"].split("/")[-1],
+                        create_backup=True,
                     )
 
             # get or create a resource a file
@@ -292,25 +296,34 @@ def create_dag(dag_id,
             #)
 
             # backup an existing resource
-            tasks_list["backup_resource_" + resource_name] = BackupDatastoreResourceOperator(
-                task_id = "backup_resource_" + resource_name,
-                address=CKAN,
-                apikey=CKAN_APIKEY,
-                resource_task_id="get_or_create_resource_" + resource_name,
-                dir_task_id="tmp_dir"
-            )
-
-            tasks_list["restore_backup_" + resource_name] = RestoreDatastoreResourceBackupOperator(
-                task_id="restore_backup_" + resource_name,
-                address=CKAN,
-                apikey=CKAN_APIKEY,
-                backup_task_id="backup_resource_" + resource_name,
-                trigger_rule="one_failed",
-            )
+            #tasks_list["backup_resource_" + resource_name] = BackupDatastoreResourceOperator(
+            #    task_id = "backup_resource_" + resource_name,
+            #    address=CKAN,
+            #    apikey=CKAN_APIKEY,
+            #    resource_task_id="get_or_create_resource_" + resource_name,
+            #    dir_task_id="tmp_dir"
+            #)
+#
+            #tasks_list["restore_backup_" + resource_name] = RestoreDatastoreResourceBackupOperator(
+            #    task_id="restore_backup_" + resource_name,
+            #    address=CKAN,
+            #    apikey=CKAN_APIKEY,
+            #    backup_task_id="backup_resource_" + resource_name,
+            #    trigger_rule="one_failed",
+            #)
 
             # delete existing resource records
             tasks_list["delete_resource_" + resource_name] = DeleteDatastoreResourceOperator(
                 task_id="delete_resource_" + resource_name,
+                address = CKAN,
+                apikey = CKAN_APIKEY,
+                resource_id_task_id = "get_or_create_resource_" + resource_name,
+                resource_id_task_key = "id"
+            )
+            
+            # delete existing resource records before restoring backup
+            tasks_list["delete_resource_" + resource_name + "_before_backup"] = DeleteDatastoreResourceOperator(
+                task_id="delete_resource_" + resource_name + "_before_backup",
                 address = CKAN,
                 apikey = CKAN_APIKEY,
                 resource_id_task_id = "get_or_create_resource_" + resource_name,
@@ -331,6 +344,19 @@ def create_dag(dag_id,
                     trigger_rule = "all_success",
                     retries = 0,
                 )
+                tasks_list["restore_backup_" + resource_name] = CSVStreamToDatastoreYAMLOperator(
+                    task_id="restore_backup_" + resource_name,
+                    address = CKAN,
+                    apikey = CKAN_APIKEY,
+                    resource_id_task_id = "get_or_create_resource_" + resource_name,
+                    resource_id_task_key = "id",
+                    data_path_task_id = "download_" + resource_name,
+                    data_path_task_key = "backup_path",
+                    config = resource,
+                    trigger_rule = "one_failed",
+                    retries = 0,
+                )
+
             else:
                 tasks_list["insert_records_" + resource_name] = InsertDatastoreFromYAMLConfigOperator(
                     task_id="insert_records_" + resource_name,
@@ -339,9 +365,22 @@ def create_dag(dag_id,
                     resource_id_task_id = "get_or_create_resource_" + resource_name,
                     resource_id_task_key = "id",
                     data_path_task_id = "download_" + resource_name,
-                    data_path_task_key = "data_path",
+                    data_path_task_key = "backup_path",
                     config = resource,
                     trigger_rule = "all_success",
+                    retries = 0,
+                )
+
+                tasks_list["restore_backup_" + resource_name] = InsertDatastoreFromYAMLConfigOperator(
+                    task_id="restore_backup_" + resource_name,
+                    address = CKAN,
+                    apikey = CKAN_APIKEY,
+                    resource_id_task_id = "get_or_create_resource_" + resource_name,
+                    resource_id_task_key = "id",
+                    data_path_task_id = "download_" + resource_name,
+                    data_path_task_key = "backup_path",
+                    config = resource,
+                    trigger_rule = "one_failed",
                     retries = 0,
                 )
             
@@ -365,8 +404,9 @@ def create_dag(dag_id,
             tasks_list["new_" + resource_name] >> tasks_list["prepare_update_" + resource_name]
 
             # if it didnt exist before this run, then dont backup or delete anything
-            tasks_list["update_resource_" + resource_name] >> tasks_list["backup_resource_" + resource_name] >> tasks_list["delete_resource_" + resource_name] >> tasks_list["prepare_update_" + resource_name]
-            
+            #tasks_list["update_resource_" + resource_name] >> tasks_list["backup_resource_" + resource_name] >> tasks_list["delete_resource_" + resource_name] >> tasks_list["prepare_update_" + resource_name]
+            tasks_list["update_resource_" + resource_name] >> tasks_list["delete_resource_" + resource_name] >> tasks_list["prepare_update_" + resource_name]
+
             # write into the datastore
             tasks_list["prepare_update_" + resource_name] >> tasks_list["insert_records_" + resource_name] >> done_inserting_into_datastore
 
@@ -381,7 +421,7 @@ def create_dag(dag_id,
             resource_name = resource_label.replace(" ", "")
             resource = dataset["resources"][resource_label]
             # if something happens while a resource is being deleted or added
-            [ tasks_list["delete_resource_" + resource_name], tasks_list["insert_records_" + resource_name] ] >> tasks_list["restore_backup_" + resource_name]
+            [ tasks_list["delete_resource_" + resource_name], tasks_list["insert_records_" + resource_name] ] >> tasks_list["delete_resource_" + resource_name + "_before_backup"] >> tasks_list["restore_backup_" + resource_name]
     
     return dag
 
@@ -412,7 +452,7 @@ for config_file in os.listdir(CONFIG_FOLDER):
                 "retries": 2,
                 "retry_delay": 3,
                 "on_failure_callback": task_failure_slack_alert,
-                "start_date": datetime(2022, 8, 8, 0, 0, 0),
+                "start_date": datetime(2023, 5, 5, 0, 0, 0),
                 "config_folder": CONFIG_FOLDER,
                 "pool": pool,
                 "tags": ["dataset", "yaml"]

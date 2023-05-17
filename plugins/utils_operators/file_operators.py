@@ -1,6 +1,7 @@
 import hashlib
 import logging
 import os
+import shutil
 import io
 import zipfile
 import json
@@ -40,9 +41,10 @@ class DownloadFileOperator(BaseOperator):
         filename_task_id: str = None, 
         filename_task_key: str= None,
 
-        overwrite_if_exists: bool = True,
-
+        create_backup: bool = False,
         custom_headers: dict = {},
+
+
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -95,12 +97,12 @@ class DownloadFileOperator(BaseOperator):
 #            "checksum": checksum.hexdigest(),
 #        }
 
-    def stream_response_to_file(self):
+    def stream_response_to_file(self, path):
         # grab data from input url
         res = requests.get(self.file_url, headers=self.custom_headers, stream=True)
         assert res.status_code == 200, f"Response status: {res.status_code}"
 
-        with open(self.path, "wb") as f:
+        with open(path, "wb") as f:
             for chunk in res.iter_content(chunk_size=8192): 
                 f.write(chunk)
 
@@ -152,24 +154,34 @@ class DownloadFileOperator(BaseOperator):
         # set task instance from context
         ti = context['ti']
 
-        # create filepath for file well create
+        # create filepath for file well create and init backup path
         self.set_path(ti)
+        backup_path = None
 
+        # init old and new file hashes for comparison
         new_hash = misc_utils.download_to_md5(self.file_url)
         old_hash = misc_utils.file_to_md5(self.path)
-
         
         # if new and old files dont match, replace old with new
         if new_hash != old_hash:
-            self.stream_response_to_file()
+            # make a backup if the old file, if it exists
+            if self.create_backup and os.path.exists(self.path):
+                # write backup and remember backup location
+                # we'll want to use or delete it later
+                backup_path = self.path + "-backup"
+                shutil.copy(self.path, backup_path)
+
+            self.stream_response_to_file(self.path)
             needs_update = True
-        # otherwise, get rid of the new "-temp" file
+
+        # otherwise, do nothing
         else:
             needs_update = False
         
         return {
                 "data_path": self.path,
                 "needs_update": needs_update,
+                "backup_path": backup_path
                 }
 
         # if the file exists already and we don't want to overwrite it
@@ -278,7 +290,7 @@ class DownloadGeoJsonOperator(BaseOperator):
         filename_task_id: str = None, 
         filename_task_key: str= None,
 
-        overwrite_if_exists: bool = True,
+        create_backup: bool = False,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -343,8 +355,15 @@ class DownloadGeoJsonOperator(BaseOperator):
         # init task instance context
         ti = context['ti']
 
-        # create target filepath
+        # create target filepath and init backup path
         path = self.set_path(ti)
+        backup_path = None
+
+        if self.create_backup and os.path.exists(path):
+            # write backup and remember backup location
+            # we'll want to use or delete it later
+            backup_path = path + "-backup"
+            shutil.copy(path, backup_path)
 
         # store parsed data in memory
         data = self.get_features()
@@ -354,6 +373,7 @@ class DownloadGeoJsonOperator(BaseOperator):
 
         return {
             "data_path": path,
+            "backup_path": backup_path
         }
 
     
