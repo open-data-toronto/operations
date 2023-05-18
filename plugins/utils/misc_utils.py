@@ -14,7 +14,7 @@ def download_to_md5(url):
     sig = hashlib.md5()
 
     # loop over lines in url response
-    for line in r.iter_lines():
+    for line in r.iter_content():
         sig.update(line)
 
     return sig.hexdigest()

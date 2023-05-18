@@ -169,6 +169,10 @@ class DownloadFileOperator(BaseOperator):
         #old_hash = misc_utils.file_to_md5(self.path)
         
         # if new and old files dont match, replace old with new
+        print("---------------------------")
+        print(new_hash)
+        print(old_hash)
+        print("---------------------------")
         if new_hash != old_hash:
             # make a backup if the old file, if it exists
             if self.create_backup and os.path.exists(self.path):
@@ -183,6 +187,12 @@ class DownloadFileOperator(BaseOperator):
         # otherwise, do nothing
         else:
             needs_update = False
+
+        print({
+                "data_path": self.path,
+                "needs_update": needs_update,
+                "backup_path": backup_path
+                })
         
         return {
                 "data_path": self.path,
