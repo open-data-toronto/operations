@@ -62,6 +62,8 @@ class DownloadFileOperator(BaseOperator):
 
         # pull headers from airflow variables, as needed
         self.custom_headers = {k:Variable.get(v) for k,v in custom_headers.items()}
+        self.create_backup = create_backup
+
 
     def set_path(self, ti):
         # init the filepath to the file we will create
@@ -71,7 +73,7 @@ class DownloadFileOperator(BaseOperator):
         if self.filename_task_id and self.filename_task_key:
             self.filename = ti.xcom_pull(task_ids=self.filename_task_id)[self.filename_task_key]
 
-        self.path = Path(self.dir) / self.filename
+        self.path = self.dir + "/" + self.filename
 
         # get url if its from a separate task, if needed
         if self.file_url_task_id and self.file_url_task_key:
@@ -160,7 +162,11 @@ class DownloadFileOperator(BaseOperator):
 
         # init old and new file hashes for comparison
         new_hash = misc_utils.download_to_md5(self.file_url)
-        old_hash = misc_utils.file_to_md5(self.path)
+        if not os.path.isfile(self.path):
+            old_hash = "no_old_file"
+        else:
+            old_hash = misc_utils.file_to_md5(self.path)
+        #old_hash = misc_utils.file_to_md5(self.path)
         
         # if new and old files dont match, replace old with new
         if new_hash != old_hash:
