@@ -15,7 +15,7 @@ from airflow.models.baseoperator import chain
 
 from utils import airflow_utils
 
-from utils_operators.file_operators import DownloadFileOperator, DownloadGeoJsonOperator
+from utils_operators.file_operators import DownloadFileOperator, DownloadGeoJsonOperator, CleanBackupFilesOperator
 from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
 from utils_operators.directory_operator import CreateLocalDirectoryOperator, DeleteLocalDirectoryOperator
 from ckan_operators.package_operator import GetOrCreatePackageOperator
@@ -33,7 +33,7 @@ CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 CKAN = CKAN_CREDS[ACTIVE_ENV]["address"]#
 CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]#
 
-TMP_DIR = Variable.get("tmp_dir")
+
 
 # branch logic - depends whether or not input resource is new
 def is_resource_new(get_or_create_resource_task_id, resource_name, **kwargs):
@@ -94,6 +94,11 @@ def create_dag(dag_id,
         catchup = False # By default Airflow tries to complete all "missed" DAGs since start_date, should be turned off
     ) as dag:
 
+        # init tmp_dir where airflow stashes downloads
+        # these downloads are use to check deltas and so data
+        # going into CKAN is stored on disk, not all in memory
+        TMP_DIR = Variable.get("tmp_dir") + "/" + dag_id
+
         # init list of resource names
         resource_names = dataset["resources"].keys()
 
@@ -144,7 +149,7 @@ def create_dag(dag_id,
         # create tmp dir
         tmp_dir = CreateLocalDirectoryOperator(
             task_id = "tmp_dir", 
-            path = TMP_DIR + "/" + dag_id
+            path = TMP_DIR
         )   
 
         # get or create package
@@ -172,10 +177,10 @@ def create_dag(dag_id,
         )
 
         # create tmp dir
-        del_tmp_dir = DeleteLocalDirectoryOperator(
-            task_id = "del_tmp_dir", 
-            path = TMP_DIR + "/" + dag_id
-        )
+        #del_tmp_dir = DeleteLocalDirectoryOperator(
+        #    task_id = "del_tmp_dir", 
+        #    path = TMP_DIR
+        #)
 
         #start_get_or_create_resources = DummyOperator(task_id = "start_get_or_create_resources")
         #done_get_or_create_resources = DummyOperator(task_id = "done_get_or_create_resources")
@@ -327,7 +332,8 @@ def create_dag(dag_id,
                 address = CKAN,
                 apikey = CKAN_APIKEY,
                 resource_id_task_id = "get_or_create_resource_" + resource_name,
-                resource_id_task_key = "id"
+                resource_id_task_key = "id",
+                trigger_rule = "one_failed"
             )
 
             # intelligently insert new records into an emptied resource based on input yaml config
@@ -383,6 +389,17 @@ def create_dag(dag_id,
                     trigger_rule = "one_failed",
                     retries = 0,
                 )
+
+            tasks_list["clean_backups_" + resource_name] = CleanBackupFilesOperator(
+                task_id = "clean_backups_" + resource_name,
+                data_path_task_id = "download_" + resource_name,
+                data_path_task_key = "data_path",
+                backup_path_task_id = "download_" + resource_name,
+                backup_path_task_key = "backup_path",
+                success_task_id = "insert_records_" + resource_name,
+                success_task_key = "success",
+                trigger_rule = "one_success",
+            )
             
             # init a temp directory and get/create the package for the target data
             tmp_dir >> get_or_create_package
@@ -414,7 +431,8 @@ def create_dag(dag_id,
         #chain( start_inserting_into_datastore, *[tasks_list["insert_records_" + resource_name.replace(" ", "")] for resource_name in resource_names], done_inserting_into_datastore)
         
         # Delete our temporary dir and report success to slack
-        done_inserting_into_datastore >> del_tmp_dir >> build_message >> success_message_slack #>> dag_complete
+        #done_inserting_into_datastore >> del_tmp_dir >> build_message >> success_message_slack #>> dag_complete
+        done_inserting_into_datastore >> build_message >> success_message_slack #>> dag_complete
 
         for resource_label in resource_names:
             # clean the resource label so the DAG can label its tasks with it
@@ -422,6 +440,8 @@ def create_dag(dag_id,
             resource = dataset["resources"][resource_label]
             # if something happens while a resource is being deleted or added
             [ tasks_list["delete_resource_" + resource_name], tasks_list["insert_records_" + resource_name] ] >> tasks_list["delete_resource_" + resource_name + "_before_backup"] >> tasks_list["restore_backup_" + resource_name]
+
+            [tasks_list["restore_backup_" + resource_name], tasks_list["insert_records_" + resource_name]] >> tasks_list["clean_backups_" + resource_name]
     
     return dag
 

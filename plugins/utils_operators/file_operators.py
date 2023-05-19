@@ -169,10 +169,6 @@ class DownloadFileOperator(BaseOperator):
         #old_hash = misc_utils.file_to_md5(self.path)
         
         # if new and old files dont match, replace old with new
-        print("---------------------------")
-        print(new_hash)
-        print(old_hash)
-        print("---------------------------")
         if new_hash != old_hash:
             # make a backup if the old file, if it exists
             if self.create_backup and os.path.exists(self.path):
@@ -392,4 +388,67 @@ class DownloadGeoJsonOperator(BaseOperator):
             "backup_path": backup_path
         }
 
-    
+
+class CleanBackupFilesOperator(BaseOperator):
+    """
+    If success == True, deletes -backup file
+    If success == False, moves -backup file over recently downloaded file
+    """
+
+    @apply_defaults
+    def __init__(self,
+    data_path = None,
+    data_path_task_id: str = None,
+    data_path_task_key: str = None,
+    backup_path = None,
+    backup_path_task_id: str = None,
+    backup_path_task_key: str = None,
+    success = None,
+    success_task_id: str = None,
+    success_task_key: str = None,
+    **kwargs):
+        super().__init__(**kwargs)
+        self.data_path = data_path
+        self.data_path_task_id = data_path_task_id
+        self.data_path_task_key = data_path_task_key
+
+        self.backup_path = backup_path
+        self.backup_path_task_id = backup_path_task_id
+        self.backup_path_task_key = backup_path_task_key
+
+        self.success = success
+        self.success_task_id = success_task_id
+        self.success_task_key = success_task_key
+
+
+    def execute(self, context):
+        # init task instance from context
+        ti = context['ti']
+
+        # get data path and backup path if provided by another task
+        if self.data_path_task_id and self.data_path_task_key:
+            self.data_path = ti.xcom_pull(task_ids=self.data_path_task_id)[self.data_path_task_key]
+
+        if self.backup_path_task_id and self.backup_path_task_key:
+            self.backup_path = ti.xcom_pull(task_ids=self.backup_path_task_id)[self.backup_path_task_key]
+
+        # get success status if provided by another task
+        if self.success_task_id and self.success_task_key:
+            success_task = ti.xcom_pull(task_ids=self.success_task_id)
+            # if we can get the success task, we'll get its success status
+            if success_task:
+                self.success = success_task[self.success_task_key]
+            # if we cant get the success task, we assume it failed
+            else:
+                self.success = False
+
+        #path = Path(self.file_path) if type(self.file_path) == "str" else self.file_path
+            
+        # if success is true, remove -backup file
+        if self.success == True:
+            os.remove(self.backup_path)
+
+        # if success is false, move -backup over most recently downloaded file
+        elif self.success == False:
+            shutil.move(self.backup_path, self.data_path)
+ 

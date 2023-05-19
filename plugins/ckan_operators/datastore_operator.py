@@ -979,6 +979,7 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
 
     def read_file(self):
         '''reads CSV at input filepath and returns generator'''
+        
 
         # make sure input filepath is CSV
         #assert self.data_path.endswith(".csv")
@@ -988,12 +989,13 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
             self.fieldnames = next(csv.reader(f))
             f.close()
 
-        # return generator
+        # return generator        
         return misc_utils.csv_to_generator(self.data_path, self.fieldnames)
 
     def does_geometry_need_parsing(self):
         '''determines if geometric attributes need to be parsed into a 
         geometry object, then finds those geometric attributes'''
+        
 
         latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
         longitude_attributes = ["long", "longitude", "x", "x coordinate"]
@@ -1012,10 +1014,12 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
 
                 if fieldnames[attr_index].lower() in longitude_attributes:
                     self.longitude_attribute = attr_index
+        
 
 
     def parse_data(self, input_data):
         '''receives one row of data as a dict, returns CKAN-friendly data'''
+        
 
         output = {} 
 
@@ -1070,13 +1074,14 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
                 output[self.config["attributes"][i]["id"]] = formatters[
                     self.config["attributes"][i]["type"]
                 ](src)
-
+        
 
         return output
 
 
     def insert_into_ckan(self, records):
         '''receives data as list of dicts, puts that data in CKAN'''
+        
 
         self.ckan.action.datastore_create(
             id=self.resource_id,
@@ -1084,7 +1089,7 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
             records=records,
             force=True,
         )
-
+        
 
     def execute(self, context):
 
@@ -1132,5 +1137,7 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
             self.insert_into_ckan(this_batch)
 
         logging.info("Inserted {} records into CKAN".format(str(total_count)))
+
+        return {"success": True}
 
                 
