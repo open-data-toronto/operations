@@ -111,11 +111,13 @@ municipal-licensing-and-standards-business-licences-and-permits:
         info:
           notes: 'Activity permitted under the licence'
       - id: Cancel Date
-        type: 'timestamp'
+        type: 'date'
+        format: "%Y-%b-%d"
         info:
           notes: 'Date the license or permit was cancelled'
       - id: Last Record Update
-        type: 'timestamp'
+        type: 'date'
+        format: "%Y-%b-%d"
         info:
           notes: ''
 

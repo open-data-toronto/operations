@@ -551,6 +551,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             "%Y%m%d%H%M%S": "%Y-%m-%dT%H:%M:%S",
             "%d%m%Y": "%Y-%m-%d",
             "%d%b%Y": "%Y-%m-%d",
+            "%Y-%b-%d": "%Y-%m-%d",
         }
 
         if input_format:
