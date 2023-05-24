@@ -4,14 +4,11 @@ from datetime import datetime
 import yaml
 import logging
 import os
-from pathlib import Path
-
 
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.bash import BashOperator
 from airflow.operators.dummy import DummyOperator
-from airflow.models.baseoperator import chain
 
 from utils import airflow_utils
 
@@ -20,19 +17,9 @@ from utils_operators.slack_operators import task_success_slack_alert, task_failu
 from utils_operators.directory_operator import CreateLocalDirectoryOperator, DeleteLocalDirectoryOperator
 from ckan_operators.package_operator import GetOrCreatePackageOperator
 from ckan_operators.resource_operator import GetOrCreateResourceOperator
-from ckan_operators.datastore_operator import BackupDatastoreResourceOperator, DeleteDatastoreResourceOperator, InsertDatastoreFromYAMLConfigOperator, RestoreDatastoreResourceBackupOperator, DeltaCheckOperator, CSVStreamToDatastoreYAMLOperator
+from ckan_operators.datastore_operator import DeleteDatastoreResourceOperator, InsertDatastoreFromYAMLConfigOperator, RestoreDatastoreResourceBackupOperator, DeltaCheckOperator, CSVStreamToDatastoreYAMLOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from utils_operators.agol_operators import AGOLDownloadFileOperator
-
-
-# init hardcoded vars for these dags
-CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
-
-ACTIVE_ENV = Variable.get("active_env")
-CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-CKAN = CKAN_CREDS[ACTIVE_ENV]["address"]#
-CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]#
-
 
 
 # branch logic - depends whether or not input resource is new
@@ -86,6 +73,12 @@ def create_dag(dag_id,
                 dataset,
                 schedule,
                 default_args):
+
+    # init hardcoded vars for these dags
+    ACTIVE_ENV = Variable.get("active_env")
+    CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
+    CKAN = CKAN_CREDS[ACTIVE_ENV]["address"]#
+    CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]#
 
     with DAG(
         dag_id=dag_id,
@@ -446,6 +439,7 @@ def create_dag(dag_id,
     return dag
 
 # Generate DAGs using the function above as a template parameterized by the configs - one DAG per YAML file
+CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
 for config_file in os.listdir(CONFIG_FOLDER):
     if config_file.endswith(".yaml"):
 
@@ -475,7 +469,8 @@ for config_file in os.listdir(CONFIG_FOLDER):
                 "start_date": datetime(2023, 5, 5, 0, 0, 0),
                 "config_folder": CONFIG_FOLDER,
                 "pool": pool,
-                "tags": ["dataset", "yaml"]
+                "tags": ["dataset", "yaml"], 
+                "weight_rule": "upstream"
             }
         )
 
