@@ -17,6 +17,7 @@ nltk.download("wordnet")
 DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
 FILE_DIR_PATH = DIR_PATH / "sustainment" / "update_data_quality_scores"
 
+current_folder = os.path.dirname(os.path.realpath(__file__))
 
 def information_url_checker(information_url):
     result_info = ""
@@ -25,7 +26,7 @@ def information_url_checker(information_url):
     else:
         call = "https://" + information_url
 
-    # record probametic url
+    # record problematic url
     try:
         response = requests.get(call)
         status_code = response.status_code
@@ -106,11 +107,18 @@ def prepare_and_normalize_scores(**kwargs):
 
     df_scores["grade"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
     df_scores["grade_norm"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
-
-    df_codes = df.loc[:, ~df.columns.isin(DIMENSIONS)].reset_index(drop=False)
-
+    
+    # only keep for final overall score
+    df_scores = df_scores.loc[:, ~df_scores.columns.isin(DIMENSIONS)]
+    scores_filepath = current_folder + "/df_scores.csv"
+    df_scores.to_csv(scores_filepath)
+    
+    #df_codes = df.loc[:, ~df.columns.isin(DIMENSIONS)].reset_index(drop=False)
+    codes_filepath = current_folder + "/df_original.csv"
+    df.to_csv(codes_filepath)
+    
     # map the package level score to resource level
-    df_output = pd.merge(df_codes, df_scores, on=["package"], how="outer")
+    df_output = pd.merge(df, df_scores, on=["package"], how="outer")
 
     logging.info(df_output.columns)
 
@@ -121,8 +129,136 @@ def prepare_and_normalize_scores(**kwargs):
     filepath = tmp_dir / f"{filename}.parquet"
 
     df_output.to_parquet(filepath, engine="fastparquet", compression=None)
+    
+    final_filepath = current_folder + "/df_output.csv"
+    df_output.to_csv(final_filepath)
+    
+    temp_path = current_folder + "/final_scores_and_codes.parquet"
+    df.to_parquet(temp_path, engine="fastparquet", compression=None)
 
     return str(filepath)
+
+
+def usability_explanation_code(columns, data):
+    """
+    How easy is it to use the data given how it is organized/structured?
+    """
+
+    metrics = {
+        "col_names": 1,  # Column names easy to understand?
+        "col_constant": [],  # Columns where all values are constant?
+    }
+
+    for f in columns:
+        words = dqs_logic.parse_col_name(f["id"])
+        eng_words = [w for w in words if len(wordnet.synsets(w))]
+        if len(eng_words) / len(words) <= 0.2:
+            metrics["col_names"] -= 1 / len(columns)
+
+        if not f["id"] == "geometry" and data[f["id"]].nunique() <= 1:
+            metrics["col_constant"].append(f["id"])
+
+    col_names_message = "~colnames_unclear" if metrics["col_names"] <= 0.5 else ""
+    col_constant_messgae = (
+        f"~constant_cols:{','.join(metrics['col_constant'])}"
+        if metrics["col_constant"]
+        else ""
+    )
+
+    usability_message = col_names_message + col_constant_messgae
+
+    return usability_message
+
+
+def metadata_explanation_code(package, metadata_fields, columns=None):
+    missing_fields = []
+    email_message = ""
+    url_message = ""
+    for field in metadata_fields:
+        if field not in package or field is None:
+            missing_fields.append(field)
+        elif field == "owner_email" and "opendata" in package[field]:
+            email_message = "~owner_is_opendata"
+        elif field == "information_url":
+            url_message = information_url_checker(package[field])
+
+    missing_fields_message = (
+        f"~metadata_missing:{','.join(missing_fields)}" if missing_fields else ""
+    )
+
+    metadata_message = missing_fields_message + email_message + url_message
+
+    if columns:
+        is_empty, missing_cols = attribue_description_check(columns)
+        if is_empty:
+            data_attributes_message = "~all_data_def_missing"
+        else:
+            data_attributes_message = (
+                f"~missing_def_cols:{','.join(missing_cols)}" if missing_cols else ""
+            )
+
+        metadata_message = metadata_message + data_attributes_message
+
+    return metadata_message
+
+
+def freshness_explanation_code(package, time_map):
+    freshness_message = ""
+    rr = package["refresh_rate"].lower()
+
+    if "last_refreshed" in package and package["last_refreshed"]:
+        days = dqs_logic.parse_datetime(package["last_refreshed"])
+        logging.info(f"elapse days: {days}, refresh_rate: {rr}")
+
+        if rr in ["real-time", "as available", "will not be refreshed"]:
+            freshness_message = "~stale" if days > (365 * 2) else ""
+
+        if rr in time_map:
+            # calculate elapse periods
+            elapse_periods = math.floor((days - time_map[rr]) / time_map[rr])
+            elapse_period_message = (
+                f"~periods_behind:{elapse_periods}" if elapse_periods >= 1 else ""
+            )
+
+            freshness_message = elapse_period_message
+
+    return freshness_message
+
+
+def completeness_explanation_code(data):
+    """
+    How much of the data is missing?
+    """
+    missing_rate = round((np.sum(len(data) - data.count()) / np.prod(data.shape)) * 100)
+    completeness_message = "~significant_missing_data" if missing_rate >= 50 else ""
+
+    return completeness_message
+
+
+def accessibility_explanation_code(p, resource, package_type, etl_intentory):
+    tags_message = "" if "tags" in p and (p["num_tags"] > 0) else "~no_tags"
+    if package_type == "filestore":
+        package_type_message = "~filestore_resource"
+        if resource["name"] in etl_intentory["resource_name"].values.tolist():
+            engine_info = etl_intentory.loc[
+                etl_intentory["resource_name"] == resource["name"], "engine"
+            ].iloc[0]
+        else:
+            engine_info = None
+
+        pipeline_message = "" if engine_info else "~no_pipeline_found"
+    else:
+        # datastore
+        package_type_message = ""
+        pipeline_message = (
+            ""
+            if "extract_job" in resource and resource["extract_job"]
+            else "~no_pipeline_found"
+        )
+
+    accessibility_message = pipeline_message + tags_message + package_type_message
+
+    return accessibility_message
 
 
 def explanation_code_catalogue(**kwargs):
@@ -139,126 +275,6 @@ def explanation_code_catalogue(**kwargs):
 
     filename = "data_quality_explanation_code"
     filepath = tmp_dir / f"{filename}.parquet"
-
-    def usability_explanation_code(columns, data):
-        """
-        How easy is it to use the data given how it is organized/structured?
-        """
-
-        metrics = {
-            "col_names": 1,  # Column names easy to understand?
-            "col_constant": [],  # Columns where all values are constant?
-        }
-
-        for f in columns:
-            words = dqs_logic.parse_col_name(f["id"])
-            eng_words = [w for w in words if len(wordnet.synsets(w))]
-            if len(eng_words) / len(words) <= 0.2:
-                metrics["col_names"] -= 1 / len(columns)
-
-            if not f["id"] == "geometry" and data[f["id"]].nunique() <= 1:
-                metrics["col_constant"].append(f["id"])
-
-        col_names_message = "~colnames_unclear" if metrics["col_names"] <= 0.5 else ""
-        col_constant_messgae = (
-            f"~constant_cols:{','.join(metrics['col_constant'])}"
-            if metrics["col_constant"]
-            else ""
-        )
-
-        usability_message = col_names_message + col_constant_messgae
-
-        return usability_message
-
-    def metadata_explanation_code(package, metadata_fields, columns=None):
-        missing_fields = []
-        email_message = ""
-        url_message = ""
-        for field in metadata_fields:
-            if field not in package or field is None:
-                missing_fields.append(field)
-            elif field == "owner_email" and "opendata" in package[field]:
-                email_message = "~owner_is_opendata"
-            elif field == "information_url":
-                url_message = information_url_checker(package[field])
-
-        missing_fields_message = (
-            f"~metadata_missing:{','.join(missing_fields)}" if missing_fields else ""
-        )
-
-        metadata_message = missing_fields_message + email_message + url_message
-
-        if columns:
-            is_empty, missing_cols = attribue_description_check(columns)
-            if is_empty:
-                data_attributes_message = "~all_data_def_missing"
-            else:
-                data_attributes_message = (
-                    f"~missing_def_cols:{','.join(missing_cols)}"
-                    if missing_cols
-                    else ""
-                )
-
-            metadata_message = metadata_message + data_attributes_message
-
-        return metadata_message
-
-    def freshness_explanation_code(package, time_map):
-        freshness_message = ""
-        rr = package["refresh_rate"].lower()
-
-        if "last_refreshed" in package and package["last_refreshed"]:
-            days = dqs_logic.parse_datetime(package["last_refreshed"])
-            logging.info(f"elapse days: {days}, refresh_rate: {rr}")
-
-            if rr in ["real-time", "as available", "will not be refreshed"]:
-                freshness_message = "~stale" if days > (365 * 2) else ""
-
-            if rr in time_map:
-                # calculate elapse periods
-                elapse_periods = math.floor((days - time_map[rr]) / time_map[rr])
-                elapse_period_message = (
-                    f"~periods_behind:{elapse_periods}" if elapse_periods >= 1 else ""
-                )
-
-                freshness_message = elapse_period_message
-
-        return freshness_message
-
-    def completeness_explanation_code(data):
-        """
-        How much of the data is missing?
-        """
-        missing_rate = round(
-            (np.sum(len(data) - data.count()) / np.prod(data.shape)) * 100
-        )
-        completeness_message = "~significant_missing_data" if missing_rate >= 50 else ""
-
-        return completeness_message
-
-    def accessibility_explanation_code(p, resource, package_type, etl_intentory):
-        tags_message = "" if "tags" in p and (p["num_tags"] > 0) else "~no_tags"
-        if package_type == "filestore":
-            package_type_message = "~filestore_resource"
-            if resource["name"] in etl_intentory["resource_name"].values.tolist():
-                engine_info = etl_intentory.loc[
-                    etl_intentory["resource_name"] == resource["name"], "engine"
-                ].iloc[0]
-            else:
-                engine_info = None
-
-            pipeline_message = "" if engine_info else "~no_pipeline_found"
-        else:
-            package_type_message = ""
-            pipeline_message = (
-                ""
-                if "extract_job" in resource and resource["extract_job"]
-                else "~no_pipeline_found"
-            )
-
-        accessibility_message = pipeline_message + tags_message + package_type_message
-
-        return accessibility_message
 
     data = []
     etl_intentory = dqs_logic.get_etl_inventory("od-etl-configs", ckan)
@@ -308,6 +324,7 @@ def explanation_code_catalogue(**kwargs):
                 ):
                     continue
 
+                # discuss for better solution for efficiency
                 content, fields = dqs_logic.read_datastore(ckan, r["id"])
 
                 records = {
@@ -343,5 +360,7 @@ def explanation_code_catalogue(**kwargs):
     df = pd.DataFrame(data)
 
     df.to_parquet(filepath, engine="fastparquet", compression=None)
+    temp_path = current_folder + "/data_quality_explanation_code.parquet"
+    df.to_parquet(temp_path, engine="fastparquet", compression=None)
 
     return str(filepath)

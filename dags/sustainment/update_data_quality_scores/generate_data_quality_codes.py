@@ -193,7 +193,6 @@ with DAG(
         task_id="prepare_and_normalize_scores",
         python_callable=explanation_codes_logic.prepare_and_normalize_scores,
         op_kwargs={
-            "ckan": ckan,
             "DIMENSIONS": DIMENSIONS,
             "BINS": BINS,
             "WEIGHTS_DATASTORE": WEIGHTS_DATASTORE,

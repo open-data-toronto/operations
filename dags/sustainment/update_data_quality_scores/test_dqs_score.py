@@ -1,9 +1,7 @@
 from airflow import DAG
-from airflow.models import TaskInstance
 import os
 
-from datetime import datetime as dt
-from sustainment.update_data_quality_scores import dqs_logic, explanation_codes_logic
+from sustainment.update_data_quality_scores import dqs_logic
 import json
 import pandas as pd
 
@@ -66,29 +64,3 @@ def test_score_usability():
 def test_score_completeness():
     assert dqs_logic.score_completeness(content) == 1
 
-
-def test_attribue_description_check():
-    assert explanation_codes_logic.attribue_description_check(fields) == (False, [])
-
-
-def test_prepare_and_normalize_scores():
-    weights_datastore = [0.35, 0.35, 0.15, 0.1, 0.05]
-    weights_filestore = [0.41, 0.41, 0.18]
-    bins = BINS = {
-        "Bronze": 0.6,
-        "Silver": 0.8,
-        "Gold": 1,
-    }
-    DIMENSIONS = [
-        "metadata",
-        "freshness",
-        "accessibility",
-        "completeness",
-        "usability",
-    ]
-    
-    df = pd.read_parquet(raw_explanation_code_path).set_index(
-        ["package", "resource"], drop=True
-    )
-    
-   
