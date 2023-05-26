@@ -1,0 +1,200 @@
+committee-of-adjustment-applications:
+  schedule: '0 10 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Committee of Adjustment Applications
+  date_published: '2021-08-31 15:18:05.151909'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: City Planning
+  owner_section: null
+  owner_unit: null
+  owner_email: Natalie.MacFarlane@toronto.ca
+  civic_issues: null
+  topics: City government
+  tags:
+  - name: committee of adjustment
+    vocabulary_id: null
+  - name: coa
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/planning-development/committee-of-adjustment/
+  excerpt: This dataset includes information about applications submitted to the Committee of Adjustment for minor variances to zoning by-laws, and consents
+  limitations: null
+  notes: "This dataset includes information about applications submitted to the Committee\
+    \ of Adjustment for minor variances to the Zoning By-law, and consents.\r\n\r\n\
+    Toronto City Council has appointed a Committee of Adjustment consisting of citizen\
+    \ members. The Committee of Adjustment operates as four panels: [Etobicoke York](https://www.toronto.ca/city-government/planning-development/committee-of-adjustment/etobicoke-york-schedule/),\
+    \ \r\n[North York](https://www.toronto.ca/city-government/planning-development/committee-of-adjustment/north-york-schedule/),\
+    \ [Toronto & East York](https://www.toronto.ca/city-government/planning-development/committee-of-adjustment/toronto-east-york-schedule/)\
+    \ and [Scarborough](https://www.toronto.ca/city-government/planning-development/committee-of-adjustment/scarborough-schedule/).\
+    \ They regularly hold public hearings to consider applications for minor variances\
+    \ and consents.\r\n\r\nFor final decision details contact the local [Committee\
+    \ of Adjustment](https://www.toronto.ca/city-government/planning-development/committee-of-adjustment/).\r\
+    \n\r\nFor more information, visit the [Application Information Centre](http://app.toronto.ca/DevelopmentApplications/mapSearchSetup.do?action=init)."
+
+  resources:
+    # resource name
+    Closed Applications since 2017:
+      format: csv
+      url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/committee-of-adjustment-applications.csv
+      attributes:
+        - id: "SYS_ID"
+          type: "text"
+          info:
+            notes: ""
+        - id: "APPLICATION_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "IN_DATE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PLANNING_DISTRICT"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD_NUMBER"
+          type: "int"
+          info:
+            notes: ""
+        - id: "WARD_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STREET_NUM"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STREET_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STREET_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STREET_DIRECTION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "POSTAL"
+          type: "text"
+          info:
+            notes: ""
+        - id: "REFERENCE_FILE#"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SUB_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WORK_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZONING_REVIEW"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZONING_DESIGNATION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "COMMUNITY"
+          type: "text"
+          info:
+            notes: ""
+        - id: "EMPLOYMENT_DISTRICT"
+          type: "text"
+          info:
+            notes: ""
+        - id: "DESCRIPTION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "HEARING_DATE"
+          type: "date"
+          format: "%b %d, %Y"
+          info:
+            notes: ""
+        - id: "TIME_OF_MEETING"
+          type: "text"
+          info:
+            notes: ""
+        - id: "MEETING_LOCATION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "C_OF_A_DESCISION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ANYONE_OBJECT_AT_MEETING"
+          type: "text"
+          info:
+            notes: ""
+        - id: "APPEAL_EXPIRY_DATE"
+          type: "date"
+          format: "%b %d, %Y"
+          info:
+            notes: ""
+        - id: "OMB_ORDER_DATE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "OMB_DESCISION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "NUMBER_OF_LOTS_CREATED"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CONDITION_EXPIRY_DATE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STATUSDESC"
+          type: "text"
+          info:
+            notes: ""
+        - id: "FINALDATE"
+          type: "date"
+          format: "%Y-%m-%dT%H:%M:%S"
+          info:
+            notes: ""
+        - id: "COMMUNITY_MEETING_DATE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "COMMUNITY_MEETING_TIME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "COMMUNITY_MEETING_LOCATION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "APPLICATION_URL"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PARENT_FOLDER_NUMBER"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CONTACT_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CONTACT_PHONE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CONTACT_EMAIL"
+          type: "text"
+          info:
+            notes: ""
+        
