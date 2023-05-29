@@ -445,10 +445,9 @@ class CleanBackupFilesOperator(BaseOperator):
         #path = Path(self.file_path) if type(self.file_path) == "str" else self.file_path
             
         # if success is true, remove -backup file
-        if self.success == True:
+        if self.success == True and self.backup_path != None:
             os.remove(self.backup_path)
 
         # if success is false, move -backup over most recently downloaded file
-        elif self.success == False:
+        elif self.success == False and self.backup_path != None:
             shutil.move(self.backup_path, self.data_path)
- 
