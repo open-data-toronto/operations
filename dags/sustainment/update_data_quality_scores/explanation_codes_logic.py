@@ -19,6 +19,7 @@ FILE_DIR_PATH = DIR_PATH / "sustainment" / "update_data_quality_scores"
 
 current_folder = os.path.dirname(os.path.realpath(__file__))
 
+
 def information_url_checker(information_url):
     result_info = ""
     if "http" in information_url:
@@ -57,6 +58,61 @@ def attribue_description_check(columns):
     return counter == 0, missing_cols
 
 
+def calculate_final_scores_and_codes(
+    df, weights_datastore, weights_filestore, dimensions, bins
+):
+    # Calculate Datastore weighted and overall score
+    ds_df = df[df["store_type"] == "datastore"]
+    scores = pd.DataFrame([weights_datastore] * len(ds_df.index))
+    scores.index = ds_df.index
+    scores.columns = dimensions
+
+    ds_scores = ds_df.loc[:, dimensions]
+    scores = ds_scores.multiply(scores)
+    ds_scores["score"] = scores.sum(axis=1)
+    ds_scores = ds_scores.groupby("package").mean().reset_index(drop=False)
+    logging.info(f"Datastore package: {ds_scores.shape[0]}")
+
+    # Calculate Filestore weighted and overall score
+    fs_df = df[df["store_type"] == "filestore"]
+    scores = pd.DataFrame([weights_filestore] * len(fs_df.index))
+    scores.index = fs_df.index
+    scores.columns = dimensions[:3]
+
+    fs_scores = fs_df.loc[:, dimensions]
+    fs_scores_3d = fs_df.loc[:, dimensions[:3]]
+    scores = fs_scores_3d.multiply(scores)
+    fs_scores["score"] = scores.sum(axis=1)
+    fs_scores = fs_scores.groupby("package").mean().reset_index(drop=False)
+    logging.info(f"Filestore package: {fs_scores.shape[0]}")
+
+    # Combine datastore and filestore, normalize overall score and assign bins
+    df_scores = ds_scores.append(fs_scores, ignore_index=True)
+    df_scores["score_norm"] = MinMaxScaler().fit_transform(df_scores[["score"]])
+
+    labels = list(bins.keys())
+    bins_cuts = [-1]
+    bins_cuts.extend(bins.values())
+
+    df_scores["grade"] = pd.cut(df_scores["score_norm"], bins=bins_cuts, labels=labels)
+    df_scores["grade_norm"] = pd.cut(
+        df_scores["score_norm"], bins=bins_cuts, labels=labels
+    )
+
+    # only keep for final overall score
+    df_scores = df_scores.loc[:, ~df_scores.columns.isin(dimensions)]
+
+    # map the package level score to resource level
+    df_output = pd.merge(df, df_scores, on=["package"], how="outer")
+
+    logging.info(df_output.columns)
+
+    df_output["recorded_at"] = dt.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+    df_output = df_output.round(2)
+
+    return df_output
+
+
 def prepare_and_normalize_scores(**kwargs):
     ti = kwargs.pop("ti")
     tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_data_dir"))
@@ -72,69 +128,14 @@ def prepare_and_normalize_scores(**kwargs):
         ["package", "resource"], drop=True
     )
 
-    # Calculate Datastore weighted and overall score
-    ds_df = df[df["store_type"] == "datastore"]
-    scores = pd.DataFrame([WEIGHTS_DATASTORE] * len(ds_df.index))
-    scores.index = ds_df.index
-    scores.columns = DIMENSIONS
-
-    ds_scores = ds_df.loc[:, DIMENSIONS]
-    scores = ds_scores.multiply(scores)
-    ds_scores["score"] = scores.sum(axis=1)
-    ds_scores = ds_scores.groupby("package").mean().reset_index(drop=False)
-    logging.info(f"Datastore package: {ds_scores.shape[0]}")
-
-    # Calculate Filestore weighted and overall score
-    fs_df = df[df["store_type"] == "filestore"]
-    scores = pd.DataFrame([WEIGHTS_FILESTORE] * len(fs_df.index))
-    scores.index = fs_df.index
-    scores.columns = DIMENSIONS[:3]
-
-    fs_scores = fs_df.loc[:, DIMENSIONS]
-    fs_scores_3d = fs_df.loc[:, DIMENSIONS[:3]]
-    scores = fs_scores_3d.multiply(scores)
-    fs_scores["score"] = scores.sum(axis=1)
-    fs_scores = fs_scores.groupby("package").mean().reset_index(drop=False)
-    logging.info(f"Filestore package: {fs_scores.shape[0]}")
-
-    # Combine datastore and filestore, normalize overall score and assign bins
-    df_scores = ds_scores.append(fs_scores, ignore_index=True)
-    df_scores["score_norm"] = MinMaxScaler().fit_transform(df_scores[["score"]])
-
-    labels = list(BINS.keys())
-    bins = [-1]
-    bins.extend(BINS.values())
-
-    df_scores["grade"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
-    df_scores["grade_norm"] = pd.cut(df_scores["score_norm"], bins=bins, labels=labels)
-    
-    # only keep for final overall score
-    df_scores = df_scores.loc[:, ~df_scores.columns.isin(DIMENSIONS)]
-    scores_filepath = current_folder + "/df_scores.csv"
-    df_scores.to_csv(scores_filepath)
-    
-    #df_codes = df.loc[:, ~df.columns.isin(DIMENSIONS)].reset_index(drop=False)
-    codes_filepath = current_folder + "/df_original.csv"
-    df.to_csv(codes_filepath)
-    
-    # map the package level score to resource level
-    df_output = pd.merge(df, df_scores, on=["package"], how="outer")
-
-    logging.info(df_output.columns)
-
-    df_output["recorded_at"] = dt.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-    df_output = df_output.round(2)
+    df_output = calculate_final_scores_and_codes(
+        df, WEIGHTS_DATASTORE, WEIGHTS_FILESTORE, DIMENSIONS, BINS
+    )
 
     filename = "final_scores_and_codes"
     filepath = tmp_dir / f"{filename}.parquet"
 
     df_output.to_parquet(filepath, engine="fastparquet", compression=None)
-    
-    final_filepath = current_folder + "/df_output.csv"
-    df_output.to_csv(final_filepath)
-    
-    temp_path = current_folder + "/final_scores_and_codes.parquet"
-    df.to_parquet(temp_path, engine="fastparquet", compression=None)
 
     return str(filepath)
 

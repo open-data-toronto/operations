@@ -17,10 +17,14 @@ METADATA_FIELDS = [
 
 
 with open(current_folder + "/death-registry-statistics-package.json") as file:
-    package = json.load(file)["result"]
+    package = json.load(file)
 
 with open(current_folder + "/death-registry-statistics-datastore.json") as file:
-    datastore = json.load(file)["result"]
+    datastore = json.load(file)
+
+with open(current_folder + "/ttc-routes-and-schedules.json") as file:
+    package_filestore = json.load(file)
+
 
 df = pd.DataFrame(datastore["records"]).drop("_id", axis=1)
 content, fields = df, [x for x in datastore["fields"] if x["id"] != "_id"]
@@ -49,8 +53,8 @@ def test_score_metadata_datastore():
     assert dqs_logic.score_metadata(package, METADATA_FIELDS, fields) == 0.875
 
 
-def test_score_metadata():
-    assert dqs_logic.score_metadata(package, METADATA_FIELDS, "") == 0.75
+def test_score_metadata_filestore():
+    assert dqs_logic.score_metadata(package_filestore, METADATA_FIELDS, "") == 0.75
 
 
 def test_invalid_score_metadata():
@@ -63,4 +67,3 @@ def test_score_usability():
 
 def test_score_completeness():
     assert dqs_logic.score_completeness(content) == 1
-
