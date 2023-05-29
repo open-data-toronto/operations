@@ -1,0 +1,140 @@
+development-applications:
+  schedule: '@once'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Development Applications
+  date_published: '2021-12-02 13:57:18.929311'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: City Planning
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: null
+  tags: 
+  - name: development
+    vocabulary_id: null
+  information_url: http://app.toronto.ca/DevelopmentApplications/mapSearchSetup.do?action=init
+  excerpt: This data set on Planning applications is shared with the public through
+    the City of Toronto's Application Information Centre.
+  limitations: 'Visualization restriction: the visualization tool is not compatible
+    with X,Y coordinates. It will not work, unless you covert them into Lat,Long.
+    The projection of the X and Y are NAD27.  We will be converting to NAD83 in the
+    future. '
+  notes: "This dataset lists all currently active (open) and inactive (closed) Community\
+    \ Planning applications, Committee of Adjustment applications and Toronto Local\
+    \ Appeal Body appeals received by the City between January 1st 2008 till present.\r\
+    \n\r\nFor more info, see:\r\n[Application Information Centre](https://www.toronto.ca/aic/)\r\
+    \n\r\n\r\n[Development Applications - Development Projects](http://app.toronto.ca/AIC/index.do)\r\
+    \n"
+
+  resources:
+    # resource name
+    Development Applications:
+      format: csv
+      url: http://opendata.toronto.ca/city.planning/development-applications/development-applications.csv
+      attributes:
+        - id: "APPLICATION_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "APPLICATION#"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STREET_NUM"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STREET_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STREET_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STREET_DIRECTION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "POSTAL"
+          type: "text"
+          info:
+            notes: ""
+        - id: "DATE_SUBMITTED"
+          type: "timestamp"
+          format: "%Y-%m-%dT%H:%M:%S"
+          info:
+            notes: ""
+        - id: "STATUS"
+          type: "text"
+          info:
+            notes: ""
+        - id: "HEARING_DATE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "X"
+          type: "text"
+          info:
+            notes: ""
+        - id: "Y"
+          type: "text"
+          info:
+            notes: ""
+        - id: "DESCRIPTION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "REFERENCE_FILE#"
+          type: "text"
+          info:
+            notes: ""
+        - id: "FOLDERRSN"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD_NUMBER"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "COMMUNITY_MEETING_DATE"
+          type: "timestamp"
+          format: "%b %d, %Y"
+          info:
+            notes: ""
+        - id: "COMMUNITY_MEETING_TIME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "COMMUNITY_MEETING_LOCATION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "APPLICATION_URL"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CONTACT_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CONTACT_PHONE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CONTACT_EMAIL"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PARENT_FOLDER_NUMBER"
+          type: "text"
+          info:
+            notes: ""
+        

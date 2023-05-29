@@ -161,7 +161,7 @@ committee-of-adjustment-applications:
           info:
             notes: ""
         - id: "FINALDATE"
-          type: "date"
+          type: "timestamp"
           format: "%Y-%m-%dT%H:%M:%S"
           info:
             notes: ""
