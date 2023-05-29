@@ -35,6 +35,11 @@ def is_resource_new(get_or_create_resource_task_id, resource_name, **kwargs):
 def does_resource_need_update(download_task_id, resource_name, **kwargs):
     #return kwargs["ti"].xcom_pull(task_ids=delta_check_task_id)
     resource = kwargs["ti"].xcom_pull(task_ids=download_task_id)
+    if "force" in kwargs['dag_run'].conf.keys():
+        if kwargs['dag_run'].conf["force"] == True:
+            return "update_resource_" + resource_name
+        elif kwargs['dag_run'].conf["force"] == False:
+            return "dont_update_resource_" + resource_name
 
     if resource["needs_update"]:
         return "update_resource_" + resource_name
@@ -130,6 +135,9 @@ def create_dag(dag_id,
         ### Contact
         - Dataset-related inquiries should go to {dataset_owner_contact}
         - ETL-related inquiries should go to {dag_owner_contact}
+
+        ### Runtime UI Inputs
+        - "force": if set to true (no quotes), will force an update of the data regardless of delta-detection result
         """.format(
             resources = "\n".join(["- `" + resource_name + "` from [" + dataset["resources"][resource_name]["url"] + "](" + dataset["resources"][resource_name]["url"] + ")" for resource_name in resource_names]),
             package_name = "[{package_name}]({CKAN}dataset/{package_name})".format(package_name=package_name, CKAN=CKAN),
