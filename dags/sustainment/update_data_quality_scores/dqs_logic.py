@@ -170,6 +170,7 @@ def score_freshness(package, time_map, penalty_map):
         metrics["elapse_days"] = (
             max(0, 1 - (days / (365 * 2)) ** 2) if days > 180 else 1
         )
+        logging.info(metrics)
 
         return np.mean(list(metrics.values()))
 

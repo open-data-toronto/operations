@@ -220,6 +220,10 @@ def freshness_explanation_code(package, time_map):
             elapse_period_message = (
                 f"~periods_behind:{elapse_periods}" if elapse_periods >= 1 else ""
             )
+            if rr == annually:
+                elapse_period_message = (
+                f"~periods_behind:{elapse_periods}" if elapse_periods >= 0.5 else ""
+            )
 
             freshness_message = elapse_period_message
 
@@ -361,7 +365,5 @@ def explanation_code_catalogue(**kwargs):
     df = pd.DataFrame(data)
 
     df.to_parquet(filepath, engine="fastparquet", compression=None)
-    temp_path = current_folder + "/data_quality_explanation_code.parquet"
-    df.to_parquet(temp_path, engine="fastparquet", compression=None)
 
     return str(filepath)
