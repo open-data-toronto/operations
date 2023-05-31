@@ -101,7 +101,7 @@ def test_calculate_final_scores_and_codes():
     )
 
     # check output expected format
-    assert output.shape == (255, 18)
+    assert output.shape == (255, 19)
 
     """
     check if file exactly same, exclude "recorded_at" column,

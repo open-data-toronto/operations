@@ -103,7 +103,8 @@ def calculate_final_scores_and_codes(
     df_scores = df_scores.loc[:, ~df_scores.columns.isin(dimensions)]
 
     # map the package level score to resource level
-    df_output = pd.merge(df, df_scores, on=["package"], how="outer")
+    df = df.reset_index(drop=False)
+    df_output = pd.merge(df, df_scores, on=["package"], how="left")
 
     logging.info(df_output.columns)
 
@@ -220,7 +221,7 @@ def freshness_explanation_code(package, time_map):
             elapse_period_message = (
                 f"~periods_behind:{elapse_periods}" if elapse_periods >= 1 else ""
             )
-            if rr == annually:
+            if rr == "annually":
                 elapse_period_message = (
                 f"~periods_behind:{elapse_periods}" if elapse_periods >= 0.5 else ""
             )
