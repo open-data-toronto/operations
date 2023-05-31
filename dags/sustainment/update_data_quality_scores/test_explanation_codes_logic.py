@@ -46,7 +46,7 @@ def test_metadata_explanation_code_datastore():
         == "~metadata_missing:information_url"
     )
 
-def test_metadata_explanation_code_datastore():
+def test_metadata_explanation_code_filestore():
     METADATA_FIELDS = [
         "notes",
         "topics",
