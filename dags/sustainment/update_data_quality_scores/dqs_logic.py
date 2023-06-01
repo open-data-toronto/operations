@@ -164,11 +164,11 @@ def score_freshness(package, time_map, penalty_map):
             elapse_periods = max(0, (days - time_map[rr]) / time_map[rr])
             metrics["elapse_periods"] = max(
                 0, 1 - (elapse_periods / penalty_map[rr]) ** 2
-            )
+            ) if elapse_periods > 0 else 1
 
-        # Decrease the score starting from ~0.5 years to ~2 years
+        # Decrease the score starting from ~2 years to ~3 years
         metrics["elapse_days"] = (
-            max(0, 1 - (days / (365 * 2)) ** 2) if days > 180 else 1
+            max(0, 1 - (days / (365 * 3)) ** 2) if (days > 365 * 2) else 1
         )
         logging.info(metrics)
 
