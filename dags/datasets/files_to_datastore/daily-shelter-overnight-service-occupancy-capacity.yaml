@@ -49,7 +49,7 @@ daily-shelter-overnight-service-occupancy-capacity:
       url: http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-occupancy.csv
       attributes:
         - id: "OCCUPANCY_DATE"
-          type: "text"
+          type: "date"
           info:
             notes: ""
         - id: "ORGANIZATION_ID"
