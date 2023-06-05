@@ -1,7 +1,7 @@
 # package name
 daily-shelter-overnight-service-occupancy-capacity:
   # DAG info
-  schedule: "0 17 * * *"
+  schedule: "30 10 * * *"
   dag_owner_name: Mackenzie
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
@@ -46,7 +46,7 @@ daily-shelter-overnight-service-occupancy-capacity:
     # resource name
     Daily shelter overnight occupancy:
       format: csv
-      url: http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-occupancy.csv
+      url: http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/Daily shelter overnight occupancy.csv
       attributes:
         - id: "OCCUPANCY_DATE"
           type: "date"
