@@ -1,5 +1,5 @@
 from airflow import DAG
-from sustainment.update_data_quality_scores import explanation_codes_logic
+from sustainment.update_data_quality_scores import explanation_codes_logic, utils
 import os
 import json
 import pandas as pd
@@ -29,7 +29,7 @@ content, fields = df, [x for x in datastore["fields"] if x["id"] != "_id"]
 
 
 def test_attribue_description_check():
-    assert explanation_codes_logic.attribue_description_check(fields) == (False, [])
+    assert utils.attribue_description_check(fields) == (False, [])
 
 
 def test_metadata_explanation_code_datastore():
@@ -46,6 +46,7 @@ def test_metadata_explanation_code_datastore():
         == "~metadata_missing:information_url"
     )
 
+
 def test_metadata_explanation_code_filestore():
     METADATA_FIELDS = [
         "notes",
@@ -59,6 +60,7 @@ def test_metadata_explanation_code_filestore():
         )
         == "~owner_is_opendata"
     )
+
 
 def test_usability_explanation_code():
     assert explanation_codes_logic.usability_explanation_code(fields, content) == ""

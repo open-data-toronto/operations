@@ -1,7 +1,7 @@
 from airflow import DAG
 import os
 
-from sustainment.update_data_quality_scores import dqs_logic
+from sustainment.update_data_quality_scores import dqs_logic, utils
 import json
 import pandas as pd
 
@@ -32,21 +32,21 @@ content, fields = df, [x for x in datastore["fields"] if x["id"] != "_id"]
 
 def test_valid_parse_datetime():
     date = "2023-05-03T16:51:13.211496"
-    assert isinstance(dqs_logic.parse_datetime(date), int)
+    assert isinstance(utils.parse_datetime(date), int)
 
 
 def test_invalid_parse_datetime():
     date = "2022-05"
 
-    assert dqs_logic.parse_datetime(date) is None
+    assert utils.parse_datetime(date) is None
 
 
 def test_parse_col_name():
     word = "Test Camel_"
     empty_word = ""
 
-    assert dqs_logic.parse_col_name(word) == ["test", "camel"]
-    assert dqs_logic.parse_col_name(empty_word) == []
+    assert utils.parse_col_name(word) == ["test", "camel"]
+    assert utils.parse_col_name(empty_word) == []
 
 
 def test_score_metadata_datastore():

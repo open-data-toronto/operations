@@ -1,80 +1,10 @@
-import json
 import logging
-import re
-from datetime import datetime as dt
-
 import nltk
 import numpy as np
-import pandas as pd
-from geopandas import gpd
 from nltk.corpus import wordnet
-from shapely.geometry import shape
+from sustainment.update_data_quality_scores import utils
 
 nltk.download("wordnet")
-
-
-def parse_datetime(input):
-    for format in [
-        "%Y-%m-%dT%H:%M:%S.%f",
-        "%Y-%m-%d %H:%M:%S.%f",
-        "%Y-%m-%dT%H:%M:%S",
-        "%Y-%m-%d %H:%M:%S",
-        "%Y-%m-%d",
-    ]:
-        try:
-            delta = dt.strptime(input, format)
-            days = (dt.utcnow() - delta).days
-            return days
-        except ValueError:
-            pass
-
-
-def read_datastore(ckan, rid, rows=10000):
-    records = []
-
-    # is_geospatial = False
-
-    has_more = True
-    while has_more:
-        result = ckan.action.datastore_search(id=rid, limit=rows, offset=len(records))
-
-        records += result["records"]
-        has_more = len(records) < result["total"]
-
-    df = pd.DataFrame(records).drop("_id", axis=1)
-
-    if "geometry" in df.columns:
-        df["geometry"] = df["geometry"].apply(
-            lambda x: shape(json.loads(x)) if x != "None" else None
-        )
-        df = gpd.GeoDataFrame(df, crs="epsg:4326")
-
-    return df, [x for x in result["fields"] if x["id"] != "_id"]
-
-
-def get_etl_inventory(package_name, ckan):
-    etl_intentory = ckan.action.package_show(id=package_name)
-    rid = etl_intentory["resources"][0]["id"]
-
-    has_more = True
-    records = []
-    while has_more:
-        result = ckan.action.datastore_search(id=rid, limit=5000, offset=len(records))
-
-        records += result["records"]
-        has_more = len(records) < result["total"]
-
-    df = pd.DataFrame(records).drop("_id", axis=1)
-
-    return df
-
-
-def parse_col_name(s):
-    camel_to_snake = re.sub(
-        "([a-z0-9])([A-Z])", r"\1_\2", re.sub("(.)([A-Z][a-z]+)", r"\1_\2", s)
-    ).lower()
-
-    return [x for x in re.split(r"-|_|\s", camel_to_snake) if len(x)]
 
 
 def score_usability(columns, data):
@@ -94,7 +24,7 @@ def score_usability(columns, data):
     scores = 1
 
     for f in columns:
-        words = parse_col_name(f["id"])
+        words = utils.parse_col_name(f["id"])
         eng_words = [w for w in words if len(wordnet.synsets(w))]
 
         if len(eng_words) / len(words) <= 0.2:
@@ -156,19 +86,21 @@ def score_freshness(package, time_map, penalty_map):
 
     rr = package["refresh_rate"].lower()
     if "last_refreshed" in package and package["last_refreshed"]:
-        days = parse_datetime(package["last_refreshed"])
+        days = utils.parse_datetime(package["last_refreshed"])
 
         if rr in ["real-time", "as available", "will not be refreshed"]:
             metrics["elapse_periods"] = 1
         elif rr in time_map:
             elapse_periods = max(0, (days - time_map[rr]) / time_map[rr])
-            metrics["elapse_periods"] = max(
-                0, 1 - (elapse_periods / penalty_map[rr]) ** 2
-            ) if elapse_periods > 0 else 1
+            metrics["elapse_periods"] = (
+                max(0, 1 - (elapse_periods / penalty_map[rr]) ** 2)
+                if elapse_periods > 0
+                else 1
+            )
 
         # Decrease the score starting from ~2 years to ~3 years
         metrics["elapse_days"] = (
-            max(0, 1 - (days / (365 * 3)) ** 2) if (days > 365 * 2) else 1
+            max(0, 1 - (days / (365 * 3)) ** 2) if days > (365 * 2) else 1
         )
         logging.info(metrics)
 
