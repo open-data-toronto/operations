@@ -98,4 +98,195 @@ members-of-toronto-city-council-voting-record:
           type: text
           info:
             notes: ""
-        
+    member-voting-record-2018-2022:
+      format: csv
+      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_VOTE_2018_2022.csv
+      attributes:
+        - id: Term
+          type: text
+          info:
+            notes: ""
+        - id: First Name
+          type: text
+          info:
+            notes: ""
+        - id: Last Name
+          type: text
+          info:
+            notes: ""
+        - id: Committee
+          type: text
+          info:
+            notes: ""
+        - id: Date/Time
+          type: timestamp
+          info:
+            notes: ""
+        - id: "Agenda Item #"
+          type: text
+          info:
+            notes: ""
+        - id: Agenda Item Title
+          type: text
+          info:
+            notes: ""
+        - id: Motion Type
+          type: text
+          info:
+            notes: ""
+        - id: Vote
+          type: text
+          info:
+            notes: ""
+        - id: Result
+          type: text
+          info:
+            notes: ""
+        - id: Vote Description
+          type: text
+          info:
+            notes: ""
+    member-voting-record-2014-2018:
+      format: csv
+      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_VOTE_2014_2018.csv
+      attributes:
+        - id: Term
+          type: text
+          info:
+            notes: ""
+        - id: First Name
+          type: text
+          info:
+            notes: ""
+        - id: Last Name
+          type: text
+          info:
+            notes: ""
+        - id: Committee
+          type: text
+          info:
+            notes: ""
+        - id: Date/Time
+          type: timestamp
+          info:
+            notes: ""
+        - id: "Agenda Item #"
+          type: text
+          info:
+            notes: ""
+        - id: Agenda Item Title
+          type: text
+          info:
+            notes: ""
+        - id: Motion Type
+          type: text
+          info:
+            notes: ""
+        - id: Vote
+          type: text
+          info:
+            notes: ""
+        - id: Result
+          type: text
+          info:
+            notes: ""
+        - id: Vote Description
+          type: text
+          info:
+            notes: ""
+    member-voting-record-2010-2014:
+      format: csv
+      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_VOTE_2010_2014.csv
+      attributes:
+        - id: Term
+          type: text
+          info:
+            notes: ""
+        - id: First Name
+          type: text
+          info:
+            notes: ""
+        - id: Last Name
+          type: text
+          info:
+            notes: ""
+        - id: Committee
+          type: text
+          info:
+            notes: ""
+        - id: Date/Time
+          type: timestamp
+          info:
+            notes: ""
+        - id: "Agenda Item #"
+          type: text
+          info:
+            notes: ""
+        - id: Agenda Item Title
+          type: text
+          info:
+            notes: ""
+        - id: Motion Type
+          type: text
+          info:
+            notes: ""
+        - id: Vote
+          type: text
+          info:
+            notes: ""
+        - id: Result
+          type: text
+          info:
+            notes: ""
+        - id: Vote Description
+          type: text
+          info:
+            notes: ""
+    member-voting-record-2006-2010:
+      format: csv
+      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_VOTE_2006_2010.csv
+      attributes:
+        - id: Term
+          type: text
+          info:
+            notes: ""
+        - id: First Name
+          type: text
+          info:
+            notes: ""
+        - id: Last Name
+          type: text
+          info:
+            notes: ""
+        - id: Committee
+          type: text
+          info:
+            notes: ""
+        - id: Date/Time
+          type: timestamp
+          info:
+            notes: ""
+        - id: "Agenda Item #"
+          type: text
+          info:
+            notes: ""
+        - id: Agenda Item Title
+          type: text
+          info:
+            notes: ""
+        - id: Motion Type
+          type: text
+          info:
+            notes: ""
+        - id: Vote
+          type: text
+          info:
+            notes: ""
+        - id: Result
+          type: text
+          info:
+            notes: ""
+        - id: Vote Description
+          type: text
+          info:
+            notes: ""
