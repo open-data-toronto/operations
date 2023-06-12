@@ -56,13 +56,13 @@ address-points-municipal-toronto-one-address-repository:
   Municipal address points (wgs84) - shapefile:
     format: shp
     url: http://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/municipal-address-points-wgs84-latitude-longitude.zip
-building-permits-active-permits:
-  Active permits (CSV):
-    format: zip
-    url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits_csv.zip
-  Active permits (XML):
-    format: zip
-    url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits.zip
+#building-permits-active-permits:
+#  Active permits (CSV):
+#    format: zip
+#    url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits_csv.zip
+#  Active permits (XML):
+#    format: zip
+#    url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits.zip
 building-permits-cleared-permits-current-year:
   Cleared Permits Current Year (CSV):
     format: zip
