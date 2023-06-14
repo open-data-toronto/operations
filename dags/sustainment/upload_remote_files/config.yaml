@@ -360,6 +360,9 @@ ttc-subway-delay-data:
   ttc-subway-delay-data-2022:
     format: xlsx
     url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2022.xlsx
+  ttc-subway-delay-data-2023:
+    format: xlsx
+    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2023.xlsx
 bike-share-toronto-ridership-data:
   bikeshare-ridership-readme:
     format: xlsx
