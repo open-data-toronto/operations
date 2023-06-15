@@ -1,0 +1,245 @@
+real-estate-asset-inventory:
+  schedule: '0 19 * * 1'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Real Estate Asset Inventory
+  date_published: '2023-06-30 00:57:18.929311'
+  refresh_rate: Weekly
+  dataset_category: Map
+  owner_division: Corporate Real Estate Management
+  owner_section: null
+  owner_unit: null
+  owner_email: realestate@toronto.ca
+  civic_issues: null
+  topics: 
+    - City Government
+    - Locations and Mapping
+  tags: 
+    - name: property
+      vocabulary_id: null
+  
+  information_url: https://www.toronto.ca/city-government/accountability-operations-customer-service/city-administration/staff-directory-divisions-and-customer-service/corporate-real-estate-management/
+  excerpt: An inventory of the City of Toronto's real estate asset portfolio.
+  limitations: This dataset does not capture all City of Toronto assets and may exclude assets without a municipal address or located within public road allowances/highways.
+  notes: This dataset contains contains the City of Toronto's real estate asset portfolio
+  
+  resources:
+    land-asset-inventory:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_SAPRE_CITY_PROP/FeatureServer/0
+      attributes:
+      - source_name: FLOC_ID
+        target_name: FLOC_ID
+        type: text
+        info:
+          notes: 'Location ID in SAP'
+      - source_name: PROPERTY_NAME
+        target_name: Property Description
+        type: text
+        info:
+          notes: 'Description of the land asset'
+      - source_name: ADDRESS
+        target_name: Address
+        type: text
+        info:
+          notes: 'Address of the land asset'
+      - source_name: CITY
+        target_name: City
+        type: text
+        info:
+          notes: 'Address (City) of the land asset'
+      - source_name: INTERSECTION
+        target_name: Intersection
+        type: text
+        info:
+          notes: 'The main intersection or brief location description'
+      - source_name: WARD
+        target_name: Ward \#
+        type: int
+        info:
+          notes: 'City ward #'
+      - source_name: WARD_NAME
+        target_name: Ward Name
+        type: text
+        info:
+          notes: 'City ward name'
+      - source_name: FMR_MUN
+        target_name: Former Municipality
+        type: text
+        info:
+          notes: 'The former (pre-amalgamation) City entity that originally acquired the asset'
+      - source_name: DISTRICT
+        target_name: District
+        type: text
+        info:
+          notes: 'The general location of the asset (i.e. North/East/South/West)'
+      - source_name: SAP_CLUSTER
+        target_name: City Cluster
+        type: text
+        info:
+          notes: 'The City Cluster who owns the asset'
+      - source_name: PROP_TYPE
+        target_name: Property Type
+        type: text
+        info:
+          notes: 'The general type / use of the land asset'
+      - source_name: PROP_STATUS
+        target_name: Property Status
+        type: text
+        info:
+          notes: 'The general usage status of the land asset'
+      - source_name: JURISDICTION
+        target_name: Jurisdiction
+        type: text
+        info:
+          notes: 'The City Division who owns the asset'
+      - source_name: MANAGEMENT
+        target_name: Management
+        type: text
+        info:
+          notes: 'The City Division who manages the asset'
+      - source_name: OWNER
+        target_name: Owner
+        type: text
+        info:
+          notes: 'The legal entity that owns the asset'
+      - source_name: AREA_M2
+        target_name: Area (M2)
+        type: float
+        info:
+          notes: 'The approximate size area in sq.m.'
+      - source_name: FRONTAGE_M
+        target_name: Frontage (M)
+        type: float
+        info:
+          notes: 'The approximate frontage in m.'
+      - source_name: DEPTH_M
+        target_name: Depth (M)
+        type: float
+        info:
+          notes: 'The approximate depth in m.'
+      - source_name: AREA_FT2
+        target_name: Area (FT2)
+        type: float
+        info:
+          notes: 'The approximate size area in sq.ft.'
+      - source_name: FRONTAGE_FT
+        target_name: Frontage (FT)
+        type: float
+        info:
+          notes: 'The approximate frontage in ft.'
+      - source_name: DEPTH_FT
+        target_name: Depth (FT)
+        type: float
+        info:
+          notes: 'The approximate depth in ft.'
+      - id: OBJECTID
+        type: int
+        info:
+          notes: 'Unique ID in AGOL'
+      - id: geometry
+        type: text
+        info:
+          notes: ''
+
+    building-asset-inventory:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_SAPRE_CITY_BLDG/FeatureServer/0
+      attributes:
+      - source_name: OBJECTID
+        target_name: OBJECTID
+        type: int
+        info:
+          notes: 'Location ID in SAP'
+      - source_name: FLOC_ID
+        target_name: FLOC_ID
+        type: text
+        info:
+          notes: 'Unique ID in AGOL'
+      - source_name: BUILDING_NAME
+        target_name: Building Description
+        type: text
+        info:
+          notes: 'Description of the building'
+      - source_name: SAP_ADDRESS
+        target_name: Address
+        type: text
+        info:
+          notes: 'Address of the building'
+      - source_name: CITY
+        target_name: City
+        type: text
+        info:
+          notes: 'Address (City) of the building'
+      - source_name: WARD_NAME
+        target_name: Ward Name
+        type: text
+        info:
+          notes: 'City ward name'
+      - source_name: FMR_MUN
+        target_name: Former Municipality
+        type: text
+        info:
+          notes: 'The former (pre-amalgamation) City entity that originally acquired the building'
+      - source_name: DISTRICT
+        target_name: District
+        type: text
+        info:
+          notes: 'The general location of the building (i.e. North/East/South/West)'
+      - source_name: SAP_CLUSTER
+        target_name: City Cluster
+        type: text
+        info:
+          notes: 'The City Cluster who owns the building'
+      - source_name: BLDG_TYPE
+        target_name: Building Type
+        type: text
+        info:
+          notes: 'The general type / use of the building'
+      - source_name: BLDG_STATUS
+        target_name: Building Status
+        type: text
+        info:
+          notes: 'The general usage status of the building'
+      - source_name: JURISDICTION
+        target_name: Jurisdiction
+        type: text
+        info:
+          notes: 'The City Division who owns the building'
+      - source_name: SAP_MANAGEMENT
+        target_name: Management
+        type: text
+        info:
+          notes: 'The City Division who manages the building'
+      - source_name: OWNER
+        target_name: Owner
+        type: text
+        info:
+          notes: 'The legal entity that owns the building'
+      - source_name: GFA_M2
+        target_name: Gross Floor Area (M2)
+        type: float
+        info:
+          notes: 'The approximate size area in sq.m.'
+      - source_name: GFA_FT2
+        target_name: Gross Floor Area (FT2)
+        type: float
+        info:
+          notes: 'The approximate size area in sq.ft.'
+      - source_name: YR_BUILT
+        target_name: Year Built
+        type: int
+        info:
+          notes: 'Year building was built'
+      - source_name: WARD
+        target_name: WARD
+        type: int
+        info:
+          notes: 'Ward ID'
+      - source_name: geometry
+        target_name: geometry
+        type: text
+        info:
+          notes: ''
