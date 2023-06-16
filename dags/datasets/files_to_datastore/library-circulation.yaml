@@ -1,0 +1,51 @@
+# package name
+library-circulation:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: Library Circulation
+  date_published: "2023-06-16T00:00:00.000000"
+  refresh_rate: Annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Public Library
+  owner_section: null
+  owner_unit: null
+  owner_email: planning@tpl.ca
+
+  civic_issues: null
+  topics: Community services
+  tags:
+  - name: toronto public library
+    vocabulary_id: null
+  - name: library circulation
+    vocabulary_id: null
+
+  information_url: https://www.torontopubliclibrary.ca
+  excerpt: This dataset shows the annual circulation of materials at Toronto Public Library branches. 
+  limitations: null   
+  notes: This dataset shows the annual circulation of materials at Toronto Public Library branches. Circulation is defined as a combination of first-time checkouts (i.e. when items are initially borrowed) and renewals (i.e. transactions that extend the due dates of borrowed items). This data covers the circulation of physical materials (e.g. books, CDs, DVDs, etc.) and electronic resources (e.g. ebooks, streaming content, etc.). The branch associated with a circulation total is the library from which the transactions were processed. For online renewals of physical materials, the circulation is associated with the home branch of the renewing customer. The VIR (Virtual Library) branch code is used to represent all electronic circulation totals.
+  resources:
+    # resource name
+    tpl-circulation-annual-by-branch-2012-2022:
+      format: csv
+      url: http://opendata.toronto.ca/toronto.public.library/tpl-circulation-annual-by-branch-2012-2022.csv
+      attributes:
+        - id: Year
+          type: int
+          info:
+            notes: The transaction year.
+        - id: BranchCode
+          type: text
+          info:
+            notes: |
+              A code identifying the TPL branch where materials were borrowed/renewed. Online renewals of physical items are attributed to the home branch of the renewing customer. 
+              Details for each code can be found in the branch information dataset.
+        - id: Circulation
+          type: text
+          info:
+            notes: The total number of items borrowed/renewed.

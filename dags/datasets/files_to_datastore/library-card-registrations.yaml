@@ -1,0 +1,51 @@
+# package name
+library-card-registrations:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: Library Card Registrations
+  date_published: "2023-06-16T00:00:00.000000"
+  refresh_rate: Annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Public Library
+  owner_section: null
+  owner_unit: null
+  owner_email: planning@tpl.ca
+
+  civic_issues: null
+  topics: Community services
+  tags:
+  - name: toronto public library
+    vocabulary_id: null
+  - name: library card registrations
+    vocabulary_id: null
+
+  information_url: https://www.torontopubliclibrary.ca
+  excerpt: This dataset shows the annual library card registrations at Toronto Public Library branches
+  limitations: null   
+  notes: This dataset shows the annual library card registrations at Toronto Public Library branches. A registration is defined as an individual initially signing up for a TPL card (it does not include card renewals). Starting in 2020, individuals could register online for a digital access card (which provides access to TPL’s electronic resources), and these transactions are also included in the totals. The VIR (Virtual Library) branch code is used to represent digital access card registrations.
+  resources:
+    # resource name
+    tpl-card-registrations-annual-by-branch-2012-2022:
+      format: csv
+      url: http://opendata.toronto.ca/toronto.public.library/tpl-card-registrations-annual-by-branch-2012-2022.csv
+      attributes:
+        - id: Year
+          type: int
+          info:
+            notes: The transaction year.
+        - id: BranchCode
+          type: text
+          info:
+            notes: |
+              A code identifying the TPL library assigned as an individual’s home branch at the time of registration. 
+              Details for each code can be found in the branch information dataset.
+        - id: Registrations
+          type: text
+          info:
+            notes: The total number of library card registrations 
