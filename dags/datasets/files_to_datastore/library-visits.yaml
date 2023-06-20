@@ -1,13 +1,13 @@
 # package name
-library-card-registrations:
+library-visits:
   # DAG info
   schedule: "@once"
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
 
   # mandatory package attributes
-  title: Library Card Registrations
-  date_published: "2023-06-16T00:00:00.000000"
+  title: Library Visits
+  date_published: "2023-06-20T00:00:00.000000"
   refresh_rate: Annually
   dataset_category: Table
 
@@ -26,14 +26,20 @@ library-card-registrations:
     vocabulary_id: null
 
   information_url: https://www.torontopubliclibrary.ca
-  excerpt: This dataset shows the annual library card registrations at Toronto Public Library branches
-  limitations: null   
-  notes: This dataset shows the annual library card registrations at Toronto Public Library branches. A registration is defined as an individual initially signing up for a TPL card (it does not include card renewals). Starting in 2020, individuals could register online for a digital access card (which provides access to TPL’s electronic resources), and these transactions are also included in the totals. The VIR (Virtual Library) branch code is used to represent digital access card registrations.
+  excerpt: This dataset shows the annual visits at Toronto Public Library branches.
+  limitations: Visits totals are sometimes estimated during periods when sensor issues have prevented proper data collection.   
+  notes: |
+    This dataset shows the annual visits at Toronto Public Library branches. Visits are generally counted using 
+    sensors located at branch entrances and this activity is recorded during scheduled operating hours. Visits are 
+    based on entries and may count the same individuals multiple times in a day if they leave and re-enter a 
+    branch at a later point in time.
+
+    The BKONE branch code is used to represent the combined visits for both bookmobiles.
   resources:
     # resource name
-    tpl-card-registrations-annual-by-branch-2012-2022:
+    tpl-visits-annual-by-branch-2012-2022:
       format: csv
-      url: http://opendata.toronto.ca/toronto.public.library/tpl-card-registrations-annual-by-branch-2012-2022.csv
+      url: http://opendata.toronto.ca/toronto.public.library/tpl-visits-annual-by-branch-2012-2022.csv
       attributes:
         - id: Year
           type: int
@@ -45,7 +51,7 @@ library-card-registrations:
             notes: |
               A code identifying the TPL library assigned as an individual’s home branch at the time of registration. 
               Details for each code can be found in the branch information dataset.
-        - id: Registrations
+        - id: Visits
           type: text
           info:
-            notes: The total number of library card registrations 
+            notes: The total number of visits.

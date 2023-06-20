@@ -1,0 +1,144 @@
+# package name
+library-branch-programs-and-events-feed:
+  # DAG info
+  schedule: "17 11 * * *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: Library Branch Programs and Events Feed
+  date_published: "2023-06-20T00:00:00.000000"
+  refresh_rate: Daily
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Public Library
+  owner_section: null
+  owner_unit: null
+  owner_email: planning@tpl.ca
+
+  civic_issues: null
+  topics: Community services
+  tags:
+  - name: library
+    vocabulary_id: null
+  - name: tpl
+    vocabulary_id: null
+  information_url: https://www.torontopubliclibrary.ca
+  excerpt: JSON data providing details on upcoming programs and events offered at Toronto Public Library branches. 
+  limitations: null   
+  notes: JSON data providing details on upcoming programs and events offered at Toronto Public Library branches. It includes a description of the events, when and where they’re scheduled, the relevant audience age groups, and additional information such as webpage and image links.
+  resources:
+    # resource name
+    tpl-events-feed:
+      format: json
+      url: http://opendata.toronto.ca/toronto.public.library/tpl-events-feed.json
+      attributes:
+        - id: title
+          type: text
+          info:
+            notes: The name of the event.
+        - id: startdate
+          type: date
+          info:
+            notes: The start date of the event in YYYY-MM-DD format.
+        - id: enddate
+          type: date
+          info:
+            notes: The end date of the event in YYYY-MM-DD format. This field will be null if the event is scheduled for a single day
+        - id: starttime
+          type: text
+          info:
+            notes: The start time of the event in HH:MM AM/PM format. For events happening over the course of an entire day, this field may be set to “All Day”. This field may be null.
+        - id: endtime
+          type: text
+          info:
+            notes: The end time of the event in HH:MM AM/PM format. For events happening over the course of an entire day, this field may be set to “All Day”. This field may be null.
+        - id: length
+          type: int
+          info:
+            notes: The duration of the event in minutes. This field may be set to 0 if an event duration has not been defined.
+        - id: library
+          type: text
+          info:
+            notes: The library branch hosting the event
+        - id: location
+          type: text
+          info:
+            notes: The specific room or space where the event will be hosted.
+        - id: description
+          type: text
+          info:
+            notes: A description of the event with HTML text formatting.
+        - id: pagelink
+          type: text
+          info:
+            notes: A link to the event page.
+        - id: id
+          type: text
+          info:
+            notes: The ID for the event.
+        - id: rcid
+          type: text
+          info:
+            notes: The ID for the associated series of recurring events. This field will be set to 0 for one-time events.
+        - id: eventtype1
+          type: text
+          info:
+            notes: A category associated with the event.
+        - id: eventtype2
+          type: text
+          info:
+            notes: A category associated with the event. This field may be null.
+        - id: eventtype3
+          type: text
+          info:
+            notes: A category associated with the event. This field may be null.
+        - id: agegroup1
+          type: text
+          info:
+            notes: An age group for the audience of the event.
+        - id: agegroup2
+          type: text
+          info:
+            notes: An age group for the audience of the event. This field may be null.
+        - id: agegroup3
+          type: text
+          info:
+            notes: An age group for the audience of the event. This field may be null.
+        - id: relatedlink
+          type: text
+          info:
+            notes: A link to information related to the event. This field may be null.
+        - id: relatedlinktext
+          type: text
+          info:
+            notes: The text for the related link. This field may be null.
+        - id: imagepath
+          type: text
+          info:
+            notes: A link to an image for the event. This field may be null.
+        - id: imagetext
+          type: text
+          info:
+            notes: Descriptive text for the image link. This field may be null.
+        - id: imageheight
+          type: text
+          info:
+            notes: The height of the image in pixels. This field may be null.
+        - id: imagewidth
+          type: text
+          info:
+            notes: The width of the image in pixels. This field may be null.
+        - id: otherinfo
+          type: text
+          info:
+            notes: Miscellaneous information for the event. Often populated by data for image links. This field may be null.
+        - id: lastupdated
+          type: text
+          info:
+            notes: A timestamp for when the event information was last updated.
+     
+
+
+        

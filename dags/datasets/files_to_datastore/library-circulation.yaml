@@ -20,9 +20,9 @@ library-circulation:
   civic_issues: null
   topics: Community services
   tags:
-  - name: toronto public library
+  - name: library
     vocabulary_id: null
-  - name: library circulation
+  - name: tpl
     vocabulary_id: null
 
   information_url: https://www.torontopubliclibrary.ca
