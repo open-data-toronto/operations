@@ -24,7 +24,7 @@ library-branch-programs-and-events-feed:
     vocabulary_id: null
   - name: tpl
     vocabulary_id: null
-  information_url: https://www.torontopubliclibrary.ca
+  information_url: https://www.torontopubliclibrary.ca/opendata
   excerpt: JSON data providing details on upcoming programs and events offered at Toronto Public Library branches. 
   limitations: null   
   notes: JSON data providing details on upcoming programs and events offered at Toronto Public Library branches. It includes a description of the events, when and where they’re scheduled, the relevant audience age groups, and additional information such as webpage and image links.
@@ -139,6 +139,3 @@ library-branch-programs-and-events-feed:
           info:
             notes: A timestamp for when the event information was last updated.
      
-
-
-        

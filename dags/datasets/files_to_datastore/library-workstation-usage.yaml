@@ -1,0 +1,72 @@
+# package name
+library-workstation-usage:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: Library Workstation Usage
+  date_published: "2023-06-28T00:00:00.000000"
+  refresh_rate: Annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Public Library
+  owner_section: null
+  owner_unit: null
+  owner_email: planning@tpl.ca
+
+  civic_issues: null
+  topics: Community services
+  tags:
+  - name: library
+    vocabulary_id: null
+  - name: tpl
+    vocabulary_id: null
+
+  information_url: https://www.torontopubliclibrary.ca/opendata
+  excerpt: This dataset shows the annual computer workstation sessions at Toronto Public Library branches.
+  limitations:   
+  notes: |
+    This dataset shows the annual computer workstation sessions at Toronto Public Library branches. This covers public workstations that can be booked in advance and “drop-in” computers. This data excludes staff computers, library catalogue terminals, and wireless internet usage. Only computer sessions that have a duration greater than 15 seconds are included in the totals. 
+    
+    NOTE: A different reporting method was used for 2012 to 2017. The totals for these years are estimates based on manual counts of workstation activity executed on a quarterly basis.
+  resources:
+    # resource name
+    tpl-workstation-usage-annual-by-branch-2018-2022:
+      format: csv
+      url: http://opendata.toronto.ca/toronto.public.library/tpl-workstation-usage-annual-by-branch-2018-2022.csv
+      attributes:
+        - id: Year
+          type: int
+          info:
+            notes: The transaction year.
+        - id: BranchCode
+          type: text
+          info:
+            notes: |
+              A code identifying the TPL library assigned as an individual’s home branch at the time of registration. 
+              Details for each code can be found in the branch information dataset.
+        - id: Sessions
+          type: text
+          info:
+            notes: The total number of workstation sessions.
+    tpl-workstation-usage-annual-by-branch-2012-2017:
+      format: csv
+      url: http://opendata.toronto.ca/toronto.public.library/tpl-workstation-usage-annual-by-branch-2012-2017.csv
+      attributes:
+        - id: Year
+          type: int
+          info:
+            notes: The transaction year.
+        - id: BranchCode
+          type: text
+          info:
+            notes: |
+              A code identifying the TPL library assigned as an individual’s home branch at the time of registration. 
+              Details for each code can be found in the [branch information dataset](https://open.toronto.ca/dataset/library-branch-general-information).
+        - id: Sessions
+          type: text
+          info:
+            notes: The total number of workstation sessions.

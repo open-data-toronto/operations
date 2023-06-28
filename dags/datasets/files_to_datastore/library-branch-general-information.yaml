@@ -1,0 +1,152 @@
+# package name
+library-branch-general-information:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: Library Branch General Information
+  date_published: "2023-06-28T00:00:00.000000"
+  refresh_rate: Annually
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Toronto Public Library
+  owner_section: null
+  owner_unit: null
+  owner_email: planning@tpl.ca
+
+  civic_issues: null
+  topics: 
+    - Community services
+    - Locations and mapping
+  tags:
+  - name: library
+    vocabulary_id: null
+  - name: tpl
+    vocabulary_id: null
+
+  information_url: https://www.torontopubliclibrary.ca/opendata
+  excerpt: This dataset shows the current characteristics of Toronto Public Library branches, such as location, size, and the availability of specific features (e.g. parking, KidsStops, Digital Innovation Hubs, etc.)
+  limitations:   
+  notes: This dataset shows the current characteristics of Toronto Public Library branches, such as location, size, and the availability of specific features (e.g. parking, KidsStops, Digital Innovation Hubs, etc.). Additionally, this dataset provides details on other TPL services & collections (e.g. Answerline, bookmobiles, Home Library Service, Merril Collection, Sunnybrook Hospital, etc.).
+  resources:
+    # resource name
+    tpl-branch-general-information-2023:
+      format: csv
+      url: http://opendata.toronto.ca/toronto.public.library/tpl-branch-general-information-2023.csv
+      attributes:
+        - id: BranchCode
+          type: text
+          info:
+            notes: A code identifying the TPL branch.
+        - id: PhysicalBranch
+          type: int
+          info:
+            notes: Library branches with fixed locations are set to 1. Other TPL services and collections are set to 0.
+        - id: BranchName
+          type: text
+          info:
+            notes: The name of the library branch.
+        - id: Address
+          type: text
+          info:
+            notes: The full address of the branch.
+        - id: PostalCode
+          type: text
+          info:
+            notes: The branch postal code.
+        - id: Website
+          type: text
+          info:
+            notes: The branch website.
+        - id: Telephone
+          type: text
+          info:
+            notes: The phone number for the branch.
+        - id: SquareFootage
+          type: text
+          info:
+            notes: The total size of the branch in square feet.
+        - id: PublicParking
+          type: text
+          info:
+            notes: The number of parking spaces available for the public. If a branch does not have any public parking spaces, this field is set to 0. If a branch shares parking spaces with another location (community centre, mall, etc.), this field is set to “shared”.
+        - id: KidsStop
+          type: int
+          info:
+            notes: This field denotes the presence of a KidsStop (1 for present, 0 for not present). KidsStops are learning and reading spaces created for parents and young children.
+        - id: LeadingReading
+          type: int
+          info:
+            notes: This field denotes the presence of the Leading To Reading service (1 for present, 0 for not present). Leading to Reading is a free service for children to receive one-on-one help and encouragement with their reading and writing skills.
+        - id: CLC
+          type: int
+          info:
+            notes: This field denotes the presence of a Computer Learning Centre (1 for present, 0 for not present). CLCs are computer labs that offer hands-on technology classes.
+        - id: DIH
+          type: int
+          info:
+            notes: This field denotes the presence of a Digital Innovation Hub (1 for present, 0 for not present). DIHs are learning and creation spaces with computers, professional software, and a wide variety of equipment, including 3D printers, audio and video production tools, Arduinos, and more.
+        - id: TeenCouncil
+          type: int
+          info:
+            notes: This field denotes the presence of a Teen Council (1 for present, 0 for not present). Teen Councils are groups of teens that attend monthly meetings with library staff, collaborate on group projects, and work to benefit their libraries and communities.
+        - id: YouthHub
+          type: int
+          info:
+            notes: This field denotes the presence of a Youth Hub (1 for present, 0 for not present). Youth Hubs are drop-in spaces where teens can study, chat with friends, use technology, or take part in activities such as arts and crafts and gaming.
+        - id: AdultLiteracyProgram
+          type: int
+          info:
+            notes: This field denotes the presence of the Adult Literacy Program service (1 for present, 0 for not present). The Adult Literacy Program offers free, one-on-one tutoring in basic reading, writing, and math for English-speaking adults 19 years or older (exceptions may apply)
+        - id: Workstations
+          type: int
+          info:
+            notes: A count of computers with internet access available for public use in the branch.
+        - id: ServiceTier
+          type: text
+          info:
+            notes: |
+              Service tier refers to the scope and scale of the branch/service.
+
+              NL - Neighbourhood branches provide collections and services that meet many of the needs of the immediate community. Bookmobiles and Home Library Service are part of the NL service tier.
+              
+              DL - District branches offer extensive informational and recreational collections, as well as services that meet the needs of the immediate community and the larger district.
+              
+              RR - Research and reference branches provide comprehensive and specialized collections, as well asservices with an emphasis on access.
+              
+              RA - Remote access offers self-serve systems (online and by phone).
+              
+              OT - Other service activities.
+
+              For more information, please refer to [Toronto Public Library’s Service Delivery Model](https://www.torontopubliclibrary.ca/content/about-the-library/service-plans-strategies-frameworks/Service.Delivery.Model.pdf)
+        - id: NBHDNo
+          type: int
+          info:
+            notes: The ID number of the neighbourhood associated with the branch. Neighbourhood boundaries are designated by the City of Toronto. For more details, please refer to this [website](https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/neighbourhood-profiles/about-toronto-neighbourhoods)
+        - id: NBHDName
+          type: text
+          info:
+            notes: The name of a neighbourhood.
+        - id: TPLNIA
+          type: int
+          info:
+            notes: This field denotes whether the branch serves a neighbourhood improvement area (1 for yes, 0 for no). A branch serving a NIA may be located inside its boundaries or nearby. NIAs are designated by the City of Toronto. For more details, please refer to this [website](https://www.toronto.ca/city-government/accountability-operations-customer-service/long-term-vision-plans-and-strategies/toronto-strong-neighbourhoods-strategy-2020)
+        - id: WardNo
+          type: int
+          info:
+            notes: The ID of the municipal ward associated with the branch.
+        - id: WardName
+          type: text
+          info:
+            notes: The name of the municipal ward.
+        - id: PresentSiteYear
+          type: int
+          info:
+            notes: The year that the present location of the branch was officially opened to the general public.
+        - id: geometry
+          type: text
+          info:
+            notes: ''

@@ -25,7 +25,7 @@ library-visits:
   - name: tpl
     vocabulary_id: null
 
-  information_url: https://www.torontopubliclibrary.ca
+  information_url: https://www.torontopubliclibrary.ca/opendata
   excerpt: This dataset shows the annual visits at Toronto Public Library branches.
   limitations: Visits totals are sometimes estimated during periods when sensor issues have prevented proper data collection.   
   notes: |
@@ -50,7 +50,7 @@ library-visits:
           info:
             notes: |
               A code identifying the TPL library assigned as an individual’s home branch at the time of registration. 
-              Details for each code can be found in the branch information dataset.
+              Details for each code can be found in the [branch information dataset](https://open.toronto.ca/dataset/library-branch-general-information).
         - id: Visits
           type: text
           info:
