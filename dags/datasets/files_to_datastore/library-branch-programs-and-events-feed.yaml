@@ -32,7 +32,7 @@ library-branch-programs-and-events-feed:
     # resource name
     tpl-events-feed:
       format: json
-      url: http://opendata.toronto.ca/toronto.public.library/tpl-events-feed.json
+      url: https://opendatasstg.blob.core.windows.net/events-feed/tpl-events-feed.json?sp=r&st=2023-06-19T19:56:33Z&se=2031-01-01T04:59:59Z&spr=https&sv=2022-11-02&sr=b&sig=rpZYPwSIa4zXJIt45WztzvkJZL%2BnF3YIAIuZ%2Bq%2Fl2uI%3D
       attributes:
         - id: title
           type: text

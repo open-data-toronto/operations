@@ -49,8 +49,7 @@ library-visits:
           type: text
           info:
             notes: |
-              A code identifying the TPL library assigned as an individual’s home branch at the time of registration. 
-              Details for each code can be found in the [branch information dataset](https://open.toronto.ca/dataset/library-branch-general-information).
+              A code identifying the TPL branch of the workstations being used. Details for each code can be found in the [branch information dataset](https://open.toronto.ca/dataset/library-branch-general-information).
         - id: Visits
           type: text
           info:
