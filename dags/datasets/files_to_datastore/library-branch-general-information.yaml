@@ -9,7 +9,7 @@ library-branch-general-information:
   title: Library Branch General Information
   date_published: "2023-06-28T00:00:00.000000"
   refresh_rate: Annually
-  dataset_category: Map
+  dataset_category: Table
 
   # optional package attributes
   owner_division: Toronto Public Library
@@ -122,6 +122,14 @@ library-branch-general-information:
               OT - Other service activities.
 
               For more information, please refer to [Toronto Public Library’s Service Delivery Model](https://www.torontopubliclibrary.ca/content/about-the-library/service-plans-strategies-frameworks/Service.Delivery.Model.pdf)
+        - id: Lat
+          type: text
+          info:
+            notes: 'The latitude coordinate of the branch.'
+        - id: Long
+          type: text
+          info:
+            notes: 'The longitude coordinate of the branch.'
         - id: NBHDNo
           type: int
           info:
@@ -146,7 +154,3 @@ library-branch-general-information:
           type: int
           info:
             notes: The year that the present location of the branch was officially opened to the general public.
-        - id: geometry
-          type: text
-          info:
-            notes: ''
