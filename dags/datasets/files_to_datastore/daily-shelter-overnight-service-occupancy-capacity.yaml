@@ -191,259 +191,259 @@ daily-shelter-overnight-service-occupancy-capacity:
           type: "text"
           info:
             notes: "The proportion of actual room capacity that is occupied for the reporting date. Calculated as OCCUPIED_ROOMS divided by CAPACITY_ACTUAL_ROOM."
-    daily-shelter-overnight-service-occupancy-capacity-2021:
-      format: csv
-      url: http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-2021.csv
-      attributes:
-        - id: "OCCUPANCY_DATE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "ORGANIZATION_ID"
-          type: "text"
-          info:
-            notes: ""
-        - id: "ORGANIZATION_NAME"
-          type: "text"
-          info:
-            notes: ""
-        - id: "SHELTER_ID"
-          type: "text"
-          info:
-            notes: ""
-        - id: "SHELTER_GROUP"
-          type: "text"
-          info:
-            notes: ""
-        - id: "LOCATION_ID"
-          type: "text"
-          info:
-            notes: ""
-        - id: "LOCATION_NAME"
-          type: "text"
-          info:
-            notes: ""
-        - id: "LOCATION_ADDRESS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "LOCATION_POSTAL_CODE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "LOCATION_CITY"
-          type: "text"
-          info:
-            notes: ""
-        - id: "LOCATION_PROVINCE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "PROGRAM_ID"
-          type: "text"
-          info:
-            notes: ""
-        - id: "PROGRAM_NAME"
-          type: "text"
-          info:
-            notes: ""
-        - id: "SECTOR"
-          type: "text"
-          info:
-            notes: ""
-        - id: "PROGRAM_MODEL"
-          type: "text"
-          info:
-            notes: ""
-        - id: "OVERNIGHT_SERVICE_TYPE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "PROGRAM_AREA"
-          type: "text"
-          info:
-            notes: ""
-        - id: "SERVICE_USER_COUNT"
-          type: "text"
-          info:
-            notes: ""
-        - id: "CAPACITY_TYPE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "CAPACITY_ACTUAL_BED"
-          type: "text"
-          info:
-            notes: ""
-        - id: "CAPACITY_FUNDING_BED"
-          type: "text"
-          info:
-            notes: ""
-        - id: "OCCUPIED_BEDS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "UNOCCUPIED_BEDS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "UNAVAILABLE_BEDS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "CAPACITY_ACTUAL_ROOM"
-          type: "text"
-          info:
-            notes: ""
-        - id: "CAPACITY_FUNDING_ROOM"
-          type: "text"
-          info:
-            notes: ""
-        - id: "OCCUPIED_ROOMS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "UNOCCUPIED_ROOMS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "UNAVAILABLE_ROOMS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "OCCUPANCY_RATE_BEDS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "OCCUPANCY_RATE_ROOMS"
-          type: "text"
-          info:
-            notes: ""
-    daily-shelter-overnight-service-occupancy-capacity-2022:
-      format: csv
-      url: http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-2022.csv
-      attributes:
-        - id: "OCCUPANCY_DATE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "ORGANIZATION_ID"
-          type: "text"
-          info:
-            notes: ""
-        - id: "ORGANIZATION_NAME"
-          type: "text"
-          info:
-            notes: ""
-        - id: "SHELTER_ID"
-          type: "text"
-          info:
-            notes: ""
-        - id: "SHELTER_GROUP"
-          type: "text"
-          info:
-            notes: ""
-        - id: "LOCATION_ID"
-          type: "text"
-          info:
-            notes: ""
-        - id: "LOCATION_NAME"
-          type: "text"
-          info:
-            notes: ""
-        - id: "LOCATION_ADDRESS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "LOCATION_POSTAL_CODE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "LOCATION_CITY"
-          type: "text"
-          info:
-            notes: ""
-        - id: "LOCATION_PROVINCE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "PROGRAM_ID"
-          type: "text"
-          info:
-            notes: ""
-        - id: "PROGRAM_NAME"
-          type: "text"
-          info:
-            notes: ""
-        - id: "SECTOR"
-          type: "text"
-          info:
-            notes: ""
-        - id: "PROGRAM_MODEL"
-          type: "text"
-          info:
-            notes: ""
-        - id: "OVERNIGHT_SERVICE_TYPE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "PROGRAM_AREA"
-          type: "text"
-          info:
-            notes: ""
-        - id: "SERVICE_USER_COUNT"
-          type: "text"
-          info:
-            notes: ""
-        - id: "CAPACITY_TYPE"
-          type: "text"
-          info:
-            notes: ""
-        - id: "CAPACITY_ACTUAL_BED"
-          type: "text"
-          info:
-            notes: ""
-        - id: "CAPACITY_FUNDING_BED"
-          type: "text"
-          info:
-            notes: ""
-        - id: "OCCUPIED_BEDS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "UNOCCUPIED_BEDS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "UNAVAILABLE_BEDS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "CAPACITY_ACTUAL_ROOM"
-          type: "text"
-          info:
-            notes: ""
-        - id: "CAPACITY_FUNDING_ROOM"
-          type: "text"
-          info:
-            notes: ""
-        - id: "OCCUPIED_ROOMS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "UNOCCUPIED_ROOMS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "UNAVAILABLE_ROOMS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "OCCUPANCY_RATE_BEDS"
-          type: "text"
-          info:
-            notes: ""
-        - id: "OCCUPANCY_RATE_ROOMS"
-          type: "text"
-          info:
-            notes: ""
+#    daily-shelter-overnight-service-occupancy-capacity-2021:
+#      format: csv
+#      url: http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-2021.csv
+#      attributes:
+#        - id: "OCCUPANCY_DATE"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "ORGANIZATION_ID"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "ORGANIZATION_NAME"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "SHELTER_ID"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "SHELTER_GROUP"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "LOCATION_ID"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "LOCATION_NAME"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "LOCATION_ADDRESS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "LOCATION_POSTAL_CODE"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "LOCATION_CITY"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "LOCATION_PROVINCE"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "PROGRAM_ID"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "PROGRAM_NAME"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "SECTOR"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "PROGRAM_MODEL"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "OVERNIGHT_SERVICE_TYPE"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "PROGRAM_AREA"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "SERVICE_USER_COUNT"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "CAPACITY_TYPE"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "CAPACITY_ACTUAL_BED"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "CAPACITY_FUNDING_BED"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "OCCUPIED_BEDS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "UNOCCUPIED_BEDS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "UNAVAILABLE_BEDS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "CAPACITY_ACTUAL_ROOM"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "CAPACITY_FUNDING_ROOM"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "OCCUPIED_ROOMS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "UNOCCUPIED_ROOMS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "UNAVAILABLE_ROOMS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "OCCUPANCY_RATE_BEDS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "OCCUPANCY_RATE_ROOMS"
+#          type: "text"
+#          info:
+#            notes: ""
+#    daily-shelter-overnight-service-occupancy-capacity-2022:
+#      format: csv
+#      url: http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-2022.csv
+#      attributes:
+#        - id: "OCCUPANCY_DATE"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "ORGANIZATION_ID"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "ORGANIZATION_NAME"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "SHELTER_ID"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "SHELTER_GROUP"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "LOCATION_ID"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "LOCATION_NAME"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "LOCATION_ADDRESS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "LOCATION_POSTAL_CODE"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "LOCATION_CITY"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "LOCATION_PROVINCE"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "PROGRAM_ID"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "PROGRAM_NAME"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "SECTOR"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "PROGRAM_MODEL"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "OVERNIGHT_SERVICE_TYPE"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "PROGRAM_AREA"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "SERVICE_USER_COUNT"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "CAPACITY_TYPE"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "CAPACITY_ACTUAL_BED"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "CAPACITY_FUNDING_BED"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "OCCUPIED_BEDS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "UNOCCUPIED_BEDS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "UNAVAILABLE_BEDS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "CAPACITY_ACTUAL_ROOM"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "CAPACITY_FUNDING_ROOM"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "OCCUPIED_ROOMS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "UNOCCUPIED_ROOMS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "UNAVAILABLE_ROOMS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "OCCUPANCY_RATE_BEDS"
+#          type: "text"
+#          info:
+#            notes: ""
+#        - id: "OCCUPANCY_RATE_ROOMS"
+#          type: "text"
+#          info:
+#            notes: ""
