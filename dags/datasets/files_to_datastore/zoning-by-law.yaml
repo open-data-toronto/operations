@@ -44,242 +44,242 @@ zoning-by-law:
       View [Amendments to Zoning By-law 569-2013](https://www.toronto.ca/city-government/planning-development/zoning-by-law-preliminary-zoning-reviews/zoning-by-law-569-2013-2/)
   
   resources:
-#    # resource name
-#    Zoning Area:
-#      agol: True
-#      format: geojson
-#      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/3
-#      attributes:
-#        - source_name: "ZN_LU_CATEGORY"
-#          target_name: "GEN_ZONE"
-#          type: "int"
-#          info:
-#            notes: "The land use category of the lands within the zone boundary. Each 'zone category' has its own Chapter in the text of By-law 569-2013."
-#        - id: "ZN_ZONE"
-#          type: "text"
-#          info:
-#            notes: |
-#              The land use category of the lands within the zone boundary. Each 'zone category' has its own Chapter in the text of By-law 569-2013. Zoned destination of the zone limited by GEN_ZONE. 
-#              0 = Residential
-#              1 = Open Space
-#              2 = Utility and Transportation
-#              4 = Employment Industrial
-#              5 = Institutional
-#              6 = Commercial Residential Employment
-#              101 = Residential Apartment
-#              201 = Commercial
-#              202 = Commercial Residential
-#        - id: "ZN_HOLDING"
-#          type: "text"
-#          info:
-#            notes: "To indicate whether there is a HOLDING status for the zone. The zone label will be prefaced by the letter (H).  These are not common, and when used, a Holding Zone is most often applied to specific sites. Yes (Y) or No (N)"
-#        - source_name: "ZN_HOLDING_NO"
-#          target_name: "HOLDING_ID"
-#          type: "int"
-#          info:
-#            notes: "Holding Number if it exists."
-#        - source_name: "ZN_FRONTAGE"
-#          target_name: "FRONTAGE"
-#          type: "float"
-#          info:
-#            notes: "The required minimum Lot Frontage in the zone, and is a numeric value prefaced by the letter 'f' within a residential zone label. Unit = metres"
-#        - id: "ZN_AREA"
-#          type: "int"
-#          info:
-#            notes: "The required minimum Lot Area in the zone, and is a numeric value prefaced by the letter 'a' within a residential zone. Unit = square metres"
-#        - source_name: "ZN_UNIT_COUNT"
-#          target_name: "UNITS"
-#          type: "int"
-#          info:
-#            notes: "The permitted maximum number of Dwelling Units allowed on a lot in the zone, and is a numeric value prefaced by the letter 'u' in a residential zone."
-#        - source_name: "ZN_FSI_DENSITY"
-#          target_name: "DENSITY"
-#          type: "float"
-#          info:
-#            notes: "The permitted maximum Density in the zone by FSI (floor space index), and is a numeric value prefaced by the letter 'd' in residential zones."
-#        - source_name: "ZN_COVERAGE"
-#          target_name: "COVERAGE"
-#          type: "float"
-#          info:
-#            notes: "The permitted maximum percentage of a lot that can be covered by any part of any building or structure on or above the surface of the lot. Unit = % (percent)"
-#        - id: "FSI_TOTAL"
-#          type: "float"
-#          info:
-#            notes: "The permitted maximum FSI (floor space index) Total in the zone. It is a numeric value following the zone symbol."
-#        - source_name: "FSI_COMMERCIAL_USE"
-#          target_name: "PRCNT_COMM"
-#          type: "float"
-#          info:
-#            notes: "The permitted maximum FSI (floor space index) for Commercial Use in most mixed-use zones, and is a numeric value prefaced by letter 'c' in the zone label."
-#        - source_name: "FSI_RESIDENTIAL_USE"
-#          target_name: "PRCNT_RES"
-#          type: "float"
-#          info:
-#            notes: "The permitted maximum FSI (floor space index) for Residential Use in most mixed-use zones, and is a numeric value prefaced by the letter 'r' in the zone label."
-#        - source_name: "FSI_EMPLOYMENT_USE"
-#          target_name: "PRCNT_EMMP"
-#          type: "float"
-#          info:
-#            notes: "The permitted maximum FSI (floor space index) for Employment Uses in the zone, and is a numeric value prefaced by the letter 'e' in the zone label."
-#        - source_name: "FSI_OFFICE_USE"
-#          target_name: "PRCNT_OFFC"
-#          type: "float"
-#          info:
-#            notes: "The permitted maximum FSI (floor space index) for Office Uses in an Employment-Office zone, and is a numeric value prefaced by the letter 'o' in the zone label."
-#        - id: "ZN_EXCPTN"
-#          type: "text"
-#          info:
-#            notes: "This indicates whether a zone has an Exception. Yes (Y) or No (N)"
-#        - source_name: "ZN_EXCPTN_NO"
-#          target_name: "EXCPTN_NO"
-#          type: "int"
-#          info:
-#            notes: "This is the Exception Number for the zone if one exists.  The exception number is prefaced by the letter 'x' in the zone label.  Each zone has its own series of exception numbers, starting at 1, so the exception number must be read in conjunction with the respective zone symbol."
-#        - source_name: "STANDARDS_SET"
-#          target_name: "STAND_SET"
-#          type: "int"
-#          info:
-#            notes: "Set of standards referred to in the Commercial-Residential mixed use zone, based on three different design typologies.  The 'standard set' number is prefaced by the letters 'SS' in the zone label."
-#        - id: "ZN_STATUS"
-#          type: "int"
-#          info:
-#            notes: "Status of the Zone, primarily indicating whether the lands have been incorporated into By-law 569-2013 or not. 0-4 and 6 = In the By-law. 5 = Not Part of Zoning By-law 569-2013"
-#        - id: "ZN_STRING"
-#          type: "text"
-#          info:
-#            notes: "Complete label of the zone."
-#        - source_name: "ZN_AREA_UNIT"
-#          target_name: "AREA_UNITS"
-#          type: "float"
-#          info:
-#            notes: "This is also a type of density limit, indicating the required minimum lot area per dwelling unit on a lot in the zone. Unit = square metres"
-#        - source_name: "ZBL_CHAPTER"
-#          target_name: "ZBL_CHAPT"
-#          type: "text"
-#          info:
-#            notes: "By-law text chapter number"
-#        - source_name: "ZBL_SECTION"
-#          target_name: "ZBL_SECTN"
-#          type: "text"
-#          info:
-#            notes: "By-law text section number"
-#        - id: "ZBL_EXCPTN"
-#          type: "text"
-#          info:
-#            notes: "By-law text exception number"
-#        - id: "geometry"
-#          type: "text"
-#          info:
-#            notes: ""
-#    Zoning Height Overlay:
-#      agol: True
-#      format: geojson
-#      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/9
-#      attributes:
-#        - id: "HT_STORIES"
-#          type: "int"
-#          info:
-#            notes: "The permitted maximum Height, in metres.  A numeric value prefaced by the letters 'HT'. Unit = metres"
-#        - id: "HT_STRING"
-#          type: "text"
-#          info:
-#            notes: "The permitted maximum Height, in Storeys.  A numeric value prefaced by the letters 'ST'. Unit = Storeys, Negative values = 0"
-#        - source_name: "HT_HEIGHT"
-#          target_name: "HT_LABEL"
-#          type: "float"
-#          info:
-#            notes: "Height in metres and Storeys Example: HT 10.5, ST 3"
-#        - id: "geometry"
-#          type: "text"
-#          info:
-#            notes: ""
-#    Zoning Lot Coverage Overlay:
-#      agol: True
-#      format: geojson
-#      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/10
-#      attributes:
-#        - source_name: "ZN_COVERAGE"
-#          target_name: "PRCNT_CVER"
-#          type: "float"
-#          info:
-#            notes: "The permitted maximum percentage of a lot that can be covered by any part of any building or structure on or above the surface of the lot. Unit = % (percent)"
-#        - id: "geometry"
-#          type: "text"
-#          info:
-#            notes: ""
-#    Zoning Policy Area Overlay:
-#      agol: True
-#      format: geojson
-#      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/13
-#      attributes:
-#        - source_name: "POLICY_AREA"
-#          target_name: "POLICY_ID"
-#          type: "text"
-#          info:
-#            notes: "Policy Area"
-#        #- id: "ZN_EXCPTN"
-#        #  type: "text"
-#        #  info:
-#        #    notes: ""
-#        #- source_name: "ZN_EXCPTN_NO"
-#        #  target_name: "ZN_EXCPTN"
-#        #  type: "int"
-#        #  info:
-#        #    notes: ""
-#        - source_name: "LINK_TO_PARKINGRATE"
-#          target_name: "CHAPT_200"
-#          type: "text"
-#          info:
-#            notes: "Link to parking rate text"
-#        - source_name: "LINK_TO_EXCPTN"
-#          target_name: "EXCPTN_LK"
-#          type: "text"
-#          info:
-#            notes: "Link to parking exception text"
-#        - id: "geometry"
-#          type: "text"
-#          info:
-#            notes: ""
-#    Zoning Policy Road Overlay:
-#      agol: True
-#      format: geojson
-#      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/14
-#      attributes:
-#        - id: "ROAD_NAME"
-#          type: "text"
-#          info:
-#            notes: "Road Name"
-#        - id: "geometry"
-#          type: "text"
-#          info:
-#            notes: ""
-#    Zoning Rooming House Overlay:
-#      agol: True
-#      format: geojson
-#      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/19
-#      attributes:
-#        - source_name: "RMG_HS_AREA"
-#          target_name: "RMH_AREA"
-#          type: "text"
-#          info:
-#            notes: "Rooming House Area"
-#        - id: "RMG_HS_NO"
-#          type: "int"
-#          info:
-#            notes: "Rooming House Number.  A sub-set of a Rooming House Area."
-#        - id: "RMG_STRING"
-#          type: "text"
-#          info:
-#            notes: "Rooming House Area + Number. Example: B1"
-#        - source_name: "BYLAW_SECTIONLINK"
-#          target_name: "CHAP150_25"
-#          type: "text"
-#          info:
-#            notes: "Link to Bylaw section."
-#        - id: "geometry"
-#          type: "text"
-#          info:
-#            notes: ""
+    # resource name
+    Zoning Area:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/3
+      attributes:
+        - source_name: "ZN_LU_CATEGORY"
+          target_name: "GEN_ZONE"
+          type: "int"
+          info:
+            notes: "The land use category of the lands within the zone boundary. Each 'zone category' has its own Chapter in the text of By-law 569-2013."
+        - id: "ZN_ZONE"
+          type: "text"
+          info:
+            notes: |
+              The land use category of the lands within the zone boundary. Each 'zone category' has its own Chapter in the text of By-law 569-2013. Zoned destination of the zone limited by GEN_ZONE. 
+              0 = Residential
+              1 = Open Space
+              2 = Utility and Transportation
+              4 = Employment Industrial
+              5 = Institutional
+              6 = Commercial Residential Employment
+              101 = Residential Apartment
+              201 = Commercial
+              202 = Commercial Residential
+        - id: "ZN_HOLDING"
+          type: "text"
+          info:
+            notes: "To indicate whether there is a HOLDING status for the zone. The zone label will be prefaced by the letter (H).  These are not common, and when used, a Holding Zone is most often applied to specific sites. Yes (Y) or No (N)"
+        - source_name: "ZN_HOLDING_NO"
+          target_name: "HOLDING_ID"
+          type: "int"
+          info:
+            notes: "Holding Number if it exists."
+        - source_name: "ZN_FRONTAGE"
+          target_name: "FRONTAGE"
+          type: "float"
+          info:
+            notes: "The required minimum Lot Frontage in the zone, and is a numeric value prefaced by the letter 'f' within a residential zone label. Unit = metres"
+        - id: "ZN_AREA"
+          type: "int"
+          info:
+            notes: "The required minimum Lot Area in the zone, and is a numeric value prefaced by the letter 'a' within a residential zone. Unit = square metres"
+        - source_name: "ZN_UNIT_COUNT"
+          target_name: "UNITS"
+          type: "int"
+          info:
+            notes: "The permitted maximum number of Dwelling Units allowed on a lot in the zone, and is a numeric value prefaced by the letter 'u' in a residential zone."
+        - source_name: "ZN_FSI_DENSITY"
+          target_name: "DENSITY"
+          type: "float"
+          info:
+            notes: "The permitted maximum Density in the zone by FSI (floor space index), and is a numeric value prefaced by the letter 'd' in residential zones."
+        - source_name: "ZN_COVERAGE"
+          target_name: "COVERAGE"
+          type: "float"
+          info:
+            notes: "The permitted maximum percentage of a lot that can be covered by any part of any building or structure on or above the surface of the lot. Unit = % (percent)"
+        - id: "FSI_TOTAL"
+          type: "float"
+          info:
+            notes: "The permitted maximum FSI (floor space index) Total in the zone. It is a numeric value following the zone symbol."
+        - source_name: "FSI_COMMERCIAL_USE"
+          target_name: "PRCNT_COMM"
+          type: "float"
+          info:
+            notes: "The permitted maximum FSI (floor space index) for Commercial Use in most mixed-use zones, and is a numeric value prefaced by letter 'c' in the zone label."
+        - source_name: "FSI_RESIDENTIAL_USE"
+          target_name: "PRCNT_RES"
+          type: "float"
+          info:
+            notes: "The permitted maximum FSI (floor space index) for Residential Use in most mixed-use zones, and is a numeric value prefaced by the letter 'r' in the zone label."
+        - source_name: "FSI_EMPLOYMENT_USE"
+          target_name: "PRCNT_EMMP"
+          type: "float"
+          info:
+            notes: "The permitted maximum FSI (floor space index) for Employment Uses in the zone, and is a numeric value prefaced by the letter 'e' in the zone label."
+        - source_name: "FSI_OFFICE_USE"
+          target_name: "PRCNT_OFFC"
+          type: "float"
+          info:
+            notes: "The permitted maximum FSI (floor space index) for Office Uses in an Employment-Office zone, and is a numeric value prefaced by the letter 'o' in the zone label."
+        - id: "ZN_EXCPTN"
+          type: "text"
+          info:
+            notes: "This indicates whether a zone has an Exception. Yes (Y) or No (N)"
+        - source_name: "ZN_EXCPTN_NO"
+          target_name: "EXCPTN_NO"
+          type: "int"
+          info:
+            notes: "This is the Exception Number for the zone if one exists.  The exception number is prefaced by the letter 'x' in the zone label.  Each zone has its own series of exception numbers, starting at 1, so the exception number must be read in conjunction with the respective zone symbol."
+        - source_name: "STANDARDS_SET"
+          target_name: "STAND_SET"
+          type: "int"
+          info:
+            notes: "Set of standards referred to in the Commercial-Residential mixed use zone, based on three different design typologies.  The 'standard set' number is prefaced by the letters 'SS' in the zone label."
+        - id: "ZN_STATUS"
+          type: "int"
+          info:
+            notes: "Status of the Zone, primarily indicating whether the lands have been incorporated into By-law 569-2013 or not. 0-4 and 6 = In the By-law. 5 = Not Part of Zoning By-law 569-2013"
+        - id: "ZN_STRING"
+          type: "text"
+          info:
+            notes: "Complete label of the zone."
+        - source_name: "ZN_AREA_UNIT"
+          target_name: "AREA_UNITS"
+          type: "float"
+          info:
+            notes: "This is also a type of density limit, indicating the required minimum lot area per dwelling unit on a lot in the zone. Unit = square metres"
+        - source_name: "ZBL_CHAPTER"
+          target_name: "ZBL_CHAPT"
+          type: "text"
+          info:
+            notes: "By-law text chapter number"
+        - source_name: "ZBL_SECTION"
+          target_name: "ZBL_SECTN"
+          type: "text"
+          info:
+            notes: "By-law text section number"
+        - id: "ZBL_EXCPTN"
+          type: "text"
+          info:
+            notes: "By-law text exception number"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Zoning Height Overlay:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/9
+      attributes:
+        - id: "HT_STORIES"
+          type: "int"
+          info:
+            notes: "The permitted maximum Height, in metres.  A numeric value prefaced by the letters 'HT'. Unit = metres"
+        - id: "HT_STRING"
+          type: "text"
+          info:
+            notes: "The permitted maximum Height, in Storeys.  A numeric value prefaced by the letters 'ST'. Unit = Storeys, Negative values = 0"
+        - source_name: "HT_HEIGHT"
+          target_name: "HT_LABEL"
+          type: "float"
+          info:
+            notes: "Height in metres and Storeys Example: HT 10.5, ST 3"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Zoning Lot Coverage Overlay:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/10
+      attributes:
+        - source_name: "ZN_COVERAGE"
+          target_name: "PRCNT_CVER"
+          type: "float"
+          info:
+            notes: "The permitted maximum percentage of a lot that can be covered by any part of any building or structure on or above the surface of the lot. Unit = % (percent)"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Zoning Policy Area Overlay:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/13
+      attributes:
+        - source_name: "POLICY_AREA"
+          target_name: "POLICY_ID"
+          type: "text"
+          info:
+            notes: "Policy Area"
+        #- id: "ZN_EXCPTN"
+        #  type: "text"
+        #  info:
+        #    notes: ""
+        #- source_name: "ZN_EXCPTN_NO"
+        #  target_name: "ZN_EXCPTN"
+        #  type: "int"
+        #  info:
+        #    notes: ""
+        - source_name: "LINK_TO_PARKINGRATE"
+          target_name: "CHAPT_200"
+          type: "text"
+          info:
+            notes: "Link to parking rate text"
+        - source_name: "LINK_TO_EXCPTN"
+          target_name: "EXCPTN_LK"
+          type: "text"
+          info:
+            notes: "Link to parking exception text"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Zoning Policy Road Overlay:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/14
+      attributes:
+        - id: "ROAD_NAME"
+          type: "text"
+          info:
+            notes: "Road Name"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    Zoning Rooming House Overlay:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/19
+      attributes:
+        - source_name: "RMG_HS_AREA"
+          target_name: "RMH_AREA"
+          type: "text"
+          info:
+            notes: "Rooming House Area"
+        - id: "RMG_HS_NO"
+          type: "int"
+          info:
+            notes: "Rooming House Number.  A sub-set of a Rooming House Area."
+        - id: "RMG_STRING"
+          type: "text"
+          info:
+            notes: "Rooming House Area + Number. Example: B1"
+        - source_name: "BYLAW_SECTIONLINK"
+          target_name: "CHAP150_25"
+          type: "text"
+          info:
+            notes: "Link to Bylaw section."
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
     Zoning Building Setback Overlay:
       agol: True
       format: geojson
