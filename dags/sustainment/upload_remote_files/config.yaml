@@ -426,7 +426,7 @@ annual-energy-consumption:
 basement-flooding-by-ward:
   basement-flooding-by-ward:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.water/basement-flooding-by-ward/Basement-flooding-by-ward_Jun 30 2022.xlsx
+    url: http://opendata.toronto.ca/toronto.water/basement-flooding-by-ward/Basaement Flooding by Ward Open Data_Jun 30 2023.xlsx
 freedom-of-information-requests-summary:
   foi-request-summary-2011:
     format: xls
