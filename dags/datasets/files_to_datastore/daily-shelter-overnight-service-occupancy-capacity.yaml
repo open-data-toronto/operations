@@ -129,9 +129,10 @@ daily-shelter-overnight-service-occupancy-capacity:
             notes: |
               Indicates whether the program is part of the base shelter and overnight services system, or is part of a temporary response program.
                 - **Base Shelter and Overnight Services System**: Programs that are intended to be regular, year-round programs.
-                - **Winter Response**: Programs that are intended to be exclusively dedicated to the provision of additional spaces under winter services plans. Winter service planning may also add additional capacity to existing programs classified in other program areas.
+                - **Base Program - Refugee**: Programs that are intended to be year-round programs that serve refugee and asylum claimant families and individuals
                 - **Temporary Refugee Response**: Programs that are intended to create spaces in the overnight services system in order to support refugee and asylum claimant families and individuals.
-                - **COVID-19 Response**: Programs that are intended to create spaces in the overnight services system in order to support improved physical distancing during the COVID-19 pandemic.
+                - **COVID-19 Response**: Programs that are intended to create spaces in the overnight services system in order to support improved physical distancing during the COVID-19 pandemic.                
+                - **Winter Response**: Programs that are intended to be exclusively dedicated to the provision of additional spaces under winter services plans. Winter service planning may also add additional capacity to existing programs classified in other program areas.                
         - id: "SERVICE_USER_COUNT"
           type: "text"
           info:
