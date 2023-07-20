@@ -1,17 +1,9 @@
 """
-    Creates a yaml config for CoT OD Airflow ETL from an OD Jira Ticket
-    Assign Jira ticket Id using Configuration JSON before triggering DAG,
+    This DAG creates a yaml config file for CoT OD Airflow ETL from an OD Jira Ticket,
+    enables automation from data owner requests intake to create data pipelines, finally
+    publish dataset to open data portal (https://open.toronto.ca), more info can be found
+    at airflow UI DAG Docs.
 
-    e.g. {"jira_ticket_id": ["DTSD-876", "DTSD-391"]},
-
-    please note string need to be double quoted.
-
-    Please make sure AUTHENTICATED before sending Jira API calls.
-
-    For "Publish Dataset" request, generate a yaml file based on
-    Jira Ticket Input;
-    For "Update Dataset" request, generate a yaml based on
-    existing package's metadata.
 """
 
 import requests
@@ -19,12 +11,15 @@ import json
 import logging
 import yaml
 import os
+import pandas as pd
+import io
+
 from datetime import datetime
 from pathlib import Path
+from bs4 import BeautifulSoup
 
 from airflow import DAG
 from airflow.models import Variable
-
 from utils import airflow_utils
 from utils_operators.slack_operators import (
     GenericSlackOperator,
@@ -51,6 +46,9 @@ jira_issue_transitions_mapping = {
     "Waiting on Division": "21",
     "Closed": "31",
     "Waiting on Open Data": "51",
+    "Published": "61",
+    "Retired": "71",
+    "Staged for Review": "81",
 }
 
 # Create a mapping between yaml fields and jira fields
@@ -67,6 +65,7 @@ mapping = {
     "information_url": "customfield_11861",
     "excerpt": "customfield_12244",
     "limitations": "customfield_12252",
+    "data_url": "customfield_12279",
 }
 
 YAML_METADATA = {  # DAG info
@@ -95,6 +94,37 @@ PACKAGE_METADATA = [
     "notes",
 ]
 
+# AGOL and CKAN data type mapping
+AGOL_CKAN_TYPE_MAP = {
+    "sqlTypeFloat": "float",
+    "sqlTypeNVarchar": "text",
+    "sqlTypeInteger": "int",
+    "sqlTypeOther": "text",
+    "sqlTypeTimestamp2": "timestamp",
+    "sqlTypeDouble": "float",
+    "esriFieldTypeString": "text",
+    "esriFieldTypeDate": "timestamp",
+    "esriFieldTypeInteger": "int",
+    "esriFieldTypeOID": "int",
+    "esriFieldTypeDouble": "float",
+    "esriFieldTypeSmallInteger": "int",
+    "esriFieldTypeSingle": "text",
+    "esriFieldTypeGlobalID": "int",
+}
+
+DELETE_FIELDS = [
+    "longitude",
+    "latitude",
+    "shape__length",
+    "shape__area",
+    "lat",
+    "long",
+    "lon",
+    "x",
+    "y",
+    "index_",
+]
+
 # init DAG
 default_args = airflow_utils.get_default_args(
     {
@@ -116,6 +146,34 @@ with DAG(
     schedule_interval="@once",
     catchup=False,
 ) as dag:
+    # write some DAG-level documentation to be visible on the Airflow UI
+    dag.doc_md = """
+    ### Summary
+    This DAG creates a yaml config file for CoT OD Airflow ETL from an OD Jira Ticket,
+    enables automation from client requests intake to create data pipelines, finally
+    publish dataset to open data portal (https://open.toronto.ca)
+
+    ### Notes
+    - Assign Jira ticket Id using Configuration JSON before triggering DAG, 
+     e.g. {"jira_ticket_id": ["DTSD-876", "DTSD-391"]}.
+
+    - Please note string need to be double quoted.
+
+    - Please make sure AUTHENTICATED before sending Jira API calls.
+
+    - For "Publish New Open Dataset Page" request, generate a yaml file based on
+    Jira Ticket Input, if agol endpoint or data dictionary attachment provided,
+    attributes section will also be generated.
+    
+    - For "Update Existing Open Dataset Page" request, generate a yaml based on
+    existing package's metadata.
+    
+    - Please note currently dag can only generate attributes based on data dictionary
+     attachment whose name is "ATPF-v4.xlsx".
+
+    ### Contact
+    jira-to-yaml automation inquiries should go to Yanan.Zhang@toronto.ca
+    """
 
     def get_jira_ticket_id(**kwargs):
         # get jira ticket ids from airflow dag configuration
@@ -131,8 +189,7 @@ with DAG(
 
     def validate_jira_ticket(**kwargs):
         # make sure input jira ticket id exists
-        input_ticket_ids = kwargs.pop("ti").\
-            xcom_pull(task_ids="get_jira_ticket_id")[
+        input_ticket_ids = kwargs.pop("ti").xcom_pull(task_ids="get_jira_ticket_id")[
             "jira_ticket_id"
         ]
 
@@ -144,86 +201,181 @@ with DAG(
             if ticket not in ticket_pool:
                 message = f"Jira Ticket {ticket} is not valid. Please double check."
                 raise Exception(message)
+        return ticket_pool
 
-    def grab_issue_content(issue):
+    # Scrape attributes from GCC managed ArcGIS Online Endpoint
+    def scrape_content_from_arcgis(url):
+        page = requests.get(url)
 
-        fields = issue["fields"]
+        # parse html content
+        soup = BeautifulSoup(page.content, "html.parser")
+        fields = list(soup.find_all("ul")[4])
 
-        # check request type
-        request_type = fields["customfield_10502"]["requestType"]["name"]
-        if request_type == "Publish Dataset":
-            logging.info(
-                ("This is a request for publishing dataset," +
-                 "generating yaml file!")
+        # collect attributes
+        attributes = []
+        for field in fields:
+            if field != "\n":
+                field_content = field.get_text()
+                id = field_content.split(" ")[0]
+                type = field_content.split("type: ")[1].split(",")[0]
+                # remove redudent geometry fields
+                if id.lower() not in DELETE_FIELDS:
+                    attributes.append(
+                        {
+                            "id": id,
+                            "type": AGOL_CKAN_TYPE_MAP[type],
+                            "info": {"notes": ""},
+                        }
+                    )
+
+        attributes.append({"id": "geometry", "type": "text", "info": {"notes": ""}})
+        return attributes
+
+    def get_attributes_from_attachment(attachment_url):
+        # Authentication needed to get attachment's content
+        response = requests.get(attachment_url, headers=headers)
+        with io.BytesIO(response.content) as file:
+            df = pd.io.excel.read_excel(file, sheet_name="Content")
+
+        # Grab columns which will be used in yaml attributes section
+        columns = [
+            "Desired Column Name on Open Data",
+            "Data Type",
+            "Business Description",
+        ]
+
+        # Read from attachment ATPF, user input start from row index 8
+        df = df.loc[8:, columns].reset_index(drop=True)
+        attributes = []
+
+        for row in df.values.tolist():
+            attributes.append(
+                {
+                    "id": row[0],
+                    "type": row[1],
+                    "info": {"notes": row[2]},
+                }
             )
 
-            # assign relevant metadata from jira to a dict
-            issue_metadata = {
-                "jira_issue_id": issue["key"],
-                "jira_issue_url": issue["self"],
-                "schedule": "@once",
-                "dag_owner_name": fields["assignee"]["displayName"]
-                if fields["assignee"]
-                else None,
-                "dag_owner_email": fields["assignee"]["emailAddress"]
-                if fields["assignee"]
-                else None,
-                "title": fields["summary"],
-                "date_published": datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"),
-                "dataset_category": "Map"
-                if fields[mapping["dataset_category"]]
-                and fields[mapping["dataset_category"]]["value"] == "Yes"
-                else None,
-                "refresh_rate": fields[mapping["refresh_rate"]]["value"]
-                if fields[mapping["refresh_rate"]]
-                else None,
-                "owner_division": fields[mapping["owner_division"]][0]["value"]
-                if fields[mapping["owner_division"]]
-                else None,
-                "owner_section": fields[mapping["owner_section"]]
-                if fields[mapping["owner_section"]]
-                else None,
-                "owner_unit": fields[mapping["owner_unit"]]
-                if fields[mapping["owner_unit"]]
-                else None,
-                "owner_email": fields[mapping["owner_email"]]
-                if fields[mapping["owner_email"]]
-                else None,
-                "civic_issues": fields[mapping["civic_issues"]][0]["value"]
-                if fields[mapping["civic_issues"]]
-                else None,
-                "topics": [topic["value"] for topic in fields[mapping["topics"]]]
-                if fields[mapping["topics"]]
-                else None,
-                "tags": [
-                    {"name": item, "vocabulary_id": None}
-                    for item in fields[mapping["tags"]]
-                ]
-                if fields[mapping["tags"]]
-                else None,
-                "information_url": fields[mapping["information_url"]]
-                if fields[mapping["information_url"]]
-                else None,
-                "excerpt": fields[mapping["excerpt"]]["content"][0]["content"][0][
-                    "text"
-                ]
-                if fields[mapping["excerpt"]]
-                else None,
-                "limitations": fields[mapping["limitations"]]["content"][0]["content"][
-                    0
-                ]["text"]
-                if fields[mapping["limitations"]]
-                and (fields[mapping["limitations"]]["content"])
-                else None,
-                "notes": fields["description"]["content"][0]["content"][0]["text"]
-                if fields["description"]
-                else None,
-                "resources": {},
-            }
-            print(issue_metadata)
-            package_id = fields["summary"].lower().replace("/", " ").replace(" ", "-")
+        return attributes
 
-            return {package_id: issue_metadata}
+    def grab_issue_content(issue):
+        fields = issue["fields"]
+
+        # location where data stored, could be an AGOL or NAS endpoint
+        data_url = (
+            fields[mapping["data_url"]]["content"][0]["content"][0]["text"]
+            if fields[mapping["data_url"]]
+            else None
+        )
+
+        # check if dataset contains geographic coordinates
+        geospatial = (
+            True
+            if fields[mapping["dataset_category"]]
+            and fields[mapping["dataset_category"]]["value"] == "Yes"
+            else False
+        )
+
+        attributes = []
+        if data_url and geospatial:
+            logging.info(data_url)
+            attributes = scrape_content_from_arcgis(data_url)
+            resource_content = {
+                "format": "geojson",
+                "agol": True,
+                "url": data_url,
+                "attributes": attributes,
+            }
+            resource = {fields["summary"]: resource_content}
+
+        if fields["attachment"]:
+            attachment_url = fields["attachment"][0]["content"]
+            attachment_name = fields["attachment"][0]["filename"]
+            logging.info(f"Attachment name: {attachment_name}, url: {attachment_url}")
+
+            # make sure the attachment file name consistent
+            if attachment_name == "ATPF-v4.xlsx":
+                logging.info("Start getting attributes from attachement.")
+                attributes = get_attributes_from_attachment(attachment_url)
+            else:
+                logging.warning(
+                    "Unexpected Attachment File Name and Structure!" +
+                    " Skipping generating attributes."
+                )
+            resource_content = {
+                "format": "",
+                "url": data_url,
+                "attributes": attributes,
+            }
+            resource = {fields["summary"]: resource_content}
+
+        else:
+            resource = {}
+
+        # assign relevant metadata from jira to a dict
+        issue_metadata = {
+            "jira_issue_id": issue["key"],
+            "jira_issue_url": issue["self"],
+            "schedule": "@once",
+            "dag_owner_name": fields["assignee"]["displayName"]
+            if fields["assignee"]
+            else None,
+            "dag_owner_email": fields["assignee"]["emailAddress"]
+            if fields["assignee"]
+            else None,
+            "title": fields["summary"],
+            "date_published": datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f"),
+            "dataset_category": "Map" if geospatial else "Table",
+            "refresh_rate": fields[mapping["refresh_rate"]]["value"]
+            if fields[mapping["refresh_rate"]]
+            else None,
+            "owner_division": fields[mapping["owner_division"]][0]["value"].strip()
+            if fields[mapping["owner_division"]]
+            else None,
+            "owner_section": fields[mapping["owner_section"]].strip()
+            if fields[mapping["owner_section"]]
+            else None,
+            "owner_unit": fields[mapping["owner_unit"]].strip()
+            if fields[mapping["owner_unit"]]
+            else None,
+            "owner_email": fields[mapping["owner_email"]].strip()
+            if fields[mapping["owner_email"]]
+            else None,
+            "civic_issues": [
+                civic_issue["value"] for civic_issue in fields[mapping["civic_issues"]]
+            ]
+            if fields[mapping["civic_issues"]]
+            else None,
+            "topics": [topic["value"] for topic in fields[mapping["topics"]]]
+            if fields[mapping["topics"]]
+            else None,
+            "tags": [
+                {"name": item, "vocabulary_id": None}
+                for item in fields[mapping["tags"]]
+            ]
+            if fields[mapping["tags"]]
+            else None,
+            "information_url": fields[mapping["information_url"]]
+            if fields[mapping["information_url"]]
+            else None,
+            "excerpt": fields[mapping["excerpt"]]["content"][0]["content"][0]["text"]
+            if fields[mapping["excerpt"]]
+            else None,
+            "limitations": fields[mapping["limitations"]]["content"][0]["content"][0][
+                "text"
+            ]
+            if fields[mapping["limitations"]]
+            and (fields[mapping["limitations"]]["content"])
+            else None,
+            "notes": fields["description"]["content"][0]["content"][0]["text"]
+            if fields["description"]
+            else None,
+            "resources": resource,
+        }
+        package_id = fields["summary"].lower().replace("/", " ").replace(" ", "-")
+
+        return {package_id: issue_metadata}
 
     def write_to_yaml(content, filename):
         """Receives a json input and writes it to a YAML file"""
@@ -244,14 +396,10 @@ with DAG(
             + "/transitions"
         )
         payload = json.dumps(
-            {"transition": {
-                "id": jira_issue_transitions_mapping["In Progress"]
-            }}
+            {"transition": {"id": jira_issue_transitions_mapping["In Progress"]}}
         )
 
-        headers = {
-                    "Authorization": JIRA_API_KEY,
-                    "Content-Type": "application/json"}
+        headers = {"Authorization": JIRA_API_KEY, "Content-Type": "application/json"}
 
         response = requests.request("POST", url, headers=headers, data=payload)
         logging.info(f"Status: {response.status_code}, Ticket has been processed.")
@@ -282,26 +430,29 @@ with DAG(
         return metadata
 
     def get_all_jira_issues(**kwargs):
-        """Generate all yamls for "Publish Dataset" Jira issues"""
+        """Generate all yamls for "Publish New Open Dataset Page" Jira issues"""
+        ti = kwargs.pop("ti")
+        input_ticket_ids = ti.xcom_pull(task_ids="get_jira_ticket_id")["jira_ticket_id"]
+        logging.info(f"Input Jira Ticket Ids: {input_ticket_ids}")
 
-        input_ticket_ids = kwargs.pop("ti").xcom_pull(task_ids="get_jira_ticket_id")[
-            "jira_ticket_id"
-        ]
-        logging.info(f"Jira Ticket Ids: {input_ticket_ids}")
-
-        # get all jira issues is and request type
-        issues = json.loads(requests.get(JIRA_URL, headers=headers).content)["issues"]
+        # get jira issues and request type
+        jira_issue_pool = ti.xcom_pull(task_ids="validate_jira_ticket")
         output_list = {}
 
-        for issue in issues:
-            if issue["key"] in input_ticket_ids:
-                request_type = issue["fields"]["customfield_10502"][
-                    "requestType"]["name"]
+        for jira_issue_id in jira_issue_pool:
+            if jira_issue_id in input_ticket_ids:
+                # get issue content
+                url = "https://toronto.atlassian.net/rest/api/3/issue/" + jira_issue_id
+
+                issue = json.loads(requests.get(url, headers=headers).content)
+                request_type = issue["fields"]["customfield_10502"]["requestType"][
+                    "name"
+                ]
                 logging.info(
-                    f"Jira Ticket Id: {issue['key']} and Request Type: {request_type}"
+                    f"Jira Ticket Id: {jira_issue_id} and Request Type: {request_type}"
                 )
 
-                if request_type == "Publish Dataset":
+                if request_type == "Publish New Open Dataset Page":
                     issue_content = grab_issue_content(issue)
                     filename = "".join(list(issue_content.keys())) + ".yaml"
                     # write data to yaml file
@@ -311,7 +462,7 @@ with DAG(
                     output_list[issue["key"]] = (
                         "Publish Dataset :done_green:" + filename
                     )
-                if request_type == "Update Dataset":
+                if request_type == "Update Existing Open Dataset Page":
                     package_name = (
                         issue["fields"]["summary"].split("/dataset/")[1].strip("//")
                     )
