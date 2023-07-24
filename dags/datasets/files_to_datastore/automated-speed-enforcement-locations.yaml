@@ -1,6 +1,6 @@
 # This file is migrated from NiFi
 automated-speed-enforcement-locations:
-  schedule: "0 0 1 * *"
+  schedule: "5 2 * * *"
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
   title: Automated Speed Enforcement Locations
