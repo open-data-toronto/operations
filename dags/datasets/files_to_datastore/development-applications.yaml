@@ -1,5 +1,5 @@
 development-applications:
-  schedule: '@once'
+  schedule: '20 7 * * *'
   dag_owner_name: 'Mackenzie'
   dag_owner_email: 'mackenzie.nichols4@toronto.ca'
   title: Development Applications

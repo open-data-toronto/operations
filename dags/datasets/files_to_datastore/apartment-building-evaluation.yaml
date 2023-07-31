@@ -1,0 +1,311 @@
+apartment-building-evaluation:
+  schedule: '40 5 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Apartment Building Evaluation
+  date_published: '2019-08-23 16:17:05.131285'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: Municipal Licensing & Standards
+  owner_section: Policy & Strategic Support
+  owner_unit: null
+  owner_email: RentSafeTO@toronto.ca
+  civic_issues: Affordable housing,Poverty reduction,Fiscal responsibility
+  topics: Locations and mapping,City government,Business,Development and infrastructure
+  tags: []
+  information_url: https://www.toronto.ca/community-people/housing-shelter/rental-housing-standards/apartment-building-standards/
+  excerpt: 'This dataset contains building evaluation data for rental buildings that
+    are registered in the City''s RentSafeTO: Apartment Building Standards program.'
+  limitations: null
+  notes: | 
+    RentSafeTO: Apartment Building Standards is a bylaw enforcement program established in 2017 to ensure that owners and operators of apartment buildings with three or more storeys or 10 or more units comply with building maintenance standards. Learn more about [RentSafeTO](https://www.toronto.ca/community-people/housing-shelter/rental-housing-tenant-information/rental-housing-standards/apartment-building-standards/rentsafeto-for-tenants/).
+
+    This dataset contains building evaluation scores for buildings registered with RentSafeTO.  During evaluations, Bylaw Enforcement Officers inspect common areas, mechanical and security systems, parking and exterior grounds.
+
+    In 2023, RentsafeTO updated its evaluation process.   Buildings must undergo evaluation at least once every two years, increasing the number of evaluation categories to 50 and allocating a weight to the category.
+
+    Each category item is inspected and assigned a score from one to three with one being the lowest and three being the highest. At times, an item may be assigned a score of 0 if it cannot be evaluated due to an obstruction or refusal to inspect. Additionally, if an item is not applicable to the building at the time of evaluation, the score will show as blank in the dataset.
+
+    To download data from building evaluations before 2023, please download “Pre-2023 Apartment Building Evaluations" and “Apartment Building Evaluations since 2023” to download data from building evaluations from 2023 and beyond.
+
+    Learn more about [RentSafeTO: Evaluation Tool – City of Toronto](https://www.toronto.ca/community-people/housing-shelter/rental-housing-tenant-information/rental-housing-standards/apartment-building-standards/rentsafeto-evaluation-tool/).
+
+  resources:
+    Apartment Building Evaluations 2023 - current:
+      format: csv
+      url: http://opendata.toronto.ca/municipal.licensing.standards/apartment-building-evaluation/apartment-building-evaluation.csv
+      attributes:
+      - id: RSN
+        type: text
+        info:
+          notes: "This is the ID number for a building. The registration ID can be used to identify information pertaining to buildings in different RentSafeTO Open Data Sets."
+      - id: YEAR REGISTERED
+        type: text
+        info:
+          notes: "This is the year that the building first registered with RentSafeTO."
+      - id: YEAR BUILT
+        type: int
+        info:
+          notes: "This is the year that the building was built in. Information is provided by the Building Owners/Managers."
+      - id: YEAR EVALUATED
+        type: int
+        info:
+          notes: "This represents the year of the building evaluation scores."
+      - id: PROPERTY TYPE
+        type: text
+        info:
+          notes: "This field informs users of whether a building is owed privately, by Toronto Community Housing Corporation (TCHC) or another assisted, social or supportive housing provider."
+      - id: WARD
+        type: text
+        info:
+          notes: "This is the ward that the building is located in. All data is provided based on the 25-ward system."      
+      - id: WARDNAME
+        type: text
+        info:
+          notes: "This is the name of the ward"
+      - id: SITE ADDRESS
+        type: text
+        info:
+          notes: "This is the building address."      
+      - id: CONFIRMED STOREYS
+        type: text
+        info:
+          notes: "This is the number of storeys in a building."
+      - id: CONFIRMED UNITS
+        type: text
+        info:
+          notes: "This is the number of units in a building."
+      - id: EVALUATION COMPLETED ON
+        type: date
+        format: "%Y/%m/%d"
+        info:
+          notes: "This is the date the evaluation was conducted on."
+      - id: SCORE
+        type: text
+        info:
+          notes: "This is the proactive weighted score of the building. This weighted score is a result of a building evaluation; scheduled every two years. "      
+      - id: NO OF AREAS EVALUATED
+        type: int
+        info:
+          notes: "This is the number of items that were evaluated during a single evaluation."
+      - id: NUMBERING OF PROPERTY
+        type: text
+        info:
+          notes: "Appropriate size and visibility of property numbering. A property number is the street number of the property displayed on the apartment building or a sign on the property."                        
+      - id: EXTERIOR GROUNDS
+        type: text
+        info:
+          notes: "Maintenance, cleanliness, landscaping (weeds, trees, foliage and turf grass), water drainage, and appropriate lighting (light posts and fixtures) on all exterior grounds. Exterior grounds comprise the area between the outer building façade and the property line. However, a public sidewalk is not part of the exterior grounds."
+      - id: FENCING
+        type: text
+        info:
+          notes: "Maintenance and materials (permitted material types) of all fencing within the building's property. Fencing is a barrier, railing, or other upright structure, enclosing an apartment building, or area of an apartment building."
+      - id: RETAINING WALLS
+        type: text
+        info:
+          notes: "Maintenance and safety of all retaining walls. A retaining wall is a wall or similar structure built to hold back, confine, or sustain the pressure from a bank of earth/soil, loose stone or fill material separating two grade levels."
+      - id: CATCH BASINS / STORM DRAINAGE
+        type: text
+        info:
+          notes: " Ponding, obstruction, damage or missing covers from all catch basins and storm drainages. A catch basin is located at the entrance of a sewer designed to prevent obstructive material from entering and blocking the sewer. A storm drainage is designed to drain excess rain and ground water from surfaces such as paved streets, car parks, parking lots, footpaths, sidewalks, and roofs."
+      - id: BUILDING EXTERIOR
+        type: text
+        info:
+          notes: "Maintenance and safety of the building's exterior walls (brick, lamination and paint), flashing (to prevent passage of water), pipes, attachments and balcony slabs (floor of a balcony)."
+      - id: BALCONY GUARDS
+        type: text
+        info:
+          notes: "Maintenance and safety of all balcony guards. A balcony guard is a protective barrier around openings to prevent accidental falls from one level to another."
+      - id: WINDOWS
+        type: text
+        info:
+          notes: "Maintenance of all windows including air conditioning, intact safety devices and window screens."
+      - id: EXT. RECEPTACLE STORAGE AREA
+        type: text
+        info:
+          notes: "Maintenance, cleanliness, supply of bins and proper screening of waste in all exterior receptacle storage areas. An exterior receptacle storage area is a space outside the apartment building where garbage is stored and collected."
+      - id: EXTERIOR WALKWAYS
+        type: text
+        info:
+          notes: "Maintenance (including handrails and/or guards), cleanliness, drainage, and safety (lighting, trip hazards) of all walkways located on the exterior of the building."
+      - id: CLOTHING DROP BOXES
+        type: text
+        info:
+          notes: "Clothing drop boxes must have the name of the owner/operator, have a permit, be in a state of good repair, located in a well-lit area, and within 3m of a driveway or side property line. A clothing drop box is an outdoor receptacle used for the purpose of collecting donated clothing."
+      - id: ACCESSORY BUILDINGS
+        type: text
+        info:
+          notes: "Constructed and maintained with suitable and uniform materials, kept in good repair, free from hazards, and protected by paint, preservatives or other weather resistant material. An accessory building is an additional building or structure, not used for human habitation, located on the same lot as the main building (excludes fences)."
+      - id: INTERCOM
+        type: text
+        info:
+          notes: "Maintenance (including updated information) and operability of all intercoms within the building. An intercom provides a means for multiple tenants to communicate with a front door, lobby or gate. They are often found at the entrance of a building."
+      - id: EMERGENCY CONTACT SIGN
+        type: text
+        info:
+          notes: "A sign that indicates the current name, address and telephone number of the owner, manager or other person responsible for the property, and the name and telephone number of the authorized person to contact in the case of an emergency on a twenty-four-hour basis."
+      - id: LOBBY - WALLS AND CEILING
+        type: text
+        info:
+          notes: "Maintenance and safety (including lighting) of all walls (tile, baseboards, paint, finishes) and ceilings of the lobby."
+      - id: LOBBY FLOORS
+        type: text
+        info:
+          notes: "Maintenance and safety (hazards) of the lobby floors. A lobby is a room providing a space out of which one or more other rooms or corridors lead, typically one near the entrance of an apartment building."
+      - id: LAUNDRY ROOM
+        type: text
+        info:
+          notes: "Maintenance, operability, and lighting of all laundry rooms. A laundry room is a common-area room where residents can wash and dry clothes and other fabrics. Typically, they are coin- or card-operated."
+      - id: INT. RECEPTACLE STORAGE AREA
+        type: text
+        info:
+          notes: "Maintenance and cleanliness of interior receptacle storage areas/rooms. An interior receptacle storage area is an area inside the apartment building that stores garbage/waste, garbage compressors, waste separation bins, etc."
+      - id: MAIL RECEPTACLES
+        type: text
+        info:
+          notes: "Maintenance and safety of all mailboxes. Each dwelling unit must have their own separate and secure mailbox. A mail receptacle is typically a mailbox assigned to each apartment suite that is used to receive or deposit mail."
+      - id: EXTERIOR DOORS
+        type: text
+        info:
+          notes: "Maintenance and operability of all doors that open to the exterior of the building."
+      - id: STORAGE AREAS/LOCKERS MAINT.
+        type: text
+        info:
+          notes: "Maintenance of storage areas/lockers including adequate lighting, uninhibited access, and safety of the space. Storage areas/lockers are typically rooms or enclosed spaces dedicated to temporary storage of resident's belongings, secured using a lock."      
+      - id: POOLS
+        type: text
+        info:
+          notes: "Maintenance and access to all pools on the building's property, if applicable."
+      - id: OTHER AMENITIES
+        type: text
+        info:
+          notes: "Maintenance and access to community rooms, play areas, gyms or tennis courts (if applicable)."                  
+      - id: PARKING AREAS
+        type: text
+        info:
+          notes: "Maintenance and cleanliness of an apartment building's parking area – either under or above ground."
+      - id: ABANDONED EQUIP./DERELICT VEH.
+        type: text
+        info:
+          notes: "Abandoned equipment includes machinery, boats, motorized and non-motorized vehicles, trailers or parts of them that are in a wrecked, discarded, dismantled, inoperative or abandoned condition, or junk or rubbish kept or in a parking or storage garage. A derelict vehicle is a vehicle that is in a wrecked, dismantled or partially dismantled condition, or which is discarded and in an inoperable condition."
+      - id: GARBAGE/COMPACTOR ROOM
+        type: text
+        info:
+          notes: "Maintenance (of ceilings, walls and floors), cleanliness and lighting of all garbage/compactor rooms. A garbage/compactor room is a room where garbage is stored, sometimes along with a compactor (to reduce the size of waste)."
+      - id: ELEVATOR MAINTENANCE
+        type: text
+        info:
+          notes: "Elevators are kept in a state of good repair."
+      - id: ELEVATOR COSMETICS
+        type: text
+        info:
+          notes: "All elevator parts and attachments, including lighting fixtures, lamps, elevator buttons, floor indicators and ventilation fans, shall be kept in good repair and operational. Elevators should be certified to be in good working order and in compliance with the Technical Safety and Standards Act, 2000."
+      - id: INT. HALLWAY - WALLS / CEILING
+        type: text
+        info:
+          notes: "Maintenance of all common interior hallway walls and ceilings in the apartment building."
+      - id: INTERIOR HALLWAY FLOORS
+        type: text
+        info:
+          notes: "Maintenance of all common interior hallway floors in the apartment building."
+      - id: INT. LOBBY / HALLWAY LIGHTING
+        type: text
+        info:
+          notes: "Maintenance, cleanliness and adequate lighting levels of all interior lobby and hallway lights."
+      - id: COMMON AREA VENTILATION
+        type: text
+        info:
+          notes: "Adequate ventilation shall be provided to all common areas of a building, and every ventilation system or unit shall be regularly cleaned, kept in good repair and maintained in good working condition at all times to ensure its proper operation."
+      - id: ELECTRICAL SERVICES / OUTLETS
+        type: text
+        info:
+          notes: "Electrical service and outlets are all electrical fixtures, switches, receptacles and connections; and should be maintained in a state of good repair."
+      - id: CHUTE ROOMS - MAINTENANCE
+        type: text
+        info:
+          notes: "Maintenance and operability of all chute rooms including ceilings, doors, walls, floors and lighting. A chute room is usually located on each floor where residents can dispose of their garbage into the chute."
+      - id: STAIRWELL - WALLS AND CEILING
+        type: text
+        info:
+          notes: "Maintenance and safety of the walls and ceilings of any common interior or exterior stairwells connected to the apartment building."
+      - id: STAIRWELL - LANDING AND STEPS
+        type: text
+        info:
+          notes: "Maintenance and safety of the landing and steps of any common interior or exterior stairwells connected to the apartment building."
+      - id: STAIRWELL LIGHTING
+        type: text
+        info:
+          notes: "Maintenance and safety of lighting in any common interior or exterior stairwells connected to the apartment building."
+      - id: INT. HANDRAIL / GUARD - SAFETY
+        type: text
+        info:
+          notes: " Safety (guard height, structural integrity, etc.) of all interior handrail and guards. A handrail is a continuously graspable rail on stairs, landings, raised walkways and ramps intended to provide guidance and support to the user. A guard is a protective barrier around openings in floors or at the open sides of stairs, landings, balconies, mezzanines, galleries, raised walkways, or other locations to prevent accidental falls from one level to another."
+      - id: INT. HANDRAIL / GUARD - MAINT.
+        type: text
+        info:
+          notes: "Maintenance and cleanliness (peeling paint, rust, scuffed/scratched, etc.) of all interior handrails and guards."
+      - id: GRAFFITI
+        type: text
+        info:
+          notes: "Graffiti includes writing (hate, gang-related, inappropriate) or drawings scribbled, scratched, or sprayed illicitly on a wall or other surface in a common area (including halls, lobby, stairwells and parking garages) or exterior grounds of the apartment building."
+      - id: BUILDING CLEANLINESS
+        type: text
+        info:
+          notes: "All common areas of the apartment building shall be kept clean in accordance with standards (clear of defecation, dirt/dust, litter, stains)."
+      - id: COMMON AREA PESTS
+        type: text
+        info:
+          notes: "A pest is a mammal, bird or insect injurious to humans or property, including but not limited to rats, mice, bats, ants, cockroaches, silverfish, fleas, or bedbugs. Common area is an area which is available for use by more than one person. Common areas can include areas of property (like hallways, lobbies, sidewalks, elevators and stairs) and amenities (like parking lots, swimming pools, parks, gyms and laundry facilities)."
+      - id: TENANT NOTIFICATION BOARD
+        type: text
+        info:
+          notes: "Display of planned or unplanned service disruptions, any pest control treatment activities, the apartment building's score, among other important notices for tenants. The Tenant Notification Board is a notification board (with notices posted commonly behind glass) in a central location within the apartment building."
+      - id: PEST CONTROL LOG
+        type: text
+        info:
+          notes: "Logs of all scheduled or unscheduled pest inspections and the results of the inspection, including the recommended treatment, all pest treatment activities and the nature of the treatment (if any)."
+      - id: MAINTENANCE LOG
+        type: text
+        info:
+          notes: "Logs of service and maintenance conducted on fuel burning appliances, heating systems, cooling systems, electrical systems, ventilation systems and plumbing systems, including the date and nature of service and the name of certified tradesperson who carried out the service or maintenance, if applicable."
+      - id: CLEANING LOG
+        type: text
+        info:
+          notes: "Maintain a cleaning log of all scheduled or unscheduled cleaning activities including, but not limited to, the nature of the cleaning activity and the date and location on which it occurred."
+      - id: VITAL SERVICE PLAN
+        type: text
+        info:
+          notes: "Developed and maintained plan, including a voluntary contact list that is up to date. Vital services are essential services that must be provided to tenants to keep them healthy and safe (including hot and cold water, fuel, electricity, natural gas, and heat)."
+      - id: ELECTRICAL SAFETY PLAN
+        type: text
+        info:
+          notes: "Maintain an up-to-date electrical maintenance plan in collaboration with a Licensed Electrical Contractor with a valid ECRA/ESA license."      
+      - id: STATE OF GOOD REPAIR PLAN
+        type: text
+        info:
+          notes: "Maintain and keep current a state of good repair plan that includes a comprehensive five-year forecast of capital element and common element repairs and improvements as well as other anticipated work that will impact tenants' access to, or enjoyment of, the property."
+      - id: TENANT SERVICE REQUEST LOG
+        type: text
+        info:
+          notes: "A log that keeps track of all tenant service requests that details the date and time the service request was made; a description of the location of the issue(s) including a rental unit number, if applicable; the nature of the service request as identified by the tenant; and name and contact information for the tenant making the request."
+      - id: GRID
+        type: text
+        info:
+          notes: "This is the grid that the building is located in. A grid represents a specific administrative area for bylaw enforcement."
+      - id: LATITUDE
+        type: text
+        info:
+          notes: "Latitude coordinate of the building"
+      - id: LONGITUDE
+        type: text
+        info:
+          notes: "Longitude coordinate of the building"
+      - id: X
+        type: text
+        info:
+          notes: "X coordinate of the building"
+      - id: Y
+        type: text
+        info:
+          notes: "Y coordinate of the building"
+      
