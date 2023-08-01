@@ -71,7 +71,7 @@ demolition-and-replacement-of-rental-housing-units:
             notes: "Current municipal ward where the project is located. "
         - id: City Council Approval Date
           type: date
-          format: "%d-%b-%y"
+          format: "%m/%d/%Y"
           info:
             notes: "the date City Council approved the Rental Housing Demolition and Conversion application. "
         - id: Link to Staff Report
@@ -88,51 +88,43 @@ demolition-and-replacement-of-rental-housing-units:
               
               * Conversion: the severance of land containing 6 or more rental units  where the resulting parcels contain fewer than 6 rental units, conversion of rental housing to a non-residential use, or conversion of rental housing to a non-rental residential use (e.g. condominium ownership) 
 
-        - id: Date of Issuance
-          type: text
-          info:
-            notes: "the date on which one of the following occurs, as applicable: Issuance of First Demolition Permit (for demolition), Condominium Registration Date (for conversion to condominium), or Certificate of Official Date (for severance).  "
-        - id: Demolition/Building Alterations Folder No
-          type: "text"
-          info:
-            notes: "a unique number assigned to a Building Permit application encompassing the demolition or conversion associated with the Rental Housing Demolition and Conversion application. "
-        - source_name: Total Units
-          target_name: Total Rental Homes for Demolition
+        #- id: Date of Issuance
+        #  type: text
+        #  info:
+        #    notes: "the date on which one of the following occurs, as applicable: Issuance of First Demolition Permit (for demolition), Condominium Registration Date (for conversion to condominium), or Certificate of Official Date (for severance).  "
+        #- id: Demolition/Building Alterations Folder No
+        #  type: "text"
+        #  info:
+        #    notes: "a unique number assigned to a Building Permit application encompassing the demolition or conversion associated with the Rental Housing Demolition and Conversion application. "
+        - id: Total Rental Homes for Demolition
           type: "text"
           info:
             notes: "the total number of demolished housing. "
-        - source_name: Affordable Rent
-          target_name: Affordable Rental Homes for Demolition
+        - id: Affordable Rental Homes for Demolition
           type: "text"
           info:
             notes: "the number of demolished housing where the total monthly shelter costs are at or below one times Average Market Rent by unit type, as reported by CMHC "
-        - source_name: Mid-Range Rent
-          target_name: Mid-Range Rental Homes for Demolition
+        - id: Mid-Range Rental Homes for Demolition
           type: "text"
           info:
             notes: "the number of demolished housing where the total monthly shelter costs exceed Affordable Rent but fall below one and one-half times Average Market Rent by unit type, as reported by CMHC "
-        - source_name: High-End Rent
-          target_name: High-End Rental Homes for Demolition
+        - id: High-End Rental Homes for Demolition
           type: "text"
           info:
             notes: "the number of demolished housing where the total monthly shelter costs exceed Mid-Range Rents "
-        - source_name: Total2 Units
-          target_name: Total Rental Homes Replaced
+        - id: Total Rental Homes Replaced
           type: "text"
           info:
             notes: "the total number of replaced housing. "
-        - source_name: Affordable2 Rent
-          target_name: Affordable Rental Homes Replaced
+        - id: Affordable Rental Homes Replaced
           type: "text"
           info:
             notes: "the number of replaced housing where the total monthly shelter costs are at or below one times Average Market Rent by unit type, as reported by CMHC "
-        - source_name: Mid-Range2 Rent
-          target_name: Mid-Range Rental Homes Replaced
+        - id: Mid-Range Rental Homes Replaced
           type: "text"
           info:
             notes: "the number of replaced housing where the total monthly shelter costs exceed Affordable Rent but fall below one and one-half times Average Market Rent by unit type, as reported by CMHC "
-        - source_name: High-End2 Rent
-          target_name: High-End Rental Homes Replaced
+        - id: High-End Rental Homes Replaced
           type: "text"
           info:
             notes: "the number of replaced housing where the total monthly shelter costs exceed Mid-Range Rents"
