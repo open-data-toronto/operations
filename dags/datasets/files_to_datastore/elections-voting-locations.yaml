@@ -26,96 +26,526 @@ elections-voting-locations:
       vocabulary_id: null
 
   information_url: null
-  excerpt: This is a point data set that identifies the address of all the voting locations for the entire City of Toronto for the 2022, 2018, 2014, 2010 and 2006 municipal elections.
+  excerpt: This is a point data set that identifies the address of all the voting locations for the entire City of Toronto for the 2023 Mayoral By-election, 2022, 2018, 2014, 2010 and 2006 General Municipal Elections for the City of Toronto.
   limitations: null
   notes: |
-    This is a point data set that identifies the address of all the voting locations for the entire City of Toronto for the 2022, 2018, 2014, 2010 and 2006 municipal elections. The files work well with the GCC Centreline file and the address points file.
+    This is a point data set that identifies the address of voting locations for the 2023 Mayoral By-election, 2022, 2018, 2014, 2010 and 2006 General Municipal Elections for the City of Toronto.
     
   resources:
     # resource name
-    voting-locations-2022:
+    voting-locations-2023:
       format: geojson
       agol: true
-      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_VOTING_LOCATION/FeatureServer/0
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial6/FeatureServer/45
       attributes:
         - id: POINT_ID
           type: float
           info:
-            notes: null
+            notes: ""
         - id: POINT_TYPE_ID
           type: int
           info:
-            notes: null
+            notes: ""
         - id: POINT_TYPE
           type: text
           info:
-            notes: null
+            notes: ""
         - id: FEATURE_CODE
           type: text
           info:
-            notes: null
+            notes: ""
         - id: FEATURE_CODE_DESC
           type: text
           info:
-            notes: null
+            notes: ""
         - id: POINT_SHORT_CODE
           type: text
           info:
-            notes: null
+            notes: ""
         - id: POINT_LONG_CODE
           type: text
           info:
-            notes: null
+            notes: ""
         - id: POINT_NAME
           type: text
           info:
-            notes: null
+            notes: ""
         - id: POINT_DESC
           type: text
           info:
-            notes: null
+            notes: ""
         - id: REF_FEATURE_TYPE
           type: text
           info:
-            notes: null
+            notes: ""
         - id: REF_FEATURE_ID_SPAT
           type: float
           info:
-            notes: null
+            notes: ""
         - id: REF_FEATURE_ID_TAB
           type: float
           info:
-            notes: null
+            notes: ""
         - id: SOURCE_FEATURE_TYPE
           type: text
           info:
-            notes: null
+            notes: ""
         - id: SOURCE_FEATURE_ID
           type: float
           info:
-            notes: null
+            notes: ""
         - id: VOTER_COUNT
           type: int
           info:
-            notes: null
+            notes: ""
         - id: OBJECTID
           type: text
           info:
-            notes: null
+            notes: ""
         - id: ADDRESS_NUMBER
           type: text
           info:
-            notes: null
+            notes: ""
         - id: LINEAR_NAME_FULL
           type: text
           info:
-            notes: null
+            notes: ""
         - id: ADDRESS_FULL
           type: text
           info:
-            notes: null
+            notes: ""
         - id: "geometry"
           type: "text"
           info:
-            notes: null
+            notes: ""
+
+    voting-locations-2022:
+      format: geojson
+      agol: true
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial6/FeatureServer/42
+      attributes:
+        - id: POINT_ID
+          type: float
+          info:
+            notes: ""
+        - id: POINT_TYPE_ID
+          type: int
+          info:
+            notes: ""
+        - id: POINT_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: FEATURE_CODE
+          type: text
+          info:
+            notes: ""
+        - id: FEATURE_CODE_DESC
+          type: text
+          info:
+            notes: ""
+        - id: POINT_SHORT_CODE
+          type: text
+          info:
+            notes: ""
+        - id: POINT_LONG_CODE
+          type: text
+          info:
+            notes: ""
+        - id: POINT_NAME
+          type: text
+          info:
+            notes: ""
+        - id: POINT_DESC
+          type: text
+          info:
+            notes: ""
+        - id: REF_FEATURE_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: REF_FEATURE_ID_SPAT
+          type: float
+          info:
+            notes: ""
+        - id: REF_FEATURE_ID_TAB
+          type: float
+          info:
+            notes: ""
+        - id: SOURCE_FEATURE_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: SOURCE_FEATURE_ID
+          type: float
+          info:
+            notes: ""
+        - id: VOTER_COUNT
+          type: int
+          info:
+            notes: ""
+        - id: OBJECTID
+          type: text
+          info:
+            notes: ""
+        - id: ADDRESS_NUMBER
+          type: text
+          info:
+            notes: ""
+        - id: LINEAR_NAME_FULL
+          type: text
+          info:
+            notes: ""
+        - id: ADDRESS_FULL
+          type: text
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+
+    voting-locations-2018:
+      format: geojson
+      agol: true
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial6/FeatureServer/36
+      attributes:
+        - id: POINT_ID
+          type: float
+          info:
+            notes: ""
+        - id: POINT_TYPE_ID
+          type: int
+          info:
+            notes: ""
+        - id: POINT_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: FEATURE_CODE
+          type: text
+          info:
+            notes: ""
+        - id: FEATURE_CODE_DESC
+          type: text
+          info:
+            notes: ""
+        - id: POINT_SHORT_CODE
+          type: text
+          info:
+            notes: ""
+        - id: POINT_LONG_CODE
+          type: text
+          info:
+            notes: ""
+        - id: POINT_NAME
+          type: text
+          info:
+            notes: ""
+        - id: POINT_DESC
+          type: text
+          info:
+            notes: ""
+        - id: REF_FEATURE_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: REF_FEATURE_ID_SPAT
+          type: float
+          info:
+            notes: ""
+        - id: REF_FEATURE_ID_TAB
+          type: float
+          info:
+            notes: ""
+        - id: SOURCE_FEATURE_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: SOURCE_FEATURE_ID
+          type: float
+          info:
+            notes: ""
+        - id: VOTER_COUNT
+          type: int
+          info:
+            notes: ""
+        - id: OBJECTID
+          type: text
+          info:
+            notes: ""
+        - id: ADDRESS_NUMBER
+          type: text
+          info:
+            notes: ""
+        - id: LINEAR_NAME_FULL
+          type: text
+          info:
+            notes: ""
+        - id: ADDRESS_FULL
+          type: text
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+
+    voting-locations-2014:
+      format: geojson
+      agol: true
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial6/FeatureServer/26
+      attributes:
+        - id: POINT_ID
+          type: float
+          info:
+            notes: ""
+        - id: POINT_TYPE_ID
+          type: int
+          info:
+            notes: ""
+        - id: POINT_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: FEATURE_CODE
+          type: text
+          info:
+            notes: ""
+        - id: FEATURE_CODE_DESC
+          type: text
+          info:
+            notes: ""
+        - id: POINT_SHORT_CODE
+          type: text
+          info:
+            notes: ""
+        - id: POINT_LONG_CODE
+          type: text
+          info:
+            notes: ""
+        - id: POINT_NAME
+          type: text
+          info:
+            notes: ""
+        - id: POINT_DESC
+          type: text
+          info:
+            notes: ""
+        - id: REF_FEATURE_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: REF_FEATURE_ID_SPAT
+          type: float
+          info:
+            notes: ""
+        - id: REF_FEATURE_ID_TAB
+          type: float
+          info:
+            notes: ""
+        - id: SOURCE_FEATURE_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: SOURCE_FEATURE_ID
+          type: float
+          info:
+            notes: ""
+        - id: VOTER_COUNT
+          type: int
+          info:
+            notes: ""
+        - id: OBJECTID
+          type: text
+          info:
+            notes: ""
+        - id: ADDRESS_NUMBER
+          type: text
+          info:
+            notes: ""
+        - id: LINEAR_NAME_FULL
+          type: text
+          info:
+            notes: ""
+        - id: ADDRESS_FULL
+          type: text
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+
+    voting-locations-2010:
+      format: geojson
+      agol: true
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial6/FeatureServer/23
+      attributes:
+        - id: POINT_ID
+          type: float
+          info:
+            notes: ""
+        - id: POINT_TYPE_ID
+          type: int
+          info:
+            notes: ""
+        - id: POINT_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: FEATURE_CODE
+          type: text
+          info:
+            notes: ""
+        - id: FEATURE_CODE_DESC
+          type: text
+          info:
+            notes: ""
+        - id: POINT_SHORT_CODE
+          type: text
+          info:
+            notes: ""
+        - id: POINT_LONG_CODE
+          type: text
+          info:
+            notes: ""
+        - id: POINT_NAME
+          type: text
+          info:
+            notes: ""
+        - id: POINT_DESC
+          type: text
+          info:
+            notes: ""
+        - id: REF_FEATURE_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: REF_FEATURE_ID_SPAT
+          type: float
+          info:
+            notes: ""
+        - id: REF_FEATURE_ID_TAB
+          type: float
+          info:
+            notes: ""
+        - id: SOURCE_FEATURE_TYPE
+          type: text
+          info:
+            notes: ""
+        - id: SOURCE_FEATURE_ID
+          type: float
+          info:
+            notes: ""
+        - id: VOTER_COUNT
+          type: int
+          info:
+            notes: ""
+        - id: OBJECTID
+          type: text
+          info:
+            notes: ""
+        - id: ADDRESS_NUMBER
+          type: text
+          info:
+            notes: ""
+        - id: LINEAR_NAME_FULL
+          type: text
+          info:
+            notes: ""
+        - id: ADDRESS_FULL
+          type: text
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+    
+    #voting-locations-2006:
+    #  format: geojson
+    #  agol: true
+    #  url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial6/FeatureServer/20
+    #  attributes:
+    #    - id: POINT_ID
+    #      type: float
+    #      info:
+    #        notes: ""
+    #    - id: POINT_TYPE_ID
+    #      type: int
+    #      info:
+    #        notes: ""
+    #    - id: POINT_TYPE
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: FEATURE_CODE
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: FEATURE_CODE_DESC
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: POINT_SHORT_CODE
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: POINT_LONG_CODE
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: POINT_NAME
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: POINT_DESC
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: REF_FEATURE_TYPE
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: REF_FEATURE_ID_SPAT
+    #      type: float
+    #      info:
+    #        notes: ""
+    #    - id: REF_FEATURE_ID_TAB
+    #      type: float
+    #      info:
+    #        notes: ""
+    #    - id: SOURCE_FEATURE_TYPE
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: SOURCE_FEATURE_ID
+    #      type: float
+    #      info:
+    #        notes: ""
+    #    - id: VOTER_COUNT
+    #      type: int
+    #      info:
+    #        notes: ""
+    #    - id: OBJECTID
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: ADDRESS_NUMBER
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: LINEAR_NAME_FULL
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: ADDRESS_FULL
+    #      type: text
+    #      info:
+    #        notes: ""
+    #    - id: "geometry"
+    #      type: "text"
+    #      info:
+    #        notes: ""
         
