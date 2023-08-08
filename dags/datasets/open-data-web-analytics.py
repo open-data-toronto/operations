@@ -90,6 +90,11 @@ with DAG(
         "retry_delay": 3,
         "on_failure_callback": task_failure_slack_alert,
         "tags": ["sustainment"],
+        "etl_mapping":[{
+                    "source": "https://api.oracleinfinity.io/",
+                    "target_package_name": package_name,
+                    "target_resource_name": "open-data-web-analytics-monthly-report",
+                }]
     },
     description="Report stats for datasets on Open Data Portal",
     schedule_interval="0 1 1 * *",

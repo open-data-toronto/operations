@@ -42,7 +42,7 @@ with DAG(
             "etl_mapping":[{
                 "source": "https://developers.flowworks.com/fwapi/v1",
                 "target_package_name": PACKAGE_ID,
-                "target_resource_name": "precipitation-data-YYYY"
+                "target_resource_name": "precipitation-data-2023"
             }]
         }
     ),
