@@ -60,24 +60,20 @@ upcoming-and-recently-completed-affordable-housing-units:
           info:
             notes: "Address used to map projects."
         - id: Ward_Number
-          type: "int"
-          info:
-            notes: "Current number of the municipal ward where the project is located."
-        - id: Ward
           type: "text"
           info:
-            notes: "Current name of the municipal ward where the project is located."
+            notes: "Current number of the municipal ward where the project is located."
         - id: Pgm_Incntve_frst_appr_date
           type: "date"
           format: "%m/%d/%Y"
           info:
             notes: "The initial date when Council approved financial incentives to a project, and where the number of units is stated. If this date is not available, then the date when Council approved the number of units through another type of report (Housing Now, By-Law Zoning) is used"
         #- id: Intl_Aff_Rent_Units_App
-        #  type: "int"
+        #  type: "text"
         #  info:
         #    notes: "The initial number of affordable rental units approved"
         #- id: Rcnt_Units_App
-        #  type: "int"
+        #  type: "text"
         #  info:
         #    notes: "The most recent number of approved affordable rental units"
         - id: First_Planning_Approval_date
@@ -107,7 +103,7 @@ upcoming-and-recently-completed-affordable-housing-units:
         #  info:
         #    notes: ""
         - id: Most_recent_number_of_affordab
-          type: "int"
+          type: "text"
           info:
             notes: "Most up to date number of units based on most recent application received for a project; this only tracks the most recent # for the purpose of the dataset.  In cases where the approval secured a portion of the total residential Gross Floor Area (GFA) as affordable housing and not a specific number of affordable units, the number of units is estimated."
         - id: Construction_Start_Date
@@ -150,7 +146,7 @@ upcoming-and-recently-completed-affordable-housing-units:
           info:
             notes: "The Occupancy Permit # for a project; used to determine construction completion"
         - id: Units_Built_Num
-          type: "int"
+          type: "text"
           info:
             notes: "The number of units completed"
         #- id: Length_of_Affordability_Years
@@ -161,14 +157,6 @@ upcoming-and-recently-completed-affordable-housing-units:
         #  type: "text"
         #  info:
         #    notes: "The depth of affordability of the units, expressed as a percentage of Average Market Rent"
-        - id: AREA_LONG_CODE
-          type: "text"
-          info:
-            notes: "Neighbourhood code"
-        - id: AREA_NAME
-          type: "text"
-          info:
-            notes: "Neighbourhood name"
         - id: geometry
           type: "text"
           info:

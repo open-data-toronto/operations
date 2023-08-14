@@ -126,6 +126,18 @@ centralized-waiting-list-activity-for-social-housing:
           type: text
           info:
             notes: "Applicants experiencing homelessness, or youth who are 16 or 17 years old at the time of applying for rent-geared-to-income housing"
+        - id: "Indigenous"
+          type: text
+          info:
+            notes: "where every tenth RGI vacancy is filled by an Indigenous household"
+        - id: "Exiting Permanent Supportive Housing"
+          type: text
+          info:
+            notes: "tenants living in a rent-geared-to-income unit administered by the City as Service Manager receiving housing supports that are not capable of living independent of the support services."  
+        - id: "Toronto Seniors Housing Corporation"
+          type: text
+          info:
+            notes: "Social housing homes for seniors managed by TSHC for whom the City of Toronto is Sole Shareholder"              
         - id: "General list"
           type: text
           info:
