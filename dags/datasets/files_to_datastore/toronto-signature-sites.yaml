@@ -1,0 +1,226 @@
+toronto-signature-sites:
+  jira_issue_id: DTSD-3678
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/177503
+  schedule: '0 12 1 * *'
+  dag_owner_name: Mackenzie.Nichols4
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Toronto Signature Sites
+  date_published: '2023-09-07 19:05:27.075577'
+  dataset_category: Map
+  refresh_rate: Monthly
+  owner_division: Economic Development & Culture
+  owner_section: Business Growth Services
+  owner_unit: Business Retention and Expansion
+  owner_email: bizconnect@toronto.ca
+  civic_issues:
+  - Poverty reduction
+  topics:
+  - Business
+  - Development
+  tags: 
+  - name: property
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/business-economy/business-operation-growth/signature-sites-toronto-site-selection-tool/
+  excerpt: Signature Sites is a listing of select industrial and commercial development
+    and redevelopment properties for sale or lease in Toronto.
+  limitations: null
+  notes: This dataset provides a collection of large industrial & commercial properties
+    for sale or lease in Toronto. Signature Sites is a listing of select industrial
+    and commercial development and redevelopment properties for sale or lease in Toronto.
+    The sites featured here are selected based on location, permitted uses and size
+    (minimum of three acres for vacant land and 50,000 sq. ft. for existing buildings).
+  resources:
+    Toronto Signature Sites:
+      format: 'geojson'
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_SignatureSites_View2/FeatureServer/0
+      attributes:
+      - id: objectid
+        type: int
+        info:
+          notes: unique id
+      - id: id
+        type: int
+        info:
+          notes: internal id
+      - id: site_name
+        type: text
+        info:
+          notes: Site Name
+      - id: district
+        type: text
+        info:
+          notes: District
+      - id: statement
+        type: text
+        info:
+          notes: Statement
+      - id: closest_major_intersection
+        type: text
+        info:
+          notes: Closest Major Intersection
+      - id: status
+        type: text
+        info:
+          notes: Status
+      - id: property_type_primary
+        type: text
+        info:
+          notes: Property Type Primary
+      - id: property_type_secondary
+        type: text
+        info:
+          notes: Property Type Secondary
+      - id: comments
+        type: text
+        info:
+          notes: Comments
+      - id: total_site_area_acres
+        type: text
+        info:
+          notes: Total Site Area acres
+      - id: site_area_range_1
+        type: text
+        info:
+          notes: Site Area Range 1
+      - id: site_area_range2
+        type: text
+        info:
+          notes: Site Area Range2
+      - id: sq_ft_available
+        type: text
+        info:
+          notes: Square Feet Available
+      - id: sq_ft_available_range1
+        type: text
+        info:
+          notes: Square Feet Available Range1
+      - id: sq_ft_available_range2
+        type: text
+        info:
+          notes: Square Feet Available Range2
+      - id: frontage_feet
+        type: text
+        info:
+          notes: Frontage feet
+      - id: asking_price
+        type: text
+        info:
+          notes: Asking Price
+      - id: planning_status
+        type: text
+        info:
+          notes: Planning Status
+      - id: planning_status_zoning
+        type: text
+        info:
+          notes: Planning Status Zoning
+      - id: planning_status_zoning_url
+        type: text
+        info:
+          notes: Planning Status Zoning URL
+      - id: planning_status_city_ward
+        type: text
+        info:
+          notes: Planning Status City Ward
+      - id: owner
+        type: text
+        info:
+          notes: Owner
+      - id: owners_rep1_name
+        type: text
+        info:
+          notes: Owners Representative 1 Name
+      - id: title1
+        type: text
+        info:
+          notes: Title1
+      - id: company1
+        type: text
+        info:
+          notes: Company1
+      - id: phone1
+        type: text
+        info:
+          notes: Phone1
+      - id: email1
+        type: text
+        info:
+          notes: Email1
+      - id: url_1a
+        type: text
+        info:
+          notes: URL 1a
+      - id: url_1b
+        type: text
+        info:
+          notes: URL 1b
+      - id: owners_rep2_name
+        type: text
+        info:
+          notes: Owners Representative 2 Name
+      - id: title2
+        type: text
+        info:
+          notes: Title2
+      - id: company2
+        type: text
+        info:
+          notes: Company2
+      - id: phone2
+        type: text
+        info:
+          notes: Phone2
+      - id: email2
+        type: text
+        info:
+          notes: Email2
+      - id: url_2a
+        type: text
+        info:
+          notes: URL 2a
+      - id: url_2b
+        type: text
+        info:
+          notes: URL 2b
+      - id: city_of_toronto_economic_develo
+        type: text
+        info:
+          notes: City of Toronto Economic Development Name
+      - id: phone3
+        type: text
+        info:
+          notes: Phone3
+      - id: email3
+        type: text
+        info:
+          notes: Email3
+      - id: photo1_path
+        type: text
+        info:
+          notes: Photo1 path
+      - id: photo2_path
+        type: text
+        info:
+          notes: Photo2 path
+      - id: photo3_path
+        type: text
+        info:
+          notes: Photo3 path
+      - id: photo1_alt_text
+        type: text
+        info:
+          notes: Photo1 alternative text - AODA
+      - id: photo2_alt_text
+        type: text
+        info:
+          notes: Photo2 alternative text - AODA
+      - id: photo3_alt_text
+        type: text
+        info:
+          notes: Photo3 alternative text - AODA
+      - id: geometry
+        type: text
+        info:
+          notes: ""
+      
