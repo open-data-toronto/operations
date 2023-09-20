@@ -35,7 +35,7 @@ library-branch-general-information:
     # resource name
     tpl-branch-general-information-2023:
       format: csv
-      url: http://opendata.toronto.ca/toronto.public.library/tpl-branch-general-information-2023.csv
+      url: https://opendata.toronto.ca/toronto.public.library/tpl-branch-general-information-2023.csv
       attributes:
         - id: BranchCode
           type: text

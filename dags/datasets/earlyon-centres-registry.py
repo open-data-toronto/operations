@@ -31,7 +31,7 @@ from utils_operators.file_operators import DownloadFileOperator
 
 RESOURCE_NAME = "EarlyON Child and Family Centres Locations - geometry"
 # SRC_URL = "https://secure.csd.toronto.ca/cseon/rest/earlyONJsonService/locations"  # noqa: E501
-SRC_URL = "http://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json" 
+SRC_URL = "https://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json" 
 
 PACKAGE_NAME = "earlyon-child-and-family-centres"
 dag_id = "Earlyon-Centres-Registry"

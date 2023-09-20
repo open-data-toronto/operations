@@ -70,7 +70,7 @@ package_metadata = {
 # FME
 def get_fme_configs(**kwargs):
     """Grab FME ETL metadata from file in NAS"""
-    fme_configs_url = ("http://opendata.toronto.ca/"
+    fme_configs_url = ("https://opendata.toronto.ca/"
                        "technology.services/_OpenData_fmeserver_jobs_list/"
                        "FMEServer_publishing_jobs.json")
 
@@ -82,7 +82,7 @@ def get_fme_configs(**kwargs):
 # NIFI
 def get_nifi_configs(**kwargs):
     """Grab NIFI ETL metadata from file in NAS"""
-    nifi_configs_url = ("http://opendata.toronto.ca/"
+    nifi_configs_url = ("https://opendata.toronto.ca/"
                         "config/nifi_od_etl_inventory.json")
     try:
         nifi_response = json.loads(requests.get(nifi_configs_url).text)

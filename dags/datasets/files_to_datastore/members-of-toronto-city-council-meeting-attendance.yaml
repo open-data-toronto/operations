@@ -35,7 +35,7 @@ members-of-toronto-city-council-meeting-attendance:
     # resource name
     councillors-meeting-attendance-2022-2026:
       format: csv
-      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_ATTENDANCE_2022_2026.csv
+      url: https://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_ATTENDANCE_2022_2026.csv
       attributes:
         - id: Term
           type: text

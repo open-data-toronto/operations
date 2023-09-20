@@ -37,7 +37,7 @@ licensed-child-care-centres:
     # resource name
     Child care centres:
       format: csv
-      url: http://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv
+      url: https://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv
       attributes:
         - id: "LOC_ID"
           type: "int"
