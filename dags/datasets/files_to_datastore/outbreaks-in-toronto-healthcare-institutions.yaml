@@ -46,7 +46,7 @@ outbreaks-in-toronto-healthcare-institutions:
     ob_report_2023:
       format: xlsx
       sheet: Sheet1
-      url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2023.xlsx
+      url: https://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2023.xlsx
       attributes:
         - id: "Institution Name"
           type: "text"

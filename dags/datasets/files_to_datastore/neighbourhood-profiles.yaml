@@ -75,7 +75,7 @@ neighbourhood-profiles:
     # resource name
     neighbourhood-profiles-2001-140-model:
       format: csv
-      url: http://opendata.toronto.ca/social.development.finance.administration/neighbourhood-profiles/neighbourhood-profiles-2001-140-model.csv
+      url: https://opendata.toronto.ca/social.development.finance.administration/neighbourhood-profiles/neighbourhood-profiles-2001-140-model.csv
       attributes:
         - id: Category
           type: "text"
@@ -655,7 +655,7 @@ neighbourhood-profiles:
             notes: "Data for the neighbourhood Yorkdale-Glen Park"
     neighbourhood-profiles-2006-140-model:
       format: csv
-      url: http://opendata.toronto.ca/social.development.finance.administration/neighbourhood-profiles/neighbourhood-profiles-2006-140-model.csv
+      url: https://opendata.toronto.ca/social.development.finance.administration/neighbourhood-profiles/neighbourhood-profiles-2006-140-model.csv
       attributes:
         - id: Category
           type: "text"
@@ -1235,7 +1235,7 @@ neighbourhood-profiles:
             notes: "Data for the neighbourhood Yorkdale-Glen Park"
     neighbourhood-profiles-2011-140-model:
       format: csv
-      url: http://opendata.toronto.ca/social.development.finance.administration/neighbourhood-profiles/neighbourhood-profiles-2011-140-model.csv
+      url: https://opendata.toronto.ca/social.development.finance.administration/neighbourhood-profiles/neighbourhood-profiles-2011-140-model.csv
       attributes:
         - id: Category
           type: "text"
@@ -1815,7 +1815,7 @@ neighbourhood-profiles:
             notes: "Data for the neighbourhood Yorkdale-Glen Park"
     neighbourhood-profiles-2016-140-model:
       format: csv
-      url: http://opendata.toronto.ca/social.development.finance.administration/neighbourhood-profiles/neighbourhood-profiles-2016-140-model.csv
+      url: https://opendata.toronto.ca/social.development.finance.administration/neighbourhood-profiles/neighbourhood-profiles-2016-140-model.csv
       attributes:
         - id: Category
           type: "text"

@@ -31,7 +31,7 @@ building-permits-cleared-permits:
   resources:
     Cleared Building Permits since 2017:
       format: csv
-      url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits/building-permits-cleared-permits.csv
+      url: https://opendata.toronto.ca/toronto.building/building-permits-cleared-permits/building-permits-cleared-permits.csv
       attributes:
         - id: PERMIT_NUM
           type: text

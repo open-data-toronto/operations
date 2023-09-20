@@ -48,7 +48,7 @@ municipal-licensing-and-standards-business-licences-and-permits:
   resources:
     Business licences data:
       format: csv
-      url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
+      url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
       attributes:
       - id: Category
         type: 'text'

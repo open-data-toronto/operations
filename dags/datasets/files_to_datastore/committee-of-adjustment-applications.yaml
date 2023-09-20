@@ -36,7 +36,7 @@ committee-of-adjustment-applications:
     # resource name
     Closed Applications since 2017:
       format: csv
-      url: http://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/committee-of-adjustment-applications.csv
+      url: https://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/committee-of-adjustment-applications.csv
       attributes:
         - id: "SYS_ID"
           type: "text"

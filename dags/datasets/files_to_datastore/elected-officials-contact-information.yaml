@@ -36,7 +36,7 @@ elected-officials-contact-information:
     2022-2026 Elected Officials Contact Info:
       format: xlsx
       sheet: Toront_Elected_Officials_0217
-      url: http://opendata.toronto.ca/city.clerks.office/elected-officials-contact-information/2022-2026-elected-officials-contact.xlsx
+      url: https://opendata.toronto.ca/city.clerks.office/elected-officials-contact-information/2022-2026-elected-officials-contact.xlsx
       attributes:
         - id: "District name"
           type: "text"
@@ -101,7 +101,7 @@ elected-officials-contact-information:
     2018-2022 Elected Officials Contact Info:
       format: xlsx
       sheet: Toront_Elected_Officials_0217
-      url: http://opendata.toronto.ca/city.clerks.office/elected-officials-contact-information/2018-2022-elected-officials-contact.xlsx
+      url: https://opendata.toronto.ca/city.clerks.office/elected-officials-contact-information/2018-2022-elected-officials-contact.xlsx
       attributes:
         - id: "District name"
           type: "text"

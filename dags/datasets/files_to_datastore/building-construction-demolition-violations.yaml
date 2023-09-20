@@ -25,7 +25,7 @@ building-construction-demolition-violations:
   resources:
     building-construction-demolition-violations:
       format: csv
-      url: http://opendata.toronto.ca/toronto.building/building-construction-demolition-violations/building-construction-demolition-violations.csv
+      url: https://opendata.toronto.ca/toronto.building/building-construction-demolition-violations/building-construction-demolition-violations.csv
       attributes:
         - id: BRFOLDERRSN
           type: text

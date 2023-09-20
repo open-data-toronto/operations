@@ -36,7 +36,7 @@ library-workstation-usage:
     # resource name
     tpl-workstation-usage-annual-by-branch-2018-2022:
       format: csv
-      url: http://opendata.toronto.ca/toronto.public.library/tpl-workstation-usage-annual-by-branch-2018-2022.csv
+      url: https://opendata.toronto.ca/toronto.public.library/tpl-workstation-usage-annual-by-branch-2018-2022.csv
       attributes:
         - id: Year
           type: int

@@ -37,7 +37,7 @@ covid-19-cases-in-toronto:
     # resource name
     COVID19 cases:
       format: csv
-      url: http://opendata.toronto.ca/toronto.public.health/covid-19-cases-in-toronto/covid19cases.csv
+      url: https://opendata.toronto.ca/toronto.public.health/covid-19-cases-in-toronto/covid19cases.csv
       attributes:
         - id: "Assigned_ID"
           type: "int"

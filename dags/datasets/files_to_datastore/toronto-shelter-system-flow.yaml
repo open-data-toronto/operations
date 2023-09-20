@@ -74,7 +74,7 @@ toronto-shelter-system-flow:
     # resource name
     toronto-shelter-system-flow:
       format: csv
-      url: http://opendata.toronto.ca/shelter.support.housing.administration/toronto-shelter-system-flow/toronto_shelter_system_flow.csv
+      url: https://opendata.toronto.ca/shelter.support.housing.administration/toronto-shelter-system-flow/toronto_shelter_system_flow.csv
       attributes:
         
         - id: date(mmm-yy)

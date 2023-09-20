@@ -46,7 +46,7 @@ tenant-notification-for-rent-reduction:
     #resource name
     Tenant Notification for Rent Reduction 2022:
       format: xlsx
-      url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2022-datastore.xlsx
+      url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2022-datastore.xlsx
       sheet: Open Data 2022
       attributes:
         - id: Street Number
@@ -107,7 +107,7 @@ tenant-notification-for-rent-reduction:
             notes: 'This states the reason why a resident did not receive notice of a rent reduction. See examples for more information.'
     Tenant Notification for Rent Reduction 2021:
       format: xlsx
-      url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2021.xlsx
+      url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2021.xlsx
       sheet: Open Data 2021
       attributes:
         - id: Street Number
@@ -168,7 +168,7 @@ tenant-notification-for-rent-reduction:
             notes: 'This states the reason why a resident did not receive notice of a rent reduction. See examples for more information.'
     Tenant Notification for Rent Reduction 2020:
       format: xlsx
-      url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2020.xlsx
+      url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2020.xlsx
       sheet: Open Data 2020
       attributes:
         - id: Street Number
@@ -229,7 +229,7 @@ tenant-notification-for-rent-reduction:
             notes: 'This states the reason why a resident did not receive notice of a rent reduction. See examples for more information.'
     Tenant Notification for Rent Reduction 2019:
       format: xlsx
-      url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2019.xlsx
+      url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2019.xlsx
       sheet: Open Data 2019 FINAL
       attributes:
         - id: Street Number
@@ -290,7 +290,7 @@ tenant-notification-for-rent-reduction:
             notes: 'This states the reason why a resident did not receive notice of a rent reduction. See examples for more information.'
     Tenant Notification for Rent Reduction 2018:
       format: xlsx
-      url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/tenant-notification-for-rent-reduction-2018.xlsx
+      url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/tenant-notification-for-rent-reduction-2018.xlsx
       sheet: Open Data 2018
       attributes:
         - id: Street Number
@@ -351,7 +351,7 @@ tenant-notification-for-rent-reduction:
             notes: 'This states the reason why a resident did not receive notice of a rent reduction. See examples for more information.'
     Tenant Notification for Rent Reduction 2017:
       format: xlsx
-      url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/tenant-notification-for-rent-reduction-2017.xlsx
+      url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/tenant-notification-for-rent-reduction-2017.xlsx
       sheet: 2017 Open Data
       attributes:
         - id: Street Number
@@ -412,7 +412,7 @@ tenant-notification-for-rent-reduction:
             notes: 'This states the reason why a resident did not receive notice of a rent reduction. See examples for more information.'
     Tenant Notification for Rent Reduction 2016:
       format: xlsx
-      url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/tenant-notification-for-rent-reduction-2016.xlsx
+      url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/tenant-notification-for-rent-reduction-2016.xlsx
       sheet: 2016 Open Data
       attributes:
         - id: Street Number
@@ -473,7 +473,7 @@ tenant-notification-for-rent-reduction:
             notes: 'This states the reason why a resident did not receive notice of a rent reduction. See examples for more information.'
     Tenant Notification for Rent Reduction 2015:
       format: xlsx
-      url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/tenant-notification-for-rent-reduction-2015.xlsx
+      url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/tenant-notification-for-rent-reduction-2015.xlsx
       sheet: Total Landlord List Final
       attributes:
         - id: Street Number
@@ -534,7 +534,7 @@ tenant-notification-for-rent-reduction:
             notes: 'This states the reason why a resident did not receive notice of a rent reduction. See examples for more information.'
     Tenant Notification for Rent Reduction 2014:
       format: xlsx
-      url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/tenant-notification-for-rent-reduction-2014.xlsx
+      url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/tenant-notification-for-rent-reduction-2014.xlsx
       sheet: Sheet1
       attributes:
         - id: Street Number

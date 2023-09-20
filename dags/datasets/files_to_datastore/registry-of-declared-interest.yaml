@@ -55,7 +55,7 @@ registry-of-declared-interest:
     # resource name
     declared-interest-2022-2026:
       format: csv
-      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_DECLARED_INTEREST_2022_2026.csv
+      url: https://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_DECLARED_INTEREST_2022_2026.csv
       attributes:
         - id: Term
           type: text

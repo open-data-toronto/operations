@@ -54,7 +54,7 @@ traffic-volumes-at-intersections-for-all-modes:
     # resource name
     raw-data-2020-2029:
       format: csv
-      url: http://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_2020_2029.csv
+      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_2020_2029.csv
       attributes:
         - id: count_id
           type: int
@@ -294,7 +294,7 @@ traffic-volumes-at-intersections-for-all-modes:
             notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the west leg of the intersection
     #raw-data-2010-2019:
     #  format: csv
-    #  url: http://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_2010_2019.csv
+    #  url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_2010_2019.csv
     #  attributes:
     #    - id: count_id
     #      type: int
@@ -534,7 +534,7 @@ traffic-volumes-at-intersections-for-all-modes:
     #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the west leg of the intersection
     #raw-data-2000-2009:
     #  format: csv
-    #  url: http://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_2000_2009.csv
+    #  url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_2000_2009.csv
     #  attributes:
     #    - id: count_id
     #      type: int
@@ -774,7 +774,7 @@ traffic-volumes-at-intersections-for-all-modes:
     #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the west leg of the intersection
     #raw-data-1990-1999:
     #  format: csv
-    #  url: http://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_1990_1999.csv
+    #  url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_1990_1999.csv
     #  attributes:
     #    - id: count_id
     #      type: int
@@ -1014,7 +1014,7 @@ traffic-volumes-at-intersections-for-all-modes:
     #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the west leg of the intersection
     #raw-data-1980-1989:
     #  format: csv
-    #  url: http://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_1980_1989.csv
+    #  url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_1980_1989.csv
     #  attributes:
     #    - id: count_id
     #      type: int
@@ -1254,7 +1254,7 @@ traffic-volumes-at-intersections-for-all-modes:
     #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the west leg of the intersection
     count_metadata:
       format: csv
-      url: http://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_count_metadata.csv
+      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_count_metadata.csv
       attributes:
         - id: count_id
           type: int
@@ -1294,7 +1294,7 @@ traffic-volumes-at-intersections-for-all-modes:
             notes: The year the location was active
     locations:
       format: csv
-      url: http://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_locations.csv
+      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_locations.csv
       attributes:
         - id: location_id
           type: int

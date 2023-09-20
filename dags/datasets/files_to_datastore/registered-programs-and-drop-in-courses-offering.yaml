@@ -75,7 +75,7 @@ registered-programs-and-drop-in-courses-offering:
     Registered Programs:
       format: xlsx
       sheet: "Registered Programs"
-      url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
+      url: https://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
       attributes:
       - id: "Course_ID"
         type: int
@@ -158,7 +158,7 @@ registered-programs-and-drop-in-courses-offering:
     Drop-in:
       format: xlsx
       sheet: "Drop-in"
-      url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
+      url: https://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
       attributes:
       - id: "Location ID"
         type: int
@@ -223,7 +223,7 @@ registered-programs-and-drop-in-courses-offering:
     Locations:
       format: xlsx
       sheet: "Locations"
-      url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
+      url: https://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
       attributes:
       - id: "Location ID"
         type: int
@@ -288,7 +288,7 @@ registered-programs-and-drop-in-courses-offering:
     Facilities:
       format: xlsx
       sheet: "Facilities"
-      url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
+      url: https://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
       attributes:
       - id: "Facility ID"
         type: int

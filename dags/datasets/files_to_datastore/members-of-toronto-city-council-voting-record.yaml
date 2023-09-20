@@ -52,7 +52,7 @@ members-of-toronto-city-council-voting-record:
     # resource name
     member-voting-record-2022-2026:
       format: csv
-      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_VOTE_2022_2026.csv
+      url: https://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_VOTE_2022_2026.csv
       attributes:
         - id: Term
           type: text

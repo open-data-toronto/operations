@@ -60,7 +60,7 @@ indoor-ice-rinks:
     # resource name
     indoor-ice-rinks-data:
       format: xlsx
-      url: http://opendata.toronto.ca/parks.forestry.recreation/indoor-ice-rinks/indoor-ice-rinks-data.xlsx
+      url: https://opendata.toronto.ca/parks.forestry.recreation/indoor-ice-rinks/indoor-ice-rinks-data.xlsx
       sheet: Sheet1
       attributes:
         - id: Parent Asset Name

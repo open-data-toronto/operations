@@ -46,7 +46,7 @@ earlyon-child-and-family-centres:
     # resource name
     EarlyON Child and Family Centres Locations - geometry:
       format: json
-      url: http://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json
+      url: https://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json
       attributes:
         - id: "service_system_manager"
           type: "text"

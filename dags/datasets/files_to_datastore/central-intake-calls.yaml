@@ -53,7 +53,7 @@ central-intake-calls:
     # resource name
     Central Intake Call Wrap-Up Codes Data:
       format: csv
-      url: http://opendata.toronto.ca/shelter.support.housing.administration/central-intake-calls/central intake - wrap-up codes.csv
+      url: https://opendata.toronto.ca/shelter.support.housing.administration/central-intake-calls/central intake - wrap-up codes.csv
       attributes:
         - id: Date
           type: date
@@ -121,7 +121,7 @@ central-intake-calls:
             notes: The number of calls where after making connection with the caller, the call was disconnected or ended prematurely before reaching a service outcome. 
     Central Intake Service Queue Data:
       format: csv
-      url: http://opendata.toronto.ca/shelter.support.housing.administration/central-intake-calls/central intake - service queue.csv
+      url: https://opendata.toronto.ca/shelter.support.housing.administration/central-intake-calls/central intake - service queue.csv
       attributes:
         - id: Date
           type: date

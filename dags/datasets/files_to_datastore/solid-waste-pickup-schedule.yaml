@@ -42,7 +42,7 @@ solid-waste-pickup-schedule:
     pickup-schedule-2023:
       agol: False
       format: csv
-      url: "http://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/waste-collection-schedule-2023.csv"
+      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/waste-collection-schedule-2023.csv"
       attributes:
         - id: "Schedule"
           type: "text"
@@ -81,7 +81,7 @@ solid-waste-pickup-schedule:
     pickup-schedule-2022:
       agol: False
       format: csv
-      url: "http://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2022.csv"
+      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2022.csv"
       attributes:
         - id: "Calendar"
           type: "text"
@@ -110,7 +110,7 @@ solid-waste-pickup-schedule:
     pickup-schedule-2021:
       agol: False
       format: csv
-      url: "http://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2021.csv"
+      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2021.csv"
       attributes:
         - id: "Calendar"
           type: "text"
@@ -151,7 +151,7 @@ solid-waste-pickup-schedule:
     pickup-schedule-2020:
       agol: False
       format: csv
-      url: "http://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2020.csv"
+      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2020.csv"
       attributes:
         - id: "Calendar"
           type: "text"
@@ -192,7 +192,7 @@ solid-waste-pickup-schedule:
     pickup-schedule-2019:
       agol: False
       format: csv
-      url: "http://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2019.csv"
+      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2019.csv"
       attributes:
         - id: "Calendar"
           type: "text"
@@ -233,7 +233,7 @@ solid-waste-pickup-schedule:
     pickup-schedule-2018:
       agol: False
       format: csv
-      url: "http://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2018.csv"
+      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2018.csv"
       attributes:
         - id: "Calendar"
           type: "text"
@@ -274,7 +274,7 @@ solid-waste-pickup-schedule:
     pickup-schedule-2017:
       agol: False
       format: csv
-      url: "http://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2017.csv"
+      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2017.csv"
       attributes:
         - id: "Calendar"
           type: "text"
@@ -315,7 +315,7 @@ solid-waste-pickup-schedule:
     pickup-schedule-2016:
       agol: False
       format: csv
-      url: "http://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2016.csv"
+      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2016.csv"
       attributes:
         - id: "Calendar"
           type: "text"
@@ -356,7 +356,7 @@ solid-waste-pickup-schedule:
     pickup-schedule-sept2014-dec-2015:
       agol: False
       format: csv
-      url: "http://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-sept2014-dec-2015.csv"
+      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-sept2014-dec-2015.csv"
       attributes:
         - id: "Calendar"
           type: "text"

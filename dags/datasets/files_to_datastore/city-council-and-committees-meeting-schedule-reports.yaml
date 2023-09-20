@@ -41,7 +41,7 @@ city-council-and-committees-meeting-schedule-reports:
     # resource name
     meeting-schedule-all-committees-2022-2026:
       format: csv
-      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_MEETING_SCHEDULE_2022_2026.csv
+      url: https://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_MEETING_SCHEDULE_2022_2026.csv
       attributes:
         - id: Term
           type: text

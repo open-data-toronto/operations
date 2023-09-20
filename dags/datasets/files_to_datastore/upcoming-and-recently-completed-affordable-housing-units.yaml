@@ -45,7 +45,7 @@ upcoming-and-recently-completed-affordable-housing-units:
   resources: 
     Affordable Rental Housing Pipeline:
       format: csv
-      url: http://opendata.toronto.ca/housing.secretariat/COT_affordable_rental_housing.csv
+      url: https://opendata.toronto.ca/housing.secretariat/COT_affordable_rental_housing.csv
       attributes:
         #- id: ID
         #  type: "text"

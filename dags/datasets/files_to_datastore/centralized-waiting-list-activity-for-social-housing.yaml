@@ -43,7 +43,7 @@ centralized-waiting-list-activity-for-social-housing:
   resources: 
     Centralized Waitlist for Social Housing:
       format: csv
-      url: http://opendata.toronto.ca/housing.secretariat/Waitlist Data.csv
+      url: https://opendata.toronto.ca/housing.secretariat/Waitlist Data.csv
       attributes:
         - source_name: "Quarter"
           target_name: "Quarter/Year"

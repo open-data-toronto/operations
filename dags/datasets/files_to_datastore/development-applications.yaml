@@ -33,7 +33,7 @@ development-applications:
     # resource name
     Development Applications:
       format: csv
-      url: http://opendata.toronto.ca/city.planning/development-applications/development-applications.csv
+      url: https://opendata.toronto.ca/city.planning/development-applications/development-applications.csv
       attributes:
         - id: "APPLICATION_TYPE"
           type: "text"

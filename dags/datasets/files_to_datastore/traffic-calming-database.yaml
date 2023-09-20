@@ -35,7 +35,7 @@ traffic-calming-database:
     Traffic Calming Database:
       #agol: False
       format: geojson
-      url: "http://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.geojson"
+      url: "https://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.geojson"
       attributes:
         - id: calm_id
           type: int

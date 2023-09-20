@@ -29,7 +29,7 @@ building-permits-active-permits:
   resources:
     building-permits-active-permits:
       format: csv
-      url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits.csv
+      url: https://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits.csv
       attributes:
         - id: PERMIT_NUM
           type: text

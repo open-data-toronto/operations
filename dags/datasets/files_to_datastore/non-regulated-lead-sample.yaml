@@ -45,7 +45,7 @@ non-regulated-lead-sample:
     # resource name
     Non Regulated Lead Samples:
       format: csv
-      url: http://opendata.toronto.ca/toronto.water/non-regulated-lead-sample/LeadSamples.csv
+      url: https://opendata.toronto.ca/toronto.water/non-regulated-lead-sample/LeadSamples.csv
       attributes:
         - id: Sample Number          
           type: int

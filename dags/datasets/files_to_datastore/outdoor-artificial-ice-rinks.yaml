@@ -56,7 +56,7 @@ outdoor-artificial-ice-rinks:
     Outdoor Ice Rinks:
       format: xlsx
       sheet: Sheet1
-      url: http://opendata.toronto.ca/parks.forestry.recreation/outdoor-ice-rinks/outdoor-ice-rinks-data-4326.xlsx
+      url: https://opendata.toronto.ca/parks.forestry.recreation/outdoor-ice-rinks/outdoor-ice-rinks-data-4326.xlsx
       attributes:
         - id: "Parent Asset Name"
           type: "text"
