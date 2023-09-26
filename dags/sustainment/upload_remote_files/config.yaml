@@ -2,192 +2,192 @@
 earlyon-child-and-family-centres:
   EarlyON Child and Family Centres Locations - JSON:
     format: json
-    url: http://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json
+    url: https://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json
 #2021/11/08, Gary
 automated-speed-enforcement-ase-charges:
   Automated Speed Enforcement - Monthly Charges:
     format: xlsx
-    url: http://opendata.toronto.ca/transportation.services/automated-speed-enforcement-ase-charges/Automated-Speed-Enforcement.xlsx
+    url: https://opendata.toronto.ca/transportation.services/automated-speed-enforcement-ase-charges/Automated-Speed-Enforcement.xlsx
 #2021/08/25, Gary
 heritage-conservation-districts:
   Heritage Conservation Districts Data(2022):
     format: zip
-    url: http://opendata.toronto.ca/city.planning/heritage-conservation-districts/HeritageConservationDistrict.zip
+    url: https://opendata.toronto.ca/city.planning/heritage-conservation-districts/HeritageConservationDistrict.zip
 heritage-register:
   Heritage Register Data:
     format: zip
-    url: http://opendata.toronto.ca/city.planning/heritage-register/Heritage_Register_Address_Points_WGS84.zip
+    url: https://opendata.toronto.ca/city.planning/heritage-register/Heritage_Register_Address_Points_WGS84.zip
 monthly-communicable-disease-surveillance-data:
   Communicable disease surveillance data 2023:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2023_Monthly_Report_AODA.xlsx
+    url: https://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2023_Monthly_Report_AODA.xlsx
   Communicable disease surveillance data 2022:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2022_Monthly_Report_AODA.xlsx
+    url: https://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2022_Monthly_Report_AODA.xlsx
   Communicable disease surveillance data 2021:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2021_Monthly_Report_AODA.xlsx
+    url: https://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2021_Monthly_Report_AODA.xlsx
   Communicable disease surveillance data 2020:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2020_Monthly_Report_AODA.xlsx
+    url: https://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2020_Monthly_Report_AODA.xlsx
 # 2021/05/06, Gary
 traffic-and-parking-by-law-schedules:
   Traffic and parking by-law schedules:
     format: zip
-    url: http://opendata.toronto.ca/transportation.services/traffic-and-parking-by-law-schedules/chapter950.zip
+    url: https://opendata.toronto.ca/transportation.services/traffic-and-parking-by-law-schedules/chapter950.zip
 toronto-economic-bulletin:
   Toronto economic bulletin data:
     format: xlsx
-    url: http://opendata.toronto.ca/economic.development.culture/toronto-economic-bulletin/bulletin_opendata.xlsx
+    url: https://opendata.toronto.ca/economic.development.culture/toronto-economic-bulletin/bulletin_opendata.xlsx
 3d-massing:
   3D Massing (WGS84):
     format: shp
-    url: http://opendata.toronto.ca/city.planning/3d-massing/2022/3DMassingShapefile_2022_WGS84.zip
+    url: https://opendata.toronto.ca/city.planning/3d-massing/2022/3DMassingShapefile_2022_WGS84.zip
   3D Massing Multipatch (WGS84):
     format: shp
-    url: http://opendata.toronto.ca/city.planning/3d-massing/2022/3DMassingMultipatch_2022_WGS84.zip
+    url: https://opendata.toronto.ca/city.planning/3d-massing/2022/3DMassingMultipatch_2022_WGS84.zip
   Tile Locator Reference File (PDF):
     format: pdf
-    url: http://opendata.toronto.ca/city.planning/3d-massing/3DContextMassing_Tile_Locator.pdf
+    url: https://opendata.toronto.ca/city.planning/3d-massing/3DContextMassing_Tile_Locator.pdf
 address-points-municipal-toronto-one-address-repository:
   Municipal address points (wgs84) - geojson:
     format: zip
-    url: http://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/ADDRESS_POINT_WGS84_geojson.zip
+    url: https://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/ADDRESS_POINT_WGS84_geojson.zip
   Municipal address points (wgs84) - shapefile:
     format: shp
-    url: http://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/municipal-address-points-wgs84-latitude-longitude.zip
+    url: https://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/municipal-address-points-wgs84-latitude-longitude.zip
 #building-permits-active-permits:
 #  Active permits (CSV):
 #    format: zip
-#    url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits_csv.zip
+#    url: https://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits_csv.zip
 #  Active permits (XML):
 #    format: zip
-#    url: http://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits.zip
+#    url: https://opendata.toronto.ca/toronto.building/building-permits-active-permits/activepermits.zip
 building-permits-cleared-permits-current-year:
   Cleared Permits Current Year (CSV):
     format: zip
-    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits_current_year_csv.zip
+    url: https://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits_current_year_csv.zip
   Cleared Permits Current Year (XML):
     format: zip
-    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits_current_year.zip
+    url: https://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-current-year/clearedpermits_current_year.zip
 building-permits-cleared-permits-prior-years:
   Cleared Permits (2021 XML ZIP):
     format: zip
-    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2021.zip
+    url: https://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2021.zip
   Cleared Permits (2021 CSV ZIP):
     format: zip
-    url: http://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2021_csv.zip
+    url: https://opendata.toronto.ca/toronto.building/building-permits-cleared-permits-prior-years/clearedpermits2021_csv.zip
 clerk-s-directory-of-record-for-record-series-management-tool-rsmt:
   RSMT Directory of records:
     format: xml
-    url: http://opendata.toronto.ca/clerk/rsmt/rsmtDirectoryOfRecords.xml
+    url: https://opendata.toronto.ca/clerk/rsmt/rsmtDirectoryOfRecords.xml
 clerks-record-classification-system-authoritative-source-rsmt:
   RCS authoritative source:
     format: xml
-    url: http://opendata.toronto.ca/clerk/rsmt/rsmtRcsAuthoritative.xml
+    url: https://opendata.toronto.ca/clerk/rsmt/rsmtRcsAuthoritative.xml
 clerks-record-classification-system-internally-approved-rsmt:
   RCS internal approved:
     format: xml
-    url: http://opendata.toronto.ca/clerk/rsmt/rsmtRcsInternal.xml
+    url: https://opendata.toronto.ca/clerk/rsmt/rsmtRcsInternal.xml
 city-subject-thesaurus:
   City Subject Thesaurus:
     format: xml
-    url: http://opendata.toronto.ca/city.clerks.office/city-subject-thesaurus/subject_thesaurus.xml
+    url: https://opendata.toronto.ca/city.clerks.office/city-subject-thesaurus/subject_thesaurus.xml
   City Subject Thesaurus Readme:
     format: xls
-    url: http://opendata.toronto.ca/city.clerks.office/city-subject-thesaurus/city-subject-thesaurus-readme.xls
+    url: https://opendata.toronto.ca/city.clerks.office/city-subject-thesaurus/city-subject-thesaurus-readme.xls
 head-of-household:
   Head of household - split files:
     format: zip
-    url: http://opendata.toronto.ca/employment.social/head.household/tess_ow_split_files.zip
+    url: https://opendata.toronto.ca/employment.social/head.household/tess_ow_split_files.zip
   head-of-household-data:
     format: zip
-    url: http://opendata.toronto.ca/employment.social/head.household/opendata_tess_ow.zip
+    url: https://opendata.toronto.ca/employment.social/head.household/opendata_tess_ow.zip
 labour-force-survey:
   Annual labour force survey database(ivt):
     format: zip
-    url: http://opendata.toronto.ca/economic.development.culture/labour-force-survey/lfs_ivt_annual.zip
+    url: https://opendata.toronto.ca/economic.development.culture/labour-force-survey/lfs_ivt_annual.zip
   Monthly labour force survey database(ivt):
     format: zip
-    url: http://opendata.toronto.ca/economic.development.culture/labour-force-survey/lfs_ivt_monthly.zip
+    url: https://opendata.toronto.ca/economic.development.culture/labour-force-survey/lfs_ivt_monthly.zip
 lobbyist-registry:
   Lobbyist Registry Activity:
     format: zip
-    url: http://opendata.toronto.ca/lobbyist.registrar/lobbyist-registry/lobbyactivity.zip
+    url: https://opendata.toronto.ca/lobbyist.registrar/lobbyist-registry/lobbyactivity.zip
 mobile-watch-your-speed-program-detailed-speed-counts:
   Mobile sign detail count 2018:
     format: zip
-    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2018.zip
+    url: https://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2018.zip
   Mobile sign detail count 2019:
     format: zip
-    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2019.zip
+    url: https://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2019.zip
   Mobile sign detail count 2020:
     format: zip
-    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2020.zip
+    url: https://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2020.zip
   Mobile sign detail count 2021:
     format: zip
-    url: http://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2021.zip
+    url: https://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile_detailed_2021.zip
 school-safety-zone-watch-your-speed-program-detailed-speed-counts:
   Stationary count detailed 2020:
     format: zip
-    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2020.zip
+    url: https://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2020.zip
   Stationary count detailed 2021:
     format: zip
-    url: http://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2021.zip
+    url: https://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary_detailed_2021.zip
 # municipal-licensing-and-standards-business-licences-and-permits:
 #   Business licences data:
 #     format: csv
-#     url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
+#     url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
 municipal-licensing-and-standards-investigation-activity:
   Investigation Activities (CSV ZIP):
     format: zip
-    url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_csv.zip
+    url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_csv.zip
   Investigation Activities (JSON ZIP):
     format: zip
-    url: http://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_json.zip
+    url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_json.zip
 #non-regulated-lead-sample:
 #  non-regulated-lead-sample-from-2014-to-present-csv:
 #    format: zip
-#    url: http://opendata.toronto.ca/toronto.water/non-regulated-lead-sample/leadsampling_csv.zip
+#    url: https://opendata.toronto.ca/toronto.water/non-regulated-lead-sample/leadsampling_csv.zip
 #  non-regulated-lead-sample-from-2014-to-present-xml:
 #    format: zip
-#    url: http://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
+#    url: https://opendata.toronto.ca/water/lead.sampling/leadsampling_xml.zip
 #outbreaks-in-toronto-healthcare-institutions:
 #  Outbreaks in Toronto Healthcare Institutions-2020:
 #    format: xls
-#    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2020.xls
+#    url: https://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2020.xls
 #  Outbreaks in Toronto Healthcare Institutions-2021:
 #    format: xls
-#    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2021.xls
+#    url: https://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2021.xls
 #  Outbreaks in Toronto Healthcare Institutions-2022:
 #    format: xls
-#    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2022.xls
+#    url: https://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2022.xls
 #  Outbreaks in Toronto Healthcare Institutions-2023:
 #    format: xls
-#    url: http://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2023.xls
+#    url: https://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2023.xls
 parking-ticket-trials:
   parking-ticket-trial-data:
     format: zip
-    url: http://opendata.toronto.ca/revenue/parking/trial/Parking_Ticket_Trials.zip
+    url: https://opendata.toronto.ca/revenue/parking/trial/Parking_Ticket_Trials.zip
 pcard-expenditures:
   pcard-expenses:
     format: zip
-    url: http://opendata.toronto.ca/accounting/pcard/expenditures.zip
+    url: https://opendata.toronto.ca/accounting/pcard/expenditures.zip
 property-boundaries:
   Property Boundaries (wgs84) - geojson:
     format: zip
-    url: http://opendata.toronto.ca/technology.services/property-boundaries/PROPERTY_BOUNDARIES_WGS84_geojson.zip
+    url: https://opendata.toronto.ca/technology.services/property-boundaries/PROPERTY_BOUNDARIES_WGS84_geojson.zip
   Property Boundaries (wgs84) - shapefile:
     format: shp
-    url: http://opendata.toronto.ca/technology.services/property-boundaries/property_bnds_gcc_wgs84.zip
+    url: https://opendata.toronto.ca/technology.services/property-boundaries/property_bnds_gcc_wgs84.zip
 rain-gauge-locations-and-precipitation:
   Rain gauge notes:
     format: zip
-    url: http://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/raingaugenotes.zip
+    url: https://opendata.toronto.ca/toronto.water/rain-gauge-locations-and-precipitation/raingaugenotes.zip
 #registered-programs-and-drop-in-courses-offering:
 #  Registered programs and drop in courses offering data:
 #    format: xlsx
-#    url: http://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
+#    url: https://opendata.toronto.ca/parks.forestry.recreation/registered-programs-and-drop-in-courses-offering/Registered_Programs_and_Drop_In_Courses_Offering.xlsx
 # report-request-log-city-council-and-its-committees:
 #   Report Request Log:
 #     format: xlsx
@@ -195,288 +195,288 @@ rain-gauge-locations-and-precipitation:
 #toronto-centreline-tcl:
 #  Centreline (wgs84) - geojson:
 #    format: zip
-#    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_geojson_v2.zip
+#    url: https://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_geojson_v2.zip
 #  Centreline (wgs84) - shapefile:
 #    format: shp
-#    url: http://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v2.zip
+#    url: https://opendata.toronto.ca/technology.services/toronto-centreline-tcl/CENTRELINE_WGS84_v2.zip
 #traffic-cameras:
   # Traffic Camera List (CSV):
   #   format: csv
-  #   url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.csv
+  #   url: https://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.csv
   # Traffic Camera List (JSON):
   #   format: json
-  #   url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.json
+  #   url: https://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.json
   # Traffic Camera List (XML):
   #   format: xml
-  #   url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.xml
+  #   url: https://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.xml
   #Traffic Camera List (XSD):
   #  format: xsd
-  #  url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.xsd
+  #  url: https://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcameras.xsd
   #Traffic Camera List (update timestamp):
   #  format: json
-  #  url: http://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcamerassn.json
+  #  url: https://opendata.toronto.ca/transportation/tmc/rescucameraimages/Data/tmcearthcamerassn.json
 triangular-irregular-network-tin:
   triangular-irregular-network:
     format: shp
-    url: http://opendata.toronto.ca/technology.services/TIN/2015_TIN.zip
+    url: https://opendata.toronto.ca/technology.services/TIN/2015_TIN.zip
 ttc-routes-and-schedules:
   TTC Routes and Schedules Data:
     format: zip
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/OpenData_TTC_Schedules.zip
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/OpenData_TTC_Schedules.zip
 # utility-cut-permits:
 #   utility-cut-permits:
 #     format: zip
-#     url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp.zip
+#     url: https://opendata.toronto.ca/transportation/utility.cut.permit/ucp.zip
 #   utility-cut-permits-documentation:
 #     format: zip
-#     url: http://opendata.toronto.ca/transportation/utility.cut.permit/ucp_doc.zip
+#     url: https://opendata.toronto.ca/transportation/utility.cut.permit/ucp_doc.zip
 # imagination-manufacturing-innovation-and-technology-imit-program-recipients:
 #   IMIT Program Recipients (CSV):
 #     format: csv
-#     url: http://opendata.toronto.ca/economic.development.culture/imagination-manufacturing-innovation-and-technology-imit-program-recipients/IMIT_Report.csv
+#     url: https://opendata.toronto.ca/economic.development.culture/imagination-manufacturing-innovation-and-technology-imit-program-recipients/IMIT_Report.csv
 #   IMIT Program Recipients (Excel):
 #     format: xlsx
-#     url: http://opendata.toronto.ca/economic.development.culture/imagination-manufacturing-innovation-and-technology-imit-program-recipients/IMIT_Report.xlsx
+#     url: https://opendata.toronto.ca/economic.development.culture/imagination-manufacturing-innovation-and-technology-imit-program-recipients/IMIT_Report.xlsx
 small-business-property-tax-subclass-eligible-properties:
   Small Business Subclass Report - 2022:
     format: xlsx
-    url: http://opendata.toronto.ca/revenue.services/small-business-property-tax-subclass-eligible-properties/Small Business Subclass - 2022.xlsx
+    url: https://opendata.toronto.ca/revenue.services/small-business-property-tax-subclass-eligible-properties/Small Business Subclass - 2022.xlsx
 small-business-property-tax-subclass-eligible-properties:
   Small Business Subclass Report - 2023:
     format: xlsx
-    url: http://opendata.toronto.ca/revenue.services/small-business-property-tax-subclass-eligible-properties/Small Business Subclass - 2023.xlsx
+    url: https://opendata.toronto.ca/revenue.services/small-business-property-tax-subclass-eligible-properties/Small Business Subclass - 2023.xlsx
 development-charge-revenues:
   DC Revenues (2017):
     format: xlsx
-    url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2017).xlsx
+    url: https://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2017).xlsx
   DC Revenues (2018):
     format: xlsx
-    url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2018).xlsx
+    url: https://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2018).xlsx
   DC Revenues (2019):
     format: xlsx
-    url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2019).xlsx
+    url: https://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2019).xlsx
   DC Revenues (2020):
     format: xlsx
-    url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2020).xlsx
+    url: https://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2020).xlsx
   DC Revenues (2021):
     format: xlsx
-    url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2021).xlsx
+    url: https://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2021).xlsx
   DC Revenues (2022):
     format: xlsx
-    url: http://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2022).xlsx
+    url: https://opendata.toronto.ca/accounting.services/development-charge-revenues/DC Revenues (2022).xlsx
 ttc-bus-delay-data:
   ttc-bus-delay-data-readme:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-readme.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-readme.xlsx
   ttc-bus-delay-data-2014:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2014.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2014.xlsx
   ttc-bus-delay-data-2015:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2015.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2015.xlsx
   ttc-bus-delay-data-2016:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2016.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2016.xlsx
   ttc-bus-delay-data-2017:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2017.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2017.xlsx
   ttc-bus-delay-data-2018:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2018.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2018.xlsx
   ttc-bus-delay-data-2019:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2019.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2019.xlsx
   ttc-bus-delay-data-2020:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2020.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2020.xlsx
   ttc-bus-delay-data-2021:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2021.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2021.xlsx
   ttc-bus-delay-data-2022:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2022.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2022.xlsx
   ttc-bus-delay-data-2023:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2023.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2023.xlsx
 ttc-streetcar-delay-data:
   ttc-streetcar-delay-data-readme:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-readme.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-readme.xlsx
   ttc-streetcar-delay-data-2014:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2014.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2014.xlsx
   ttc-streetcar-delay-data-2015:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2015.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2015.xlsx
   ttc-streetcar-delay-data-2016:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2016.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2016.xlsx
   ttc-streetcar-delay-data-2017:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2017.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2017.xlsx
   ttc-streetcar-delay-data-2018:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2018.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2018.xlsx
   ttc-streetcar-delay-data-2019:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2019.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2019.xlsx
   ttc-streetcar-delay-data-2020:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2020.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2020.xlsx
   ttc-streetcar-delay-data-2021:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2021.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2021.xlsx
   ttc-streetcar-delay-data-2022:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2022.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2022.xlsx
   ttc-streetcar-delay-data-2023:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2023.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2023.xlsx
 ttc-subway-delay-data:
   ttc-subway-delay-data-readme:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-readme.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-readme.xlsx
   ttc-subway-delay-codes:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-codes.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-codes.xlsx
   ttc-subway-delay-jan-2014-april-2017:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-jan-2014-april-2017.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-jan-2014-april-2017.xlsx
   ttc-subway-delay-may-december-2017:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-may-december-2017.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-may-december-2017.xlsx
   ttc-subway-delay-data-2018:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2018.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2018.xlsx
   ttc-subway-delay-data-2019:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2019.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2019.xlsx
   ttc-subway-delay-data-2020:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2020.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2020.xlsx
   ttc-subway-delay-data-2021:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2021.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2021.xlsx
   ttc-subway-delay-data-2022:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2022.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2022.xlsx
   ttc-subway-delay-data-2023:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2023.xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2023.xlsx
 bike-share-toronto-ridership-data:
   bikeshare-ridership-readme:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-readme.xlsx
+    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-readme.xlsx
   bikeshare-ridership-2014-2015:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2014-2015.xlsx
+    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2014-2015.xlsx
   bikeshare-ridership-2016:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2016.xlsx
+    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2016.xlsx
   bikeshare-ridership-2017:
     format: zip
-    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2017.zip
+    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2017.zip
   bikeshare-ridership-2018:
     format: zip
-    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2018.zip
+    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2018.zip
   bikeshare-ridership-2019:
     format: zip
-    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2019.zip
+    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2019.zip
   bikeshare-ridership-2020:
     format: zip
-    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2020.zip
+    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2020.zip
   bikeshare-ridership-2021:
     format: zip
-    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2021.zip
+    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2021.zip
   bikeshare-ridership-2022:
     format: zip
-    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2022.zip
+    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2022.zip
   bikeshare-ridership-2023:
     format: zip
-    url: http://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2023.zip
+    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2023.zip
 annual-energy-consumption:
   annual-energy-consumption-readme:
     format: xlsx
-    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-readme.xlsx
+    url: https://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-readme.xlsx
   annual-energy-consumption-data-2011-2014:
     format: xlsx
-    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2011-2014.xlsx
+    url: https://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2011-2014.xlsx
   annual-energy-consumption-data-2015:
     format: xlsx
-    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2015.xlsx
+    url: https://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2015.xlsx
   annual-energy-consumption-data-2016:
     format: xlsx
-    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2016.xlsx
+    url: https://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2016.xlsx
   annual-energy-consumption-data-2017:
     format: xlsx
-    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2017.xlsx
+    url: https://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2017.xlsx
   annual-energy-consumption-data-2018:
     format: xlsx
-    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2018.xlsx
+    url: https://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2018.xlsx
   annual-energy-consumption-data-2019:
     format: xlsx
-    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2019.xlsx
+    url: https://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2019.xlsx
   annual-energy-consumption-data-2020:
     format: xlsx
-    url: http://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2020.xlsx 
+    url: https://opendata.toronto.ca/environment.energy/annual-energy-consumption/annual-energy-consumption-data-2020.xlsx 
 #cafeto-curb-lane-parklet-cafe-locations:
 #  Cafe TO Locations:
 #    format: shp
-#    url: http://opendata.toronto.ca/transportation.services/cafe-to/Cafe_TO_Locations_with_Years.zip
+#    url: https://opendata.toronto.ca/transportation.services/cafe-to/Cafe_TO_Locations_with_Years.zip
 basement-flooding-by-ward:
   basement-flooding-by-ward:
     format: xlsx
-    url: http://opendata.toronto.ca/toronto.water/basement-flooding-by-ward/Basaement Flooding by Ward Open Data_Jun 30 2023.xlsx
+    url: https://opendata.toronto.ca/toronto.water/basement-flooding-by-ward/Basaement Flooding by Ward Open Data_Jun 30 2023.xlsx
 freedom-of-information-requests-summary:
   foi-request-summary-2011:
     format: xls
-    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2011.xls
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2011.xls
   foi-request-summary-2012:
     format: xls
-    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2012.xls
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2012.xls
   foi-request-summary-2013:
     format: xls
-    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2013.xls
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2013.xls
   foi-request-summary-2014:
     format: xlsx
-    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2014.xlsx
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2014.xlsx
   foi-request-summary-2015:
     format: xlsx
-    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2015.xlsx
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2015.xlsx
   foi-request-summary-2016:
     format: xlsx
-    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2016.xlsx
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2016.xlsx
   foi-request-summary-2017:
     format: xlsx
-    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2017.xlsx
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2017.xlsx
   foi-request-summary-2018:
     format: xlsx
-    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2018.xlsx
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2018.xlsx
   foi-request-summary-2019:
     format: xlsx
-    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2019.xlsx
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2019.xlsx
   foi-request-summary-2020:
     format: xlsx
-    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2020.xlsx
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2020.xlsx
   foi-request-summary-2021:
     format: xlsx
-    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2021.xlsx
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2021.xlsx
   foi-request-summary-2022:
     format: xlsx
-    url: http://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2022.xlsx
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2022.xlsx
   Glossary of Short Forms:
     format: doc
-    url: http://opendata.toronto.ca/city.clerks.office/foi/Glossary of Short Forms  updated  August 29, 2022.doc
+    url: https://opendata.toronto.ca/city.clerks.office/foi/Glossary of Short Forms  updated  August 29, 2022.doc
 community-grants-allocations:
   community-grants-allocations-2020:
     format: xlsx
-    url: http://opendata.toronto.ca/social.development.finance.administration/community-grants/community-grants-allocations-2020.xlsx
+    url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/community-grants-allocations-2020.xlsx
   community-grants-allocations-2020-additions:
     format: xlsx
-    url: http://opendata.toronto.ca/social.development.finance.administration/community-grants/MISSING 2020 EED Community Grants Allocations.xlsx
+    url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/MISSING 2020 EED Community Grants Allocations.xlsx
   community-grants-allocations-2021:
     format: xlsx
-    url: http://opendata.toronto.ca/social.development.finance.administration/community-grants/2021 Community Grants Allocation - Final 3.xlsx
+    url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/2021 Community Grants Allocation - Final 3.xlsx
 report-request-log-city-council-and-its-committees: 
   Report Request Log 2022-2026:
     format: xlsx
@@ -493,42 +493,42 @@ report-request-log-city-council-and-its-committees:
 cost-of-living-in-toronto-for-low-income-households:
   2022 Income Scenario - With Subsidies:
     format: csv
-    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-with subsidies v2.csv
+    url: https://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-with subsidies v2.csv
   2022 Income Scenario - Without Subsidies, Average Rent:
     format: csv
-    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-without subsidies_average rent v2.csv
+    url: https://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-without subsidies_average rent v2.csv
   2022 Income Scenario - Without Subsidies, Market Rent:
     format: csv
-    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-without subsidies_market rent v2.csv
+    url: https://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/2022-income-scenario-spreadsheet-without subsidies_market rent v2.csv
   2022 Income Scenario - With Subsidies Readme:
     format: xlsx
-    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-with-subsidies-readme .xlsx
+    url: https://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-with-subsidies-readme .xlsx
   2022 Income Scenario - Without Subsidies, Average Rent Readme:
     format: xlsx
-    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-without-subsidies-average-rent-readme .xlsx
+    url: https://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-without-subsidies-average-rent-readme .xlsx
   2022 Income Scenario - Without Subsidies, Market Rent Readme:
     format: xlsx
-    url: http://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-without-subsidies-market-rent-readme .xlsx
+    url: https://opendata.toronto.ca/social.development.finance.administration/cost-of-living-in-toronto-for-low-income-households/income-scenerios-without-subsidies-market-rent-readme .xlsx
 # tenant-notification-for-rent-reduction:
 #   tenant-notification-for-rent-reduction-2022:
 #     format: xlsx
-#     url: http://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2022.xlsx
+#     url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2022.xlsx
 red-light-camera-annual-charges:
   Red Light Camera Annual Charges:
     format: xlsx
-    url: http://opendata.toronto.ca/transportation.services/red-light-camera-charges/rlc-annual-charges-2007-2022.xlsx
+    url: https://opendata.toronto.ca/transportation.services/red-light-camera-charges/rlc-annual-charges-2007-2022.xlsx
 
 ##### agol ckan sync
 neighbourhood-improvement-areas:
   NIA Methodology FAQ:
     format: docx
-    url: http://opendata.toronto.ca/social.development.finance.administration/neighbourhood-improvement-areas/NIA Methodology FAQ.docx
+    url: https://opendata.toronto.ca/social.development.finance.administration/neighbourhood-improvement-areas/NIA Methodology FAQ.docx
   TSNS 2020 NIA Census Tracts:
     format: xlsx
-    url: http://opendata.toronto.ca/social.development.finance.administration/neighbourhood-improvement-areas/TSNS 2020 NIA Census Tracts.xlsx
+    url: https://opendata.toronto.ca/social.development.finance.administration/neighbourhood-improvement-areas/TSNS 2020 NIA Census Tracts.xlsx
   TSNS 2020 NEI Methodological Documentation:
     format: docx
-    url: http://opendata.toronto.ca/social.development.finance.administration/neighbourhood-improvement-areas/TSNS 2020 NEI Methodological Documentation-Final.docx
+    url: https://opendata.toronto.ca/social.development.finance.administration/neighbourhood-improvement-areas/TSNS 2020 NEI Methodological Documentation-Final.docx
 311-service-requests-customer-initiated:
   311 Service Requests 2022:
     format: zip
@@ -540,58 +540,58 @@ neighbourhood-improvement-areas:
 parking-tickets:
   parking-tickets-2022:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2022.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2022.zip
   parking-tickets-2021:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2021.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2021.zip
 #  parking-tickets-2020:
 #    format: zip
-#    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2020.zip
+#    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2020.zip
 #  parking-tickets-2019:
 #    format: zip
-#    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2019.zip
+#    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2019.zip
   parking-tickets-2018:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2018.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2018.zip
   parking-tickets-2017:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2017.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2017.zip
   parking-tickets-2016:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2016.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2016.zip
   parking-tickets-2015:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2015.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2015.zip
   parking-tickets-2014:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2014.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2014.zip
   parking-tickets-2014:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2014.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2014.zip
   parking-tickets-2013:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2013.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2013.zip
   parking-tickets-2012:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2012.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2012.zip
   parking-tickets-2011:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2011.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2011.zip
   parking-tickets-2010:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2010.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2010.zip
   parking-tickets-2009:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2009.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2009.zip
   parking-tickets-2008:
     format: zip
-    url: http://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2008.zip
+    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2008.zip
 traffic-calming-database:
   Traffic Calming Database:
     format: shp
-    url: http://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.zip
+    url: https://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.zip
 
 housing-to-action-plan:
   HousingTO Open Data:
     format: xlsx
-    url: http://opendata.toronto.ca/housing.secretariat/housing-to-open-data.xlsx
+    url: https://opendata.toronto.ca/housing.secretariat/housing-to-open-data.xlsx

@@ -1,0 +1,110 @@
+city-of-toronto-free-public-wifi:
+  jira_issue_id: DTSD-3619
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/177021
+  schedule: '@once'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: City of Toronto Free Public WiFi
+  date_published: '2023-09-26 14:04:12.166811'
+  dataset_category: Map
+  refresh_rate: Monthly
+  owner_division: Information & Technology
+  owner_section: Connected Communities
+  owner_unit: ConnectTO
+  owner_email: Michel.Mersereau@toronto.ca
+  civic_issues:
+  - Poverty reduction
+  topics:
+  - Community Services
+  - Locations and Mapping
+  tags:
+  - name: Internet
+    vocabulary_id: null
+  - name: WiFi
+    vocabulary_id: null
+  information_url: null
+  excerpt: Locations and descriptions for all City of Toronto Free Public WiFi sites
+  limitations: n/a
+  notes: location and description data of all CoT free public WiFi locations
+  resources:
+    City of Toronto Free Public WiFi:      
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_Public_Wifi_view/FeatureServer/0
+      attributes:
+      - id: objectid
+        type: int
+        info:
+          notes: ''
+      - id: has_wifi
+        type: text
+        info:
+          notes: ''
+      - id: location_name
+        type: text
+        info:
+          notes: ''
+      - id: public_name
+        type: text
+        info:
+          notes: ''
+      - id: address
+        type: text
+        info:
+          notes: ''
+      - id: postal_code
+        type: text
+        info:
+          notes: ''
+      - id: building_type
+        type: text
+        info:
+          notes: ''
+      - id: gis_id
+        type: int
+        info:
+          notes: ''
+      - id: asset_id
+        type: int
+        info:
+          notes: ''
+      - id: owner
+        type: text
+        info:
+          notes: ''
+      - id: neighbourhood
+        type: text
+        info:
+          notes: ''
+      - id: is_nia
+        type: text
+        info:
+          notes: ''
+      - id: is_emerging
+        type: text
+        info:
+          notes: ''
+      - id: ward
+        type: text
+        info:
+          notes: ''
+      - id: ward_number
+        type: text
+        info:
+          notes: ''
+      - id: telephone
+        type: text
+        info:
+          notes: ''
+      - id: website
+        type: text
+        info:
+          notes: ''
+      - id: globalid
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''
