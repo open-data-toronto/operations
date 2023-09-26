@@ -1,7 +1,7 @@
 city-of-toronto-free-public-wifi:
   jira_issue_id: DTSD-3619
   jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/177021
-  schedule: 0 19 * * 1
+  schedule: '0 19 * * 1'
   dag_owner_name: Mackenzie Nichols
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: City of Toronto Free Public WiFi
