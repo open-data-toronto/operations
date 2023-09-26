@@ -590,3 +590,8 @@ traffic-calming-database:
   Traffic Calming Database:
     format: shp
     url: http://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.zip
+
+housing-to-action-plan:
+  HousingTO Open Data:
+    format: xlsx
+    url: http://opendata.toronto.ca/housing.secretariat/housing-to-open-data.xlsx
