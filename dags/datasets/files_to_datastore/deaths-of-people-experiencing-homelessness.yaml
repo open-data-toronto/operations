@@ -50,13 +50,13 @@ deaths-of-people-experiencing-homelessness:
     Homeless deaths by month:
       format: xlsx
       url: https://opendata.toronto.ca/toronto.public.health/deaths-of-people-experiencing-homelessness/Homeless deaths_by_month.xlsx
-      sheet: Homeless Deaths_Feburary2023
+      sheet: Sheet1
       attributes:
-        - id: YEAR_OF_DEATH
+        - id: Year of death
           type: int
           info:
             notes: "This represents the year that the death occurred."
-        - id: Month_of_Death
+        - id: Month of death
           type: text
           info:
             notes: "This represents the month that the death occurred."
@@ -67,13 +67,13 @@ deaths-of-people-experiencing-homelessness:
     Homeless deaths by demographics:
       format: xlsx
       url: https://opendata.toronto.ca/toronto.public.health/deaths-of-people-experiencing-homelessness/Homeless deaths_demographics.xlsx
-      sheet: Demographics
+      sheet: Sheet1
       attributes:
-        - id: YEAR_OF_DEATH
+        - id: Year of death
           type: int
           info:
             notes: "This represents the year that the death occurred."
-        - id: Age_Group
+        - id: Age_group
           type: text
           info:
             notes: "This represents of the age group of the deceased individuals.  Categories are: <20, 20-39, 40-59, 60+"
@@ -88,17 +88,17 @@ deaths-of-people-experiencing-homelessness:
     Homeless deaths by cause:
       format: xlsx
       url: https://opendata.toronto.ca/toronto.public.health/deaths-of-people-experiencing-homelessness/Homeless deaths_by_cause.xlsx
-      sheet: Homeless Deaths_Feburary2023
+      sheet: Sheet1
       attributes:
-        - id: YEAR_OF_DEATH
+        - id: Year of death
           type: int
           info:
             notes: "This represents the year that the death occurred."
-        - id: Cause_Of_Death
+        - id: Cause_of_death
           type: text
           info:
             notes: "This represents the cause of death provided by the service provider, SSHA and/or coroner.  Categories include: Accident, Cancer, Cardiovascular Disease, COVID-19, Drug Toxicity, Homicide, Infection, Pneumonia, Suicide and Other.  Other includes: complications from diabetes, hypothermia, influenza, liver disease, organ failure, pulmonary disease, respiratory disease and stroke."
-        - id: Age_Group
+        - id: Age_group
           type: text
           info:
             notes: "This represents of the age group of the deceased individuals.  Categories are: <20, 20-39, 40-59, 60+"
