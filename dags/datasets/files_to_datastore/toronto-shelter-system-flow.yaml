@@ -93,7 +93,7 @@ toronto-shelter-system-flow:
           type: "int"
           info:
             notes: People who were previously using the shelter system, then did not use the system for 3 months or longer, and have now returned. Some other communities may call this indicator “Returned from Inactive”
-        - id: newly_identified 
+        - id: newly_identified
           type: "int"
           info:
             notes: People who entered the shelter system for the first time

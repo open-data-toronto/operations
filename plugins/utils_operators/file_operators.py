@@ -83,25 +83,6 @@ class DownloadFileOperator(BaseOperator):
         if self.file_url_task_id and self.file_url_task_key:
             self.file_url = ti.xcom_pull(task_ids=self.file_url_task_id)[self.file_url_task_key]
 
-    #def overwrite_file_check(self):
-    #    # if the file exists already and we don't want to overwrite it, return false
-    #    return not self.overwrite_if_exists and self.path.exists()
-
-#    def return_current_file_metadata(self):
-#        # make a hash of the file 
-#        checksum = hashlib.md5()
-#        f = open(self.path, "rb")
-#        content = f.read()
-#        checksum.update(content)
-#
-#        s = os.stat(self.path)
-#
-#        # return file hash and other metadata
-#        return {
-#            "path": self.path,
-#            "last_modified": datetime.fromtimestamp(s.st_mtime).isoformat(),
-#            "checksum": checksum.hexdigest(),
-#        }
 
     def stream_response_to_file(self, path):
         # grab data from input url
@@ -121,35 +102,6 @@ class DownloadFileOperator(BaseOperator):
 
         with open(self.path, "wb") as f:
             f.write(res.content)
-
-#
-#    def write_response_to_file_and_return_hash(self, res):
-#        # write the data to a file
-#        with open(self.path, "wb") as f:
-#            f.write(res.content)
-#
-#        # make a hash out of the data
-#        checksum = hashlib.md5()
-#        checksum.update(res.content)
-#
-#        return checksum
-
-#    def return_new_file_metadata(self, res, checksum):
-#        # init last-modified date of file, if available in response
-#        if "last-modified" in res.headers.keys():
-#            last_modified = res.headers["last-modified"]
-#        else:
-#            last_modified = ""
-
-
-        # return file hash and other metadata
-#        return {
-#            "path": self.path,
-#            "data_path": self.path,
-#            "last_modified": last_modified,
-#            "checksum": checksum.hexdigest(),
-#        }
-            
 
 
     def execute(self, context):
@@ -198,40 +150,12 @@ class DownloadFileOperator(BaseOperator):
         # otherwise, do nothing
         else:
             needs_update = False
-
-        print("-------------------------")
-        print({
-                "data_path": self.path,
-                "needs_update": needs_update,
-                "backup_path": backup_path
-                })
-        print("-------------------------")
         
         return {
                 "data_path": self.path,
                 "needs_update": needs_update,
                 "backup_path": backup_path
                 }
-
-        # if the file exists already and we don't want to overwrite it
-        #if self.overwrite_file_check():
-        #    result = self.return_current_file_metadata()
-            
-        # if the file doesn't exist or we're ok with overwriting an existing one
-#        else:
-#            # get data from http request
-#            res = self.get_data_from_http_request(ti)
-#
-#            # write response to file and get its md5 hash
-#            checksum = self.write_response_to_file_and_return_hash(res)
-#
-#            # create result
-#            result = self.return_new_file_metadata(res, checksum)
-#            
-#
-#        logging.info(f"Returning: {result}")
-#
-#        return result
 
 
 class DownloadZipOperator(BaseOperator):
@@ -515,4 +439,4 @@ class ValidateFileSchemaOperator(BaseOperator):
                 # so, while its present in the config file, it may not
                 # be present in the input file
                     if correct_col != "geometry":
-                        assert correct_col in file_columns, correct_col + " is in the config, but not in the data"
+                        assert correct_col.strip() in [f.strip() for f in file_columns], correct_col + " is in the config, but not in the data"
