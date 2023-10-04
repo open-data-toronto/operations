@@ -509,4 +509,10 @@ class ValidateFileSchemaOperator(BaseOperator):
             file_columns = next(reader, None)
 
             for correct_col in self.correct_columns:
-                assert correct_col in file_columns, correct_col + " is in the config, but not in the data"
+                for correct_col in self.correct_columns:
+                # we do not need to check geometry columns
+                # sometimes, we create the geometry columns from the input
+                # so, while its present in the config file, it may not
+                # be present in the input file
+                if correct_col != "geometry":
+                    assert correct_col in file_columns, correct_col + " is in the config, but not in the data"
