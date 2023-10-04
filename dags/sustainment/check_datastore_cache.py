@@ -95,7 +95,7 @@ with DAG(
 ) as dag:
 
     get_packages = GetAllPackagesOperator(
-        task_id = "get_packages"
+        task_id = "get_packages",
     )
 
     find_outdated_datastore_caches = PythonOperator(

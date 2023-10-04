@@ -81,12 +81,13 @@ class GetAllPackagesOperator(BaseOperator):
 
     @apply_defaults
     def __init__(self, address: str = None, **kwargs):
+        self.address = address
         super().__init__(**kwargs)
 
     def execute(self, context):
 
-        if address:
-            self.ckan = ckanapi.RemoteCKAN(apikey="", address=address)
+        if self.address:
+            self.ckan = ckanapi.RemoteCKAN(apikey="", address=self.address)
         else:
             self.ckan = misc_utils.connect_to_ckan()
 

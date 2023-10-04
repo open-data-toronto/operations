@@ -35,9 +35,9 @@ SRC_URL = "https://opendata.toronto.ca/childrens.services/child-family-programs/
 
 PACKAGE_NAME = "earlyon-child-and-family-centres"
 dag_id = "Earlyon-Centres-Registry"
-tmp_folder = Path(Variable.get("tmp_dir")) / dag_id
-filepath = tmp_folder / "data.parquet"
-fields_filepath = tmp_folder / "fields.json"
+tmp_folder = Variable.get("tmp_dir") + "/" + dag_id
+filepath = tmp_folder + "/" + "data.parquet"
+fields_filepath = tmp_folder + "/" + "fields.json"
 schema_change = True
 maker_attr_def = {
         "service_system_manager": "City of Toronto",
@@ -142,7 +142,7 @@ with DAG(
         ti = kwargs["ti"]
         data_file_info = ti.xcom_pull(task_ids="get_data")
 
-        with open(Path(data_file_info["path"])) as f:
+        with open(Path(data_file_info["data_path"])) as f:
             markers = json.load(f)
 
         df = pd.DataFrame(markers)
@@ -157,7 +157,7 @@ with DAG(
         ti = kwargs["ti"]
         data_file_info = ti.xcom_pull(task_ids="get_data")
 
-        with open(Path(data_file_info["path"])) as f:
+        with open(Path(data_file_info["data_path"])) as f:
             markers = json.load(f)
         logging.info(f"tmp_folder: {tmp_folder} | data_file_info: {data_file_info}")
 

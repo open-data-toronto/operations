@@ -48,6 +48,7 @@ class BackupDatastoreResourceOperator(BaseOperator):
     def _checksum_datastore_response(self, datastore_response):
 
         import hashlib
+        import pandas as pd
 
         data = pd.DataFrame(datastore_response["records"])
         if "_id" in data.columns.values:
@@ -61,6 +62,8 @@ class BackupDatastoreResourceOperator(BaseOperator):
         return data_hash.hexdigest()
 
     def _build_dataframe(self, records):
+        import pandas as pd
+
         data = pd.DataFrame(records)
         if "_id" in data.columns.values:
             data = data.drop("_id", axis=1)
@@ -97,7 +100,7 @@ class BackupDatastoreResourceOperator(BaseOperator):
         # get a resource and backup directory via xcom
         ti = context["ti"]
         resource = ti.xcom_pull(task_ids=self.resource_task_id)
-        backups_dir = Path(ti.xcom_pull(task_ids=self.dir_task_id))
+        backups_dir = ti.xcom_pull(task_ids=self.dir_task_id)
 
         # get number of records for this datastore resource
         record_count = self.ckan.action.datastore_search(id=resource["id"], limit=0)[
@@ -230,7 +233,7 @@ class DeleteDatastoreResourceRecordsOperator(BaseOperator):
 
         self.ckan.action.datastore_delete(id=backups_info["resource_id"], force=True)
 
-        with open(Path(backups_info["fields_file_path"]), "r") as f:
+        with open(backups_info["fields_file_path"], "r") as f:
             fields = json.load(f)
 
         self.ckan.action.datastore_create(
@@ -276,11 +279,11 @@ class InsertDatastoreResourceRecordsOperator(BaseOperator):
         resource = ti.xcom_pull(task_ids=self.resource_task_id)
 
         if self.fields_json_path_task_id is not None:
-            fields_path = Path(ti.xcom_pull(task_ids=self.fields_json_path_task_id))
+            fields_path = ti.xcom_pull(task_ids=self.fields_json_path_task_id)
             self._create_empty_resource_with_fields(fields_path, resource["id"])
 
         if self.parquet_filepath_task_id is not None:
-            path = Path(ti.xcom_pull(task_ids=self.parquet_filepath_task_id))
+            path = ti.xcom_pull(task_ids=self.parquet_filepath_task_id)
 
             data = pd.read_parquet(path)
             records = data.to_dict(orient="records")
@@ -331,10 +334,10 @@ class RestoreDatastoreResourceBackupOperator(BaseOperator):
 
         resource_id = backups_info["resource_id"]
 
-        with open(Path(backups_info["fields_file_path"]), "r") as f:
+        with open(backups_info["fields_file_path"], "r") as f:
             fields = json.load(f)
 
-        data = pd.read_parquet(Path(backups_info["data_file_path"]))
+        data = pd.read_parquet(backups_info["data_file_path"])
         records = data.to_dict(orient="records")
 
         try:

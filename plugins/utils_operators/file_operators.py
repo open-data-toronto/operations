@@ -514,5 +514,5 @@ class ValidateFileSchemaOperator(BaseOperator):
                 # sometimes, we create the geometry columns from the input
                 # so, while its present in the config file, it may not
                 # be present in the input file
-                if correct_col != "geometry":
-                    assert correct_col in file_columns, correct_col + " is in the config, but not in the data"
+                    if correct_col != "geometry":
+                        assert correct_col in file_columns, correct_col + " is in the config, but not in the data"
