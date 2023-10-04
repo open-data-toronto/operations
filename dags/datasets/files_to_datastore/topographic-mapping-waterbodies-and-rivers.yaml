@@ -1,9 +1,9 @@
-topographic-mapping-water-line:
+topographic-mapping-waterbodies-and-rivers:
   schedule: '0 0 4 */3 *'
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
-  title: Topographic Mapping - Water Line
-  date_published: '2023-07-19 15:49:09.917562'
+  title: Topographic Mapping – Waterbodies & Rivers
+  date_published: '2023-06-16 15:49:09.917562'
   dataset_category: Map
   refresh_rate: Quarterly
   owner_division: Information & Technology
@@ -16,7 +16,9 @@ topographic-mapping-water-line:
   tags:
   - name: GIS
     vocabulary_id: null
-  - name: Rivers
+  - name: Lake
+    vocabulary_id: null
+  - name: River
     vocabulary_id: null
   - name: Topo
     vocabulary_id: null
@@ -25,17 +27,17 @@ topographic-mapping-water-line:
   - name: Waterbodies
     vocabulary_id: null
   information_url: null
-  excerpt: Layer from the City’s topographic mapping products representing narrow waterways.
+  excerpt: Layer from the City’s topographic mapping products representing the physical area of waterbodies and rivers.
   limitations: Data is collected via manual digitization from aerial imagery. It has a ground accuracy of +/- 30cm. Added/deleted/moved features may not be reflected in the dataset immediately due to operational constraints. Due to the inability to see features located close to tall buildings, or in areas of deep shadow; some features may not be collected. Based on the sheer scale and physical area of the City of Toronto not all features are collected annually. This data is not to be used as a substitute for a legal survey. The data is to be used for analysis and visualization purposes.
   notes: |
-    Line layer representing small waterways. These are for any waterways too narrow to accurately determine both banks of the waterway. For any waterway wide enough to determine both sides of the banks, please refer to the Topographic Mapping - Water Bodies and Rivers dataset.
+    Polygon layer representing the physical area of waterbodies and rivers. Some features contain an attribute defining their name. Names are defined from the Ontario Geographic Names Board [Geographic names | ontario.ca](https://www.ontario.ca/page/geographic-names)
 
-    These lines are part of the City’s topographic mapping products, the data is collected from high resolution aerial photography. The data is a representation of the physical features that are visually identifiable in an aerial photograph.
+    These polygons Part of the City’s topographic mapping products, the data is collected from high resolution aerial photography. The data is a representation of the physical features that are visually identifiable in an aerial photograph.
   resources:
-    Water Line:
+    Water Body:
       format: geojson
       agol: true
-      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_TOPO_WATER_LINE/FeatureServer/0
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_TOPO_WATER_BODY/FeatureServer/0
       attributes:
       - id: SUBTYPE_CODE
         type: int
@@ -49,7 +51,7 @@ topographic-mapping-water-line:
         type: float
         info:
           notes: 'Ground elevation of the feature'
-      - id: WATERLINE_NAME
+      - id: WATERBODY_NAME
         type: text
         info:
           notes: 'Waterbody/River name - taken from Ontario Geographic Place Names Board definitions'
@@ -66,6 +68,6 @@ topographic-mapping-water-line:
         info:
           notes: 'Date of the last attribute edit'
       - id: geometry
-        type: text
+        type: json
         info:
           notes: ''

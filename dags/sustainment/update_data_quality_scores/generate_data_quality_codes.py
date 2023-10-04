@@ -293,8 +293,6 @@ with DAG(
 
     get_or_create_explanation_code_resource = GetOrCreateResourceOperator(
         task_id="get_or_create_explanation_code_resource",
-        address=CKAN_ADDRESS,
-        apikey=CKAN_APIKEY,
         package_name_or_id=PACKAGE_DQS,
         resource_name=RESOURCE_EXPLANATION_CODES,
         resource_attributes=dict(

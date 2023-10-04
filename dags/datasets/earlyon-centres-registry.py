@@ -294,8 +294,6 @@ with DAG(
 
     get_package = GetPackageOperator(
         task_id="get_package",
-        address=ckan_address,
-        apikey=ckan_apikey,
         package_name_or_id=PACKAGE_NAME,
     )
 
@@ -313,8 +311,6 @@ with DAG(
 
     get_or_create_resource = GetOrCreateResourceOperator(
         task_id="get_or_create_resource",
-        address=ckan_address,
-        apikey=ckan_apikey,
         package_name_or_id=PACKAGE_NAME,
         resource_name=RESOURCE_NAME,
         resource_attributes=dict(
@@ -328,8 +324,6 @@ with DAG(
 
     backup_data = BackupDatastoreResourceOperator(
         task_id="backup_data",
-        address=ckan_address,
-        apikey=ckan_apikey,
         resource_task_id="get_or_create_resource",
         dir_task_id="tmp_dir",
         sort_columns=["loc_id"],
@@ -362,8 +356,6 @@ with DAG(
 
     modify_metadata = ResourceAndFileOperator(
         task_id="modify_metadata",
-        address=ckan_address,
-        apikey=ckan_apikey,
         download_file_task_id="get_data",
         resource_task_id="get_or_create_resource",
         upload_to_ckan=False,
@@ -385,15 +377,11 @@ with DAG(
 
     delete_records = DeleteDatastoreResourceRecordsOperator(
         task_id="delete_records",
-        address=ckan_address,
-        apikey=ckan_apikey,
         backup_task_id="backup_data",
     )
 
     insert_records = InsertDatastoreResourceRecordsOperator(
         task_id="insert_records",
-        address=ckan_address,
-        apikey=ckan_apikey,
         fields_json_path_task_id='create_data_dictionary',
         parquet_filepath_task_id="transform_data",
         resource_task_id="get_or_create_resource",
@@ -422,8 +410,6 @@ with DAG(
 
     restore_backup = RestoreDatastoreResourceBackupOperator(
         task_id="restore_backup",
-        address=ckan_address,
-        apikey=ckan_apikey,
         backup_task_id="backup_data",
         trigger_rule="all_failed",
     )
@@ -447,8 +433,6 @@ with DAG(
     )
     delete_datastore = DeleteDatastoreResourceOperator(   # delete datastore schema for the resource
         task_id="delete_datastore",
-        address=ckan_address,
-        apikey=ckan_apikey,
         resource_id_task_id = "get_or_create_resource",
         resource_id_task_key = "id",
     )

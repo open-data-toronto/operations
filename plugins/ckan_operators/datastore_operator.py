@@ -1,19 +1,13 @@
-import hashlib
 import json
 import csv
 import logging
-import codecs
-import openpyxl
+import sys
 
-from datetime import datetime
-from pathlib import Path
 from typing import List
+from utils import misc_utils
 
 from ckan_operators import nested_file_readers
 
-import ckanapi
-import requests
-import pandas as pd
 from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
@@ -39,9 +33,7 @@ class BackupDatastoreResourceOperator(BaseOperator):
 
     @apply_defaults
     def __init__(
-        self,
-        address: str,
-        apikey: str,
+        self,        
         resource_task_id: str,
         dir_task_id: str,
         sort_columns: List[str] = [],
@@ -51,9 +43,12 @@ class BackupDatastoreResourceOperator(BaseOperator):
         self.dir_task_id = dir_task_id
         self.resource_task_id = resource_task_id
         self.sort_columns = sort_columns
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+        
 
     def _checksum_datastore_response(self, datastore_response):
+
+        import hashlib
+
         data = pd.DataFrame(datastore_response["records"])
         if "_id" in data.columns.values:
             data = data.drop("_id", axis=1)
@@ -94,6 +89,11 @@ class BackupDatastoreResourceOperator(BaseOperator):
         return data_file_path
 
     def execute(self, context):
+
+        import pandas as pd
+
+        self.ckan = misc_utils.connect_to_ckan()
+
         # get a resource and backup directory via xcom
         ti = context["ti"]
         resource = ti.xcom_pull(task_ids=self.resource_task_id)
@@ -153,9 +153,7 @@ class DeleteDatastoreResourceOperator(BaseOperator):
 
     @apply_defaults
     def __init__(
-        self,
-        address: str,
-        apikey: str,
+        self,        
         resource_id: str = None,
         resource_id_task_id: str = None,
         resource_id_task_key: str = None,
@@ -168,9 +166,12 @@ class DeleteDatastoreResourceOperator(BaseOperator):
             resource_id_task_id,
             resource_id_task_key,
         )
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+        
 
     def execute(self, context):
+
+        self.ckan = misc_utils.connect_to_ckan()
+
         # get task instance from context
         ti = context["ti"]
 
@@ -197,7 +198,9 @@ class DeleteDatastoreResourceOperator(BaseOperator):
             logging.info("Deleted " + self.resource_id)
 
         except Exception as e:
-            logging.error("Error while trying to delete resource: " + e)
+            logging.error("Error while trying to delete resource: " + str(e))
+            if str(e) == "NotFound":
+                logging.error(self.resource_id + " is not a datastore resource")
 
 
 class DeleteDatastoreResourceRecordsOperator(BaseOperator):
@@ -212,16 +215,17 @@ class DeleteDatastoreResourceRecordsOperator(BaseOperator):
     @apply_defaults
     def __init__(
         self,
-        address: str,
-        apikey: str,
         backup_task_id: str,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self.backup_task_id = backup_task_id
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
+
 
     def execute(self, context):
+
+        self.ckan = misc_utils.connect_to_ckan()
+
         backups_info = context["ti"].xcom_pull(task_ids=self.backup_task_id)
 
         self.ckan.action.datastore_delete(id=backups_info["resource_id"], force=True)
@@ -244,8 +248,6 @@ class InsertDatastoreResourceRecordsOperator(BaseOperator):
     @apply_defaults
     def __init__(
         self,
-        address: str,
-        apikey: str,
         resource_task_id: str,
         parquet_filepath_task_id: str = None,
         fields_json_path_task_id: str = None,
@@ -257,8 +259,7 @@ class InsertDatastoreResourceRecordsOperator(BaseOperator):
         self.resource_task_id = resource_task_id
         self.chunk_size = chunk_size
         self.fields_json_path_task_id = fields_json_path_task_id
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
-
+        
     def _create_empty_resource_with_fields(self, fields_path, resource_id):
         with open(fields_path, "r") as f:
             fields = json.load(f)
@@ -266,6 +267,11 @@ class InsertDatastoreResourceRecordsOperator(BaseOperator):
         self.ckan.action.datastore_create(id=resource_id, fields=fields, force=True)
 
     def execute(self, context):
+
+        import pandas as pd
+
+        self.ckan = misc_utils.connect_to_ckan()
+
         ti = context["ti"]
         resource = ti.xcom_pull(task_ids=self.resource_task_id)
 
@@ -307,16 +313,18 @@ class RestoreDatastoreResourceBackupOperator(BaseOperator):
     @apply_defaults
     def __init__(
         self,
-        address: str,
-        apikey: str,
         backup_task_id: str,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self.backup_task_id = backup_task_id
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def execute(self, context):
+
+        import pandas as pd
+
+        self.ckan = misc_utils.connect_to_ckan()
+
         backups_info = context["ti"].xcom_pull(task_ids=self.backup_task_id)
 
         assert backups_info is not None, "No backup information"
@@ -343,129 +351,6 @@ class RestoreDatastoreResourceBackupOperator(BaseOperator):
         return result
 
 
-class InsertDatastoreResourceRecordsFromJSONOperator(BaseOperator):
-    """
-    Reads a JSON file and write the output into a CKAN datastore resource.
-    JSON must be a list of dicts, with each dict being a record, like the following:
-    [
-        { "column1": "string", "column2": 100, "column3": true},
-        { "column1": "some other string", "column2": 34, "column3": false}
-    ]
-
-    The fields must match the CKAN standard, like the following:
-    [
-        {
-            "id": "column1",
-            "type": "text" ,
-            "info": {
-            "notes": "Description of the field goes here. Info key is optional."
-            }
-        },
-        {
-            "id": "column2",
-            "type": "int"
-        },
-        {
-            "id": "column3",
-            "type": "bool"
-        }
-    ]
-
-    Expects as inputs:
-    - address - url of target ckan
-    - apikey - key needed to make authorized ckan calls
-    - resource_id - id of the resource that will receive this data
-    - data_path - location of the json data file
-    - fields_path - location of the data's fields, already in a CKAN-friendly
-      format
-
-    All of the above, except the address and apikey, can be given with an
-    actual value, or with a reference to a task_id and task_key that returns
-    the value
-    """
-
-    @apply_defaults
-    def __init__(
-        self,
-        address: str,
-        apikey: str,
-        resource_id: str = None,
-        resource_id_task_id: str = None,
-        resource_id_task_key: str = None,
-        data_path: str = None,
-        data_path_task_id: str = None,
-        data_path_task_key: str = None,
-        fields_path: str = None,
-        fields_path_task_id: str = None,
-        fields_path_task_key: str = None,
-        **kwargs,
-    ) -> None:
-        super().__init__(**kwargs)
-        self.resource_id, self.resource_id_task_id, self.resource_id_task_key = (
-            resource_id,
-            resource_id_task_id,
-            resource_id_task_key,
-        )
-        self.data_path, self.data_path_task_id, self.data_path_task_key = (
-            data_path,
-            data_path_task_id,
-            data_path_task_key,
-        )
-        self.fields_path, self.fields_path_task_id, self.fields_path_task_key = (
-            fields_path,
-            fields_path_task_id,
-            fields_path_task_key,
-        )
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
-
-    def execute(self, context):
-        # init task instance from context
-        ti = context["ti"]
-
-        # assign important vars if provided from other tasks
-        if self.resource_id_task_id and self.resource_id_task_key:
-            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[
-                self.resource_id_task_key
-            ]
-
-        if self.data_path_task_id and self.data_path_task_key:
-            self.data_path = ti.xcom_pull(task_ids=self.data_path_task_id)[
-                self.data_path_task_key
-            ]
-
-        if self.fields_path_task_id and self.fields_path_task_key:
-            self.fields_path = ti.xcom_pull(task_ids=self.fields_path_task_id)[
-                self.fields_path_task_key
-            ]
-
-        # get fields from file
-        with open(self.fields_path, "r") as f:
-            fields = json.load(f)
-            logging.info(
-                "Loaded the following fields from {}: {}".format(
-                    self.fields_path, fields
-                )
-            )
-
-        # populate that resource w data from the path provided
-        assert (
-            self.data_path
-        ), "Data path, or the filepath to the data to be inserted, required!"
-        with open(self.data_path) as f:
-            data = json.load(f)
-
-        logging.info("Data parsed from JSON file")
-        logging.info("Fields from fields file: " + str(fields))
-        logging.info("Fields from data file: " + str(data[0].keys()))
-
-        self.ckan.action.datastore_create(
-            id=self.resource_id, fields=fields, records=data
-        )
-        logging.info("Resource created + populated from input fields and data")
-
-        return {"resource_id": self.resource_id, "data_inserted": len(data)}
-
-
 class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
     """
     Inserts a file's data into a datastore resource based YAML config
@@ -474,8 +359,6 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
     @apply_defaults
     def __init__(
         self,
-        address: str,
-        apikey: str,
         resource_id: str = None,
         resource_id_task_id: str = None,
         resource_id_task_key: str = None,
@@ -483,6 +366,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         data_path_task_id: str = None,
         data_path_task_key: str = None,
         config: dict = {},
+        do_not_cache: bool = False,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -497,27 +381,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             data_path_task_key,
         )
         self.config = config
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
-
-    def clean_string(self, input):
-        if input is None:
-            return ""
-        if not isinstance(input, str):
-            return str(input)
-        else:
-            return str(input).strip()
-
-    def clean_int(self, input):
-        if input:
-            return int(input)
-        else:
-            return None
-
-    def clean_float(self, input):
-        if input:
-            return float(input)
-        else:
-            return None
+        self.do_not_cache = do_not_cache
 
     def clean_date_format(self, input, input_format=None):
         # loops through the list of formats and tries to return an input
@@ -573,8 +437,10 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                 except ValueError:
                     pass
 
+
     # reads a csv and returns a list of dicts - one dict for each row
     def read_csv_file(self):
+        import codecs
         output = []
 
         # we'll try to detect lat, long attributes here and put them into a
@@ -644,6 +510,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         return json.load(open(self.data_path, "r", encoding="latin-1"))
 
     def read_xlsx_file(self):
+        import openpyxl
         workbook = openpyxl.load_workbook(self.data_path)
         worksheet = workbook[self.config["sheet"]]
 
@@ -675,7 +542,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
 
         for row in worksheet.iter_rows(min_row=2):
             output_row = {
-                column_names[i]: self.clean_string(row[i].value)
+                column_names[i]: str(row[i].value).strip()
                 for i in range(len(row))
             }
             if self.geometry_needs_parsing:
@@ -707,9 +574,8 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
             nested_readers = nested_file_readers.nested_readers
             return nested_readers[self.config["url"]](self.data_path)
 
-        if "zip" in self.config.keys():
-            if self.config["zip"]:
-                self.data_path = self.data_path[self.config["filename"]]
+        if self.config.get("agol", None):
+            return readers["csv"]()
 
         return readers[self.config["format"].lower()]()
 
@@ -721,10 +587,10 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         # list of functions used to convert input to desired data_type
         formatters = {
             "text": str,
-            "int": self.clean_int,
-            "float": self.clean_float,
-            "timestamp": self.clean_date_format,
-            "date": self.clean_date_format,
+            "int": misc_utils.clean_int,
+            "float": misc_utils.clean_float,
+            "timestamp": misc_utils.clean_date_format,
+            "date": misc_utils.clean_date_format,
         }
 
         # if input is tabular, convert each column in each input row
@@ -778,6 +644,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                 fields=self.config["attributes"],
                 records=records,
                 force=True,
+                do_not_cache=self.do_not_cache,
             )
 
         # Larger datasets, however, need to be loaded in chunks
@@ -807,6 +674,9 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         return len(records)
 
     def execute(self, context):
+
+        self.ckan = misc_utils.connect_to_ckan()
+
         # init task instance from context
         ti = context["ti"]
 
@@ -828,7 +698,7 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
         # put parsed_data into ckan datastore
         record_count = self.insert_into_datastore(self.resource_id, parsed_data)
 
-        return {"Success": True, "record_count": record_count}
+        return {"success": True, "record_count": record_count}
 
 
 class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
@@ -847,6 +717,9 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
         self.resource_name = resource_name
 
     def execute(self, context):
+
+        self.ckan = misc_utils.connect_to_ckan()
+        
         # init task instance from context
         ti = context["ti"]
 
@@ -866,7 +739,6 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
         # already
         read_file = self.read_file()
         parsed_data = self.parse_file(read_file)
-        print("data parsed")
 
         # if the incoming and incumbent data are a different length, green
         # light an update
@@ -882,7 +754,7 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
                     self.resource_name
                 )
             )
-            return "update_resource_" + self.resource_name
+            return {"needs_update": True}
 
         if len(parsed_data) != record_count:
             logging.info(
@@ -890,7 +762,7 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
                     str(len(parsed_data)), str(record_count)
                 )
             )
-            return "update_resource_" + self.resource_name
+            return {"needs_update": True}
 
         print("matching record counts")
 
@@ -903,14 +775,14 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
             logging.info("Current column names dont match incoming colnames")
             logging.info("Current attributes:" + str(datastore_record.keys()))
             logging.info("Incoming attributes:" + str(parsed_data[0].keys()))
-            return "update_resource_" + self.resource_name
+            return {"needs_update": True}
 
         print("matching column names")
 
         # If the dataset is "large", we dont do a record by record comparison
         # as we dont have enough memory in the EC2s right now (July 2022)
         if record_count > 500000:
-            return "dont_update_resource_" + self.resource_name
+            return {"needs_update": False}
 
         # Record by record comparison
         print("Starting record by record comparison")
@@ -925,7 +797,7 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
             if incumbent_record in parsed_data:
                 continue
             elif incumbent_record not in datastore_resource["records"]:
-                return "update_resource_" + self.resource_name
+                return {"needs_update": True}
 
         # if the resource is too big to get in a single call, make multiple calls
         if record_count >= max_chunk_size:
@@ -942,75 +814,244 @@ class DeltaCheckOperator(InsertDatastoreFromYAMLConfigOperator):
                     if incumbent_record in parsed_data:
                         continue
                     elif incumbent_record not in datastore_resource["records"]:
-                        return "update_resource_" + self.resource_name
+                        return {"needs_update": True}
                 # datastore_resource["records"].append( next_chunk["records"] )
                 iteration += 1
 
-        return "dont_update_resource_" + self.resource_name
+        return {"needs_update": False}
 
 
-class CheckCkanResourceDescriptionOperator(BaseOperator):
+class CSVStreamToDatastoreYAMLOperator(BaseOperator):
     """
-    Check if the description of a resource is missing
+    Streams a CSV file's data into a datastore resource based YAML config
     """
 
     @apply_defaults
     def __init__(
-            self,
-            input_dag_id: str = None,
-            address: str = None,
-            **kwargs) -> None:
+        self,
+        resource_id: str = None,
+        resource_id_task_id: str = None,
+        resource_id_task_key: str = None,
+        data_path: str = None,
+        data_path_task_id: str = None,
+        data_path_task_key: str = None,
+        config: dict = {},
+        do_not_cache: bool = False,
+        **kwargs,
+    ) -> None:
         super().__init__(**kwargs)
-        self.input_dag_id = input_dag_id
-        self.address = address
+        self.resource_id = resource_id
+        self.resource_id_task_id = resource_id_task_id
+        self.resource_id_task_key = resource_id_task_key
+        self.data_path = data_path
+        self.data_path_task_id = data_path_task_id
+        self.data_path_task_key = data_path_task_key
+        self.do_not_cache = do_not_cache
+         
+        self.config = config
+
+        # this var will be reset later if there are geometry fields that need 
+        # to be put into a geometry object
+        self.geometry_needs_parsing = False
+
+        # ensure CSVs can be really wide
+        csv.field_size_limit(sys.maxsize)
+
+
+    def read_file(self):
+        '''reads CSV at input filepath and returns generator'''
+        
+        # make sure input filepath is CSV
+        #assert self.data_path.endswith(".csv")
+
+        # get fieldnames from first row of CSV
+        with open(self.data_path, "r") as f:
+            self.fieldnames = next(csv.reader(f))
+            f.close()
+
+        # return generator        
+        return misc_utils.csv_to_generator(self.data_path, self.fieldnames)
+
+    def does_geometry_need_parsing(self):
+        '''determines if geometric attributes need to be parsed into a 
+        geometry object, then finds those geometric attributes'''
+        
+
+        latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
+        longitude_attributes = ["long", "longitude", "x", "x coordinate"]
+
+        # check if there are supposed to be geometric fields
+        if "geometry" not in self.fieldnames and "geometry" in [
+            attr.get("id", None) for attr in self.config["attributes"]
+        ]:
+            # geometry needs to be parsed 
+            # lets find which columns hold geometric data
+            self.geometry_needs_parsing = True
+
+            for attr_index in range(len(fieldnames)):
+                if fieldnames[attr_index].lower() in latitude_attributes:
+                    self.latitude_attribute = attr_index
+
+                if fieldnames[attr_index].lower() in longitude_attributes:
+                    self.longitude_attribute = attr_index
+        
+
+
+    def parse_data(self, input_data):
+        '''receives one row of data as a dict, returns CKAN-friendly data'''
+        
+        output = {} 
+
+        # map geometric columns to geometry column, if needed
+        if self.geometry_needs_parsing:
+            output["geometry"] = json.dumps(
+                {
+                    "type": "Point",
+                    "coordinates": [
+                        input_data[self.longitude_attribute].value,
+                        input_data[self.latitude_attribute].value,
+                    ],
+                }
+            )
+
+        # list of functions used to convert input to desired data_type
+        formatters = {
+            "text": str,
+            "int": misc_utils.clean_int,
+            "float": misc_utils.clean_float,
+            "timestamp": misc_utils.clean_date_format,
+            "date": misc_utils.clean_date_format,
+            "json": json.loads
+        }
+
+
+        for i in range(len(self.config["attributes"])):
+            # if geometry was parsed above, we dont need to do it again
+            if self.geometry_needs_parsing and self.config["attributes"][i]["id"] == "geometry":
+                continue
+
+            # map source column names to target column names, where needed
+            if (
+                "source_name" in self.config["attributes"][i].keys()
+                and "target_name" in self.config["attributes"][i].keys()
+            ):
+                self.config["attributes"][i]["id"] = self.config["attributes"][i][
+                    "target_name"
+                ]
+                src = input_data[self.config["attributes"][i]["source_name"]]
+            else:
+                src = input_data[self.config["attributes"][i]["id"]]
+
+            # massage data values so CKAN will ingest it
+
+            # if date column, consider hardcoded format attribute
+            if self.config["attributes"][i]["type"] in ["date", "timestamp"]:
+                output[self.config["attributes"][i]["id"]] = formatters[
+                    self.config["attributes"][i]["type"]
+                ](src, self.config["attributes"][i].get("format", None))
+            # if not a date column, consider another formatter
+            else:
+                output[self.config["attributes"][i]["id"]] = formatters[
+                    self.config["attributes"][i]["type"]
+                ](src)
+        
+        return output
+
+
+    def insert_into_ckan(self, records):
+        '''receives data as list of dicts, puts that data in CKAN'''
+
+        self.ckan.action.datastore_create(
+            id=self.resource_id,
+            fields=self.config["attributes"],
+            records=records,
+            force=True,
+            do_not_cache=self.do_not_cache
+        )
+        
 
     def execute(self, context):
+
+        self.ckan = misc_utils.connect_to_ckan()
+
+        # init task instance from context
         ti = context["ti"]
-        # Get full package name list
-        package_list = ti.xcom_pull(task_ids=self.input_dag_id)
-        result_info = {}
-        for package_name in package_list:
-            url = self.address + "api/3/action/package_show?id=" + package_name
-            resources = requests.get(url).json()["result"]["resources"]
-            # Iterate over all resources in a package
-            for resource in resources:
-                # Perform analysis only when datastore is active
-                if str(resource["datastore_active"]) == "True":
-                    # Send datastore_search request
-                    url = (
-                        self.address
-                        + "api/3/action/datastore_search?resource_id="
-                        + resource["id"]
-                    )
-                    fields = requests.get(url).json()["result"]["fields"]
 
-                    # check "info" field exists and "notes" is not empty
-                    field_flag = [
-                        True
-                        if ("info" in item.keys())
-                        and (item["info"]["notes"] is not None)
-                        else False
-                        for item in fields
-                    ]
-                    # resource_flag == true, means that resource dont have ANY
-                    # column name descriptions
-                    resource_flag = all([flag is False for flag in field_flag])
+        # assign important vars if provided from other tasks
+        if self.resource_id_task_id and self.resource_id_task_key:
+            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[
+                self.resource_id_task_key
+            ]
 
-                    if resource_flag:
-                        logging.warning(
-                            'Resource description MISSING!' +
-                            'package id or name: {package_name} ' +
-                            'resource id: {resource["id"]}'
-                        )
+        if self.data_path_task_id and self.data_path_task_key:
+            self.data_path = ti.xcom_pull(task_ids=self.data_path_task_id)[
+                self.data_path_task_key
+            ]
+        
+        logging.info(self.data_path)
 
-                        # collect package and resource info for missing descriptions
-                        if package_name in result_info:
-                            result_info[package_name] = (
-                                result_info[package_name] + ", " + resource["id"]
-                            )
-                        else:
-                            result_info[package_name] = resource["id"]
+        # init csv generator
+        csv_generator = self.read_file()
 
-                    else:
-                        logging.info("Resource description OK!")
-        return {"package_and_resource": result_info}
+        # init some vars so batch calls to CKAN API
+        total_count = 0
+        this_count = 0
+        this_batch = []
+        batch_size = 20000
+
+        for row in csv_generator:
+            total_count += 1
+            this_count += 1
+            this_batch.append(self.parse_data(row))
+
+            # when this batch is the max size, insert the data into CKAN
+            if len(this_batch) >= batch_size:
+                logging.info("Loading {}th records".format(str(total_count)))
+                self.insert_into_ckan(this_batch)
+                this_batch = []
+                this_count = 0
+
+        # insert the last batch into CKAN
+        if len(this_batch) != 0:
+            logging.info("Loading last records")
+            self.insert_into_ckan(this_batch)
+
+        logging.info("Inserted {} records into CKAN".format(str(total_count)))
+
+        return {"success": True}
+
+
+class DatastoreCacheOperator(BaseOperator):
+    """
+    Streams a CSV file's data into a datastore resource based YAML config
+    """
+
+    @apply_defaults
+    def __init__(
+        self,
+        resource_id: str = None,
+        resource_id_task_id: str = None,
+        resource_id_task_key: str = None,
+        **kwargs,
+    ) -> None:
+        super().__init__(**kwargs)
+        self.resource_id = resource_id
+        self.resource_id_task_id = resource_id_task_id
+        self.resource_id_task_key = resource_id_task_key
+
+    def execute(self, context):
+
+        self.ckan = misc_utils.connect_to_ckan()
+
+        # init task instance from context
+        ti = context["ti"]
+
+        # assign important vars if provided from other tasks
+        if self.resource_id_task_id and self.resource_id_task_key:
+            self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[
+                self.resource_id_task_key
+            ]
+
+        self.ckan.action.datastore_cache(
+            resource_id=self.resource_id,
+        )

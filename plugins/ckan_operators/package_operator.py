@@ -2,6 +2,8 @@ import ckanapi
 import logging
 from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
+from utils import misc_utils
+
 
 
 class GetOrCreatePackageOperator(BaseOperator):
@@ -11,8 +13,6 @@ class GetOrCreatePackageOperator(BaseOperator):
     @apply_defaults
     def __init__(
         self,
-        address: str,
-        apikey: str,
 
         package_name_or_id: str = None,
         package_name_or_id_task_id: str = None,
@@ -26,9 +26,11 @@ class GetOrCreatePackageOperator(BaseOperator):
         super().__init__(**kwargs)
         self.package_name_or_id, self.package_name_or_id_task_id, self.package_name_or_id_task_key = package_name_or_id, package_name_or_id_task_id, package_name_or_id_task_key
         self.package_metadata, self.package_metadata_task_id, self.package_metadata_task_key = package_metadata, package_metadata_task_id, package_metadata_task_key
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def execute(self, context):
+
+        self.ckan = misc_utils.connect_to_ckan()
+
         # get the package id and notes from a task if its been provided from a task
         if self.package_name_or_id_task_id and self.package_name_or_id_task_key:
             self.package_name_or_id = ti.xcom_pull(task_ids=self.package_name_or_id_task_id)[self.package_name_or_id_task_key]
@@ -63,12 +65,12 @@ class GetPackageOperator(BaseOperator):
     """
 
     @apply_defaults
-    def __init__(self, address, apikey, package_name_or_id, **kwargs):
+    def __init__(self, package_name_or_id, **kwargs):
         super().__init__(**kwargs)
         self.package_id = package_name_or_id
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def execute(self, context):
+        self.ckan = misc_utils.connect_to_ckan()
         return self.ckan.action.package_show(id=self.package_id)
 
 
@@ -78,11 +80,16 @@ class GetAllPackagesOperator(BaseOperator):
     """
 
     @apply_defaults
-    def __init__(self, address, apikey, **kwargs):
+    def __init__(self, address: str = None, **kwargs):
         super().__init__(**kwargs)
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def execute(self, context):
+
+        if address:
+            self.ckan = ckanapi.RemoteCKAN(apikey="", address=address)
+        else:
+            self.ckan = misc_utils.connect_to_ckan()
+
         # Initiate a loop of getting each package from CKAN, 1000 packages at a time
         output = []
         offset = 0
@@ -214,6 +221,7 @@ class AssertIdenticalPackagesOperator(BaseOperator):
 
         # TODO: add logic for comparing only packages and not lists of packages
 
+
 class GetCkanPackageListOperator(BaseOperator):
     """
     Get full package list
@@ -221,15 +229,14 @@ class GetCkanPackageListOperator(BaseOperator):
     @apply_defaults
     def __init__(
         self,
-        address: str,
-        apikey: str,
+
         **kwargs
     ) -> None:
         super().__init__(**kwargs)
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
 
     def execute(self, context):
+        self.ckan = misc_utils.connect_to_ckan()
         package_list = self.ckan.action.package_list()
         logging.info(f'package list {package_list}')
         return package_list

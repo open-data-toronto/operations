@@ -2,66 +2,36 @@
 
 import logging
 import os
+import csv
 import json
 import hashlib
+import shutil
 from datetime import datetime
 from pathlib import Path
 
 import requests
 from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
-
-# init some vars to be used throughout this file
-# maps agol data type to ckan data type
-AGOL_CKAN_TYPE_MAP =  {
-    "sqlTypeFloat": "float",
-    "sqlTypeNVarchar": "text",
-    "sqlTypeInteger": "int",
-    "sqlTypeOther": "text",
-    "sqlTypeTimestamp2": "timestamp",
-    "sqlTypeDouble": "float",
-    "esriFieldTypeString": "text",
-    "esriFieldTypeDate": "timestamp",
-    "esriFieldTypeInteger": "int",
-    "esriFieldTypeOID": "int",
-    "esriFieldTypeDouble": "float",
-    "esriFieldTypeSmallInteger": "int",
-    "esriFieldTypeSingle": "text",
-    "esriFieldTypeGlobalID": "int",
-}
-
-# list of attributes that are redundant when geometry is present in a response
-DELETE_FIELDS = [
-    "longitude",
-    "latitude",
-    "shape__length",
-    "shape__area",
-    "lat",
-    "long",
-    "lon",
-    "x",
-    "y",
-    "index_"
-]
+from utils import misc_utils
 
 
 class AGOLDownloadFileOperator(BaseOperator):
     """
-    Downloads data from AGOL URL and saves to provided directory using provided filename.
-    This will always overwrite an existing file, if it's there.
-    This is because we are not interested in versioning AGOL data - only pulling the latest from AGOL.
+    Downloads data from AGOL URL 
+    If new data != old data on the server, old data is replaced
+    Data is saved as CSV provided directory using provided filename
+    
 
     Expects the following inputs:
-        - request_url - reference to the url where this operator will grab the data
+        - request_url - reference to url where this operator will grab data
         - dir - directory where the response from the above will be saved
         - filename - name of the file to be made
-        each of the three above can be given with an actual value, or with a reference to a task_id and task_key that returns the value
+        Each of the three above can be given with an actual value, or with a
+        reference to a task_id and task_key that returns the value
 
     Returns a dictionary containing:
-        - path: path to saved file containing data
-        - last_modified: timestamp file was last_modified (from the request)
-        - fields_path: path to file containing fields
-        - checksum: md5 hash of the download's contents
+        - data_path - path on server to newest data's file
+        - needs_update - whether the existing file was replaced by a new one
     """
 
     @apply_defaults
@@ -80,79 +50,96 @@ class AGOLDownloadFileOperator(BaseOperator):
         filename_task_key: str = None,
 
         delete_col: list = [],
+        create_backup: bool = False,
 
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
-        self.request_url, self.request_url_task_id, self.request_url_task_key = request_url, request_url_task_id, request_url_task_key
-        self.dir, self.dir_task_id, self.dir_task_key = dir, dir_task_id, dir_task_key
-        self.filename, self.filename_task_id, self.filename_task_key = filename, filename_task_id, filename_task_key
+        self.request_url = request_url
+        self.request_url_task_id = request_url_task_id
+        self.request_url_task_key = request_url_task_key
+
+        self.dir = dir
+        self.dir_task_id = dir_task_id
+        self.dir_task_key = dir_task_key
+
+        self.filename = filename
+        self.filename_task_id = filename_task_id
+        self.filename_task_key = filename_task_key
+
         self.delete_col = delete_col
+        self.create_backup = create_backup
+        self.backup_path = None
     
     def set_path(self, ti):
         # init the filepath to the file we will create
-        # how this is done depends on whether the operator received task ids/keys, or actual values 
         if self.dir_task_id and self.dir_task_key:
             self.dir = ti.xcom_pull(task_ids=self.dir_task_id)[self.dir_task_key]
 
         if self.filename_task_id and self.filename_task_key:
             self.filename = ti.xcom_pull(task_ids=self.filename_task_id)[self.filename_task_key]
 
-        self.path = Path(self.dir) / self.filename  
+        self.path = self.dir + "/" + self.filename  
 
-    def esri_timestamp_to_datetime(self, ts):
-        #convert esri timestamp (which is unix) to ISO format datetime string
-        if ts:
-            return  datetime.fromtimestamp(ts/1000).isoformat()  
-        else:
-            return None
-        
 
-    def parse_properties_from_features(self, features, fields):
-        # returns properties (and geometry, if present) from the agol response
-        if "geometry" not in features[0].keys():
-            return [ object["properties"] for object in features ]
+    def get_fields(self, query_url):
+        # list of attributes that are redundant when geometry is present in a response
+        delete_fields = [
+            "longitude",
+            "latitude",
+            "shape__length",
+            "shape__area",
+            "lat",
+            "long",
+            "lon",
+            "x",
+            "y",
+            "index_"
+        ]
 
-        else:
-            rows = []
-            for feature in features:
-                # create a row object for each object in the json response, and flag its timestamp fields
-                row = {**feature["properties"], "geometry": json.dumps(feature["geometry"])}
-                datetime_fields = [ field["id"] for field in fields if field["type"] == "timestamp" ]
-                
-                # for every row
-                for k,v in {**row}.items():
-                    # delete field if duplicate geo field (x, y, lat, long, etc.)
-                    if k.lower() in [*DELETE_FIELDS, *self.delete_col]:
-                        del row[k]
-                    
-                    # delete "<null>" string field
-                    if isinstance(v, str) and v.lower() == "<null>":
-                        del row[k]
-                        
-                # convert esri time data types to JSON standard (for ckan)
-                for dtf in datetime_fields:
-                    row[dtf] = self.esri_timestamp_to_datetime(row[dtf])
-                
-                rows.append(row)
-
-            return rows
-        
-    def get_features(self, query_url):
-        logging.info(f"  getting features from AGOL")
-
-        features = []
-        overflow = True
-        offset = 0
         query_string_params = {
             "where": "1=1",
             "outFields": "*",
             "outSR": 4326,
+            "f": "json",
+            "resultRecordCount": 1
+        }
+        
+        params = "&".join([ f"{k}={v}" for k,v in query_string_params.items() ])
+        url = "https://" + "/".join([ url_part for url_part in f"{query_url}/query?{params}".replace("https://", "").split("/") if url_part ])
+        res = requests.get(url)
+        assert res.status_code == 200, f"Status code response: {res.status_code}"
+        
+        ckan_fieldnames = []
+        for field in res.json()["fields"]:
+            if field["name"].lower() not in [*delete_fields, *self.delete_col]:            
+                ckan_fieldnames.append(field["name"])
+
+        # check if geometry in response too
+        if "geometry" in res.json()["features"][0].keys():
+            ckan_fieldnames.append("geometry")
+
+        logging.info("Utils parsed the following fields: {}".format(ckan_fieldnames))
+            
+        return ckan_fieldnames
+
+
+    def agol_generator(self, query_url, fieldnames):
+        '''yields chunks of AGOL records'''
+        logging.info(f"  getting features from AGOL")
+
+        records = 0
+        overflow = True
+        offset = 0
+        query_string_params = {
+            "where": "1=1",
+            "outSR": 4326,
             "f": "geojson",
             "resultType": "standard",
             "resultOffset": offset,
+            "outFields": ",".join([f for f in fieldnames if f!="geometry"])
         }
-        
+
         while overflow is True:
             # As long as there are more records to get on another request
             
@@ -168,9 +155,11 @@ class AGOLDownloadFileOperator(BaseOperator):
             # parse the response
             geojson = json.loads(res.text)
             # get the properties out of each returned object
-            #data = [ object["properties"] for object in geojson["features"] ]
-            features.extend( geojson["features"] )
-            
+            for object in geojson["features"]:
+                this_record = object["properties"]
+                this_record["geometry"] = json.dumps(object["geometry"])
+                yield(this_record)
+
             # prepare the next request, if needed
             if "exceededTransferLimit" in geojson:
                 overflow = geojson["exceededTransferLimit"] is True
@@ -178,79 +167,24 @@ class AGOLDownloadFileOperator(BaseOperator):
             elif "properties" in geojson:
                 overflow = "properties" in geojson and "exceededTransferLimit" in geojson["properties"] and geojson["properties"]["exceededTransferLimit"] is True
 
-            
             else:
                 overflow = False
 
             offset = offset + len(geojson["features"])
             query_string_params["resultOffset"] = offset
 
-        logging.info("Returned {} AGOL records".format(str(len(features)) ))
-        return features
 
-    def get_fields(self, query_url):
+    def agol_to_csv(self, query_url, path, fieldnames):
+        '''write agol records to CSV on disk'''        
+        with open(path, "w") as f:
+            writer = csv.DictWriter(f, fieldnames)
+            writer.writeheader()
+            writer.writerows(self.agol_generator(query_url, fieldnames))
+               
+            f.close()
 
-        query_string_params = {
-            "where": "1=1",
-            "outFields": "*",
-            "outSR": 4326,
-            "f": "json",
-            "resultRecordCount": 1
-        }
-        
-        params = "&".join([ f"{k}={v}" for k,v in query_string_params.items() ])
-        url = "https://" + "/".join([ url_part for url_part in f"{query_url}/query?{params}".replace("https://", "").split("/") if url_part ])
-        res = requests.get(url)
-        assert res.status_code == 200, f"Status code response: {res.status_code}"
-        
-        ckan_fields = []
-        for field in res.json()["fields"]:
-            if field["name"].lower() not in [*DELETE_FIELDS, *self.delete_col]:
-                ckan_fields.append({
-                    "id": field["name"],
-                    "type": AGOL_CKAN_TYPE_MAP[field["type"]],
-                })
-
-        logging.info("Utils parsed the following fields: {}".format(ckan_fields))
-            
-        return ckan_fields
-
-    def parse_data_from_agol(self):
-        # calls agol utils to get only the features from a simple GET request to AGOL
-        res = self.get_features( self.request_url )
-        try:
-            unparsed_last_modified = requests.get(self.request_url).headers["last-modified"]
-            last_modified = datetime.strptime(unparsed_last_modified[:-13], "%a, %d %b %Y")
-        except:
-            last_modified = datetime.now() #.strftime("%Y-%m-%dT%H:%M:%S.%f")
-
-        fields = self.get_fields( self.request_url )
-        
-        logging.info("Received {} AGOL records".format(str(len(res))))
-        logging.info("Parsed the following fields: {}".format(fields))
-
-        return { "data": self.parse_properties_from_features(res, fields),
-                 "last_modified": last_modified,
-                 "fields": fields
-                }
-
-
-    def write_to_file(self, data, filepath):
-        # write the data to a file dict by dict to avoid memory errors
-        with open(filepath, "w") as f:
-            f.write("[")
-
-            for item in data[:-1]:
-                json.dump(item, f)
-                f.write(",")
-            
-            json.dump(data[-1], f)
-            f.write("]")
-
-        checksum = hashlib.md5()
-        #checksum.update(data.encode('utf-8'))
-
-        return checksum
+        logging.info("Returned AGOL records")
+        return
 
 
     def execute(self, context):
@@ -260,27 +194,43 @@ class AGOLDownloadFileOperator(BaseOperator):
         # create target filepath
         self.set_path(ti)
 
-        # Store data in memory
-        print("Getting data from agol")
-        res = self.parse_data_from_agol()
-        last_modified = res["last_modified"]
+        # get fieldnames
+        fieldnames = self.get_fields(self.request_url)
 
-        # write data to a file, get checksum
-        #data = json.dumps(res["data"])
-        print("Putting AGOL Data into a file")
-        checksum = self.write_to_file(res["data"], self.path)
-        print("AGOL Data saved to a file: " + str(self.path))
+        # write new agol data to local temp CSV
+        self.agol_to_csv(self.request_url, self.path + "-temp", fieldnames)
 
-        # write fields to a file
-        fields = json.dumps(res["fields"])
-        fields_filename = "fields_" + self.filename
-        fields_path = Path(self.dir) / fields_filename
-        self.write_to_file(fields, fields_path)
+        # get new and old data's hashes
+        new_hash = misc_utils.file_to_md5(self.path + "-temp")
+        if not os.path.isfile(self.path):
+            old_hash = "no_old_file"
+        else:
+            old_hash = misc_utils.file_to_md5(self.path)
 
-        # Return dict with data's filepath, last modified date, and checksum
+        # if new and old files dont match, replace old with new
+        if new_hash != old_hash:
+            logging.info("New data does not match old data's hash")
+            
+            # make a backup
+            if self.create_backup and os.path.exists(self.path):
+                # write backup and remember backup location
+                # we'll want to use or delete it later
+                self.backup_path = self.path + "-backup"
+                shutil.copy(self.path, self.backup_path)
+                logging.info("Created a backup at " + self.backup_path)
+
+            shutil.move(self.path + "-temp", self.path)
+            needs_update = True
+        # otherwise, get rid of the new "-temp" file
+        else:
+            logging.info("New data matches old data's hash")
+            os.remove(self.path + "-temp")
+            needs_update = False
+
+        logging.info(self.path)
+        
         return {
-            "data_path": self.path,
-            "fields_path": fields_path,
-            "last_modified": last_modified,
-            "checksum": checksum.hexdigest(),
-        }
+                "data_path": self.path,
+                "needs_update": needs_update,
+                "backup_path": self.backup_path
+                }

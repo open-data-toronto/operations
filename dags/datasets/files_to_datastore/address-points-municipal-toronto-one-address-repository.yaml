@@ -1,0 +1,195 @@
+address-points-municipal-toronto-one-address-repository:
+  schedule: '40 10 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Address Points (Municipal) - Toronto One Address Repository
+  date_published: '2019-07-23 16:30:45.457004'
+  refresh_rate: Daily
+  dataset_category: Document
+  owner_division: Information & Technology
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: Locations and mapping
+  tags:
+  - name: address
+    vocabulary_id: null
+  - name: toronto addresses
+    vocabulary_id: null
+  information_url: null
+  excerpt: This data set provides a point representation for addresses within the
+    City of Toronto.
+  limitations: "As part of our State of Good Repair project and data quality improvements,\
+    \ the Geospatial Competency Centre has removed a few deprecated attributes from\
+    \ our ADDRESS and ADDRESS_POINT dataset, and their associated web map services.\r\
+    \n\r\nThese attributes are *GENERALUSE* and *GENERALUSE_CODE* (also known as Feature\
+    \ Code and Feature Code Description). These two attributes are based on a historic\
+    \ dataset, have not been regularly maintained, and have no reliable, affordable\
+    \ sources for continued update.\r\n\r\nDue to these factors, these attributes\
+    \ were nullified (made blank) on Thursday, July 29, 2021. It is important to note\
+    \ that the attribute columns will remain in the database to ensure this change\
+    \ does not affect existing applications, however there will be no values in them.\r\
+    \n"
+  notes: "The One Address Repository data set provides a point representation for\
+    \ over 500,000 addresses within the City of Toronto. Each address point is described\
+    \ with a series of attributes including street number, street name, address type,\
+    \ feature class and real world coordinates.\r\n\r\nAll address points have a position\
+    \ on the correct side of the street, and are correctly positioned relative to\
+    \ neighbouring addresses. They are positioned within the parcel or the building\
+    \ footprint.\r\n\r\n\r\n\r\n"
+  resources:
+    Address Points:
+      format: geojson
+      agol: true
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial27/FeatureServer/101
+      attributes:
+      - id: ADDRESS_POINT_ID
+        type: int
+        info:
+          notes: ''
+      - id: ADDRESS_ID
+        type: int
+        info:
+          notes: ''
+      - id: ADDRESS_STRING_ID
+        type: int
+        info:
+          notes: ''
+      - id: LINEAR_NAME_ID
+        type: float
+        info:
+          notes: ''
+      - id: CENTRELINE_ID
+        type: int
+        info:
+          notes: ''
+      - id: MAINT_STAGE
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESS_NUMBER
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_FULL
+        type: text
+        info:
+          notes: ''
+      - id: LO_NUM
+        type: int
+        info:
+          notes: ''
+      - id: LO_NUM_SUF
+        type: text
+        info:
+          notes: ''
+      - id: HI_NUM
+        type: int
+        info:
+          notes: ''
+      - id: HI_NUM_SUF
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_TYPE
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_DIR
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_DESC
+        type: text
+        info:
+          notes: ''
+      - id: CENTRELINE_SIDE
+        type: text
+        info:
+          notes: ''
+      - id: CENTRELINE_MEASURE
+        type: float
+        info:
+          notes: ''
+      - id: CENTRELINE_OFFSET
+        type: float
+        info:
+          notes: ''
+      - id: GENERAL_USE_CODE
+        type: int
+        info:
+          notes: ''
+      - id: GENERAL_USE
+        type: text
+        info:
+          notes: ''
+      - id: CLASS_FAMILY
+        type: int
+        info:
+          notes: ''
+      - id: CLASS_FAMILY_DESC
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESS_CLASS
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESS_CLASS_DESC
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESS_POINT_ID_LINK
+        type: int
+        info:
+          notes: ''
+      - id: ADDRESS_ID_LINK
+        type: int
+        info:
+          notes: ''
+      - id: PLACE_NAME
+        type: text
+        info:
+          notes: ''
+      - id: PLACE_NAME_ALL
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESS_STATUS
+        type: text
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: text
+        info:
+          notes: ''
+      - id: MUNICIPALITY
+        type: text
+        info:
+          notes: ''
+      - id: MUNICIPALITY_NAME
+        type: text
+        info:
+          notes: ''
+      - id: WARD
+        type: text
+        info:
+          notes: ''
+      - id: WARD_NAME
+        type: text
+        info:
+          notes: ''
+      - id: ADDRESS_FULL
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''
+      

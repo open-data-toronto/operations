@@ -479,8 +479,6 @@ with DAG(
 
     get_or_create_package = GetOrCreatePackageOperator(
         task_id="get_or_create_package",
-        address=CKAN_ADDRESS,
-        apikey=CKAN_APIKEY,
         package_name_or_id=package_name,
         package_metadata=package_metadata,
     )
@@ -488,8 +486,6 @@ with DAG(
     # get or create a resource a file
     get_or_create_resource = GetOrCreateResourceOperator(
         task_id="get_or_create_resource",
-        address=CKAN_ADDRESS,
-        apikey=CKAN_APIKEY,
         package_name_or_id=package_name,
         resource_name="od-etl-configs",
         resource_attributes=dict(

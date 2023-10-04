@@ -52,13 +52,11 @@ with DAG(
     get_contrib_packages = GetAllPackagesOperator(
         task_id = "get_contrib_packages",
         address = CONTRIB_ADDRESS,
-        apikey = ""
     )
 
     get_delivery_packages = GetAllPackagesOperator(
         task_id = "get_delivery_packages",
         address = DELIVERY_ADDRESS,
-        apikey = ""
     )
 
     check_if_packages_match = AssertIdenticalPackagesOperator(

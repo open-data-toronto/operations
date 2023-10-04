@@ -36,7 +36,7 @@ solarto:
     solarto-map:
       agol: True
       format: geojson
-      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_BuildingSolarPotential/FeatureServer/0
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_Geospatial_Solar_Potential_Polygon/FeatureServer/0
       attributes:
         - id: objectid
           type: text

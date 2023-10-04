@@ -163,7 +163,7 @@ with DAG(
     )
 
     packages = GetAllPackagesOperator(
-        task_id="get_all_packages", address=ckan_address, apikey=ckan_apikey,
+        task_id="get_all_packages"
     )
 
     record_counts = PythonOperator(

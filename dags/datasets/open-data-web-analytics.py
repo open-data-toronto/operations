@@ -417,8 +417,6 @@ with DAG(
     # get or create package
     get_or_create_package = GetOrCreatePackageOperator(
         task_id="get_or_create_package",
-        address=ckan_address,
-        apikey=ckan_apikey,
         package_name_or_id=package_name,
         package_metadata=package_metadata,
     )

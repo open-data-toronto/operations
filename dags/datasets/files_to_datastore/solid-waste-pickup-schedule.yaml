@@ -51,7 +51,7 @@ solid-waste-pickup-schedule:
         - id: "CollectionDate"
           type: "date"
           info:
-            notes: "Actual date of waste collection"
+            notes: "Actual date of the waste collection"
         - id: "Organics"
           type: "text"
           info:

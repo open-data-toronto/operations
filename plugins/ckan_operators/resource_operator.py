@@ -7,6 +7,8 @@ from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from dateutil import parser
 from datetime import datetime
+from utils import misc_utils
+
 
 class GetOrCreateResourceOperator(BaseOperator):
     """
@@ -26,8 +28,6 @@ class GetOrCreateResourceOperator(BaseOperator):
     @apply_defaults
     def __init__(
         self,
-        address: str,
-        apikey: str,
 
         package_name_or_id: str = None,
         package_name_or_id_task_id: str = None,
@@ -52,8 +52,7 @@ class GetOrCreateResourceOperator(BaseOperator):
         self.resource_id, self.resource_id_task_id, self.resource_id_task_key = resource_id, resource_id_task_id, resource_id_task_key
 
         self.resource_attributes = resource_attributes
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
-
+        
     def _resource_exists(self):
         # get the package id from a task if its been provided from a task
         if self.package_name_or_id_task_id and self.package_name_or_id_task_key:
@@ -75,6 +74,9 @@ class GetOrCreateResourceOperator(BaseOperator):
         return False
 
     def execute(self, context):
+
+        self.ckan = misc_utils.connect_to_ckan()
+
         # get resource id from a task if its provided by another task
         if self.resource_id_task_id and self.resource_id_task_key:
             self.resource_id = ti.xcom_pull(task_ids=self.resource_id_task_id)[self.resource_id_task_key]
@@ -110,7 +112,7 @@ class GetOrCreateResourceOperator(BaseOperator):
                 try:
                     # pause a moment before checking that the resource is truly loaded - sometimes a resource_create call reports success but never made a resource
                     logging.info("Pausing a moment before checking that the resource is truly loaded")
-                    time.sleep(5)
+                    time.sleep(10)
                     logging.info("Fetching resource to make sure it was created successfully...")
                     assert self.ckan.action.resource_show(id=resource["id"])
                     break
@@ -131,6 +133,7 @@ class GetOrCreateResourceOperator(BaseOperator):
 
         return resource
 
+
 class EditResourceMetadataOperator(BaseOperator):
     """
     Edits a resource's name or last_modified date
@@ -148,8 +151,6 @@ class EditResourceMetadataOperator(BaseOperator):
     @apply_defaults
     def __init__(
         self,
-        address: str,
-        apikey: str,
 
         resource_id: str = None,
         resource_id_task_id: str = None,
@@ -171,12 +172,19 @@ class EditResourceMetadataOperator(BaseOperator):
         self.new_resource_name, self.new_resource_name_task_id, self.new_resource_name_task_key = new_resource_name, new_resource_name_task_id, new_resource_name_task_key
         self.last_modified, self.last_modified_task_id, self.last_modified_task_key = last_modified, last_modified_task_id, last_modified_task_key
         
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def _datetime_to_string(self, datetime):
-        return datetime.strftime("%Y-%m-%dT%H:%M:%S")
+        try:
+            output = datetime.strftime("%Y-%m-%dT%H:%M:%S")
+        except Exception as e:
+            output = datetime
+        return output
+
 
     def execute(self, context):
+
+        self.ckan = misc_utils.connect_to_ckan()
+
         # init task instance from context
         ti = context['ti']
 
@@ -208,8 +216,6 @@ class EditResourceMetadataOperator(BaseOperator):
             )
         
 
-
-
 class ResourceAndFileOperator(BaseOperator):
     """
             - download_file_task_id: task_id that returns the download file info (ie. DownloadFileOperator)
@@ -219,8 +225,6 @@ class ResourceAndFileOperator(BaseOperator):
     @apply_defaults
     def __init__(
         self,
-        address: str,
-        apikey: str,
         resource_task_id: str,
         download_file_task_id: str,
         sync_timestamp: bool,
@@ -232,12 +236,14 @@ class ResourceAndFileOperator(BaseOperator):
         self.download_file_task_id = download_file_task_id
         self.sync = sync_timestamp
         self.upload = upload_to_ckan
-        self.ckan = ckanapi.RemoteCKAN(apikey=apikey, address=address)
 
     def _datetime_to_string(self, datetime):
         return datetime.strftime("%Y-%m-%dT%H:%M:%S")
 
     def execute(self, context):
+
+        self.ckan = misc_utils.connect_to_ckan()
+
         ti = context["ti"]
         resource = ti.xcom_pull(task_ids=self.resource_task_id)
         download_file_info = ti.xcom_pull(task_ids=self.download_file_task_id)

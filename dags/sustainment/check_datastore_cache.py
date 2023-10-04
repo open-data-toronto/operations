@@ -3,6 +3,7 @@
 Compares datastore cache last update to resource last update for each package in CKAN and, where needed, updates the datastore cache for a whole package
 """
 import requests
+import logging
 from datetime import datetime
 
 from airflow import DAG
@@ -34,7 +35,7 @@ DEFAULT_ARGS = airflow_utils.get_default_args(
     })
     
 DESCRIPTION = "For each datastore resource in CKAN, check whether its datastore cache is up-to-date"
-SCHEDULE = "1 0,12 * * 1-5" # minute 1 at noon and midnight on weekdays
+SCHEDULE = "0 */3 * * *" # minute 1 at noon and midnight on weekdays
 TAGS=["sustainment"]
 
 # custom function to determine whether a package contains a datastore resource that needs its datastore cache updated
@@ -46,29 +47,37 @@ def find_outdated_datastore_caches(**kwargs):
 
         for resource in package["resources"]:
             if resource["datastore_active"] == True:
-                # if datastore_cache_last_update is earlier than the resource was created or last modified, then run datastore_cache
                 comparison_attribute = "last_modified" if resource["last_modified"] else "created"
+
+                # if resource doesnt have a cache date, try caching it
+                if not resource.get("datastore_cache_last_update"):
+                    output.append( package["name"] )
+                    continue
+
+                # if datastore_cache_last_update is earlier than the resource was created or last modified, then run datastore_cache
                 if datetime.strptime(resource["datastore_cache_last_update"][:19], "%Y-%m-%dT%H:%M:%S") < datetime.strptime(resource[comparison_attribute][:19], "%Y-%m-%dT%H:%M:%S") :
                     output.append( package["name"] )
                     continue
-    
-    #print(output)
+    # remove dupes
+    output = set(output)
+    logging.info("Found {} packages to run datastore_cache on: {}".format(str(len(output)), str(output)))
     return {"output": output}
 
 def trigger_datastore_cache(**kwargs):
     output_dict = {
-        "200": "successfully cached",
-        "500": "failed",
-        "400": "failed",
+        "2": "successfully cached",
+        "5": "failed",
+        "4": "failed",
     }
     output = {}
     package_names = kwargs.pop("ti").xcom_pull(task_ids="find_outdated_datastore_caches")["output"]
     headers = {"Authorization": CKAN_CREDS[ACTIVE_ENV]["apikey"]}
 
     for package_name in package_names:
+        logging.info("Starting on " + package_name)
         data = {"package_id": package_name}    
-        output[package_name] = output_dict[str(requests.post(CKAN_ADDRESS + "/api/3/action/datastore_cache", headers = headers, data=data).status_code)]
-
+        output[package_name] = output_dict[str(requests.post(CKAN_ADDRESS + "/api/3/action/datastore_cache", headers = headers, data=data).status_code)[0]]
+        logging.info("Finished " + package_name)
     if len(output):
         return {"output": output}
 
@@ -81,13 +90,12 @@ with DAG(
     description = DESCRIPTION,
     default_args = DEFAULT_ARGS,
     schedule_interval = SCHEDULE,
-    tags=TAGS
+    tags=TAGS,
+    catchup=False,
 ) as dag:
 
     get_packages = GetAllPackagesOperator(
-        task_id = "get_packages",
-        address = CKAN_ADDRESS,
-        apikey = ""
+        task_id = "get_packages"
     )
 
     find_outdated_datastore_caches = PythonOperator(

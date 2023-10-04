@@ -6,6 +6,8 @@ import os
 import time
 import logging
 import re
+import yaml
+import ckanapi
 
 from datetime import datetime
 
@@ -16,7 +18,7 @@ from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert, GenericSlackOperator
 
-from airflow.models import DagRun, DagBag
+from airflow.models import DagRun, DagBag, Variable, TaskInstance
 
 DEFAULT_ARGS = {
         "owner": "Mackenzie",
@@ -52,7 +54,7 @@ def get_dag_ids(ds, **kwargs):
                     dag_ids.append(dag.dag_id)
                     continue
 
-    # if given a list of dag ids, check and return those dag_idss:
+    # if given a list of dag ids, check and return those dag_ids:
     if "dag_ids" in kwargs['dag_run'].conf.keys():
         dag_ids = kwargs['dag_run'].conf["dag_ids"]
         assert isinstance(dag_ids, list), "Input 'dag_ids' object needs to be a list of strings of the names of dags you want to run"
@@ -82,14 +84,72 @@ def run_dags(ds, **kwargs):
             dag_runs.sort(key=lambda x: x.execution_date, reverse=True)
 
         logging.info(dag_id + " complete: " + dag_runs[0].state)
-        output[dag_id] = dag_runs[0].state
+        output[dag_id] = {"state": dag_runs[0].state, "instance": dag_runs[0]}
 
     return {"output": output}
 
 
+def assess_results(**kwargs):
 
-    
+    # Init CKAN
+    ACTIVE_ENV = Variable.get("active_env")
+    CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
+    CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]  #
+    CKAN_ADDRESS = CKAN_CREDS[ACTIVE_ENV]["address"]
+    CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
+    # init configs folder
+    CONFIG_FOLDER = "/data/operations/dags/datasets/files_to_datastore"
+
+    # init output
+    message = ""
+
+    # get dag run results
+    results = kwargs.pop("ti").xcom_pull(task_ids="run_dags")["output"]
+
+    # loop through each result from each run DAG and get more details
+    for dag_id, result in results.items():
+
+        # get YAML config info
+        with open(CONFIG_FOLDER + "/" + dag_id + ".yaml", "r") as f:
+            config = yaml.load(f, yaml.SafeLoader)
+
+        # get package info
+        package = CKAN.action.package_show(name_or_id=dag_id)
+
+
+        # find resource from YAML config in CKAN package
+        message += "\n*{}*: {} in {}".format(package["name"], result["state"], str(result["instance"].end_date - result["instance"].start_date))
+        for r_conf_name, r_conf in config[dag_id]["resources"].items():      
+            for r in package["resources"]:                
+                if r_conf_name == r["name"]:
+                    message += "\n\t\t   {}:".format(r["name"])
+                    
+                    # get whether data was updated or not
+                    task_instances = result["instance"].get_task_instances()
+                    print(task_instances)
+                    updated = False
+                    for ti in task_instances:
+                        if ti.task_id == "prepare_update_{}".format(r["name"].replace(" ", "")) and ti.state == "success":
+                            updated = True
+
+                            # get inserted records and fields
+                            datastore_resource = CKAN.action.datastore_search(resource_id=r["id"])
+                            record_count = datastore_resource["total"]
+                            field_count = len(datastore_resource["fields"]) - 1 # dont count _id field
+                            cache_file_count = len(r["datastore_cache"].keys())
+
+                            message += """
+                                   Records inserted: {}
+                                   Fields inserted: {}
+                                   Files cached: {}
+                            """.format(record_count, field_count, cache_file_count)
+                    
+                    if not updated:
+                        message += "\n\t\t   No update occurred"
+
+    return {"output": message}
+                    
 with DAG(
     "run_many_dags",
     description = DESCRIPTION,
@@ -130,12 +190,18 @@ with DAG(
         provide_context = True
     )
 
+    assess_results = PythonOperator(
+        task_id = "assess_results",
+        python_callable = assess_results,
+        provide_context = True
+    )
+
     message_slack = GenericSlackOperator(
         task_id = "message_slack",
-        message_header = "Multiple DAG Run Report",
-        message_content_task_id = "run_dags",
+        message_header = "Test DAG Run Report",
+        message_content_task_id = "assess_results",
         message_content_task_key = "output",
         message_body = ""
     )
 
-    get_dag_ids >> run_dags >> message_slack
+    get_dag_ids >> run_dags >> assess_results >> message_slack

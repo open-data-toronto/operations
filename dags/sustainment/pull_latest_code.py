@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from airflow import DAG
 from airflow.models import Variable
 from airflow.operators.bash import BashOperator
