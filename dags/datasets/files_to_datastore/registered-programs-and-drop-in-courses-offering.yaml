@@ -130,11 +130,11 @@ registered-programs-and-drop-in-courses-offering:
         info:
           notes: "URL to the course's program details and registration on eFUN website - PF&R Interface for registration to recreation programs."
       - id: "Min Age"
-        type: int
+        type: text
         info:
           notes: 'Minimum age required to register for the course  - age in months'
       - id: "Max Age"
-        type: int
+        type: text
         info:
           notes: 'Maximum age limit to register for the course - age in months'
       - id: "Program Category"
@@ -173,11 +173,11 @@ registered-programs-and-drop-in-courses-offering:
         info:
           notes: 'Title of a drop-in course'
       - id: "Age Min"
-        type: int
+        type: text
         info:
           notes: 'Minimum age required to register for the course minimum allowable age in months'
       - id: "Age Max"
-        type: int
+        type: text
         info:
           notes: 'Maximum age limit to register for the course, maximum allowable age in months'
       - id: "Date From"
