@@ -553,8 +553,8 @@ class InsertDatastoreFromYAMLConfigOperator(BaseOperator):
                     {
                         "type": "Point",
                         "coordinates": [
-                            row[longitude_attribute].value,
-                            row[latitude_attribute].value,
+                            row[longitude_attribute],
+                            row[latitude_attribute],
                         ],
                     }
                 )
@@ -891,13 +891,12 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
             # lets find which columns hold geometric data
             self.geometry_needs_parsing = True
 
-            for attr_index in range(len(fieldnames)):
-                if fieldnames[attr_index].lower() in latitude_attributes:
-                    self.latitude_attribute = attr_index
+            for attr_index in range(len(self.fieldnames)):
+                if self.fieldnames[attr_index].lower() in latitude_attributes:
+                    self.latitude_attribute = self.fieldnames[attr_index]
 
-                if fieldnames[attr_index].lower() in longitude_attributes:
-                    self.longitude_attribute = attr_index
-        
+                if self.fieldnames[attr_index].lower() in longitude_attributes:
+                    self.longitude_attribute = self.fieldnames[attr_index]
 
 
     def parse_data(self, input_data):
@@ -907,15 +906,20 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
 
         # map geometric columns to geometry column, if needed
         if self.geometry_needs_parsing:
-            output["geometry"] = json.dumps(
-                {
-                    "type": "Point",
-                    "coordinates": [
-                        input_data[self.longitude_attribute].value,
-                        input_data[self.latitude_attribute].value,
-                    ],
-                }
-            )
+            if input_data[self.longitude_attribute] and input_data[self.latitude_attribute]:
+                output["geometry"] = json.dumps(
+                    {
+                        "type": "Point",
+                        "coordinates": [
+                            float(input_data[self.longitude_attribute]),
+                            float(input_data[self.latitude_attribute]),
+                        ],
+                    }
+                )
+            else:
+                output["geometry"] = json.dumps(
+                    {"type": "Point","coordinates": [None,None]})
+
 
         # list of functions used to convert input to desired data_type
         formatters = {
@@ -996,6 +1000,9 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
         # init csv generator
         csv_generator = self.read_file()
 
+        # determine whether we need to parse geometry
+        self.does_geometry_need_parsing()
+
         # init some vars so batch calls to CKAN API
         total_count = 0
         this_count = 0
@@ -1021,7 +1028,7 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
 
         logging.info("Inserted {} records into CKAN".format(str(total_count)))
 
-        return {"success": True}
+        return {"success": True, "record_count":str(total_count)}
 
 
 class DatastoreCacheOperator(BaseOperator):
