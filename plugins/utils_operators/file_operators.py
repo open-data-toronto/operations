@@ -276,7 +276,7 @@ class DownloadGeoJsonOperator(BaseOperator):
         if self.filename_task_id and self.filename_task_key:
             self.filename = ti.xcom_pull(task_ids=self.filename_task_id)[self.filename_task_key]
 
-        return Path(self.dir) / self.filename
+        return self.dir + "/" + self.filename
 
     def get_features(self):
         # flattens file by removing all subobjects from each of the input file's dicts

@@ -258,13 +258,13 @@ with DAG(
         ti = kwargs["ti"]
         data_file_measure = ti.xcom_pull(task_ids="get_measure")
         data_file_narrative = ti.xcom_pull(task_ids="get_narrative")
-        tmp_dir = Path(ti.xcom_pull(task_ids="tmp_dir"))
+        tmp_dir = ti.xcom_pull(task_ids="tmp_dir")
 
-        with open(Path(data_file_measure["path"])) as f:
+        with open(data_file_measure["data_path"]) as f:
             measure = json.load(f)
         logging.info(f"tmp_dir: {tmp_dir} | data_file_measure: {data_file_measure}")
 
-        with open(Path(data_file_narrative["path"])) as f:
+        with open(data_file_narrative["data_path"]) as f:
             narrative = json.load(f)
         logging.info(f"tmp_dir: {tmp_dir} | data_file_narrative: {data_file_narrative}")
 
@@ -306,7 +306,7 @@ with DAG(
 
     def get_fields(**kwargs):
         ti = kwargs["ti"]
-        tmp_dir = Path(ti.xcom_pull(task_ids="tmp_dir"))
+        tmp_dir = ti.xcom_pull(task_ids="tmp_dir")
         filepath = tmp_dir / "fields.json"
         with open(filepath, 'w') as fields_json_file:
             json.dump(ds_fields(), fields_json_file)
@@ -347,23 +347,23 @@ with DAG(
     ckan_apikey = ckan_creds[active_env]["apikey"]
 
     tmp_dir = CreateLocalDirectoryOperator(
-        task_id="tmp_dir", path=Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
+        task_id="tmp_dir", path=Variable.get("tmp_dir") + "/" + PACKAGE_NAME,
     )
 
     backups_dir = CreateLocalDirectoryOperator(
-        task_id="backups_dir", path=Path(Variable.get("backups_dir")) / PACKAGE_NAME,
+        task_id="backups_dir", path=Variable.get("backups_dir") + "/" + PACKAGE_NAME,
     )
 
     src1 = DownloadFileOperator(
         task_id="get_measure",
         file_url=tpp_measure_url,
-        dir=Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
+        dir=Variable.get("tmp_dir") + "/" + PACKAGE_NAME,
         filename="measure.json",
     )
     src2 = DownloadFileOperator(
         task_id="get_narrative",
         file_url=tpp_narratives_url,
-        dir=Path(Variable.get("tmp_dir")) / PACKAGE_NAME,
+        dir=Variable.get("tmp_dir") + "/" + PACKAGE_NAME,
         filename="narrative.json",
     )
 
