@@ -28,7 +28,7 @@ class CreateLocalDirectoryOperator(BaseOperator):
         path = Path(self.file_path)
         path.mkdir(parents=self.parents, exist_ok=self.exist_ok)
 
-        return path
+        return str(path)
 
 
 class DeleteLocalDirectoryOperator(BaseOperator):
