@@ -359,3 +359,20 @@ zoning-by-law:
           type: "text"
           info:
             notes: ""
+    Parking Zone Overlay:
+      agol: True
+      format: geojson
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/MapServer/61
+      attributes:
+        - id: "OBJECTID"          
+          type: "text"
+          info:
+            notes: "Unique ID from source AGOL"
+        - id: "ZN_PARKZONE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
