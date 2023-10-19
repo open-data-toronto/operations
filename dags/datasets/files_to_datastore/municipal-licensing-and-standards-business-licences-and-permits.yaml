@@ -63,7 +63,8 @@ municipal-licensing-and-standards-business-licences-and-permits:
         info:
           notes: 'Name that company operates under'
       - id: Issued
-        type: 'text'
+        type: 'date'
+        format: "%Y-%b-%d"
         info:
           notes: 'Date of issue of licence/permit'
       - id: Client Name
