@@ -64,7 +64,7 @@ municipal-licensing-and-standards-business-licences-and-permits:
           notes: 'Name that company operates under'
       - id: Issued
         type: 'date'
-        format: "%Y-%b-%d"
+        format: "%d-%b-%y"
         info:
           notes: 'Date of issue of licence/permit'
       - id: Client Name
@@ -113,17 +113,11 @@ municipal-licensing-and-standards-business-licences-and-permits:
           notes: 'Activity permitted under the licence'
       - id: Cancel Date
         type: 'date'
-        format: "%Y-%b-%d"
+        format: "%d-%b-%y"
         info:
           notes: 'Date the license or permit was cancelled'
       - id: Last Record Update
         type: 'date'
-        format: "%Y-%b-%d"
+        format: "%d-%b-%y"
         info:
           notes: ''
-
-
-
-
-
-
