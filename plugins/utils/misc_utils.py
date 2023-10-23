@@ -119,10 +119,20 @@ def clean_date_format(input, input_format=None):
     }
 
     if input_format:
-        input = input.replace("/", "-")
-        input_format = input_format.replace("/", "-")
-        datetime_object = datetime.strptime(input, input_format)
-        output = datetime_object.strftime(format_dict[input_format])
+        if input_format == "epoch":
+            # assumes input is in milliseconds
+
+            datetime_object = datetime.fromtimestamp(int(input)/1e3)
+            try:
+                return datetime_object.strftime("%Y-%m-%dT%H:%M:%S")
+            except ValueError:
+                return datetime_object.strftime("%Y-%m-%d")
+
+        else:
+            input = input.replace("/", "-")
+            input_format = input_format.replace("/", "-")
+            datetime_object = datetime.strptime(input, input_format)
+            output = datetime_object.strftime(format_dict[input_format])
 
         return output
 

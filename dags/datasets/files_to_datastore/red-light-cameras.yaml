@@ -143,6 +143,7 @@ red-light-cameras:
           notes: ''
       - id: ACTIVATION_DATE
         type: timestamp
+        format: epoch
         info:
           notes: ''
       - id: geometry
