@@ -8,11 +8,13 @@ import json
 import types
 import csv
 
-from datetime import datetime
+import datetime
 
 from airflow import DAG
 from airflow.models import TaskInstance
 from utils_operators.agol_operators import AGOLDownloadFileOperator
+from airflow.utils.state import DagRunState
+from airflow.utils.types import DagRunType
 
 # init the base url, without query parameters, of where the data will come from
 request_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_FIRE_FACILITY/FeatureServer/0"
@@ -27,21 +29,37 @@ filename = "agol_data.csv"
 #if os.path.exists(dir + "/" + filename):
 #    os.remove( dir + "/" + filename )
 
-# init the dag for the tests
-dag = DAG(dag_id='anydag', start_date=datetime.now())
+DATA_INTERVAL_START = datetime.datetime(2021, 9, 13)
+DATA_INTERVAL_END = DATA_INTERVAL_START + datetime.timedelta(days=1)
 
-# init the Operator and Task Instance
-task = AGOLDownloadFileOperator(
-        task_id="get_data",
-        request_url=request_url,
-        dir=dir,
-        filename=filename,
-        dag=dag
-    )
+TEST_DAG_ID = "my_custom_operator_dag"
+TEST_TASK_ID = "my_custom_operator_task"
 
-ti = TaskInstance(task=task, execution_date=datetime.now())
 
-def test_get_fields():
+@pytest.fixture()
+def dag():
+    with DAG(
+        dag_id=TEST_DAG_ID,
+        schedule_interval="@daily",
+        default_args={"start_date": DATA_INTERVAL_START},
+    ) as dag:
+        task = AGOLDownloadFileOperator(
+            task_id=TEST_TASK_ID,
+            request_url=request_url,
+            dir=dir,
+            filename=filename,
+            #dag=dag
+        )
+    return dag
+
+def test_get_fields(dag):
+    dagrun = dag.create_dagrun(
+        state=DagRunState.RUNNING,
+        execution_date=DATA_INTERVAL_START,
+        data_interval=(DATA_INTERVAL_START, DATA_INTERVAL_END),
+        start_date=DATA_INTERVAL_END,
+        run_type=DagRunType.MANUAL,
+    )    
     # checks if the operator parses agol data properly
     # and gets more than one field
     fields = task.get_fields(request_url)
@@ -52,7 +70,14 @@ def test_get_fields():
     assert type(fields) == list
     assert all([isinstance(f, str) for f in fields])
 
-def test_agol_generator():
+def test_agol_generator(dag):
+    dagrun = dag.create_dagrun(
+        state=DagRunState.RUNNING,
+        execution_date=DATA_INTERVAL_START,
+        data_interval=(DATA_INTERVAL_START, DATA_INTERVAL_END),
+        start_date=DATA_INTERVAL_END,
+        run_type=DagRunType.MANUAL,
+    )    
     # checks that making a generator from agol works as expected
     fields = task.get_fields(request_url)
 
@@ -63,7 +88,14 @@ def test_agol_generator():
     for i in task.agol_generator(request_url, fields):
         assert isinstance(i, dict)
 
-def test_execute():
+def test_execute(dag):
+    dagrun = dag.create_dagrun(
+        state=DagRunState.RUNNING,
+        execution_date=DATA_INTERVAL_START,
+        data_interval=(DATA_INTERVAL_START, DATA_INTERVAL_END),
+        start_date=DATA_INTERVAL_END,
+        run_type=DagRunType.MANUAL,
+    )
     # checks all keys are present in operator output
     output = task.execute(ti.get_template_context())
     

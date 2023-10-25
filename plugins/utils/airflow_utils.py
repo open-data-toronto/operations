@@ -103,7 +103,7 @@ def create_dir_with_dag_name(**kwargs):
     dir_with_dag_name = Path(files_dir) / dag_id
     dir_with_dag_name.mkdir(parents=True, exist_ok=True)
 
-    return dir_with_dag_name
+    return str(dir_with_dag_name)
 
 
 def delete_tmp_data_dir(**kwargs):

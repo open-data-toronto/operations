@@ -4,7 +4,7 @@ import pytest
 import requests
 import os
 
-from datetime import datetime
+import datetime
 
 from airflow import DAG
 from airflow.models import TaskInstance
@@ -23,21 +23,37 @@ filename = "file_data.json"
 # if os.path.exists(dir + "/" + filename):
 #     os.remove(dir + "/" + filename)
 
-# init the dag for the tests
-dag = DAG(dag_id='anydag', start_date=datetime.now())
+DATA_INTERVAL_START = datetime.datetime(2021, 9, 13)
+DATA_INTERVAL_END = DATA_INTERVAL_START + datetime.timedelta(days=1)
 
-# init the Operator and Task Instance
-task = DownloadFileOperator(
-        task_id="get_data",
-        file_url=file_url,
-        dir=dir,
-        filename=filename,
-        dag=dag
-    )
+TEST_DAG_ID = "my_custom_operator_dag"
+TEST_TASK_ID = "my_custom_operator_task"
 
-ti = TaskInstance(task=task, execution_date=datetime.now())
+
+@pytest.fixture()
+def dag():
+    with DAG(
+        dag_id=TEST_DAG_ID,
+        schedule_interval="@daily",
+        default_args={"start_date": DATA_INTERVAL_START},
+    ) as dag:
+        task = AGOLDownloadFileOperator(
+            task_id=TEST_TASK_ID,
+            request_url=request_url,
+            dir=dir,
+            filename=filename,
+            #dag=dag
+        )
+    return dag
   
-def test_execute():
+def test_execute(dag):
+    dagrun = dag.create_dagrun(
+        state=DagRunState.RUNNING,
+        execution_date=DATA_INTERVAL_START,
+        data_interval=(DATA_INTERVAL_START, DATA_INTERVAL_END),
+        start_date=DATA_INTERVAL_END,
+        run_type=DagRunType.MANUAL,
+    )
     # checks all keys are present in operator output
     output = task.execute(ti.get_template_context())
     keys = output.keys()

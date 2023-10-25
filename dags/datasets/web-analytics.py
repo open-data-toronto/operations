@@ -168,7 +168,7 @@ def create_dag(d):
 
         logging.info(res)
 
-        return save_path
+        return str(save_path)
 
     def download_data(**kwargs):
         ti = kwargs.pop("ti")
@@ -185,7 +185,7 @@ def create_dag(d):
             ):  # to-do: read up on chunk size here
                 fd.write(chunk)
 
-        return save_path
+        return str(save_path)
 
     def unzip_data(**kwargs):
         ti = kwargs.pop("ti")
@@ -199,7 +199,7 @@ def create_dag(d):
         if target_dir.exists() is False:
             target_dir.mkdir()
 
-        return target_dir
+        return str(target_dir)
 
     def get_filename_date_format(**kwargs):
         period_range = kwargs["period_range"]
@@ -322,7 +322,7 @@ def create_dag(d):
             if period_path.exists() is False:
                 period_path.mkdir()
 
-            dirs.append(period_path)
+            dirs.append(str(period_path))
 
             logging.info(period_path)
 
@@ -352,7 +352,7 @@ def create_dag(d):
             period_path = dest_path / period_path_name
             fpath = period_path / (report_name + ".csv")
 
-            file_paths.append(fpath)
+            file_paths.append(str(fpath))
 
             response = generate_report(
                 report_name=report_name,
@@ -387,7 +387,7 @@ def create_dag(d):
 
         staging.mkdir(parents=True, exist_ok=True)
 
-        return staging
+        return str(staging)
 
     def zip_files(**kwargs):
         ti = kwargs.pop("ti")
@@ -406,7 +406,7 @@ def create_dag(d):
 
         copy_tree(str(from_dir.absolute()), str(dest_dir.absolute()))
 
-        return dest_dir
+        return str(dest_dir)
 
     def upload_zip(**kwargs):
         ti = kwargs.pop("ti")

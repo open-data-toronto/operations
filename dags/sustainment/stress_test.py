@@ -70,7 +70,7 @@ def run_dags(ds, **kwargs):
         for dag_id in dag_ids:
             this_dag_runs = DagRun.find(dag_id=dag_id)
             this_dag_runs.sort(key=lambda x: x.execution_date, reverse=True)
-            if this_dag_runs[0].start_date > runtime:
+            if this_dag_runs[0].execution_date > runtime:
                 this_dag_run = this_dag_runs[0]
             else:
                 time.sleep(10)

@@ -78,13 +78,26 @@ def run_dags(ds, **kwargs):
         dag_runs.sort(key=lambda x: x.execution_date, reverse=True)
 
         # wait for dag to finish and then store its result in output
-        while dag_runs[0].state == "running":
+        while dag_runs[0].state in ["running", "queued"]:
             time.sleep(5)
             dag_runs = DagRun.find(dag_id=dag_id)
             dag_runs.sort(key=lambda x: x.execution_date, reverse=True)
 
+        # parse task instance metadata
+        for ti in dag_runs[0].get_task_instances():
+            if ti.task_id.startswith("prepare_update_") and ti.state == "success":
+                updated = True
+            else:
+                updated = False
+
         logging.info(dag_id + " complete: " + dag_runs[0].state)
-        output[dag_id] = {"state": dag_runs[0].state, "instance": dag_runs[0]}
+        output[dag_id] = {
+            "state": dag_runs[0].state, 
+            "start_date": dag_runs[0].start_date, 
+            "end_date": dag_runs[0].end_date, 
+            "updated": updated,
+
+        }
 
     return {"output": output}
 
@@ -119,31 +132,29 @@ def assess_results(**kwargs):
 
 
         # find resource from YAML config in CKAN package
-        message += "\n*{}*: {} in {}".format(package["name"], result["state"], str(result["instance"].end_date - result["instance"].start_date))
+        message += "\n*{}*: {} in {}".format(package["name"], result["state"], str(result["end_date"] - result["start_date"]))
         for r_conf_name, r_conf in config[dag_id]["resources"].items():      
             for r in package["resources"]:                
                 if r_conf_name == r["name"]:
                     message += "\n\t\t   {}:".format(r["name"])
                     
                     # get whether data was updated or not
-                    task_instances = result["instance"].get_task_instances()
-                    print(task_instances)
                     updated = False
-                    for ti in task_instances:
-                        if ti.task_id == "prepare_update_{}".format(r["name"].replace(" ", "")) and ti.state == "success":
-                            updated = True
+                    
+                    if result["updated"]:
+                        updated = True
 
-                            # get inserted records and fields
-                            datastore_resource = CKAN.action.datastore_search(resource_id=r["id"])
-                            record_count = datastore_resource["total"]
-                            field_count = len(datastore_resource["fields"]) - 1 # dont count _id field
-                            cache_file_count = len(r["datastore_cache"].keys())
+                        # get inserted records and fields
+                        datastore_resource = CKAN.action.datastore_search(resource_id=r["id"])
+                        record_count = datastore_resource["total"]
+                        field_count = len(datastore_resource["fields"]) - 1 # dont count _id field
+                        cache_file_count = len(r["datastore_cache"].keys())
 
-                            message += """
-                                   Records inserted: {}
-                                   Fields inserted: {}
-                                   Files cached: {}
-                            """.format(record_count, field_count, cache_file_count)
+                        message += """
+                                Records inserted: {}
+                                Fields inserted: {}
+                                Files cached: {}
+                        """.format(record_count, field_count, cache_file_count)
                     
                     if not updated:
                         message += "\n\t\t   No update occurred"

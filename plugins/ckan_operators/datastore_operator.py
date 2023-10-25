@@ -5,6 +5,7 @@ import sys
 
 from typing import List
 from utils import misc_utils
+from pathlib import Path
 
 from ckan_operators import nested_file_readers
 
@@ -78,7 +79,7 @@ class BackupDatastoreResourceOperator(BaseOperator):
             with open(fields_file_path, "w") as f:
                 json.dump(fields, f)
 
-        return fields_file_path
+        return str(fields_file_path)
 
     def _save_data_parquet(self, datastore_response, checksum, backups_dir, data):
         data_file_path = backups_dir / f"data.{checksum}.parquet"
@@ -89,7 +90,7 @@ class BackupDatastoreResourceOperator(BaseOperator):
                 engine="fastparquet",
                 compression=None)
 
-        return data_file_path
+        return str(data_file_path)
 
     def execute(self, context):
 
@@ -101,6 +102,7 @@ class BackupDatastoreResourceOperator(BaseOperator):
         ti = context["ti"]
         resource = ti.xcom_pull(task_ids=self.resource_task_id)
         backups_dir = ti.xcom_pull(task_ids=self.dir_task_id)
+        backups_dir = Path(backups_dir)
 
         # get number of records for this datastore resource
         record_count = self.ckan.action.datastore_search(id=resource["id"], limit=0)[

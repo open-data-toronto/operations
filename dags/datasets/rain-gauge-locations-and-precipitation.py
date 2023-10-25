@@ -103,7 +103,7 @@ with DAG(
 
         pd.read_csv(BytesIO(file_content)).to_csv(filepath, index=False)
 
-        return filepath
+        return str(filepath)
 
     def get_from_timestamp(**kwargs):
         ti = kwargs.pop("ti")
@@ -168,7 +168,7 @@ with DAG(
 
         pd.DataFrame(records_to_load).to_csv(filepath, index=False)
 
-        return filepath
+        return str(filepath)
 
     def update_resource_data(**kwargs):
         ti = kwargs.pop("ti")
@@ -185,7 +185,7 @@ with DAG(
 
         data_to_load.to_csv(filepath, index=False)
 
-        return filepath
+        return str(filepath)
 
     def upload_yearly_resources(**kwargs):
         ti = kwargs.pop("ti")

@@ -298,20 +298,20 @@ with DAG(
         # measure/target join with narrative
         df = pd.merge(df_m_t,df_narrative, how='left', on=['measure_id', 'year', 'period_number_in_year'])
 
-        filepath = tmp_dir / "measure_target_narrative.parquet"
+        filepath = Path(tmp_dir) / "measure_target_narrative.parquet"
 
         df.to_parquet(path=filepath, engine="fastparquet", compression=None)
 
-        return filepath
+        return str(filepath)
 
     def get_fields(**kwargs):
         ti = kwargs["ti"]
         tmp_dir = ti.xcom_pull(task_ids="tmp_dir")
-        filepath = tmp_dir / "fields.json"
+        filepath = Path(tmp_dir) / "fields.json"
         with open(filepath, 'w') as fields_json_file:
             json.dump(ds_fields(), fields_json_file)
 
-        return filepath
+        return str(filepath)
 
     def were_records_loaded(**kwargs):
         inserted_records_count = kwargs["ti"].xcom_pull(task_ids="insert_records")
@@ -390,6 +390,7 @@ with DAG(
             url_type="datastore",
             extract_job=f"Airflow: {PACKAGE_NAME}",
             package_id=PACKAGE_NAME,
+            url="placeholder",
         ),
     )
 
