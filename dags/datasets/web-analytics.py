@@ -1,5 +1,6 @@
 import calendar
 import logging
+import pytz
 import os
 import shutil
 import zipfile
@@ -241,7 +242,7 @@ def create_dag(d):
             begin = latest_loaded + timedelta(days=1)
             end = begin + timedelta(days=6)
 
-            while end < datetime.now():
+            while end.replace(tzinfo=None) < datetime.now().replace(tzinfo=None):
                 periods_to_load.append(
                     {
                         "begin": datetime.strftime(begin, "%Y/%m/%d/0"),
