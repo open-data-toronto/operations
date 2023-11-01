@@ -428,7 +428,7 @@ class ValidateFileSchemaOperator(BaseOperator):
         if self.filepath_task_id and self.filepath_task_key:
             self.filepath = ti.xcom_pull(task_ids=self.filepath_task_id)[self.filepath_task_key]
 
-        with open(self.filepath, "r") as f:
+        with open(self.filepath, "r", encoding="utf-8-sig") as f:
             reader = csv.reader(f)
             file_columns = next(reader, None)
 
