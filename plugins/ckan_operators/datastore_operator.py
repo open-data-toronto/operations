@@ -870,7 +870,7 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
         #assert self.data_path.endswith(".csv")
 
         # get fieldnames from first row of CSV
-        with open(self.data_path, "r") as f:
+        with open(self.data_path, "r", encoding="windows-1252") as f:
             self.fieldnames = next(csv.reader(f))
             f.close()
 
