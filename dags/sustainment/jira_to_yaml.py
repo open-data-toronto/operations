@@ -263,11 +263,12 @@ with DAG(
         fields = issue["fields"]
 
         # location where data stored, could be an AGOL or NAS endpoint
-        data_url = (
-            fields[mapping["data_url"]]["content"][0]["content"][0]["text"]
-            if fields[mapping["data_url"]]
-            else None
-        )
+        print(fields)
+        print(mapping)
+        data_url = None
+        if fields[mapping["data_url"]]:
+            if len(fields[mapping["data_url"]]["content"]) > 0:
+                data_url = fields[mapping["data_url"]]["content"][0]["content"][0]["text"]
 
         # check if dataset contains geographic coordinates
         geospatial = (
