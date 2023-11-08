@@ -196,6 +196,7 @@ traffic-signals-tabular:
             notes: ""
         - id: "ACTIVATIONDATE"
           type: "timestamp"
+          format: "epoch"
           info:
             notes: ""
         - id: "SIGNALSYSTEM"
@@ -268,18 +269,22 @@ traffic-signals-tabular:
             notes: ""
         - id: "LPI_NORTH_IMPLEMENTATION_DATE"
           type: "timestamp"
+          format: "epoch"
           info:
             notes: ""
         - id: "LPI_SOUTH_IMPLEMENTATION_DATE"
           type: "timestamp"
+          format: "epoch"
           info:
             notes: ""
         - id: "LPI_EAST_IMPLEMENTATION_DATE"
           type: "timestamp"
+          format: "epoch"
           info:
             notes: ""
         - id: "LPI_WEST_IMPLEMENTATION_DATE"
           type: "timestamp"
+          format: "epoch"
           info:
             notes: ""
         - id: "LPI_COMMENT"
