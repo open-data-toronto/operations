@@ -49,13 +49,13 @@ toronto-economic-bulletin:
   Tile Locator Reference File (PDF):
     format: pdf
     url: https://opendata.toronto.ca/city.planning/3d-massing/3DContextMassing_Tile_Locator.pdf
-address-points-municipal-toronto-one-address-repository:
-  Municipal address points (wgs84) - geojson:
-    format: zip
-    url: https://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/ADDRESS_POINT_WGS84_geojson.zip
-  Municipal address points (wgs84) - shapefile:
-    format: shp
-    url: https://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/municipal-address-points-wgs84-latitude-longitude.zip
+#address-points-municipal-toronto-one-address-repository:
+#  Municipal address points (wgs84) - geojson:
+#    format: zip
+#    url: https://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/ADDRESS_POINT_WGS84_geojson.zip
+#  Municipal address points (wgs84) - shapefile:
+#    format: shp
+#    url: https://opendata.toronto.ca/technology.services/address-points-municipal-toronto-one-address-repository/municipal-address-points-wgs84-latitude-longitude.zip
 #building-permits-active-permits:
 #  Active permits (CSV):
 #    format: zip
