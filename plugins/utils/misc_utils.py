@@ -6,10 +6,6 @@ import codecs
 import csv
 import ckanapi
 
-from datetime import datetime
-from airflow.models import Variable
-
-
 def stream_download_to_md5(url):
     '''streams input url into returned md5 hash string'''
     r = requests.get(url, stream=True)
@@ -147,14 +143,17 @@ def clean_date_format(input, input_format=None):
             except ValueError:
                 pass
 
+def validate_url(source_url):
+    try:
+        req = requests.get(source_url)
+        assert str(req.status_code).startswith("2"), \
+            "Input URL {} returned {}".format(source_url, req.status_code)
+        return source_url
 
-def connect_to_ckan():
-    '''Returns RemoteCKAN object for appropriate CKAN instance'''
+    except ConnectionError as e:
+        logging.error("Error when connecting to {}".format(source_url))
+        raise e
     
-    # init hardcoded vars
-    ACTIVE_ENV = Variable.get("active_env")
-    CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-    CKAN = CKAN_CREDS[ACTIVE_ENV]["address"]#
-    CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]#
+    except Exception as e:
+        raise e
 
-    return ckanapi.RemoteCKAN(apikey=CKAN_APIKEY, address=CKAN)
