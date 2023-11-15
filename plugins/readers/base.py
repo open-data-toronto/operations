@@ -4,6 +4,7 @@ import logging
 import requests
 import csv
 import json
+import sys
 
 from io import StringIO
 from utils import misc_utils
@@ -15,9 +16,10 @@ class Reader():
     def __init__(
         self, 
         source_url: str = None,
-        schema: list = []
+        schema: list = [],
+        dir: str = None,
+        filename: str = None
         ):
-        '''Ensure url is valid, returns 2**'''
         self.source_url = misc_utils.validate_url(source_url)
         self.schema = schema
 
@@ -30,10 +32,22 @@ class Reader():
             "json": json.loads
         } 
 
-    def write_to_csv():
+        self.path = dir + "/" + filename
+
+        self.fieldnames = [attr["id"] for attr in self.schema]
+
+    def write_to_csv(self, read_method):
         '''Input stream or list of dicts with the same schema.
         Writes to local csv'''
         print("Write!")
+        csv.field_size_limit(sys.maxsize)
+
+        with open(self.path, "w") as f:
+            writer = csv.DictWriter(f, self.fieldnames)
+            writer.writeheader()
+            writer.writerows(read_method)
+            f.close()
+
 
     def clean_line(self, line):
         '''Input list of dicts, intended schema.
@@ -69,6 +83,7 @@ class CSVReader(Reader):
 
             # connect headers and values in a dict
             for row in iterator:
+                # skip line breaks or empty rows
                 if len(row) == 0:
                     continue
                 values = row.decode(self.encoding)
@@ -78,6 +93,14 @@ class CSVReader(Reader):
                     data = line
                 out = {headers[i]:data[i] for i in range(len(data))}
                 yield out
+
+
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
@@ -115,14 +138,16 @@ if __name__ == "__main__":
                     "notes": "Number of unmatched callers who had called Central Intake two or more times on this date."
                 }
             }
-        ]
+        ],
+        "/data/tmp",
+        "ssha-temp-test.csv"
         )
-    i = 0
-    for x in c.stream_from_csv():
-        print("-----------------------")
-        print(x)
-        print(c.clean_line(x))
-        i += 1
 
-
-    print(i)
+    c.write_to_csv(c.stream_from_csv())
+    #i = 0
+    #for x in c.stream_from_csv():
+    #    print("-----------------------")
+    #    print(x)
+    #    print(c.clean_line(x))
+    #    i += 1
+    #print(i)
