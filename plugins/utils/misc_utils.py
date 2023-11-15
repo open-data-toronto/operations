@@ -5,6 +5,7 @@ import hashlib
 import codecs
 import csv
 import ckanapi
+from datetime import datetime
 
 def stream_download_to_md5(url):
     '''streams input url into returned md5 hash string'''

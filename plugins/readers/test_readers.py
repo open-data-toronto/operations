@@ -1,11 +1,11 @@
 '''test cases for reader classes'''
 
 import pytest
-from base import Downloader
+from readers.base import Reader
 
-def test_downloader():
+def test_reader():
 
     test_url = "https://httpstat.us/Random/200,201"
-    downloader = Downloader(test_url)
+    reader = Reader(test_url)
 
-    assert downloader.source_url
+    assert reader.source_url == test_url
