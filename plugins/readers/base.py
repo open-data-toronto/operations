@@ -17,7 +17,7 @@ class Reader():
         self, 
         source_url: str = None,
         schema: list = [],
-        dir: str = None,
+        out_dir: str = "",
         filename: str = None
         ):
         self.source_url = misc_utils.validate_url(source_url)
@@ -32,14 +32,14 @@ class Reader():
             "json": json.loads
         } 
 
-        self.path = dir + "/" + filename
-
+        # where the data will be saved
+        self.path = out_dir + "/" + filename
+        # names intended to be written out to saved file
         self.fieldnames = [attr["id"] for attr in self.schema]
 
     def write_to_csv(self, read_method):
         '''Input stream or list of dicts with the same schema.
         Writes to local csv'''
-        print("Write!")
         csv.field_size_limit(sys.maxsize)
 
         with open(self.path, "w") as f:
@@ -71,6 +71,7 @@ class CSVReader(Reader):
         '''Return generator yielding csv rows as dicts'''
         self.encoding = "latin-1"
 
+        # get source file stream
         with requests.get(self.source_url, stream=True) as r:
             iterator = r.iter_lines()
             
@@ -108,7 +109,7 @@ if __name__ == "__main__":
     #print(d.source_url)
 
     c = CSVReader(
-        "https://opendata.toronto.ca/shelter.support.housing.administration/central-intake-calls/central intake - service queue.csv",
+        "https://opendata.toronto.ca/DummyDatasets/COT_affordable_rental_housing_mod.csv",
         [
             {
                 "id": "Date",
