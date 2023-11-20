@@ -70,31 +70,42 @@ class CSVReader(Reader):
     def stream_from_csv(self):
         '''Return generator yielding csv rows as dicts'''
         self.encoding = "latin-1"
+        self.latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
+        self.longitude_attributes = ["long", "longitude", "x", "x coordinate"]
 
         # get source file stream
         with requests.get(self.source_url, stream=True) as r:
-            iterator = r.iter_lines()
-            
-            # parse out the headers
-            header_string = next(iterator).decode(self.encoding)
-            buff = StringIO(header_string)
+            # decode bytes to string
+            iterator = (line.decode(self.encoding) for line in r.iter_lines())
+
+            buff = StringIO(next(iterator))
             header_reader = csv.reader(buff)
             for line in header_reader:
-                headers = line
+                source_headers = line
+            reader = csv.DictReader(iterator, fieldnames = source_headers)
+            
+            for source_row in reader:
 
-            # connect headers and values in a dict
-            for row in iterator:
-                # skip line breaks or empty rows
-                if len(row) == 0:
-                    continue
-                values = row.decode(self.encoding)
-                buff = StringIO(values)
-                data_reader = csv.reader(buff)
-                for line in data_reader:
-                    data = line
-                out = {headers[i]:data[i] for i in range(len(data))}
+                # if geometric data, parse into geometry object
+                if "geometry" in self.fieldnames:
+                    for attr in source_row:
+                        if attr.lower() in self.latitude_attributes:
+                            latitude_attribute = attr
+
+                        if attr.lower() in self.longitude_attributes:
+                            longitude_attribute = attr
+
+                    source_row["geometry"] = {
+                        "type": "Point",
+                        "coordinates": [
+                            float(source_row[longitude_attribute]),
+                            float(source_row[latitude_attribute]),
+                        ],
+                    }
+
+                out = {attr["id"]:dict(source_row)[attr["id"]] for attr in self.schema}
+
                 yield out
-
 
 
 
