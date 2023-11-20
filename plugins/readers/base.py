@@ -8,9 +8,11 @@ import sys
 
 from io import StringIO
 from utils import misc_utils
+from abc import ABC, abstractmethod
 
 
-class Reader():
+
+class Reader(ABC):
     '''Base class for airflow extracting data from a source'''
 
     def __init__(
@@ -37,7 +39,12 @@ class Reader():
         # names intended to be written out to saved file
         self.fieldnames = [attr["id"] for attr in self.schema]
 
-    def write_to_csv(self, read_method):
+    @abstractmethod
+    def read(self):
+        raise NotImplementedError("Reader's 'read' method must be overridden")
+
+
+    def write_to_csv(self):
         '''Input stream or list of dicts with the same schema.
         Writes to local csv'''
         csv.field_size_limit(sys.maxsize)
@@ -45,7 +52,7 @@ class Reader():
         with open(self.path, "w") as f:
             writer = csv.DictWriter(f, self.fieldnames)
             writer.writeheader()
-            writer.writerows(read_method)
+            writer.writerows(self.read())
             f.close()
 
 
@@ -67,7 +74,7 @@ class Reader():
 class CSVReader(Reader):
     '''Reads a CSV from a URL and writes it locally'''
 
-    def stream_from_csv(self):
+    def read(self):
         '''Return generator yielding csv rows as dicts'''
         self.encoding = "latin-1"
         self.latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
@@ -103,7 +110,7 @@ class CSVReader(Reader):
                         ],
                     }
 
-                out = {attr["id"]:dict(source_row)[attr["id"]] for attr in self.schema}
+                out = {attr["id"]:source_row[attr["id"]] for attr in self.schema}
 
                 yield out
 
