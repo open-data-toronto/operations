@@ -18,7 +18,7 @@ class Reader(ABC):
     def __init__(
         self, 
         source_url: str = None,
-        schema: list = [],
+        schema: list = None,
         out_dir: str = "",
         filename: str = None
         ):
@@ -37,7 +37,9 @@ class Reader(ABC):
         # where the data will be saved
         self.path = out_dir + "/" + filename
         # names intended to be written out to saved file
-        self.fieldnames = [attr["id"] for attr in self.schema]
+        self.fieldnames = ["_id"]
+        self.fieldnames += [attr["id"] for attr in self.schema]
+        
 
     @abstractmethod
     def read(self):
@@ -57,7 +59,7 @@ class Reader(ABC):
 
 
     def clean_line(self, line):
-        '''Input list of dicts, intended schema.
+        '''Input one line of data as a list of dicts.
         Forces values to CKAN-friendly data types.
         Raises error if data format issue is found'''
         output = {}
@@ -79,6 +81,7 @@ class CSVReader(Reader):
         self.encoding = "latin-1"
         self.latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
         self.longitude_attributes = ["long", "longitude", "x", "x coordinate"]
+        i = 0 # we'll use this to count rows and add a fake row _id
 
         # get source file stream
         with requests.get(self.source_url, stream=True) as r:
@@ -92,9 +95,11 @@ class CSVReader(Reader):
             reader = csv.DictReader(iterator, fieldnames = source_headers)
             
             for source_row in reader:
+                i += 1
+                out = {"_id": i}
 
                 # if geometric data, parse into geometry object
-                if "geometry" in self.fieldnames:
+                if "geometry" in self.fieldnames and "geometry" not in source_headers:
                     for attr in source_row:
                         if attr.lower() in self.latitude_attributes:
                             latitude_attribute = attr
@@ -102,15 +107,16 @@ class CSVReader(Reader):
                         if attr.lower() in self.longitude_attributes:
                             longitude_attribute = attr
 
-                    source_row["geometry"] = {
+                    source_row["geometry"] = json.dumps({
                         "type": "Point",
                         "coordinates": [
                             float(source_row[longitude_attribute]),
                             float(source_row[latitude_attribute]),
                         ],
-                    }
-
-                out = {attr["id"]:source_row[attr["id"]] for attr in self.schema}
+                    })
+                # add source data to out row
+                for attr in self.schema:
+                    out[attr["id"]] = source_row[attr["id"]] 
 
                 yield out
 
@@ -126,47 +132,24 @@ if __name__ == "__main__":
     #d = Reader("https://httpstat.us/Random/200,201,500-504")
     #print(d.source_url)
 
+    import os
+    import yaml
+    this_dir = os.path.dirname(os.path.realpath(__file__))
+    test_source_url = "https://opendata.toronto.ca/housing.secretariat/COT_affordable_rental_housing.csv"
+    with open(this_dir + "/test_schema.yaml", "r") as f:
+            config = yaml.load(f, yaml.SafeLoader)
+    test_schema = config["upcoming-and-recently-completed-affordable-housing-units"]["resources"]["Affordable Rental Housing Pipeline"]["attributes"]
+
+    ckan_url = "https://ckanadmin0.intra.prod-toronto.ca/datastore/dump/22c57a77-de52-4206-b6a7-276fb1f7ae17?bom=True"
+
     c = CSVReader(
-        "https://opendata.toronto.ca/DummyDatasets/COT_affordable_rental_housing_mod.csv",
-        [
-            {
-                "id": "Date",
-                "type": "date",
-                "info": {
-                    "notes": "Operational date for the data, uses the date before midnight to refer to the evening of service. A closeout completed at 4:00 am on the morning of August 1, 2022 would be recorded as operational date July 31, 2022."
-                }
-            },
-            {
-                "id": "Unmatched callers",
-                "type": "int",
-                "info": {
-                    "notes": "Total individuals who were not able to be offered a space over the past 24 hours, at time of closeout at 4am."
-                }
-            },
-            {
-                "id": "Single call",
-                "type": "int",
-                "info": {
-                    "notes": "Number of unmatched callers who had called Central Intake a single time on this date."
-                }
-            },
-            {
-                "id": "Repeat caller",
-                "type": "int",
-                "info": {
-                    "notes": "Number of unmatched callers who had called Central Intake two or more times on this date."
-                }
-            }
-        ],
+        test_source_url,
+        test_schema,
         "/data/tmp",
         "ssha-temp-test.csv"
         )
 
-    c.write_to_csv(c.stream_from_csv())
-    #i = 0
-    #for x in c.stream_from_csv():
-    #    print("-----------------------")
-    #    print(x)
-    #    print(c.clean_line(x))
-    #    i += 1
-    #print(i)
+    c.write_to_csv()
+    
+    print(misc_utils.file_to_md5("/data/tmp/ssha-temp-test.csv"))
+    print(misc_utils.stream_download_to_md5(ckan_url))
