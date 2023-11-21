@@ -8,7 +8,7 @@ police-annual-statistical-report-homicide:
   # mandatory package attributes
   title: Police Annual Statistical Report - Homicides
   date_published: "2020-08-18 14:31:25.49913"
-  refresh_rate: Annually
+  refresh_rate: Quarterly
   dataset_category: Map
 
   # optional package attributes

@@ -8,7 +8,7 @@ major-crime-indicators:
   # mandatory package attributes
   title: "Major Crime Indicators"
   date_published: "2020-08-18 14:18:24.389728"
-  refresh_rate: Semi-annually
+  refresh_rate: Quarterly
   dataset_category: Table
 
   # optional package attributes

@@ -8,7 +8,7 @@ shootings-firearm-discharges:
   # mandatory package attributes
   title: "Shootings & Firearm Discharges"
   date_published: "2021-03-23 13:40:25.910943"
-  refresh_rate: Annually
+  refresh_rate: Quarterly
   dataset_category: Map
 
   # optional package attributes

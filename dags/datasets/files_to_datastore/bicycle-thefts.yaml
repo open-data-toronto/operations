@@ -8,7 +8,7 @@ bicycle-thefts:
   # mandatory package attributes
   title: Bicycle Thefts
   date_published: "2020-08-18 14:33:07.070323"
-  refresh_rate: Annually
+  refresh_rate: Quarterly
   dataset_category: Map
 
   # optional package attributes

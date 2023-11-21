@@ -8,7 +8,7 @@ theft-from-motor-vehicle:
   # mandatory package attributes
   title: Theft from Motor Vehicle
   date_published: "2022-04-21 14:16:02.226552"
-  refresh_rate: Semi-annually
+  refresh_rate: Quarterly
   dataset_category: Map
 
   # optional package attributes

@@ -8,7 +8,7 @@ mental-health-apprehensions:
   # mandatory package attributes
   title: "Mental Health Act Apprehensions"
   date_published: "2022-10-07 13:52:25.910943"
-  refresh_rate: Annually
+  refresh_rate: Quarterly
   dataset_category: Table
 
   # optional package attributes
