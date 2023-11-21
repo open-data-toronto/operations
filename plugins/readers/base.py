@@ -122,6 +122,25 @@ class CSVReader(Reader):
 
 
 
+class AGOLReader(Reader):
+    '''Reads a AGOL from a URL and writes it locally'''
+
+    def read(self):
+        '''Return generator yielding AGOL rows as dicts'''
+
+        self.param_dict = {
+            "where": "1=1",
+            "outFields": "*",
+            "outSR": 4326,
+            "f": "json",
+            "resultRecordCount": 1
+        }
+
+        self.param_string = "&".join([f"{k}={v}" for k,v in self.param_dict.items()])
+        self.url = self.source_url + "/" + self.param_string
+
+        print(self.param_string)
+        print(self.url)
 
 
 
@@ -132,24 +151,34 @@ if __name__ == "__main__":
     #d = Reader("https://httpstat.us/Random/200,201,500-504")
     #print(d.source_url)
 
+    
+
     import os
     import yaml
     this_dir = os.path.dirname(os.path.realpath(__file__))
     test_source_url = "https://opendata.toronto.ca/housing.secretariat/COT_affordable_rental_housing.csv"
-    with open(this_dir + "/test_schema.yaml", "r") as f:
+    with open(this_dir + "/test_csv_schema.yaml", "r") as f:
             config = yaml.load(f, yaml.SafeLoader)
     test_schema = config["upcoming-and-recently-completed-affordable-housing-units"]["resources"]["Affordable Rental Housing Pipeline"]["attributes"]
+#
+    #ckan_url = "https://ckanadmin0.intra.prod-toronto.ca/datastore/dump/22c57a77-de52-4206-b6a7-276fb1f7ae17?bom=True"
+#
 
-    ckan_url = "https://ckanadmin0.intra.prod-toronto.ca/datastore/dump/22c57a77-de52-4206-b6a7-276fb1f7ae17?bom=True"
-
-    c = CSVReader(
+    AGOLReader(
         test_source_url,
         test_schema,
         "/data/tmp",
         "ssha-temp-test.csv"
-        )
+    ).read()
 
-    c.write_to_csv()
-    
-    print(misc_utils.file_to_md5("/data/tmp/ssha-temp-test.csv"))
-    print(misc_utils.stream_download_to_md5(ckan_url))
+    #c = CSVReader(
+    #    test_source_url,
+    #    test_schema,
+    #    "/data/tmp",
+    #    "ssha-temp-test.csv"
+    #    )
+#
+    #c.write_to_csv()
+    #
+    #print(misc_utils.file_to_md5("/data/tmp/ssha-temp-test.csv"))
+    #print(misc_utils.stream_download_to_md5(ckan_url))
