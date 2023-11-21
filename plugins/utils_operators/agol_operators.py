@@ -116,7 +116,7 @@ class AGOLDownloadFileOperator(BaseOperator):
                 ckan_fieldnames.append(field["name"])
 
         # check if geometry in response too
-        if "geometry" in res.json()["features"][0].keys():
+        if res.json()["features"][0].get("geometry", None):
             ckan_fieldnames.append("geometry")
 
         logging.info("Utils parsed the following fields: {}".format(ckan_fieldnames))
@@ -157,7 +157,8 @@ class AGOLDownloadFileOperator(BaseOperator):
             # get the properties out of each returned object
             for object in geojson["features"]:
                 this_record = object["properties"]
-                this_record["geometry"] = json.dumps(object["geometry"])
+                if object.get("geometry", None):
+                    this_record["geometry"] = json.dumps(object["geometry"])
                 yield(this_record)
 
             # prepare the next request, if needed

@@ -103,7 +103,4 @@ persons-in-crisis-calls-for-service-attended:
           type: "text"
           info:
             notes: "Name of Neighbourhood using City of Toronto's old 140 neighbourhood structure"
-        - id: "F_num_removed"
-          type: "float"
-          info:
-            notes: ""
+
