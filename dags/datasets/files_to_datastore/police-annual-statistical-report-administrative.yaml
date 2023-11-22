@@ -24,53 +24,39 @@ police-annual-statistical-report-administrative:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
-  excerpt: This dataset provides a breakdown of administrative information from 2014 – 2019.
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::administrative-asr-ad-tbl-001/about
+  excerpt: This dataset provides a breakdown of administrative information.
   limitations: null
   notes: |
-    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
-
-    This dataset provides a breakdown of administrative information from 2014 – 2019. This data is compiled and provided by several units of the Toronto Police Service. The data is broken down into the following categories:
-    
-    •	Community Events
-    •	Crime Stoppers
-    •	Volunteers
-    •	Fleet
-    •	Industrial Liaison
-    •	Victim Services
-    
-    This data is related to table (ASR-AD-TBL-001) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
-
-    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
-  
+    This dataset provides a breakdown of administrative information. This data is compiled and provided by several units of the Toronto Police Service. The data is broken down into the following categories: Community Events, Crime Stoppers, Volunteers, Fleet, Industrial Liaison, and Victim Services.
   resources:
     # resource name
     Administrative:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Administrative_ASR_AD_TBL_001/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Administrative_(ASR_AD_TBL_001)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "Year"
+        #- id: "INDEX_"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: "YEAR"
           type: "int"
           info:
             notes: "Year"
-        - id: "Section"
+        - id: "SECTION"
           type: "text"
           info:
             notes: "Table description"
-        - id: "Category"
+        - id: "CATEGORY"
           type: "text"
           info:
             notes: "Description of category"
-        - id: "Subtype"
+        - id: "SUBTYPE"
           type: "text"
           info:
             notes: "Detailed description of category subtype"
-        - id: "Count_"
+        - id: "COUNT_"
           type: "text"
           info:
             notes: "Total Count"
