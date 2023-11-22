@@ -24,37 +24,30 @@ police-annual-statistical-report-firearms-top-5-calibres:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
-  excerpt: The dataset provides a list of the five most common types of pistols, revolvers, rifles and shotguns that comprise the crime guns seized by the Toronto Police Service from 2014 - 2019.
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::firearms-top-calibres-asr-f-tbl-001/about
+  excerpt: The dataset provides a list of the most common types of firearms that comprise the crime guns seized by the Toronto Police Service.
   limitations: null
-  notes: |
-    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
-
-    The specific dataset provides a list of the five most common types of pistols, revolvers, rifles and shotguns that comprise the crime guns seized by the Toronto Police Service from 2014 - 2019.
-
-    This data is related to table (ASR-F-TBL-001) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
-
-    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+  notes: The dataset provides a list of the most common types of pistols, revolvers, rifles and shotguns that comprise the crime guns seized by the Toronto Police Service.
   resources:
     # resource name
     Top 5 Calibres:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Firearms_Top_5_Calibres_ASR_F_TBL_001/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Firearms_Top_Calibres_(ASR_F_TBL_001)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "Year"
+        #- id: "ObjectId"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: YEAR
           type: "int"
           info:
             notes: "Year of firearm seizure"
-        - id: "Firearm_Type"
+        - id: FIREARM_TYPE
           type: "text"
           info:
             notes: "Type of firearm seized"
-        - id: "Calibre"
+        - id: CALIBRE
           type: "text"
           info:
             notes: "Top 5 calibres per firearm seized"

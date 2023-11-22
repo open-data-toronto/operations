@@ -24,46 +24,39 @@ police-annual-statistical-report-gross-expenditures-by-division:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
-  excerpt: This dataset provides a breakdown of the Gross Expenditures for each division from 2014 - 2019. This data includes the command level at the time of reporting.
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::gross-expenditures-by-division-asr-pb-tbl-001/about
+  excerpt: This dataset provides a breakdown of the Gross Expenditures for each division. 
   limitations: null
-  notes: |
-    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
-
-    This dataset provides a breakdown of the Gross Expenditures for each division from 2014 - 2019. This data includes the command level at the time of reporting.
-
-    This data is related to table (ASR-PB-TBL-001) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
-
-    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+  notes: This dataset provides a breakdown of the Gross Expenditures for each division. This data includes the command level at the time of reporting.
 
   resources:
     # resource name
     Gross Expenditures by Division:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Gross_Expenditures_by_Division_ASR_PB_TBL_001/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Gross_Expenditures_by_Division_(ASR_PB_TBL_001)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "Year"
+        #- id: "ObjectId"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: "YEAR"
           type: "int"
           info:
             notes: "Budget Year"
-        - id: "Category"
+        - id: "CATEGORY"
           type: "text"
           info:
             notes: "Data category"
-        - id: "Division"
+        - id: "DIVISION"
           type: "text"
           info:
             notes: "Division description"
-        - id: "Command"
+        - id: "COMMAND"
           type: "text"
           info:
             notes: "Command type at time of reporting, East/West or Area/Central"
-        - id: "Gross_Expenditure__final_"
+        - id: "GROSS_EXPENDITURE__FINAL_"
           type: "text"
           info:
             notes: "Total cost of expenditures"

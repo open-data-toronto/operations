@@ -24,37 +24,43 @@ police-annual-statistical-report-dispatched-calls-by-division:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
-  excerpt: This dataset provides a count of the dispatched calls from 2014 – 2019 by division.
-  limitations: The count for "Other" Dispatched Events is comprised of events with a valid call for a service event type that are discpatched to a valid call sign where a Division reference could not be readilt determined (For example, a TPS officer attends an address outside of the city or a location that is not verified and attributed to a TPS Division)
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::dispatched-calls-by-division-asr-cs-tbl-001/about
+  excerpt: This dataset provides a count of the dispatched calls by division.
+  limitations: |
+    *	PRIME and Parking Events are shown as separate counts and a final combined TPS, PRIME and Parking Total Count is provided for the Communications Services perspective of Total Dispatched Events.  
+    *	The count for “Other” Dispatched Events is comprised of events with a valid call for service event type that are dispatched to a valid call sign where a Division reference could not be readily determined. (Example:  TPS officer attends an address outside of the city or a location that is not verified and attributed to a TPS Division.)
+    *	All Administrative, Field Administrative Events, Duplicate, Cancel, and Filed Events are excluded.
+
+  notes: |
+    This dataset provides a count of the dispatched calls by division, including some specific units such as PRIME, Parking and “Other”. This data includes the command level at the time of reporting.
   resources:
     # resource name
     Dispatched Calls by Division:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Dispatched_Calls_by_Division_ASR_CS_TBL_001/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Dispatched_Calls_by_Division_(ASR_CS_TBL_001)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "Year"
+        #- id: "ObjectId"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: "YEAR"
           type: "int"
           info:
             notes: "Year call was dispatched"
-        - id: "Unit"
+        - id: "UNIT"
           type: "text"
           info:
             notes: "Unit description"
-        - id: "Category"
+        - id: "CATEGORY"
           type: "text"
           info:
             notes: "Description of data category"
-        - id: "Command"
+        - id: "COMMAND"
           type: "text"
           info:
             notes: "Command breakdown at time of dispatched call"
-        - id: "Count_"
+        - id: "COUNT_"
           type: "text"
           info:
             notes: "Number of dispatched calls"

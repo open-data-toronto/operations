@@ -24,7 +24,7 @@ police-annual-statistical-report-miscellaneous-data:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::miscellaneous-data-asr-misc-tbl-001/about
   excerpt: This dataset contains the following categories of information - Hate Crimes, Miscellaneous Budget, and R.I.D.E.
   limitations: null
   notes: |
@@ -33,12 +33,13 @@ police-annual-statistical-report-miscellaneous-data:
     This dataset contains the following categories of information:
 
     <strong>Hate Crimes</strong><br>
-    This portion of the dataset is provided by Intelligence Services to identify the count of Hate Crimes per year from 2014 – 2019.
+    This portion of the dataset is provided by Intelligence Services to identify the count of Hate Crimes per year.
+
     Detailed Information on Hate/Bias crime can be found in the publication Hate Bias Statistical Report
     [https://www.torontopolice.on.ca/publications/](https://www.torontopolice.on.ca/publications/)
 
     <strong>Miscellaneous Budget</strong><br>
-    This portion of the dataset is provided by Financial Services to identify the actual budget expenditures from 2014 – 2019.
+    This portion of the dataset is provided by Financial Services to identify the actual budget expenditures.
 
     <strong>R.I.D.E.</strong><br>
     This portion of the dataset is provided by Traffic Services to identify the number of vehicles stopped and charges laid as a result of R.I.D.E.
@@ -47,34 +48,35 @@ police-annual-statistical-report-miscellaneous-data:
 
     Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
 
+
   resources:
     # resource name
     Miscellaneous Data:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Miscellaneous_Data_ASR_MISC_TBL_001/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Miscellaneous_Data_(ASR_MISC_TBL_001)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "Year"
+        #- id: "ObjectId"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: "YEAR"
           type: "int"
           info:
             notes: "Year"
-        - id: "Section"
+        - id: "SECTION"
           type: "text"
           info:
             notes: "Table description"
-        - id: "Category"
+        - id: "CATEGORY"
           type: "text"
           info:
             notes: "Description of category"
-        - id: "Subtype"
+        - id: "SUBTYPE"
           type: "text"
           info:
             notes: "Detailed description of category subtype"
-        - id: "Count_"
+        - id: "COUNT_"
           type: "text"
           info:
             notes: "Total Count"

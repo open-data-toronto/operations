@@ -24,50 +24,43 @@ police-annual-statistical-report-personnel-by-rank-by-division:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
-  excerpt: This dataset provides a count of personnel broken down by rank classification for Uniform & Civilian staff from 2014 - 2019 by division.
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::personnel-by-rank-by-division-asr-pb-tbl-003/about
+  excerpt: This dataset provides a count of personnel broken down by rank classification.
   limitations: Does not include temporary and part-time civilian members.
-  notes: |
-    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
-
-    This specific dataset provides a count of personnel broken down by rank classification for Uniform & Civilian staff from 2014 - 2019 by division. This data includes the command level at the time of reporting.
-
-    This data is related to table (ASR-PB-TBL-003) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
-
-    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+  notes: This dataset provides a count of personnel broken down by rank classification for Uniform & Civilian staff by division. This data includes the command level at the time of reporting.
 
   resources:
     # resource name
     Personnel by Rank by Division:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Personnel_by_Rank_by_Division_ASR_PB_TBL_003/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Personnel_by_Rank_by_Division_(ASR_PB_TBL_003)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "Year"
+        #- id: "ObjectId"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: "YEAR"
           type: "int"
           info:
             notes: "Year of reported personnel"
-        - id: "Command_Group"
+        - id: "COMMAND_GROUP"
           type: "text"
           info:
             notes: "Description of command group"
-        - id: "Command_Subunit"
+        - id: "COMMAND_SUBUNIT"
           type: "text"
           info:
             notes: "Breakdown of command subunits"
-        - id: "Unit"
+        - id: "UNIT"
           type: "text"
           info:
             notes: "Breakdown of command units"
-        - id: "Classification"
+        - id: "CLASSIFICATION"
           type: "text"
           info:
             notes: "Breakdown of rank"
-        - id: "Count_"
+        - id: "COUNT_"
           type: "text"
           info:
             notes: "Count of employed persons"

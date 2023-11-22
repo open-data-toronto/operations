@@ -24,42 +24,35 @@ police-annual-statistical-report-personnel-by-rank:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
-  excerpt: This dataset provides a count of personnel broken down by rank classification for Uniform, Civilian, and Other Staff from 2014 - 2019.
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::personnel-by-rank-asr-pb-tbl-002/about
+  excerpt: This dataset provides a count of personnel broken down by rank classification for Uniform, Civilian, and Other Staff.
   limitations: Does not include temporary and part-time civilian members.
-  notes: |
-    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
-
-    This specific dataset provides a count of personnel broken down by rank classification for Uniform, Civilian, and Other Staff from 2014 - 2019. 
-
-    This data is related to table (ASR-PB-TBL-002) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
-
-    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+  notes: This dataset provides a count of personnel broken down by rank classification for Uniform, Civilian, and Other Staff.
 
   resources:
     # resource name
     Personnel by Rank:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Personnel_by_Rank_ASR_PB_TBL_002/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Personnel_by_Rank_(ASR_PB_TBL_002)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "Year"
+        #- id: "ObjectId"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: "YEAR"
           type: "int"
           info:
             notes: "Year of reported personnel"
-        - id: "Rank"
+        - id: "RANK"
           type: "text"
           info:
             notes: "Breakdown of rank, uniform, civilian, other"
-        - id: "Classification"
+        - id: "CLASSIFICATION"
           type: "text"
           info:
             notes: "Description of rank breakdown"
-        - id: "Count_"
+        - id: "COUNT_"
           type: "text"
           info:
             notes: "Count of employed persons"

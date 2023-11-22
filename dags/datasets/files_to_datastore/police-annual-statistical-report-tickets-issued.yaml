@@ -1,0 +1,76 @@
+# package name
+police-annual-statistical-report-tickets-issued:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Police Annual Statistical Report - Tickets Issued"
+  date_published: "2020-11-18T19:41:10.391098"
+  refresh_rate: Annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: Annual Statistical Report
+      vocabulary_id: null
+
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::tickets-issued-asr-enf-tbl-002/about
+  excerpt: This dataset provides an aggregated count of tickets issued by year, ticket type, offence, age group, division, and neighbourhood.
+  limitations: |
+    *	Filtered by offence year
+    *	Age calculated from date of offence
+    *	No Specified Address (NSA) includes any occurrences outside the City of Toronto limits or those that have no verified location
+
+  notes: This dataset provides an aggregated count of tickets issued by year, ticket type, offence, age group, division, and neighbourhood.
+
+  resources:
+    # resource name
+    Tickets Issued:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Tickets_Issued_(ASR_ENF_TBL_002)/FeatureServer/0
+      attributes:        
+        - id: OFFENCE_YEAR
+          type: "int"
+          info:
+            notes: "Year offence occurred"
+        - id: DIVISION
+          type: "text"
+          info:
+            notes: "Geographic division where crime took place"
+        - id: TICKET_TYPE
+          type: "text"
+          info:
+            notes: "Type of ticket issued"
+        - id: OFFENCE_CATEGORY
+          type: "text"
+          info:
+            notes: "Ticket category"
+        - id: AGE_GROUP
+          type: "text"
+          info:
+            notes: "Age group of identified victim, adult or youth"
+        - id: HOOD_158
+          type: "text"
+          info:
+            notes: "Identifier of neighbourhood"
+        - id: NEIGHBOURHOOD_158
+          type: "text"
+          info:
+            notes: "Neighbourhood where ticket was issued"
+        - id: TICKET_COUNT
+          type: "int"
+          info:
+            notes: "Count of ticket issued"
+        
+        

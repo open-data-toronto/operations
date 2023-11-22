@@ -24,41 +24,50 @@ police-annual-statistical-report-miscellaneous-calls-for-service:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
-  excerpt: This dataset includes the following categories of data including languages, calls received, and alarm calls for 2014 – 2019.
-  limitations: Numbers provided represent calls received at Communications via 9-1-1 or the nonemergency number that used Language Line Services. All Administrative, Field Administrative Events, Duplicate, Cancel, Filed Events are excluded and are available as required)
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::miscellaneous-calls-for-service-asr-cs-tbl-002/about
+  excerpt: This dataset includes information pertaining to calls and alarms received.
+  limitations: |
+    *	Numbers provided represent calls received at Communications via 9-1-1 or the nonemergency number that used Language Line Services
+    *	All Administrative, Field Administrative Events, Duplicate, Cancel, Filed Events are excluded.
+
   notes: |
-    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+    This dataset includes the following categories of data:
 
-    This specific dataset includes the following categories of data including languages, calls received, and alarm calls for 2014 – 2019.
+    **Languages**
+    Languages used by Language Line Services other than English
 
-    This data is related to table (ASR-CS-TBL-002) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
+    **Calls Received**
+    Emergency Calls
+    Non-Emergency Calls
 
-    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+    **Alarm Calls**
+    Valid Alarms
+    False Alarms
+
   resources:
     # resource name
     Miscellaneous Calls for Service:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Miscellaneous_Calls_for_Service_ASR_CS_TBL_002/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Miscellaneous_Calls_for_Service_(ASR_CS_TBL_002)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "Year"
+        #- id: "ObjectId"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: "YEAR"
           type: "int"
           info:
             notes: "Year"
-        - id: "Category"
+        - id: "CATEGORY"
           type: "text"
           info:
             notes: "Description of category"
-        - id: "Type"
+        - id: "TYPE"
           type: "text"
           info:
             notes: "Detailed description of category type"
-        - id: "Count_"
+        - id: "COUNT_"
           type: "text"
           info:
             notes: "Total Count"
