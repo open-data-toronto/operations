@@ -1,7 +1,7 @@
 from datetime import datetime
 from airflow.decorators import dag, task
 from utils_operators.slack_operators import task_failure_slack_alert
-from ckan_operators.resource_class import GetOrCreateResource
+from ckan_operators.resource_class import GetOrCreateResource, EditResourceMetadata
 
 
 default_args = {
@@ -26,7 +26,7 @@ def test_publishing_pipeline():
     package_id = "refactor-template-test-pipeline"
     resource_name = "Test Resource"
     
-    @task
+    @task(multiple_outputs=True)
     def get_or_create_resource(package_id, resource_name):
         resource = GetOrCreateResource(
             package_id=package_id,
@@ -37,13 +37,22 @@ def test_publishing_pipeline():
                 url_type="datastore",
                 extract_job=f"Airflow: {package_id}",
                 url="placeholder",
-                title = 
             )
         )
         
         return resource.get_or_create_resource()
+    
+    @task
+    def edit_resource_metadata(multiple_outputs, last_modified, new_resource_name):
+        edited_resource = EditResourceMetadata(resource_id = resource_id,
+                                               new_resource_name = new_resource_name,
+                                               last_modified = last_modified
+                                               )
+        return edited_resource.edit_resource_metadata()
         
-    get_or_create_resource(package_id, resource_name)
+    resource = get_or_create_resource(package_id, resource_name)
+    
+    edit_resource_metadata(resource_id=resource["id"], new_resource_name="new resource name", last_modified=None)
     
 
 test_publishing_pipeline()
