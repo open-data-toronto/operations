@@ -1,8 +1,8 @@
 import logging
 import time
-
-from typing import Dict
 from datetime import datetime
+from typing import Dict
+
 from ckan_operators import ckan_connector
 
 
@@ -21,11 +21,12 @@ class GetOrCreateResource:
     Methods:
         _resource_exists(package_id, resource_name):
             private method check if ckan resource exists
-        
+
         get_or_create_resource(package_id, resource_name, resource_attributes):
             Return CKAN resource object, or create it if it does not exist
-        
+
     """
+
     def __init__(
         self,
         package_id: str,
@@ -44,15 +45,27 @@ class GetOrCreateResource:
             - resource_attributes : dict
                 the attributes that will be in a resource if we create it
         """
-        
+
         self.package_id = package_id
         self.resource_name = resource_name
         self.resource_attributes = resource_attributes
 
         self.ckan = ckan_connector.connect_to_ckan()
 
-    # check if resource exists
     def _resource_exists(self):
+        """
+        Check if resource exists
+
+        Parameters:
+            - package_id : str
+                the id of the package wherein we'll look for/make a resource
+            - resource_name : str
+                the name of the resource this operator will look for/make
+
+        Returns:
+            resource exists or not : bool
+
+        """
         package = self.ckan.action.package_show(id=self.package_id)
         for r in package["resources"]:
             if r["name"] == self.resource_name:
@@ -65,15 +78,15 @@ class GetOrCreateResource:
         Return ckan resource object, or create it if it does not exist
 
         Parameters:
-            - package_id : str 
+            - package_id : str
                 the id of the package wherein we'll look for/make a resource
             - resource_name : str
                 the name of the resource this operator will look for/make
-            - resource_attributes : dict 
+            - resource_attributes : dict
                 the attributes that will be in a resource if we create it
 
         Returns:
-            ckan resource : dict
+            resource : dict
 
         """
         if self._resource_exists():
@@ -140,30 +153,24 @@ class GetOrCreateResource:
 
 class EditResourceMetadata:
     """
-    A class to edit ckan resource metadata
+    Edits a resource's name or last_modified date
 
     Attributes:
         - resource_id : str
-                the id of the ckan resource whose metadata will be updated
-        - new_resource_name : str
-            the new name of the resource
-        - last_modified : datetime 
-            the last_modified date of the resource
+            the id of the ckan resource whose metadata will be updated
 
     Methods:
         _datetime_to_string(package_id, resource_name):
             convert last_modified from datetime object to string format
-        
+
         edit_resource_metadata(resource_id, new_resource_name, last_modified):
             Edit a resource's name or last_modified date
-        
+
     """
 
     def __init__(
         self,
         resource_id: str,
-        new_resource_name: str = None,
-        last_modified: datetime = None,
     ) -> Dict:
         """
         Construct all the necessary attributes for the EditResourceMetadata object.
@@ -171,15 +178,9 @@ class EditResourceMetadata:
         Parameters:
             - resource_id : str
                 the id of the ckan resource whose metadata will be updated
-            - new_resource_name : str
-                the new name of the resource
-            - last_modified : datetime 
-                the last_modified date of the resource
         """
-        
+
         self.resource_id = resource_id
-        self.new_resource_name = new_resource_name
-        self.last_modified = last_modified
 
         self.ckan = ckan_connector.connect_to_ckan()
 
@@ -191,7 +192,9 @@ class EditResourceMetadata:
         return output
 
     # resource_patch api call below for non null input vars
-    def edit_resource_metadata(self):
+    def edit_resource_metadata(
+        self, new_resource_name: str = None, new_last_modified: datetime = None
+    ):
         """
         Edit a resource's name or last_modified date, only one of name or last_modified is required
 
@@ -200,31 +203,31 @@ class EditResourceMetadata:
                 the id of the ckan resource whose metadata will be updated
             - new_resource_name : str
                 the new name of the resource
-            - last_modified : datetime 
-                the last_modified date of the resource
-        
+            - new_last_modified : datetime
+                the new last_modified date of the resource
+
         Return: None
         """
         # last modified date
-        if self.last_modified:
-            last_modified = self._datetime_to_string(self.last_modified)
+        if new_last_modified:
+            new_last_modified = self._datetime_to_string(new_last_modified)
             logging.info(
                 "Setting last-modified of resource_id {} to {}".format(
-                    self.resource_id, last_modified
+                    self.resource_id, new_last_modified
                 )
             )
             self.ckan.action.resource_patch(
                 id=self.resource_id,
-                last_modified=last_modified,
+                last_modified=new_last_modified,
             )
         # new resource_name
-        if self.new_resource_name:
+        if new_resource_name:
             logging.info(
                 "Setting name of resource_id {} to {}".format(
-                    self.resource_id, self.new_resource_name
+                    self.resource_id, new_resource_name
                 )
             )
             self.ckan.action.resource_patch(
                 id=self.resource_id,
-                name=self.new_resource_name,
+                name=new_resource_name,
             )
