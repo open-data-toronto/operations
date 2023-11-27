@@ -24,53 +24,53 @@ police-annual-statistical-report-reported-crimes:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
-  excerpt: This dataset includes all reported crime offences from 2014 to 2019 by reported date aggregated by division.
-  limitations: No Specified Address (NSA) includes any occurrences reported outside the City of Toronto limits or those that have no verified location.
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::reported-crimes-asr-rc-tbl-001/about
+  excerpt: This dataset includes all reported crime offences by reported date aggregated by division.
+  limitations: |
+    * No Specified Address (NSA) includes any occurrences reported outside the City of Toronto limits or those that have no verified location
+    * Includes reported crimes deemed as unfounded
+    * Filtered by reported year
+    * Crimes Against the Person does not include where the victim name is null 
+
   notes: |
-    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+    This dataset includes all reported crime offences by reported date aggregated by division. This data includes all crimes reported to the Toronto Police Service, including, but not limited to, those that may have been deemed unfounded after investigation, those that may have occurred outside the City of Toronto limits, or those that have no verified location. 
 
-    This specific dataset includes all reported crime offences from 2014 to 2019 by reported date aggregated by division. This data includes all crimes reported to the Toronto Police Service, including, but not limited to, those that may have been deemed unfounded after investigation, those that may have occurred outside the City of Toronto limits, or those that have no verified location. 
+    In accordance with the Municipal Freedom of Information and Protection of Privacy Act, the Toronto Police Service has taken the necessary measures to protect the privacy of individuals involved in the reported occurrences. No personal information related to any of the parties involved in the occurrence will be released as open data. The data has been aggregated by year, category, subtype and geographic police division.
 
-    In accordance with the Municipal Freedom of Information and Protection of Privacy Act, the Toronto Police Service has taken the necessary measures to protect the privacy of individuals involved in the reported occurrences. No personal information related to any of the parties involved in the occurrence will be released as open data. The data has been aggregated by year, category, subtype and geographic division.
+    If an occurrence is categorized as multiple offence types, it would be included in multiple categories. The counts presented do not indicate the number of distinct occurrences.
 
-    If an occurrence is categorized as multiple offence types, it would be included in multiple categories. The count presented do not indicate the number of distinct occurrences.
-
-    This data is related to table (ASR-RC-TBL-001) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
-
-    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
   resources:
     # resource name
     Reported Crimes:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Reported_Crimes_ASR_RC_TBL_001/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Reported_Crimes_(ASR_RC_TBL_001)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "ReportedYear"
+        #- id: "ObjectId"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: "REPORT_YEAR"
           type: "int"
           info:
             notes: "Year crime was reported"
-        - id: "GeoDivision"
+        - id: "DIVISION"
           type: "text"
           info:
             notes: "Geographic division where crime took place"
-        - id: "Category"
+        - id: "CATEGORY"
           type: "text"
           info:
             notes: "Crime category"
-        - id: "Subtype"
+        - id: "SUBTYPE"
           type: "text"
           info:
             notes: "Crime category subtype"
-        - id: "Count_"
+        - id: "COUNT_"
           type: "text"
           info:
             notes: "Total number of crimes"
-        - id: "CountCleared"
+        - id: "COUNT_CLEARED"
           type: "text"
           info:
             notes: "Total number of crimes identified as cleared"

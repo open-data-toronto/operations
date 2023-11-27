@@ -24,12 +24,15 @@ police-annual-statistical-report-search-of-persons:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
-  excerpt: This dataset includes all Level 3 and Level 4 searches that were conducted between 2014 and 2020.
-  limitations: null
-  notes: |
-    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::search-of-persons-asr-sp-tbl-001/about
+  excerpt: This dataset includes aggregated format of all Level 3 and Level 4 searches that were conducted.
+  limitations: |
+    * Dependent on data entered into the Booking – 3 Search of Person Text Template from Versadex
+    * Filtered by Search Date
+    * Cannot be broken down by division due to consistency issues with data entry
+    * May include duplicates if multiple text templates entered for the same search
 
+  notes: |
     This dataset includes all Level 3 and Level 4 searches that were conducted.
 
     In accordance with the Municipal Freedom of Information and Protection of Privacy Act, the Toronto Police Service has taken the necessary measures to protect the privacy of individuals involved in the reported occurrences. No personal information related to any of the parties involved in the occurrence will be released as open data. 
@@ -43,45 +46,45 @@ police-annual-statistical-report-search-of-persons:
     Search of Persons:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Search_of_Persons_ASR_SP_TBL_001/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Search_of_Persons_(ASR_SP_TBL_001)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "SearchYear"
+        #- id: "ObjectId"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: "SEARCH_YEAR"
           type: "int"
           info:
             notes: "Year search was conducted"
-        - id: "SearchLevel"
+        - id: "SEARCH_LEVEL"
           type: "text"
           info:
             notes: "Search level, 3 or 4"
-        - id: "SelfIdentifyTrans"
+        - id: "SELF_IDENTIFY_TRANS"
           type: "text"
           info:
             notes: "Did the searched individual self-identify as Trans, yes or no"
-        - id: "Evidence"
+        - id: "EVIDENCE"
           type: "text"
           info:
             notes: "Did the search yield evidence, yes or no"
-        - id: "Escape_"
+        - id: "ESCAPE_"
           type: "text"
           info:
             notes: "Did the searched individual escape, yes or no"
-        - id: "Injury"
+        - id: "INJURY"
           type: "text"
           info:
             notes: "Did the searched individual have an injury, yes or no"
-        - id: "Other"
+        - id: "OTHER"
           type: "text"
           info:
             notes: "Any other search that is does not fall under Evidence, Escape, or Injury, yes or no"
-        - id: "Count_"
+        - id: "COUNT_"
           type: "text"
           info:
             notes: "Count of searched persons"
-        - id: "ItemsFound"
+        - id: "ITEMS_FOUND"
           type: "text"
           info:
             notes: ""

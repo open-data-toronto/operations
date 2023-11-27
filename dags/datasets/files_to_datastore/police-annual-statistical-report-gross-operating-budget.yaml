@@ -24,46 +24,49 @@ police-annual-statistical-report-gross-operating-budget:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
-  excerpt: This dataset provides the Gross Operating Budget incurred by the Toronto Police Service from 2014 to 2019.
-  limitations: null
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::gross-operating-budget-asr-pb-tbl-005/about
+  excerpt: This dataset includes all identified victims of crimes against the person.
+  limitations: |
+    * Age calculated from date of occurrence
+    * Filtered by reported year
+    * Victims only for CCJS Level 1 = ‘Crimes Against the Person’ and where the victim name is not null
+    * No Specified Address (NSA) includes any occurrences reported outside the City of Toronto limits or those that have no verified location
+
   notes: |
-    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+    This dataset includes all identified victims of crimes against the person, including, but not limited to, those that may have been deemed unfounded after investigation, those that may have occurred outside the City of Toronto limits, or have no verified location. 
 
-    This dataset provides the Gross Operating Budget incurred by the Toronto Police Service from 2014 to 2019. The Gross Operating Budget refers to the expected expenses for the year. This dataset also includes calculated differences for the Percent (%) Change and Absolute Change from the previous year. This dataset also includes the percentage distribution among the command levels as well as the account features.
+    In accordance with the Municipal Freedom of Information and Protection of Privacy Act, the Toronto Police Service has taken the necessary measures to protect the privacy of individuals involved in the reported occurrences. No personal information related to any of the parties involved in the occurrence will be released as open data. 
 
-    This data is related to table (ASR-PB-TBL-005) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
-
-    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
+    The data has been aggregated by reported year, geographic police division, offence subtype, sex, and age group.
 
   resources:
     # resource name
     Gross Operating Budget:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Gross_Operating_Budget_ASR_PB_TBL_005/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Gross_Operating_Budget_(ASR_PB_TBL_005)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "Year"
+        #- id: "ObjectId"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: "YEAR"
           type: "int"
           info:
             notes: "Year of reported personnel"
-        - id: "Section"
+        - id: "SECTION"
           type: "text"
           info:
             notes: "Description of data setion"
-        - id: "Category"
+        - id: "CATEGORY"
           type: "text"
           info:
             notes: "Category description"
-        - id: "Subtype"
+        - id: "SUBTYPE"
           type: "text"
           info:
             notes: "Description of data type"
-        - id: "Count_"
+        - id: "COUNT_"
           type: "text"
           info:
             notes: "Value (either gross operating budget, absolute change, or percent change)"

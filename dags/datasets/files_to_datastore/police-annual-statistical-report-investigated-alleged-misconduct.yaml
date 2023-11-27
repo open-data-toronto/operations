@@ -24,42 +24,34 @@ police-annual-statistical-report-investigated-alleged-misconduct:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
-  excerpt: This dataset provides a breakdown of the total investigated complaints by type of complaint submitted between 2014 and 2019.
-  limitations: Data pertains to external public complaints that have been received by PRS and entered in PSIS as of the data extraction date. Data pertains to TPS uniform members only. Numbers are subject to change as the data in PSIS is frequently being updated as complaints are concluded.
-  notes: |
-    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
-
-    This specific dataset provides a breakdown of the total investigated complaints by type of complaint submitted between 2014 and 2019.
-
-    This data is related to table (ASR-PCF-TBL-002) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
-
-    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
-
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::investigated-alleged-misconduct-asr-pcf-tbl-002/about
+  excerpt: This dataset provides a breakdown of the total investigated complaints by type of complaint submitted.
+  limitations: Data pertains to external public complaints that have been received by PRS and entered in PSIS as of the data extraction date.  Data pertains to TPS uniform members only. Numbers are subject to change as the data in PSIS is frequently being updated as complaints are concluded.
+  notes: This dataset provides a breakdown of the total investigated complaints by type of complaint submitted.
   resources:
     # resource name
     Investigated Alleged Misconduct:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Investigated_Alleged_Misconduct_ASR_PCF_TBL_002/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Investigated_Alleged_Misconduct_(ASR_PCF_TBL_002)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "Year"
+        #- id: "ObjectId"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: "YEAR"
           type: "int"
           info:
             notes: "Year"
-        - id: "Type"
+        - id: "TYPE"
           type: "text"
           info:
             notes: "Type of allegation"
-        - id: "Subtype"
+        - id: "SUBTYPE"
           type: "text"
           info:
             notes: "Detailed description of category subtype"
-        - id: "Count_"
+        - id: "COUNT_"
           type: "text"
           info:
             notes: "Total Count"

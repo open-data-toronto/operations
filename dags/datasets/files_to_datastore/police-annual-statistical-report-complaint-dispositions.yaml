@@ -24,43 +24,38 @@ police-annual-statistical-report-complaint-dispositions:
     - name: Annual Statistical Report
       vocabulary_id: null
 
-  information_url: https://data.torontopolice.on.ca/datasets/79dace94d6f74ea496dc74bd11ef42c3_0
-  excerpt: This dataset provides a breakdown of the total investigated complaints by disposition of the complaint submitted between 2014 and 2019.
-  limitations: Data pertains to external public complaints that have been received by PRS and entered in PSIS as of the data extraction date. Data pertains to TPS uniform members only. Numbers are subject to change as the data in PSIS is frequently being updated as complaints are concluded. The Disposition subtype of “Over 6 Months” was replaced by “Discontinued” in 2015.
-  notes: |
-    The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information. 
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::complaint-dispositions-asr-pcf-tbl-003/about
+  excerpt: This dataset provides a breakdown of the total investigated complaints by disposition of the complaint submitted.
+  limitations: |
+    * Data pertains to external public complaints that have been received by PRS and entered in PSIS as of the data extraction date.  Data pertains to TPS uniform members only. Numbers are subject to change as the data in PSIS is frequently being updated as complaints are concluded.   
+    * The Disposition subtype of “Over 6 Months” was replaced by “Discontinued” in 2015.
 
-    This specific dataset provides a breakdown of the total investigated complaints by disposition of the complaint submitted between 2014 and 2019.
-
-    This data is related to table (ASR-PCF-TBL-003) in [The Annual Statistical Report](https://data.torontopolice.on.ca/pages/annualstatisticalreport).
-
-    Additional information can be found [here](https://data.torontopolice.on.ca/pages/asr-resources).
-
+  notes: This dataset provides a breakdown of the total investigated complaints by disposition of the complaint submitted.
 
   resources:
     # resource name
     Complaint Dispositions:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Complaint_Dispositions_ASR_PCF_TBL_003/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Complaint_Dispositions_(ASR_PCF_TBL_003)/FeatureServer/0/
       attributes:
-        - id: "ObjectId"
-          type: "int"
-          info:
-            notes: "Unique identifier from the source system"
-        - id: "Year"
+        #- id: "ObjectId"
+        #  type: "int"
+        #  info:
+        #    notes: "Unique identifier from the source system"
+        - id: "YEAR"
           type: "int"
           info:
             notes: "Year complaint was received"
-        - id: "Type"
+        - id: "TYPE"
           type: "text"
           info:
             notes: "Type of complaint received"
-        - id: "Subtype"
+        - id: "SUBTYPE"
           type: "text"
           info:
             notes: "Detailed description of complaint type"
-        - id: "Count_"
+        - id: "COUNT_"
           type: "text"
           info:
             notes: "Total Count of complaints received"
