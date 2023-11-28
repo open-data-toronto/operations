@@ -45,7 +45,6 @@ class GetOrCreateResource:
             - resource_attributes : dict
                 the attributes that will be in a resource if we create it
         """
-
         self.package_id = package_id
         self.resource_name = resource_name
         self.resource_attributes = resource_attributes
@@ -67,6 +66,7 @@ class GetOrCreateResource:
 
         """
         package = self.ckan.action.package_show(id=self.package_id)
+
         for r in package["resources"]:
             if r["name"] == self.resource_name:
                 self.resource = r
@@ -179,19 +179,25 @@ class EditResourceMetadata:
             - resource_id : str
                 the id of the ckan resource whose metadata will be updated
         """
-
         self.resource_id = resource_id
-
         self.ckan = ckan_connector.connect_to_ckan()
 
-    def _datetime_to_string(self, datetime):
+    def _datetime_to_string(self, date_time):
+        """
+        Convert date and time objects to string representation
+
+        Parameters:
+            - date_time : datetime
+                the datetime obj will be converted to string
+
+        Return: date_time : str
+        """
         try:
-            output = datetime.strftime("%Y-%m-%dT%H:%M:%S")
+            output = date_time.strftime("%Y-%m-%dT%H:%M:%S")
         except Exception as e:
-            output = datetime
+            output = date_time
         return output
 
-    # resource_patch api call below for non null input vars
     def edit_resource_metadata(
         self, new_resource_name: str = None, new_last_modified: datetime = None
     ):
