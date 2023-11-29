@@ -16,11 +16,11 @@ class Reader(ABC):
     '''Base class for airflow extracting data from a source'''
 
     def __init__(
-        self, 
-        source_url: str = None,
-        schema: list = None,
-        out_dir: str = "",
-        filename: str = None
+            self, 
+            source_url: str = None,
+            schema: list = None,
+            out_dir: str = "",
+            filename: str = None
         ):
         self.source_url = misc_utils.validate_url(source_url)
         self.schema = schema
@@ -76,9 +76,16 @@ class Reader(ABC):
 class CSVReader(Reader):
     '''Reads a CSV from a URL and writes it locally'''
 
+    def __init__(
+            self,
+            encoding: str = "latin1",
+            **kwargs
+        ):
+        super().__init__(**kwargs)
+        self.encoding = encoding
+
     def read(self):
         '''Return generator yielding csv rows as dicts'''
-        self.encoding = "latin-1"
         self.latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
         self.longitude_attributes = ["long", "longitude", "x", "x coordinate"]
         i = 0 # we'll use this to count rows and add a fake row _id
