@@ -52,7 +52,7 @@ class Reader(ABC):
         csv.field_size_limit(sys.maxsize)
 
         with open(self.path, "w") as f:
-            writer = csv.DictWriter(f, self.fieldnames)
+            writer = csv.DictWriter(f, self.fieldnames, extrasaction='ignore')
             writer.writeheader()
             writer.writerows(self.read())
             f.close()
@@ -132,27 +132,70 @@ class CSVReader(Reader):
 class AGOLReader(Reader):
     '''Reads a AGOL from a URL and writes it locally'''
 
-    def read(self):
-        '''Return generator yielding AGOL rows as dicts'''
-
-        self.param_dict = {
+    def generate_url(
+        self,
+        params: dict = {
             "where": "1=1",
             "outFields": "*",
             "outSR": 4326,
-            "f": "json",
-            "resultRecordCount": 1
+            "f": "geojson",
+        }
+    ):
+        '''return a valid agol url based on inputs'''
+
+        param_string = "&".join([f"{k}={v}" for k,v in params.items()])
+        url = self.source_url + "/query?" + param_string
+
+        return url
+
+    def read(self):
+        '''Return generator yielding AGOL rows as dicts'''
+        self.generate_url()
+
+        overflow = True
+        offset = 0
+        params = {
+            "where": "1=1",
+            "outSR": 4326,
+            "f": "geojson",
+            "resultType": "standard",
+            "resultOffset": offset,
+            "outFields": "*",
         }
 
-        self.param_string = "&".join([f"{k}={v}" for k,v in self.param_dict.items()])
-        self.url = self.source_url + "/" + self.param_string
+        while overflow is True:            
+            
+            # make a request url and request
+            url = self.generate_url(params)
+            res = requests.get(url)
+            assert res.status_code == 200, f"HTTP status: {res.status_code}"
 
-        print(self.param_string)
-        print(self.url)
+            # parse the response
+            geojson = json.loads(res.text)
+            # get and yield the properties out of each returned object
+            for object in geojson["features"]:
+                this_record = object["properties"]
+                if object.get("geometry", None):
+                    this_record["geometry"] = json.dumps(object["geometry"])
+                print(this_record)
+                yield(this_record)
 
+            # prepare the next request, if needed
+            if "exceededTransferLimit" in geojson:
+                overflow = geojson["exceededTransferLimit"] is True
 
+            elif "properties" in geojson:
+                overflow = (
+                            "properties" in geojson 
+                            and "exceededTransferLimit" in geojson["properties"] 
+                            and geojson["properties"]["exceededTransferLimit"] is True
+                        )
 
+            else:
+                overflow = False
 
-
+            offset = offset + len(geojson["features"])
+            params["resultOffset"] = offset
 
 if __name__ == "__main__":
     #d = Reader("https://httpstat.us/Random/200,201,500-504")
@@ -163,10 +206,10 @@ if __name__ == "__main__":
     import os
     import yaml
     this_dir = os.path.dirname(os.path.realpath(__file__))
-    test_source_url = "https://opendata.toronto.ca/housing.secretariat/COT_affordable_rental_housing.csv"
-    with open(this_dir + "/test_csv_schema.yaml", "r") as f:
+    test_source_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_EMS/FeatureServer/0"
+    with open(this_dir + "/test_agol_schema.yaml", "r") as f:
             config = yaml.load(f, yaml.SafeLoader)
-    test_schema = config["upcoming-and-recently-completed-affordable-housing-units"]["resources"]["Affordable Rental Housing Pipeline"]["attributes"]
+    test_schema = config["ambulance-station-locations"]["resources"]["ambulance-station-locations"]["attributes"]
 #
     #ckan_url = "https://ckanadmin0.intra.prod-toronto.ca/datastore/dump/22c57a77-de52-4206-b6a7-276fb1f7ae17?bom=True"
 #
@@ -176,7 +219,7 @@ if __name__ == "__main__":
         test_schema,
         "/data/tmp",
         "ssha-temp-test.csv"
-    ).read()
+    ).write_to_csv()
 
     #c = CSVReader(
     #    test_source_url,

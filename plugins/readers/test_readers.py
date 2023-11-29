@@ -9,7 +9,7 @@ from readers.base import Reader, CSVReader
 this_dir = os.path.dirname(os.path.realpath(__file__))
 
 @pytest.fixture
-def test_csv_vars():
+def test_csv_vars_latin1():
     test_source_url = "https://opendata.toronto.ca/DummyDatasets/COT_affordable_rental_housing_mod.csv"
     with open(this_dir + "/test_csv_schema.yaml", "r") as f:
         config = yaml.load(f, yaml.SafeLoader)
@@ -24,20 +24,20 @@ def test_csv_vars():
     }
 
 @pytest.fixture
-def test_csv_reader(test_csv_vars):
+def test_csv_reader(test_csv_vars_latin1):
     
     test_csv_reader = CSVReader(
-        source_url = test_csv_vars["test_source_url"],
-        schema = test_csv_vars["test_schema"],
-        out_dir = test_csv_vars["this_dir"],
-        filename = test_csv_vars["test_filename"],
+        source_url = test_csv_vars_latin1["test_source_url"],
+        schema = test_csv_vars_latin1["test_schema"],
+        out_dir = test_csv_vars_latin1["this_dir"],
+        filename = test_csv_vars_latin1["test_filename"],
     )
 
     return test_csv_reader
 
-def test_csv_reader_vars(test_csv_reader, test_csv_vars):
+def test_csv_reader_vars(test_csv_reader, test_csv_vars_latin1):
     '''test cases for CSVReader class variables'''
-    assert test_csv_reader.path == test_csv_vars["this_dir"] + "/" + test_csv_vars["test_filename"]
+    assert test_csv_reader.path == test_csv_vars_latin1["this_dir"] + "/" + test_csv_vars_latin1["test_filename"]
 
 def test_csv_reader_output(test_csv_reader):
     '''test cases for CSVReader write method'''
