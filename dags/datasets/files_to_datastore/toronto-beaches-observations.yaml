@@ -1,0 +1,103 @@
+# package name
+toronto-beaches-observations:
+  # DAG info
+  schedule: "0 21 * 5-9 *"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Toronto Beaches Observations"
+  date_published: "2023-11-29 01:41:20.503792"
+  refresh_rate: As available
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Parks, Forestry & Recreation
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+
+  civic_issues: 
+    - Climate Change
+  topics: 
+    - Environment
+    - Health
+    - Public safety
+    - Water
+  tags: 
+    - name: beaches
+      vocabulary_id: null
+    - name: fowl
+      vocabulary_id: null
+    - name: turbidity
+      vocabulary_id: null
+    - name: temperature
+      vocabulary_id: null
+    - name: wave
+      vocabulary_id: null
+    - name: waves
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: Observations made daily by city staff on Toronto's beaches.
+  limitations: null
+  notes: Observations made daily by city staff on Toronto's beaches. Where appropriate, instrumentation such as thermometer or turbidity meters is used to obtain this data. Other observations such as "number of fowl" and "wave action" are estimated. These observations are made between mid May and mid September.
+  resources:
+    # resource name
+    toronto-beaches-observations:
+      format: json
+      custom_headers:
+        SRV-KEY: toronto-beaches-water-quality_secure_toronto_opendata_SRV_KEY
+        USER-KEY: secure_toronto_opendata_USER_KEY
+      url: https://secure.toronto.ca/opendata/adv_od/route_observations/v1?format=json
+      attributes:
+        - id: dataCollectionDate
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: "Date observations were collected"
+        - id: beachName
+          type: text
+          info:
+            notes: "Name of beach where observations were collected"
+        - id: wind_speed
+          type: int
+          info:
+            notes: "Wind speed measured in km/h"
+        - id: windDirection
+          type: text
+          info:
+            notes: "Wind directions"
+        - id: airTemp
+          type: int
+          info:
+            notes: "Air temperature in degrees Celsius"
+        - id: rain
+          type: text
+          info:
+            notes: "Presence of rain"
+        - id: rainAmount
+          type: int
+          info:
+            notes: "Amount of rainfall in mm in the last 24 hours"
+        - id: waterTemp
+          type: float
+          info:
+            notes: "Water temperature in degrees Celsius"
+        - id: waterFowl
+          type: int
+          info:
+            notes: "Count of water fowl seen"
+        - id: waveAction
+          type: text
+          info:
+            notes: "Observations on wave action"
+        - id: waterClarity
+          type: text
+          info:
+            notes: "Visual state of water's clarity"
+        - id: turbidity
+          type: float
+          info:
+            notes: "Turbidity of water measured in Nephelometric Turbidity Units (NTUs)"
+        
