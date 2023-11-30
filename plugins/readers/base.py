@@ -5,11 +5,13 @@ import requests
 import csv
 import json
 import sys
+import importlib
+import types
 
 from io import StringIO
 from utils import misc_utils
 from abc import ABC, abstractmethod
-
+from inspect import isfunction
 
 
 class Reader(ABC):
@@ -17,12 +19,14 @@ class Reader(ABC):
 
     def __init__(
             self, 
+            # TODO: are these mandatory or optional?
             source_url: str = None,
-            schema: list = None,
+            schema: list = None, 
             out_dir: str = "",
             filename: str = None
         ):
-        self.source_url = misc_utils.validate_url(source_url)
+        if source_url:
+            self.source_url = misc_utils.validate_url(source_url)
         self.schema = schema
 
         self.cleaners = {
@@ -128,7 +132,6 @@ class CSVReader(Reader):
                 yield out
 
 
-
 class AGOLReader(Reader):
     '''Reads a AGOL from a URL and writes it locally'''
 
@@ -196,13 +199,46 @@ class AGOLReader(Reader):
 
             offset = offset + len(geojson["features"])
             params["resultOffset"] = offset
+    
+
+class CustomReader(Reader):
+    '''Reads data using external custom python function'''
+
+    def __init__(
+            self,
+            full_module_name: str,
+            func_name: str,
+            input_args: dict = {},
+            **kwargs
+        ):
+        super().__init__(**kwargs)
+        self.full_module_name = full_module_name
+        self.func_name = func_name
+        self.input_args = input_args
+
+
+    def read(self):
+        module = importlib.import_module(self.full_module_name)
+        if self.func_name not in dir(module):
+            raise ValueError("Function name must be valid.")
+        else:
+            for attribute_name in dir(module):
+                attribute = getattr(module, attribute_name)
+                if isfunction(attribute) and attribute_name == self.func_name:                    
+                    func = attribute(**self.input_args)
+                    assert isinstance(func, types.GeneratorType), "Custom func must return generator!"
+                    return func
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     #d = Reader("https://httpstat.us/Random/200,201,500-504")
     #print(d.source_url)
-
-    
-
     import os
     import yaml
     this_dir = os.path.dirname(os.path.realpath(__file__))
@@ -210,16 +246,35 @@ if __name__ == "__main__":
     with open(this_dir + "/test_agol_schema.yaml", "r") as f:
             config = yaml.load(f, yaml.SafeLoader)
     test_schema = config["ambulance-station-locations"]["resources"]["ambulance-station-locations"]["attributes"]
-#
-    #ckan_url = "https://ckanadmin0.intra.prod-toronto.ca/datastore/dump/22c57a77-de52-4206-b6a7-276fb1f7ae17?bom=True"
-#
 
-    AGOLReader(
-        test_source_url,
-        test_schema,
-        "/data/tmp",
-        "ssha-temp-test.csv"
+    CustomReader(
+        #source_url = test_source_url,
+        schema = [
+        {
+            "id": "row1",
+            "type": "int",
+        },
+        {
+            "id": "row2",
+            "type": "text",
+        },
+        {
+            "id": "row3",
+            "type": "float",
+        }],
+        out_dir = "/data/tmp",
+        filename = "ssha-temp-test.csv",
+        full_module_name = "readers.custom_readers",
+        func_name = "test_reader",
+        input_args = {},
     ).write_to_csv()
+
+    #AGOLReader(
+    #    test_source_url,
+    #    test_schema,
+    #    "/data/tmp",
+    #    "ssha-temp-test.csv"
+    #).write_to_csv()
 
     #c = CSVReader(
     #    test_source_url,
@@ -227,7 +282,7 @@ if __name__ == "__main__":
     #    "/data/tmp",
     #    "ssha-temp-test.csv"
     #    )
-#
+
     #c.write_to_csv()
     #
     #print(misc_utils.file_to_md5("/data/tmp/ssha-temp-test.csv"))

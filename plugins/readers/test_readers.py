@@ -4,7 +4,7 @@ import pytest
 import csv
 import os
 import yaml
-from readers.base import Reader, CSVReader, AGOLReader
+from readers.base import Reader, CSVReader, AGOLReader, CustomReader
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 
