@@ -41,8 +41,7 @@ class Reader(ABC):
         # where the data will be saved
         self.path = out_dir + "/" + filename
         # names intended to be written out to saved file
-        self.fieldnames = ["_id"]
-        self.fieldnames += [attr["id"] for attr in self.schema]
+        self.fieldnames = [attr["id"] for attr in self.schema]
         
 
     @abstractmethod
@@ -92,7 +91,6 @@ class CSVReader(Reader):
         '''Return generator yielding csv rows as dicts'''
         self.latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
         self.longitude_attributes = ["long", "longitude", "x", "x coordinate"]
-        i = 0 # we'll use this to count rows and add a fake row _id
 
         # get source file stream
         with requests.get(self.source_url, stream=True) as r:
@@ -106,8 +104,7 @@ class CSVReader(Reader):
             reader = csv.DictReader(iterator, fieldnames = source_headers)
             
             for source_row in reader:
-                i += 1
-                out = {"_id": i}
+                out = {}
 
                 # if geometric data, parse into geometry object
                 if "geometry" in self.fieldnames and "geometry" not in source_headers:
