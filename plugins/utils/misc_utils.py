@@ -144,6 +144,7 @@ def clean_date_format(input, input_format=None):
             except ValueError:
                 pass
 
+
 def validate_url(source_url):
     try:
         req = requests.get(source_url)
@@ -158,3 +159,27 @@ def validate_url(source_url):
     except Exception as e:
         raise e
 
+
+def parse_geometry_from_row(source_row):
+    '''input row as dict, output same row with geometry object
+    made of that rows geometric contents'''
+
+    latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
+    longitude_attributes = ["long", "longitude", "x", "x coordinate"]
+    
+    for attr in source_row:
+        if attr.lower() in latitude_attributes:
+            latitude_attribute = attr
+
+        if attr.lower() in longitude_attributes:
+            longitude_attribute = attr
+
+    source_row["geometry"] = json.dumps({
+        "type": "Point",
+        "coordinates": [
+            float(source_row[longitude_attribute]),
+            float(source_row[latitude_attribute]),
+        ],
+    })
+
+    return source_row

@@ -5,13 +5,9 @@ import requests
 import csv
 import json
 import sys
-import importlib
-import types
 
-from io import StringIO
 from utils import misc_utils
 from abc import ABC, abstractmethod
-from inspect import isfunction
 
 
 class Reader(ABC):
@@ -25,6 +21,7 @@ class Reader(ABC):
             out_dir: str = "",
             filename: str = None
         ):
+
         if source_url:
             self.source_url = misc_utils.validate_url(source_url)
         self.schema = schema
@@ -84,13 +81,14 @@ class CSVReader(Reader):
             encoding: str = "latin1",
             **kwargs
         ):
+        from io import StringIO
+
         super().__init__(**kwargs)
         self.encoding = encoding
 
     def read(self):
         '''Return generator yielding csv rows as dicts'''
-        self.latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
-        self.longitude_attributes = ["long", "longitude", "x", "x coordinate"]
+        
 
         # get source file stream
         with requests.get(self.source_url, stream=True) as r:
@@ -108,20 +106,7 @@ class CSVReader(Reader):
 
                 # if geometric data, parse into geometry object
                 if "geometry" in self.fieldnames and "geometry" not in source_headers:
-                    for attr in source_row:
-                        if attr.lower() in self.latitude_attributes:
-                            latitude_attribute = attr
-
-                        if attr.lower() in self.longitude_attributes:
-                            longitude_attribute = attr
-
-                    source_row["geometry"] = json.dumps({
-                        "type": "Point",
-                        "coordinates": [
-                            float(source_row[longitude_attribute]),
-                            float(source_row[latitude_attribute]),
-                        ],
-                    })
+                    source_row = utils.parse_geometry_from_row(source_row)
                 # add source data to out row
                 for attr in self.schema:
                     out[attr["id"]] = source_row[attr["id"]] 
@@ -208,6 +193,10 @@ class CustomReader(Reader):
             input_args: dict = {},
             **kwargs
         ):
+        from inspect import isfunction
+        import importlib
+        import types
+
         super().__init__(**kwargs)
         self.full_module_name = full_module_name
         self.func_name = func_name
@@ -227,8 +216,42 @@ class CustomReader(Reader):
                     return func
 
 
+class ExcelReader(Reader):
+    def __init__(
+            self, 
+            sheet,           
+            **kwargs
+        ):
+        import openpyxl
+        from io import BytesIO
+        import gc
 
+        super().__init__(**kwargs)
+        self.sheet = sheet
 
+        file = requests.get(self.source_url).content
+        wb = openpyxl.load_workbook(filename = BytesIO(file))
+        self.worksheet = wb[self.sheet]
+        
+        del file
+        gc.collect()
+        
+
+    def read(self):
+
+        source_headers = [col.value for col in self.worksheet[1]]
+
+        for row in self.worksheet.iter_rows(min_row=2):
+            output_row = {
+                source_headers[i]: str(row[i].value).strip()
+                for i in range(len(row))
+            }
+
+            # if geometric data, parse into geometry object
+            if "geometry" in self.fieldnames and "geometry" not in source_headers:
+                output_row = utils.parse_geometry_from_row(output_row)
+
+            yield output_row
 
 
 
@@ -239,32 +262,40 @@ if __name__ == "__main__":
     import os
     import yaml
     this_dir = os.path.dirname(os.path.realpath(__file__))
-    test_source_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_EMS/FeatureServer/0"
-    with open(this_dir + "/test_agol_schema.yaml", "r") as f:
+    test_source_url = "https://opendata.toronto.ca/toronto.public.health/deaths-of-people-experiencing-homelessness/Homeless deaths_demographics.xlsx"
+    with open("/data/operations/dags/datasets/files_to_datastore/deaths-of-people-experiencing-homelessness.yaml", "r") as f:
             config = yaml.load(f, yaml.SafeLoader)
-    test_schema = config["ambulance-station-locations"]["resources"]["ambulance-station-locations"]["attributes"]
+    test_schema = config["deaths-of-people-experiencing-homelessness"]["resources"]["Homeless deaths by demographics"]["attributes"]
 
-    CustomReader(
-        #source_url = test_source_url,
-        schema = [
-        {
-            "id": "row1",
-            "type": "int",
-        },
-        {
-            "id": "row2",
-            "type": "text",
-        },
-        {
-            "id": "row3",
-            "type": "float",
-        }],
+    ExcelReader(
+        source_url = test_source_url,
+        schema = test_schema,
+        sheet = config["deaths-of-people-experiencing-homelessness"]["resources"]["Homeless deaths by demographics"]["sheet"],
         out_dir = "/data/tmp",
         filename = "ssha-temp-test.csv",
-        full_module_name = "readers.custom_readers",
-        func_name = "test_reader",
-        input_args = {},
     ).write_to_csv()
+
+    #CustomReader(
+    #    #source_url = test_source_url,
+    #    schema = [
+    #    {
+    #        "id": "row1",
+    #        "type": "int",
+    #    },
+    #    {
+    #        "id": "row2",
+    #        "type": "text",
+    #    },
+    #    {
+    #        "id": "row3",
+    #        "type": "float",
+    #    }],
+    #    out_dir = "/data/tmp",
+    #    filename = "ssha-temp-test.csv",
+    #    full_module_name = "readers.custom_readers",
+    #    func_name = "test_reader",
+    #    input_args = {},
+    #).write_to_csv()
 
     #AGOLReader(
     #    test_source_url,
