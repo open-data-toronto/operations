@@ -13,13 +13,13 @@ import yaml
 import os
 import pandas as pd
 import io
-
 from datetime import datetime
 from pathlib import Path
 from bs4 import BeautifulSoup
 
 from airflow import DAG
 from airflow.models import Variable
+
 from utils import airflow_utils
 from utils_operators.slack_operators import (
     GenericSlackOperator,
@@ -32,24 +32,15 @@ CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 # we need ckan prod address to get a full list of packages
 CKAN = CKAN_CREDS["prod"]["address"]
 
-JIRA_URL = "https://toronto.atlassian.net/rest/api/3/search?jql=type=11468"
+# jira api call default return 50 results,
+# manually expand to 100 to expand active jira ticket pool
+JIRA_URL = (
+    "https://toronto.atlassian.net/rest/api/3/search?jql=type=11468&maxResults=100"
+)
 JIRA_API_KEY = Variable.get("jira_apikey")
-DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
-YAML_DIR_PATH = DIR_PATH / "datasets" / "files_to_datastore"
 
 # headers for authenticate jira api calls
 headers = {"Authorization": JIRA_API_KEY}
-
-# Create a mapping between jira issue transition name and id
-jira_issue_transitions_mapping = {
-    "In Progress": "11",
-    "Waiting on Division": "21",
-    "Closed": "31",
-    "Waiting on Open Data": "51",
-    "Published": "61",
-    "Retired": "71",
-    "Staged for Review": "81",
-}
 
 # Create a mapping between yaml fields and jira fields
 mapping = {
@@ -94,36 +85,6 @@ PACKAGE_METADATA = [
     "notes",
 ]
 
-# AGOL and CKAN data type mapping
-AGOL_CKAN_TYPE_MAP = {
-    "sqlTypeFloat": "float",
-    "sqlTypeNVarchar": "text",
-    "sqlTypeInteger": "int",
-    "sqlTypeOther": "text",
-    "sqlTypeTimestamp2": "timestamp",
-    "sqlTypeDouble": "float",
-    "esriFieldTypeString": "text",
-    "esriFieldTypeDate": "timestamp",
-    "esriFieldTypeInteger": "int",
-    "esriFieldTypeOID": "int",
-    "esriFieldTypeDouble": "float",
-    "esriFieldTypeSmallInteger": "int",
-    "esriFieldTypeSingle": "text",
-    "esriFieldTypeGlobalID": "int",
-}
-
-DELETE_FIELDS = [
-    "longitude",
-    "latitude",
-    "shape__length",
-    "shape__area",
-    "lat",
-    "long",
-    "lon",
-    "x",
-    "y",
-    "index_",
-]
 
 # init DAG
 default_args = airflow_utils.get_default_args(
@@ -154,8 +115,9 @@ with DAG(
     publish dataset to open data portal (https://open.toronto.ca)
 
     ### Notes
-    - Assign Jira ticket Id using Configuration JSON before triggering DAG, 
-     e.g. {"jira_ticket_id": ["DTSD-876", "DTSD-391"]}.
+    - Assign Jira ticket Id using Configuration JSON before triggering DAG
+     e.g. {"jira_ticket_id": ["DTSD-3056"]}
+     e.g. {"jira_ticket_id": ["DTSD-876", "DTSD-391"]}
 
     - Please note string need to be double quoted.
 
@@ -164,12 +126,12 @@ with DAG(
     - For "Publish New Open Dataset Page" request, generate a yaml file based on
     Jira Ticket Input, if agol endpoint or data dictionary attachment provided,
     attributes section will also be generated.
-    
+
     - For "Update Existing Open Dataset Page" request, generate a yaml based on
     existing package's metadata.
-    
-    - Please note currently dag can only generate attributes based on data dictionary
-     attachment whose name is "ATPF-v4.xlsx".
+
+    - Please note currently dag can only generate attributes based on Data Dictionary
+    Attachment, e.g."ATPF-v4.xlsx". And the sheet name has to be "Content"
 
     ### Contact
     jira-to-yaml automation inquiries should go to Yanan.Zhang@toronto.ca
@@ -203,8 +165,39 @@ with DAG(
                 raise Exception(message)
         return ticket_pool
 
-    # Scrape attributes from GCC managed ArcGIS Online Endpoint
+    # Scrape attributes from GCC managed ArcGIS Online Endpoint, city arcgis only
     def scrape_content_from_arcgis(url):
+        # AGOL and CKAN data type mapping
+        AGOL_CKAN_TYPE_MAP = {
+            "sqlTypeFloat": "float",
+            "sqlTypeNVarchar": "text",
+            "sqlTypeInteger": "int",
+            "sqlTypeOther": "text",
+            "sqlTypeTimestamp2": "timestamp",
+            "sqlTypeDouble": "float",
+            "esriFieldTypeString": "text",
+            "esriFieldTypeDate": "timestamp",
+            "esriFieldTypeInteger": "int",
+            "esriFieldTypeOID": "int",
+            "esriFieldTypeDouble": "float",
+            "esriFieldTypeSmallInteger": "int",
+            "esriFieldTypeSingle": "text",
+            "esriFieldTypeGlobalID": "int",
+        }
+
+        DELETE_FIELDS = [
+            "longitude",
+            "latitude",
+            "shape__length",
+            "shape__area",
+            "lat",
+            "long",
+            "lon",
+            "x",
+            "y",
+            "index_",
+        ]
+
         page = requests.get(url)
 
         # parse html content
@@ -239,6 +232,7 @@ with DAG(
 
         # Grab columns which will be used in yaml attributes section
         columns = [
+            "Column Name in Source Data",
             "Desired Column Name on Open Data",
             "Data Type",
             "Business Description",
@@ -246,16 +240,33 @@ with DAG(
 
         # Read from attachment ATPF, user input start from row index 8
         df = df.loc[8:, columns].reset_index(drop=True)
+        value_list = df.values.tolist()
         attributes = []
 
-        for row in df.values.tolist():
-            attributes.append(
-                {
-                    "id": row[0],
-                    "type": row[1],
-                    "info": {"notes": row[2]},
-                }
-            )
+        # If source data column name and desired column name are both provided
+        # We assign source_name and target_name in yaml
+        if (str(value_list[0][0]) != "nan") and (str(value_list[0][1]) != "nan"):
+            for row in value_list:
+                attributes.append(
+                    {
+                        "source_name": row[0],
+                        "target_name": row[1],
+                        "type": row[2],
+                        "info": {"notes": row[3]},
+                    }
+                )
+
+        # If only source data column name or desired column name provided,
+        # We assign id in yaml
+        else:
+            for row in value_list:
+                attributes.append(
+                    {
+                        "id": row[0] if str(row[0]) != "nan" else row[1],
+                        "type": row[2],
+                        "info": {"notes": row[3]},
+                    }
+                )
 
         return attributes
 
@@ -263,12 +274,12 @@ with DAG(
         fields = issue["fields"]
 
         # location where data stored, could be an AGOL or NAS endpoint
-        print(fields)
-        print(mapping)
         data_url = None
         if fields[mapping["data_url"]]:
             if len(fields[mapping["data_url"]]["content"]) > 0:
-                data_url = fields[mapping["data_url"]]["content"][0]["content"][0]["text"]
+                data_url = fields[mapping["data_url"]]["content"][0]["content"][0][
+                    "text"
+                ]
 
         # check if dataset contains geographic coordinates
         geospatial = (
@@ -279,6 +290,7 @@ with DAG(
         )
 
         attributes = []
+        # if agol endpoint provided
         if data_url and geospatial:
             logging.info(data_url)
             attributes = scrape_content_from_arcgis(data_url)
@@ -290,20 +302,19 @@ with DAG(
             }
             resource = {fields["summary"]: resource_content}
 
-        if fields["attachment"]:
+        # if data column description (data dictionary) provided
+        elif fields["attachment"]:
             attachment_url = fields["attachment"][0]["content"]
             attachment_name = fields["attachment"][0]["filename"]
             logging.info(f"Attachment name: {attachment_name}, url: {attachment_url}")
 
-            # make sure the attachment file name consistent
-            if attachment_name == "ATPF-v4.xlsx":
+            try:
                 logging.info("Start getting attributes from attachement.")
                 attributes = get_attributes_from_attachment(attachment_url)
-            else:
-                logging.warning(
-                    "Unexpected Attachment File Name and Structure!" +
-                    " Skipping generating attributes."
-                )
+            except Exception as e:
+                logging.error(e)
+                logging.warning("Unexpected Attachment File Structure!")
+
             resource_content = {
                 "format": "",
                 "url": data_url,
@@ -380,10 +391,12 @@ with DAG(
 
     def write_to_yaml(content, filename):
         """Receives a json input and writes it to a YAML file"""
+        dir_path = Path(os.path.dirname(os.path.realpath(__file__))).parent
+        yaml_dir_path = dir_path / "datasets" / "files_to_datastore"
 
         logging.info(f"Generating yaml file: {filename}")
         try:
-            with open(YAML_DIR_PATH / filename, "w") as file:
+            with open(yaml_dir_path / filename, "w") as file:
                 yaml.dump(content, file, sort_keys=False)
         except PermissionError:
             message = "Note: yaml file already exist, please double check!"
@@ -391,6 +404,17 @@ with DAG(
         return {"filename": filename}
 
     def process_ticket(jira_issue_id):
+        # Create a mapping between jira issue transition name and id
+        jira_issue_transitions_mapping = {
+            "In Progress": "11",
+            "Waiting on Division": "21",
+            "Closed": "31",
+            "Waiting on Open Data": "51",
+            "Published": "61",
+            "Retired": "71",
+            "Staged for Review": "81",
+        }
+
         url = (
             "https://toronto.atlassian.net/rest/api/3/issue/"
             + jira_issue_id
