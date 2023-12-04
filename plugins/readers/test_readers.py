@@ -57,6 +57,21 @@ def test_excel_reader():
         sheet = sheet
     )
 
+@pytest.fixture
+def test_csv_reader_special_chars():
+    test_source_url = "https://opendata.toronto.ca/DummyDatasets/VW_OPEN_VOTE_2018_2022.csv"
+    with open(this_dir + "/test_excel_schema_special_chars.yaml", "r") as f:
+        config = yaml.load(f, yaml.SafeLoader)
+    test_schema = config["members-of-toronto-city-council-voting-record"]["resources"]["member-voting-record-2018-2022"]["attributes"]
+    test_filename = "test_csv_output_special_chars.csv"
+
+    return CSVReader(
+        source_url = test_source_url,
+        schema = test_schema,
+        out_dir = this_dir,
+        filename = test_filename,
+    )
+
 
 def test_csv_reader_output(test_csv_reader):
     '''test cases for CSVReader write method'''
@@ -77,4 +92,11 @@ def test_excel_reader_output(test_excel_reader):
 
     test_excel_reader.write_to_csv()
     with open(test_excel_reader.path, "r") as f:
+        assert f
+
+def test_csv_reader_special_chars_output(test_csv_reader_special_chars):
+    '''test cases for CSVReader write method'''
+
+    test_csv_reader_special_chars.write_to_csv()
+    with open(test_csv_reader_special_chars.path, "r") as f:
         assert f

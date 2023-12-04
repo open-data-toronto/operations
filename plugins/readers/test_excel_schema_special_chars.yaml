@@ -1,0 +1,102 @@
+# package name
+members-of-toronto-city-council-voting-record:
+  # DAG info
+  schedule: "0 18 * * *"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Members of Toronto City Council - Voting Record"
+  date_published: "2019-07-23 17:43:02.171489"
+  refresh_rate: As available
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: clerk@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - City government
+  tags: 
+    - name: city council
+      vocabulary_id: null
+    - name: councillor voting
+      vocabulary_id: null
+    - name: vote
+      vocabulary_id: null
+    - name: voting record
+      vocabulary_id: null
+
+  information_url: http://www.toronto.ca/council
+  excerpt: Access Voting-Record Reporting data for Members of Toronto City Council.
+  limitations: null
+  notes: |
+    This dataset includes the following information about Member of Toronto City Council Voting Record. For official definitions and procedure by-law information, refer to the [City of Toronto Municipal Code, Chapter 27, Council Procedures](http://www.toronto.ca/legdocs/municode/1184_027.pdf) 
+    
+    **Description of the data**
+    
+    - The vote record data for a meeting becomes available **when the minutes for a meeting have been published**. For agendas with a large number of items, there can and will be a delay of several days after a meeting before this customized data becomes available.
+    
+    - Since 2010, recorded votes have been made available in this downloadable format (not just in the published minutes). _You may also find downloadable records prior 2010 that are the result of on-going data-conversion work for last-term meetings._
+    
+    - Votes generated in the report are recorded votes only. Under Article IX of the Council Procedures by-law, the City Clerk may be asked to record a vote for specific types of motions that are made by members during a meeting. When requested, votes are recorded as \"Yes\", \"No\" or \"Absent\". 
+    
+    - Vote results for motions can either be \"Carried\" or \"Lost\" depending on the majority or two-thirds requirements for a motion. _\"Absent\" can also indicate that a member chose not to participate in a vote because they declared an interest under the Municipal Conflict of Interest Act._
+    
+    To access current term open data set for meeting attendance please visit:[ http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport](http://app.toronto.ca/tmmis/getAdminReport.do?function=prepareMemberVoteReport)
+
+  resources:
+    # resource name
+
+    member-voting-record-2018-2022:
+      format: csv
+      url: http://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_VOTE_2018_2022.csv
+      attributes:
+        - id: Term
+          type: text
+          info:
+            notes: ""
+        - id: First Name
+          type: text
+          info:
+            notes: ""
+        - id: Last Name
+          type: text
+          info:
+            notes: ""
+        - id: Committee
+          type: text
+          info:
+            notes: ""
+        - id: Date/Time
+          type: timestamp
+          info:
+            notes: ""
+        - id: "Agenda Item #"
+          type: text
+          info:
+            notes: ""
+        - id: Agenda Item Title
+          type: text
+          info:
+            notes: ""
+        - id: Motion Type
+          type: text
+          info:
+            notes: ""
+        - id: Vote
+          type: text
+          info:
+            notes: ""
+        - id: Result
+          type: text
+          info:
+            notes: ""
+        - id: Vote Description
+          type: text
+          info:
+            notes: ""
+    
