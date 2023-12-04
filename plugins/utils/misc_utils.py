@@ -5,6 +5,7 @@ import hashlib
 import codecs
 import csv
 import ckanapi
+import json
 from datetime import datetime
 
 def stream_download_to_md5(url):

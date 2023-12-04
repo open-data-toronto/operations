@@ -8,6 +8,7 @@ import sys
 
 from utils import misc_utils
 from abc import ABC, abstractmethod
+from io import StringIO
 
 
 class Reader(ABC):
@@ -80,8 +81,7 @@ class CSVReader(Reader):
             self,
             encoding: str = "latin1",
             **kwargs
-        ):
-        from io import StringIO
+        ):        
 
         super().__init__(**kwargs)
         self.encoding = encoding
@@ -106,7 +106,7 @@ class CSVReader(Reader):
 
                 # if geometric data, parse into geometry object
                 if "geometry" in self.fieldnames and "geometry" not in source_headers:
-                    source_row = utils.parse_geometry_from_row(source_row)
+                    source_row = misc_utils.parse_geometry_from_row(source_row)
                 # add source data to out row
                 for attr in self.schema:
                     out[attr["id"]] = source_row[attr["id"]] 
