@@ -12,7 +12,18 @@ from io import StringIO
 
 
 class Reader(ABC):
-    '''Base class for airflow extracting data from a source'''
+    '''Base class for airflow downloading data from an external source
+
+    This class always expects an input YAML schema and always writes to a
+    local CSV. It will validate the schema of the source data based on the
+    YAML schema provided.
+    
+    source_url - url of the data to download
+    schema - path to yaml containing the download's data dictionary
+    out_dir - path to where the file will be written as a csv
+    filename - name of output csv file
+    
+    '''
 
     def __init__(
             self, 
@@ -44,6 +55,7 @@ class Reader(ABC):
 
     @abstractmethod
     def read(self):
+        '''Placeholder method to be used by child classes'''
         raise NotImplementedError("Reader's 'read' method must be overridden")
 
 
@@ -75,7 +87,10 @@ class Reader(ABC):
 
 
 class CSVReader(Reader):
-    '''Reads a CSV from a URL and writes it locally'''
+    '''Reads a CSV from a URL and writes it locally
+    
+    encoding - encoding of the source file
+    '''
 
     def __init__(
             self,
@@ -105,7 +120,8 @@ class CSVReader(Reader):
                 out = {}
 
                 # if geometric data, parse into geometry object
-                if "geometry" in self.fieldnames and "geometry" not in source_headers:
+                if "geometry" in self.fieldnames \
+                    and "geometry" not in source_headers:
                     source_row = misc_utils.parse_geometry_from_row(source_row)
                 # add source data to out row
                 for attr in self.schema:
@@ -184,7 +200,15 @@ class AGOLReader(Reader):
     
 
 class CustomReader(Reader):
-    '''Reads data using external custom python function'''
+    '''Reads data using external custom python function. 
+    
+    Expects function to return a generator of dicts
+    
+    full_module_name - name of module where logic lives
+    func_name - name of function to use
+    input_args - optional dict of arguments to feed the function
+    
+    '''
 
     def __init__(
             self,
@@ -204,6 +228,7 @@ class CustomReader(Reader):
 
 
     def read(self):
+        '''Return input function'''
         module = importlib.import_module(self.full_module_name)
         if self.func_name not in dir(module):
             raise ValueError("Function name must be valid.")
@@ -217,6 +242,10 @@ class CustomReader(Reader):
 
 
 class ExcelReader(Reader):
+    '''Reads from remote excel file, writes to local CSV
+    
+    sheet - the sheet in the excel to write to a CSV
+    '''
     def __init__(
             self, 
             sheet,           
