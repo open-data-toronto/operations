@@ -11,12 +11,12 @@ class GetOrCreateResource:
     A class to get or create package.
 
     Attributes:
-        - package_id : str
-            the id of the package wherein we'll look for/make a resource
-        - resource_name : str
-            the name of the resource this operator will look for/make
-        - resource_attributes : dict
-            the attributes that will be in a resource if we create it
+    - package_id : str
+        the id of the package wherein we'll look for/make a resource
+    - resource_name : str
+        the name of the resource this operator will look for/make
+    - resource_attributes : dict
+        the attributes that will be in a resource if we create it
 
     Methods:
         _resource_exists(package_id, resource_name):
@@ -38,12 +38,12 @@ class GetOrCreateResource:
         Construct all the necessary attributes for the GetOrCreateResource object.
 
         Parameters:
-            - package_id : str
-                the id of the package wherein we'll look for/make a resource
-            - resource_name : str
-                the name of the resource this operator will look for/make
-            - resource_attributes : dict
-                the attributes that will be in a resource if we create it
+        - package_id : str
+            the id of the package wherein we'll look for/make a resource
+        - resource_name : str
+            the name of the resource this operator will look for/make
+        - resource_attributes : dict
+            the attributes that will be in a resource if we create it
         """
         self.package_id = package_id
         self.resource_name = resource_name
@@ -56,10 +56,10 @@ class GetOrCreateResource:
         Check if resource exists
 
         Parameters:
-            - package_id : str
-                the id of the package wherein we'll look for/make a resource
-            - resource_name : str
-                the name of the resource this operator will look for/make
+        - package_id : str
+            the id of the package wherein we'll look for/make a resource
+        - resource_name : str
+            the name of the resource this operator will look for/make
 
         Returns:
             resource exists or not : bool
@@ -78,12 +78,12 @@ class GetOrCreateResource:
         Return ckan resource object, or create it if it does not exist
 
         Parameters:
-            - package_id : str
-                the id of the package wherein we'll look for/make a resource
-            - resource_name : str
-                the name of the resource this operator will look for/make
-            - resource_attributes : dict
-                the attributes that will be in a resource if we create it
+        - package_id : str
+            the id of the package wherein we'll look for/make a resource
+        - resource_name : str
+            the name of the resource this operator will look for/make
+        - resource_attributes : dict
+            the attributes that will be in a resource if we create it
 
         Returns:
             resource : dict
@@ -156,13 +156,10 @@ class EditResourceMetadata:
     Edits a resource's name or last_modified date
 
     Attributes:
-        - resource_id : str
-            the id of the ckan resource whose metadata will be updated
+    - resource_id : str
+        the id of the ckan resource whose metadata will be updated
 
     Methods:
-        _datetime_to_string(package_id, resource_name):
-            convert last_modified from datetime object to string format
-
         edit_resource_metadata(resource_id, new_resource_name, last_modified):
             Edit a resource's name or last_modified date
 
@@ -182,22 +179,6 @@ class EditResourceMetadata:
         self.resource_id = resource_id
         self.ckan = ckan_connector.connect_to_ckan()
 
-    def _datetime_to_string(self, date_time):
-        """
-        Convert date and time objects to string representation
-
-        Parameters:
-            - date_time : datetime
-                the datetime obj will be converted to string
-
-        Return: date_time : str
-        """
-        try:
-            output = date_time.strftime("%Y-%m-%dT%H:%M:%S")
-        except Exception as e:
-            output = date_time
-        return output
-
     def edit_resource_metadata(
         self, new_resource_name: str = None, new_last_modified: datetime = None
     ):
@@ -205,18 +186,17 @@ class EditResourceMetadata:
         Edit a resource's name or last_modified date, only one of name or last_modified is required
 
         Parameters:
-            - resource_id : str
-                the id of the ckan resource whose metadata will be updated
-            - new_resource_name : str
-                the new name of the resource
-            - new_last_modified : datetime
-                the new last_modified date of the resource
+        - resource_id : str
+            the id of the ckan resource whose metadata will be updated
+        - new_resource_name : str, Optional
+            the new name of the resource
+        - new_last_modified : datetime, Optional
+            the new last_modified date of the resource
 
         Return: None
         """
         # last modified date
         if new_last_modified:
-            new_last_modified = self._datetime_to_string(new_last_modified)
             logging.info(
                 "Setting last-modified of resource_id {} to {}".format(
                     self.resource_id, new_last_modified
