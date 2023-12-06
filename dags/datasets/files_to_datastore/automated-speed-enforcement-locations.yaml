@@ -44,7 +44,7 @@ automated-speed-enforcement-locations:
         type: text
         info:
           notes: A unique identifier for each Automated Speed Enforcement System
-      - id: Ward
+      - id: ward
         type: text
         info:
           notes: 'The City of Toronto Ward where the ASE System is located'
