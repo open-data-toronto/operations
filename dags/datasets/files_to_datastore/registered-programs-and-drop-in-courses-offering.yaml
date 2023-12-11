@@ -1,5 +1,5 @@
 registered-programs-and-drop-in-courses-offering:
-  schedule: '45 5 * * *'
+  schedule: '0 19 * * *'
   dag_owner_name: 'Mackenzie'
   dag_owner_email: 'mackenzie.nichols4@toronto.ca'
   title: Registered Programs and Drop In Courses Offering
