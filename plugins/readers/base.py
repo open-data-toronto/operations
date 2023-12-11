@@ -51,6 +51,8 @@ class Reader(ABC):
         self.path = out_dir + "/" + filename
         # names intended to be written out to saved file
         self.fieldnames = [attr["id"] for attr in self.schema]
+
+        logging.info(f"Reader expecting the following fields: {self.fieldnames}")
         
 
     @abstractmethod
@@ -104,7 +106,6 @@ class CSVReader(Reader):
     def read(self):
         '''Return generator yielding csv rows as dicts'''
         
-
         # get source file stream
         with requests.get(self.source_url, stream=True) as r:
             # decode bytes to string
@@ -164,6 +165,7 @@ class AGOLReader(Reader):
             "outFields": "*",
         }
 
+        logging.info(f"Requesting CSV from {self.source_url}...")
         while overflow is True:            
             
             # make a request url and request
@@ -235,7 +237,8 @@ class CustomReader(Reader):
         else:
             for attribute_name in dir(module):
                 attribute = getattr(module, attribute_name)
-                if isfunction(attribute) and attribute_name == self.func_name:                    
+                if isfunction(attribute) and attribute_name == self.func_name:
+                    logging.info(f"Returning logic from {module} - {self.func_name}")                 
                     func = attribute(**self.input_args)
                     assert isinstance(func, types.GeneratorType), "Custom func must return generator!"
                     return func
@@ -281,66 +284,3 @@ class ExcelReader(Reader):
                 output_row = utils.parse_geometry_from_row(output_row)
 
             yield output_row
-
-
-
-
-if __name__ == "__main__":
-    #d = Reader("https://httpstat.us/Random/200,201,500-504")
-    #print(d.source_url)
-    import os
-    import yaml
-    this_dir = os.path.dirname(os.path.realpath(__file__))
-    test_source_url = "https://opendata.toronto.ca/toronto.public.health/deaths-of-people-experiencing-homelessness/Homeless deaths_demographics.xlsx"
-    with open("/data/operations/dags/datasets/files_to_datastore/deaths-of-people-experiencing-homelessness.yaml", "r") as f:
-            config = yaml.load(f, yaml.SafeLoader)
-    test_schema = config["deaths-of-people-experiencing-homelessness"]["resources"]["Homeless deaths by demographics"]["attributes"]
-
-    ExcelReader(
-        source_url = test_source_url,
-        schema = test_schema,
-        sheet = config["deaths-of-people-experiencing-homelessness"]["resources"]["Homeless deaths by demographics"]["sheet"],
-        out_dir = "/data/tmp",
-        filename = "ssha-temp-test.csv",
-    ).write_to_csv()
-
-    #CustomReader(
-    #    #source_url = test_source_url,
-    #    schema = [
-    #    {
-    #        "id": "row1",
-    #        "type": "int",
-    #    },
-    #    {
-    #        "id": "row2",
-    #        "type": "text",
-    #    },
-    #    {
-    #        "id": "row3",
-    #        "type": "float",
-    #    }],
-    #    out_dir = "/data/tmp",
-    #    filename = "ssha-temp-test.csv",
-    #    full_module_name = "readers.custom_readers",
-    #    func_name = "test_reader",
-    #    input_args = {},
-    #).write_to_csv()
-
-    #AGOLReader(
-    #    test_source_url,
-    #    test_schema,
-    #    "/data/tmp",
-    #    "ssha-temp-test.csv"
-    #).write_to_csv()
-
-    #c = CSVReader(
-    #    test_source_url,
-    #    test_schema,
-    #    "/data/tmp",
-    #    "ssha-temp-test.csv"
-    #    )
-
-    #c.write_to_csv()
-    #
-    #print(misc_utils.file_to_md5("/data/tmp/ssha-temp-test.csv"))
-    #print(misc_utils.stream_download_to_md5(ckan_url))
