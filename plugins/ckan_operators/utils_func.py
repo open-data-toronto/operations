@@ -5,6 +5,8 @@ from pathlib import Path
 
 from airflow.models import Variable
 
+from utils import misc_utils
+
 
 def create_dir_with_dag_id(dag_id: str, dir_variable_name: str) -> str:
     """
@@ -74,3 +76,22 @@ def delete_file(dag_tmp_dir: str, file_name: str) -> None:
         logging.info(f"{file_name} deleted.")
     else:
         logging.info("The file does not exist.")
+
+
+def file_equal(curr_file_path: str, new_file_path: str):
+    """
+    Compare if new file and existing file are same
+    Parameters:
+    - curr_file_path : str
+        the path of current file
+    - new_file_path : str
+        the path of upcoming new file
+
+    Returns:
+        Bool
+
+    """
+    curr_hash = misc_utils.file_to_md5(curr_file_path)
+    new_hash = misc_utils.file_to_md5(new_file_path)
+
+    return curr_hash == new_hash
