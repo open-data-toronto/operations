@@ -10,6 +10,7 @@ this_dir = os.path.dirname(os.path.realpath(__file__))
 
 @pytest.fixture
 def test_csv_reader():
+    '''Inits a CSV reader for testing'''
     test_source_url = "https://opendata.toronto.ca/DummyDatasets/COT_affordable_rental_housing_mod.csv"
     with open(this_dir + "/test_csv_schema.yaml", "r") as f:
         config = yaml.load(f, yaml.SafeLoader)
@@ -26,6 +27,7 @@ def test_csv_reader():
 
 @pytest.fixture
 def test_agol_reader():
+    '''Inits an AGOL reader for testing'''
     test_source_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_EMS/FeatureServer/0"
     with open(this_dir + "/test_agol_schema.yaml", "r") as f:
         config = yaml.load(f, yaml.SafeLoader)
@@ -42,6 +44,7 @@ def test_agol_reader():
 
 @pytest.fixture
 def test_excel_reader():
+    '''Inits an excel reader for testing'''
     test_source_url = "https://opendata.toronto.ca/toronto.public.health/deaths-of-people-experiencing-homelessness/Homeless deaths_demographics.xlsx"
     with open(this_dir + "/test_excel_schema.yaml", "r") as f:
         config = yaml.load(f, yaml.SafeLoader)
@@ -57,8 +60,10 @@ def test_excel_reader():
         sheet = sheet
     )
 
+
 @pytest.fixture
 def test_csv_reader_special_chars():
+    '''Inits csv reader with a source with special chars for testing'''
     test_source_url = "https://opendata.toronto.ca/DummyDatasets/VW_OPEN_VOTE_2018_2022.csv"
     with open(this_dir + "/test_excel_schema_special_chars.yaml", "r") as f:
         config = yaml.load(f, yaml.SafeLoader)
@@ -80,6 +85,7 @@ def test_csv_reader_output(test_csv_reader):
     with open(test_csv_reader.path, "r") as f:
         assert f
 
+
 def test_agol_reader_output(test_agol_reader):
     '''test cases for agolReader write method'''
 
@@ -87,12 +93,14 @@ def test_agol_reader_output(test_agol_reader):
     with open(test_agol_reader.path, "r") as f:
         assert f
 
+
 def test_excel_reader_output(test_excel_reader):
     '''test cases for excelReader write method'''
 
     test_excel_reader.write_to_csv()
     with open(test_excel_reader.path, "r") as f:
         assert f
+
 
 def test_csv_reader_special_chars_output(test_csv_reader_special_chars):
     '''test cases for CSVReader write method'''
