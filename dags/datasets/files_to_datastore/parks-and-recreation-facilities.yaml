@@ -1,0 +1,96 @@
+parks-and-recreation-facilities:
+  schedule: '20 20 1 * *'
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Parks and Recreation Facilities
+  date_published: '2019-07-23 17:52:21.401168'
+  refresh_rate: As available
+  dataset_category: Document
+  owner_division: Parks, Forestry & Recreation
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: Locations and mapping,Parks and recreation
+  tags:
+  - name: parks and rec
+    vocabulary_id: null
+  - name: rec centre
+    vocabulary_id: null
+  - name: rec facility
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/parks/facilities/index.htm
+  excerpt: This dataset provides information on the recreation facilities administered
+    by Toronto's Parks, Forestry and Recreation Division.
+  limitations: null
+  notes: |
+    This data set, for each of the City of Toronto's parks and community recreation centres, provides location information and a select list of twenty amenities that could be found a location. Included in the list are sports facilities, playgrounds, picnic areas, dog off-leash areas, etc. There are over 1500 records in the dataset.
+
+    Location information found in this data set include:
+
+    * AssetID
+    * AssetName
+    * Address
+    * Type - Community Recreation Centre or Park
+    * Amenity
+    * URL
+    * Attribution (Future)
+
+    The operational status of a community recreation centre is updated in near real-time by staff throughout the day. The most updated information can be found by accessing the JSON file linked below:
+
+    https://www.toronto.ca/data/parks/live/centres.json
+
+    Operational Statuses include:
+
+    * 0 = closed
+    * 1 = open
+    * 2 = service alert
+
+    Facilities within a centre such as pools or ice rinks have separate statuses and are not reflected in the community recreation centre status or the park status. Operational status of Parks is set to always Open.
+
+    PFR publishes real-time updates directly on the Parks & Community Recreation Centres Map webpage.
+
+  resources:
+    Parks and Recreation Facilities:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_PARKS_AND_COMMUNITY_CENTRES/FeatureServer/0
+      attributes: 
+      - id: LOCATIONID
+        type: text
+        info:
+          notes: ''
+      - id: ASSET_ID
+        type: float
+        info:
+          notes: ''
+      - id: ASSET_NAME
+        type: text
+        info:
+          notes: ''
+      - id: TYPE
+        type: text
+        info:
+          notes: 'Community Recreation Centre or Park'
+      - id: AMENITIES
+        type: text
+        info:
+          notes: 'Amenities at the location'
+      - id: ADDRESS
+        type: text
+        info:
+          notes: ''
+      - id: PHONE
+        type: text
+        info:
+          notes: ''
+      - id: URL
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''
+      
+      
