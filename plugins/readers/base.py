@@ -308,7 +308,7 @@ class JSONReader(Reader):
 
     def __init__(
             self,
-            jsonpath,
+            jsonpath: str = None,
             is_geojson: bool = False,
             **kwargs,
         ):
@@ -319,30 +319,33 @@ class JSONReader(Reader):
         if jsonpath and is_geojson:
             logging.warning("Input jsonpath ignored; geojson input data expected")
 
+        if jsonpath:
+            assert self.jsonpath.startswith("$"), "JSONPath must start with $"    
         self.jsonpath = jsonpath
-        assert self.jsonpath.startswith("$"), "JSONPath must start with $"
+
         self.is_geojson = is_geojson
 
 
-    def parse_jsonpath(self, json):
-        # Currently, this only parses "dot" notation of jsonpath
-        path_steps = self.jsonpath.split(".")
+    def parse_jsonpath(self, input):
+        if self.jsonpath:
+            # Currently, this only parses "dot" notation of jsonpath
+            path_steps = self.jsonpath.split(".")
 
-        # loop over each step of json path and return target json
-        for step in path_steps:
-            if step == "$":
-                continue
-            if step.isdigit():
-                step = int(step)
-            json = json[step]
+            # loop over each step of jsonpath and return target json
+            for step in path_steps:
+                if step == "$":
+                    continue
+                if step.isdigit():
+                    step = int(step)
+                input = input[step]
 
-        for row in json:
+        for row in input:
             yield row
 
-    def parse_geojson(self, json):
+    def parse_geojson(self, input):
         output = []
          # for each feature, combine it with its geometry into one object and append it to the output
-        for feature in res["features"]:
+        for feature in input["features"]:
         # create a row object for each object in the json response, and flag its timestamp fields
             row = {**feature["properties"], "geometry": json.dumps(feature["geometry"])}
 
@@ -353,10 +356,10 @@ class JSONReader(Reader):
         res = json.loads(requests.get(self.source_url).text)
 
         if self.is_geojson:
-            return parse_geojson(json=res)
+            return self.parse_geojson(input=res)
 
         elif not self.is_geojson:
-            return self.parse_jsonpath(json=res)
+            return self.parse_jsonpath(input=res)
 
 
 
@@ -369,9 +372,24 @@ if __name__ == "__main__":
     import yaml
     this_dir = os.path.dirname(os.path.realpath(__file__))
     test_source_url = "https://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.geojson"
-    with open("/data/operations/plugins/readers/test_json_schema.yaml", "r") as f:
+    with open("/data/operations/plugins/readers/test_geojson_schema.yaml", "r") as f:
             config = yaml.load(f, yaml.SafeLoader)
     test_schema = config["traffic-calming-database"]["resources"]["Traffic Calming Database"]["attributes"]
+
+    #JSONReader(
+    #    source_url = test_source_url,
+    #    schema = test_schema,
+    #    #sheet = config["deaths-of-people-experiencing-homelessness"]["resources"]["Homeless deaths by demographics"]["sheet"],
+    #    out_dir = "/data/tmp",
+    #    filename = "ssha-temp-test.csv",
+    #    is_geojson = True,
+	#    ).write_to_csv()
+#
+    this_dir = os.path.dirname(os.path.realpath(__file__))
+    test_source_url = "https://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json"
+    with open("/data/operations/plugins/readers/test_json_schema.yaml", "r") as f:
+            config = yaml.load(f, yaml.SafeLoader)
+    test_schema = config["earlyon-child-and-family-centres"]["resources"]["EarlyON Child and Family Centres Locations - geometry"]["attributes"]
 
     JSONReader(
         source_url = test_source_url,
@@ -379,5 +397,4 @@ if __name__ == "__main__":
         #sheet = config["deaths-of-people-experiencing-homelessness"]["resources"]["Homeless deaths by demographics"]["sheet"],
         out_dir = "/data/tmp",
         filename = "ssha-temp-test.csv",
-        jsonpath = "$.features",
 	    ).write_to_csv()

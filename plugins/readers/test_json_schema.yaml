@@ -1,76 +1,182 @@
 # package name
-traffic-calming-database:
+earlyon-child-and-family-centres:
   # DAG info
-  schedule: "@once"
+  schedule: "0 18 * * *"
   dag_owner_name: Mackenzie
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
   # mandatory package attributes
-  title: Traffic Calming Database
-  date_published: "2023-05-11 14:33:07.070323"
-  refresh_rate: Semi-annually
+  title: "EarlyON Child and Family Centres"
+  date_published: "2019-07-23T12:46:56.408963"
+  refresh_rate: Daily
   dataset_category: Map
 
   # optional package attributes
-  owner_division: Transportation Services
-  owner_section: Project Design and Management
-  owner_unit: Vision Zero Project
-  owner_email: visionzeroto@toronto.ca
+  owner_division: Children's Services
+  owner_section: null
+  owner_unit: null
+  owner_email: EarlyON@toronto.ca
 
-  civic_issues: null
+  civic_issues: 
+    - Poverty reduction
   topics: 
-    - Transportation
-    - Environment
+    - Community services
+    - Locations and mapping
   tags: 
-    - name: speed bumps
-      vocabulary_id: null
+    - vocabulary_id: null
+      name: earlyon child and family centre
+    - vocabulary_id: null
+      name: family resource program
+    - vocabulary_id: null
+      name: ontario early years centre
+    - vocabulary_id: null
+      name: parenting and family literacy centre
 
-  information_url: null
-  excerpt: Vision Zero Project Unit uses this data to track and to visualize the location of traffic calming measurements such as traffic islands, speed cushion and speed humps.
+  information_url: http://www.toronto.ca/EarlyON
+  excerpt: EarlyON Child and Family Centres provide community-based programs and services for parents/caregivers who attend with their young children (newborn to 6 years).
   limitations: null
-  notes: Vision Zero Project Unit uses this data to track and to visualize the location of traffic calming measurements such as traffic islands, speed cushion and speed humps. Currently Vision Zero Project Unit has this shown in our public Vision Zero dashboard.
+  notes: |
+    EarlyON Child and family centres offer free programs to parents/caregivers and their children from birth to six years of age. These centres welcome all families to participate in quality programs that:
+    
+    1) Help strengthen adult-child relationships,  
+    2) Support parent education, and  
+    3) Foster healthy child development.
     
   resources:
     # resource name
-    Traffic Calming Database:
-      #agol: False
-      format: geojson
-      url: "https://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.geojson"
+    EarlyON Child and Family Centres Locations - geometry:
+      format: json
+      url: https://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json
       attributes:
-        - id: calm_id
-          type: int
+        - id: "service_system_manager"
+          type: "text"
           info:
-            notes: Unique identifier that corresponds to each location that contains traffic calming implementations
-        - id: street
-          type: text
+            notes:  "City of Toronto"
+        - id: "agency"
+          type: "text"
           info:
-            notes: Street name and segment that contains traffic calming implementations
-        - id: intersecti
-          type: text
+            notes:  "The agency associated with this location"
+        - id: "loc_id"
+          type: "text"
           info:
-            notes: Cross street name that intersects with the street that contains traffic calming implementations
-        - id: intersec_1
-          type: text
+            notes:  "Location ID as in CSIS2"
+        - id: "program_name"
+          type: "text"
           info:
-            notes: Cross street name that intersects with the street that contains traffic calming implementations 
-        - id: spd_hump
-          type: int
+            notes:  "The name of the Resource centre "
+        - id: "languages"
+          type: "text"
           info:
-            notes: Speed humps that have been installed on the street segment
-        - id: traf_islan
-          type: int
+            notes:  "The languages in which service is available at this Location"
+        - id: "french_language_program"
+          type: "text"
           info:
-            notes: Traffic Islands that have been installed on the street segment
-        - id: spd_cush
-          type: int
+            notes:  "If a French language program is offered"
+        - id: "indigenous_program"
+          type: "text"
           info:
-            notes: Speed Cushions that have been installed on the street segment
-        - id: Installed
-          type: int
+            notes:  "If Indigenous programming offered at this location"
+        - id: "programTypes"
+          type: "text"
           info:
-            notes: The latest year that the traffic calming implementation was installed
-        - id: geometry
-          type: text
+            notes:  "If the program is Drop-In, or Registered, or Virtual"
+        - id: "serviceName"
+          type: "text"
           info:
-            notes: ""
-        
+            notes:  "Additional information about this program"
+        - id: "buildingName"
+          type: "text"
+          info:
+            notes:  "The Building Name of the location if one exists"
+        - id: "address"
+          type: "text"
+          info:
+            notes:  "The street address of the location"
+        - id: "full_address"
+          type: "text"
+          info:
+            notes:  "The full address of the location"
+        - id: "major_intersection"
+          type: "text"
+          info:
+            notes:  "The closest major intersection to the location address"
+        - id: "ward"
+          type: "text"
+          info:
+            notes:  "In which ward  (number) is this location"
+        - id: "ward_name"
+          type: "text"
+          info:
+            notes:  "The ward name of the location"
+        - id: "located_in_school"
+          type: "text"
+          info:
+            notes:  "Is this Location in a school (Yes/No)?"
+        - id: "school_name"
+          type: "text"
+          info:
+            notes:  "Name of School EarlyON is located in"
+        - id: "lat"
+          type: "text"
+          info:
+            notes:  "Latitudinal coordinates of the location address"
+        - id: "lng"
+          type: "text"
+          info:
+            notes:  "Longitudinal coordinates of the location address"
+        - id: "website"
+          type: "text"
+          info:
+            notes:  "the location website where parents and caregivers can find more information about the programs"
+        - id: "website_name"
+          type: "text"
+          info:
+            notes:  "Agency's Website"
+        - id: "website_description"
+          type: "text"
+          info:
+            notes:  "Agency's Website"
+        - id: "consultant_fullname"
+          type: "text"
+          info:
+            notes:  "The first and last name of the EarlyOn Consultant assigned to this location"
+        - id: "consultant_phone"
+          type: "text"
+          info:
+            notes:  "The contact phone number of the EarlyOn Consultant assigned to this location"
+        - id: "email"
+          type: "text"
+          info:
+            notes:  "The contact email for the EarlyOn Consultant assigned to this location"
+        - id: "contact_fullname"
+          type: "text"
+          info:
+            notes:  "The contact email for the EarlyOn Consultant assigned to this location"
+        - id: "contact_title"
+          type: "text"
+          info:
+            notes:  "The contact email of the Location Administrator"
+        - id: "phone"
+          type: "text"
+          info:
+            notes:  "The contact phone number of the Location Administrator "
+        - id: "contact_email"
+          type: "text"
+          info:
+            notes:  "The contact email of the Location Administrator"
+        - id: "dropinHours"
+          type: "text"
+          info:
+            notes:  "Day of the week, Start and end time, whether program is full time, and frequency for in-person programs"
+        - id: "registeredHours"
+          type: "text"
+          info:
+            notes:  "Day of the week, Start and end time, whether program is full time, and frequency for in-person registered programs"
+        - id: "virtualHours"
+          type: "text"
+          info:
+            notes:  "Day of the week, Start and end time, whether program is full time, and frequency for virtual programs"
+        - id: "centre_type"
+          type: "text"
+          info:
+            notes:  ""

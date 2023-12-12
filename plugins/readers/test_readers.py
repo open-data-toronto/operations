@@ -4,7 +4,7 @@ import pytest
 import csv
 import os
 import yaml
-from readers.base import Reader, CSVReader, AGOLReader, CustomReader, ExcelReader
+from readers.base import Reader, CSVReader, AGOLReader, CustomReader, ExcelReader, JSONReader
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -78,6 +78,41 @@ def test_csv_reader_special_chars():
     )
 
 
+@pytest.fixture
+def test_geojson_reader():
+    '''Inits csv reader with a source with special chars for testing'''
+    test_source_url = "https://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.geojson"
+    with open("/data/operations/plugins/readers/test_geojson_schema.yaml", "r") as f:
+        config = yaml.load(f, yaml.SafeLoader)
+    test_schema = config["traffic-calming-database"]["resources"]["Traffic Calming Database"]["attributes"]
+    test_filename = "test_json_output.csv"
+
+    return JSONReader(
+        source_url = test_source_url,
+        schema = test_schema,
+        out_dir = this_dir,
+        filename = test_filename,
+        is_geojson = True,
+    )
+
+
+@pytest.fixture
+def test_json_reader():
+    '''Inits csv reader with a source with special chars for testing'''
+    test_source_url = "https://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json"
+    with open("/data/operations/plugins/readers/test_json_schema.yaml", "r") as f:
+        config = yaml.load(f, yaml.SafeLoader)
+    test_schema = config["earlyon-child-and-family-centres"]["resources"]["EarlyON Child and Family Centres Locations - geometry"]["attributes"]
+    test_filename = "test_geojson_output.csv"
+
+    return JSONReader(
+        source_url = test_source_url,
+        schema = test_schema,
+        out_dir = this_dir,
+        filename = test_filename,
+    )
+
+
 def test_csv_reader_output(test_csv_reader):
     '''test cases for CSVReader write method'''
 
@@ -107,4 +142,20 @@ def test_csv_reader_special_chars_output(test_csv_reader_special_chars):
 
     test_csv_reader_special_chars.write_to_csv()
     with open(test_csv_reader_special_chars.path, "r") as f:
+        assert f
+
+
+def test_json_reader_output(test_json_reader):
+    '''test cases for JSONReader write method with json input'''
+
+    test_json_reader.write_to_csv()
+    with open(test_json_reader.path, "r") as f:
+        assert f
+
+
+def test_geojson_reader_output(test_geojson_reader):
+    '''test cases for JSONReader write method with geojson input'''
+
+    test_geojson_reader.write_to_csv()
+    with open(test_geojson_reader.path, "r") as f:
         assert f
