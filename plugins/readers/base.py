@@ -132,7 +132,9 @@ class CSVReader(Reader):
 
 
 class AGOLReader(Reader):
-    '''Reads a AGOL from a URL and writes it locally'''
+    '''Reads a AGOL from a URL and writes it locally
+    
+    params - optional input to control query sent to AGOL'''
 
     def generate_url(
         self,
@@ -246,6 +248,7 @@ class CustomReader(Reader):
 
 class ExcelReader(Reader):
     '''Reads from remote excel file, writes to local CSV
+    Data is read all at once into memory - it may struggle with big datasets
     
     sheet - the sheet in the excel to write to a CSV
     '''
@@ -284,3 +287,97 @@ class ExcelReader(Reader):
                 output_row = utils.parse_geometry_from_row(output_row)
 
             yield output_row
+
+    
+class JSONReader(Reader):
+    '''Reads from a remote, flat JSON or GEOJSON and writes to local CSV.
+    Data is read all at once into memory; it will struggle with large datasets
+    
+    jsonpath - if flat contents are not top level json, jsonpath evaluates
+              where to start parsing said flat contents
+              
+              This currently only accepts "dot" notation of jsonpath
+
+              ex: 
+                $.1.target_attribute is good
+                $[1][target_attribute] is not good
+
+    is_geojson - if true, parses file like geojson. Looks for geometry 
+                attribute and adds it as its own column in output CSV
+    '''
+
+    def __init__(
+            self,
+            jsonpath,
+            is_geojson: bool = False,
+            **kwargs,
+        ):
+        super().__init__(**kwargs)
+
+        # If both of these are provided, we only parse the geojson
+        # We assume the geojson is not nested deeper than standard geojson
+        if jsonpath and is_geojson:
+            logging.warning("Input jsonpath ignored; geojson input data expected")
+
+        self.jsonpath = jsonpath
+        assert self.jsonpath.startswith("$"), "JSONPath must start with $"
+        self.is_geojson = is_geojson
+
+
+    def parse_jsonpath(self, json):
+        # Currently, this only parses "dot" notation of jsonpath
+        path_steps = self.jsonpath.split(".")
+
+        # loop over each step of json path and return target json
+        for step in path_steps:
+            if step == "$":
+                continue
+            if step.isdigit():
+                step = int(step)
+            json = json[step]
+
+        for row in json:
+            yield row
+
+    def parse_geojson(self, json):
+        output = []
+         # for each feature, combine it with its geometry into one object and append it to the output
+        for feature in res["features"]:
+        # create a row object for each object in the json response, and flag its timestamp fields
+            row = {**feature["properties"], "geometry": json.dumps(feature["geometry"])}
+
+            yield row
+
+
+    def read(self):
+        res = json.loads(requests.get(self.source_url).text)
+
+        if self.is_geojson:
+            return parse_geojson(json=res)
+
+        elif not self.is_geojson:
+            return self.parse_jsonpath(json=res)
+
+
+
+
+
+if __name__ == "__main__":
+    #d = Reader("https://httpstat.us/Random/200,201,500-504")
+    #print(d.source_url)
+    import os
+    import yaml
+    this_dir = os.path.dirname(os.path.realpath(__file__))
+    test_source_url = "https://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.geojson"
+    with open("/data/operations/plugins/readers/test_json_schema.yaml", "r") as f:
+            config = yaml.load(f, yaml.SafeLoader)
+    test_schema = config["traffic-calming-database"]["resources"]["Traffic Calming Database"]["attributes"]
+
+    JSONReader(
+        source_url = test_source_url,
+        schema = test_schema,
+        #sheet = config["deaths-of-people-experiencing-homelessness"]["resources"]["Homeless deaths by demographics"]["sheet"],
+        out_dir = "/data/tmp",
+        filename = "ssha-temp-test.csv",
+        jsonpath = "$.features",
+	    ).write_to_csv()
