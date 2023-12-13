@@ -113,6 +113,25 @@ def test_json_reader():
     )
 
 
+@pytest.fixture
+def test_json_reader_jsonpath():
+    '''Inits csv reader with a source with special chars for testing'''
+    test_source_url = "https://opendata.toronto.ca/DummyDatasets/tpl-events-feed_mod3.json"
+    with open("/data/operations/plugins/readers/test_json_schema_jsonpath.yaml", "r") as f:
+        config = yaml.load(f, yaml.SafeLoader)
+    test_schema = config["earlyon-child-and-family-centres"]["resources"]["EarlyON Child and Family Centres Locations - geometry"]["attributes"]
+    test_filename = "test_geojson_output_jsonpath.csv"
+    test_jsonpath = "$.data.1"
+
+    return JSONReader(
+        source_url = test_source_url,
+        schema = test_schema,
+        out_dir = this_dir,
+        filename = test_filename,
+        jsonpath = test_jsonpath
+    )
+
+
 def test_csv_reader_output(test_csv_reader):
     '''test cases for CSVReader write method'''
 
@@ -158,4 +177,12 @@ def test_geojson_reader_output(test_geojson_reader):
 
     test_geojson_reader.write_to_csv()
     with open(test_geojson_reader.path, "r") as f:
+        assert f
+
+
+def test_json_reader_output_jsonpath(test_json_reader_jsonpath):
+    '''test cases for JSONReader write method with json input that needs parsing'''
+
+    test_json_reader_jsonpath.write_to_csv()
+    with open(test_json_reader_jsonpath.path, "r") as f:
         assert f

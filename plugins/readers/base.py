@@ -320,7 +320,7 @@ class JSONReader(Reader):
             logging.warning("Input jsonpath ignored; geojson input data expected")
 
         if jsonpath:
-            assert self.jsonpath.startswith("$"), "JSONPath must start with $"    
+            assert jsonpath.startswith("$"), "JSONPath must start with $"    
         self.jsonpath = jsonpath
 
         self.is_geojson = is_geojson
