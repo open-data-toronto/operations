@@ -69,23 +69,26 @@ class Reader(ABC):
         with open(self.path, "w") as f:
             writer = csv.DictWriter(f, self.fieldnames, extrasaction='ignore')
             writer.writeheader()
-            writer.writerows(self.read())
+            writer.writerows(self.clean_lines())
             f.close()
 
 
-    def clean_line(self, line):
+    def clean_lines(self):
         '''Input one line of data as a list of dicts.
         Forces values to CKAN-friendly data types.
         Raises error if data format issue is found'''
         output = {}
-        for attr in self.schema:
-        
-            value = line[attr["id"]]
-            cleaner = self.cleaners[attr["type"]]
-
-            output[attr["id"]] = cleaner(value)
-        
-        return output
+        for line in self.read():
+            for attr in self.schema:
+            
+                cleaner = self.cleaners[attr["type"]]
+                value = line[attr["id"]]
+                if attr["type"] in ["date", "timestamp"]:
+                    output[attr["id"]] = cleaner(value, attr["format"])
+                else:                    
+                    output[attr["id"]] = cleaner(value)
+            
+            yield output
 
 
 class CSVReader(Reader):

@@ -72,7 +72,8 @@ members-of-toronto-city-council-voting-record:
           info:
             notes: ""
         - id: Date/Time
-          type: timestamp
+          type: text #timestamp
+          #format: "%Y-%m-%d %H:%M %p"
           info:
             notes: ""
         - id: "Agenda Item #"

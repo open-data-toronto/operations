@@ -65,7 +65,7 @@ def test_excel_reader():
 def test_csv_reader_special_chars():
     '''Inits csv reader with a source with special chars for testing'''
     test_source_url = "https://opendata.toronto.ca/DummyDatasets/VW_OPEN_VOTE_2018_2022.csv"
-    with open(this_dir + "/test_excel_schema_special_chars.yaml", "r") as f:
+    with open(this_dir + "/test_csv_schema_special_chars.yaml", "r") as f:
         config = yaml.load(f, yaml.SafeLoader)
     test_schema = config["members-of-toronto-city-council-voting-record"]["resources"]["member-voting-record-2018-2022"]["attributes"]
     test_filename = "test_csv_output_special_chars.csv"
