@@ -281,3 +281,14 @@ def file_equal(curr_file_path: str, new_file_path: str):
     new_hash = file_to_md5(new_file_path)
 
     return curr_hash == new_hash
+
+def connect_to_ckan():
+    '''Returns RemoteCKAN object for appropriate CKAN instance'''
+    
+    # init hardcoded vars
+    ACTIVE_ENV = Variable.get("active_env")
+    CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
+    CKAN = CKAN_CREDS[ACTIVE_ENV]["address"]#
+    CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]#
+
+    return ckanapi.RemoteCKAN(apikey=CKAN_APIKEY, address=CKAN)
