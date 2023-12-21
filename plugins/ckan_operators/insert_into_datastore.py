@@ -1,5 +1,6 @@
 import codecs
 import csv
+import sys
 import logging
 from typing import Dict, List, Generator
 
@@ -7,24 +8,25 @@ from utils import misc_utils
 
 
 def stream_to_datastore(
-    self,
     resource_id: str,
-    data_path: str,
+    file_path: str,
     config: Dict,
-    do_not_cache: bool = False,
+    encoding: str = "latin1",
     batch_size: int = 20000,
     **kwargs,
 ) -> None:
-    def read_csv(data_path: str) -> Generator:
+    logging.info("-----------------------------")
+    logging.info(config)
+    def read_csv(file_path: str) -> Generator:
         """reads CSV at input filepath and returns generator"""
 
         # grab fieldnames from csv
         with open(
-            data_path, "r", encoding="windows-1252"
-        ) as f:  # why use "windows-1252"
+            file_path, "r", encoding=encoding
+        ) as f: 
             fieldnames = next(csv.reader(f))
 
-        return misc_utils.csv_to_generator(data_path, fieldnames)
+        return misc_utils.csv_to_generator(file_path, fieldnames, encoding)
 
     def insert_into_ckan(records: List) -> None:
         ckan.action.datastore_create(
@@ -39,7 +41,7 @@ def stream_to_datastore(
     ckan = misc_utils.connect_to_ckan()
 
     # init csv generator
-    csv_generator = read_csv()
+    csv_generator = read_csv(file_path)
 
     # init counter vars, make calls to CKAN API in batch
     total_count = 0
