@@ -13,17 +13,16 @@ def stream_to_datastore(
     config: Dict,
     encoding: str = "latin1",
     batch_size: int = 20000,
+    do_not_cache: bool = False,
     **kwargs,
 ) -> None:
-    logging.info("-----------------------------")
-    logging.info(config)
+    logging.info("---------Start Streaming to CKAN---------------")
+
     def read_csv(file_path: str) -> Generator:
         """reads CSV at input filepath and returns generator"""
 
         # grab fieldnames from csv
-        with open(
-            file_path, "r", encoding=encoding
-        ) as f: 
+        with open(file_path, "r", encoding=encoding) as f:
             fieldnames = next(csv.reader(f))
 
         return misc_utils.csv_to_generator(file_path, fieldnames, encoding)
@@ -64,7 +63,7 @@ def stream_to_datastore(
 
     # insert the last batch into CKAN
     if len(records) != 0:
-        logging.info("Loading last records")
+        logging.info(f"Loading last {len(records)} records")
         insert_into_ckan(records)
 
     print(f"Inserted {total_count} records into CKAN")

@@ -1,6 +1,6 @@
-'''
+"""
 This is a test pipeline created by yanan.zhang@toronto.ca for codebase refactor testing purpose
-'''
+"""
 
 
 import os
@@ -30,7 +30,6 @@ default_args = {
 }
 
 
-
 @dag(
     default_args=default_args,
     schedule="@once",
@@ -38,19 +37,21 @@ default_args = {
     catchup=False,
 )
 def test_publishing_pipeline():
-    package_id = "template-test-pipeline"
+    package_id = "test-package"
     resource_name = "Daily Shelter Test"
-    
+
     @task
-    def get_attributes_from_config() -> Dict:
+    def get_resource_from_config() -> Dict:
         CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
         for config_file in os.listdir(CONFIG_FOLDER):
             if config_file.endswith("config.yaml"):
                 # read config file
                 with open(CONFIG_FOLDER + "/" + config_file, "r") as f:
                     config = yaml.load(f, yaml.SafeLoader)
-                    logging.info(config[package_id])
-                    return config[package_id]
+                    dataset = config[package_id]
+                    resource = dataset["resources"]["Daily Shelter Test"]
+                    logging.info(resource)
+                    return resource
 
     @task
     def get_or_create_resource(package_id: str, resource_name: str) -> Dict:
@@ -67,7 +68,7 @@ def test_publishing_pipeline():
         )
 
         return resource.get_or_create_resource()
-    
+
     @task
     def insert_records_to_datastore(
         resource_id: str,
@@ -76,19 +77,8 @@ def test_publishing_pipeline():
         config: Dict,
     ):
         data_path = file_path + "/" + file_name
-        return stream_to_datastore(resource_id= resource_id, file_path=data_path, config=config)
-        
-
-    @task
-    def edit_resource_metadata(
-        resource_id: str,
-        new_last_modified: datetime = None,
-        new_resource_name: str = None,
-    ) -> None:
-        edited_resource = EditResourceMetadata(resource_id=resource_id)
-
-        edited_resource.edit_resource_metadata(
-            new_resource_name=new_resource_name, new_last_modified=new_last_modified
+        return stream_to_datastore(
+            resource_id=resource_id, file_path=data_path, config=config
         )
 
     @task
@@ -97,10 +87,9 @@ def test_publishing_pipeline():
 
     @task
     def write_to_csv(file_path):
-        #data = {"employee1": [39, 23], "employee2": [52, 30], "employee3": [45, 67]}
         current_folder = os.path.dirname(os.path.realpath(__file__))
         logging.info(current_folder)
-        
+
         path = current_folder + "/data.csv"
         df = pd.read_csv(path)
         file = file_path + "/data.csv"
@@ -120,23 +109,24 @@ def test_publishing_pipeline():
     # Main Flow
     # get or create resource
     tmp_dir = create_tmp_dir(dag_id=package_id, dir_variable_name="tmp_dir")
+
     resource = get_or_create_resource(package_id, resource_name)
 
-    # # edit resource
-    # @task_group(group_id="edit_resource_task_group")
-    # def tg1():
-    #     edit_resource_metadata(
-    #         resource_id=resource["id"], new_resource_name="edited new resource name"
-    #     )
-    #     edit_resource_metadata(
-    #         resource_id=resource["id"], new_last_modified="2023-08-10 14:33:07"
-    #     )
-    
-    config = get_attributes_from_config()
-    config >> resource >> insert_records_to_datastore(resource_id=resource["id"], file_path=tmp_dir, file_name="data.csv", config=config)
-    
-    tmp_dir >> write_to_csv(tmp_dir) >> delete_file(tmp_dir, file_name="data.csv") >> delete_tmp_dir(dag_id=package_id)
+    config = get_resource_from_config()
+    insert_records = insert_records_to_datastore(
+        resource_id=resource["id"],
+        file_path=tmp_dir,
+        file_name="data.csv",
+        config=config,
+    )
 
+    (
+        tmp_dir
+        >> write_to_csv(tmp_dir)
+        >> insert_records
+        >> delete_file(tmp_dir, file_name="data.csv")
+        >> delete_tmp_dir(dag_id=package_id)
+    )
 
 
 test_publishing_pipeline()
