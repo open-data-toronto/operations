@@ -74,11 +74,11 @@ def test_publishing_pipeline():
         resource_id: str,
         file_path: str,
         file_name: str,
-        config: Dict,
+        attributes: Dict,
     ):
         data_path = file_path + "/" + file_name
         return stream_to_datastore(
-            resource_id=resource_id, file_path=data_path, config=config
+            resource_id=resource_id, file_path=data_path, attributes=attributes
         )
 
     @task
@@ -117,7 +117,7 @@ def test_publishing_pipeline():
         resource_id=resource["id"],
         file_path=tmp_dir,
         file_name="data.csv",
-        config=config,
+        attributes=config["attributes"],
     )
 
     (
