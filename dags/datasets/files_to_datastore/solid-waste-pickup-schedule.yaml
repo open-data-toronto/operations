@@ -42,17 +42,18 @@ solid-waste-pickup-schedule:
     pickup-schedule-2024:
       agol: False
       format: csv
-      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/waste-collection-schedule-2024.csv"
+      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2024_updated 2024-01-02.csv"
       attributes:
-        - id: "Calendar"
+        - id: "Schedule"
           type: "text"
           info:
             notes: "Day of the week that waste is collected. Schedules include two daytime ones for each of Tuesday, Wednesday, Thursday and Friday."
-        - id: "WeekStarting"
+        - id: "CollectionDate"
           type: "date"
+          format: "%m/%d/%Y"
           info:
             notes: "Actual date of the waste collection"
-        - id: "GreenBin"
+        - id: "Organics"
           type: "text"
           info:
             notes: "The [Organics(Green Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week."
