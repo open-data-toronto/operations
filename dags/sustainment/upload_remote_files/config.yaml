@@ -42,10 +42,10 @@ toronto-economic-bulletin:
 3d-massing:
   3D Massing (WGS84):
     format: shp
-    url: https://opendata.toronto.ca/city.planning/3d-massing/2022/3DMassingShapefile_2022_WGS84.zip
+    url: https://opendata.toronto.ca/city.planning/3d-massing/2023/3DMassingShapefile_2023_WGS84.zip
   3D Massing Multipatch (WGS84):
     format: shp
-    url: https://opendata.toronto.ca/city.planning/3d-massing/2022/3DMassingMultipatch_2022_WGS84.zip
+    url: https://opendata.toronto.ca/city.planning/3d-massing/2023/3DMassingMultipatch_2023_WGS84.gdb.zip
   Tile Locator Reference File (PDF):
     format: pdf
     url: https://opendata.toronto.ca/city.planning/3d-massing/3DContextMassing_Tile_Locator.pdf
