@@ -39,20 +39,20 @@ solid-waste-pickup-schedule:
 
   resources:
     # resource name
-    pickup-schedule-2023:
+    pickup-schedule-2024:
       agol: False
       format: csv
-      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/waste-collection-schedule-2023.csv"
+      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/waste-collection-schedule-2024.csv"
       attributes:
-        - id: "Schedule"
+        - id: "Calendar"
           type: "text"
           info:
             notes: "Day of the week that waste is collected. Schedules include two daytime ones for each of Tuesday, Wednesday, Thursday and Friday."
-        - id: "CollectionDate"
+        - id: "WeekStarting"
           type: "date"
           info:
             notes: "Actual date of the waste collection"
-        - id: "Organics"
+        - id: "GreenBin"
           type: "text"
           info:
             notes: "The [Organics(Green Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week."
@@ -78,320 +78,358 @@ solid-waste-pickup-schedule:
               - R	Thursday
               - F	Friday
               - 0	No collection
-    pickup-schedule-2022:
-      agol: False
-      format: csv
-      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2022.csv"
-      attributes:
-        - id: "Calendar"
-          type: "text"
-          info:
-            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
-        - id: "WeekStarting"
-          type: "timestamp"
-          info:
-            notes: "Actual date of waste collection"
-        - id: "GreenBin"
-          type: "text"
-          info:
-            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
-        - id: "Garbage"
-          type: "text"
-          info:
-            notes: "Garbage is collected every other week, alternating with recycling."
-        - id: "Recycling"
-          type: "text"
-          info:
-            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
-        - id: "YardWaste"
-          type: "text"
-          info:
-            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
-    pickup-schedule-2021:
-      agol: False
-      format: csv
-      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2021.csv"
-      attributes:
-        - id: "Calendar"
-          type: "text"
-          info:
-            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
-        - id: "WeekStarting"
-          type: "timestamp"
-          info:
-            notes: "Actual date of waste collection"
-        - id: "GreenBin"
-          type: "text"
-          info:
-            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
-        - id: "Garbage"
-          type: "text"
-          info:
-            notes: "Garbage is collected every other week, alternating with recycling."
-        - id: "Recycling"
-          type: "text"
-          info:
-            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
-        - id: "YardWaste"
-          type: "text"
-          info:
-            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
-        - id: "ChristmasTree"
-          type: "text"
-          info:
-            notes: |
-              Christmas trees are collected on two designated garbage collection days in January.
-              - M	Monday
-              - T	Tuesday
-              - W	Wednesday
-              - R	Thursday
-              - F	Friday
-              - S	Saturday
-              - 0	No pick-up
-    pickup-schedule-2020:
-      agol: False
-      format: csv
-      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2020.csv"
-      attributes:
-        - id: "Calendar"
-          type: "text"
-          info:
-            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
-        - id: "WeekStarting"
-          type: "timestamp"
-          info:
-            notes: "Actual date of waste collection"
-        - id: "GreenBin"
-          type: "text"
-          info:
-            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
-        - id: "Garbage"
-          type: "text"
-          info:
-            notes: "Garbage is collected every other week, alternating with recycling."
-        - id: "Recycling"
-          type: "text"
-          info:
-            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
-        - id: "YardWaste"
-          type: "text"
-          info:
-            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
-        - id: "ChristmasTree"
-          type: "text"
-          info:
-            notes: |
-              Christmas trees are collected on two designated garbage collection days in January.
-              - M	Monday
-              - T	Tuesday
-              - W	Wednesday
-              - R	Thursday
-              - F	Friday
-              - S	Saturday
-              - 0	No pick-up
-    pickup-schedule-2019:
-      agol: False
-      format: csv
-      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2019.csv"
-      attributes:
-        - id: "Calendar"
-          type: "text"
-          info:
-            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
-        - id: "WeekStarting"
-          type: "timestamp"
-          info:
-            notes: "Actual date of waste collection"
-        - id: "GreenBin"
-          type: "text"
-          info:
-            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
-        - id: "Garbage"
-          type: "text"
-          info:
-            notes: "Garbage is collected every other week, alternating with recycling."
-        - id: "Recycling"
-          type: "text"
-          info:
-            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
-        - id: "YardWaste"
-          type: "text"
-          info:
-            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
-        - id: "ChristmasTree"
-          type: "text"
-          info:
-            notes: |
-              Christmas trees are collected on two designated garbage collection days in January.
-              - M	Monday
-              - T	Tuesday
-              - W	Wednesday
-              - R	Thursday
-              - F	Friday
-              - S	Saturday
-              - 0	No pick-up
-    pickup-schedule-2018:
-      agol: False
-      format: csv
-      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2018.csv"
-      attributes:
-        - id: "Calendar"
-          type: "text"
-          info:
-            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
-        - id: "WeekStarting"
-          type: "timestamp"
-          info:
-            notes: "Actual date of waste collection"
-        - id: "GreenBin"
-          type: "text"
-          info:
-            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
-        - id: "Garbage"
-          type: "text"
-          info:
-            notes: "Garbage is collected every other week, alternating with recycling."
-        - id: "Recycling"
-          type: "text"
-          info:
-            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
-        - id: "YardWaste"
-          type: "text"
-          info:
-            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
-        - id: "ChristmasTree"
-          type: "text"
-          info:
-            notes: |
-              Christmas trees are collected on two designated garbage collection days in January.
-              - M	Monday
-              - T	Tuesday
-              - W	Wednesday
-              - R	Thursday
-              - F	Friday
-              - S	Saturday
-              - 0	No pick-up
-    pickup-schedule-2017:
-      agol: False
-      format: csv
-      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2017.csv"
-      attributes:
-        - id: "Calendar"
-          type: "text"
-          info:
-            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
-        - id: "WeekStarting"
-          type: "timestamp"
-          info:
-            notes: "Actual date of waste collection"
-        - id: "GreenBin"
-          type: "text"
-          info:
-            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
-        - id: "Garbage"
-          type: "text"
-          info:
-            notes: "Garbage is collected every other week, alternating with recycling."
-        - id: "Recycling"
-          type: "text"
-          info:
-            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
-        - id: "YardWaste"
-          type: "text"
-          info:
-            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
-        - id: "ChristmasTree"
-          type: "text"
-          info:
-            notes: |
-              Christmas trees are collected on two designated garbage collection days in January.
-              - M	Monday
-              - T	Tuesday
-              - W	Wednesday
-              - R	Thursday
-              - F	Friday
-              - S	Saturday
-              - 0	No pick-up
-    pickup-schedule-2016:
-      agol: False
-      format: csv
-      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2016.csv"
-      attributes:
-        - id: "Calendar"
-          type: "text"
-          info:
-            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
-        - id: "WeekStarting"
-          type: "timestamp"
-          info:
-            notes: "Actual date of waste collection"
-        - id: "GreenBin"
-          type: "text"
-          info:
-            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
-        - id: "Garbage"
-          type: "text"
-          info:
-            notes: "Garbage is collected every other week, alternating with recycling."
-        - id: "Recycling"
-          type: "text"
-          info:
-            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
-        - id: "YardWaste"
-          type: "text"
-          info:
-            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
-        - id: "ChristmasTree"
-          type: "text"
-          info:
-            notes: |
-              Christmas trees are collected on two designated garbage collection days in January.
-              - M	Monday
-              - T	Tuesday
-              - W	Wednesday
-              - R	Thursday
-              - F	Friday
-              - S	Saturday
-              - 0	No pick-up
-    pickup-schedule-sept2014-dec-2015:
-      agol: False
-      format: csv
-      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-sept2014-dec-2015.csv"
-      attributes:
-        - id: "Calendar"
-          type: "text"
-          info:
-            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
-        - id: "WeekStarting"
-          type: "timestamp"
-          info:
-            notes: "Actual date of waste collection"
-        - id: "GreenBin"
-          type: "text"
-          info:
-            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
-        - id: "Garbage"
-          type: "text"
-          info:
-            notes: "Garbage is collected every other week, alternating with recycling."
-        - id: "Recycling"
-          type: "text"
-          info:
-            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
-        - id: "YardWaste"
-          type: "text"
-          info:
-            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
-        - id: "ChristmasTree"
-          type: "text"
-          info:
-            notes: |
-              Christmas trees are collected on two designated garbage collection days in January.
-              - M	Monday
-              - T	Tuesday
-              - W	Wednesday
-              - R	Thursday
-              - F	Friday
-              - S	Saturday
-              - 0	No pick-up
-        
+#    pickup-schedule-2023:
+#      agol: False
+#      format: csv
+#      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/waste-collection-schedule-2023.csv"
+#      attributes:
+#        - id: "Schedule"
+#          type: "text"
+#          info:
+#            notes: "Day of the week that waste is collected. Schedules include two daytime ones for each of Tuesday, Wednesday, Thursday and Friday."
+#        - id: "CollectionDate"
+#          type: "date"
+#          info:
+#            notes: "Actual date of the waste collection"
+#        - id: "Organics"
+#          type: "text"
+#          info:
+#            notes: "The [Organics(Green Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week."
+#        - id: "Garbage"
+#          type: "text"
+#          info:
+#            notes: "[Garbage](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-garbage-bin/) is collected every other week, alternating with recycling."
+#        - id: "Recycling"
+#          type: "text"
+#          info:
+#            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
+#        - id: "YardWaste"
+#          type: "text"
+#          info:
+#            notes: "[Yard waste](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/) is collected on garbage collection day from mid-March to mid-December."
+#        - id: "ChristmasTree"
+#          type: "text"
+#          info:
+#            notes: |
+#              Christmas trees are collected on two designated garbage collection days in January.
+#              - T	Tuesday
+#              - W	Wednesday
+#              - R	Thursday
+#              - F	Friday
+#              - 0	No collection
+#    pickup-schedule-2022:
+#      agol: False
+#      format: csv
+#      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2022.csv"
+#      attributes:
+#        - id: "Calendar"
+#          type: "text"
+#          info:
+#            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
+#        - id: "WeekStarting"
+#          type: "timestamp"
+#          info:
+#            notes: "Actual date of waste collection"
+#        - id: "GreenBin"
+#          type: "text"
+#          info:
+#            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
+#        - id: "Garbage"
+#          type: "text"
+#          info:
+#            notes: "Garbage is collected every other week, alternating with recycling."
+#        - id: "Recycling"
+#          type: "text"
+#          info:
+#            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
+#        - id: "YardWaste"
+#          type: "text"
+#          info:
+#            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
+#    pickup-schedule-2021:
+#      agol: False
+#      format: csv
+#      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2021.csv"
+#      attributes:
+#        - id: "Calendar"
+#          type: "text"
+#          info:
+#            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
+#        - id: "WeekStarting"
+#          type: "timestamp"
+#          info:
+#            notes: "Actual date of waste collection"
+#        - id: "GreenBin"
+#          type: "text"
+#          info:
+#            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
+#        - id: "Garbage"
+#          type: "text"
+#          info:
+#            notes: "Garbage is collected every other week, alternating with recycling."
+#        - id: "Recycling"
+#          type: "text"
+#          info:
+#            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
+#        - id: "YardWaste"
+#          type: "text"
+#          info:
+#            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
+#        - id: "ChristmasTree"
+#          type: "text"
+#          info:
+#            notes: |
+#              Christmas trees are collected on two designated garbage collection days in January.
+#              - M	Monday
+#              - T	Tuesday
+#              - W	Wednesday
+#              - R	Thursday
+#              - F	Friday
+#              - S	Saturday
+#              - 0	No pick-up
+#    pickup-schedule-2020:
+#      agol: False
+#      format: csv
+#      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2020.csv"
+#      attributes:
+#        - id: "Calendar"
+#          type: "text"
+#          info:
+#            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
+#        - id: "WeekStarting"
+#          type: "timestamp"
+#          info:
+#            notes: "Actual date of waste collection"
+#        - id: "GreenBin"
+#          type: "text"
+#          info:
+#            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
+#        - id: "Garbage"
+#          type: "text"
+#          info:
+#            notes: "Garbage is collected every other week, alternating with recycling."
+#        - id: "Recycling"
+#          type: "text"
+#          info:
+#            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
+#        - id: "YardWaste"
+#          type: "text"
+#          info:
+#            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
+#        - id: "ChristmasTree"
+#          type: "text"
+#          info:
+#            notes: |
+#              Christmas trees are collected on two designated garbage collection days in January.
+#              - M	Monday
+#              - T	Tuesday
+#              - W	Wednesday
+#              - R	Thursday
+#              - F	Friday
+#              - S	Saturday
+#              - 0	No pick-up
+#    pickup-schedule-2019:
+#      agol: False
+#      format: csv
+#      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2019.csv"
+#      attributes:
+#        - id: "Calendar"
+#          type: "text"
+#          info:
+#            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
+#        - id: "WeekStarting"
+#          type: "timestamp"
+#          info:
+#            notes: "Actual date of waste collection"
+#        - id: "GreenBin"
+#          type: "text"
+#          info:
+#            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
+#        - id: "Garbage"
+#          type: "text"
+#          info:
+#            notes: "Garbage is collected every other week, alternating with recycling."
+#        - id: "Recycling"
+#          type: "text"
+#          info:
+#            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
+#        - id: "YardWaste"
+#          type: "text"
+#          info:
+#            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
+#        - id: "ChristmasTree"
+#          type: "text"
+#          info:
+#            notes: |
+#              Christmas trees are collected on two designated garbage collection days in January.
+#              - M	Monday
+#              - T	Tuesday
+#              - W	Wednesday
+#              - R	Thursday
+#              - F	Friday
+#              - S	Saturday
+#              - 0	No pick-up
+#    pickup-schedule-2018:
+#      agol: False
+#      format: csv
+#      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2018.csv"
+#      attributes:
+#        - id: "Calendar"
+#          type: "text"
+#          info:
+#            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
+#        - id: "WeekStarting"
+#          type: "timestamp"
+#          info:
+#            notes: "Actual date of waste collection"
+#        - id: "GreenBin"
+#          type: "text"
+#          info:
+#            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
+#        - id: "Garbage"
+#          type: "text"
+#          info:
+#            notes: "Garbage is collected every other week, alternating with recycling."
+#        - id: "Recycling"
+#          type: "text"
+#          info:
+#            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
+#        - id: "YardWaste"
+#          type: "text"
+#          info:
+#            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
+#        - id: "ChristmasTree"
+#          type: "text"
+#          info:
+#            notes: |
+#              Christmas trees are collected on two designated garbage collection days in January.
+#              - M	Monday
+#              - T	Tuesday
+#              - W	Wednesday
+#              - R	Thursday
+#              - F	Friday
+#              - S	Saturday
+#              - 0	No pick-up
+#    pickup-schedule-2017:
+#      agol: False
+#      format: csv
+#      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2017.csv"
+#      attributes:
+#        - id: "Calendar"
+#          type: "text"
+#          info:
+#            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
+#        - id: "WeekStarting"
+#          type: "timestamp"
+#          info:
+#            notes: "Actual date of waste collection"
+#        - id: "GreenBin"
+#          type: "text"
+#          info:
+#            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
+#        - id: "Garbage"
+#          type: "text"
+#          info:
+#            notes: "Garbage is collected every other week, alternating with recycling."
+#        - id: "Recycling"
+#          type: "text"
+#          info:
+#            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
+#        - id: "YardWaste"
+#          type: "text"
+#          info:
+#            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
+#        - id: "ChristmasTree"
+#          type: "text"
+#          info:
+#            notes: |
+#              Christmas trees are collected on two designated garbage collection days in January.
+#              - M	Monday
+#              - T	Tuesday
+#              - W	Wednesday
+#              - R	Thursday
+#              - F	Friday
+#              - S	Saturday
+#              - 0	No pick-up
+#    pickup-schedule-2016:
+#      agol: False
+#      format: csv
+#      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-2016.csv"
+#      attributes:
+#        - id: "Calendar"
+#          type: "text"
+#          info:
+#            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
+#        - id: "WeekStarting"
+#          type: "timestamp"
+#          info:
+#            notes: "Actual date of waste collection"
+#        - id: "GreenBin"
+#          type: "text"
+#          info:
+#            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
+#        - id: "Garbage"
+#          type: "text"
+#          info:
+#            notes: "Garbage is collected every other week, alternating with recycling."
+#        - id: "Recycling"
+#          type: "text"
+#          info:
+#            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
+#        - id: "YardWaste"
+#          type: "text"
+#          info:
+#            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
+#        - id: "ChristmasTree"
+#          type: "text"
+#          info:
+#            notes: |
+#              Christmas trees are collected on two designated garbage collection days in January.
+#              - M	Monday
+#              - T	Tuesday
+#              - W	Wednesday
+#              - R	Thursday
+#              - F	Friday
+#              - S	Saturday
+#              - 0	No pick-up
+#    pickup-schedule-sept2014-dec-2015:
+#      agol: False
+#      format: csv
+#      url: "https://opendata.toronto.ca/solid.waste.management.services/solid-waste-pickup-schedule/pickup-schedule-sept2014-dec-2015.csv"
+#      attributes:
+#        - id: "Calendar"
+#          type: "text"
+#          info:
+#            notes: "Day of the week that waste is collected. Schedules include Monday night and two daytime ones for each of Tuesday, Wednesday, Thursday and Friday. "
+#        - id: "WeekStarting"
+#          type: "timestamp"
+#          info:
+#            notes: "Actual date of waste collection"
+#        - id: "GreenBin"
+#          type: "text"
+#          info:
+#            notes: "The [Green Bin (organics)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-green-bin/) is collected once a week. "
+#        - id: "Garbage"
+#          type: "text"
+#          info:
+#            notes: "Garbage is collected every other week, alternating with recycling."
+#        - id: "Recycling"
+#          type: "text"
+#          info:
+#            notes: "The [Recycling (Blue Bin)](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-blue-bin/) is collected every other week, alternating with garbage. "
+#        - id: "YardWaste"
+#          type: "text"
+#          info:
+#            notes: "[Yard waste ](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/)is collected on garbage collection day from mid-March to mid-December."
+#        - id: "ChristmasTree"
+#          type: "text"
+#          info:
+#            notes: |
+#              Christmas trees are collected on two designated garbage collection days in January.
+#              - M	Monday
+#              - T	Tuesday
+#              - W	Wednesday
+#              - R	Thursday
+#              - F	Friday
+#              - S	Saturday
+#              - 0	No pick-up    
