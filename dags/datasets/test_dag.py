@@ -14,7 +14,7 @@ from airflow.decorators import dag, task, task_group
 
 from utils_operators.slack_operators import task_failure_slack_alert
 from ckan_operators.resource_operator import GetOrCreateResource, EditResourceMetadata
-from ckan_operators.insert_into_datastore import stream_to_datastore
+from ckan_operators.datastore_operator import stream_to_datastore
 from utils import misc_utils
 
 
