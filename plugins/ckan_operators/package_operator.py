@@ -272,9 +272,6 @@ class GetOrCreatePackage:
         Get the existing ckan package object or create one.
     """
 
-    # Connect to CKAN API
-    CKAN = misc_utils.connect_to_ckan()
-
     def __init__(
         self,
         package_name: str, 
@@ -293,6 +290,9 @@ class GetOrCreatePackage:
 
         Return: None
         """
+        # Connect to CKAN API
+        self.CKAN = misc_utils.connect_to_ckan()
+        
         self.package_name = package_name
         self.package_metadata = package_metadata
 
@@ -312,7 +312,7 @@ class GetOrCreatePackage:
             return existing_ckan_package
 
         # Create an empty new package
-        except:
+        except Exception as e:
             logging.info(f"Unable to get package {self.package_name} - creating it instead")
             new_ckan_package = self.CKAN.action.package_create(
                 name = self.package_name,
