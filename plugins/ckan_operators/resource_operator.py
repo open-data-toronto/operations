@@ -299,7 +299,7 @@ class GetOrCreateResource:
     A class to get or create package.
 
     Attributes:
-    - package_id : str
+    - package_name : str
         the id of the package wherein we'll look for/make a resource
     - resource_name : str
         the name of the resource this operator will look for/make
@@ -307,17 +307,17 @@ class GetOrCreateResource:
         the attributes that will be in a resource if we create it
 
     Methods:
-        _resource_exists(package_id, resource_name):
+        _resource_exists(package_name, resource_name):
             private method check if ckan resource exists
 
-        get_or_create_resource(package_id, resource_name, resource_attributes):
+        get_or_create_resource(package_name, resource_name, resource_attributes):
             Return CKAN resource object, or create it if it does not exist
 
     """
 
     def __init__(
         self,
-        package_id: str,
+        package_name: str,
         resource_name: str,
         resource_attributes: Dict,
         **kwargs,
@@ -326,14 +326,14 @@ class GetOrCreateResource:
         Construct all the necessary attributes for the GetOrCreateResource object.
 
         Parameters:
-        - package_id : str
+        - package_name : str
             the id of the package wherein we'll look for/make a resource
         - resource_name : str
             the name of the resource this operator will look for/make
         - resource_attributes : dict
             the attributes that will be in a resource if we create it
         """
-        self.package_id = package_id
+        self.package_name = package_name
         self.resource_name = resource_name
         self.resource_attributes = resource_attributes
 
@@ -344,7 +344,7 @@ class GetOrCreateResource:
         Check if resource exists
 
         Parameters:
-        - package_id : str
+        - package_name : str
             the id of the package wherein we'll look for/make a resource
         - resource_name : str
             the name of the resource this operator will look for/make
@@ -353,7 +353,7 @@ class GetOrCreateResource:
             resource exists or not : bool
 
         """
-        package = self.ckan.action.package_show(id=self.package_id)
+        package = self.ckan.action.package_show(id=self.package_name)
 
         for r in package["resources"]:
             if r["name"] == self.resource_name:
@@ -366,7 +366,7 @@ class GetOrCreateResource:
         Return ckan resource object, or create it if it does not exist
 
         Parameters:
-        - package_id : str
+        - package_name : str
             the id of the package wherein we'll look for/make a resource
         - resource_name : str
             the name of the resource this operator will look for/make
@@ -380,7 +380,7 @@ class GetOrCreateResource:
         if self._resource_exists():
             logging.info(
                 "Resource found using the package id {} and resource name {}".format(
-                    self.package_id, self.resource_name
+                    self.package_name, self.resource_name
                 )
             )
             resource = self.resource
@@ -394,11 +394,11 @@ class GetOrCreateResource:
             # create a resource and check if created - if not, then create it again
             logging.info(
                 "Resource not found - creating a resource called {} in package {}".format(
-                    self.resource_name, self.package_id
+                    self.resource_name, self.package_name
                 )
             )
             resource = self.ckan.action.resource_create(
-                package_id=self.package_id,
+                package_id=self.package_name,
                 name=self.resource_name,
                 **self.resource_attributes,
             )
@@ -424,11 +424,11 @@ class GetOrCreateResource:
                     logging.info("Resource not made successfully - trying again ... ")
                     logging.info(
                         "Resource not found - creating a resource called {} in package {}".format(
-                            self.resource_name, self.package_id
+                            self.resource_name, self.package_name
                         )
                     )
                     resource = self.ckan.action.resource_create(
-                        package_id=self.package_id,
+                        package_id=self.package_name,
                         name=self.resource_name,
                         **self.resource_attributes,
                     )

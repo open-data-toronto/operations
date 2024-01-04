@@ -14,7 +14,7 @@ random_name = "test-name" + str(random.randint(1000,9999))
 
 package_metadata = {
     "title": random_name,
-    "date_published": "2023-01-13",
+    "date_published": "2023-01-13 00:00:00",
     "refresh_rate": "Monthly",
     "dataset_category": "Document",
     "owner_division": "Information & Technology",
@@ -42,8 +42,7 @@ package_metadata = {
 }
 
 resource_metadata = {
-    "format": "csv",
-    "package_id": random_name,
+    "format": "CSV",
     "is_preview": True,
     "url_type": "datastore",
     "extract_job": "airflow_test_case",
@@ -64,6 +63,7 @@ def dummy_package():
 def dummy_resource():
     return CKAN.action.resource_create(
         name=random_name,
+        package_id=random_name,
         **resource_metadata,
     )
 
@@ -74,9 +74,24 @@ def cleanup():
 
 def test_get(dummy_package, dummy_resource, cleanup):
     package = GetOrCreatePackage(package_name = random_name, package_metadata = package_metadata).get_or_create_package()
+    resource = GetOrCreateResource(package_name = random_name, resource_name = random_name, resource_attributes = resource_metadata).get_or_create_resource()
 
     for key in package_metadata.keys():
+        assert package[key] == dummy_package[key]
 
-        assert package[key]
-        assert dummy_package[key]
-    
+    for key in resource_metadata.keys():
+        assert resource[key] == dummy_resource[key]
+
+
+
+def test_create(cleanup):
+    package = GetOrCreatePackage(package_name = random_name, package_metadata = package_metadata).get_or_create_package()
+    resource = GetOrCreateResource(package_name = random_name, resource_name = random_name, resource_attributes = resource_metadata).get_or_create_resource()
+
+    for key in package_metadata.keys():
+        if key not in ["tags"]: # CKAN handles these - we wont check them
+            assert package[key] == package_metadata[key]
+
+    for key in resource_metadata.keys():
+        if key not in ["url"]: # CKAN handles these - we wont check them
+            assert resource[key] == resource_metadata[key]
