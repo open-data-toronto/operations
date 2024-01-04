@@ -1,0 +1,56 @@
+active-affordable-and-social-housing-units-temp:
+  jira_issue_id: DTSD-1478
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/156846
+  schedule: '0 2 1 * *'
+  dag_owner_name: Mackenzie.Nichols4
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Active Affordable and Social Housing Units
+  date_published: '2023-03-17 13:37:16.207118'
+  dataset_category: Map
+  refresh_rate: Quarterly
+  owner_division: Housing Secretariat
+  owner_section: 'Housing Secretariat '
+  owner_unit: Operations Support
+  owner_email: housingplan@toronto.ca
+  civic_issues: Affordable Housing
+  topics:
+  - Development
+  tags:
+  - name: Affordable
+    vocabulary_id: null
+  - name: Community
+    vocabulary_id: null
+  - name: Housing
+    vocabulary_id: null
+  - name: RGI
+    vocabulary_id: null
+  - name: Rent-geared-to-income
+    vocabulary_id: null
+  - name: Social
+    vocabulary_id: null
+  - name: Subsidized
+    vocabulary_id: null
+  information_url: null
+  excerpt: This dataset contains information on the active social housing stock and the active affordable housing stock that are under the City's administration.
+  limitations: null
+  notes: |
+    This dataset contains information on the active social housing stock and the active affordable housing stock that are under the City's administration. Social housing is administered by the City to make rent affordable for low and moderate-income households. Affordable Housing refers to rental homes under the City's administration that meet the provincial definition of affordability.
+
+  resources: 
+    Social and Affordable Housing:
+      format: csv
+      url: https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv
+      attributes:
+        - id: Quarter
+          type: "text"
+          info:
+            notes: ""
+        - id: Subsidized Housing Units
+          type: "text"
+          info:
+            notes: "Rental homes developed with the assistance of government so that rents are more affordable for low-income households and are under the City's administration. Social housing includes homes that are Rent-Geared-to-Income (RGI) housing. In most cases, RGI rent is 30 per cent of a household's monthly Adjusted Family Net Income. Social housing is provided by various types of housing organizations, including the City's housing corporations (Toronto Community Housing Corporation and Toronto Seniors Housing Corporation), and not-for-profit and co-op social housing providers. In addition, commercial rent supplements enable RGI-level housing through subsidized private landlords."
+        - id: Affordable Housing Units
+          type: "text"
+          info:
+            notes: "Rental homes under the City's administration with monthly rents, including utilities, at or below 100 per cent of Average Market Rent (AMR). Average Market Rents are published annually by the Canadian Mortgage and Housing Corporation (CMHC). "
+        
