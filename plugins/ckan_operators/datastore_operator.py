@@ -1212,6 +1212,9 @@ def stream_to_datastore(
         Returns:
             None
         """
+        print("--------=====================-----------------")
+        print(records)
+        print("--------=====================-----------------")
         ckan.action.datastore_create(
             id=resource_id,
             fields=attributes,

@@ -1,0 +1,7 @@
+text_col,int_col,float_col,date_col
+abc,1,1.1,12/05/1911
+meemeemee,2,2.2,12/15/2021
+,3,12,12/15/1800
+four,,12.123,11/15/2021
+one two three,4,,
+"this has a comma, it should still work though",5,0.44,11/11/2011

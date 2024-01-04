@@ -6,6 +6,7 @@ import random
 from utils import misc_utils
 from ckan_operators.resource_operator import GetOrCreateResource
 from ckan_operators.package_operator import GetOrCreatePackage
+from ckan_operators.datastore_operator import stream_to_datastore
 
 
 CKAN = misc_utils.connect_to_ckan()
@@ -48,6 +49,26 @@ resource_metadata = {
     "extract_job": "airflow_test_case",
     "url": "placeholder"
 }
+
+datastore_attributes = [
+  {
+    "id": "text_col",
+    "type": "text",
+  },
+  {
+    "id": "int_col",
+    "type": "int",
+  },
+  {
+    "id": "float_col",
+    "type": "float",
+  },
+  {
+    "id": "date_col",
+    "type": "date",
+    "format": "%m/%d/%Y",
+  },
+]
 
 @pytest.fixture
 def dummy_package():
@@ -95,3 +116,17 @@ def test_create(cleanup):
     for key in resource_metadata.keys():
         if key not in ["url"]: # CKAN handles these - we wont check them
             assert resource[key] == resource_metadata[key]
+
+def test_stream_to_datastore(dummy_package, dummy_resource, cleanup):
+
+    resource_id = dummy_resource["id"]
+    package_id = dummy_package["name"]
+    file_path = "/data/operations/plugins/ckan_operators/test_csv.csv"
+
+    result = stream_to_datastore(
+        resource_id = resource_id,
+        file_path = file_path,
+        attributes = datastore_attributes,
+    )
+
+    assert result["success"]

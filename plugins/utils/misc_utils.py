@@ -54,6 +54,10 @@ def csv_to_generator(filepath, fieldnames, encoding):
         reader = csv.DictReader(f, fieldnames=fieldnames)
         next(reader)
         for row in reader:
+            # convert '' to None - CKAN prefers None
+            for k,v in row.items():
+                if v == '':
+                    row[k] = None
             yield(row)
 
 
