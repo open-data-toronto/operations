@@ -43,6 +43,47 @@ outbreaks-in-toronto-healthcare-institutions:
   
   resources:
     # resource name
+    ob_report_2024:
+      format: xlsx
+      sheet: Sheet1
+      url: https://opendata.toronto.ca/toronto.public.health/outbreaks-in-toronto-healthcare-institutions/ob_report_2024.xlsx
+      attributes:
+        - id: "Institution Name"
+          type: "text"
+          info:
+            notes: "Name of the healthcare institution where the outbreak has been declared"
+        - id: "Institution Address"
+          type: "text"
+          info:
+            notes: "Street address of the institution"
+        - id: "Outbreak Setting"
+          type: "text"
+          info:
+            notes: "The type of facility, in terms of the type of healthcare provided"
+        - id: "Type of Outbreak"
+          type: "text"
+          info:
+            notes: "The mode of transmission classification description of the outbreak"
+        - id: "Causative Agent-1"
+          type: "text"
+          info:
+            notes: "The first aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
+        - id: "Causative Agent-2"
+          type: "text"
+          info:
+            notes: "The second aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
+        - id: "Date Outbreak Began"
+          type: "date"
+          info:
+            notes: "The date the institution reports the outbreak to TPH"
+        - id: "Date Declared Over"
+          type: "date"
+          info:
+            notes: "In general, respiratory and enteric outbreaks are declared over if no new cases have been detected in the facility for a period of time equal to atleast one full incubation period plus one full period of communicability for the particular outbreak organism"
+        - id: "Active"
+          type: "text"
+          info:
+            notes: "Institutional outbreaks remain active until they have been declared over and the public health investigation is closed."
     ob_report_2023:
       format: xlsx
       sheet: Sheet1
