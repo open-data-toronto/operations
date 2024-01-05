@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from datetime import datetime
 
 import ckanapi
@@ -140,7 +141,7 @@ with DAG(
 
         fpath = tmp_dir +"/"+ empties_file_name
 
-        if fpath.exists():
+        if os.path.exists(fpath):
             return "there_were_empties_prior"
 
         return "there_were_no_empties_prior"
