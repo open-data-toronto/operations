@@ -1,7 +1,6 @@
 import json
 import logging
 from datetime import datetime
-from pathlib import Path
 
 import ckanapi
 from airflow import DAG
@@ -11,27 +10,20 @@ from airflow.operators.python import BranchPythonOperator, PythonOperator
 from ckan_operators.package_operator import GetAllPackagesOperator
 from utils import airflow_utils
 from utils_operators.directory_operator import CreateLocalDirectoryOperator
+from utils_operators.slack_operators import task_failure_slack_alert
+
 
 job_name = "get_empty_datastore_resources"
 empties_file_name = "empties.json"
-
-
-def send_failure_msg():
-    airflow_utils.message_slack(
-        name=job_name,
-        message_type="error",
-        msg="Job not finished",
-        active_env=Variable.get("active_env"),
-        prod_webhook=Variable.get("active_env") == "prod",
-    )
 
 
 with DAG(
     job_name,
     default_args=airflow_utils.get_default_args(
         {
-            "on_failure_callback": send_failure_msg,
-            "start_date": datetime(2020, 11, 9, 0, 30, 0),
+            "start_date": datetime(2023, 11, 9, 0, 30, 0),
+            "on_failure_callback": task_failure_slack_alert,
+
         }
     ),
     description="Identifies empty datastore resources and send to Slack",
@@ -65,7 +57,14 @@ with DAG(
             for r in p["resources"]:
                 if r["url_type"] != "datastore":
                     continue
-                res = ckan.action.datastore_search(id=r["id"], limit=0)
+
+                try:
+                    res = ckan.action.datastore_search(id=r["id"], limit=0)
+                except Exception as e:
+                    logging.warning(f"datastore_search returned error with id {r['id']}")
+                    res = {
+                        "total": 0
+                    }
 
                 datastore_resources.append(
                     {
@@ -74,7 +73,7 @@ with DAG(
                         "resource_name": r["name"],
                         #"extract_job": r["extract_job"],
                         "row_count": res["total"],
-                        "fields": res["fields"],
+                        #"fields": res["fields"],
                     }
                 )
 
@@ -137,9 +136,9 @@ with DAG(
 
     def were_there_empties_prior(**kwargs):
         ti = kwargs.pop("ti")
-        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
+        tmp_dir = ti.xcom_pull(task_ids="create_tmp_dir")
 
-        fpath = tmp_dir / empties_file_name
+        fpath = tmp_dir +"/"+ empties_file_name
 
         if fpath.exists():
             return "there_were_empties_prior"
@@ -149,9 +148,9 @@ with DAG(
     def save_empties_file(**kwargs):
         ti = kwargs.pop("ti")
         empties = ti.xcom_pull(task_ids="filter_empty_resources")
-        tmp_dir = Path(ti.xcom_pull(task_ids="create_tmp_dir"))
+        tmp_dir = ti.xcom_pull(task_ids="create_tmp_dir")
 
-        fpath = tmp_dir / empties_file_name
+        fpath = tmp_dir +"/"+ empties_file_name
 
         with open(fpath, "w") as f:
             json.dump(empties, f)
@@ -159,7 +158,7 @@ with DAG(
         return fpath
 
     create_tmp_dir = CreateLocalDirectoryOperator(
-        task_id="create_tmp_dir", path=Path(Variable.get("tmp_dir")) / dag.dag_id,
+        task_id="create_tmp_dir", path=Variable.get("tmp_dir") +"/"+ dag.dag_id,
     )
 
     packages = GetAllPackagesOperator(
