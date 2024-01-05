@@ -6,10 +6,10 @@ active-affordable-and-social-housing-units-temp:
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Active Affordable and Social Housing Units
   date_published: '2023-03-17 13:37:16.207118'
-  dataset_category: Map
+  dataset_category: Table
   refresh_rate: Quarterly
-  owner_division: Housing Secretariat
-  owner_section: 'Housing Secretariat '
+  owner_division: Shelter, Support & Housing Administration
+  owner_section: Shelter, Support & Housing Administration
   owner_unit: Operations Support
   owner_email: housingplan@toronto.ca
   civic_issues: Affordable Housing

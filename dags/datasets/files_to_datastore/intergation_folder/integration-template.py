@@ -11,11 +11,12 @@ from datetime import datetime
 
 from airflow.decorators import dag, task, task_group
 
-from utils_operators.slack_operators import task_failure_slack_alert
+from ckan_operators.package_operator import GetOrCreatePackage
 from ckan_operators.resource_operator import GetOrCreateResource, EditResourceMetadata
 from ckan_operators.datastore_operator import stream_to_datastore
 from readers.base import CSVReader
 from utils import misc_utils
+from utils_operators.slack_operators import task_failure_slack_alert
 
 
 default_args = {
@@ -37,86 +38,134 @@ default_args = {
     catchup=False,
 )
 def integration_template():
-    package_id = "active-affordable-and-social-housing-units-temp"
+    package_name = "active-affordable-and-social-housing-units-temp"
     resource_name = "Social and Affordable Housing"
 
     @task
     def create_tmp_dir(dag_id, dir_variable_name):
         tmp_dir = misc_utils.create_dir_with_dag_id(dag_id, dir_variable_name)
-        logging.info(tmp_dir)
         return tmp_dir
-    
+
     @task
     def read_from_csv(source_url, schema, out_dir, filename):
-        csv_reader = CSVReader(source_url=source_url, schema=schema, out_dir=out_dir, filename=filename)
+        csv_reader = CSVReader(
+            source_url=source_url, schema=schema, out_dir=out_dir, filename=filename
+        )
         csv_reader.write_to_csv()
-        
+
         if os.listdir(out_dir):
             logging.info(f"Reader output file {filename} Successfully.")
         else:
             raise Exception("Reader failed!")
 
-    
     @task
     def get_or_create_package(package_name, package_metadata):
-        package = GetOrCreatePackage(package_name, package_metadata)
+        package = GetOrCreatePackage(
+            package_name=package_name, package_metadata=package_metadata
+        )
         return package.get_or_create_package()
-    
 
-    @task
-    def get_or_create_resource(package_id, resource_name):
+    @task(multiple_outputs=True)
+    def get_or_create_resource(package_name, resource_name):
         resource = GetOrCreateResource(
-            package_id=package_id,
+            package_name=package_name,
             resource_name=resource_name,
             resource_attributes=dict(
                 format="csv",
                 is_preview=True,
                 url_type="datastore",
-                extract_job=f"Airflow: {package_id}",
+                extract_job=f"Airflow: {package_name}",
                 url="placeholder",
             ),
         )
 
         return resource.get_or_create_resource()
-    
+
+    @task
+    def insert_records_to_datastore(
+        resource_id,
+        file_path,
+        file_name,
+        attributes,
+    ):
+        data_path = file_path + "/" + file_name
+        return stream_to_datastore(
+            resource_id=resource_id, file_path=data_path, attributes=attributes
+        )
+
     @task
     def delete_tmp_dir(dag_id):
         misc_utils.delete_tmp_dir(dag_id)
-    
+
     @task(multiple_outputs=True)
-    def get_attr_from_config():
+    def get_config_from_yaml():
         CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
         for config_file in os.listdir(CONFIG_FOLDER):
             if config_file.endswith("units-temp.yaml"):
                 # read config file
                 with open(CONFIG_FOLDER + "/" + config_file, "r") as f:
                     config = yaml.load(f, yaml.SafeLoader)
-                    dataset = config[package_id]
-                    attributes = dataset["resources"]["Social and Affordable Housing"]
+                    dataset = config[package_name]
+                    # init package metadata attributes, where available
+                    package_metadata = {}
+                    for metadata_attribute in [
+                        "title",
+                        "date_published",
+                        "refresh_rate",
+                        "owner_division",
+                        "dataset_category",
+                        "owner_unit",
+                        "owner_section",
+                        "owner_division",
+                        "owner_email",
+                        "civic_issues",
+                        "topics",
+                        "tags",
+                        "information_url",
+                        "excerpt",
+                        "limitations",
+                        "notes",
+                    ]:
+                        if metadata_attribute in dataset.keys():
+                            package_metadata[metadata_attribute] = dataset[
+                                metadata_attribute
+                            ]
+                        else:
+                            package_metadata[metadata_attribute] = None
+                    attributes = dataset["resources"]["Social and Affordable Housing"][
+                        "attributes"
+                    ]
                     logging.info(attributes)
-                    return attributes
+                    return {
+                        "attributes": attributes,
+                        "package_metadata": package_metadata,
+                    }
 
     # Main Flow
-    tmp_dir = create_tmp_dir(dag_id=package_id, dir_variable_name="tmp_dir")
+    tmp_dir = create_tmp_dir(dag_id=package_name, dir_variable_name="tmp_dir")
 
-    
-    attributes = get_attr_from_config()
-    
-    get_data = read_from_csv(source_url="https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv", schema=attributes["attributes"], out_dir=tmp_dir, filename="temp_data.csv")
-    
-    # package = get_or_create_package(package_name, package_metadata)
+    config = get_config_from_yaml()
 
-    # resource = get_or_create_resource(package_id, resource_name)
+    get_data = read_from_csv(
+        source_url="https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv",
+        schema=config["attributes"],
+        out_dir=tmp_dir,
+        filename="temp_data.csv",
+    )
 
-    # insert_records = insert_records_to_datastore(
-    #     resource_id=resource["id"],
-    #     file_path=tmp_dir,
-    #     file_name="data.csv",
-    #     attributes=attributes,
-    # )
-    
-    
-    [tmp_dir, attributes] >> get_data >> delete_tmp_dir(package_id)
+    package = get_or_create_package(package_name, config["package_metadata"])
+
+    resource = get_or_create_resource(package_name, resource_name)
+
+    insert_records = insert_records_to_datastore(
+        resource_id=resource["id"],
+        file_path=tmp_dir,
+        file_name="temp_data.csv",
+        attributes=config["attributes"],
+    )
+
+    tmp_dir >> config >> get_data
+    config >> package >> resource >> insert_records >> delete_tmp_dir(package_name)
 
 
 integration_template()
