@@ -30,7 +30,8 @@ imagination-manufacturing-innovation-and-technology-imit-program-recipients:
       format: csv
       url: https://opendata.toronto.ca/economic.development.culture/imagination-manufacturing-innovation-and-technology-imit-program-recipients/IMIT_Report.csv
       attributes:
-        - id: Approved IMIT Property
+        - source_name: "Approved IMIT Property "
+          target_name: "Approved IMIT Property"
           type: text
           info:
             notes: ''
