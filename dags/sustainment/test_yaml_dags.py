@@ -75,8 +75,10 @@ def test_yaml_dags():
         - Then it edits data and runs the DAG to make sure the delta is found
         - Then it spoofs a failure and runs the DAG to check failure protocol
         '''
+        results = {}
         for dag_id in dag_ids["dag_ids"]:
             logging.info(f"Testing {dag_id}...")
+            results[dag_id] = {}
             # get metadata from YAML config
             with open(CONFIG_FOLDER + "/" + dag_id + ".yaml", "r") as f:
                 config = yaml.load(f, yaml.SafeLoader)
@@ -90,16 +92,33 @@ def test_yaml_dags():
             CKAN.action.dataset_purge(id = package_name)
 
             # run DAG and get results
-            results = run_dag(dag_id)
+            run = run_dag(dag_id)
 
             # parse task instance metadata
-            for ti in results.get_task_instances():
-                if ti.task_id.startswith("prepare_update_") and ti.state == "success":
-                    updated = True
-                else:
-                    updated = False
+            results = assess_results(run)
+
+            print("---------------------")
+            print(results)
+            print("========================")
+            return results
+            
 
     
     run_dags(get_dag_ids())
+
+    def assess_results(run):
+        # determing if update was attempted by DAG run
+        for ti in run.get_task_instances():
+                if ti.task_id.startswith("prepare_update_") and ti.state == "success":
+                    updated = True
+                    break
+                else:
+                    updated = False
+
+        return {
+            "updated": updated,
+            "state": run.state,
+
+        }
 
 test_yaml_dags()
