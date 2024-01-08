@@ -20,20 +20,12 @@ apartment-building-evaluation:
   notes: | 
     RentSafeTO: Apartment Building Standards is a bylaw enforcement program established in 2017 to ensure that owners and operators of apartment buildings with three or more storeys or 10 or more units comply with building maintenance standards. Learn more about [RentSafeTO](https://www.toronto.ca/community-people/housing-shelter/rental-housing-tenant-information/rental-housing-standards/apartment-building-standards/rentsafeto-for-tenants/).
 
-    This dataset contains building evaluation scores for buildings registered with RentSafeTO.  During evaluations, Bylaw Enforcement Officers inspect common areas, mechanical and security systems, parking and exterior grounds.
-
-    In 2023, RentsafeTO updated its evaluation process.   Buildings must undergo evaluation at least once every two years, increasing the number of evaluation categories to 50 and allocating a weight to the category.
-
-    Each category item is inspected and assigned a score from one to three with one being the lowest and three being the highest. At times, an item may be assigned a score of 0 if it cannot be evaluated due to an obstruction or refusal to inspect. Additionally, if an item is not applicable to the building at the time of evaluation, the score will show as blank in the dataset.
-
-    To download data from building evaluations before 2023, please download “Pre-2023 Apartment Building Evaluations" and “Apartment Building Evaluations since 2023” to download data from building evaluations from 2023 and beyond.
-
-    Learn more about [RentSafeTO: Evaluation Tool – City of Toronto](https://www.toronto.ca/community-people/housing-shelter/rental-housing-tenant-information/rental-housing-standards/apartment-building-standards/rentsafeto-evaluation-tool/).
+    This dataset contains building evaluation scores for buildings registered with RentSafeTO. Buildings must undergo evaluation at least once every two years. During evaluations, Bylaw Enforcement Officers inspect common areas, mechanical and security systems, parking and exterior grounds. Each item is inspected and assigned a score from one to three with one being the lowest and three being the highest. At times, an item may be assigned a score of 0 if it cannot be evaluated due to an obstruction or refusal to inspect. Additionally, if an item is not applicable to the building at the time of evaluation, the score will show as blank in the dataset. Learn more about [RentSafeTO Building Evaluations & Audits](https://www.toronto.ca/community-people/housing-shelter/rental-housing-tenant-information/rental-housing-standards/apartment-building-standards/audits-evaluations/)
 
   resources:
     Apartment Building Evaluations 2023 - current:
       format: csv
-      url: https://opendata.toronto.ca/municipal.licensing.standards/apartment-building-evaluation/apartment-building-evaluation.csv
+      url: http://opendata.toronto.ca/municipal.licensing.standards/apartment-building-evaluation/apartment-building-evaluation-uat.csv
       attributes:
       - id: RSN
         type: text
@@ -79,19 +71,19 @@ apartment-building-evaluation:
         type: date
         format: "%Y/%m/%d"
         info:
-          notes: "This is the date the evaluation was conducted on."  
+          notes: "This is the date the evaluation was conducted on."
       - id: CURRENT BUILDING EVAL SCORE
-        type: float
+        type: text
         info:
-          notes: "An assessment of a building's compliance with property standards which is calculated by adding the current reactive score (applicable Orders and Notices of Violations) to the proactive building score (latest building evaluation score)."      
+          notes: "An assessment of a building's compliance with property standards which is calculated by adding the reactive score (applicable Orders or Notices of Violations) to the proactive score (latest building evaluation score)"
       - id: PROACTIVE BUILDING SCORE
-        type: float
+        type: text
         info:
-          notes: "The score of the most recent, proactive evaluation of the common areas of a building reflecting the weighted score of all, applicable, evaluation categories."
+          notes: "The score of the most recent, proactive evaluation of the common areas of a building reflecting the weighted score of all, applicable, evaluation categories."      
       - id: CURRENT REACTIVE SCORE
-        type: float
+        type: text
         info:
-          notes: "Total score of all applicable Orders and Notices of Violation issued for a building"            
+          notes: "Total score of all applicable Orders and Notices of Violation issued for a building"      
       - id: NO OF AREAS EVALUATED
         type: int
         info:
