@@ -9,7 +9,7 @@ import logging
 import pandas as pd
 from datetime import datetime
 
-from airflow.decorators import dag, task, task_group
+from airflow.decorators import dag, task
 
 from ckan_operators.package_operator import GetOrCreatePackage
 from ckan_operators.resource_operator import GetOrCreateResource, EditResourceMetadata
@@ -85,22 +85,19 @@ def get_config_from_yaml(package_name):
 def integration_template():
     package_name = "active-affordable-and-social-housing-units-temp"
 
+    ################################################
+    # --------------Get config params----------------
+    config = get_config_from_yaml(package_name)
+    package_metadata = config["package_metadata"]
+    resources = config["resources"]
+    resource_list = resources.keys()
+
+    #################################################
+    # --------------Package level tasks--------------
     @task
     def create_tmp_dir(dag_id, dir_variable_name):
         tmp_dir = misc_utils.create_dir_with_dag_id(dag_id, dir_variable_name)
         return tmp_dir
-
-    @task
-    def read_from_csv(source_url, schema, out_dir, filename):
-        csv_reader = CSVReader(
-            source_url=source_url, schema=schema, out_dir=out_dir, filename=filename
-        )
-        csv_reader.write_to_csv()
-
-        if os.listdir(out_dir):
-            logging.info(f"Reader output file {filename} Successfully.")
-        else:
-            raise Exception("Reader failed!")
 
     @task
     def get_or_create_package(package_name, package_metadata):
@@ -109,72 +106,103 @@ def integration_template():
         )
         return package.get_or_create_package()
 
-    @task(multiple_outputs=True)
-    def get_or_create_resource(package_name, resource_name):
-        resource = GetOrCreateResource(
-            package_name=package_name,
-            resource_name=resource_name,
-            resource_attributes=dict(
-                format="csv",
-                is_preview=True,
-                url_type="datastore",
-                extract_job=f"Airflow: {package_name}",
-                url="placeholder",
-            ),
-        )
-
-        return resource.get_or_create_resource()
-
-    @task
-    def insert_records_to_datastore(
-        resource_id,
-        file_path,
-        file_name,
-        attributes,
-    ):
-        data_path = file_path + "/" + file_name
-        return stream_to_datastore(
-            resource_id=resource_id, file_path=data_path, attributes=attributes
-        )
-
     @task
     def delete_tmp_dir(dag_id):
         misc_utils.delete_tmp_dir(dag_id)
 
-    ## Main Flow
+    # ----------------------init tasks
+    create_tmp_dir = create_tmp_dir(dag_id=package_name, dir_variable_name="tmp_dir")
+    get_or_create_package = get_or_create_package(package_name, package_metadata)
 
-    # Get config params
-    config = get_config_from_yaml(package_name)
+    ############################################################
+    # ---------------Resource level task lists------------------
+    task_lists = {}
 
-    package_metadata = config["package_metadata"]
-    resources = config["resources"]
-    resource_name = list(resources.keys())
-    attributes = resources[resource_name[0]]["attributes"]
+    for resource_name in resource_list:
+        # clean the resource name so the DAG can label its tasks with it
+        resource_label = resource_name.replace(" ", "")
+        resource = resources[resource_name]
+        attributes = resource["attributes"]
 
-    # Task Begins
-    tmp_dir = create_tmp_dir(dag_id=package_name, dir_variable_name="tmp_dir")
+        # download source data
+        download_task_id = "download_data_" + resource_label
 
-    get_data = read_from_csv(
-        source_url="https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv",
-        schema=attributes,
-        out_dir=tmp_dir,
-        filename="temp_data.csv",
-    )
+        @task(task_id=download_task_id)
+        def read_from_csv(source_url, schema, out_dir, filename):
+            csv_reader = CSVReader(
+                source_url=source_url, schema=schema, out_dir=out_dir, filename=filename
+            )
+            csv_reader.write_to_csv()
 
-    package = get_or_create_package(package_name, package_metadata)
+            if os.listdir(out_dir):
+                logging.info(f"Reader output file {filename} Successfully.")
+            else:
+                raise Exception("Reader failed!")
 
-    resource = get_or_create_resource(package_name, resource_name)
+        # get or create resource
+        create_resource_task_id = "get_or_create_resource_" + resource_label
 
-    insert_records = insert_records_to_datastore(
-        resource_id=resource["id"],
-        file_path=tmp_dir,
-        file_name="temp_data.csv",
-        attributes=attributes,
-    )
+        @task(task_id=create_resource_task_id, multiple_outputs=True)
+        def get_or_create_resource(package_name, resource_name):
+            resource = GetOrCreateResource(
+                package_name=package_name,
+                resource_name=resource_name,
+                resource_attributes=dict(
+                    format="csv",
+                    is_preview=True,
+                    url_type="datastore",
+                    extract_job=f"Airflow: {package_name}",
+                    url="placeholder",
+                ),
+            )
 
-    tmp_dir >> get_data
-    package >> resource
-    [get_data, resource] >> insert_records >> delete_tmp_dir(package_name)
+            return resource.get_or_create_resource()
+
+        # stream to ckan datastore
+        insert_records_task_id = "insert_records_" + resource_label
+
+        @task(task_id=insert_records_task_id)
+        def insert_records_to_datastore(
+            resource_id,
+            file_path,
+            file_name,
+            attributes,
+        ):
+            data_path = file_path + "/" + file_name
+            return stream_to_datastore(
+                resource_id=resource_id, file_path=data_path, attributes=attributes
+            )
+
+        # -----------------Init tasks
+        task_lists["download_data_" + resource_label] = read_from_csv(
+            source_url="https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv",
+            schema=attributes,
+            out_dir=create_tmp_dir,
+            filename="temp_data.csv",
+        )
+
+        task_lists[
+            "get_or_create_resource_" + resource_label
+        ] = get_or_create_resource(
+            package_name=package_name, resource_name=resource_name
+        )
+
+        task_lists["insert_records_" + resource_label] = insert_records_to_datastore(
+            resource_id=task_lists["get_or_create_resource_" + resource_label]["id"],
+            file_path="/data/tmp/active-affordable-and-social-housing-units-temp",
+            file_name="temp_data.csv",
+            attributes=attributes,
+        )
+
+
+        # ----Task Flow----
+        (
+            get_or_create_package
+            >> create_tmp_dir
+            >> task_lists["download_data_" + resource_label]
+            >> task_lists["get_or_create_resource_" + resource_label]
+            >> task_lists["insert_records_" + resource_label]
+        )
 
 
 integration_template()
