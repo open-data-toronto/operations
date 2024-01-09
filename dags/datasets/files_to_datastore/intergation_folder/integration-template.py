@@ -30,6 +30,51 @@ default_args = {
     "retries": 1,
 }
 
+metadata_pool = [
+    "title",
+    "date_published",
+    "refresh_rate",
+    "owner_division",
+    "dataset_category",
+    "owner_unit",
+    "owner_section",
+    "owner_division",
+    "owner_email",
+    "civic_issues",
+    "topics",
+    "tags",
+    "information_url",
+    "excerpt",
+    "limitations",
+    "notes",
+]
+
+
+def get_config_from_yaml(package_name):
+    CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
+    for config_file in os.listdir(CONFIG_FOLDER):
+        if config_file.endswith("units-temp.yaml"):
+            # read config file
+            with open(CONFIG_FOLDER + "/" + config_file, "r") as f:
+                config = yaml.load(f, yaml.SafeLoader)
+                package = config[package_name]
+                # init package metadata attributes, where available
+                package_metadata = {}
+                for metadata_attribute in metadata_pool:
+                    if metadata_attribute in package.keys():
+                        package_metadata[metadata_attribute] = package[
+                            metadata_attribute
+                        ]
+                    else:
+                        package_metadata[metadata_attribute] = None
+                resources = package["resources"]
+                logging.info(package_metadata)
+                logging.info(resources)
+                return {
+                    "resources": resources,
+                    "package_metadata": package_metadata,
+                }
+
 
 @dag(
     default_args=default_args,
@@ -39,7 +84,6 @@ default_args = {
 )
 def integration_template():
     package_name = "active-affordable-and-social-housing-units-temp"
-    resource_name = "Social and Affordable Housing"
 
     @task
     def create_tmp_dir(dag_id, dir_variable_name):
@@ -97,63 +141,27 @@ def integration_template():
     def delete_tmp_dir(dag_id):
         misc_utils.delete_tmp_dir(dag_id)
 
-    @task(multiple_outputs=True)
-    def get_config_from_yaml():
-        CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
-        for config_file in os.listdir(CONFIG_FOLDER):
-            if config_file.endswith("units-temp.yaml"):
-                # read config file
-                with open(CONFIG_FOLDER + "/" + config_file, "r") as f:
-                    config = yaml.load(f, yaml.SafeLoader)
-                    dataset = config[package_name]
-                    # init package metadata attributes, where available
-                    package_metadata = {}
-                    for metadata_attribute in [
-                        "title",
-                        "date_published",
-                        "refresh_rate",
-                        "owner_division",
-                        "dataset_category",
-                        "owner_unit",
-                        "owner_section",
-                        "owner_division",
-                        "owner_email",
-                        "civic_issues",
-                        "topics",
-                        "tags",
-                        "information_url",
-                        "excerpt",
-                        "limitations",
-                        "notes",
-                    ]:
-                        if metadata_attribute in dataset.keys():
-                            package_metadata[metadata_attribute] = dataset[
-                                metadata_attribute
-                            ]
-                        else:
-                            package_metadata[metadata_attribute] = None
-                    attributes = dataset["resources"]["Social and Affordable Housing"][
-                        "attributes"
-                    ]
-                    logging.info(attributes)
-                    return {
-                        "attributes": attributes,
-                        "package_metadata": package_metadata,
-                    }
+    ## Main Flow
 
-    # Main Flow
+    # Get config params
+    config = get_config_from_yaml(package_name)
+
+    package_metadata = config["package_metadata"]
+    resources = config["resources"]
+    resource_name = list(resources.keys())
+    attributes = resources[resource_name[0]]["attributes"]
+
+    # Task Begins
     tmp_dir = create_tmp_dir(dag_id=package_name, dir_variable_name="tmp_dir")
-
-    config = get_config_from_yaml()
 
     get_data = read_from_csv(
         source_url="https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv",
-        schema=config["attributes"],
+        schema=attributes,
         out_dir=tmp_dir,
         filename="temp_data.csv",
     )
 
-    package = get_or_create_package(package_name, config["package_metadata"])
+    package = get_or_create_package(package_name, package_metadata)
 
     resource = get_or_create_resource(package_name, resource_name)
 
@@ -161,11 +169,12 @@ def integration_template():
         resource_id=resource["id"],
         file_path=tmp_dir,
         file_name="temp_data.csv",
-        attributes=config["attributes"],
+        attributes=attributes,
     )
 
-    tmp_dir >> config >> get_data
-    config >> package >> resource >> insert_records >> delete_tmp_dir(package_name)
+    tmp_dir >> get_data
+    package >> resource
+    [get_data, resource] >> insert_records >> delete_tmp_dir(package_name)
 
 
 integration_template()
