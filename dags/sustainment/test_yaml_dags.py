@@ -15,6 +15,7 @@ from utils_operators.slack_operators import task_failure_slack_alert
 from airflow.decorators import dag, task
 
 CONFIG_FOLDER = "/data/operations/dags/datasets/files_to_datastore"
+TMP_DIR = "data/tmp/"
 CKAN = misc_utils.connect_to_ckan()
 
 @dag(
@@ -52,7 +53,7 @@ def test_yaml_dags():
 
     def run_dag(dag_id, **kwargs):
         # trigger each dag based on dag_ids
-        logging.info("Running command: airflow dags trigger " + dag_id)
+        logging.info("\tRunning command: airflow dags trigger " + dag_id)
         assert os.system( "airflow dags trigger " + dag_id) == 0, dag_id + " was unable to start!"
 
         dag_runs = DagRun.find(dag_id=dag_id)
@@ -75,10 +76,10 @@ def test_yaml_dags():
         - Then it edits data and runs the DAG to make sure the delta is found
         - Then it spoofs a failure and runs the DAG to check failure protocol
         '''
-        results = {}
+        output = {}
         for dag_id in dag_ids["dag_ids"]:
             logging.info(f"Testing {dag_id}...")
-            results[dag_id] = {}
+            output[dag_id] = {}
             # get metadata from YAML config
             with open(CONFIG_FOLDER + "/" + dag_id + ".yaml", "r") as f:
                 config = yaml.load(f, yaml.SafeLoader)
@@ -87,38 +88,72 @@ def test_yaml_dags():
             resource_count = len(config[package_name]["resources"])
 
             
-            # PURGE PACKAGE, RUN DAG
-            # purge package
+            ### PURGE PACKAGE, RUN DAG, EXPECT DATASET CREATED
+            logging.info(f"\tTesting {dag_id} purge and run...")
+            # purge package            
             CKAN.action.dataset_purge(id = package_name)
 
             # run DAG and get results
             run = run_dag(dag_id)
 
             # parse task instance metadata
-            results = assess_results(run)
+            results = get_results(run)
 
-            print("---------------------")
-            print(results)
-            print("========================")
-            return results
+            output[dag_id]["test_create_success"] = results["updated"] and results["state"] == "success"
+
+
+            ### RUN DAG, RUN DAG, EXPECT NO UPDATE TO DATASET
+            logging.info(f"\tTesting {dag_id} run with no delta...")
+            # run DAG and get results
+            run = run_dag(dag_id)
+
+            # parse task instance metadata
+            results = get_results(run)
+
+            output[dag_id]["test_no_update_success"] = results["updated"] == False and results["state"] == "success"
+
+
+            ### EDIT DATA, RUN DAG, EXPECT UPDATE TO DATASET
+            logging.info(f"\tTesting {dag_id} run with delta...")
+            # edit data stored on airflow server
+            tmp_filenames = os.listdir(f"{TMP_DIR}{package_name}")
+            for filename in tmp_filenames:
+                with open(f"{TMP_DIR}{package_name}/{filename}", "a") as f:
+                    f.write("random line of text")
+                    f.close()
+
+            # run DAG and get results
+            run = run_dag(dag_id)
+
+            # parse task instance metadata
+            results = get_results(run)
+
+            output[dag_id]["test_update_success"] = results["updated"] == True and results["state"] == "success"
+
+
+            ### TODO: RUN DAG, FORCE ERROR, EXPECT FAILURE PROTOCOL TO RUN
+            return output
             
 
     
     run_dags(get_dag_ids())
 
-    def assess_results(run):
-        # determing if update was attempted by DAG run
+    def get_results(run):
+        updated = False
+        failure_protocol = False
         for ti in run.get_task_instances():
-                if ti.task_id.startswith("prepare_update_") and ti.state == "success":
-                    updated = True
-                    break
-                else:
-                    updated = False
+
+            if ti.task_id.startswith("prepare_update_") and ti.state == "success":
+                updated = True
+
+            if ti.task_id.startswith("restore_backup_") and ti.state == "success":
+                failure_protocol = True
+                                
 
         return {
             "updated": updated,
+            "failure_protocol": failure_protocol,
             "state": run.state,
-
         }
 
 test_yaml_dags()
