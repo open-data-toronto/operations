@@ -464,9 +464,12 @@ freedom-of-information-requests-summary:
   foi-request-summary-2022:
     format: xlsx
     url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2022.xlsx
+  foi-request-summary-2023:
+    format: xlsx
+    url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2023.xlsx
   Glossary of Short Forms:
     format: doc
-    url: https://opendata.toronto.ca/city.clerks.office/foi/Glossary of Short Forms  updated  August 29, 2022.doc
+    url: https://opendata.toronto.ca/city.clerks.office/foi/Glossary of Short Forms updated January 5 2024.docx
 community-grants-allocations:
   community-grants-allocations-2020:
     format: xlsx
