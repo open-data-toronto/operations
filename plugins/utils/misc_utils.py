@@ -199,35 +199,38 @@ from pathlib import Path
 from airflow.models import Variable
 
 
-def create_dir_with_dag_id(dag_id: str, dir_variable_name: str) -> str:
+def create_dir_with_dag_id(dag_id: str, dir_path: str) -> str:
     """
     Create a directory with dag name
 
     Parameters:
     - dag_id : str
         the id of the dag(pipeline)
-    - dir_variable_name : str
-        the name of the variable stored dir_path
+    - dir_path : str
+        the path of directory
 
     Returns:
         full directory path string: str
 
     """
-    files_dir = Variable.get(dir_variable_name)
 
-    dir_with_dag_name = Path(files_dir) / dag_id
+    dir_with_dag_name = Path(dir_path) / dag_id
     dir_with_dag_name.mkdir(parents=False, exist_ok=True)
 
     return str(dir_with_dag_name)
 
 
-def delete_tmp_dir(dag_id: str, delete_recursively: bool = True) -> None:
+def delete_tmp_dir(
+    dag_id: str, dir_path: str = "/data/tmp", delete_recursively: bool = True
+) -> None:
     """
     Delete tmp directory with dag id
 
     Parameters:
     - dag_id : str
         the id of the dag(pipeline)
+    - dir_path: str, Optional
+        the path of directory
     - delete_recursively : bool, Optional
         flag if delete all files and subdirectories
 
@@ -235,11 +238,11 @@ def delete_tmp_dir(dag_id: str, delete_recursively: bool = True) -> None:
         None
 
     """
-    files_dir_path = Path(Variable.get("tmp_dir"))
-    dag_tmp_dir = files_dir_path / dag_id
+
+    dag_tmp_dir = Path(dir_path) / dag_id
 
     # list all files under current directory before delete directory.
-    logging.info(os.listdir(dag_tmp_dir))
+    logging.info(f"Deleted file: {os.listdir(dag_tmp_dir)}")
 
     if not delete_recursively:
         os.rmdir(dag_tmp_dir)

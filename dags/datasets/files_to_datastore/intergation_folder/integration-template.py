@@ -95,8 +95,8 @@ def integration_template():
     #################################################
     # --------------Package level tasks--------------
     @task
-    def create_tmp_dir(dag_id, dir_variable_name):
-        tmp_dir = misc_utils.create_dir_with_dag_id(dag_id, dir_variable_name)
+    def create_tmp_dir(dag_id, dir_path):
+        tmp_dir = misc_utils.create_dir_with_dag_id(dag_id, dir_path)
         return tmp_dir
 
     @task
@@ -111,8 +111,9 @@ def integration_template():
         misc_utils.delete_tmp_dir(dag_id)
 
     # ----------------------init tasks
-    create_tmp_dir = create_tmp_dir(dag_id=package_name, dir_variable_name="tmp_dir")
+    create_tmp_dir = create_tmp_dir(dag_id=package_name, dir_path="/data/tmp")
     get_or_create_package = get_or_create_package(package_name, package_metadata)
+    delete_tmp_dir = delete_tmp_dir(dag_id=package_name)
 
     ############################################################
     # ---------------Resource level task lists------------------
@@ -125,9 +126,7 @@ def integration_template():
         attributes = resource["attributes"]
 
         # download source data
-        download_task_id = "download_data_" + resource_label
-
-        @task(task_id=download_task_id)
+        @task(task_id="download_data_" + resource_label)
         def read_from_csv(source_url, schema, out_dir, filename):
             csv_reader = CSVReader(
                 source_url=source_url, schema=schema, out_dir=out_dir, filename=filename
@@ -139,10 +138,10 @@ def integration_template():
             else:
                 raise Exception("Reader failed!")
 
-        # get or create resource
-        create_resource_task_id = "get_or_create_resource_" + resource_label
+            return out_dir + "/" + filename
 
-        @task(task_id=create_resource_task_id, multiple_outputs=True)
+        # get or create resource
+        @task(task_id="get_or_create_resource_" + resource_label, multiple_outputs=True)
         def get_or_create_resource(package_name, resource_name):
             resource = GetOrCreateResource(
                 package_name=package_name,
@@ -159,18 +158,14 @@ def integration_template():
             return resource.get_or_create_resource()
 
         # stream to ckan datastore
-        insert_records_task_id = "insert_records_" + resource_label
-
-        @task(task_id=insert_records_task_id)
+        @task(task_id="insert_records_" + resource_label)
         def insert_records_to_datastore(
             resource_id,
             file_path,
-            file_name,
             attributes,
         ):
-            data_path = file_path + "/" + file_name
             return stream_to_datastore(
-                resource_id=resource_id, file_path=data_path, attributes=attributes
+                resource_id=resource_id, file_path=file_path, attributes=attributes
             )
 
         # -----------------Init tasks
@@ -178,22 +173,18 @@ def integration_template():
             source_url="https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv",
             schema=attributes,
             out_dir=create_tmp_dir,
-            filename="temp_data.csv",
+            filename=resource_name + ".csv",
         )
 
-        task_lists[
-            "get_or_create_resource_" + resource_label
-        ] = get_or_create_resource(
+        task_lists["get_or_create_resource_" + resource_label] = get_or_create_resource(
             package_name=package_name, resource_name=resource_name
         )
 
         task_lists["insert_records_" + resource_label] = insert_records_to_datastore(
             resource_id=task_lists["get_or_create_resource_" + resource_label]["id"],
-            file_path="/data/tmp/active-affordable-and-social-housing-units-temp",
-            file_name="temp_data.csv",
+            file_path=task_lists["download_data_" + resource_label],
             attributes=attributes,
         )
-
 
         # ----Task Flow----
         (
@@ -202,6 +193,7 @@ def integration_template():
             >> task_lists["download_data_" + resource_label]
             >> task_lists["get_or_create_resource_" + resource_label]
             >> task_lists["insert_records_" + resource_label]
+            >> delete_tmp_dir
         )
 
 
