@@ -79,7 +79,7 @@ def get_config_from_yaml(package_name):
 @dag(
     default_args=default_args,
     schedule="@once",
-    start_date=datetime(2023, 11, 21),
+    start_date=datetime(2024, 1, 2),
     catchup=False,
 )
 def integration_template():
@@ -123,6 +123,7 @@ def integration_template():
         # clean the resource name so the DAG can label its tasks with it
         resource_label = resource_name.replace(" ", "")
         resource = resources[resource_name]
+        resource_url = resource["url"]
         attributes = resource["attributes"]
 
         # download source data
@@ -170,7 +171,7 @@ def integration_template():
 
         # -----------------Init tasks
         task_lists["download_data_" + resource_label] = read_from_csv(
-            source_url="https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv",
+            source_url=resource_url,
             schema=attributes,
             out_dir=create_tmp_dir,
             filename=resource_name + ".csv",
