@@ -84,18 +84,18 @@ class AGOLDownloadFileOperator(BaseOperator):
 
     def get_fields(self, query_url):
         # list of attributes that are redundant when geometry is present in a response
-        delete_fields = [
-            "longitude",
-            "latitude",
-            "shape__length",
-            "shape__area",
-            "lat",
-            "long",
-            "lon",
-            "x",
-            "y",
-            "index_"
-        ]
+        delete_fields = []
+        #    "longitude",
+        #    "latitude",
+        #    "shape__length",
+        #    "shape__area",
+        #    "lat",
+        #    "long",
+        #    "lon",
+        #    "x",
+        #    "y",
+        #    "index_"
+        #]
 
         query_string_params = {
             "where": "1=1",
@@ -137,7 +137,7 @@ class AGOLDownloadFileOperator(BaseOperator):
             "f": "geojson",
             "resultType": "standard",
             "resultOffset": offset,
-            "outFields": ",".join([f for f in fieldnames if f!="geometry"])
+            "outFields": "*",#",".join([f for f in fieldnames if f!="geometry"])
         }
 
         while overflow is True:

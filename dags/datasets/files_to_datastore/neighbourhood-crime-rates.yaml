@@ -62,10 +62,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Name of Neighbourhood where offence occurred using City of Toronto's new 158 neighbourhood structure
-        - id: POPN_PROJ_2022
+        - id: POPULATION_2023
           type: int
           info:
-            notes: 2022 Population projection provided by Environics Analytics (EA)
+            notes: 2023 Population projection provided by Environics Analytics (EA)
         - id: ASSAULT_2014
           type: int
           info:
@@ -102,6 +102,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of assaults for 2022
+        - id: ASSAULT_2023
+          type: int
+          info:
+            notes: Count of assaults for 2023
         - id: ASSAULT_RATE_2014
           type: float
           info:
@@ -138,6 +142,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of assaults per 100,000 population for 2022 calculated using the 2022 population projection provided by EA
+        - id: ASSAULT_RATE_2023
+          type: float
+          info:
+            notes: Rate of assaults per 100,000 population for 2023 calculated using the 2023 population projection provided by EA
         - id: AUTOTHEFT_2014
           type: int
           info:
@@ -174,6 +182,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of auto thefts for 2022
+        - id: AUTOTHEFT_2023
+          type: int
+          info:
+            notes: Count of auto thefts for 2023
         - id: AUTOTHEFT_RATE_2014
           type: float
           info:
@@ -210,6 +222,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of auto thefts per 100,000 population for 2022 calculated using the 2022 population projection provided by EA
+        - id: AUTOTHEFT_RATE_2023
+          type: float
+          info:
+            notes: Rate of auto thefts per 100,000 population for 2023 calculated using the 2023 population projection provided by EA
         - id: BIKETHEFT_2014
           type: int
           info:
@@ -246,6 +262,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of bike thefts for 2022
+        - id: BIKETHEFT_2023
+          type: int
+          info:
+            notes: Count of bike thefts for 2023
         - id: BIKETHEFT_RATE_2014
           type: float
           info:
@@ -282,6 +302,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of bike thefts per 100,000 population for 2022 calculated using the 2022 population projection provided by EA
+        - id: BIKETHEFT_RATE_2023
+          type: float
+          info:
+            notes: Rate of bike thefts per 100,000 population for 2023 calculated using the 2023 population projection provided by EA
         - id: BREAKENTER_2014
           type: int
           info:
@@ -318,6 +342,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of break and enters for 2022
+        - id: BREAKENTER_2023
+          type: int
+          info:
+            notes: Count of break and enters for 2023
         - id: BREAKENTER_RATE_2014
           type: float
           info:
@@ -354,6 +382,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of break and enters per 100,000 population for 2022 calculated using the 2022 population projection provided by EA
+        - id: BREAKENTER_RATE_2023
+          type: float
+          info:
+            notes: Rate of break and enters per 100,000 population for 2023 calculated using the 2023 population projection provided by EA
         - id: HOMICIDE_2014
           type: int
           info:
@@ -390,20 +422,24 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of homicides for 2022
+        - id: HOMICIDE_2023
+          type: int
+          info:
+            notes: Count of homicides for 2023
         - id: HOMICIDE_RATE_2014
           type: float
           info:
             notes: Rate of homicides per 100,000 population for 2014 calculated using the 2014 population projection provided by EA
         - id: HOMICIDE_RATE_2015
-          type: int
+          type: float
           info:
             notes: Rate of homicides per 100,000 population for 2015 calculated using the 2015 population projection provided by EA
         - id: HOMICIDE_RATE_2016
-          type: int
+          type: float
           info:
             notes: Rate of homicides per 100,000 population for 2016 calculated using the 2016 population projection provided by EA
         - id: HOMICIDE_RATE_2017
-          type: int
+          type: float
           info:
             notes: Rate of homicides per 100,000 population for 2017 calculated using the 2017 population projection provided by EA
         - id: HOMICIDE_RATE_2018
@@ -426,6 +462,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of homicides per 100,000 population for 2022 calculated using the 2022 population projection provided by EA
+        - id: HOMICIDE_RATE_2023
+          type: float
+          info:
+            notes: Rate of homicides per 100,000 population for 2023 calculated using the 2023 population projection provided by EA
         - id: ROBBERY_2014
           type: int
           info:
@@ -462,6 +502,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of robberies for 2022
+        - id: ROBBERY_2023
+          type: int
+          info:
+            notes: Count of robberies for 2023
         - id: ROBBERY_RATE_2014
           type: float
           info:
@@ -498,6 +542,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of robberies per 100,000 population for 2022 calculated using the 2022 population projection provided by EA
+        - id: ROBBERY_RATE_2023
+          type: float
+          info:
+            notes: Rate of robberies per 100,000 population for 2023 calculated using the 2023 population projection provided by EA
         - id: SHOOTING_2014
           type: int
           info:
@@ -534,6 +582,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of shooting and firearm discharges for 2022
+        - id: SHOOTING_2023
+          type: int
+          info:
+            notes: Count of shooting and firearm discharges for 2023
         - id: SHOOTING_RATE_2014
           type: float
           info:
@@ -570,6 +622,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of shooting and firearm discharges per 100,000 population for 2022 calculated using the 2022 population projection provided by EA
+        - id: SHOOTING_RATE_2023
+          type: float
+          info:
+            notes: Rate of shooting and firearm discharges per 100,000 population for 2023 calculated using the 2023 population projection provided by EA
         - id: THEFTFROMMV_2014
           type: int
           info:
@@ -606,6 +662,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of theft from motor vehicles for 2022
+        - id: THEFTFROMMV_2023
+          type: int
+          info:
+            notes: Count of theft from motor vehicles for 2023
         - id: THEFTFROMMV_RATE_2014
           type: float
           info:
@@ -642,6 +702,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of theft from motor vehicles per 100,000 population for 2022 calculated using the 2022 population projection provided by EA
+        - id: THEFTFROMMV_RATE_2023
+          type: float
+          info:
+            notes: Rate of theft from motor vehicles per 100,000 population for 2023 calculated using the 2023 population projection provided by EA
         - id: THEFTOVER_2014
           type: int
           info:
@@ -678,6 +742,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of theft over for 2022
+        - id: THEFTOVER_2023
+          type: int
+          info:
+            notes: Count of theft over for 2023
         - id: THEFTOVER_RATE_2014
           type: float
           info:
@@ -714,9 +782,11 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of theft over per 100,000 population for 2022 calculated using the 2022 population projection provided by EA
+        - id: THEFTOVER_RATE_2023
+          type: float
+          info:
+            notes: Rate of theft over per 100,000 population for 2023 calculated using the 2023 population projection provided by EA
         - id: "geometry"
           type: "text"
           info:
             notes: ""
-         
-        
