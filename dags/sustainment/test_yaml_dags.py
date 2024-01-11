@@ -11,7 +11,7 @@ import ckanapi
 from datetime import datetime
 from utils import misc_utils
 from airflow.models import DagRun, DagBag, Variable, TaskInstance
-from utils_operators.slack_operators import task_failure_slack_alert
+from utils_operators.slack_operators import task_failure_slack_alert, SlackTownCrier
 from airflow.decorators import dag, task
 
 CONFIG_FOLDER = "/data/operations/dags/datasets/files_to_datastore"
@@ -90,8 +90,11 @@ def test_yaml_dags():
             
             ### PURGE PACKAGE, RUN DAG, EXPECT DATASET CREATED
             logging.info(f"\tTesting {dag_id} purge and run...")
-            # purge package            
-            CKAN.action.dataset_purge(id = package_name)
+            # purge package
+            try:        
+                CKAN.action.dataset_purge(id = package_name)
+            except:
+                logging.warning(f"{package_name} was not purged")
 
             # run DAG and get results
             run = run_dag(dag_id)
@@ -130,13 +133,12 @@ def test_yaml_dags():
 
             output[dag_id]["test_update_success"] = results["updated"] == True and results["state"] == "success"
 
-
             ### TODO: RUN DAG, FORCE ERROR, EXPECT FAILURE PROTOCOL TO RUN
-            return output
-            
 
-    
-    run_dags(get_dag_ids())
+        print(output)
+        print(type(output))
+        return output
+                
 
     def get_results(run):
         updated = False
@@ -155,5 +157,36 @@ def test_yaml_dags():
             "failure_protocol": failure_protocol,
             "state": run.state,
         }
+
+    @task
+    def write_to_slack(results):
+
+        # parse results
+        failures = {}
+        tests_run = 0
+        yamls_tested = 0
+
+        for k1,v1 in results.items():
+            yamls_tested += 1
+            for k2,v2 in results[k1].items():
+                tests_run += 1
+                if v2 == False:
+                    failures[f"{k1} {k2}"] = "failed"
+
+        if len(failures) == 0:
+            failures = ":+1: All tests ran successfully"
+
+        body = f"\n\t\t   {tests_run} tests run\n\t\t   {yamls_tested} :yaml:s tested"
+
+        # write to slack
+        SlackTownCrier(
+            dag_id="test_yaml_dags",
+            message_header = "YAML DAGs Test Complete",
+            message_content = failures, 
+            message_body = body,
+        ).announce()
+
+
+    write_to_slack(run_dags(get_dag_ids()))
 
 test_yaml_dags()
