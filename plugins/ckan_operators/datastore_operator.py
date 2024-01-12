@@ -1212,9 +1212,7 @@ def stream_to_datastore(
         Returns:
             None
         """
-        print("--------=====================-----------------")
-        print(records)
-        print("--------=====================-----------------")
+
         ckan.action.datastore_create(
             id=resource_id,
             fields=attributes,
@@ -1253,6 +1251,15 @@ def stream_to_datastore(
         logging.info(f"Loading last {len(records)} records")
         insert_into_ckan(records)
 
-    print(f"Inserted {total_count} records into CKAN")
+    # make sure datastore_active is set to True
+    datastore_active = ckan.action.resource_show(id=resource_id)["datastore_active"]
+    if str(datastore_active).lower() != "true":
+        ckan.action.resource_patch(
+            id=resource_id,
+            datastore_active=True,
+        )
+        logging.info("Manually set datastore_active to True.")
+
+    logging.info(f"Inserted {total_count} records into CKAN")
 
     return {"success": True, "record_count": str(total_count)}

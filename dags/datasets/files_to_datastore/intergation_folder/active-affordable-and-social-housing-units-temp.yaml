@@ -53,7 +53,7 @@ active-affordable-and-social-housing-units-temp:
           type: "text"
           info:
             notes: "Rental homes under the City's administration with monthly rents, including utilities, at or below 100 per cent of Average Market Rent (AMR). Average Market Rents are published annually by the Canadian Mortgage and Housing Corporation (CMHC). "
-    Rental Housing:
+    Rental Housing A:
       format: csv
       url: https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv
       attributes:
@@ -69,4 +69,67 @@ active-affordable-and-social-housing-units-temp:
           type: "text"
           info:
             notes: "Rental homes under the City's administration with monthly rents, including utilities, at or below 100 per cent of Average Market Rent (AMR). Average Market Rents are published annually by the Canadian Mortgage and Housing Corporation (CMHC). "
-            
+    Rental Housing B:
+      format: csv
+      url: https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv
+      attributes:
+        - id: Quarter
+          type: "text"
+          info:
+            notes: ""
+        - id: Subsidized Housing Units
+          type: "text"
+          info:
+            notes: "Rental homes developed with the assistance of government so that rents are more affordable for low-income households and are under the City's administration. Social housing includes homes that are Rent-Geared-to-Income (RGI) housing. In most cases, RGI rent is 30 per cent of a household's monthly Adjusted Family Net Income. Social housing is provided by various types of housing organizations, including the City's housing corporations (Toronto Community Housing Corporation and Toronto Seniors Housing Corporation), and not-for-profit and co-op social housing providers. In addition, commercial rent supplements enable RGI-level housing through subsidized private landlords."
+        - id: Affordable Housing Units
+          type: "text"
+          info:
+            notes: "Rental homes under the City's administration with monthly rents, including utilities, at or below 100 per cent of Average Market Rent (AMR). Average Market Rents are published annually by the Canadian Mortgage and Housing Corporation (CMHC). "
+    Rental Housing C:
+      format: csv
+      url: https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv
+      attributes:
+        - id: Quarter
+          type: "text"
+          info:
+            notes: ""
+        - id: Subsidized Housing Units
+          type: "text"
+          info:
+            notes: "Rental homes developed with the assistance of government so that rents are more affordable for low-income households and are under the City's administration. Social housing includes homes that are Rent-Geared-to-Income (RGI) housing. In most cases, RGI rent is 30 per cent of a household's monthly Adjusted Family Net Income. Social housing is provided by various types of housing organizations, including the City's housing corporations (Toronto Community Housing Corporation and Toronto Seniors Housing Corporation), and not-for-profit and co-op social housing providers. In addition, commercial rent supplements enable RGI-level housing through subsidized private landlords."
+        - id: Affordable Housing Units
+          type: "text"
+          info:
+            notes: "Rental homes under the City's administration with monthly rents, including utilities, at or below 100 per cent of Average Market Rent (AMR). Average Market Rents are published annually by the Canadian Mortgage and Housing Corporation (CMHC). "
+    Rental Housing D:
+      format: csv
+      url: https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv
+      attributes:
+        - id: Quarter
+          type: "text"
+          info:
+            notes: ""
+        - id: Subsidized Housing Units
+          type: "text"
+          info:
+            notes: "Rental homes developed with the assistance of government so that rents are more affordable for low-income households and are under the City's administration. Social housing includes homes that are Rent-Geared-to-Income (RGI) housing. In most cases, RGI rent is 30 per cent of a household's monthly Adjusted Family Net Income. Social housing is provided by various types of housing organizations, including the City's housing corporations (Toronto Community Housing Corporation and Toronto Seniors Housing Corporation), and not-for-profit and co-op social housing providers. In addition, commercial rent supplements enable RGI-level housing through subsidized private landlords."
+        - id: Affordable Housing Units
+          type: "text"
+          info:
+            notes: "Rental homes under the City's administration with monthly rents, including utilities, at or below 100 per cent of Average Market Rent (AMR). Average Market Rents are published annually by the Canadian Mortgage and Housing Corporation (CMHC). "
+    Rental Housing E:
+      format: csv
+      url: https://opendata.toronto.ca/housing.secretariat/Social and Affordable Housing.csv
+      attributes:
+        - id: Quarter
+          type: "text"
+          info:
+            notes: ""
+        - id: Subsidized Housing Units
+          type: "text"
+          info:
+            notes: "Rental homes developed with the assistance of government so that rents are more affordable for low-income households and are under the City's administration. Social housing includes homes that are Rent-Geared-to-Income (RGI) housing. In most cases, RGI rent is 30 per cent of a household's monthly Adjusted Family Net Income. Social housing is provided by various types of housing organizations, including the City's housing corporations (Toronto Community Housing Corporation and Toronto Seniors Housing Corporation), and not-for-profit and co-op social housing providers. In addition, commercial rent supplements enable RGI-level housing through subsidized private landlords."
+        - id: Affordable Housing Units
+          type: "text"
+          info:
+            notes: "Rental homes under the City's administration with monthly rents, including utilities, at or below 100 per cent of Average Market Rent (AMR). Average Market Rents are published annually by the Canadian Mortgage and Housing Corporation (CMHC). "

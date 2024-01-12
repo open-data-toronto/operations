@@ -6,7 +6,6 @@ This is a dag generator template created by yanan.zhang@toronto.ca for codebase 
 import os
 import yaml
 import logging
-import pandas as pd
 from datetime import datetime
 
 from airflow.decorators import dag, task
@@ -159,7 +158,7 @@ def integration_template():
             return resource.get_or_create_resource()
 
         # stream to ckan datastore
-        @task(task_id="insert_records_" + resource_label)
+        @task(task_id="insert_records_" + resource_label, trigger_rule="all_success")
         def insert_records_to_datastore(
             resource_id,
             file_path,
