@@ -366,8 +366,13 @@ class JSONReader(Reader):
             return self.parse_jsonpath(input=res)
 
 
-def select_reader(resource_config):
+def select_reader(package_name, resource_config):
     '''input CKAN resource config, returns correctReader instance'''
+
+    out_dir_basepath = "/data/tmp/"
+
+    resource_name = list(resource_config.keys())[0]
+    resource_config = resource_config[resource_name]
 
     readers = {
         "csv": CSVReader,
@@ -379,63 +384,31 @@ def select_reader(resource_config):
     }
 
     # make sure config has minimum keys we'll need
-    assert isinstance(config, dict), f"Input must be dict! Got {type(config)}"
+    assert isinstance(resource_config, dict), f"Input must be dict! Got {type(resource_config)}"
     
     assert "url" in resource_config.keys(), "Resource config missing URL!"
     assert "format" in resource_config.keys(), "Resource config missing format!"
 
+    # parse attributes from config for Readers
+    resource_config["source_url"] = resource_config["url"]
+    resource_config["schema"] = resource_config["attributes"]
+    resource_config["out_dir"] = out_dir_basepath + package_name
+    resource_config["filename"] = resource_name + ".csv"
+
     # add attribute to differentiate json and geojson for jsonReader
     if resource_config["format"] == "geojson":
-        resource_config["is_geojson"] == True
+        resource_config["is_geojson"] = True
 
     # TODO: How do we mark custom readers in YAMLs?
     # TODO: How do we mark custom reader inputs in YAMLs?
     if "custom_reader" in resource_config.keys():
         return CustomReader()
 
+    # if file is AGOL, return AGOLReader
+    elif resource_config.get("agol", None):
+        return AGOLReader(**resource_config) 
+
     # return reader
     else:
         reader = readers[resource_config["format"]](**resource_config)
         return reader
-
-
-
-
-if __name__ == "__main__":
-    #d = Reader("https://httpstat.us/Random/200,201,500-504")
-    #print(d.source_url)
-    import os
-    import yaml
-    this_dir = os.path.dirname(os.path.realpath(__file__))
-    test_source_url = "https://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.geojson"
-    with open("/data/operations/plugins/readers/test_geojson_schema.yaml", "r") as f:
-            config = yaml.load(f, yaml.SafeLoader)
-    test_schema = config["traffic-calming-database"]["resources"]["Traffic Calming Database"]["attributes"]
-
-    #JSONReader(
-    #    source_url = test_source_url,
-    #    schema = test_schema,
-    #    #sheet = config["deaths-of-people-experiencing-homelessness"]["resources"]["Homeless deaths by demographics"]["sheet"],
-    #    out_dir = "/data/tmp",
-    #    filename = "ssha-temp-test.csv",
-    #    is_geojson = True,
-	#    ).write_to_csv()
-#
-    this_dir = os.path.dirname(os.path.realpath(__file__))
-    test_source_url = "https://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json"
-    with open("/data/operations/plugins/readers/test_json_schema.yaml", "r") as f:
-            config = yaml.load(f, yaml.SafeLoader)
-    test_schema = config["earlyon-child-and-family-centres"]["resources"]["EarlyON Child and Family Centres Locations - geometry"]#["attributes"]
-
-    #JSONReader(
-    #    source_url = test_source_url,
-    #    schema = test_schema,
-    #    #sheet = config["deaths-of-people-experiencing-homelessness"]["resources"]["Homeless deaths by demographics"]["sheet"],
-    #    out_dir = "/data/tmp",
-    #    filename = "ssha-temp-test.csv",
-	#    ).write_to_csv()
-
-    print(test_schema)
-    print(type(test_schema))
-
-    print(select_reader(test_schema))

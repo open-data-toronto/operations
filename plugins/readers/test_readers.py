@@ -4,7 +4,7 @@ import pytest
 import csv
 import os
 import yaml
-from readers.base import Reader, CSVReader, AGOLReader, CustomReader, ExcelReader, JSONReader
+from readers.base import Reader, CSVReader, AGOLReader, CustomReader, ExcelReader, JSONReader, select_reader
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -186,3 +186,26 @@ def test_json_reader_output_jsonpath(test_json_reader_jsonpath):
     test_json_reader_jsonpath.write_to_csv()
     with open(test_json_reader_jsonpath.path, "r") as f:
         assert f
+
+
+def test_select_reader():
+    
+    readers = {
+        "csv": CSVReader,
+        "json": JSONReader,
+        "geojson": JSONReader,
+        "agol": AGOLReader,
+        "excel": ExcelReader,
+    }
+
+    for test_format, reader_class in readers.items():
+        config_filepath = f"{this_dir}/test_{test_format}_schema.yaml"
+        with open(config_filepath, "r") as f:
+            config = yaml.load(f, yaml.SafeLoader)
+
+        package_name = list(config.keys())[0]
+        resource_config = config[package_name]["resources"]
+        reader = select_reader(package_name, resource_config)
+        print(reader)
+
+        assert type(reader) == reader_class, f"{test_format} needs {reader_class}, not {type(reader)}"
