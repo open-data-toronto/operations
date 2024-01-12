@@ -31,7 +31,8 @@ class Reader(ABC):
             source_url: str = None,
             schema: list = None, 
             out_dir: str = "",
-            filename: str = None
+            filename: str = None,
+            **kwargs,
         ):
 
         if source_url:
@@ -365,6 +366,40 @@ class JSONReader(Reader):
             return self.parse_jsonpath(input=res)
 
 
+def select_reader(config):
+    '''input CKAN resource config, returns correctReader instance'''
+
+    readers = {
+        "csv": CSVReader,
+        "json": JSONReader,
+        "geojson": JSONReader,
+        "agol": AGOLReader,
+        "xls": ExcelReader,
+        "xlsx": ExcelReader,
+    }
+
+    # make sure config has minimum keys we'll need
+    assert isinstance(config, dict), f"Input must be dict! Got {type(config)}"
+    
+    resource_name = list(config.keys())[0]
+    resource_config = config[resource_name]
+    assert "url" in resource_config.keys(), "Resource config missing URL!"
+    assert "format" in resource_config.keys(), "Resource config missing format!"
+
+    # add attribute to differentiate json and geojson for jsonReader
+    if resource_config["format"] == "geojson":
+        resource_config["is_geojson"] == True
+
+    # TODO: How do we mark custom readers in YAMLs?
+    # TODO: How do we mark custom reader inputs in YAMLs?
+    if "custom_reader" in resource_config.keys():
+        return CustomReader()
+
+    # return reader
+    else:
+        reader = readers[resource_config["format"]](**resource_config)
+        return reader
+
 
 
 
@@ -392,12 +427,14 @@ if __name__ == "__main__":
     test_source_url = "https://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json"
     with open("/data/operations/plugins/readers/test_json_schema.yaml", "r") as f:
             config = yaml.load(f, yaml.SafeLoader)
-    test_schema = config["earlyon-child-and-family-centres"]["resources"]["EarlyON Child and Family Centres Locations - geometry"]["attributes"]
+    test_schema = config["earlyon-child-and-family-centres"]["resources"][0]#["EarlyON Child and Family Centres Locations - geometry"]["attributes"]
 
-    JSONReader(
-        source_url = test_source_url,
-        schema = test_schema,
-        #sheet = config["deaths-of-people-experiencing-homelessness"]["resources"]["Homeless deaths by demographics"]["sheet"],
-        out_dir = "/data/tmp",
-        filename = "ssha-temp-test.csv",
-	    ).write_to_csv()
+    #JSONReader(
+    #    source_url = test_source_url,
+    #    schema = test_schema,
+    #    #sheet = config["deaths-of-people-experiencing-homelessness"]["resources"]["Homeless deaths by demographics"]["sheet"],
+    #    out_dir = "/data/tmp",
+    #    filename = "ssha-temp-test.csv",
+	#    ).write_to_csv()
+
+    print(select_reader(test_schema))
