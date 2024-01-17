@@ -13,10 +13,10 @@ from pendulum import datetime
 
 from airflow.decorators import dag, task, task_group
 from utils_operators.slack_operators import task_success_slack_alert, task_failure_slack_alert
-#from utils_operators import slack_operator_v2
-from utils_operators.slack_operator_v2 import MessageFactory, SlackTownCrier
+#from utils_operators import slack_operators
+from utils_operators.slack_operators import MessageFactory, SlackTownCrier
 
-from ckan_operators.package_operator_v2 import GetOrCreatePackage
+from ckan_operators.package_operator import GetOrCreatePackage
 
 def create_dag(dag_id,
                 package_name,

@@ -1,8 +1,8 @@
 import pendulum
 from airflow.decorators import dag, task, task_group
-from ckan_operators.package_operator_v2 import GetOrCreatePackage
-from ckan_operators.datastore_operator_v2 import DeleteDatastoreResource
-from utils_operators.slack_operator_v2 import SlackTownCrier
+from ckan_operators.package_operator import GetOrCreatePackage
+from ckan_operators.datastore_operator import DeleteDatastoreResource
+from utils_operators.slack_operators import SlackTownCrier
 
 package_name = 'test-package-dag-refactor'
 package_metadata = {
