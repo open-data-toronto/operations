@@ -33,7 +33,7 @@ apartment-building-evaluation:
   resources:
     Apartment Building Evaluations 2023 - current:
       format: csv
-      url: https://opendata.toronto.ca/municipal.licensing.standards/apartment-building-evaluation/apartment-building-evaluation.csv
+      url: https://opendata.toronto.ca/municipal.licensing.standards/apartment-building-evaluation/apartment-building-evaluation-test.csv
       attributes:
       - id: RSN
         type: text
@@ -79,11 +79,19 @@ apartment-building-evaluation:
         type: date
         format: "%Y/%m/%d"
         info:
-          notes: "This is the date the evaluation was conducted on."
-      - id: SCORE
-        type: text
+          notes: "This is the date the evaluation was conducted on."  
+      - id: CURRENT BUILDING EVAL SCORE
+        type: float
         info:
-          notes: "This is the proactive weighted score of the building. This weighted score is a result of a building evaluation; scheduled every two years. "      
+          notes: "An assessment of a building's compliance with property standards which is calculated by adding the current reactive score (applicable Orders and Notices of Violations) to the proactive building score (latest building evaluation score)."      
+      - id: PROACTIVE BUILDING SCORE
+        type: float
+        info:
+          notes: "The score of the most recent, proactive evaluation of the common areas of a building reflecting the weighted score of all, applicable, evaluation categories."
+      - id: CURRENT REACTIVE SCORE
+        type: float
+        info:
+          notes: "Total score of all applicable Orders and Notices of Violation issued for a building"            
       - id: NO OF AREAS EVALUATED
         type: int
         info:
