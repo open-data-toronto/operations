@@ -9,10 +9,14 @@ import logging
 import pendulum
 
 from airflow.decorators import dag, task
+from airflow.operators.empty import EmptyOperator
 
 from ckan_operators.package_operator import GetOrCreatePackage
 from ckan_operators.resource_operator import GetOrCreateResource, EditResourceMetadata
-from ckan_operators.datastore_operator import stream_to_datastore
+from ckan_operators.datastore_operator import (
+    DeleteDatastoreResource,
+    stream_to_datastore,
+)
 from readers.base import CSVReader
 from utils import misc_utils
 from utils_operators.slack_operators import task_failure_slack_alert
@@ -70,18 +74,16 @@ def create_dag(package_name, config, schedule, default_args):
             )
             return package.get_or_create_package()
 
-        @task
-        def delete_tmp_dir(dag_id):
-            misc_utils.delete_tmp_dir(dag_id)
-
         # ----------------------init tasks
         create_tmp_dir = create_tmp_dir(dag_id=package_name, dir_path="/data/tmp")
         get_or_create_package = get_or_create_package(package_name, package_metadata)
-        delete_tmp_dir = delete_tmp_dir(dag_id=package_name)
+        done_inserting_into_datastore = EmptyOperator(
+            task_id="done_inserting_into_datastore"
+        )
 
         ############################################################
         # ---------------Resource level task lists------------------
-        task_lists = {}
+        task_list = {}
         resources = package["resources"]
         resource_list = resources.keys()
 
@@ -130,6 +132,31 @@ def create_dag(package_name, config, schedule, default_args):
 
                 return resource.get_or_create_resource()
 
+            # branching for new and existing resource
+            @task.branch(task_id="new_or_existing_" + resource_label)
+            def new_or_existing(resource):
+                if resource["is_new"]:
+                    return "new_" + resource_label
+
+                return "existing_" + resource_label
+
+            # compare if new file and existing file are exactly same
+            # determine if the resource needs to be updated
+            @task.branch(task_id="does_" + resource_label + "_need_update")
+            def does_resource_need_update(curr_file_path, new_file_path):
+                equal = misc_utils.file_equal(curr_file_path, new_file_path)
+
+                if equal:
+                    return "dont_update_resource_" + resource_label
+                else:
+                    return "update_resource_" + resource_label
+
+            # delete datastore resource
+            @task(task_id="delete_resource_" + resource_label)
+            def delete_resource(resource_id):
+                delete = DeleteDatastoreResource(resource_id=resource_id)
+                return delete.delete_datastore_resource()
+
             # stream to ckan datastore
             @task(
                 task_id="insert_records_" + resource_label, trigger_rule="all_success"
@@ -144,26 +171,52 @@ def create_dag(package_name, config, schedule, default_args):
                 )
 
             # -----------------Init tasks
-            task_lists["download_data_" + resource_label] = read_from_csv(
+            task_list["download_data_" + resource_label] = read_from_csv(
                 source_url=resource_url,
                 schema=attributes,
                 out_dir=create_tmp_dir,
                 filename=resource_name + ".csv",
             )
 
-            task_lists[
+            task_list[
                 "get_or_create_resource_" + resource_label
             ] = get_or_create_resource(
                 package_name=package_name, resource_name=resource_name
             )
 
-            task_lists[
-                "insert_records_" + resource_label
-            ] = insert_records_to_datastore(
-                resource_id=task_lists["get_or_create_resource_" + resource_label][
-                    "id"
-                ],
-                file_path=task_lists["download_data_" + resource_label],
+            task_list["new_or_existing_" + resource_label] = new_or_existing(
+                resource=task_list["get_or_create_resource_" + resource_label]
+            )
+
+            task_list["new_" + resource_label] = EmptyOperator(
+                task_id="new_" + resource_label
+            )
+            task_list["existing_" + resource_label] = EmptyOperator(
+                task_id="existing_" + resource_label
+            )
+
+            task_list[
+                "does_" + resource_label + "_need_update"
+            ] = does_resource_need_update("curr_file_path", "new_file_path")
+
+            task_list["update_resource_" + resource_label] = EmptyOperator(
+                task_id="update_resource_" + resource_label
+            )
+            task_list["dont_update_resource_" + resource_label] = EmptyOperator(
+                task_id="dont_update_resource_" + resource_label
+            )
+
+            task_list["delete_resource_" + resource_label] = EmptyOperator(
+                task_id="delete_resource_" + resource_label
+            )
+
+            task_list["ready_insert_" + resource_label] = EmptyOperator(
+                task_id="ready_insert_" + resource_label
+            )
+
+            task_list["insert_records_" + resource_label] = insert_records_to_datastore(
+                resource_id=task_list["get_or_create_resource_" + resource_label]["id"],
+                file_path=task_list["download_data_" + resource_label],
                 attributes=attributes,
             )
 
@@ -171,10 +224,43 @@ def create_dag(package_name, config, schedule, default_args):
             (
                 get_or_create_package
                 >> create_tmp_dir
-                >> task_lists["download_data_" + resource_label]
-                >> task_lists["get_or_create_resource_" + resource_label]
-                >> task_lists["insert_records_" + resource_label]
-                >> delete_tmp_dir
+                >> task_list["download_data_" + resource_label]
+                >> task_list["get_or_create_resource_" + resource_label]
+                >> task_list["new_or_existing_" + resource_label]
+            )
+
+            task_list["new_or_existing_" + resource_label] >> [
+                task_list["new_" + resource_label],
+                task_list["existing_" + resource_label],
+            ]
+
+            (
+                task_list["new_" + resource_label]
+                >> task_list["ready_insert_" + resource_label]
+            )
+            (
+                task_list["existing_" + resource_label]
+                >> task_list["does_" + resource_label + "_need_update"]
+            )
+
+            task_list["does_" + resource_label + "_need_update"] >> [
+                task_list["update_resource_" + resource_label],
+                task_list["dont_update_resource_" + resource_label],
+            ]
+
+            (
+                task_list["dont_update_resource_" + resource_label]
+                >> done_inserting_into_datastore
+            )
+            (
+                task_list["update_resource_" + resource_label]
+                >> task_list["delete_resource_" + resource_label]
+                >> task_list["ready_insert_" + resource_label]
+            )
+            (
+                task_list["ready_insert_" + resource_label]
+                >> task_list["insert_records_" + resource_label]
+                >> done_inserting_into_datastore
             )
 
     return integration_template()
