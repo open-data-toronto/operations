@@ -7,7 +7,9 @@ import os
 import yaml
 import logging
 import pendulum
+import shutil
 
+from airflow.models import Variable
 from airflow.decorators import dag, task
 from airflow.operators.empty import EmptyOperator
 
@@ -33,6 +35,8 @@ def create_dag(package_name, config, schedule, default_args):
     def integration_template():
         ################################################
         # --------------Get config params----------------
+        dir_path = Variable.get("tmp_dir")
+        dag_tmp_dir = dir_path + "/" + package_name
         package = config[package_name]
         metadata_pool = [
             "title",
@@ -75,10 +79,10 @@ def create_dag(package_name, config, schedule, default_args):
             return package.get_or_create_package()
 
         # ----------------------init tasks
-        create_tmp_dir = create_tmp_dir(dag_id=package_name, dir_path="/data/tmp")
+        create_tmp_dir = create_tmp_dir(dag_id=package_name, dir_path=dir_path)
         get_or_create_package = get_or_create_package(package_name, package_metadata)
         done_inserting_into_datastore = EmptyOperator(
-            task_id="done_inserting_into_datastore"
+            task_id="done_inserting_into_datastore", trigger_rule="none_failed"
         )
 
         ############################################################
@@ -93,6 +97,8 @@ def create_dag(package_name, config, schedule, default_args):
             resource = resources[resource_name]
             resource_url = resource["url"]
             attributes = resource["attributes"]
+            resource_filename = resource_name + ".csv"
+            resource_filepath = dag_tmp_dir + "/" + resource_filename
 
             # download source data
             @task(task_id="download_data_" + resource_label)
@@ -143,8 +149,13 @@ def create_dag(package_name, config, schedule, default_args):
             # compare if new file and existing file are exactly same
             # determine if the resource needs to be updated
             @task.branch(task_id="does_" + resource_label + "_need_update")
-            def does_resource_need_update(curr_file_path, new_file_path):
-                equal = misc_utils.file_equal(curr_file_path, new_file_path)
+            def does_resource_need_update():
+                backup_resource_filename = "backup_" + resource_filename
+                backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
+
+                equal = misc_utils.file_equal(
+                    resource_filepath, backup_resource_filepath
+                )
 
                 if equal:
                     return "dont_update_resource_" + resource_label
@@ -170,11 +181,19 @@ def create_dag(package_name, config, schedule, default_args):
                     resource_id=resource_id, file_path=file_path, attributes=attributes
                 )
 
+            @task(task_id="clean_backups_" + resource_label)
+            def clean_backups():
+                backup_resource_filename = "backup_" + resource_filename
+                backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
+                shutil.move(resource_filepath, backup_resource_filepath)
+
+                logging.info(f"File list: {os.listdir(dag_tmp_dir)}")
+
             # -----------------Init tasks
             task_list["download_data_" + resource_label] = read_from_csv(
                 source_url=resource_url,
                 schema=attributes,
-                out_dir=create_tmp_dir,
+                out_dir=dag_tmp_dir,
                 filename=resource_name + ".csv",
             )
 
@@ -197,7 +216,7 @@ def create_dag(package_name, config, schedule, default_args):
 
             task_list[
                 "does_" + resource_label + "_need_update"
-            ] = does_resource_need_update("curr_file_path", "new_file_path")
+            ] = does_resource_need_update()
 
             task_list["update_resource_" + resource_label] = EmptyOperator(
                 task_id="update_resource_" + resource_label
@@ -211,19 +230,21 @@ def create_dag(package_name, config, schedule, default_args):
             )
 
             task_list["ready_insert_" + resource_label] = EmptyOperator(
-                task_id="ready_insert_" + resource_label
+                task_id="ready_insert_" + resource_label, trigger_rule="one_success"
             )
 
             task_list["insert_records_" + resource_label] = insert_records_to_datastore(
                 resource_id=task_list["get_or_create_resource_" + resource_label]["id"],
-                file_path=task_list["download_data_" + resource_label],
+                file_path=resource_filepath,
                 attributes=attributes,
             )
 
+            task_list["clean_backups_" + resource_label] = clean_backups()
+
             # ----Task Flow----
             (
-                get_or_create_package
-                >> create_tmp_dir
+                create_tmp_dir
+                >> get_or_create_package
                 >> task_list["download_data_" + resource_label]
                 >> task_list["get_or_create_resource_" + resource_label]
                 >> task_list["new_or_existing_" + resource_label]
@@ -261,6 +282,11 @@ def create_dag(package_name, config, schedule, default_args):
                 task_list["ready_insert_" + resource_label]
                 >> task_list["insert_records_" + resource_label]
                 >> done_inserting_into_datastore
+            )
+
+            (
+                done_inserting_into_datastore
+                >> task_list["clean_backups_" + resource_label]
             )
 
     return integration_template()

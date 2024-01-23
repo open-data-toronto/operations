@@ -272,11 +272,11 @@ def delete_file(dag_tmp_dir: str, file_name: str) -> None:
         logging.info("The file does not exist.")
 
 
-def file_equal(curr_file_path: str, new_file_path: str):
+def file_equal(existing_file_path: str, new_file_path: str):
     """
     Compare if new file and existing file are same
     Parameters:
-    - curr_file_path : str
+    - existing_file_path : str
         the path of current file
     - new_file_path : str
         the path of upcoming new file
@@ -285,7 +285,7 @@ def file_equal(curr_file_path: str, new_file_path: str):
         Bool
 
     """
-    curr_hash = file_to_md5(curr_file_path)
+    curr_hash = file_to_md5(existing_file_path)
     new_hash = file_to_md5(new_file_path)
 
     return curr_hash == new_hash
