@@ -19,7 +19,7 @@ from ckan_operators.datastore_operator import (
     DeleteDatastoreResource,
     stream_to_datastore,
 )
-from readers.base import CSVReader
+from readers.base import select_reader
 from utils import misc_utils
 from utils_operators.slack_operators import task_failure_slack_alert
 
@@ -94,29 +94,23 @@ def create_dag(package_name, config, schedule, default_args):
         for resource_name in resource_list:
             # clean the resource name so the DAG can label its tasks with it
             resource_label = resource_name.replace(" ", "")
-            resource = resources[resource_name]
-            resource_url = resource["url"]
-            attributes = resource["attributes"]
+            
+            # get resource config
+            resource_config = resources[resource_name]
+            attributes = resource_config["attributes"]
             resource_filename = resource_name + ".csv"
             resource_filepath = dag_tmp_dir + "/" + resource_filename
 
             # download source data
             @task(task_id="download_data_" + resource_label)
-            def read_from_csv(source_url, schema, out_dir, filename):
-                csv_reader = CSVReader(
-                    source_url=source_url,
-                    schema=schema,
-                    out_dir=out_dir,
-                    filename=filename,
-                )
-                csv_reader.write_to_csv()
-
-                if os.listdir(out_dir):
-                    logging.info(f"Reader output file {filename} Successfully.")
+            def read_from_readers(package_name, resource_name, resource_config):
+                reader = select_reader(package_name=package_name, resource_name=resource_name, resource_config=resource_config)
+                reader.write_to_csv()
+                
+                if os.listdir(dag_tmp_dir):
+                    logging.info(f"Reader output file {resource_filename} Successfully.")
                 else:
                     raise Exception("Reader failed!")
-
-                return out_dir + "/" + filename
 
             # get or create resource
             @task(
@@ -124,19 +118,19 @@ def create_dag(package_name, config, schedule, default_args):
                 multiple_outputs=True,
             )
             def get_or_create_resource(package_name, resource_name):
-                resource = GetOrCreateResource(
+                ckan_resource = GetOrCreateResource(
                     package_name=package_name,
                     resource_name=resource_name,
                     resource_attributes=dict(
-                        format="csv",
+                        format=resource_config["format"],
                         is_preview=True,
                         url_type="datastore",
-                        extract_job=f"Airflow: {package_name}",
-                        url="placeholder",
+                        extract_job=f"Airflow: Integration Pipeline {package_name}",
+                        url=resource_config["url"],
                     ),
                 )
 
-                return resource.get_or_create_resource()
+                return ckan_resource.get_or_create_resource()
 
             # branching for new and existing resource
             @task.branch(task_id="new_or_existing_" + resource_label)
@@ -178,9 +172,23 @@ def create_dag(package_name, config, schedule, default_args):
                 attributes,
             ):
                 return stream_to_datastore(
-                    resource_id=resource_id, file_path=file_path, attributes=attributes
+                    resource_id=resource_id,
+                    file_path=file_path,
+                    attributes=attributes,
+                    do_not_cache=True,
                 )
 
+            # trigger datastore_cache
+            @task(
+                task_id="datastore_cache_" + resource_label,
+                pool="ckan_datastore_cache_pool"
+            )
+            def datastore_cache(resource_id):
+                ckan = misc_utils.connect_to_ckan()
+                ckan.action.datastore_cache(resource_id=resource_id)
+                logging.info("Done Datastore Cache!")
+
+            # rename most recent resource_file to backup resource_file
             @task(task_id="clean_backups_" + resource_label)
             def clean_backups():
                 backup_resource_filename = "backup_" + resource_filename
@@ -190,11 +198,10 @@ def create_dag(package_name, config, schedule, default_args):
                 logging.info(f"File list: {os.listdir(dag_tmp_dir)}")
 
             # -----------------Init tasks
-            task_list["download_data_" + resource_label] = read_from_csv(
-                source_url=resource_url,
-                schema=attributes,
-                out_dir=dag_tmp_dir,
-                filename=resource_name + ".csv",
+            task_list["download_data_" + resource_label] = read_from_readers(
+                package_name=package_name,
+                resource_name=resource_name,
+                resource_config=resource_config
             )
 
             task_list[
@@ -225,8 +232,8 @@ def create_dag(package_name, config, schedule, default_args):
                 task_id="dont_update_resource_" + resource_label
             )
 
-            task_list["delete_resource_" + resource_label] = EmptyOperator(
-                task_id="delete_resource_" + resource_label
+            task_list["delete_resource_" + resource_label] = delete_resource(
+                resource_id=task_list["get_or_create_resource_" + resource_label]["id"]
             )
 
             task_list["ready_insert_" + resource_label] = EmptyOperator(
@@ -237,6 +244,10 @@ def create_dag(package_name, config, schedule, default_args):
                 resource_id=task_list["get_or_create_resource_" + resource_label]["id"],
                 file_path=resource_filepath,
                 attributes=attributes,
+            )
+
+            task_list["datastore_cache_" + resource_label] = datastore_cache(
+                resource_id=task_list["get_or_create_resource_" + resource_label]["id"]
             )
 
             task_list["clean_backups_" + resource_label] = clean_backups()
@@ -281,6 +292,7 @@ def create_dag(package_name, config, schedule, default_args):
             (
                 task_list["ready_insert_" + resource_label]
                 >> task_list["insert_records_" + resource_label]
+                >> task_list["datastore_cache_" + resource_label]
                 >> done_inserting_into_datastore
             )
 

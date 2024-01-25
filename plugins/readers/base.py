@@ -366,13 +366,11 @@ class JSONReader(Reader):
             return self.parse_jsonpath(input=res)
 
 
-def select_reader(package_name, resource_config):
+def select_reader(package_name, resource_name, resource_config):
     '''input CKAN resource config, returns correctReader instance'''
 
     out_dir_basepath = "/data/tmp/"
 
-    resource_name = list(resource_config.keys())[0]
-    resource_config = resource_config[resource_name]
 
     readers = {
         "csv": CSVReader,
