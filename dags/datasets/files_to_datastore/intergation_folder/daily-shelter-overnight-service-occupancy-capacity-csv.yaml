@@ -1,0 +1,451 @@
+# package name
+daily-shelter-overnight-service-occupancy-capacity-csv:
+  # DAG info
+  schedule: "30 13 * * *"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Daily Shelter & Overnight Service Occupancy & Capacity"
+  date_published: "2021-06-28T13:44:56.408963"
+  refresh_rate: Daily
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Shelter, Support & Housing Administration
+  owner_section: null
+  owner_unit: null
+  owner_email: sshadata@toronto.ca
+
+  civic_issues: 
+    - Affordable housing
+  topics: 
+    - Community services
+    - City government
+  tags: 
+    - name: shelter
+      vocabulary_id: null
+
+  information_url: https://www.toronto.ca/city-government/data-research-maps/research-reports/housing-and-homelessness-research-and-reports/shelter-census/
+  excerpt: Daily occupancy and capacity data for City of Toronto funded shelter and overnight service programs.
+  limitations: This is unaudited data compiled directly from an administrative database. Data reflect only the state of each program's records in the database and may not always accurately reflect the actual current situation in each program.
+  notes: |
+    This data set provides a daily list of active overnight shelter and allied services in the Shelter Support and Housing Administration division's Shelter Management Information System (SMIS) database. The data provides daily updated information about shelter and overnight service programs administered by SSHA including the program's operator, location, classification, occupancy and capacity.
+    This reporting revises and updates the approach taken in the [Daily Shelter Occupancy data set] (https://open.toronto.ca/dataset/daily-shelter-occupancy/), starting with the current year data for 2021. This new data set includes the following revisions:
+    
+    * __Overnight service type:__ The previous data set only reported on shelter programs, now all overnight service types where occupancy is tracked in SMIS are included.
+    
+    * __Capacity type:__ Programs are categorized in this data set as having either bed based or room based capacity. Bed based capacity is typically applicable for programs with common sleeping areas, while room based capacity is typically applicable for family programs and hotel programs where sleeping rooms are not shared by people from different households. This change prevents over reporting of capacity in room based programs.
+    
+    * __Two measures of capacity:__ This data set provides information about two measures of capacity. __Funding__ capacity reports the number of beds or rooms that a program is intended to provide. This is also the capacity measure provided in the previous Daily Shelter Occupancy data set. There are a number of reasons why beds or rooms may be temporarily out of service, including maintenance, repairs, renovations, outbreaks or pest control, so a second capacity measure is also included in the reporting. __Actual__ capacity reports the number of beds or rooms in service and showing as available for occupancy in the Shelter Management Information System at time of reporting. The previous data set reported only funding capacity, but actual capacity is a more effective capacity measure to assess program occupancy rates.
+    
+    ### Definitions
+    Definitions for each field in the data set are provided under data features. Additional definitions about housing & homelessness services can be found in the Housing & Homelessness Services Glossary, which you can find on the [Housing Stability Service System Overview](https://www.toronto.ca/city-government/data-research-maps/research-reports/housing-and-homelessness-research-and-reports/housing-stability-service-system-map-and-terms/) web page.
+    
+  resources:
+    # resource name
+    Daily shelter overnight occupancy:
+      format: csv
+      url: https://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/Daily shelter overnight occupancy.csv
+      attributes:
+        - id: "OCCUPANCY_DATE"
+          type: "date"
+          format: "%Y-%m-%dT%H:%M:%S"
+          info:
+            notes: "Date of the record. This date refers to the evening of the overnight period being reported. The occupancy data is retrieved at 4:00 am the following morning, so an OCCUPANCY_DATE of January 1, 2021 would refer to data collected at 4:00 am on January 2, 2021."
+        - id: "ORGANIZATION_ID"
+          type: "text"
+          info:
+            notes: "Unique ID to consistently identify organizations even if the organization name changes"
+        - id: "ORGANIZATION_NAME"
+          type: "text"
+          info:
+            notes: "Name of the organization providing the overnight service"
+        - id: "SHELTER_ID"
+          type: "text"
+          info:
+            notes: "Unique ID to consistently identify the shelter group even if the shelter group name changes"
+        - id: "SHELTER_GROUP"
+          type: "text"
+          info:
+            notes: "The shelter group to which the program belongs in the SMIS database. The shelter group is named for the lead shelter, but also includes satellite programs and hotel programs administered by the lead shelter."
+        - id: "LOCATION_ID"
+          type: "text"
+          info:
+            notes: "Unique ID to consistently identify locations even if the location name changes"
+        - id: "LOCATION_NAME"
+          type: "text"
+          info:
+            notes: "The name of the location of the program"
+        - id: "LOCATION_ADDRESS"
+          type: "text"
+          info:
+            notes: "Street address of the location of the program"
+        - id: "LOCATION_POSTAL_CODE"
+          type: "text"
+          info:
+            notes: "Postal Code of the location of the program"
+        - id: "LOCATION_CITY"
+          type: "text"
+          info:
+            notes: "City of the location of the program"
+        - id: "LOCATION_PROVINCE"
+          type: "text"
+          info:
+            notes: "Province of the location of the program"
+        - id: "PROGRAM_ID"
+          type: "text"
+          info:
+            notes: "Unique ID to consistently identify programs even if the program name changes."
+        - id: "PROGRAM_NAME"
+          type: "text"
+          info:
+            notes: "Name of the program"
+        - id: "SECTOR"
+          type: "text"
+          info:
+            notes: "A means of categorizing homeless shelters based on the gender, age and household size of the service user group(s) served at the shelter location. There are currently five shelter sectors in Toronto: adult men, adult women, mixed adult (co-ed or all gender), youth and family."
+        - id: "PROGRAM_MODEL"
+          type: "text"
+          info:
+            notes: |
+              A classification of shelter programs as either Emergency or Transitional.
+                -	**Emergency**: A homeless shelter program that can be accessed by any individual or family experiencing homelessness with or without a referral.
+                - **Transitional**: A homeless shelter program that provides required, specialized programming and can be accessed by eligible individuals and families experiencing homelessness by referral only.
+        - id: "OVERNIGHT_SERVICE_TYPE"
+          type: "text"
+          info:
+            notes: |
+              Identifies the type of overnight service being provided. (Options are: Shelter, 24-Hour Respite, Motel/Hotel, Interim Housing, Warming Centre, 24-Hour Women's Drop-in, Isolation/Recovery Site)
+                - **Shelter**: Supervised residential facilities that provide temporary accommodation and related support services to assist people experiencing homelessness to move into housing. Operate year-round.
+                - **24-Hour Respite**: An allied shelter service which provides essential services to individuals experiencing homelessness in an environment that prioritizes ease of access to safe indoor space. Services provided include resting spaces, meals and service referrals. Operates on a 24/7 basis.
+                - **Motel/Hotel**: A type of shelter program that provides shelter beds/rooms through contracts with hotel and motel operators, which enables the City to expand and contract emergency shelter capacity in response to demand for services.
+                - **Interim Housing**: A type of shelter program that provides interim housing shelter beds through contracts with apartment spaces.       
+                - **Warming Centre**: An allied shelter service that provides immediate safe indoor space for people during extreme cold weather alerts. Facilities vary, but often include City of Toronto buildings or community recreation centres. Services vary, depending on the facility, and may include at a minimum resting spaces, snacks and referrals to emergency shelter. Operates on a 24/7 basis for the duration of an extreme cold weather alert.
+                - **24-Hour Women's Drop-in**: A type of 24-Hour Respite Site that provides services to women and transgender or gender-non-binary people who are experiencing homelessness.
+                - **Isolation/Recovery Site**: Dedicated isolation and recovery programs with medical supports for people experiencing homelessness to isolate and recover from COVID-19.
+        - id: "PROGRAM_AREA"
+          type: "text"
+          info:
+            notes: |
+              Indicates whether the program is part of the base shelter and overnight services system, or is part of a temporary response program.
+                - **Base Shelter and Overnight Services System**: Programs that are intended to be regular, year-round programs.
+                - **Base Program - Refugee**: Programs that are intended to be year-round programs that serve refugee and asylum claimant families and individuals
+                - **Temporary Refugee Response**: Programs that are intended to create spaces in the overnight services system in order to support refugee and asylum claimant families and individuals.
+                - **COVID-19 Response**: Programs that are intended to create spaces in the overnight services system in order to support improved physical distancing during the COVID-19 pandemic.                
+                - **Winter Response**: Programs that are intended to be exclusively dedicated to the provision of additional spaces under winter services plans. Winter service planning may also add additional capacity to existing programs classified in other program areas.                
+        - id: "SERVICE_USER_COUNT"
+          type: "text"
+          info:
+            notes: "Count of the number of service users staying in an overnight program as of the occupancy time and date. Programs with no service user occupancy will not be included in reporting for that day."
+        - id: "CAPACITY_TYPE"
+          type: "text"
+          info:
+            notes: |
+              Whether the capacity for this program is measured in rooms or beds. Family programs and hotel programs where rooms are not shared by people from different households are room-based.
+                - **Bed Based Capacity**: A program where occupancy is measured at the bed level. Typically applicable for programs with common sleeping areas.
+                - **Room Based Capacity**: A program where occupancy is measured at the room level. Typically applicable to family programs or hotel-based programs where sleeping rooms are not shared by people from different households.
+        - id: "CAPACITY_ACTUAL_BED"
+          type: "text"
+          info:
+            notes: "The number of beds showing as available for occupancy in the Shelter Management Information System."
+        - id: "CAPACITY_FUNDING_BED"
+          type: "text"
+          info:
+            notes: "The number of beds that a program has been approved to provide."
+        - id: "OCCUPIED_BEDS"
+          type: "text"
+          info:
+            notes: "The number of beds showing as occupied by a shelter user in the Shelter Management Information System for this program for this date."
+        - id: "UNOCCUPIED_BEDS"
+          type: "text"
+          info:
+            notes: "The number of beds that are showing as available for occupancy that are not occupied as of the occupancy date. Beds may be held for a service user or may be vacant. Calculated as CAPACITY_ACTUAL_BED minus OCCUPIED_BEDS."
+        - id: "UNAVAILABLE_BEDS"
+          type: "text"
+          info:
+            notes: "The number of beds that are not currently available in a program. This can include temporarily out-of-service beds due to maintenance, repairs, renovations, outbreaks and pest control. Calculated as CAPACITY_FUNDING_BED minus CAPACITY_ACTUAL_BED."
+        - id: "CAPACITY_ACTUAL_ROOM"
+          type: "text"
+          info:
+            notes: "The number of rooms showing as available for occupancy in the Shelter Management Information System for this program for this date."
+        - id: "CAPACITY_FUNDING_ROOM"
+          type: "text"
+          info:
+            notes: "The number of rooms that a program is has been approved to provide."
+        - id: "OCCUPIED_ROOMS"
+          type: "text"
+          info:
+            notes: "The number of rooms showing as occupied by a shelter user in the Shelter Management Information System for this program for this date."
+        - id: "UNOCCUPIED_ROOMS"
+          type: "text"
+          info:
+            notes: "The number of rooms that are showing as available for occupancy that are not occupied as of the occupancy date. Rooms may be held for service users or may be vacant. Calculated as CAPACITY_ACTUAL_ROOM minus OCCUPIED_ROOMS."
+        - id: "UNAVAILABLE_ROOMS"
+          type: "text"
+          info:
+            notes: "The number of rooms that are not currently available in a program. This can include temporarily out-of-service rooms due to maintenance, repairs, renovations, outbreaks and pest control. Calculated as CAPACITY_FUNDING_ROOM minus CAPACITY_ACTUAL_ROOM."
+        - id: "OCCUPANCY_RATE_BEDS"
+          type: "text"
+          info:
+            notes: "The proportion of actual bed capacity that is occupied for the reporting date. Calculated as OCCUPIED_BEDS divided by CAPACITY_ACTUAL_BED."
+        - id: "OCCUPANCY_RATE_ROOMS"
+          type: "text"
+          info:
+            notes: "The proportion of actual room capacity that is occupied for the reporting date. Calculated as OCCUPIED_ROOMS divided by CAPACITY_ACTUAL_ROOM."
+    # daily-shelter-overnight-service-occupancy-capacity-2021:
+    #   format: csv
+    #   url: http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-2021.csv
+    #   attributes:
+    #     - id: "OCCUPANCY_DATE"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "ORGANIZATION_ID"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "ORGANIZATION_NAME"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "SHELTER_ID"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "SHELTER_GROUP"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "LOCATION_ID"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "LOCATION_NAME"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "LOCATION_ADDRESS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "LOCATION_POSTAL_CODE"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "LOCATION_CITY"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "LOCATION_PROVINCE"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "PROGRAM_ID"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "PROGRAM_NAME"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "SECTOR"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "PROGRAM_MODEL"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "OVERNIGHT_SERVICE_TYPE"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "PROGRAM_AREA"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "SERVICE_USER_COUNT"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "CAPACITY_TYPE"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "CAPACITY_ACTUAL_BED"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "CAPACITY_FUNDING_BED"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "OCCUPIED_BEDS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "UNOCCUPIED_BEDS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "UNAVAILABLE_BEDS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "CAPACITY_ACTUAL_ROOM"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "CAPACITY_FUNDING_ROOM"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "OCCUPIED_ROOMS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "UNOCCUPIED_ROOMS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "UNAVAILABLE_ROOMS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "OCCUPANCY_RATE_BEDS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "OCCUPANCY_RATE_ROOMS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    # daily-shelter-overnight-service-occupancy-capacity-2022:
+    #   format: csv
+    #   url: http://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-2022.csv
+    #   attributes:
+    #     - id: "OCCUPANCY_DATE"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "ORGANIZATION_ID"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "ORGANIZATION_NAME"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "SHELTER_ID"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "SHELTER_GROUP"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "LOCATION_ID"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "LOCATION_NAME"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "LOCATION_ADDRESS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "LOCATION_POSTAL_CODE"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "LOCATION_CITY"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "LOCATION_PROVINCE"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "PROGRAM_ID"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "PROGRAM_NAME"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "SECTOR"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "PROGRAM_MODEL"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "OVERNIGHT_SERVICE_TYPE"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "PROGRAM_AREA"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "SERVICE_USER_COUNT"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "CAPACITY_TYPE"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "CAPACITY_ACTUAL_BED"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "CAPACITY_FUNDING_BED"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "OCCUPIED_BEDS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "UNOCCUPIED_BEDS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "UNAVAILABLE_BEDS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "CAPACITY_ACTUAL_ROOM"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "CAPACITY_FUNDING_ROOM"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "OCCUPIED_ROOMS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "UNOCCUPIED_ROOMS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "UNAVAILABLE_ROOMS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "OCCUPANCY_RATE_BEDS"
+    #       type: "text"
+    #       info:
+    #         notes: ""
+    #     - id: "OCCUPANCY_RATE_ROOMS"
+    #       type: "text"
+    #       info:
+    #         notes: ""

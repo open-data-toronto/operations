@@ -1,0 +1,107 @@
+tenant-notification-for-rent-reduction-xlsx:
+  schedule: '@once'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Tenant Notification for Rent Reduction
+  date_published: '2019-07-23 18:04:41.381535'
+  refresh_rate: Annually
+  dataset_category: Table
+  owner_division: Revenue Services
+  owner_section: null
+  owner_unit: null
+  owner_email: Sara.Jackson@toronto.ca
+  civic_issues: Affordable housing,Poverty reduction
+  topics: City government,Community services,Finance
+  tags:
+  - name: landlords
+    vocabulary_id: null
+  - name: property tax
+    vocabulary_id: null
+  - name: rent
+    vocabulary_id: null
+  - name: rent reduction
+    vocabulary_id: null
+  - name: tenants
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/taxes/rent_reduction
+  excerpt: This dataset is a list of addresses that may be eligible to receive a rent
+    decrease due to a property tax decrease of 2.5% or more between two consecutive
+    years.
+
+  limitations: This data is updated in December annually.
+  notes: |
+    See attached for readme file.
+    The Residential Tenancies Act (RTA) allows residential tenants to reduce their rents when the rental properties in which they live have had a property tax decrease of more than 2.49%.
+    The Act also requests that the City send notices to the landlords and tenants of the affected properties to inform about the rent reduction.
+    
+    Visit us on the Web for more information about the Residential Reduction Program at
+    
+    [www.toronto.ca/taxes/rent_reduction](http://www.toronto.ca/taxes/rent_reduction)
+    Property value assessments are established by the Municipal Property Assessment Corporation. The City of Toronto is provided with this information to determine the property tax rates for residential buildings.
+    Reasons for Notices Not Mailed:
+    (i)     Property taxes from 2021 to 2022 either increased or did not change.
+    (ii)    Property taxes from 2021 to 2022 were reduced by less than 2.5%.  No notices will be sent from the City. Tenants cannot automatically reduce their rent and must apply to the Landlord and Tenant Board for the rent reduction.
+    (iii)   No notice is required if a property is exempt from the rent reduction provisions of the Residential Tenancies Act (s.131)
+  resources:
+    #resource name
+    Tenant Notification for Rent Reduction 2022:
+      format: xlsx
+      url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2022-datastore.xlsx
+      sheet: Open Data 2022
+      attributes:
+        - id: Street Number
+          type: int
+          info:
+            notes: 'This is the street number'
+        - id: To Street Number
+          type: int
+          info:
+            notes: 'This is part of the street number range'
+        - id: Street Suffix
+          type: text
+          info:
+            notes: 'This is the street number suffix (e.g. 11A )'
+        - id: Street Name
+          type: text
+          info:
+            notes: 'This is the name of the street'
+        - id: Street Code
+          type: text
+          info:
+            notes: 'This is the type of street (e.g. Crescent, Avenue)'
+        - id: Street Direction
+          type: text
+          info:
+            notes: 'This is part of the street name (e.g. Queen St. West)'
+        - id: Unit Type
+          type: text
+          info:
+            notes: 'This is the type of unit (e.g. Penthouse (PH), Suite )'
+        - id: Unit
+          type: text
+          info:
+            notes: 'This is the unit number'
+        - id: Political Ward
+          type: text
+          info:
+            notes: 'This is the ward that the property is located in'
+        - id: "Tax Reduction %"
+          type: text
+          info:
+            notes: 'Percentage of property tax reduction'
+        - id: "Rent Reduction %"
+          type: text
+          info:
+            notes: 'The percentage  rate in which the property tax was reduced.'
+        - id: "Tenant Notices Mailed (Y/N)"
+          type: text
+          info:
+            notes: 'This identifies the properties that received a notice'
+        - id: Notices Mailed On
+          type: text
+          info:
+            notes: 'This is the date that the notices were issued'
+        - id: Reason Notices Not Mailed
+          type: text
+          info:
+            notes: 'This states the reason why a resident did not receive notice of a rent reduction. See examples for more information.'

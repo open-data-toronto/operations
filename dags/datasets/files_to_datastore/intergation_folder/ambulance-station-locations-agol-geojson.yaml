@@ -1,0 +1,141 @@
+# This file is migrated from NiFi
+ambulance-station-locations-geojson:
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Ambulance Station Locations
+  date_published: '2019-07-23 16:31:58.090236'
+  refresh_rate: As available
+  dataset_category: Map
+  owner_division: Toronto Paramedic Services
+  owner_section: null
+  owner_unit: null
+  owner_email: 'bikram.chawla@toronto.ca '
+  civic_issues: null
+  topics: Health,Locations and mapping,Public safety
+  tags:
+  - name: ambulance
+    vocabulary_id: null
+  - name: ambulance location
+    vocabulary_id: null
+  - name: paramedic
+    vocabulary_id: null
+  information_url: null
+  excerpt: This geographical file contains the locations of ambulance stations within
+    the City of Toronto. This dataset also contains the district offices. This information
+    is used for reference and planning purposes.
+  limitations: null
+  notes: "This geographical file contains the locations of ambulance stations within\
+    \ the City of Toronto. This dataset also contains the district offices. This information\
+    \ is used for reference and planning purposes.\r\n\r\n  * Add_PT_ID Unique geo-spatial\
+    \ code for address points\r\n  * Address - City of Toronto address\r\n  * Name\
+    \ - Station name\r\n  * X - Easting\r\n  * Y - Northing\r\n  * LONGITUDE - Longitude\r\
+    \n  * LATITUDE - Latitude\r\n\r\n\r\n"
+  resources:
+    ambulance-station-locations:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_EMS/FeatureServer/0
+      attributes:
+      - id: ADDRESS_POINT_ID
+        type: int
+        info:
+          notes: 'Address Point '
+      - id: ADDRESS_NUMBER
+        type: text
+        info:
+          notes: Address number
+      - id: LINEAR_NAME_FULL
+        type: text
+        info:
+          notes: Street name
+      - id: ADDRESS_FULL
+        type: text
+        info:
+          notes: Full Address
+      - id: POSTAL_CODE
+        type: text
+        info:
+          notes: Postal Code
+      - id: MUNICIPALITY
+        type: text
+        info:
+          notes: Municipality
+      - id: CITY
+        type: text
+        info:
+          notes: City
+      - id: PLACE_NAME
+        type: text
+        info:
+          notes: Place Name
+      - id: GENERAL_USE_CODE
+        type: int
+        info:
+          notes: "Legacy attribute \u2013 no longer supported. Deprecation pending. "
+      - id: CENTRELINE_ID
+        type: int
+        info:
+          notes: Unique Identifier for the street segment associated with the address
+      - id: LO_NUM
+        type: int
+        info:
+          notes: Street address number
+      - id: LO_NUM_SUF
+        type: text
+        info:
+          notes: ''
+      - id: HI_NUM
+        type: int
+        info:
+          notes: ''
+      - id: HI_NUM_SUF
+        type: text
+        info:
+          notes: ''
+      - id: LINEAR_NAME_ID
+        type: float
+        info:
+          notes: Unique Identifier for the linear name assigned to the street
+      - id: OBJECTID
+        type: int
+        info:
+          notes: "Unique identifier for each row in a table to find and enable processing\
+            \ (selection, etc.) of specific row(s)/record(s)/feature(s) in a GIS layer\
+            \                                                              \r\n"
+      - id: EMS_ID
+        type: int
+        info:
+          notes: ID for EMS station
+      - id: EMS_NAME
+        type: text
+        info:
+          notes: EMS station name
+      - id: EMS_ADDRESS
+        type: text
+        info:
+          notes: EMS station address
+      - id: EMS_NOTES
+        type: text
+        info:
+          notes: Any  notes
+      - id: EMS_WEBSITE
+        type: text
+        info:
+          notes: Website if applicable
+      - id: EMS_EXTRA1
+        type: text
+        info:
+          notes: ''
+      - id: EMS_EXTRA2
+        type: text
+        info:
+          notes: ''
+      - id: EMS_ADDITIONAL_ADDRESS_INFO
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''
