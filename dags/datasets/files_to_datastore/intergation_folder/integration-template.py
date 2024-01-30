@@ -206,13 +206,14 @@ def create_dag(package_name, config, schedule, default_args):
                 ckan = misc_utils.connect_to_ckan()
                 ckan.action.datastore_cache(resource_id=resource["id"])
 
-            # rename most recent resource_file to backup resource_file
+            # clean up resource files, rename most recent resource_file to backup
             @task(task_id="clean_backups_" + resource_label)
             def clean_backups(resource_filename, resource_filepath):
                 backup_resource_filename = "backup_" + resource_filename
                 backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
-                shutil.move(resource_filepath, backup_resource_filepath)
 
+                # rename file
+                shutil.move(resource_filepath, backup_resource_filepath)
                 logging.info(f"File list: {os.listdir(dag_tmp_dir)}")
 
             # -----------------Init tasks
