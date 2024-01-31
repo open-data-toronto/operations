@@ -17,7 +17,7 @@ from ckan_operators.resource_operator import GetOrCreateResourceOperator
 
 job_settings = {
     "description": "Calculates DQ scores across the catalogue",
-    "schedule": "5 5 * * *",
+    "schedule": "15 17 * * *",
     "start_date": datetime(2023, 3, 27, 0, 0, 0),
 }
 

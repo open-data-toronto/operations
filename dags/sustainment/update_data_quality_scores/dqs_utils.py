@@ -133,10 +133,10 @@ def get_run_schedule(**kwargs):
     ti = kwargs.pop("ti")
     check_force_run = ti.xcom_pull(task_ids="check_force_run")
 
-    day_of_week = 7 if check_force_run else dt.now().isoweekday()
+    day_of_week = 2 if check_force_run else dt.now().isoweekday()
     logging.info(f"day {day_of_week} of the week")
 
-    if day_of_week == 7:
+    if day_of_week == 2:
         return "run_all_dataset"
     else:
         return "run_daily_dataset"
