@@ -1,0 +1,90 @@
+blacklegged-tick-surveillance:
+  schedule: '0 0 1 * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Blacklegged Tick Surveillance
+  date_published: '2020-02-14 16:31:41.518997'
+  refresh_rate: Semi-annually
+  dataset_category: Map
+  owner_division: Toronto Public Health
+  owner_section: null
+  owner_unit: null
+  owner_email: CDSU@toronto.ca
+  civic_issues: Climate change
+  topics: Health,Environment,Parks and recreation
+  tags:
+  - name: Disease
+    vocabulary_id: null
+  - name: Health
+    vocabulary_id: null
+  - name: Lyme Disease
+    vocabulary_id: null
+  - name: Parks
+    vocabulary_id: null
+  - name: Surveillance
+    vocabulary_id: null
+  - name: Ticks
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/health-wellness-care/health-programs-advice/lyme-disease/blacklegged-tick-surveillance-results/
+  excerpt: "Toronto\u2019s active tick surveillance program monitors the number of\
+    \ blacklegged ticks, their locations and the number of them that carry the bacteria\
+    \ that causes Lyme disease. This information helps to determine the overall risk\
+    \ of Lyme disease in Toronto."
+  limitations: Toronto Public Health chooses dragging locations based on suitable
+    blacklegged tick habitat or a previous confirmed finding of a blacklegged tick.
+    Blacklegged ticks may still be present in very low numbers at a site where none
+    were found by tick dragging efforts. Not all locations are dragged every spring
+    or fall, depending on the previous season's results.
+  notes: "Toronto\u2019s tick surveillance program monitors the number of blacklegged\
+    \ ticks, their locations and the number of them that carry the bacteria that causes\
+    \ Lyme disease (Borrelia burgdorferi). This information helps to determine the\
+    \ overall risk of Lyme disease in Toronto. Toronto has been engaged in active\
+    \ tick surveillance since 2013.\r\nThe tick surveillance program consists of ticks\
+    \ found by dragging.\r\n\r\nTick dragging is a process of collecting ticks in\
+    \ the environment and is done in the spring and fall when adult ticks are active.\
+    \ Dragging locations are selected based on suitable blacklegged tick habitat or\
+    \ a previous confirmed finding of a blacklegged tick. Blacklegged ticks may still\
+    \ be present in very low numbers at a site where none were found by tick dragging\
+    \ efforts.  Ticks are found in wooded or bushy areas with lots of leaves on the\
+    \ ground or where there are tall grasses. As tick populations are expanding, it\
+    \ is possible that blacklegged ticks could be present outside the areas identified\
+    \ by Toronto Public Health. In addition, ticks can travel or migrate on the bodies\
+    \ of animals such as birds and therefore can be present in an area for a year\
+    \ in very low numbers and then disappear. The ticks are sent to the National Microbiology\
+    \ Laboratory in Winnipeg for confirmation of species and testing of adults and\
+    \ nymphs for Borrelia burgdorferi.\r\n"
+  resources:
+    # resource name
+    BLT Active Surveillance Results:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.public.health/blacklegged-tick-surveillance/BLT Active Surveillance Results.csv
+      attributes:
+        - id: Park Location
+          type: text
+          info:
+            notes: "Name of the park that was dragged for black legged ticks"
+        - id: Total BLTs
+          type: int
+          info:
+            notes: "The total number of Blacklegged ticks (BLTs) found at the given park during tick dragging"
+        - id: BLT Larvae
+          type: int
+          info:
+            notes: "The total number of the BLTs found during tick dragging that were in the larvae stage. The larval stage cannot be tested for Borrelia burgdorferi"
+        - id: BLT Adults and Nymphs
+          type: int
+          info:
+            notes: "The total number of the BLTs found during tick dragging that were in the adult and nymph stage"
+        - id: "# Positive"
+          type: int
+          info:
+            notes: "The total number of BLTs found during tick dragging that tested positive for Borrelia burgdorferi"
+        - id: Year
+          type: int
+          info:
+            notes: "The year that the tick dragging occurred. Tick dragging occurs in the spring and fall: the same location can be dragged twice in one year."
+        - id: geometry
+          type: text
+          info:
+            notes: ""
+        
