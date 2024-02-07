@@ -21,7 +21,7 @@ from ckan_operators.datastore_operator import (
 )
 from readers.base import select_reader
 from utils import misc_utils
-from utils_operators.slack_operators import task_failure_slack_alert
+from utils_operators.slack_operators import task_failure_slack_alert, MessageFactory, SlackTownCrier
 
 
 def create_dag(package_name, config, schedule, default_args):
@@ -85,9 +85,69 @@ def create_dag(package_name, config, schedule, default_args):
             task_id="done_inserting_into_datastore", trigger_rule="none_failed"
         )
 
+        #------------------ Slack Notification ------------------
+        # @task(trigger_rule="none_failed_min_one_success")
+        # def scribe(package_name, yaml_file_content, record_counts):
+        #     message = MessageFactory(package_name, yaml_file_content, record_counts).scribe()
+        #     return message
+
+        @task
+        def scribe(package_name, package, **context):
+            """
+            Generate a formatted message for each resource in a YAML file.
+            Usually, the outpout would be fed into the SlackTownCrier to be announced on Slack.
+
+            Returns:
+                Str: The final message.
+                None: If no resources are found in the YAML file.
+            """
+            resources = package.get("resources", {})
+
+            if not resources:   
+                logging.info("No resources found in the YAML file.")
+                return None
+
+            message_lines = [f"*Package*: {package_name}", "\t\t\t*Resources*:"]
+            
+            for resource_name, resource_content in resources.items():
+                try:
+                    resource_format = resource_content.get("format")
+                    record_count = context["ti"].xcom_pull(task_ids="insert_records_" + resource_name.replace(" ", ""))["record_count"]
+                    message_line = f"\t\t\t\t- {resource_name} `{resource_format}`: {record_count} records"
+                    message_lines.append(message_line)
+                    #record_count = task_list["insert_records_" + resource_name.replace(" ", "")]["record_count"]
+                    # if resource_format:
+                    #     record_count = context["ti"].xcom_pull(task_ids="insert_records_" + resource_name.replace(" ", ""))["record_count"]
+                    #     message_line = f"\t\t\t\t- {resource_name} `{resource_format}`: {record_count} records"
+                    #     message_lines.append(message_line)
+                    # else:
+                    #     logging.error(f"No format found for resource: {resource_name}")
+                except Exception as e:
+                    logging.error(e)
+                    continue
+            
+            # The following `if` statement makes sure that the blanc/meaningless messages won't be created.
+            final_message = "\n".join(message_lines) if len(message_lines) > 2 else None
+            
+            return final_message
+
+        @task
+        def slack_town_crier(dag_id, message_header, message_content, message_body):
+            return SlackTownCrier(dag_id, message_header, message_content, message_body).announce()
+
+        # slack_town_crier(
+        #     dag_id = package_name,
+        #     message_header = "Slack Town Crier - Integration Template",
+        #     message_content = scribe(package_name, config, record_count=10),
+        #     message_body = "",
+        # )
+
+        
+
         ############################################################
         # ---------------Resource level task lists------------------
         task_list = {}
+        record_counts = {}
         resources = package["resources"]
         resource_list = resources.keys()
 
@@ -216,6 +276,32 @@ def create_dag(package_name, config, schedule, default_args):
                 shutil.move(resource_filepath, backup_resource_filepath)
                 logging.info(f"File list: {os.listdir(dag_tmp_dir)}")
 
+            #------------------ Failure Protocol ------------------
+            # # Delete the incomplete new resource from CKAN
+            # @task(task_id="delete_failed_new_resource_" + resource_label,
+            # trigger_rule="one_failed")
+            # def delete_resource(resource_label, **context):
+            #     resource = context["ti"].xcom_pull(
+            #         task_ids="get_or_create_resource_" + resource_label
+            #     )
+            #     delete = DeleteDatastoreResource(resource_id=resource["id"])
+            #     return delete.delete_datastore_resource()
+
+            # # stream to ckan datastore
+            # @task(task_id="insert_records_" + resource_label)
+            # def insert_records_to_datastore(
+            #     file_path, attributes, resource_label, **context
+            # ):
+            #     resource = context["ti"].xcom_pull(
+            #         task_ids="get_or_create_resource_" + resource_label
+            #     )
+            #     return stream_to_datastore(
+            #         resource_id=resource["id"],
+            #         file_path=file_path,
+            #         attributes=attributes,
+            #         do_not_cache=True,
+            #     )
+
             # -----------------Init tasks
             task_list["download_data_" + resource_label] = read_from_readers(
                 package_name=package_name,
@@ -269,11 +355,31 @@ def create_dag(package_name, config, schedule, default_args):
                 attributes=attributes,
                 resource_label=resource_label,
             )
+            
+            record_counts[resource_name] = task_list["insert_records_" + resource_label]["record_count"]
 
             task_list["datastore_cache_" + resource_label] = datastore_cache(
                 resource_label=resource_label
             )
 
+            # #------------------ Failure Protocol ------------------
+            # task_list["failed_to_insert_" + resource_label] = EmptyOperator(
+            #     task_id="failed_to_insert_" + resource_label,
+            #     trigger_rule="one_failed",
+            # )
+            
+            # task_list["delete_failed_resource_" + resource_label] = delete_resource(
+            #     resource_label=resource_label
+            # )
+            
+            # task_list["insert_backup_records_" + resource_label] = insert_records_to_datastore(
+            #     file_path=backup_resource_filepath,
+            #     attributes=attributes,
+            #     resource_label=resource_label,
+            # )
+
+
+            # Clean up
             task_list["clean_backups_" + resource_label] = clean_backups(
                 resource_filename=resource_filename, resource_filepath=resource_filepath
             )
@@ -331,6 +437,19 @@ def create_dag(package_name, config, schedule, default_args):
                 done_inserting_into_datastore
                 >> task_list["clean_backups_" + resource_label]
             )
+
+        # Define the tasks
+        #record_count = task_list["insert_records_" + resource_name.replace(" ", "")]["record_count"]
+        scribe_task = scribe(package_name, package)#, record_counts)#, record_count=10)
+        slack_town_crier_task = slack_town_crier(
+            dag_id = package_name,
+            message_header = "Slack Town Crier - Integration Template",
+            message_content = scribe_task,
+            message_body = "",
+        )
+
+        # Set up the task dependencies
+        done_inserting_into_datastore >> scribe_task >> slack_town_crier_task
 
     return integration_template()
 
