@@ -1,5 +1,5 @@
 apartment-building-evaluation:
-  schedule: '40 5 * * *'
+  schedule: '30 9 * * *'
   dag_owner_name: 'Mackenzie'
   dag_owner_email: 'mackenzie.nichols4@toronto.ca'
   title: Apartment Building Evaluation
