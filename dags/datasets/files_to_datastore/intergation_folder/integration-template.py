@@ -161,6 +161,11 @@ def create_dag(package_name, config, schedule, default_args):
             resource_filename = resource_name + ".csv"
             resource_filepath = dag_tmp_dir + "/" + resource_filename
 
+            ############################ Backup ################################
+            backup_resource_filename = "backup_" + resource_filename
+            backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
+            ####################################################################
+
             # download source data
             @task(task_id="download_data_" + resource_label)
             def read_from_readers(package_name, resource_name, resource_config):
@@ -246,6 +251,9 @@ def create_dag(package_name, config, schedule, default_args):
                 resource = context["ti"].xcom_pull(
                     task_ids="get_or_create_resource_" + resource_label
                 )
+
+                #json.loads("test")
+
                 return stream_to_datastore(
                     resource_id=resource["id"],
                     file_path=file_path,
@@ -276,32 +284,32 @@ def create_dag(package_name, config, schedule, default_args):
                 shutil.move(resource_filepath, backup_resource_filepath)
                 logging.info(f"File list: {os.listdir(dag_tmp_dir)}")
 
+            ##############################################################################################
             #------------------ Failure Protocol ------------------
-            # # Delete the incomplete new resource from CKAN
-            # @task(task_id="delete_failed_new_resource_" + resource_label,
-            # trigger_rule="one_failed")
-            # def delete_resource(resource_label, **context):
-            #     resource = context["ti"].xcom_pull(
-            #         task_ids="get_or_create_resource_" + resource_label
-            #     )
-            #     delete = DeleteDatastoreResource(resource_id=resource["id"])
-            #     return delete.delete_datastore_resource()
+            # Delete the incomplete new resource from CKAN
+            @task(task_id="delete_failed_resource_" + resource_label) #,trigger_rule="one_failed")
+            def delete_failed_resource(resource_label, **context):
+                resource = context["ti"].xcom_pull(
+                    task_ids="get_or_create_resource_" + resource_label
+                )
+                delete = DeleteDatastoreResource(resource_id=resource["id"])
+                return delete.delete_datastore_resource()
 
-            # # stream to ckan datastore
-            # @task(task_id="insert_records_" + resource_label)
-            # def insert_records_to_datastore(
-            #     file_path, attributes, resource_label, **context
-            # ):
-            #     resource = context["ti"].xcom_pull(
-            #         task_ids="get_or_create_resource_" + resource_label
-            #     )
-            #     return stream_to_datastore(
-            #         resource_id=resource["id"],
-            #         file_path=file_path,
-            #         attributes=attributes,
-            #         do_not_cache=True,
-            #     )
-
+            # stream to ckan datastore
+            @task(task_id="restore_backup_records_" + resource_label)
+            def restore_backup_records_(
+                file_path, attributes, resource_label, **context
+            ):
+                resource = context["ti"].xcom_pull(
+                    task_ids="get_or_create_resource_" + resource_label
+                )
+                return stream_to_datastore(
+                    resource_id=resource["id"],
+                    file_path=file_path,
+                    attributes=attributes,
+                    do_not_cache=True,
+                )
+            ##############################################################################################
             # -----------------Init tasks
             task_list["download_data_" + resource_label] = read_from_readers(
                 package_name=package_name,
@@ -356,28 +364,29 @@ def create_dag(package_name, config, schedule, default_args):
                 resource_label=resource_label,
             )
             
-            record_counts[resource_name] = task_list["insert_records_" + resource_label]["record_count"]
+            # record_counts[resource_name] = task_list["insert_records_" + resource_label]["record_count"]
 
             task_list["datastore_cache_" + resource_label] = datastore_cache(
                 resource_label=resource_label
             )
 
-            # #------------------ Failure Protocol ------------------
-            # task_list["failed_to_insert_" + resource_label] = EmptyOperator(
-            #     task_id="failed_to_insert_" + resource_label,
-            #     trigger_rule="one_failed",
-            # )
+            ##############################################################################################
+            #------------------ Failure Protocol ------------------
+            task_list["failed_to_insert_" + resource_label] = EmptyOperator(
+                task_id="failed_to_insert_" + resource_label,
+                trigger_rule="one_failed",
+            )
             
-            # task_list["delete_failed_resource_" + resource_label] = delete_resource(
-            #     resource_label=resource_label
-            # )
+            task_list["delete_failed_resource_" + resource_label] = delete_failed_resource(
+                resource_label=resource_label
+            )
             
-            # task_list["insert_backup_records_" + resource_label] = insert_records_to_datastore(
-            #     file_path=backup_resource_filepath,
-            #     attributes=attributes,
-            #     resource_label=resource_label,
-            # )
-
+            task_list["restore_backup_records_" + resource_label] = restore_backup_records_(
+                file_path=backup_resource_filepath,
+                attributes=attributes,
+                resource_label=resource_label,
+            )
+            ##############################################################################################
 
             # Clean up
             task_list["clean_backups_" + resource_label] = clean_backups(
@@ -432,7 +441,16 @@ def create_dag(package_name, config, schedule, default_args):
                 >> task_list["datastore_cache_" + resource_label]
                 >> done_inserting_into_datastore
             )
-
+            ##############################################################################################
+            #------------------ Failure Protocol ------------------
+            (
+                task_list["insert_records_" + resource_label]
+                >> task_list["failed_to_insert_" + resource_label]
+                >> task_list["delete_failed_resource_" + resource_label]
+                >> task_list["restore_backup_records_" + resource_label]
+                >> task_list["clean_backups_" + resource_label]
+            )
+            ##############################################################################################
             (
                 done_inserting_into_datastore
                 >> task_list["clean_backups_" + resource_label]
