@@ -298,6 +298,9 @@ ttc-bus-delay-data:
   ttc-bus-delay-data-2023:
     format: xlsx
     url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2023.xlsx
+  ttc-bus-delay-data-2024:
+    format: xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-bus-delay-data/ttc-bus-delay-data-2024.xlsx
 ttc-streetcar-delay-data:
   ttc-streetcar-delay-data-readme:
     format: xlsx
@@ -332,6 +335,9 @@ ttc-streetcar-delay-data:
   ttc-streetcar-delay-data-2023:
     format: xlsx
     url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2023.xlsx
+  ttc-streetcar-delay-data-2024:
+    format: xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-streetcar-delay-data/ttc-streetcar-delay-data-2024.xlsx
 ttc-subway-delay-data:
   ttc-subway-delay-data-readme:
     format: xlsx
@@ -363,6 +369,9 @@ ttc-subway-delay-data:
   ttc-subway-delay-data-2023:
     format: xlsx
     url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2023.xlsx
+  ttc-subway-delay-data-2024:
+    format: xlsx
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2024.xlsx
 bike-share-toronto-ridership-data:
   bikeshare-ridership-readme:
     format: xlsx
