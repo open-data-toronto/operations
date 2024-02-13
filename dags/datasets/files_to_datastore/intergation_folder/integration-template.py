@@ -82,7 +82,7 @@ def create_dag(package_name, config, schedule, default_args):
         create_tmp_dir = create_tmp_dir(dag_id=package_name, dir_path=dir_path)
         get_or_create_package = get_or_create_package(package_name, package_metadata)
         done_inserting_into_datastore = EmptyOperator(
-            task_id="done_inserting_into_datastore", trigger_rule="none_failed"
+            task_id="done_inserting_into_datastore", trigger_rule = "one_success" #"none_failed"
         )
 
         #------------------ Slack Notification ------------------
@@ -275,7 +275,7 @@ def create_dag(package_name, config, schedule, default_args):
                 ckan.action.datastore_cache(resource_id=resource["id"])
 
             # clean up resource files, rename most recent resource_file to backup
-            @task(task_id="clean_backups_" + resource_label)
+            @task(task_id="clean_backups_" + resource_label, trigger_rule = "one_success")
             def clean_backups(resource_filename, resource_filepath):
                 backup_resource_filename = "backup_" + resource_filename
                 backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
@@ -439,6 +439,7 @@ def create_dag(package_name, config, schedule, default_args):
                 task_list["ready_insert_" + resource_label]
                 >> task_list["insert_records_" + resource_label]
                 >> task_list["datastore_cache_" + resource_label]
+                >> task_list["clean_backups_" + resource_label]
                 >> done_inserting_into_datastore
             )
             ##############################################################################################
@@ -451,10 +452,10 @@ def create_dag(package_name, config, schedule, default_args):
                 >> task_list["clean_backups_" + resource_label]
             )
             ##############################################################################################
-            (
-                done_inserting_into_datastore
-                >> task_list["clean_backups_" + resource_label]
-            )
+            # (
+            #     done_inserting_into_datastore
+            #     >> task_list["clean_backups_" + resource_label]
+            # )
 
         # Define the tasks
         #record_count = task_list["insert_records_" + resource_name.replace(" ", "")]["record_count"]
