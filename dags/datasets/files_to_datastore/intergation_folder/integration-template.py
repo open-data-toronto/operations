@@ -12,6 +12,7 @@ import shutil
 from airflow.models import Variable
 from airflow.decorators import dag, task
 from airflow.operators.empty import EmptyOperator
+from airflow.utils.edgemodifier import Label
 
 from ckan_operators.package_operator import GetOrCreatePackage
 from ckan_operators.resource_operator import GetOrCreateResource, EditResourceMetadata
@@ -82,7 +83,7 @@ def create_dag(package_name, config, schedule, default_args):
         create_tmp_dir = create_tmp_dir(dag_id=package_name, dir_path=dir_path)
         get_or_create_package = get_or_create_package(package_name, package_metadata)
         done_inserting_into_datastore = EmptyOperator(
-            task_id="done_inserting_into_datastore", trigger_rule = "one_success" #"none_failed"
+            task_id="done_inserting_into_datastore", trigger_rule = "none_failed"
         )
 
         #------------------ Slack Notification ------------------
@@ -276,13 +277,20 @@ def create_dag(package_name, config, schedule, default_args):
 
             # clean up resource files, rename most recent resource_file to backup
             @task(task_id="clean_backups_" + resource_label, trigger_rule = "one_success")
-            def clean_backups(resource_filename, resource_filepath):
-                backup_resource_filename = "backup_" + resource_filename
-                backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
-
-                # rename file
-                shutil.move(resource_filepath, backup_resource_filepath)
-                logging.info(f"File list: {os.listdir(dag_tmp_dir)}")
+            def clean_backups(resource_filename, resource_filepath, resource_label, **kwargs):
+                # stop overwrting the original file in case of failure
+                failure_pathway_tail_task = kwargs['ti'].xcom_pull(task_ids="restore_backup_records_" + resource_label)
+                if failure_pathway_tail_task:
+                    logging.info("NEW RESOURCE DISCARDED!")
+                    os.remove(resource_filepath)
+                else:
+                    # Normal Scenario
+                    backup_resource_filename = "backup_" + resource_filename
+                    backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
+                    # rename file
+                    shutil.move(resource_filepath, backup_resource_filepath)
+                    logging.info("BACKUP RESOURCE OVERWRITTEN BY NEW FILE")
+                    logging.info(f"File list: {os.listdir(dag_tmp_dir)}")
 
             ##############################################################################################
             #------------------ Failure Protocol ------------------
@@ -390,7 +398,7 @@ def create_dag(package_name, config, schedule, default_args):
 
             # Clean up
             task_list["clean_backups_" + resource_label] = clean_backups(
-                resource_filename=resource_filename, resource_filepath=resource_filepath
+                resource_filename=resource_filename, resource_filepath=resource_filepath, resource_label=resource_label
             )
 
             # ----Task Flow----
@@ -428,7 +436,8 @@ def create_dag(package_name, config, schedule, default_args):
 
             (
                 task_list["dont_update_resource_" + resource_label]
-                >> done_inserting_into_datastore
+                >> task_list["clean_backups_" + resource_label]
+                #>> done_inserting_into_datastore
             )
             (
                 task_list["update_resource_" + resource_label]
