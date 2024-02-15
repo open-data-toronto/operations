@@ -531,7 +531,7 @@ cost-of-living-in-toronto-for-low-income-households:
 red-light-camera-annual-charges:
   Red Light Camera Annual Charges:
     format: xlsx
-    url: https://opendata.toronto.ca/transportation.services/red-light-camera-charges/rlc-annual-charges-2007-2022.xlsx
+    url: https://opendata.toronto.ca/transportation.services/red-light-camera-charges/RLC Annual Charges 2007-2023.xlsx
 
 ##### agol ckan sync
 neighbourhood-improvement-areas:
