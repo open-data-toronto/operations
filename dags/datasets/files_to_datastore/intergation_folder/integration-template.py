@@ -447,6 +447,7 @@ def create_dag(package_name, config, schedule, default_args):
             (
                 task_list["ready_insert_" + resource_label]
                 >> task_list["insert_records_" + resource_label]
+                >> Label("Success")
                 >> task_list["datastore_cache_" + resource_label]
                 >> task_list["clean_backups_" + resource_label]
                 >> done_inserting_into_datastore
@@ -455,6 +456,7 @@ def create_dag(package_name, config, schedule, default_args):
             #------------------ Failure Protocol ------------------
             (
                 task_list["insert_records_" + resource_label]
+                >> Label("Fail")
                 >> task_list["failed_to_insert_" + resource_label]
                 >> task_list["delete_failed_resource_" + resource_label]
                 >> task_list["restore_backup_records_" + resource_label]
