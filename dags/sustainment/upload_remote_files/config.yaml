@@ -241,10 +241,12 @@ small-business-property-tax-subclass-eligible-properties:
   Small Business Subclass Report - 2022:
     format: xlsx
     url: https://opendata.toronto.ca/revenue.services/small-business-property-tax-subclass-eligible-properties/Small Business Subclass - 2022.xlsx
-small-business-property-tax-subclass-eligible-properties:
   Small Business Subclass Report - 2023:
     format: xlsx
     url: https://opendata.toronto.ca/revenue.services/small-business-property-tax-subclass-eligible-properties/Small Business Subclass - 2023.xlsx
+  Small Business Subclass Report - 2024:
+    format: xlsx
+    url: https://opendata.toronto.ca/revenue.services/small-business-property-tax-subclass-eligible-properties/Small Business Subclass - 2024.xlsx
 development-charge-revenues:
   DC Revenues (2017):
     format: xlsx
