@@ -1,5 +1,15 @@
 """
-This is a dag generator template created by yanan.zhang@toronto.ca for codebase refactor purpose
+This is the 2nd generation of the Airflow DAG generator module.
+
+It serves as the backbone of the Open Data pipeline.
+DAGs are generated based on the YAML files available in the Current Working Directory (CWD).
+The module takes advantages of Airflow TaskFlow API for better performance and sustainability. 
+(Compatibility Warning: TaskFlow API is supported by Airflow v2.0 and above)
+The module is architected as follows:
+- dag_factory() function: contains a for-loop to ingest all the YAMLs from its CWD and runs create_dag() for each of them.
+    - create_dag() function: it contains the DAG constuctor function which is integration_template(). 
+    The essense of this function is to dynamically change the DAG-level attributes based on the digested YAML.
+        - integration_template() function: this is main funciton making a DAG grounded on TaskFlow paradigm.
 """
 
 
