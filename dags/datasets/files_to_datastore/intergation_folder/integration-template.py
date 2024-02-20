@@ -234,7 +234,8 @@ def create_dag(package_name, config, schedule, default_args):
                 if equal:
                     return "dont_update_resource_" + resource_label
                 else:
-                    return "update_resource_" + resource_label
+                    #return "update_resource_" + resource_label
+                    return "delete_resource_" + resource_label
 
             # delete datastore resource
             @task(task_id="delete_resource_" + resource_label)
@@ -351,9 +352,9 @@ def create_dag(package_name, config, schedule, default_args):
                 resource_filepath=resource_filepath,
             )
 
-            task_list["update_resource_" + resource_label] = EmptyOperator(
-                task_id="update_resource_" + resource_label
-            )
+            # task_list["update_resource_" + resource_label] = EmptyOperator(
+            #     task_id="update_resource_" + resource_label
+            # )
             task_list["dont_update_resource_" + resource_label] = EmptyOperator(
                 task_id="dont_update_resource_" + resource_label
             )
@@ -432,7 +433,8 @@ def create_dag(package_name, config, schedule, default_args):
             # )
 
             task_list["does_" + resource_label + "_need_update"] >> [
-                task_list["update_resource_" + resource_label],
+                #task_list["update_resource_" + resource_label],
+                task_list["delete_resource_" + resource_label],
                 task_list["dont_update_resource_" + resource_label],
             ]
 
@@ -442,8 +444,8 @@ def create_dag(package_name, config, schedule, default_args):
                 #>> done_inserting_into_datastore
             )
             (
-                task_list["update_resource_" + resource_label]
-                >> task_list["delete_resource_" + resource_label]
+                # task_list["update_resource_" + resource_label]
+                task_list["delete_resource_" + resource_label]
                 >> task_list["ready_insert_" + resource_label]
             )
             (
