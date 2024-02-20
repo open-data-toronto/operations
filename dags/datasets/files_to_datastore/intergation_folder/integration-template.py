@@ -295,7 +295,7 @@ def create_dag(package_name, config, schedule, default_args):
             ##############################################################################################
             #------------------ Failure Protocol ------------------
             # Delete the incomplete new resource from CKAN
-            @task(task_id="delete_failed_resource_" + resource_label) #,trigger_rule="one_failed")
+            @task(task_id="delete_failed_resource_" + resource_label, trigger_rule="one_failed")
             def delete_failed_resource(resource_label, **context):
                 resource = context["ti"].xcom_pull(
                     task_ids="get_or_create_resource_" + resource_label
@@ -380,10 +380,10 @@ def create_dag(package_name, config, schedule, default_args):
 
             ##############################################################################################
             #------------------ Failure Protocol ------------------
-            task_list["failed_to_insert_" + resource_label] = EmptyOperator(
-                task_id="failed_to_insert_" + resource_label,
-                trigger_rule="one_failed",
-            )
+            # task_list["failed_to_insert_" + resource_label] = EmptyOperator(
+            #     task_id="failed_to_insert_" + resource_label,
+            #     trigger_rule="one_failed",
+            # )
             
             task_list["delete_failed_resource_" + resource_label] = delete_failed_resource(
                 resource_label=resource_label
@@ -457,7 +457,7 @@ def create_dag(package_name, config, schedule, default_args):
             (
                 task_list["insert_records_" + resource_label]
                 >> Label("Fail")
-                >> task_list["failed_to_insert_" + resource_label]
+                #>> task_list["failed_to_insert_" + resource_label]
                 >> task_list["delete_failed_resource_" + resource_label]
                 >> task_list["restore_backup_records_" + resource_label]
                 >> task_list["clean_backups_" + resource_label]
