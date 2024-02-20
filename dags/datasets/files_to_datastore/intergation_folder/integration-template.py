@@ -223,7 +223,7 @@ def create_dag(package_name, config, schedule, default_args):
                     task_ids="get_or_create_resource_" + resource_label
                 )
                 if resource["is_new"]:
-                    return "new_" + resource_label
+                    return "brand_new_" + resource_label
 
                 # return "existing_" + resource_label
                 return "does_" + resource_label + "_need_update"
@@ -347,8 +347,8 @@ def create_dag(package_name, config, schedule, default_args):
                 resource_label
             )
 
-            task_list["new_" + resource_label] = EmptyOperator(
-                task_id="new_" + resource_label
+            task_list["brand_new_" + resource_label] = EmptyOperator(
+                task_id="brand_new_" + resource_label
             )
             # task_list["existing_" + resource_label] = EmptyOperator(
             #     task_id="existing_" + resource_label
@@ -423,7 +423,7 @@ def create_dag(package_name, config, schedule, default_args):
             )
 
             # task_list["new_or_existing_" + resource_label] >> [
-            #     task_list["new_" + resource_label],
+            #     task_list["brand_new_" + resource_label],
             #     # task_list["existing_" + resource_label],
             #     task_list["does_" + resource_label + "_need_update"],
             # ]
@@ -431,7 +431,7 @@ def create_dag(package_name, config, schedule, default_args):
             (
                 task_list["new_or_existing_" + resource_label]
                 >> Label("New")
-                >> task_list["new_" + resource_label]
+                >> task_list["brand_new_" + resource_label]
             )
 
             (
@@ -441,7 +441,7 @@ def create_dag(package_name, config, schedule, default_args):
             )
 
             (
-                task_list["new_" + resource_label]
+                task_list["brand_new_" + resource_label]
                 # >> task_list["ready_insert_" + resource_label]
                 >> task_list["insert_records_" + resource_label]
             )
