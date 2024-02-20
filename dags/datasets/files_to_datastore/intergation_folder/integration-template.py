@@ -247,7 +247,7 @@ def create_dag(package_name, config, schedule, default_args):
                 return delete.delete_datastore_resource()
 
             # stream to ckan datastore
-            @task(task_id="insert_records_" + resource_label)
+            @task(task_id="insert_records_" + resource_label , trigger_rule="none_failed_min_one_success")
             def insert_records_to_datastore(
                 file_path, attributes, resource_label, **context
             ):
@@ -363,10 +363,10 @@ def create_dag(package_name, config, schedule, default_args):
                 resource_label=resource_label
             )
 
-            task_list["ready_insert_" + resource_label] = EmptyOperator(
-                task_id="ready_insert_" + resource_label,
-                trigger_rule="none_failed_min_one_success",
-            )
+            # task_list["ready_insert_" + resource_label] = EmptyOperator(
+            #     task_id="ready_insert_" + resource_label,
+            #     trigger_rule="none_failed_min_one_success",
+            # )
 
             task_list["insert_records_" + resource_label] = insert_records_to_datastore(
                 file_path=resource_filepath,
@@ -418,14 +418,11 @@ def create_dag(package_name, config, schedule, default_args):
                 task_list["does_" + resource_label + "_need_update"],
             ]
 
-            (
-                task_list["new_" + resource_label]
-                >> task_list["ready_insert_" + resource_label]
-            )
 
             (
                 task_list["new_" + resource_label]
-                >> task_list["ready_insert_" + resource_label]
+                # >> task_list["ready_insert_" + resource_label]
+                >> task_list["insert_records_" + resource_label]
             )
             # (
             #     task_list["existing_" + resource_label]
@@ -446,11 +443,12 @@ def create_dag(package_name, config, schedule, default_args):
             (
                 # task_list["update_resource_" + resource_label]
                 task_list["delete_resource_" + resource_label]
-                >> task_list["ready_insert_" + resource_label]
+                # >> task_list["ready_insert_" + resource_label]
+                >> task_list["insert_records_" + resource_label]
             )
             (
-                task_list["ready_insert_" + resource_label]
-                >> task_list["insert_records_" + resource_label]
+                #task_list["ready_insert_" + resource_label]
+                task_list["insert_records_" + resource_label]
                 >> Label("Success")
                 >> task_list["datastore_cache_" + resource_label]
                 >> task_list["clean_backups_" + resource_label]
