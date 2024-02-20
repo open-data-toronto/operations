@@ -412,12 +412,23 @@ def create_dag(package_name, config, schedule, default_args):
                 >> task_list["new_or_existing_" + resource_label]
             )
 
-            task_list["new_or_existing_" + resource_label] >> [
-                task_list["new_" + resource_label],
-                # task_list["existing_" + resource_label],
-                task_list["does_" + resource_label + "_need_update"],
-            ]
+            # task_list["new_or_existing_" + resource_label] >> [
+            #     task_list["new_" + resource_label],
+            #     # task_list["existing_" + resource_label],
+            #     task_list["does_" + resource_label + "_need_update"],
+            # ]
 
+            (
+                task_list["new_or_existing_" + resource_label]
+                >> Label("New")
+                >> task_list["new_" + resource_label]
+            )
+
+            (
+                task_list["new_or_existing_" + resource_label]
+                >> Label("Existing")
+                >> task_list["does_" + resource_label + "_need_update"]
+            )
 
             (
                 task_list["new_" + resource_label]
@@ -429,11 +440,23 @@ def create_dag(package_name, config, schedule, default_args):
             #     >> task_list["does_" + resource_label + "_need_update"]
             # )
 
-            task_list["does_" + resource_label + "_need_update"] >> [
-                #task_list["update_resource_" + resource_label],
-                task_list["delete_resource_" + resource_label],
-                task_list["dont_update_resource_" + resource_label],
-            ]
+            # task_list["does_" + resource_label + "_need_update"] >> [
+            #     #task_list["update_resource_" + resource_label],
+            #     task_list["delete_resource_" + resource_label],
+            #     task_list["dont_update_resource_" + resource_label],
+            # ]
+
+            (   
+                task_list["does_" + resource_label + "_need_update"]
+                >> Label("No Update")
+                >> task_list["dont_update_resource_" + resource_label]
+            )
+
+            (   
+                task_list["does_" + resource_label + "_need_update"]
+                >> Label("Update")
+                >> task_list["delete_resource_" + resource_label]
+            )
 
             (
                 task_list["dont_update_resource_" + resource_label]
