@@ -215,7 +215,8 @@ def create_dag(package_name, config, schedule, default_args):
                 if resource["is_new"]:
                     return "new_" + resource_label
 
-                return "existing_" + resource_label
+                # return "existing_" + resource_label
+                return "does_" + resource_label + "_need_update"
 
             # compare if new file and existing file are exactly same
             # determine if the resource needs to be updated
@@ -338,9 +339,9 @@ def create_dag(package_name, config, schedule, default_args):
             task_list["new_" + resource_label] = EmptyOperator(
                 task_id="new_" + resource_label
             )
-            task_list["existing_" + resource_label] = EmptyOperator(
-                task_id="existing_" + resource_label
-            )
+            # task_list["existing_" + resource_label] = EmptyOperator(
+            #     task_id="existing_" + resource_label
+            # )
 
             task_list[
                 "does_" + resource_label + "_need_update"
@@ -412,7 +413,8 @@ def create_dag(package_name, config, schedule, default_args):
 
             task_list["new_or_existing_" + resource_label] >> [
                 task_list["new_" + resource_label],
-                task_list["existing_" + resource_label],
+                # task_list["existing_" + resource_label],
+                task_list["does_" + resource_label + "_need_update"],
             ]
 
             (
@@ -424,10 +426,10 @@ def create_dag(package_name, config, schedule, default_args):
                 task_list["new_" + resource_label]
                 >> task_list["ready_insert_" + resource_label]
             )
-            (
-                task_list["existing_" + resource_label]
-                >> task_list["does_" + resource_label + "_need_update"]
-            )
+            # (
+            #     task_list["existing_" + resource_label]
+            #     >> task_list["does_" + resource_label + "_need_update"]
+            # )
 
             task_list["does_" + resource_label + "_need_update"] >> [
                 task_list["update_resource_" + resource_label],
