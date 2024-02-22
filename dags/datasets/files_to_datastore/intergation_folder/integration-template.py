@@ -18,6 +18,7 @@ import yaml
 import logging
 import pendulum
 import shutil
+import time
 
 from airflow.models import Variable
 from airflow.decorators import dag, task
@@ -285,24 +286,32 @@ def create_dag(package_name, config, schedule, default_args):
                     task_ids="get_or_create_resource_" + resource_label
                 )
                 ckan = misc_utils.connect_to_ckan()
-                ckan.action.datastore_cache(resource_id=resource["id"])
+                return ckan.action.datastore_cache(resource_id=resource["id"])
 
             # clean up resource files, rename most recent resource_file to backup
             @task(task_id="clean_backups_" + resource_label, trigger_rule = "one_success")
             def clean_backups(resource_label, resource_filepath, backup_resource_filepath, **kwargs):
-                # stop overwrting the original file in case of failure
-                failure_pathway_tail_task = kwargs['ti'].xcom_pull(task_ids="restore_backup_records_" + resource_label)
-                if failure_pathway_tail_task:
-                    logging.info("NEW RESOURCE DISCARDED!")
-                    os.remove(resource_filepath)
-                else:
-                    # Normal Scenario
-                    # backup_resource_filename = "backup_" + resource_filename
-                    # backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
-                    # rename file
+                # when the resource is updated successfully
+                succeeded_to_update = kwargs['ti'].xcom_pull(task_ids="datastore_cache_" + resource_label)
+                if succeeded_to_update:
                     shutil.move(resource_filepath, backup_resource_filepath)
-                    logging.info("BACKUP RESOURCE OVERWRITTEN BY NEW FILE")
-                    logging.info(f"File list: {os.listdir(dag_tmp_dir)}")
+                    logging.info(">>>>>>> BACKUP RESOURCE OVERWRITTEN BY THE NEW FILE <<<<<<<")
+                    # logging.info(f"File list: {os.listdir(dag_tmp_dir)}")
+
+                # stop overwrting the original file in case of failure
+                # failure_pathway_tail_task = kwargs['ti'].xcom_pull(task_ids="restore_backup_records_" + resource_label)
+                elif kwargs['ti'].xcom_pull(task_ids="restore_backup_records_" + resource_label):
+                    os.remove(resource_filepath)
+                    logging.info(">>>>>>> DISCARDED THE NEW CORRUPTED RESOURCE <<<<<<<")
+
+                # stop overwrting the original file in case of no update
+                else:
+                    os.remove(resource_filepath)
+                    logging.info(">>>>>>> NO NEW RECORD - NEW RESOURCE DISCARDED! <<<<<<<")
+
+                mod_time = os.path.getmtime(backup_resource_filepath)
+                mod_time = time.ctime(mod_time)
+                logging.info(f">>>>>>> BACKUP FILE: '{backup_resource_filepath}', Last Modification Date and Time: {mod_time} <<<<<<<")
 
             ##############################################################################################
             #------------------ Failure Protocol ------------------
