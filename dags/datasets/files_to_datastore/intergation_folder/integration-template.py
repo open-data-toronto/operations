@@ -289,7 +289,7 @@ def create_dag(package_name, config, schedule, default_args):
 
             # clean up resource files, rename most recent resource_file to backup
             @task(task_id="clean_backups_" + resource_label, trigger_rule = "one_success")
-            def clean_backups(resource_filename, resource_filepath, resource_label, **kwargs):
+            def clean_backups(resource_label, resource_filepath, backup_resource_filepath, **kwargs):
                 # stop overwrting the original file in case of failure
                 failure_pathway_tail_task = kwargs['ti'].xcom_pull(task_ids="restore_backup_records_" + resource_label)
                 if failure_pathway_tail_task:
@@ -297,8 +297,8 @@ def create_dag(package_name, config, schedule, default_args):
                     os.remove(resource_filepath)
                 else:
                     # Normal Scenario
-                    backup_resource_filename = "backup_" + resource_filename
-                    backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
+                    # backup_resource_filename = "backup_" + resource_filename
+                    # backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
                     # rename file
                     shutil.move(resource_filepath, backup_resource_filepath)
                     logging.info("BACKUP RESOURCE OVERWRITTEN BY NEW FILE")
@@ -411,7 +411,10 @@ def create_dag(package_name, config, schedule, default_args):
 
             # Clean up
             task_list["clean_backups_" + resource_label] = clean_backups(
-                resource_filename=resource_filename, resource_filepath=resource_filepath, resource_label=resource_label
+                #resource_filename=resource_filename, 
+                resource_label=resource_label,
+                resource_filepath=resource_filepath,
+                backup_resource_filepath=backup_resource_filepath,
             )
 
             # ----Task Flow----
