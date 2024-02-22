@@ -232,10 +232,10 @@ def create_dag(package_name, config, schedule, default_args):
             # determine if the resource needs to be updated
             @task.branch(task_id="does_" + resource_label + "_need_update")
             def does_resource_need_update(
-                resource_label, resource_filename, resource_filepath
+                resource_label, resource_filepath, backup_resource_filepath
             ):
-                backup_resource_filename = "backup_" + resource_filename
-                backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
+                # backup_resource_filename = "backup_" + resource_filename
+                # backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
 
                 equal = misc_utils.file_equal(
                     resource_filepath, backup_resource_filepath
@@ -358,8 +358,9 @@ def create_dag(package_name, config, schedule, default_args):
                 "does_" + resource_label + "_need_update"
             ] = does_resource_need_update(
                 resource_label=resource_label,
-                resource_filename=resource_filename,
+                # resource_filename=resource_filename,
                 resource_filepath=resource_filepath,
+                backup_resource_filepath=backup_resource_filepath,
             )
 
             # task_list["update_resource_" + resource_label] = EmptyOperator(
