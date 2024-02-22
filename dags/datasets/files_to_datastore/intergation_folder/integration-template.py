@@ -197,6 +197,8 @@ def create_dag(package_name, config, schedule, default_args):
                 else:
                     raise Exception("Reader failed!")
 
+                return True
+
             # get or create resource
             @task(
                 task_id="get_or_create_resource_" + resource_label,
@@ -312,6 +314,8 @@ def create_dag(package_name, config, schedule, default_args):
                 mod_time = os.path.getmtime(backup_resource_filepath)
                 mod_time = time.ctime(mod_time)
                 logging.info(f">>>>>>> BACKUP FILE: '{backup_resource_filepath}', Last Modification Date and Time: {mod_time} <<<<<<<")
+
+                return True
 
             ##############################################################################################
             #------------------ Failure Protocol ------------------
