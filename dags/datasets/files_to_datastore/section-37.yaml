@@ -1,0 +1,127 @@
+section-37:
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Community Benefits Secured (Planning Act Sections 37 and 45)
+  date_published: '2023-09-23 17:30:33.993276'
+  refresh_rate: As available
+  dataset_category: Table
+  owner_division: City Planning
+  owner_section: null
+  owner_unit: null
+  owner_email: cityplanning@toronto.ca
+  civic_issues: Affordable housing
+  topics: Development and infrastructure,City government,Locations and mapping
+  tags:
+  - name: benefits
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/planning-development/official-plan-guidelines/section-37-benefits/
+  excerpt: Section 37 of the Planning Act authorizes municipalities to grant increases in permitted height and/or density through the zoning by-law in exchange for community benefits, provided that there are approved Official Plan policies in effect. The City's Official Plan, Section 5.1.1 contains such policy provisions.
+  limitations: This dataset is a snapshot of the Community Benefits Secured through Section 37 and  45 when the records were last refreshed on the Open Data Portal. Individual records may be updated and new ones added to the Portal between refreshes.
+  notes: |
+    The legacy Section 37 density bonusing framework in the  Planning Act, 1990 enabled the City to negotiate contributions towards local community benefits for development applications that exceeded a site’s zoned height and density. Toronto’s Official Plan provided that Section 37 may be used for development, excepting non-profit developments, with more than 10,000 square metres of gross floor area where the zoning by-law amendment increases the permitted density by at least 1,500 square metres and/or significantly increases the permitted height.
+
+    When a developer submitted an application requesting more height and density than allowed, City Planning staff initiated a review process. Section 37 benefits were negotiated on a case-by-case basis with developers, incorporating consultation with the Ward Councillor, the community, and various City Divisions and Agencies. 
+
+    In-kind contributions occur where a development applicant agrees to directly provide the negotiated benefit, such as dedicating physical space within a building for use by non-profit groups. Alternatively, a development applicant can provide cash-in-lieu of the negotiated benefit, transferring responsibility for implementation to the City.
+
+    After approval by City Council, the proposed Section 37 benefits are considered to be “secured”, and the developer has a legal obligation to provide the benefits at a future date, usually when applying for a building permit.
+
+    Similar to Section 37, community benefits can also be obtained pursuant to Section 45(9) of the Planning Act, 1990, where the Committee of Adjustment adds a condition on the approval of a minor variance to the zoning by-law. 
+
+    **Note:** There is often a lag between when the City secures and receives a benefit as, in some cases, it can take years before an approved development submits an application for a building permit. Delays in receiving the benefit can also occur when large investments require the pooling of funds from multiple projects. 
+
+  resources:
+    Secured by Section 37:
+      format: csv
+      url: http://opendata.toronto.ca/city.planning/section-37-benefits/Secured by Section 37.csv
+      attributes:
+      - id: Ward
+        type: text
+        info:
+          notes: "For more information about Toronto's 25-ward system, please visit the [Ward Profiles](https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/ward-profiles/) page."
+      - id: Council/OMB Approval Date
+        type: timestamp
+        format: '%Y-%m-%d %H:%M:%S'
+        info:
+          notes: "To find the Council decision, please browse the [Toronto Meeting Management Information System](https://secure.toronto.ca/council/#/highlights)"
+      - id: Cash Contribution
+        type: float
+        info:
+          notes: ''
+      - id: By-law No
+        type: text
+        info:
+          notes: "To search for the specific by-law, please browse the [By-Law Registry](https://www.toronto.ca/legdocs/bylaws/lawlists.htm?1708637384158) using the by-law number."
+      - id: Address
+        type: text
+        info:
+          notes: "All City applications are found in the [Application Information Centre](https://www.toronto.ca/city-government/planning-development/application-information-centre/#location=&lat=&lng=&zoom=)"
+      - id: Description of Benefits
+        type: text
+        info:
+          notes: "These descriptions are excerpts from the by-law. "
+      #- id: Comments
+      #  type: text
+      #  info:
+      #    notes: ''
+
+    Section 37 Financial Details:
+      format: csv
+      url: http://opendata.toronto.ca/city.planning/section-37-benefits/Section 37 Financial Details.csv
+      attributes:
+      - id: Ward
+        type: text
+        info:
+          notes: "For more information about Toronto's 25-ward system, please visit the [Ward Profiles](https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/ward-profiles/) page."
+      - id: Location
+        type: text
+        info:
+          notes: ''
+      - id: Approval Date
+        type: timestamp
+        format: '%Y-%m-%d %H:%M:%S'
+        info:
+          notes: ''
+      - id: By-law
+        type: text
+        info:
+          notes: ''
+      - id: Total Secured
+        type: float
+        info:
+          notes: ''
+      #- id: Comments
+      #  type: text
+      #  info:
+      #    notes: ''
+      - id: Community Benefits
+        type: text
+        info:
+          notes: ''
+      - id: Secured
+        type: float
+        info:
+          notes: ''
+      - id: Received
+        type: float
+        info:
+          notes: ''
+      - id: Interest
+        type: float
+        info:
+          notes: ''
+      - id: Spent
+        type: float
+        info:
+          notes: ''
+      - id: Balance
+        type: float
+        info:
+          notes: ''
+      - id: Commitments
+        type: text
+        info:
+          notes: ''
+      
+      
