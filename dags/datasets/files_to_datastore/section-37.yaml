@@ -48,7 +48,7 @@ section-37:
       - id: Cash Contribution
         type: float
         info:
-          notes: ''
+          notes: "This cash contribution is the total amount secured. In some cases, the City has not yet received the contribution given the payment schedule indicated in the by-law."
       - id: By-law No
         type: text
         info:
@@ -66,62 +66,61 @@ section-37:
       #  info:
       #    notes: ''
 
-    Section 37 Financial Details:
-      format: csv
-      url: http://opendata.toronto.ca/city.planning/section-37-benefits/Section 37 Financial Details.csv
-      attributes:
-      - id: Ward
-        type: text
-        info:
-          notes: "For more information about Toronto's 25-ward system, please visit the [Ward Profiles](https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/ward-profiles/) page."
-      - id: Location
-        type: text
-        info:
-          notes: ''
-      - id: Approval Date
-        type: timestamp
-        format: '%Y-%m-%d %H:%M:%S'
-        info:
-          notes: ''
-      - id: By-law
-        type: text
-        info:
-          notes: ''
-      - id: Total Secured
-        type: float
-        info:
-          notes: ''
-      #- id: Comments
-      #  type: text
-      #  info:
-      #    notes: ''
-      - id: Community Benefits
-        type: text
-        info:
-          notes: ''
-      - id: Secured
-        type: float
-        info:
-          notes: ''
-      - id: Received
-        type: float
-        info:
-          notes: ''
-      - id: Interest
-        type: float
-        info:
-          notes: ''
-      - id: Spent
-        type: float
-        info:
-          notes: ''
-      - id: Balance
-        type: float
-        info:
-          notes: ''
-      - id: Commitments
-        type: text
-        info:
-          notes: ''
-      
+    #Section 37 Financial Details:
+    #  format: csv
+    #  url: http://opendata.toronto.ca/city.planning/section-37-benefits/Section 37 Financial Details.csv
+    #  attributes:
+    #  - id: Ward
+    #    type: text
+    #    info:
+    #      notes: "For more information about Toronto's 25-ward system, please visit the [Ward Profiles](https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/ward-profiles/) page."
+    #  - id: Location
+    #    type: text
+    #    info:
+    #      notes: ''
+    #  - id: Approval Date
+    #    type: timestamp
+    #    format: '%Y-%m-%d %H:%M:%S'
+    #    info:
+    #      notes: ''
+    #  - id: By-law
+    #    type: text
+    #    info:
+    #      notes: ''
+    #  - id: Total Secured
+    #    type: float
+    #    info:
+    #      notes: ''
+    #  #- id: Comments
+    #  #  type: text
+    #  #  info:
+    #  #    notes: ''
+    #  - id: Community Benefits
+    #    type: text
+    #    info:
+    #      notes: ''
+    #  - id: Secured
+    #    type: float
+    #    info:
+    #      notes: ''
+    #  - id: Received
+    #    type: float
+    #    info:
+    #      notes: ''
+    #  - id: Interest
+    #    type: float
+    #    info:
+    #      notes: ''
+    #  - id: Spent
+    #    type: float
+    #    info:
+    #      notes: ''
+    #  - id: Balance
+    #    type: float
+    #    info:
+    #      notes: ''
+    #  - id: Commitments
+    #    type: text
+    #    info:
+    #      notes: ''
       
