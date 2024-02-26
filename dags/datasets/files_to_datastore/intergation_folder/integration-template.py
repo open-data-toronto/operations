@@ -2,17 +2,29 @@
 This is the 2nd generation of the Airflow DAG generator module.
 
 It serves as the backbone of the Open Data pipeline.
+It is continuously digested by Apache Airflow Scheduler.
 DAGs are generated based on the YAML files available in the Current Working Directory (CWD).
 The module takes advantages of Airflow TaskFlow API for better performance and sustainability. 
 (Compatibility Warning: TaskFlow API is supported by Airflow v2.0 and above)
+
 The module is architected as follows:
 - dag_factory() function: contains a for-loop to ingest all the YAMLs from its CWD and runs create_dag() for each of them.
     - create_dag() function: it contains the DAG constuctor function which is integration_template(). 
     The essense of this function is to dynamically change the DAG-level attributes based on the digested YAML.
         - integration_template() function: this is main funciton making a DAG grounded on TaskFlow paradigm.
+        To see the architecture (psuedo code) of the integration_template() function, 
+        it is recommended to check out its flowchart created in Miro board:
+        https://miro.com/app/board/uXjVNvIJyzE=/?share_link_id=481351942209
+        (Please contact Reza.Ghasemzadeh@toronto.ca if you need access to view the board)
+
+At the end, the module runs dag_factory() function.
+
+Module authors: Yanan.Zhang@toronto.ca and Reza.Ghasemzadeh@toronto.ca
+Developed in Winter 2024.
+Compatible with Python 3.7, Apache Airflow 2.6.3, CKAN 2.9
 """
 
-
+# Python Built-In Libraries
 import os
 import yaml
 import logging
@@ -20,11 +32,13 @@ import pendulum
 import shutil
 import time
 
+# Third-Party Libraries
 from airflow.models import Variable
 from airflow.decorators import dag, task
 from airflow.operators.empty import EmptyOperator
 from airflow.utils.edgemodifier import Label
 
+# Custom Libraries
 from ckan_operators.package_operator import GetOrCreatePackage
 from ckan_operators.resource_operator import GetOrCreateResource, EditResourceMetadata
 from ckan_operators.datastore_operator import (
@@ -37,6 +51,19 @@ from utils_operators.slack_operators import task_failure_slack_alert, MessageFac
 
 
 def create_dag(package_name, config, schedule, default_args):
+    """
+    it contains the DAG constuctor function which is integration_template(). 
+
+    The essense of this function is to dynamically change the DAG-level attributes based on the fed arguments.
+
+    Args:
+        - package_name (str): Name of the package/dataset
+        - config (nested dict): all the informations contained in the YAML file.
+        - schedule (str): the DAG run schedule
+        - default_args (dict): contains the DAG default arguments
+
+    Return: runs integration_template()
+    """
     @dag(
         dag_id=package_name,
         schedule=schedule,
@@ -537,6 +564,17 @@ def create_dag(package_name, config, schedule, default_args):
 
 
 def dag_factory():
+    """
+    Read DAG configurations from the YAMLs in the directory.
+
+    For each YAML, it loads the YAML files into the memory and sets the DAG/Package level information from it. 
+    DAG default args are also set here either manualy or based on the YAML file content.
+    Finally, it runs the create_dag() functoin (defined above) by feeding the extracted configs into its args.
+
+    Args: None
+
+    Returns: None
+    """
     CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
     for config_file in os.listdir(CONFIG_FOLDER):
         if config_file.endswith(".yaml"):
