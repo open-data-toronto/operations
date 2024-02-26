@@ -1,7 +1,7 @@
 upcoming-and-recently-completed-affordable-housing-units:
   jira_issue_id: DTSD-1481
   jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/156849
-  schedule: '45 4 1 * *'
+  schedule: '45 4 * * *'
   dag_owner_name: Mackenzie.Nichols4
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Affordable Housing Pipeline
