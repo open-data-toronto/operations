@@ -1,7 +1,7 @@
 centralized-waiting-list-activity-for-social-housing:
   jira_issue_id: DTSD-1477
   jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/156841
-  schedule: '15 4 * * *'
+  schedule: '15 4 * * 1'
   dag_owner_name: Mackenzie.Nichols4
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Centralized Waiting List Activity for Social Housing

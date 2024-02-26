@@ -1,7 +1,7 @@
 active-affordable-and-social-housing-units:
   jira_issue_id: DTSD-1478
   jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/156846
-  schedule: '0 2 * * *'
+  schedule: '0 2 * * 1'
   dag_owner_name: Mackenzie.Nichols4
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Active Affordable and Social Housing Units
