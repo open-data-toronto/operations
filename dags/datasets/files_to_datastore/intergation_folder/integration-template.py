@@ -74,8 +74,6 @@ def create_dag(package_name, config, schedule, default_args):
     def integration_template():
         ################################################
         # --------------Get config params----------------
-        dir_path = Variable.get("tmp_dir")
-        dag_tmp_dir = dir_path + "/" + package_name
         package = config[package_name]
         metadata_pool = [
             "title",
@@ -103,6 +101,8 @@ def create_dag(package_name, config, schedule, default_args):
             else:
                 package_metadata[metadata_attribute] = None
 
+        dir_path = Variable.get("tmp_dir")
+        dag_tmp_dir = dir_path + "/" + package_name
         #################################################
         # --------------Package level tasks--------------
         @task
