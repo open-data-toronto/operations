@@ -103,42 +103,67 @@ def create_dag(package_name, config, schedule, default_args):
 
         dir_path = Variable.get("tmp_dir")
         dag_tmp_dir = dir_path + "/" + package_name
-        #################################################
-        # --------------Package level tasks--------------
+        ###################################################################
+        # ---------------------- Package level tasks ----------------------
         @task
         def create_tmp_dir(dag_id, dir_path):
+            """
+            Create a directory with dag name
+
+            Args:
+            - dag_id : str
+                the id of the dag(pipeline)
+            - dir_path : str
+                the path of directory
+
+            Returns: full directory path string
+            Return Type: str
+            """
             tmp_dir = misc_utils.create_dir_with_dag_id(dag_id, dir_path)
             return tmp_dir
 
         @task
         def get_or_create_package(package_name, package_metadata):
+            """
+            Get the existing CKAN package object or create one.
+
+            Args:
+            - package_name: str
+                the package name/id to be retrieved/created.
+            - package_metadata: dict 
+                the package metadata in form of a dict. 
+                Required when the function wants to create the package.
+
+            Return: CKAN Package Object Metadata
+            Return Type: Dict
+            """
             package = GetOrCreatePackage(
-                package_name=package_name, package_metadata=package_metadata
+                package_name=package_name, 
+                package_metadata=package_metadata,
             )
             return package.get_or_create_package()
-
-        # ----------------------init tasks
-        create_tmp_dir = create_tmp_dir(dag_id=package_name, dir_path=dir_path)
-        get_or_create_package = get_or_create_package(package_name, package_metadata)
-        done_inserting_into_datastore = EmptyOperator(
-            task_id="done_inserting_into_datastore", trigger_rule = "none_failed"
-        )
-
-        #------------------ Slack Notification ------------------
-        # @task(trigger_rule="none_failed_min_one_success")
-        # def scribe(package_name, yaml_file_content, record_counts):
-        #     message = MessageFactory(package_name, yaml_file_content, record_counts).scribe()
-        #     return message
 
         @task
         def scribe(package_name, package, **context):
             """
-            Generate a formatted message for each resource in a YAML file.
-            Usually, the outpout would be fed into the SlackTownCrier to be announced on Slack.
+            Generate a formatted message for each YAML file.
+
+            The message contains the new/updated resource names and thier record count. 
+            It will look like this:
+                Package: package_name
+                Resources:
+                    - recource_1 [format] : ### records
+                    - recource_2 [format] : ### records
+            Usually, the output would be fed into the `SlackTownCrier` task to get announced on Slack.
+
+            Args:
+            - package_name: str
+            - package: str
+                YAML file contents.
 
             Returns:
-                Str: The final message.
-                None: If no resources are found in the YAML file.
+                The final message (str)
+                None: If no resources are found in the YAML file or if there is no new/updated resource
             """
             resources = package.get("resources", {})
 
@@ -154,13 +179,6 @@ def create_dag(package_name, config, schedule, default_args):
                     record_count = context["ti"].xcom_pull(task_ids="insert_records_" + resource_name.replace(" ", ""))["record_count"]
                     message_line = f"\t\t\t\t- {resource_name} `{resource_format}`: {record_count} records"
                     message_lines.append(message_line)
-                    #record_count = task_list["insert_records_" + resource_name.replace(" ", "")]["record_count"]
-                    # if resource_format:
-                    #     record_count = context["ti"].xcom_pull(task_ids="insert_records_" + resource_name.replace(" ", ""))["record_count"]
-                    #     message_line = f"\t\t\t\t- {resource_name} `{resource_format}`: {record_count} records"
-                    #     message_lines.append(message_line)
-                    # else:
-                    #     logging.error(f"No format found for resource: {resource_name}")
                 except Exception as e:
                     logging.error(e)
                     continue
@@ -172,16 +190,28 @@ def create_dag(package_name, config, schedule, default_args):
 
         @task
         def slack_town_crier(dag_id, message_header, message_content, message_body):
+            """
+            Send the message to the appropriate slack channel
+            
+            Args:
+            - dag_id: The DAG ID; It appears after the message_header
+            - message_header: The title of the message, to appear in bold font.
+            - message_content: The content of the message; Usually supplied by the `Scribe` task.
+            - message_body: Sort of a footer. Displayed at the end of the message.
+
+            Return: Pass the inputs to the `SlackTownCrier` plugin to announce on slack.
+            """
             return SlackTownCrier(dag_id, message_header, message_content, message_body).announce()
-
-        # slack_town_crier(
-        #     dag_id = package_name,
-        #     message_header = "Slack Town Crier - Integration Template",
-        #     message_content = scribe(package_name, config, record_count=10),
-        #     message_body = "",
-        # )
-
         
+        # ---------------------- init tasks ----------------------
+        create_tmp_dir = create_tmp_dir(package_name, dir_path)
+        get_or_create_package = get_or_create_package(package_name, package_metadata)
+
+        # This dummy task would be use at the end of the pipeline!
+        done_inserting_into_datastore = EmptyOperator(
+            task_id="done_inserting_into_datastore", 
+            trigger_rule = "none_failed",
+        )
 
         ############################################################
         # ---------------Resource level task lists------------------
