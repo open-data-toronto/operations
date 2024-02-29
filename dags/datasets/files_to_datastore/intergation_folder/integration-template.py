@@ -216,7 +216,6 @@ def create_dag(package_name, config, schedule, default_args):
         ############################################################
         # ---------------Resource level task lists------------------
         task_list = {}
-        record_counts = {}
         resources = package["resources"]
         resource_list = resources.keys()
 
@@ -227,22 +226,41 @@ def create_dag(package_name, config, schedule, default_args):
             # get resource config
             resource_config = resources[resource_name]
             attributes = resource_config["attributes"]
+
+            #define the file name and its directory and backup
             resource_filename = resource_name + ".csv"
             resource_filepath = dag_tmp_dir + "/" + resource_filename
-
-            ############################ Backup ################################
             backup_resource_filename = "backup_" + resource_filename
             backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
-            ####################################################################
 
             # download source data
             @task(task_id="download_data_" + resource_label)
             def read_from_readers(package_name, resource_name, resource_config):
+                """
+                Download all resources provided in the YAML file.
+
+                Regardless of whether there is any new resource or updaten, 
+                all the resources - including those with no update - will be
+                downloade, converted in csv format and finally saved into the corresponding temporary directory.
+
+                Args:
+                - package_name: str
+                - resource_name: str
+                - resource_config: dict
+                    it is a nested dict which contains the resource format, URL, attributes, etc.
+
+                Returns: True
+                Return Type: Bool
+                """
+                
+                # find and instantiate the approoriate reader for the resource based on its file format.
                 reader = select_reader(
                     package_name=package_name,
                     resource_name=resource_name,
                     resource_config=resource_config,
                 )
+
+                # convert the downloaded resource file into csv format
                 reader.write_to_csv()
 
                 if os.listdir(dag_tmp_dir):
