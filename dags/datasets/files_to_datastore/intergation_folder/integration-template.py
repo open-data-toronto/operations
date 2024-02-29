@@ -444,31 +444,54 @@ def create_dag(package_name, config, schedule, default_args):
                 resource = context["ti"].xcom_pull(
                     task_ids="get_or_create_resource_" + resource_label
                 )
-                # Connect to CKAN DB
+                # Connect to CKAN
                 ckan = misc_utils.connect_to_ckan()
                 return ckan.action.datastore_cache(resource_id=resource["id"])
 
-            # clean up resource files, rename most recent resource_file to backup
-            @task(task_id="clean_backups_" + resource_label, trigger_rule = "one_success")
+            @task(
+                task_id="clean_backups_" + resource_label, 
+                trigger_rule = "one_success",
+            )
             def clean_backups(resource_label, resource_filepath, backup_resource_filepath, **kwargs):
-                # when the resource is updated successfully
+                """
+                Clean up unneccessary resource files from the directory.
+
+                The functions considers three scenarios:
+                - The new/updated resource is inserted to CKAN successfully: 
+                    Overwrite the existing backup file with the new file.
+                - The new/updated resource is NOT inserted to CKAN successfully.
+                    Do not replace the new file with the old file. Discard the new file!
+                - There were no update to the existing resource.
+                    Do not replace the new file with the old file. Discard the new file!
+                Finally it logs the survivig file name along with its most recent modification date.
+
+                Args:
+                - resource_label: str
+                - resource_filepath: str
+                    Absolute path of the new resource file
+                - backup_resource_filepath: str
+                    Absolute path of the existing resource file
+
+                Return: True
+                Return Type: Bool
+                """
+                # When the resource is updated successfully
                 succeeded_to_update = kwargs['ti'].xcom_pull(task_ids="datastore_cache_" + resource_label)
                 if succeeded_to_update:
                     shutil.move(resource_filepath, backup_resource_filepath)
                     logging.info(">>>>>>> BACKUP RESOURCE OVERWRITTEN BY THE NEW FILE <<<<<<<")
-                    # logging.info(f"File list: {os.listdir(dag_tmp_dir)}")
 
-                # stop overwrting the original file in case of failure
-                # failure_pathway_tail_task = kwargs['ti'].xcom_pull(task_ids="restore_backup_records_" + resource_label)
+                # Stop overwrting the original file in case of failure
                 elif kwargs['ti'].xcom_pull(task_ids="restore_backup_records_" + resource_label):
                     os.remove(resource_filepath)
                     logging.info(">>>>>>> DISCARDED THE NEW CORRUPTED RESOURCE <<<<<<<")
 
-                # stop overwrting the original file in case of no update
+                # Stop overwrting the original file in case of no update
                 else:
                     os.remove(resource_filepath)
                     logging.info(">>>>>>> NO NEW RECORD - NEW RESOURCE DISCARDED! <<<<<<<")
 
+                # Log the final file name along with its last modification date.
                 mod_time = os.path.getmtime(backup_resource_filepath)
                 mod_time = time.ctime(mod_time)
                 logging.info(f">>>>>>> BACKUP FILE: '{backup_resource_filepath}', Last Modification Date and Time: {mod_time} <<<<<<<")
