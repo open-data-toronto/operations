@@ -252,7 +252,7 @@ def create_dag(package_name, config, schedule, default_args):
                 Returns: True
                 Return Type: Bool
                 """
-                
+
                 # find and instantiate the approoriate reader for the resource based on its file format.
                 reader = select_reader(
                     package_name=package_name,
@@ -274,12 +274,23 @@ def create_dag(package_name, config, schedule, default_args):
 
                 return True
 
-            # get or create resource
             @task(
                 task_id="get_or_create_resource_" + resource_label,
                 multiple_outputs=True,
             )
             def get_or_create_resource(package_name, resource_name):
+                """
+                Get the existing CKAN resource object or create one.
+
+                Args:
+                - package_name: str
+                    the package name/id of the resource to be retrieved/created.
+                - resource_name: str 
+                    the resource name/id to be retrieved/created.
+
+                Return: CKAN resource object metadata
+                Return Type: Dict
+                """
                 ckan_resource = GetOrCreateResource(
                     package_name=package_name,
                     resource_name=resource_name,
@@ -297,54 +308,112 @@ def create_dag(package_name, config, schedule, default_args):
             # branching for new and existing resource
             @task.branch(task_id="new_or_existing_" + resource_label)
             def new_or_existing(resource_label, **context):
+                """
+                Detemines whether the resource is brand new or not 
+                based the "is_new" key. 
+                Accordingly, the fuction directs to the correct branch.
+
+                Args:
+                - resource_label: str
+
+                Returns: ID of the downstream task
+                Return type: str
+                """
+                # Get the output of the get_or_create_resource task
                 resource = context["ti"].xcom_pull(
                     task_ids="get_or_create_resource_" + resource_label
                 )
+                # Check whether the resource is new
                 if resource["is_new"]:
+                    # Heads up: brand_new is a dummy/empty task!
                     return "brand_new_" + resource_label
 
-                # return "existing_" + resource_label
                 return "does_" + resource_label + "_need_update"
 
-            # compare if new file and existing file are exactly same
-            # determine if the resource needs to be updated
             @task.branch(task_id="does_" + resource_label + "_need_update")
             def does_resource_need_update(
                 resource_label, resource_filepath, backup_resource_filepath
             ):
-                # backup_resource_filename = "backup_" + resource_filename
-                # backup_resource_filepath = dag_tmp_dir + "/" + backup_resource_filename
+                """
+                Determine if the resource needs to be updated.
 
+                When the resource already exist,
+                compare the new file with the existing file, 
+                checking if any new change is introduced.
+                Accordingly, the fuction directs to the correct branch.
+
+                Args:
+                - resource_label: str
+                - resource_filepath: str
+                    Absoulte path of the new file.
+                - backup_resource_filepath: str
+                    Absoulte path of the existing file.
+
+                Returns: ID of the downstream task
+                Return type: str
+                """
+                # Compare the two files by their hash values! A boolean is returned.
                 equal = misc_utils.file_equal(
-                    resource_filepath, backup_resource_filepath
+                    resource_filepath, 
+                    backup_resource_filepath,
                 )
-
+                # Determine the downsteam task to move on.
                 if equal:
+                    # Heads up: dont_update_resource is a dummy/empty task!
                     return "dont_update_resource_" + resource_label
                 else:
-                    #return "update_resource_" + resource_label
                     return "delete_resource_" + resource_label
 
-            # delete datastore resource
             @task(task_id="delete_resource_" + resource_label)
             def delete_resource(resource_label, **context):
+                """
+                Delete Datastore resource from CKAN database.
+
+                The function removes the existing resource file (not object!) from CKAN DB
+                to make room empty for the new file to be inserted.
+                
+                Args:
+                - resource_label: str
+
+                Return: None
+                """
+                # Get the output of the get_or_create_resource task
+                # which is the CKAN resource object.
                 resource = context["ti"].xcom_pull(
                     task_ids="get_or_create_resource_" + resource_label
                 )
+                # Delete a given datastore rescouce records by calling ckan.action.datastore_delete.
+                # The DeleteDatastoreResource class is capable of keeping 
+                # the resource schema by setting keep_schema = True
                 delete = DeleteDatastoreResource(resource_id=resource["id"])
                 return delete.delete_datastore_resource()
 
-            # stream to ckan datastore
-            @task(task_id="insert_records_" + resource_label , trigger_rule="none_failed_min_one_success")
+            @task(
+                task_id="insert_records_" + resource_label , 
+                trigger_rule="none_failed_min_one_success",
+            )
             def insert_records_to_datastore(
                 file_path, attributes, resource_label, **context
             ):
+                """
+                Insert the new/updated resource file as Datastore file into CKAN DB.
+
+                Args:
+                - file_path : str
+                    the absolute path of data file
+                - attributes : Dict
+                    the attributes section of yaml config (data fields)
+                - resource_label : str
+
+                Return: None
+                """
+                # Get the output of the get_or_create_resource task
+                # which is the CKAN resource object.
                 resource = context["ti"].xcom_pull(
                     task_ids="get_or_create_resource_" + resource_label
                 )
-
-                #json.loads("test")
-
+                # Stream records from csv; insert records into ckan datastore in batch
+                # based on yaml config attributes.
                 return stream_to_datastore(
                     resource_id=resource["id"],
                     file_path=file_path,
