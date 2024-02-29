@@ -427,10 +427,24 @@ def create_dag(package_name, config, schedule, default_args):
                 pool="ckan_datastore_cache_pool",
             )
             def datastore_cache(resource_label, **context):
+                """
+                Make different format versions of the resource.
+
+                It rund the iotrans plugin which create duplicates of the datastore resource
+                in different formats and inserts them in the same packeage but in the filestore format.
+
+                Args:
+                - resource_label: str
+
+                Return: None
+                """
                 logging.info(f"Staring caching {resource_label}")
+                # Get the output of the get_or_create_resource task
+                # which is the CKAN resource object.
                 resource = context["ti"].xcom_pull(
                     task_ids="get_or_create_resource_" + resource_label
                 )
+                # Connect to CKAN DB
                 ckan = misc_utils.connect_to_ckan()
                 return ckan.action.datastore_cache(resource_id=resource["id"])
 
