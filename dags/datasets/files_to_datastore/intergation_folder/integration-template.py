@@ -501,22 +501,56 @@ def create_dag(package_name, config, schedule, default_args):
             ##############################################################################################
             #------------------ Failure Protocol ------------------
             # Delete the incomplete new resource from CKAN
-            @task(task_id="delete_failed_resource_" + resource_label, trigger_rule="one_failed")
+            @task(
+                task_id="delete_failed_resource_" + resource_label, 
+                trigger_rule="one_failed",
+            )
             def delete_failed_resource(resource_label, **context):
+                """
+                Delete failed Datastore resource from CKAN database.
+
+                The function removes the new but corrupted resource file (not object!) from CKAN DB
+                to make room empty for the backup file to be inserted.
+                
+                Args:
+                - resource_label: str
+
+                Return: None
+                """
+                # Get the output of the get_or_create_resource task
+                # which is the CKAN resource object.
                 resource = context["ti"].xcom_pull(
                     task_ids="get_or_create_resource_" + resource_label
                 )
+                # Delete a given datastore rescouce records by calling ckan.action.datastore_delete.
+                # The DeleteDatastoreResource class is capable of keeping 
+                # the resource schema by setting keep_schema = True
                 delete = DeleteDatastoreResource(resource_id=resource["id"])
                 return delete.delete_datastore_resource()
 
-            # stream to ckan datastore
             @task(task_id="restore_backup_records_" + resource_label)
             def restore_backup_records_(
                 file_path, attributes, resource_label, **context
             ):
+                """
+                Insert the backup resource file as Datastore file into CKAN DB.
+
+                Args:
+                - file_path : str
+                    the absolute path of data file
+                - attributes : Dict
+                    the attributes section of yaml config (data fields)
+                - resource_label : str
+
+                Return: None
+                """
+                # Get the output of the get_or_create_resource task
+                # which is the CKAN resource object.
                 resource = context["ti"].xcom_pull(
                     task_ids="get_or_create_resource_" + resource_label
                 )
+                # Stream records from csv; insert records into ckan datastore in batch
+                # based on yaml config attributes.
                 return stream_to_datastore(
                     resource_id=resource["id"],
                     file_path=file_path,
