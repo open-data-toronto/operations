@@ -624,7 +624,8 @@ def create_dag(package_name, config, schedule, default_args):
                 backup_resource_filepath=backup_resource_filepath,
             )
 
-            # ----Task Flow----
+            ############################################################
+            # ---------- Explicitly Define Tasks Dependencies ----------
             (
                 create_tmp_dir
                 >> get_or_create_package
@@ -647,19 +648,8 @@ def create_dag(package_name, config, schedule, default_args):
 
             (
                 task_list["brand_new_" + resource_label]
-                # >> task_list["ready_insert_" + resource_label]
                 >> task_list["insert_records_" + resource_label]
             )
-            # (
-            #     task_list["existing_" + resource_label]
-            #     >> task_list["does_" + resource_label + "_need_update"]
-            # )
-
-            # task_list["does_" + resource_label + "_need_update"] >> [
-            #     #task_list["update_resource_" + resource_label],
-            #     task_list["delete_resource_" + resource_label],
-            #     task_list["dont_update_resource_" + resource_label],
-            # ]
 
             (   
                 task_list["does_" + resource_label + "_need_update"]
@@ -676,48 +666,36 @@ def create_dag(package_name, config, schedule, default_args):
             (
                 task_list["dont_update_resource_" + resource_label]
                 >> task_list["clean_backups_" + resource_label]
-                #>> done_inserting_into_datastore
             )
             (
-                # task_list["update_resource_" + resource_label]
                 task_list["delete_resource_" + resource_label]
-                # >> task_list["ready_insert_" + resource_label]
                 >> task_list["insert_records_" + resource_label]
             )
             (
-                #task_list["ready_insert_" + resource_label]
                 task_list["insert_records_" + resource_label]
                 >> Label("Success")
                 >> task_list["datastore_cache_" + resource_label]
                 >> task_list["clean_backups_" + resource_label]
                 >> done_inserting_into_datastore
             )
-            ##############################################################################################
-            #------------------ Failure Protocol ------------------
+            
+            # Fail Tolerance Branch
             (
                 task_list["insert_records_" + resource_label]
                 >> Label("Fail")
-                #>> task_list["failed_to_insert_" + resource_label]
                 >> task_list["delete_failed_resource_" + resource_label]
                 >> task_list["restore_backup_records_" + resource_label]
                 >> task_list["clean_backups_" + resource_label]
             )
-            ##############################################################################################
-            # (
-            #     done_inserting_into_datastore
-            #     >> task_list["clean_backups_" + resource_label]
-            # )
 
-        # Define the tasks
-        #record_count = task_list["insert_records_" + resource_name.replace(" ", "")]["record_count"]
-        scribe_task = scribe(package_name, package)#, record_counts)#, record_count=10)
+        # Init slack-related task.
+        scribe_task = scribe(package_name, package)
         slack_town_crier_task = slack_town_crier(
             dag_id = package_name,
             message_header = "Slack Town Crier - Integration Template",
             message_content = scribe_task,
             message_body = "",
         )
-
         # Set up the task dependencies
         done_inserting_into_datastore >> scribe_task >> slack_town_crier_task
 
