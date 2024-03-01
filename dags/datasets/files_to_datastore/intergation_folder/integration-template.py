@@ -498,7 +498,7 @@ def create_dag(package_name, config, schedule, default_args):
 
                 return True
 
-            ##############################################################################################
+            ############################################################
             #------------------ Failure Protocol ------------------
             # Delete the incomplete new resource from CKAN
             @task(
@@ -557,8 +557,10 @@ def create_dag(package_name, config, schedule, default_args):
                     attributes=attributes,
                     do_not_cache=True,
                 )
-            ##############################################################################################
-            # -----------------Init tasks
+            ############################################################
+            # --------------- Init Resource Level Tasks ---------------
+            # All tasks are intialized and stored as key:value pairs in task_list dict
+            # Thi is done to simplify tasks' dependency definition.
             task_list["download_data_" + resource_label] = read_from_readers(
                 package_name=package_name,
                 resource_name=resource_name,
@@ -568,66 +570,46 @@ def create_dag(package_name, config, schedule, default_args):
             task_list[
                 "get_or_create_resource_" + resource_label
             ] = get_or_create_resource(
-                package_name=package_name, resource_name=resource_name
+                package_name=package_name, 
+                resource_name=resource_name,
             )
 
             task_list["new_or_existing_" + resource_label] = new_or_existing(
-                resource_label
+                resource_label,
             )
 
             task_list["brand_new_" + resource_label] = EmptyOperator(
-                task_id="brand_new_" + resource_label
+                task_id="brand_new_" + resource_label,
             )
-            # task_list["existing_" + resource_label] = EmptyOperator(
-            #     task_id="existing_" + resource_label
-            # )
 
             task_list[
                 "does_" + resource_label + "_need_update"
             ] = does_resource_need_update(
                 resource_label=resource_label,
-                # resource_filename=resource_filename,
                 resource_filepath=resource_filepath,
                 backup_resource_filepath=backup_resource_filepath,
             )
 
-            # task_list["update_resource_" + resource_label] = EmptyOperator(
-            #     task_id="update_resource_" + resource_label
-            # )
             task_list["dont_update_resource_" + resource_label] = EmptyOperator(
-                task_id="dont_update_resource_" + resource_label
+                task_id="dont_update_resource_" + resource_label,
             )
 
             task_list["delete_resource_" + resource_label] = delete_resource(
-                resource_label=resource_label
+                resource_label=resource_label,
             )
-
-            # task_list["ready_insert_" + resource_label] = EmptyOperator(
-            #     task_id="ready_insert_" + resource_label,
-            #     trigger_rule="none_failed_min_one_success",
-            # )
 
             task_list["insert_records_" + resource_label] = insert_records_to_datastore(
                 file_path=resource_filepath,
                 attributes=attributes,
                 resource_label=resource_label,
             )
-            
-            # record_counts[resource_name] = task_list["insert_records_" + resource_label]["record_count"]
 
             task_list["datastore_cache_" + resource_label] = datastore_cache(
-                resource_label=resource_label
+                resource_label=resource_label,
             )
 
-            ##############################################################################################
-            #------------------ Failure Protocol ------------------
-            # task_list["failed_to_insert_" + resource_label] = EmptyOperator(
-            #     task_id="failed_to_insert_" + resource_label,
-            #     trigger_rule="one_failed",
-            # )
-            
             task_list["delete_failed_resource_" + resource_label] = delete_failed_resource(
-                resource_label=resource_label
+                resource_label=resource_label,
             )
             
             task_list["restore_backup_records_" + resource_label] = restore_backup_records_(
@@ -635,11 +617,8 @@ def create_dag(package_name, config, schedule, default_args):
                 attributes=attributes,
                 resource_label=resource_label,
             )
-            ##############################################################################################
 
-            # Clean up
             task_list["clean_backups_" + resource_label] = clean_backups(
-                #resource_filename=resource_filename, 
                 resource_label=resource_label,
                 resource_filepath=resource_filepath,
                 backup_resource_filepath=backup_resource_filepath,
@@ -653,12 +632,6 @@ def create_dag(package_name, config, schedule, default_args):
                 >> task_list["get_or_create_resource_" + resource_label]
                 >> task_list["new_or_existing_" + resource_label]
             )
-
-            # task_list["new_or_existing_" + resource_label] >> [
-            #     task_list["brand_new_" + resource_label],
-            #     # task_list["existing_" + resource_label],
-            #     task_list["does_" + resource_label + "_need_update"],
-            # ]
 
             (
                 task_list["new_or_existing_" + resource_label]
