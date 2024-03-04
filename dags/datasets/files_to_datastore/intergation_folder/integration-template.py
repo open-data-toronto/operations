@@ -154,7 +154,7 @@ def create_dag(package_name, config, schedule, default_args):
                 Resources:
                     - recource_1 [format] : ### records
                     - recource_2 [format] : ### records
-            Usually, the output would be fed into the `SlackTownCrier` task to get announced on Slack.
+            Usually, the output would be fed into the slack_writer task to get announced on Slack.
 
             Args:
             - package_name: str
@@ -199,7 +199,7 @@ def create_dag(package_name, config, schedule, default_args):
             - message_content: The content of the message; Usually supplied by the `message_factory` task.
             - message_body: Sort of a footer. Displayed at the end of the message.
 
-            Return: Pass the inputs to the `SlackTownCrier` plugin to announce on slack.
+            Return: None
             """
             return SlackWriter(dag_id, message_header, message_content, message_body).announce()
         
