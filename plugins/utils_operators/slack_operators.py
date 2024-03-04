@@ -177,7 +177,7 @@ This Modules contains the classes creating and sending messages to messengers li
 
 Classes:
 - MessageFactory: Generates a formatted message for each resource in a YAML file.
-- SlackTownCrier: Writes a message to the appropriate slack channel.
+- SlackWriter: Writes a message to the appropriate slack channel.
 '''
 
 
@@ -197,7 +197,7 @@ class MessageFactory:
     Methods:
     - __init__(self, package_name, yaml_file_content, record_count): 
         Initialize a new instance of the MessageFactory class
-    - scribe(self): 
+    - build(self): 
         Generates a formatted message for each resource in a YAML file.
     """
 
@@ -226,10 +226,10 @@ class MessageFactory:
         self.yaml_file_content = yaml_file_content
         self.record_count = record_count
 
-    def scribe(self):
+    def build(self):
         """
         Generate a formatted message for each resource in a YAML file.
-        Usually, the outpout would be fed into the SlackTownCrier to be announced on Slack.
+        Usually, the outpout would be fed into the SlackWriter to be announced on Slack.
 
         Returns:
             Str: The final message.
@@ -258,7 +258,7 @@ class MessageFactory:
         return final_message
 
 
-class SlackTownCrier:
+class SlackWriter:
     """
     Writes a message to the appropriate slack channel, depending on the server where this is being run
     
@@ -271,7 +271,7 @@ class SlackTownCrier:
         Instance-level:
         - dag_id: The DAG ID; It appears after the message_header
         - message_header: The title of the message, to appear in bold font.
-        - message_content: The content of the message; Usually supplied by the Scribe.
+        - message_content: The content of the message; Usually supplied by the MessageFactory.
         - message_body: Sort of a footer. Displayed at the end of the message.
 
     Methods:
@@ -293,7 +293,7 @@ class SlackTownCrier:
         message_body: str = None,
     ) -> None:
         """
-        Initialize a new instance of the SlackTownCrier class
+        Initialize a new instance of the SlackWriter class
         and construct all the necessary attributes.
 
         Arguments:
@@ -302,7 +302,7 @@ class SlackTownCrier:
         - message_header: str
             The title of the message, to appear in bold font.
         - message_content: str
-            The content of the message; Usually supplied by the Scribe.
+            The content of the message; Usually supplied by the MessageFactory.
         - message_body: str
             Sort of a footer. Displayed at the end of the message.
 

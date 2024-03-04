@@ -47,7 +47,7 @@ from ckan_operators.datastore_operator import (
 )
 from readers.base import select_reader
 from utils import misc_utils
-from utils_operators.slack_operators import task_failure_slack_alert, MessageFactory, SlackTownCrier
+from utils_operators.slack_operators import task_failure_slack_alert, SlackWriter
 
 
 def create_dag(package_name, config, schedule, default_args):
@@ -201,7 +201,7 @@ def create_dag(package_name, config, schedule, default_args):
 
             Return: Pass the inputs to the `SlackTownCrier` plugin to announce on slack.
             """
-            return SlackTownCrier(dag_id, message_header, message_content, message_body).announce()
+            return SlackWriter(dag_id, message_header, message_content, message_body).announce()
         
         # ---------------------- init tasks ----------------------
         create_tmp_dir = create_tmp_dir(package_name, dir_path)
