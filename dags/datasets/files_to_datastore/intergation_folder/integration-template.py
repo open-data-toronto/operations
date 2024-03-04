@@ -391,6 +391,7 @@ def create_dag(package_name, config, schedule, default_args):
             @task(
                 task_id="insert_records_" + resource_label , 
                 trigger_rule="none_failed_min_one_success",
+                retries=0,
             )
             def insert_records_to_datastore(
                 file_path, attributes, resource_label, **context
