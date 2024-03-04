@@ -184,7 +184,7 @@ def create_dag(package_name, config, schedule, default_args):
                     continue
             
             # The following `if` statement makes sure that the blanc/meaningless messages won't be created.
-            final_message = "\n".join(message_lines) # if len(message_lines) > 2 else None
+            final_message = "\n".join(message_lines) if len(message_lines) > 2 else None
             
             return final_message
 
@@ -215,7 +215,7 @@ def create_dag(package_name, config, schedule, default_args):
 
         ############################################################
         # ---------------Resource level task lists------------------
-        task_list = {}
+        tasks_dict = {}
         resources = package["resources"]
         resource_list = resources.keys()
 
@@ -559,30 +559,30 @@ def create_dag(package_name, config, schedule, default_args):
                 )
             ############################################################
             # --------------- Init Resource Level Tasks ---------------
-            # All tasks are intialized and stored as key:value pairs in task_list dict
+            # All tasks are intialized and stored as key:value pairs in tasks_dict dict
             # Thi is done to simplify tasks' dependency definition.
-            task_list["download_data_" + resource_label] = read_from_readers(
+            tasks_dict["download_data_" + resource_label] = read_from_readers(
                 package_name=package_name,
                 resource_name=resource_name,
                 resource_config=resource_config,
             )
 
-            task_list[
+            tasks_dict[
                 "get_or_create_resource_" + resource_label
             ] = get_or_create_resource(
                 package_name=package_name, 
                 resource_name=resource_name,
             )
 
-            task_list["new_or_existing_" + resource_label] = new_or_existing(
+            tasks_dict["new_or_existing_" + resource_label] = new_or_existing(
                 resource_label,
             )
 
-            task_list["brand_new_" + resource_label] = EmptyOperator(
+            tasks_dict["brand_new_" + resource_label] = EmptyOperator(
                 task_id="brand_new_" + resource_label,
             )
 
-            task_list[
+            tasks_dict[
                 "does_" + resource_label + "_need_update"
             ] = does_resource_need_update(
                 resource_label=resource_label,
@@ -590,35 +590,35 @@ def create_dag(package_name, config, schedule, default_args):
                 backup_resource_filepath=backup_resource_filepath,
             )
 
-            task_list["dont_update_resource_" + resource_label] = EmptyOperator(
+            tasks_dict["dont_update_resource_" + resource_label] = EmptyOperator(
                 task_id="dont_update_resource_" + resource_label,
             )
 
-            task_list["delete_resource_" + resource_label] = delete_resource(
+            tasks_dict["delete_resource_" + resource_label] = delete_resource(
                 resource_label=resource_label,
             )
 
-            task_list["insert_records_" + resource_label] = insert_records_to_datastore(
+            tasks_dict["insert_records_" + resource_label] = insert_records_to_datastore(
                 file_path=resource_filepath,
                 attributes=attributes,
                 resource_label=resource_label,
             )
 
-            task_list["datastore_cache_" + resource_label] = datastore_cache(
+            tasks_dict["datastore_cache_" + resource_label] = datastore_cache(
                 resource_label=resource_label,
             )
 
-            task_list["delete_failed_resource_" + resource_label] = delete_failed_resource(
+            tasks_dict["delete_failed_resource_" + resource_label] = delete_failed_resource(
                 resource_label=resource_label,
             )
             
-            task_list["restore_backup_records_" + resource_label] = restore_backup_records_(
+            tasks_dict["restore_backup_records_" + resource_label] = restore_backup_records_(
                 file_path=backup_resource_filepath,
                 attributes=attributes,
                 resource_label=resource_label,
             )
 
-            task_list["clean_backups_" + resource_label] = clean_backups(
+            tasks_dict["clean_backups_" + resource_label] = clean_backups(
                 resource_label=resource_label,
                 resource_filepath=resource_filepath,
                 backup_resource_filepath=backup_resource_filepath,
@@ -629,63 +629,63 @@ def create_dag(package_name, config, schedule, default_args):
             (
                 create_tmp_dir
                 >> get_or_create_package
-                >> task_list["download_data_" + resource_label]
-                >> task_list["get_or_create_resource_" + resource_label]
-                >> task_list["new_or_existing_" + resource_label]
+                >> tasks_dict["download_data_" + resource_label]
+                >> tasks_dict["get_or_create_resource_" + resource_label]
+                >> tasks_dict["new_or_existing_" + resource_label]
             )
 
             (
-                task_list["new_or_existing_" + resource_label]
+                tasks_dict["new_or_existing_" + resource_label]
                 >> Label("New")
-                >> task_list["brand_new_" + resource_label]
+                >> tasks_dict["brand_new_" + resource_label]
             )
 
             (
-                task_list["new_or_existing_" + resource_label]
+                tasks_dict["new_or_existing_" + resource_label]
                 >> Label("Existing")
-                >> task_list["does_" + resource_label + "_need_update"]
+                >> tasks_dict["does_" + resource_label + "_need_update"]
             )
 
             (
-                task_list["brand_new_" + resource_label]
-                >> task_list["insert_records_" + resource_label]
+                tasks_dict["brand_new_" + resource_label]
+                >> tasks_dict["insert_records_" + resource_label]
             )
 
             (   
-                task_list["does_" + resource_label + "_need_update"]
+                tasks_dict["does_" + resource_label + "_need_update"]
                 >> Label("No Update")
-                >> task_list["dont_update_resource_" + resource_label]
+                >> tasks_dict["dont_update_resource_" + resource_label]
             )
 
             (   
-                task_list["does_" + resource_label + "_need_update"]
+                tasks_dict["does_" + resource_label + "_need_update"]
                 >> Label("Update")
-                >> task_list["delete_resource_" + resource_label]
+                >> tasks_dict["delete_resource_" + resource_label]
             )
 
             (
-                task_list["dont_update_resource_" + resource_label]
-                >> task_list["clean_backups_" + resource_label]
+                tasks_dict["dont_update_resource_" + resource_label]
+                >> tasks_dict["clean_backups_" + resource_label]
             )
             (
-                task_list["delete_resource_" + resource_label]
-                >> task_list["insert_records_" + resource_label]
+                tasks_dict["delete_resource_" + resource_label]
+                >> tasks_dict["insert_records_" + resource_label]
             )
             (
-                task_list["insert_records_" + resource_label]
+                tasks_dict["insert_records_" + resource_label]
                 >> Label("Success")
-                >> task_list["datastore_cache_" + resource_label]
-                >> task_list["clean_backups_" + resource_label]
+                >> tasks_dict["datastore_cache_" + resource_label]
+                >> tasks_dict["clean_backups_" + resource_label]
                 >> done_inserting_into_datastore
             )
             
             # Fail Tolerance Branch
             (
-                task_list["insert_records_" + resource_label]
+                tasks_dict["insert_records_" + resource_label]
                 >> Label("Fail")
-                >> task_list["delete_failed_resource_" + resource_label]
-                >> task_list["restore_backup_records_" + resource_label]
-                >> task_list["clean_backups_" + resource_label]
+                >> tasks_dict["delete_failed_resource_" + resource_label]
+                >> tasks_dict["restore_backup_records_" + resource_label]
+                >> tasks_dict["clean_backups_" + resource_label]
             )
 
         # Init slack-related task.
