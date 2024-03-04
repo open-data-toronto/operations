@@ -144,7 +144,7 @@ def create_dag(package_name, config, schedule, default_args):
             return package.get_or_create_package()
 
         @task
-        def scribe(package_name, package, **context):
+        def message_factory(package_name, package, **context):
             """
             Generate a formatted message for each YAML file.
 
@@ -184,19 +184,19 @@ def create_dag(package_name, config, schedule, default_args):
                     continue
             
             # The following `if` statement makes sure that the blanc/meaningless messages won't be created.
-            final_message = "\n".join(message_lines) if len(message_lines) > 2 else None
+            final_message = "\n".join(message_lines) # if len(message_lines) > 2 else None
             
             return final_message
 
         @task
-        def slack_town_crier(dag_id, message_header, message_content, message_body):
+        def slack_writer(dag_id, message_header, message_content, message_body):
             """
             Send the message to the appropriate slack channel
             
             Args:
             - dag_id: The DAG ID; It appears after the message_header
             - message_header: The title of the message, to appear in bold font.
-            - message_content: The content of the message; Usually supplied by the `Scribe` task.
+            - message_content: The content of the message; Usually supplied by the `message_factory` task.
             - message_body: Sort of a footer. Displayed at the end of the message.
 
             Return: Pass the inputs to the `SlackTownCrier` plugin to announce on slack.
@@ -689,15 +689,15 @@ def create_dag(package_name, config, schedule, default_args):
             )
 
         # Init slack-related task.
-        scribe_task = scribe(package_name, package)
-        slack_town_crier_task = slack_town_crier(
+        message_task = message_factory(package_name, package)
+        slack_writer_task = slack_writer(
             dag_id = package_name,
-            message_header = "Slack Town Crier - Integration Template",
-            message_content = scribe_task,
+            message_header = "DAG Template v2",
+            message_content = message_task,
             message_body = "",
         )
         # Set up the task dependencies
-        done_inserting_into_datastore >> scribe_task >> slack_town_crier_task
+        done_inserting_into_datastore >> message_task >> slack_writer_task
 
     return integration_template()
 
