@@ -45,7 +45,7 @@ from ckan_operators.datastore_operator import (
     DeleteDatastoreResource,
     stream_to_datastore,
 )
-from readers.base import select_reader
+from readers.readers import select_reader
 from utils import misc_utils
 from utils_operators.slack_operators import task_failure_slack_alert, SlackWriter
 
@@ -122,7 +122,7 @@ def create_dag(package_name, config, schedule, default_args):
             tmp_dir = misc_utils.create_dir_with_dag_id(dag_id, dir_path)
             return tmp_dir
 
-        @task
+        @task(pool="ckan_pool",)
         def get_or_create_package(package_name, package_metadata):
             """
             Get the existing CKAN package object or create one.
@@ -277,6 +277,7 @@ def create_dag(package_name, config, schedule, default_args):
             @task(
                 task_id="get_or_create_resource_" + resource_label,
                 multiple_outputs=True,
+                pool="ckan_pool",
             )
             def get_or_create_resource(package_name, resource_name):
                 """
@@ -364,7 +365,7 @@ def create_dag(package_name, config, schedule, default_args):
                 else:
                     return "delete_resource_" + resource_label
 
-            @task(task_id="delete_resource_" + resource_label)
+            @task(task_id="delete_resource_" + resource_label, pool="ckan_pool")
             def delete_resource(resource_label, **context):
                 """
                 Delete Datastore resource from CKAN database.
@@ -392,6 +393,7 @@ def create_dag(package_name, config, schedule, default_args):
                 task_id="insert_records_" + resource_label , 
                 trigger_rule="none_failed_min_one_success",
                 retries=0,
+                pool="ckan_pool",
             )
             def insert_records_to_datastore(
                 file_path, attributes, resource_label, **context
@@ -505,6 +507,7 @@ def create_dag(package_name, config, schedule, default_args):
             @task(
                 task_id="delete_failed_resource_" + resource_label, 
                 trigger_rule="one_failed",
+                pool="ckan_pool",
             )
             def delete_failed_resource(resource_label, **context):
                 """
@@ -529,7 +532,10 @@ def create_dag(package_name, config, schedule, default_args):
                 delete = DeleteDatastoreResource(resource_id=resource["id"])
                 return delete.delete_datastore_resource()
 
-            @task(task_id="restore_backup_records_" + resource_label)
+            @task(
+                task_id="restore_backup_records_" + resource_label,
+                pool="ckan_pool",
+            )
             def restore_backup_records_(
                 file_path, attributes, resource_label, **context
             ):
