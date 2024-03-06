@@ -1,0 +1,58 @@
+toronto-island-ferry-ticket-counts:
+  jira_issue_id: DTSD-5076
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/190458
+  schedule: '10 13,14,15,16,17,18,19,20,21,22,23,0-7 * * 1-5'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Toronto Island Ferry Ticket Counts
+  date_published: '2024-03-06 12:39:40.281513'
+  dataset_category: Table
+  refresh_rate: Real-time
+  owner_division: Parks, Forestry & Recreation
+  owner_section: null
+  owner_unit: null
+  owner_email: pfr.researchanalytics@toronto.ca
+  civic_issues: null
+  topics:
+  - Transportation
+  - Culture & Tourism
+  - Parks and Recreation
+  tags:
+  - name: Ferry
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/explore-enjoy/parks-gardens-beaches/toronto-island-park/ferries-to-toronto-island-park/
+  excerpt: 'This dataset provides near real-time information about Toronto Island
+    ferry ticket sales and ticket redemptions. '
+  limitations: null
+  notes: |
+    Ferries to [Toronto Island Park] (https://www.toronto.ca/explore-enjoy/parks-gardens-beaches/toronto-island-park) operate year-round out of Jack Layton Ferry Terminal. Ferries carry passengers to and from Centre Island, Hanlan’s Point and Ward’s Island. There are [limited amenities during the off-season](https://www.toronto.ca/explore-enjoy/parks-gardens-beaches/toronto-island-park/?accordion=during-the-off-seasonwinter).
+
+    This dataset provides near real-time information on ferry ticket sales and ticket redemptions. The counts are provided in 15 minute intervals and are updated hourly. They encompass all product types and include both online and POS-kiosk sales.
+
+    For additional information about Toronto Island Park or the ferry service, please visit [toronto.ca/parks](https://www.toronto.ca/explore-enjoy/parks-gardens-beaches) or contact parks@toronto.ca. 
+  resources:
+    Toronto Island Ferry Ticket Counts:
+      format: csv
+      url: https://opendata.toronto.ca/parks.forestry.recreation/ferry-ticket-volumes/Toronto_Ferry_Ticket_Volumes (PRD).csv
+      attributes:
+        #- source_name: "ï»¿Sort_Order"
+        #  target_name: Sort Order
+        #  type: int
+        #  info:
+        #    notes: "The sort order of timestamps descending by most recent"
+        - source_name: TimeStamp
+          target_name: Timestamp
+          type: timestamp
+          format: "%m/%d/%Y %I:%M:%S %p"
+          info:
+            notes: "The 15 minute interval (end time) that the data represents"
+        - source_name: Redemption_Count
+          target_name: Redemption Count
+          type: int
+          info:
+            notes: "The ticket redemption count between the previous and current timestamp"
+        - source_name: Sales_Count
+          target_name: Sales Count
+          type: int
+          info:
+            notes: "The ticket sales count between the previous and current timestamp"
