@@ -74,6 +74,7 @@ dinesafe:
             notes: Description of the Infraction
         - id: Inspection Date
           type: date
+          format: "%m-%d-%Y"
           info:
             notes: Calendar date the inspection was conducted
         - id: Severity

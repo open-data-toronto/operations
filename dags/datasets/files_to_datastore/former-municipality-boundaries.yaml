@@ -45,6 +45,7 @@ former-municipality-boundaries:
           notes: ''
       - id: DATE_EFFECTIVE
         type: timestamp
+        format: epoch
         info:
           notes: ''
       - id: AREA_ATTR_ID

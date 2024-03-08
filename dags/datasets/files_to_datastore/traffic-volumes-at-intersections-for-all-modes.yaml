@@ -62,6 +62,7 @@ traffic-volumes-at-intersections-for-all-modes:
             notes: Unique identified for the traffic study conducted to gather count data. This corresponds with the count_id field in the raw_data_[decade] table.
         - id: count_date
           type: date
+          format: "%Y-%m-%d"
           info:
             notes: Date of count
         - id: location_id
@@ -1262,6 +1263,7 @@ traffic-volumes-at-intersections-for-all-modes:
             notes: Unique identified for the traffic study conducted to gather count data. This corresponds with the count_id field in the raw_data_[decade] table.
         - id: count_date
           type: date
+          format: "%Y-%m-%d"
           info:
             notes: Date of count
         - id: location_id

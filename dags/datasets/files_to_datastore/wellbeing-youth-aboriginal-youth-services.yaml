@@ -89,6 +89,7 @@ wellbeing-youth-aboriginal-youth-services:
           notes: ''
       - id: DATE_UPDATED
         type: timestamp
+        format: epoch
         info:
           notes: ''
       - id: ADDRESS_POINT_ID

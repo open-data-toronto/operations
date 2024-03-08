@@ -59,6 +59,7 @@ members-of-toronto-city-council-meeting-attendance:
             notes: ""
         - id: Session Date
           type: date
+          format: "%Y-%m-%d"
           info:
             notes: ""
         - id: Session Type

@@ -83,6 +83,7 @@ registry-of-declared-interest:
             notes: ""
         - id: Verbal Declaration Date
           type: date
+          format: "%Y-%m-%d"
           info:
             notes: ""
         - id: Verbal Declaration
@@ -95,5 +96,6 @@ registry-of-declared-interest:
             notes: ""
         - id: Receive Date
           type: date
+          format: "%Y-%m-%d"
           info:
             notes: ""

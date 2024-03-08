@@ -52,10 +52,12 @@ theft-from-motor-vehicle:
             notes: Offence Number
         - id: "REPORT_DATE"
           type: date
+          format: epoch
           info:
             notes: Date Offence was Reported
         - id: "OCC_DATE"
           type: date
+          format: epoch
           info:
             notes: Date of Offence
         - id: "REPORT_YEAR"
