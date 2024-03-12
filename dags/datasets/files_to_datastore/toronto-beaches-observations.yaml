@@ -76,7 +76,7 @@ toronto-beaches-observations:
         - id: rain
           type: text
           info:
-            notes: "Presence of rain"
+            notes: "Presence of rain - Yes, No"
         - id: rainAmount
           type: int
           info:
