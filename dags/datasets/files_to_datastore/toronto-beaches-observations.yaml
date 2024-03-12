@@ -60,14 +60,15 @@ toronto-beaches-observations:
           type: text
           info:
             notes: "Name of beach where observations were collected"
-        - id: wind_speed
+        - source_name: wind_speed
+          target_name: windSpeed
           type: int
           info:
             notes: "Wind speed measured in km/h"
         - id: windDirection
           type: text
           info:
-            notes: "Wind directions"
+            notes: "Wind directions - East, North-East, North, North-West, West, South-West, South, South-East"
         - id: airTemp
           type: int
           info:
@@ -91,11 +92,11 @@ toronto-beaches-observations:
         - id: waveAction
           type: text
           info:
-            notes: "Observations on wave action"
+            notes: "Observations on wave action - high, low, moderate, none"
         - id: waterClarity
           type: text
           info:
-            notes: "Visual state of water's clarity"
+            notes: "Visual state of water's clarity - free form text"
         - id: turbidity
           type: float
           info:
