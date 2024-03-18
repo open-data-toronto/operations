@@ -18,6 +18,9 @@ heritage-register:
     format: zip
     url: https://opendata.toronto.ca/city.planning/heritage-register/Heritage_Register_Address_Points_WGS84.zip
 monthly-communicable-disease-surveillance-data:
+  Communicable disease surveillance data 2024:
+    format: xlsx
+    url: https://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2024_Monthly_Report_AODA.xlsx
   Communicable disease surveillance data 2023:
     format: xlsx
     url: https://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2023_Monthly_Report_AODA.xlsx
