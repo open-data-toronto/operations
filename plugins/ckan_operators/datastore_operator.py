@@ -1009,7 +1009,7 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
         total_count = 0
         this_count = 0
         this_batch = []
-        batch_size = 20000
+        batch_size = 10
 
         for row in csv_generator:
             total_count += 1
@@ -1213,9 +1213,19 @@ def stream_to_datastore(
             None
         """
 
+        # parse source and target names
+        working_attributes = []
+        for attr in attributes:
+            if "id" in attr.keys():
+                working_attributes.append(attr)
+            elif "source_name" in attr.keys():
+                attr["id"] = attr["target_name"]
+                working_attributes.append(attr)
+
+        # insert data into ckan
         ckan.action.datastore_create(
             id=resource_id,
-            fields=attributes,
+            fields=working_attributes,
             records=records,
             force=True,
             do_not_cache=do_not_cache,

@@ -51,9 +51,9 @@ class Reader(ABC):
         # where the data will be saved
         self.path = out_dir + "/" + filename
         # names intended to be written out to saved file
-        self.fieldnames = [attr["id"] for attr in self.schema]
+        self.fieldnames = [attr["id"] if "id" in attr.keys() else attr["target_name"] for attr in self.schema]
 
-        logging.info(f"Reader expecting the following fields: {self.fieldnames}")
+        logging.info(f"Reader prepping to save the following fields: {self.fieldnames}")
         
 
     @abstractmethod
@@ -81,6 +81,10 @@ class Reader(ABC):
         output = {}
         for line in self.read():
             for attr in self.schema:
+
+                # consider remapped column names when parsing data
+                if "id" not in attr.keys():
+                    attr["id"] = attr["target_name"]
             
                 cleaner = self.cleaners[attr["type"]]
                 value = line[attr["id"]]
@@ -128,9 +132,14 @@ class CSVReader(Reader):
                 if "geometry" in self.fieldnames \
                     and "geometry" not in source_headers:
                     source_row = misc_utils.parse_geometry_from_row(source_row)
+                
                 # add source data to out row
                 for attr in self.schema:
-                    out[attr["id"]] = source_row[attr["id"]] 
+                    # remap column names if in config file
+                    if "source_name" in attr.keys() and "target_name" in attr.keys():                        
+                        out[attr["target_name"]] = source_row[attr["source_name"]]
+                    elif "id" in attr.keys():
+                        out[attr["id"]] = source_row[attr["id"]]
 
                 yield out
 

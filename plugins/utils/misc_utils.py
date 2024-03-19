@@ -89,17 +89,8 @@ def clean_date_format(input, input_format=None):
     # loops through the list of formats and tries to return an input
     # string into a datetime of one of those formats
 
-    if input is None:
+    if input in [None, '']:
         return
-
-    if len(input) == 0:
-        return
-
-    assert isinstance(
-        input, str
-    ), "Utils.clean_date_format() accepts strings - it got {}".format(
-        type(input)
-    )
 
     format_dict = {
         "%Y-%m-%dT%H:%M:%S.%f": "%Y-%m-%dT%H:%M:%S",
@@ -134,6 +125,12 @@ def clean_date_format(input, input_format=None):
                 return datetime_object.strftime("%Y-%m-%d")
 
         else:
+            assert isinstance(
+                input, str
+            ), "Utils.clean_date_format() accepts strings - it got {}".format(
+                type(input)
+          
+            )
             input = input.replace("/", "-")
             input_format = input_format.replace("/", "-")
             datetime_object = datetime.strptime(input, input_format)
