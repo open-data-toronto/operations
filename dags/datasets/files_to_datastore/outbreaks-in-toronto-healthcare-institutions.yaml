@@ -115,10 +115,12 @@ outbreaks-in-toronto-healthcare-institutions:
             notes: "The second aetiological agent(s) that have been identified from one or more outbreak-related cases, when an agent is confirmed."
         - id: "Date Outbreak Began"
           type: "date"
+          format: "%Y-%m-%d"
           info:
             notes: "The date the institution reports the outbreak to TPH"
         - id: "Date Declared Over"
           type: "date"
+          format: "%Y-%m-%d"
           info:
             notes: "In general, respiratory and enteric outbreaks are declared over if no new cases have been detected in the facility for a period of time equal to atleast one full incubation period plus one full period of communicability for the particular outbreak organism"
         - id: "Active"

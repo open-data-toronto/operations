@@ -57,6 +57,7 @@ central-intake-calls:
       attributes:
         - id: Date
           type: date
+          format: "%m-%d-%Y"
           info:
             notes: The calendar date to which all call counts in this data set apply.
         - id: Total calls handled
@@ -125,6 +126,7 @@ central-intake-calls:
       attributes:
         - id: Date
           type: date
+          format: "%m-%d-%Y"
           info:
             notes: Operational date for the data, uses the date before midnight to refer to the evening of service. A closeout completed at 4:00 am on the morning of August 1, 2022 would be recorded as operational date July 31, 2022.
         - id: Unmatched callers

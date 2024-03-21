@@ -94,10 +94,11 @@ traffic-control-devices:
             notes: ""
         - id: "ACTIVATION_DATE"
           type: "timestamp"
+          format: epoch
           info:
             notes: ""
         - id: "REMOVAL_DATE"
-          type: "timestamp"
+          type: "text"
           info:
             notes: ""
         - id: "DISTRICT"

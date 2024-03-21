@@ -43,10 +43,12 @@ toronto-fire-services-run-areas:
             notes: ""
         - id: "DATE_EFFECTIVE"
           type: "timestamp"
+          format: epoch
           info:
             notes: ""
         - id: "DATE_EXPIRY"
           type: "timestamp"
+          format: epoch
           info:
             notes: ""
         - id: "AREA_ATTR_ID"

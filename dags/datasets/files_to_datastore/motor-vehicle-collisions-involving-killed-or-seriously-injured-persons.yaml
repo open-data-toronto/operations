@@ -51,6 +51,7 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
             notes: Year Collision Occurred
         - id: "DATE"
           type: date
+          format: epoch
           info:
             notes: Date Collision Occurred
         - id: "TIME"

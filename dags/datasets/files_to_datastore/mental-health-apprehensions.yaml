@@ -58,6 +58,7 @@ mental-health-apprehensions:
             notes: Offence Number
         - id: REPORT_DATE
           type: date
+          format: epoch
           info:
             notes: Date Offence was Reported
         - id: REPORT_YEAR
@@ -86,6 +87,7 @@ mental-health-apprehensions:
             notes: Hour Offence was Reported
         - id: OCC_DATE
           type: date
+          format: epoch
           info:
             notes: Date of Offence
         - id: OCC_YEAR

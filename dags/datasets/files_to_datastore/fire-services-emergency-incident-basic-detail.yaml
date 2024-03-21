@@ -82,14 +82,17 @@ fire-services-emergency-incident-basic-detail:
             notes: Nearest major or minor intersection in the ward where the incident occurred
         - id: TFS_Alarm_Time
           type: timestamp
+          format: "%Y-%m-%d %H:%M:%S.%f"
           info:
             notes: Timestamp of when TFS was notified of the incident
         - id: TFS_Arrival_Time
           type: timestamp
+          format: "%Y-%m-%d %H:%M:%S.%f"
           info:
             notes: Timestamp of first arriving unit to incident
         - id: Last_TFS_Unit_Clear_Time
           type: timestamp
+          format: "%Y-%m-%d %H:%M:%S.%f"
           info:
             notes: Timestamp of last unit cleared from incident
         - id: Persons_Rescued

@@ -50,6 +50,7 @@ daily-shelter-overnight-service-occupancy-capacity:
       attributes:
         - id: "OCCUPANCY_DATE"
           type: "date"
+          format: "%Y-%m-%dT%H:%M:%S"
           info:
             notes: "Date of the record. This date refers to the evening of the overnight period being reported. The occupancy data is retrieved at 4:00 am the following morning, so an OCCUPANCY_DATE of January 1, 2021 would refer to data collected at 4:00 am on January 2, 2021."
         - id: "ORGANIZATION_ID"

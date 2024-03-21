@@ -171,6 +171,7 @@ cycling-network:
           notes: ''
       - id: LAST_EDIT_DATE
         type: timestamp
+        format: epoch
         info:
           notes: ''
       - id: UPGRADE_DESCRIPTION

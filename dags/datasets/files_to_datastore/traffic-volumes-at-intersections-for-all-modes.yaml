@@ -95,10 +95,12 @@ traffic-volumes-at-intersections-for-all-modes:
             notes: The year the location was active
         - id: time_start
           type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
           info:
             notes:  ""
         - id: time_end
           type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
           info:
             notes: Id associated with the location
         - id: sb_cars_r
@@ -1328,5 +1330,6 @@ traffic-volumes-at-intersections-for-all-modes:
             notes: The year the location was active
         - id: latest_count_date
           type: date
+          format: "%Y-%m-%d"
           info:
             notes: Latest date for this count

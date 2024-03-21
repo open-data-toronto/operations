@@ -42,11 +42,11 @@ on-street-permit-parking-area-maps:
         info:
           notes: ''
       - id: DATE_EFFECTIVE
-        type: timestamp
+        type: text
         info:
           notes: ''
       - id: DATE_EXPIRY
-        type: timestamp
+        type: text
         info:
           notes: ''
       - id: AREA_ATTR_ID

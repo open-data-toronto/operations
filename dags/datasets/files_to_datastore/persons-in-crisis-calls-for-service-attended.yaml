@@ -53,6 +53,7 @@ persons-in-crisis-calls-for-service-attended:
             notes: "Event Number"
         - id: "EVENT_DATE"
           type: "date"
+          format: epoch
           info:
             notes: "Date of Event"
         - id: "EVENT_YEAR"

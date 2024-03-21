@@ -71,7 +71,7 @@ park-and-recreation-facility-study-areas:
         info:
           notes: 'Descriptive alt-text for the image at the URL in the image field'
       - id: takedown_date
-        type: timestamp
+        type: text
         info:
           notes: 'The date at which the feature should be removed from'
       - id: geometry

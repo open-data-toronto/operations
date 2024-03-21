@@ -43,10 +43,12 @@ wards-and-elected-councillors:
             notes: ""
         - id: "DATE_EFFECTIVE"
           type: date
+          format: epoch
           info:
             notes: ""
         - id: "DATE_EXPIRY"
           type: date
+          format: epoch
           info:
             notes: ""
         - id: "AREA_ATTR_ID"

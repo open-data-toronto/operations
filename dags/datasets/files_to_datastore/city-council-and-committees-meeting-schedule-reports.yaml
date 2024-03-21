@@ -57,6 +57,7 @@ city-council-and-committees-meeting-schedule-reports:
             notes: ""
         - id: Date
           type: date
+          format: "%Y-%m-%d"
           info:
             notes: ""
         - id: Start Time

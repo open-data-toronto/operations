@@ -36,10 +36,12 @@ intersection-file-city-of-toronto:
           notes: 'Unique id of the intersection'
       - id: DATE_EFFECTIVE
         type: timestamp
+        format: epoch
         info:
           notes: ''
       - id: DATE_EXPIRY
         type: timestamp
+        format: epoch
         info:
           notes: ''
       - id: ELEVATION_ID
