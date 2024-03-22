@@ -1009,7 +1009,7 @@ class CSVStreamToDatastoreYAMLOperator(BaseOperator):
         total_count = 0
         this_count = 0
         this_batch = []
-        batch_size = 10
+        batch_size = 20000
 
         for row in csv_generator:
             total_count += 1

@@ -291,13 +291,13 @@ class ExcelReader(Reader):
 
         for row in self.worksheet.iter_rows(min_row=2):
             output_row = {
-                source_headers[i]: str(row[i].value).strip()
+                source_headers[i]: str(row[i].value).strip() if row[i].value else None
                 for i in range(len(row))
             }
 
             # if geometric data, parse into geometry object
             if "geometry" in self.fieldnames and "geometry" not in source_headers:
-                output_row = utils.parse_geometry_from_row(output_row)
+                output_row = misc_utils.parse_geometry_from_row(output_row)
 
             yield output_row
 

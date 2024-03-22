@@ -22,7 +22,7 @@ neighbourhood-profiles:
     - City government
     - Locations and mapping
     - Community services
-  tags: null
+  tags: []
     
   information_url: "www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/neighbourhood-profiles/about-toronto-neighbourhoods/"
   excerpt: "The Neighbourhood Profiles provide a portrait of the demographic, social and economic characteristics of the people and households in each City of Toronto neighbourhood. The data is based on tabulations of 2006, 2011, 2016, 2021 Census of Population data from Statistics Canada."

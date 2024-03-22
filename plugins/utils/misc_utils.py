@@ -178,12 +178,18 @@ def parse_geometry_from_row(source_row):
         if attr.lower() in longitude_attributes:
             longitude_attribute = attr
 
+    # manage empty coordinates
+    if source_row[longitude_attribute] and source_row[latitude_attribute]:
+        coordinates = [
+                float(source_row[longitude_attribute]),
+                float(source_row[latitude_attribute]),
+            ]
+    else:
+        coordinates = [None, None]
+
     source_row["geometry"] = json.dumps({
         "type": "Point",
-        "coordinates": [
-            float(source_row[longitude_attribute]),
-            float(source_row[latitude_attribute]),
-        ],
+        "coordinates": coordinates,
     })
 
     return source_row
