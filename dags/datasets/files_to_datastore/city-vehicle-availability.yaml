@@ -1,0 +1,124 @@
+city-vehicle-availability:
+  jira_issue_id: DTSD-6970
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/209363
+  schedule: '@once'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: 'City Vehicle Availability '
+  date_published: '2024-03-15 12:51:46.096443'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: Fleet Services
+  owner_section: Fleet Maintenance
+  owner_unit: Fleet Maintenance
+  owner_email: fleetservices@toronto.ca
+  civic_issues: null
+  topics:
+  - Business
+  tags:
+  - name: availability
+    vocabulary_id: null
+  - name: class
+    vocabulary_id: null
+  - name: fleet
+    vocabulary_id: null
+  - name: maintenance
+    vocabulary_id: null
+  - name: make
+    vocabulary_id: null
+  - name: model
+    vocabulary_id: null
+  - name: unit_type
+    vocabulary_id: null
+  information_url: null
+  excerpt: 'This dataset provides year-to-date availability metrics on current and
+    past fleet assets owned and managed by the Fleet Services Division. '
+  limitations: As the dataset only captures year-to-date availability of each asset,
+    comparisons between multiple years and months cannot be made using this dataset.
+    If a specific unit/asset does not have an entry for its YTD availability, this
+    means the unit was not in use during the timeframe. This dataset only includes
+    currently active Fleet asset's that are maintained by Fleet Services.
+  notes: The Fleet Services Division (FSD) procures and maintains over 5,000 City
+    vehicles and equipment used to deliver critical services. Fleet availability is
+    a key performance metric that measures the percentage of time fleet assets are
+    available for use.
+
+    This dataset provides year-to-date availability metrics on current fleet assets owned and managed by FSD. The dataset also provides additional information, including the vehicle type, class, make, and model.
+    
+  resources:
+    'City Vehicle Availability ':
+      format: 'xlsx'
+      sheet: Sheet1
+      url: https://opendata.toronto.ca/fleet.services/vehicle-availability/OpenData SRPT078 - YTD Fleet Availability Metrics.xlsm
+      attributes:
+      - id: UNIT_NO
+        type: text
+        info:
+          notes: City of Toronto assigned fleet number, located on the left, right,
+            and rear of the unit
+      - id: YEAR
+        type: int
+        info:
+          notes: Model Year of the unit
+      - id: MAKE
+        type: text
+        info:
+          notes: Manufacturer of the unit
+      - id: MODEL
+        type: text
+        info:
+          notes: Model Name of the unit
+      - id: CATEGORY
+        type: text
+        info:
+          notes: Second highest level of grouping of equipment. Controls unit budgeting,
+            valuation, procurement (purchasing) and replacement policies
+      - id: CAT_DESC
+        type: text
+        info:
+          notes: A text based desciption of the units category
+      - id: UNIT_TYPE
+        type: text
+        info:
+          notes: The grouping of units based category class
+      - id: CATEGORY_CLASS
+        type: text
+        info:
+          notes: The grouping of units based on gross vehicles weight
+      - id: CAT_GRP
+        type: text
+        info:
+          notes: A high level description of the units category grouping
+      - id: IN_SERV_DT
+        type: date
+        format: "%Y/%m/%d %H:%M:%S"
+        info:
+          notes: The date the unit was brought into service/use
+      - id: STATUS_DESC
+        type: text
+        info:
+          notes: The current funcitonal status of the unit
+      - id: CLASS2
+        type: text
+        info:
+          notes: Vehicle maintenance group of the unit
+      - id: HIGH_PRIORITY
+        type: text
+        info:
+          notes: Flag to determine the unit is high priority
+      - id: OWNER_DIVISION
+        type: text
+        info:
+          notes: Divisional owners of the unit
+      - id: REF_DIVISION
+        type: text
+        info:
+          notes: Current using division of the unit
+      - id: SEASONAL
+        type: text
+        info:
+          notes: Flag for determining if a unit only operates seasonaly
+      - id: AVAILABILITY_YTD
+        type: float
+        info:
+          notes: The year to date availability of the unit
