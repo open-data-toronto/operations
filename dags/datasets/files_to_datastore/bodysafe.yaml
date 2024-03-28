@@ -61,6 +61,7 @@ bodysafe:
     bodysafe:
       nested: True
       format: geojson
+      custom_reader: bodysafe
       custom_headers:
         SRV-KEY: bodysafe_secure_toronto_opendata_SRV_KEY
         USER-KEY: secure_toronto_opendata_USER_KEY
@@ -88,6 +89,7 @@ bodysafe:
             notes: "Status of the inspection (ex: Pass)"
         - id: insDate
           type: date
+          format: "%Y-%m-%d"
           info:
             notes: "Date of inspection"
         - id: observation
@@ -112,6 +114,7 @@ bodysafe:
             notes: "Description of action taken"
         - id: OutcomeDate
           type: date
+          format: "%Y-%m-%d"
           info:
             notes: "Date of outcome"
         - id: OutcomeDesc

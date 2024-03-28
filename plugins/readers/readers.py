@@ -5,6 +5,9 @@ import requests
 import csv
 import json
 import sys
+from inspect import getmembers, isfunction
+import importlib
+import types
 
 from utils import misc_utils
 from abc import ABC, abstractmethod
@@ -27,7 +30,6 @@ class Reader(ABC):
 
     def __init__(
             self, 
-            # TODO: are these mandatory or optional?
             source_url: str = None,
             schema: list = None, 
             out_dir: str = "",
@@ -89,6 +91,7 @@ class Reader(ABC):
                 cleaner = self.cleaners[attr["type"]]
                 value = line[attr["id"]]
                 if attr["type"] in ["date", "timestamp"]:
+                    assert "format" in attr.keys(), f"{attr['id']} doesn't have a {attr['type']} format"
                     output[attr["id"]] = cleaner(value, attr["format"])
                 else:                    
                     output[attr["id"]] = cleaner(value)
@@ -195,7 +198,6 @@ class AGOLReader(Reader):
                 this_record = object["properties"]
                 if object.get("geometry", None):
                     this_record["geometry"] = json.dumps(object["geometry"])
-                print(this_record)
                 yield(this_record)
 
             # prepare the next request, if needed
@@ -229,19 +231,18 @@ class CustomReader(Reader):
 
     def __init__(
             self,
-            full_module_name: str,
-            func_name: str,
-            input_args: dict = {},
+            #full_module_name: str,
+            #func_name: str,
+            #resource_config: dict = {},
+            custom_reader: str,
+            custom_headers: dict = {},
             **kwargs
         ):
-        from inspect import isfunction
-        import importlib
-        import types
 
         super().__init__(**kwargs)
-        self.full_module_name = full_module_name
-        self.func_name = func_name
-        self.input_args = input_args
+        self.full_module_name = "custom_readers"
+        self.func_name = custom_reader
+        #self.custom_headers = custom_headers
 
 
     def read(self):
@@ -254,7 +255,7 @@ class CustomReader(Reader):
                 attribute = getattr(module, attribute_name)
                 if isfunction(attribute) and attribute_name == self.func_name:
                     logging.info(f"Returning logic from {module} - {self.func_name}")                 
-                    func = attribute(**self.input_args)
+                    func = attribute()
                     assert isinstance(func, types.GeneratorType), "Custom func must return generator!"
                     return func
 
@@ -409,7 +410,7 @@ def select_reader(package_name, resource_name, resource_config):
     # TODO: How do we mark custom readers in YAMLs?
     # TODO: How do we mark custom reader inputs in YAMLs?
     if "custom_reader" in resource_config.keys():
-        return CustomReader()
+        return CustomReader(**resource_config)
 
     # if file is AGOL, return AGOLReader
     elif resource_config.get("agol", None):
@@ -419,3 +420,125 @@ def select_reader(package_name, resource_name, resource_config):
     else:
         reader = readers[resource_config["format"]](**resource_config)
         return reader
+
+
+if __name__ == "__main__":
+    print("Testing")
+    config = {
+                "custom_reader": "bodysafe",
+                "format": "geojson",
+                "custom_headers": {
+                    "SRV-KEY": "bodysafe_secure_toronto_opendata_SRV_KEY",
+                    "USER-KEY": "secure_toronto_opendata_USER_KEY"
+                },
+                "url": "https://secure.toronto.ca/opendata/bs_od/full_list/v1?format=json",
+                "attributes": [
+                    {
+                    "id": "estId",
+                    "type": "int",
+                    "info": {
+                        "notes": "Establishment ID"
+                    }
+                    },
+                    {
+                    "id": "estName",
+                    "type": "text",
+                    "info": {
+                        "notes": "Establishment Name"
+                    }
+                    },
+                    {
+                    "id": "addrFull",
+                    "type": "text",
+                    "info": {
+                        "notes": "Address of Establishment"
+                    }
+                    },
+                    {
+                    "id": "srvType",
+                    "type": "text",
+                    "info": {
+                        "notes": "Type of services offered by Establishment"
+                    }
+                    },
+                    {
+                    "id": "insStatus",
+                    "type": "text",
+                    "info": {
+                        "notes": "Status of the inspection (ex: Pass)"
+                    }
+                    },
+                    {
+                    "id": "insDate",
+                    "type": "date",
+                    "info": {
+                        "notes": "Date of inspection"
+                    }
+                    },
+                    {
+                    "id": "observation",
+                    "type": "text",
+                    "info": {
+                        "notes": "Notes on the observations made during inspection"
+                    }
+                    },
+                    {
+                    "id": "infCategory",
+                    "type": "text",
+                    "info": {
+                        "notes": "Category of infraction"
+                    }
+                    },
+                    {
+                    "id": "defDesc",
+                    "type": "text",
+                    "info": {
+                        "notes": "Description of infraction"
+                    }
+                    },
+                    {
+                    "id": "infType",
+                    "type": "text",
+                    "info": {
+                        "notes": "Type of infraction"
+                    }
+                    },
+                    {
+                    "id": "actionDesc",
+                    "type": "text",
+                    "info": {
+                        "notes": "Description of action taken"
+                    }
+                    },
+                    {
+                    "id": "OutcomeDate",
+                    "type": "date",
+                    "info": {
+                        "notes": "Date of outcome"
+                    }
+                    },
+                    {
+                    "id": "OutcomeDesc",
+                    "type": "text",
+                    "info": {
+                        "notes": "Description of outcome"
+                    }
+                    },
+                    {
+                    "id": "fineAmount",
+                    "type": "int",
+                    "info": {
+                        "notes": "Amount of fine given"
+                    }
+                    },
+                    {
+                    "id": "geometry",
+                    "type": "text",
+                    "info": {
+                        "notes": ""
+                    }
+                    }
+                ]
+                }
+    for i in select_reader("bodysafe", "bodysafe", config).read():
+        print(i)
