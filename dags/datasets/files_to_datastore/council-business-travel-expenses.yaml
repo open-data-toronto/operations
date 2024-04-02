@@ -93,7 +93,7 @@ council-business-travel-expenses:
           type: "float"
           info:
             notes: ""
-        - id: "Constituency Office Lease Expenses Charged to Staff Salary Budget"
+        - id: "Office Lease Expenses Charged to Staff Salary Budget"
           type: "float"
           info:
             notes: ""
