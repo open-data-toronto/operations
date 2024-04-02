@@ -46,9 +46,7 @@ toronto-beaches-observations:
     # resource name
     toronto-beaches-observations:
       format: json
-      custom_headers:
-        SRV-KEY: toronto-beaches-water-quality_secure_toronto_opendata_SRV_KEY
-        USER-KEY: secure_toronto_opendata_USER_KEY
+      custom_reader: toronto_beaches_observations
       url: https://secure.toronto.ca/opendata/adv_od/route_observations/v1?format=json
       attributes:
         - id: dataCollectionDate
@@ -60,8 +58,7 @@ toronto-beaches-observations:
           type: text
           info:
             notes: "Name of beach where observations were collected"
-        - source_name: wind_speed
-          target_name: windSpeed
+        - id: windSpeed
           type: int
           info:
             notes: "Wind speed measured in km/h"
@@ -101,4 +98,3 @@ toronto-beaches-observations:
           type: float
           info:
             notes: "Turbidity of water measured in Nephelometric Turbidity Units (NTUs)"
-        

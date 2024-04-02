@@ -62,9 +62,9 @@ bodysafe:
       nested: True
       format: geojson
       custom_reader: bodysafe
-      custom_headers:
-        SRV-KEY: bodysafe_secure_toronto_opendata_SRV_KEY
-        USER-KEY: secure_toronto_opendata_USER_KEY
+      # custom_headers:
+      #   SRV-KEY: bodysafe_secure_toronto_opendata_SRV_KEY
+      #   USER-KEY: secure_toronto_opendata_USER_KEY
       url: https://secure.toronto.ca/opendata/bs_od/full_list/v1?format=json
       attributes:
         - id: estId

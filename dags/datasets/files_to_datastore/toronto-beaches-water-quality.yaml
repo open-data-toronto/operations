@@ -43,9 +43,10 @@ toronto-beaches-water-quality:
     toronto-beaches-water-quality:
       nested: True
       format: geojson
-      custom_headers:
-        SRV-KEY: toronto-beaches-water-quality_secure_toronto_opendata_SRV_KEY
-        USER-KEY: secure_toronto_opendata_USER_KEY
+      custom_reader: toronto_beaches_water_quality
+      # custom_headers:
+      #   SRV-KEY: toronto-beaches-water-quality_secure_toronto_opendata_SRV_KEY
+      #   USER-KEY: secure_toronto_opendata_USER_KEY
       url: https://secure.toronto.ca/opendata/adv_od/beach_results/v1?format=json&startDate=2000-01-01&endDate=9999-01-01
       attributes:
         - id: beachId
@@ -62,6 +63,7 @@ toronto-beaches-water-quality:
             notes: ""
         - id: collectionDate
           type: date
+          format: "%Y-%m-%d"
           info:
             notes: ""
         - id: eColi
