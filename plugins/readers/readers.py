@@ -117,6 +117,7 @@ class CSVReader(Reader):
     def read(self):
         '''Return generator yielding csv rows as dicts'''
         
+        logging.info(">>>>> CSVReader <<<<<<")
         # get source file stream
         with requests.get(self.source_url, stream=True) as r:
             # decode bytes to string
@@ -183,6 +184,7 @@ class AGOLReader(Reader):
             "outFields": "*",
         }
 
+        logging.info(">>>>> AGOLReader <<<<<<")
         logging.info(f"Requesting CSV from {self.source_url}...")
         while overflow is True:            
             
@@ -255,6 +257,7 @@ class CustomReader(Reader):
 
     def read(self):
         '''Return input function'''
+        logging.info(">>>>> CustomReader <<<<<<")
         module = importlib.import_module(self.full_module_name)
         if self.func_name not in dir(module):
             raise ValueError("Function name must be valid.")
@@ -295,6 +298,7 @@ class ExcelReader(Reader):
         
 
     def read(self):
+        logging.info(">>>>> ExcelReader <<<<<<")
 
         source_headers = [col.value for col in self.worksheet[1]]
 
@@ -375,6 +379,7 @@ class JSONReader(Reader):
 
 
     def read(self):
+        logging.info(">>>>> JSONReader <<<<<<")
         res = json.loads(requests.get(self.source_url).text)
 
         if self.is_geojson:
