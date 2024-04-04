@@ -198,6 +198,14 @@ class AGOLReader(Reader):
                 this_record = object["properties"]
                 if object.get("geometry", None):
                     this_record["geometry"] = json.dumps(object["geometry"])
+                
+                for attr in self.schema:
+                    # remap column names if in config file
+                    if "source_name" in attr.keys() and "target_name" in attr.keys():                        
+                        this_record[attr["target_name"]] = this_record[attr["source_name"]]
+                    #elif "id" in attr.keys():
+                    #    this_record[attr["id"]] = this_record[attr["id"]]
+
                 yield(this_record)
 
             # prepare the next request, if needed
