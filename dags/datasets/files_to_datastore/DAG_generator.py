@@ -699,7 +699,7 @@ def create_dag(package_name, config, schedule, default_args):
         message_task = message_factory(package_name, package)
         slack_writer_task = slack_writer(
             dag_id = package_name,
-            message_header = "DAG Template v2",
+            message_header = "DAG Template",
             message_content = message_task,
             message_body = "",
         )
