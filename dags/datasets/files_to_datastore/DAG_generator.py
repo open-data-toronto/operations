@@ -28,7 +28,7 @@ Compatible with Python 3.7, Apache Airflow 2.6.3, CKAN 2.9
 import os
 import yaml
 import logging
-import pendulum
+from datetime import datetime
 import shutil
 import time
 
@@ -67,7 +67,7 @@ def create_dag(package_name, config, schedule, default_args):
     @dag(
         dag_id=package_name,
         schedule=schedule,
-        start_date=pendulum.now(),
+        start_date=datetime(2024, 4, 8, 0, 0, 0),
         catchup=False,
         default_args=default_args,
     )
