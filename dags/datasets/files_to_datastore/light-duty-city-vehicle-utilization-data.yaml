@@ -1,0 +1,71 @@
+light-duty-city-vehicle-utilization-data:
+  jira_issue_id: DTSD-7384
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/213393
+  schedule: '5 8 * * 1'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Light duty city vehicle utilization data
+  date_published: '2024-04-12 10:50:32.354558'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: Fleet Services
+  owner_section: Fleet Asset Management
+  owner_unit: Fleet Asset Management
+  owner_email: fleetservices@toronto.ca
+  civic_issues:
+  - Fiscal responsibility
+  topics:
+  - City Government
+  tags:
+  - name: Fleet
+    vocabulary_id: null
+  - name: Light-Duty
+    vocabulary_id: null
+  - name: Underutilization
+    vocabulary_id: null
+  - name: Utilization
+    vocabulary_id: null
+  - name: Vehicles
+    vocabulary_id: null
+  information_url: null
+  excerpt: Utilization data for Light Duty (Class 1 and 2) city vehicles maintained
+    by the Fleet Services Division.
+  limitations: The dataset only includes Class 1 and 2 vehicles, also known as “light duty vehicles,” such as sedans, minivans, SUVs and pickup trucks. Specialized vehicles are indicated with a “Yes” in the Specialized units (Y/N) column. 
+  notes: The Fleet Services Division provides and maintains the City's vehicles and equipment used in a wide range of daily operations. The utilization of City vehicles is tracked to ensure optimal use and cost-effectiveness.
+  resources:
+    Light duty city vehicle utilization data:
+      format: CSV
+      url: "https://opendata.toronto.ca/fleet.services/vehicle-utilization/Sheet1.csv"
+      attributes:
+      - id: UNIT_NO
+        type: text
+        info:
+          notes: City of Toronto assigned fleet number, located on the left, right,
+            and rear of the unit
+      - id: YEAR
+        type: text
+        info:
+          notes: Model Year of the unit
+      - id: MAKE
+        type: text
+        info:
+          notes: Manufacturer of the unit
+      - id: MODEL
+        type: text
+        info:
+          notes: Model Name of the unit
+      - source_name: Specialized units (Y/N)
+        target_name: Specialized units
+        type: text
+        info:
+          notes: If the unit is a specialized vehicle that has custom-built specifications
+            to meet operational needs
+      - id: REF_USING_DIV
+        type: text
+        info:
+          notes: City Division using the vehicle
+      - source_name: Utilization (Underutilized/Not Underutilized)
+        target_name: Utilization
+        type: text
+        info:
+          notes: Whether the unit is underutilized using Fleet's definition
