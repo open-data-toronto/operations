@@ -34,7 +34,7 @@ light-duty-city-vehicle-utilization-data:
   notes: The Fleet Services Division provides and maintains the City's vehicles and equipment used in a wide range of daily operations. The utilization of City vehicles is tracked to ensure optimal use and cost-effectiveness.
   resources:
     Light duty city vehicle utilization data:
-      format: CSV
+      format: csv
       url: "https://opendata.toronto.ca/fleet.services/vehicle-utilization/Sheet1.csv"
       attributes:
       - id: UNIT_NO
