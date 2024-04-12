@@ -1,0 +1,73 @@
+dogs-issued-dangerous-dog-orders:
+  jira_issue_id: DTSD-5843
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/198954
+  schedule: '10 10 * * 1'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Registry of Dogs Subject to and Issued a Dangerous Dog Order
+  date_published: '2024-04-12 10:00:59.237251'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: Municipal Licensing & Standards
+  owner_section: Toronto Animal Services
+  owner_unit: Enforcement
+  owner_email: tasemru@toronto.ca
+  civic_issues: null
+  topics:
+  - Public Safety
+  tags:
+  - name: bite
+    vocabulary_id: null
+  - name: attack
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/animals-pets/pets-in-the-city/dogs-in-the-city/dog-bites-or-attacks/
+  excerpt: Dogs who have received a Dangerous Dog Order are included in this list.  A
+    Dangerous Dog Order is issued to a dog who has committed a severe dangerous act
+    or has a second or subsequent dangerous act on record with the City of Toronto.
+  limitations: Where possible, dogs that no longer reside within the noted forward sorting area (first 3 characters of a postal code), no longer reside in Toronto, or have died, will be removed from this data set. 
+  notes: |
+    Dangerous Dog Orders issued to dogs by the City of Toronto that are currently active will be listed here. A Dangerous Dog Order is issued when it is confirmed that a dangerous act (Any bite, attack, act of menacing behaviour or any combination of a bite, attack or act of menacing behaviour.) has occurred and the act is deemed severe or is the second consecutive act on record. This data set is updated monthly. 
+ 
+    For more information about Dangerous Dog Orders, please visit [toronto.ca/dangerousdogs](https://www.toronto.ca/community-people/animals-pets/pets-in-the-city/dogs-in-the-city/dog-bites-or-attacks/)
+
+    Prior to October 2019, Bite Severity was classified from Level 0 to Level 5, as described [here](https://www.toronto.ca/community-people/animals-pets/pets-in-the-city/dogs-in-the-city/dog-bites-or-attacks/). Since October 2019, Bite Severity is classified as either Severe, Non-Severe, or NAB (not a bite).
+
+  resources:
+    Dogs Issued Dangerous Dog Orders:
+      format: 'CSV'
+      url: https://opendata.toronto.ca/municipal.licensing.standards/dogs-issued-dangerous-dog-orders/dogs-issued-dangerous-dog-orders.csv
+      attributes: 
+      - id: Forward_Sortation_Area
+        type: text
+        info:
+          notes: 'FSA of occurrence'
+      - id: Name_of_Dog
+        type: text
+        info:
+          notes: 'Dog name'
+      - id: Breed
+        type: text
+        info:
+          notes: 'Dog breed'
+      - id: Color
+        type: text
+        info:
+          notes: 'Dog color'
+      - id: Ward_Number
+        type: text
+        info:
+          notes: 'Ward Number'
+      - id: Ward_Name
+        type: text
+        info:
+          notes: 'Ward Name'
+      - id: Bite_Circumstance
+        type: text
+        info:
+          notes: 'Severity of Bite'
+      - id: Date_of_Dangerous_Act
+        type: date
+        format: "%Y/%m/%d"
+        info:
+          notes: 'Date of Occurrence'
+      
