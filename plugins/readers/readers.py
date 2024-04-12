@@ -431,5 +431,5 @@ def select_reader(package_name, resource_name, resource_config):
 
     # return reader
     else:
-        reader = readers[resource_config["format"]](**resource_config)
+        reader = readers[resource_config["format"].lower()](**resource_config)
         return reader
