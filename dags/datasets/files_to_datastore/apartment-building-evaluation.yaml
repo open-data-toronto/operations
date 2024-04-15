@@ -25,7 +25,7 @@ apartment-building-evaluation:
   resources:
     Apartment Building Evaluations 2023 - current:
       format: csv
-      url: http://opendata.toronto.ca/municipal.licensing.standards/apartment-building-evaluation/apartment-building-evaluation-uat.csv
+      url: http://opendata.toronto.ca/municipal.licensing.standards/apartment-building-evaluation/apartment-building-evaluation.csv
       attributes:
       - id: RSN
         type: text
