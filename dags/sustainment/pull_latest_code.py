@@ -17,7 +17,7 @@ with DAG(
 
     pull_repo = BashOperator(
         task_id="pull_repo",
-        bash_command=f"git config --global --add safe.directory /data/operations; git -C {Variable.get('repo_dir')} pull; echo $?",
+        bash_command=f"git -C {Variable.get('repo_dir')} pull; echo $?",
     )
 
     pull_repo
