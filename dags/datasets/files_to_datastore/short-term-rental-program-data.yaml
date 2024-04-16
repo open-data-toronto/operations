@@ -1,0 +1,52 @@
+short-term-rental-program-data:
+  jira_issue_id: DTSD-7006
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/209866
+  schedule: '0 2 * * 2'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Short Term Rental Program Data
+  date_published: '2024-04-16 10:14:54.027114'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: Municipal Licensing & Standards
+  owner_section: Investigation Services
+  owner_unit: Short Term Rental Enforcement Unit
+  owner_email: ShortTermRentals@toronto.ca
+  civic_issues: null
+  topics:
+  - Permits and Licenses
+  tags: 
+    - name: airbnb
+      vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/housing-shelter/short-term-rentals/short-term-rental-operators-hosts/
+  excerpt: Key program data related to short-term rental operator registration, registration renewal and enforcement activities.
+  limitations: null
+  notes: |
+    In Toronto, short-term rentals are regulated by the Toronto Municipal Code Chapter 547, Licensing and Registration of [Short-Term Rentals](https://www.toronto.ca/community-people/housing-shelter/short-term-rentals/). The City provides key program data related to short-term rental operator registration, registration renewal and enforcement activities.
+  resources:
+    Short Term Rental Program Data:
+      format: csv
+      url: https://opendata.toronto.ca/municipal.licensing.standards/short-term-rentals-program/short-term-rentals-program.csv
+      attributes: 
+        - id: Data Name
+          type: text          
+          info:
+            notes: "Name of what is being measured"
+        - id: Data Type
+          type: text          
+          info:
+            notes: "Category of what is being measured"
+        - id: Year
+          type: int          
+          info:
+            notes: "Year of measurement"        
+        - source_name: MonthName
+          target_name: Month Name
+          type: text          
+          info:
+            notes: "Month of measurement"
+        - id: Data Count
+          type: float          
+          info:
+            notes: "Value of measurement"
+        
