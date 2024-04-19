@@ -1,0 +1,61 @@
+toronto-police-budget-by-command:
+  jira_issue_id: DTSD-7615
+  jira_issue_url: https://toronto.atlassian.net/browse/DTSD-7615
+  schedule: '@once'
+  dag_owner_name: Mackenzie.Nichols4
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Toronto Police Budget by Command
+  date_published: '2021-10-20 19:05:27.075577'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca 
+  civic_issues: null
+  topics: 
+    - Public safety
+  tags: 
+    - name: spending
+      vocabulary_id: null
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::budget-by-command/about
+  excerpt: Summarized breakdown of Toronto Police Service approved budget and actual expenditures by command
+
+  limitations: null
+  notes: |
+    This dataset includes a summarized breakdown of the Toronto Police Service approved budget and actual expenditures by command at a Service-wide level. Approved budget and actual expenditures are defined as follows: 
+    
+    * Approved Budget: Operating funding approved by the Toronto Police Services Board and City Council for a specific fiscal year. 
+    * Actual Expenditures: Operating expenses incurred by the Toronto Police Service during a fiscal year.
+  resources:
+    TPS Budget by command:
+      format: 'json'
+      agol: true
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_by_Command/FeatureServer/0/
+      attributes:
+      - id: Year
+        type: int
+        info:
+          notes: "Fiscal Year"
+      - id: Type_of_Metric
+        type: text
+        info:
+          notes: "Type of Metric"
+      - id: Organization_Entity
+        type: text
+        info:
+          notes: "Organizational entity"
+      - id: Command
+        type: text
+        info:
+          notes: "Command"
+      - id: Category
+        type: text
+        info:
+          notes: "Category"
+      - id: Amount
+        type: float
+        info:
+          notes: "Budget Amount"
+      
+      
