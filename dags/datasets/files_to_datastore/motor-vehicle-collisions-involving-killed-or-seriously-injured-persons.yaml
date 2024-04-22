@@ -21,7 +21,7 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
     vocabulary_id: null
   - name: injured
     vocabulary_id: null
-  information_url: https://data.torontopolice.on.ca/datasets/ksi
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::ksi/about
   excerpt: "This dataset includes all traffic collisions events where a person was\
     \ either Killed or Seriously Injured (KSI) from 2006 \u2013 2021."
   limitations: "This dataset includes all traffic collisions events where a person\
@@ -44,11 +44,7 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
         - id: "ACCNUM"
           type: text
           info:
-            notes: Accident Number
-        - id: "YEAR"
-          type: int
-          info:
-            notes: Year Collision Occurred
+            notes: Accident Number        
         - id: "DATE"
           type: date
           format: epoch
@@ -78,14 +74,6 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
           type: text
           info:
             notes: City District
-        - id: "WARDNUM"
-          type: int
-          info:
-            notes: City of Toronto Ward
-        - id: "LOCCOORD"
-          type: text
-          info:
-            notes: Location Coordinate
         - id: "ACCLOC"
           type: text
           info:
