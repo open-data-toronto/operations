@@ -65,6 +65,10 @@ dogs-issued-dangerous-dog-orders:
         type: text
         info:
           notes: 'Severity of Bite'
+      - id: Location_of_Incident
+        type: text
+        info:
+          notes: 'Category of location of the incident'
       - id: Date_of_Dangerous_Act
         type: date
         format: "%Y/%m/%d"
