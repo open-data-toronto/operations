@@ -22,9 +22,10 @@ building-permits-active-permits:
     Data collected from permit applications and updates made by City Staff when reviewing
     the application and inspecting the work on the issued permit.
   limitations: Information for applications where APPLICATION_DATE is earlier than Oct 1, 1999 is likely to be incomplete, because these were entered and processed on numerous pre-amalgamation legacy systems with varying data collection capabilities and standards.
-  notes: Provides information on currently active Building Applications and Permits.
-    Data collected from permit applications and updates made by City Staff when reviewing
-    the application and inspecting the work on the issued permit.
+  notes: |
+    Provides information on currently active Building Applications and Permits. 
+    A building permit is a municipally issued permit, required by the Building Code Act and enforced by the City of Toronto, associated with the construction/demolition of a physical structure
+    Data collected from permit applications and updates made by City Staff when reviewing the application and inspecting the work on the issued permit.
 
   resources:
     building-permits-active-permits:
@@ -42,7 +43,12 @@ building-permits-active-permits:
         - id: PERMIT_TYPE
           type: text
           info:
-            notes: Text field describing the type of permit.
+            notes: | 
+              Text field describing the type of permit. The less descriptive permit type names here include:
+              
+              * Designated Structures: Designated structure, such as communication towers, crane runways, exterior tanks and supports, pedestrian bridges, retaining walls, satellite dishes and solar collectors.
+              * Partial Permits: Permits issued for parts of a building; Excavation, Shoring, Structure, etc...
+              * Authority to Occupy: Partial occupancy of a building
         - id: STRUCTURE_TYPE
           type: text
           info:
@@ -83,7 +89,7 @@ building-permits-active-permits:
           type: date
           format: "%Y%m%d%H%M%S"
           info:
-            notes: Date that the application was received and entered into IBMS
+            notes: Date that the application was received and entered into the city's permit application management system (IBMS)
         - id: ISSUED_DATE
           type: date
           format: "%Y%m%d%H%M%S"
