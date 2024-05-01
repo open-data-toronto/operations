@@ -619,4 +619,4 @@ housing-to-action-plan:
 traffic-signal-timing:
   Traffic Signal Timing:
     format: zip
-    url: https://opendata.toronto.ca/transportation.services/traffic-signal-timing/traffic-signal-timing.zip
+    url: https://opendata.toronto.ca/transportation.services/traffic-signal-timing/traffic-signals-timing.zip
