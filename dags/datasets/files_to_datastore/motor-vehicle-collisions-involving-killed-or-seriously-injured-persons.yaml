@@ -39,7 +39,7 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
     Motor Vehicle Collisions with KSI Data:
       agol: True
       format: geojson
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/KSI/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/TOTAL_KSI/FeatureServer/0
       attributes:
         - id: "ACCNUM"
           type: text
