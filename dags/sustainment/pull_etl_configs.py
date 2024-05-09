@@ -30,6 +30,7 @@ DEFAULT_ARGS = airflow_utils.get_default_args(
         "email_on_failure": False,
         "email_on_retry": False,
         "retries": 1,
+        "retry_delay": 3,
         "on_failure_callback": task_failure_slack_alert,
         "start_date": datetime.datetime(2022, 7, 7, 0, 0, 0),
         "catchup": False,
@@ -150,6 +151,7 @@ def get_airflow_configs(**kwargs):
     dagbag = DagBag()
     for dag in dagbag.dags.values():
         print(dag)
+        # Customized Job
         if "etl_mapping" in dag.default_args.keys():
             for mapping in dag.default_args["etl_mapping"]:
 
@@ -167,6 +169,8 @@ def get_airflow_configs(**kwargs):
                         # "etl_description": dag.description,
                     }
                 )
+        
+        # Filestore - upload remote files job
         elif dag.dag_id == "upload_remote_files":
             # upload_remote_files
             with open(
@@ -194,6 +198,8 @@ def get_airflow_configs(**kwargs):
                             "od_owner": dag.owner,
                         }
                     )
+
+        # Datastore - DAG_generator.py Template
         elif dag.default_args.get("config_folder", False):
             # YAML Jobs
             for config_file in os.listdir(dag.default_args["config_folder"]):

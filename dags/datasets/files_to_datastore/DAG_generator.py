@@ -743,6 +743,7 @@ def dag_factory():
                 "retry_delay": 3,
                 "on_failure_callback": task_failure_slack_alert,
                 "tags": ["dataset", "yaml"],
+                "config_folder": CONFIG_FOLDER,
             }
 
             # create dag
