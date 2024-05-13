@@ -1,5 +1,5 @@
 registered-programs-and-drop-in-courses-offering:
-  schedule: '0 19 * * *'
+  schedule: '30 21 * * 4'
   dag_owner_name: 'Mackenzie'
   dag_owner_email: 'mackenzie.nichols4@toronto.ca'
   title: Registered Programs and Drop In Courses Offering
@@ -123,6 +123,7 @@ registered-programs-and-drop-in-courses-offering:
           notes: 'End min'
       - id: "Start Date"
         type: date
+        format: "%Y-%m-%d %H:%M:%S"
         info:
           notes: 'Date when the course starts'
       - id: "eFun URL"
@@ -142,7 +143,7 @@ registered-programs-and-drop-in-courses-offering:
         info:
           notes: "Category of recreational program - top-level hierarchical level of programs classification. F.ex., 'General Interest Arts - Adult' and 'Hip Hop - Child' are activities/programs of"
       - id: "Registration Date"
-        type: date
+        type: text
         info:
           notes: 'Start of registration.'
       - id: "Status / Information"
@@ -181,7 +182,7 @@ registered-programs-and-drop-in-courses-offering:
         info:
           notes: 'Maximum age limit to register for the course, maximum allowable age in months'
       - id: "Date From"
-        type: date
+        type: text
         info:
           notes: 'First date of the Date Range when the course runs'
       - id: "Date Range"
@@ -190,6 +191,7 @@ registered-programs-and-drop-in-courses-offering:
           notes: 'Calendar range when the course runs'
       - id: "Start Date Time"
         type: timestamp
+        format: "%Y-%m-%d %H:%M:%S"
         info:
           notes: 'Start time of the course'
       - id: "Start Hour"
@@ -214,10 +216,12 @@ registered-programs-and-drop-in-courses-offering:
           notes: "Category of recreational program - top-level hierarchical level of programs classification. F.ex., 'Aquafit', 'Lane Swim', 'Leisure Swim: Preschool', and 'DROP-IN: Swimming - All Ages' are drop-in programs of 'Swimming' category; 'Stretch and Strength', 'Weight Room/Fitness Centre - Adult', and other drop-in fitness programs/activities belong to 'Fitness' category."
       - id: "First Date"
         type: date
+        format: "%Y-%m-%d %H:%M:%S"
         info:
           notes: 'First date when the course runs.'
       - id: "Last Date"
         type: date
+        format: "%Y-%m-%d %H:%M:%S"
         info:
           notes: 'Last date of the course'
     Locations:
@@ -318,5 +322,3 @@ registered-programs-and-drop-in-courses-offering:
         type: text
         info:
           notes: 'Name of the asset in the facility.'
-      
-      
