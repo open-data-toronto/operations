@@ -40,10 +40,12 @@ library-branch-programs-and-events-feed:
             notes: The name of the event.
         - id: startdate
           type: date
+          format: "%Y-%m-%d"
           info:
             notes: The start date of the event in YYYY-MM-DD format.
         - id: enddate
           type: date
+          format: "%Y-%m-%d"
           info:
             notes: The end date of the event in YYYY-MM-DD format. This field will be null if the event is scheduled for a single day
         - id: starttime
@@ -54,10 +56,10 @@ library-branch-programs-and-events-feed:
           type: text
           info:
             notes: The end time of the event in HH:MM AM/PM format. For events happening over the course of an entire day, this field may be set to “All Day”. This field may be null.
-        - id: length
-          type: int
-          info:
-            notes: The duration of the event in minutes. This field may be set to 0 if an event duration has not been defined.
+        #- id: length
+        #  type: int
+        #  info:
+        #    notes: The duration of the event in minutes. This field may be set to 0 if an event duration has not been defined.
         - id: library
           type: text
           info:
@@ -106,11 +108,11 @@ library-branch-programs-and-events-feed:
           type: text
           info:
             notes: An age group for the audience of the event. This field may be null.
-        - id: relatedlink
+        - id: supportlink
           type: text
           info:
             notes: A link to information related to the event. This field may be null.
-        - id: relatedlinktext
+        - id: supportlinktext
           type: text
           info:
             notes: The text for the related link. This field may be null.
