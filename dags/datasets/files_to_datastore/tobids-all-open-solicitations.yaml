@@ -1,0 +1,99 @@
+tobids-all-open-solicitations:
+  schedule: '55 15 * * *'
+  dag_owner_name: 'Yanan'
+  dag_owner_email: 'yanan.zhang@toronto.ca'
+  title: Toronto Bids Solicitations
+  date_published: '2024-06-03 10:45:52.182112'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: Purchasing & Materials Management
+  owner_section: null
+  owner_unit: null
+  owner_email: supplychain@toronto.ca
+  civic_issues: null
+  topics: City government,Finance
+  tags:
+  - name: call documents
+    vocabulary_id: null
+  - name: goods and services
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/business-economy/doing-business-with-the-city/searching-bidding-on-city-contracts/toronto-bids-portal/#all
+  excerpt: The Solicitations for the Purchase of Goods and Services dataset contains
+    a list and summary of information about competitive solicitations for the City
+    of Toronto (e.g. Request for Proposal, Request for Quotation, Tenders, Request
+    for Information, Request for an Expression of Interest, Request for Pre-Qualification
+    and Offer to Purchase).
+  limitations: null
+  notes: "The Solicitations for the Purchase of Goods and Services dataset contains\
+    \ a list and summary of information about competitive solicitations for the City\
+    \ of Toronto (e.g. Request for Proposal, Request for Quotation, Tenders, Request\
+    \ for Information, Request for an Expression of Interest, Request for Pre-Qualification\
+    \ and Offer to Purchase).\r\n\r\nThe solicitations are issued for the purchase\
+    \ of goods and services, professional services, and construction services made\
+    \ on behalf of the City of Toronto Divisions and designated Agencies, Boards and\
+    \ Commissions (e.g. CNE, Toronto Atmospheric Fund).\r\n\r\nSolicitations may be\
+    \ active from a minimum of 15 days or as long as 90 days (ie: due to numerous\
+    \ addenda or due to a lack of interest, which may result in an extension of the\
+    \ Closing Date. The Closing Date can be extended if new or additional information\
+    \ needs to be provided to the supplier community about the solicitation."
+  resources:
+    # resource name
+    All Solicitations:
+      format: json
+      custom_reader: tobids_all_solicitations
+      datastore_upsert:
+        primary_key: unique_id
+      url: https://secure.toronto.ca/c3api_data/v2/DataAccess.svc/pmmd_solicitations/feis_solicitation?$format=application/json;odata.metadata=none&$count=true&$skip=0&$filter=Ready_For_Posting%20eq%20%27Yes%27%20and%20Status%20eq%20%27Open%27%20and%20Closing_Date%20ge%202024-04-30&$orderby=Closing_Date%20desc,Issue_Date%20desc
+      attributes:
+        - id: "unique_id"
+          type: text
+          info:
+            notes: 'uuid for record.'
+        - id: "Document Number"
+          type: text
+          info:
+            notes: 'The reference number used by the City to track the solicitation during the procurement process.'
+        - id: "RFx (Solicitation) Type"
+          type: text
+          info:
+            notes: "The RFx Type indicates the procurement method for the solicitation. These solicitations are the process of seeking information, proposals and quotes from suppliers. The City of Toronto issues solicitations when requesting bids for services, goods and/or construction. As there are multiple types of solicitations, the RFx Type stands for Request For, with the 'x' acting as a placeholder for the different types of solicitations i.e.: Request for Proposal (RFP), Request for Quotation (RFQ), Tenders (RFT), Request for Information (RFI), Request for an Expression of Interest (REOI), Request for Pre-Qualification (RFSQ), and Offer to Purchase (OTP)."
+        - id: "NOIP (Notice of Intended Procurement) Type"
+          type: text
+          info:
+            notes: |
+              - **Advanced Notice of Intended Procurement**: A written notice published by the City, inviting interested suppliers to submit a bid in response to an upcoming solicitation. This is posted on TO Bids before the solicitation is considered live and available for bidding on the City's Online Procurement System. Also referred to as an Advanced NOIP.
+              - **Notice of Intended Procurement**: A written notice published by the City, inviting interested suppliers to submit a bid in response to a live solicitation that is available for bidding.
+        - id: "Issue Date"
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: "The date that a record is published on the City's Online Procurement System and is available for bidding. This date can occur at the same time as or after the Publish Date."
+        - id: "Submission Deadline"
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: 'This is the final date and time that responses may be submitted for a solicitation. After this date, no responses may be accepted for the solicitation. The Submission Deadline can be extended if new or additional information needs to be provided to the supplier community about the solicitation.'
+        - id: "High Level Category"
+          type: text
+          info:
+            notes: 'Used to identify and group the goods/services being procured on behalf of the City of Toronto Divisions and designated Agencies, Boards and Commissions. i.e.: Goods and Services, Professional Services, and Construction Services.'
+        - id: "Solicitation Document Description"
+          type: text
+          info:
+            notes: 'A description or summary of the solicitation.'
+        - id: "Division"
+          type: text
+          info:
+            notes: 'The name of the City Division requesting the solicitation. The final contract will be between this Awarded Supplier and this Division.'
+        - id: "Buyer Name"
+          type: text
+          info:
+            notes: 'The name of the buyer. Buyer is the primary, purchasing City contact for the solicitation or contract from PMMD. Any questions about the solicitation or contract can be directed to this Buyer.'
+        - id: "Buyer Email"
+          type: text
+          info:
+            notes: 'The email of the buyer.'
+        - id: "Buyer Phone Number"
+          type: text
+          info:
+            notes: 'The phone number of the buyer.'

@@ -1,0 +1,67 @@
+tobids-non-competitive-contracts:
+  schedule: '5 16 * * *'
+  dag_owner_name: 'Yanan'
+  dag_owner_email: 'yanan.zhang@toronto.ca'
+  title: Toronto Bids Non Competitive Contracts
+  date_published: '2024-06-03 14:25:27.459388'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: Purchasing & Materials Management
+  owner_section: null
+  owner_unit: null
+  owner_email: supplychain@toronto.ca
+  civic_issues: null
+  topics: Business
+  tags: []
+  information_url: https://www.toronto.ca/business-economy/doing-business-with-the-city/searching-bidding-on-city-contracts/toronto-bids-portal/#non_competitive
+  excerpt: The Non-Competitive Contracts dataset contains a list of non-competitive
+    contracts processed by the Purchasing and Materials Management Division on behalf
+    of the City of Toronto. These non-competitive contract procurements were processed
+    in accordance with the requirements under Chapter 195, Purchasing By-law and the
+    Procurement Processes Policy.
+  limitations: null
+  notes: "The Non-Competitive Contracts dataset contains a list of non-competitive\
+    \ contracts processed by the Purchasing and Materials Management Division on behalf\
+    \ of the City of Toronto. These non-competitive contract procurements were processed\
+    \ in accordance with the requirements under Chapter 195, Purchasing By-law and\
+    \ the Procurement Processes Policy.\r\n\r\nNon-Competitive Contracts are posted\
+    \ on the Toronto Bids Portal and are available for 18 months after the\
+    \ date the contract is created.\r\n\r\nMaRS Non-Competitive Procurements are identifiable\
+    \ by the Title."
+  resources:
+    # resource name
+    Non-Competitive Contracts:
+      format: json
+      custom_reader: tobids_non_competitive_contracts
+      url: https://secure.toronto.ca/c3api_data/v2/DataAccess.svc/pmmd_solicitations/feis_non_competitive?$format=application/json;odata.metadata=none&$count=true&$skip=0&$filter=Ready_For_Posting%20eq%20%27Yes%27%20and%20Status%20eq%20%27Awarded%27%20and%20Awarded_Cancelled%20eq%20%27No%27%20and%20Latest_Date_Awarded%20gt%202022-10-30&$orderby=Latest_Date_Awarded%20desc
+      datastore_upsert:
+        primary_key: unique_id
+      attributes:
+        - id: "unique_id"
+          type: text
+          info:
+            notes: 'uuid for record.'
+        - id: "Workspace Number"
+          type: text
+          info:
+            notes: 'The reference number used by the City to keep track of Non-Competitive Contracts.'
+        - id: "Reason"
+          type: text
+          info:
+            notes: 'A Non-Competitive Exception Code is used to best describes the rationale for the Non-Competitive purchase by the City.'
+        - id: "Contract Date"
+          type: text
+          info:
+            notes: 'Date when the contract was created.'
+        - id: "Supplier Name"
+          type: text
+          info:
+            notes: 'Name of the contracted supplier providing goods and services to the City.'
+        - id: "Contract Amount"
+          type: text
+          info:
+            notes: 'The total dollar amount for a contract.'
+        - id: "Division"
+          type: text
+          info:
+            notes: 'The name of the City Division requesting the solicitation. The final contract will be between this Supplier and this Division.'

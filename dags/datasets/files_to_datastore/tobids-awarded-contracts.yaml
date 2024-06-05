@@ -1,0 +1,94 @@
+tobids-awarded-contracts:
+  schedule: '0 16 * * *'
+  dag_owner_name: 'Yanan'
+  dag_owner_email: 'yanan.zhang@toronto.ca'
+  title: Toronto Bids Awarded Contracts
+  date_published: '2024-06-03 10:45:52.182112'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: Purchasing & Materials Management
+  owner_section: null
+  owner_unit: null
+  owner_email: supplychain@toronto.ca
+  civic_issues: null
+  topics: Business
+  tags: []
+  information_url: https://www.toronto.ca/business-economy/doing-business-with-the-city/searching-bidding-on-city-contracts/toronto-bids-portal/#awarded
+  excerpt: The Competitive Contracts dataset contains a list and summary of information
+    about competitive contract that have been cancelled or awarded for goods and various
+    services for the City of Toronto (e.g. Request for Proposal, Request for Quotation,
+    Tenders, Request for an Expression of Interest, Request for Pre-Qualification
+    and Offer to Purchase).
+  limitations: null
+  notes: "The Competitive Contracts dataset contains a list and summary of information\
+    \ about competitive contract that have been cancelled or awarded for goods and\
+    \ various services for the City of Toronto (e.g. Request for Proposal, Request\
+    \ for Quotation, Tenders, Request for Information, Request for an Expression of\
+    \ Interest, Request for Pre-Qualification and Offer to Purchase).\r\n\r\nThe contract\
+    \ awards include goods and services including professional services and construction\
+    \ services made on behalf of the City of Toronto Divisions and designated Agencies,\
+    \ Boards and Commissions (e.g. CNE, Toronto Atmospheric Fund).\r\n\r\nAll solicitations\
+    \ were publicly advertised in accordance with Chapter 195, Purchasing By-law.\
+    \ Contracts were awarded to the lowest bidder meeting specifications for Request\
+    \ for Quotations and Tenders, and the highest scoring proponent in the case of\
+    \ Request for Proposals.\r\n\r\nCompetitive Contracts are posted on the Toronto\
+    \ Bids Portal and are available for 18 months after the date the contract\
+    \ is created."
+  resources:
+    # resource name
+    Awarded Contracts:
+      format: json
+      custom_reader: tobids_awarded_contracts
+      url: https://secure.toronto.ca/c3api_data/v2/DataAccess.svc/pmmd_solicitations/feis_solicitation?$format=application/json;odata.metadata=none&$count=true&$skip=0&$filter=Ready_For_Posting%20eq%20%27Yes%27%20and%20((Solicitation_Form_Type%20eq%20%27Awarded%20Contracts%27%20and%20Awarded_Cancelled%20eq%20%27No%27%20and%20Latest_Date_Awarded%20gt%202022-10-11)%20or%20(Solicitation_Form_Type%20eq%20%27Awarded%20Contracts%27%20and%20Awarded_Cancelled%20eq%20%27Yes%27%20and%20Cancellation_Date%20gt%20%272022-10-11%27))&$orderby=Purchasing_Group,High_Level_Category,Solicitation_Document_Number,Posting_Title%20desc
+      datastore_upsert:
+        primary_key: unique_id
+      attributes:
+        - id: "unique_id"
+          type: text
+          info:
+            notes: 'unique composite key.'
+        - id: "Document Number"
+          type: text
+          info:
+            notes: 'The reference number used by the City to track the solicitation during the procurement process.'
+        - id: "RFx (Solicitation) Type"
+          type: text
+          info:
+            notes: "The RFx Type indicates the procurement method for the solicitation. These solicitations are the process of seeking information, proposals and quotes from suppliers. The City of Toronto issues solicitations when requesting bids for services, goods and/or construction. As there are multiple types of solicitations, the RFx Type stands for Request For, with the 'x' acting as a placeholder for the different types of solicitations i.e.: Request for Proposal (RFP), Request for Quotation (RFQ), Tenders (RFT), Request for Information (RFI), Request for an Expression of Interest (REOI), Request for Pre-Qualification (RFSQ), and Offer to Purchase (OTP)."
+        - id: "High Level Category"
+          type: text
+          info:
+            notes: 'Used to identify and group the goods/services being procured on behalf of the City of Toronto Divisions and designated Agencies, Boards and Commissions. i.e.: Goods and Services, Professional Services, and Construction Services.'
+        - id: "Successful Supplier"
+          type: text
+          info:
+            notes: "The name of the Supplier that has been awarded the contract."
+        - id: "Awarded Amount"
+          type: text
+          info:
+            notes: 'The total dollar amount that has been awarded to a Successful Supplier for a contract.'
+        - id: "Award Date"
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: 'The date that a contract between the City and a Successful Supplier has been signed.'
+        - id: "Division"
+          type: text
+          info:
+            notes: 'The name of the City Division requesting the solicitation. The final contract will be between this Awarded Supplier and this Division.'
+        - id: "Buyer Name"
+          type: text
+          info:
+            notes: 'The name of the buyer. Buyer is the primary, purchasing City contact for the solicitation or contract from PMMD. Any questions about the solicitation or contract can be directed to this Buyer.'
+        - id: "Buyer Email"
+          type: text
+          info:
+            notes: 'The email of the buyer.'
+        - id: "Buyer Phone Number"
+          type: text
+          info:
+            notes: 'The phone number of the buyer.'
+        - id: "Solicitation Document Description"
+          type: text
+          info:
+            notes: 'A description or summary of the solicitation.'

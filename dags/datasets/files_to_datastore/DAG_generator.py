@@ -226,6 +226,9 @@ def create_dag(package_name, config, schedule, default_args):
             # get resource config
             resource_config = resources[resource_name]
             attributes = resource_config["attributes"]
+            
+            # get primary key if datastore_upsert needed
+            primary_key = resource_config["datastore_upsert"]["primary_key"] if "datastore_upsert" in resource_config.keys() else None
 
             #define the file name and its directory and backup
             resource_filename = resource_name + ".csv"
@@ -363,6 +366,29 @@ def create_dag(package_name, config, schedule, default_args):
                     # Heads up: dont_update_resource is a dummy/empty task!
                     return "dont_update_resource_" + resource_label
                 else:
+                    return "check_" + resource_label + "_insert_method"
+            
+            @task.branch(task_id="check_" + resource_label + "_insert_method")
+            def datastore_insert_method(
+                resource_label, resource_config
+            ):
+                """
+                Determine if the resource needs to be upserted.
+
+                Args:
+                - resource_label: str
+                - resource_config: dict
+                    config parameters for a resource in yaml
+
+                Returns: insert method of the datastore resource
+                Return type: str
+                """
+                # check if datastore_upsert needed
+                if "datastore_upsert" in resource_config.keys():
+                    logging.info(f"Upsert method. primary key: {primary_key}")
+                    return "insert_records_" + resource_label
+                else:
+                    logging.info(f"Insert method.")
                     return "delete_resource_" + resource_label
 
             @task(task_id="delete_resource_" + resource_label, pool="ckan_pool")
@@ -420,6 +446,7 @@ def create_dag(package_name, config, schedule, default_args):
                 return stream_to_datastore(
                     resource_id=resource["id"],
                     file_path=file_path,
+                    primary_key=primary_key,
                     attributes=attributes,
                     do_not_cache=True,
                 )
@@ -561,6 +588,7 @@ def create_dag(package_name, config, schedule, default_args):
                 return stream_to_datastore(
                     resource_id=resource["id"],
                     file_path=file_path,
+                    primary_key=primary_key,
                     attributes=attributes,
                     do_not_cache=True,
                 )
@@ -599,6 +627,11 @@ def create_dag(package_name, config, schedule, default_args):
 
             tasks_dict["dont_update_resource_" + resource_label] = EmptyOperator(
                 task_id="dont_update_resource_" + resource_label,
+            )
+
+            tasks_dict["check_" + resource_label + "_insert_method"] = datastore_insert_method(
+                resource_label=resource_label,
+                resource_config=resource_config
             )
 
             tasks_dict["delete_resource_" + resource_label] = delete_resource(
@@ -667,17 +700,27 @@ def create_dag(package_name, config, schedule, default_args):
             (   
                 tasks_dict["does_" + resource_label + "_need_update"]
                 >> Label("Update")
-                >> tasks_dict["delete_resource_" + resource_label]
+                >> tasks_dict["check_" + resource_label + "_insert_method"]
             )
-
+            
             (
                 tasks_dict["dont_update_resource_" + resource_label]
                 >> tasks_dict["clean_backups_" + resource_label]
             )
+            
             (
-                tasks_dict["delete_resource_" + resource_label]
+                tasks_dict["check_" + resource_label + "_insert_method"]
+                >> Label("Insert")
+                >> tasks_dict["delete_resource_" + resource_label]
                 >> tasks_dict["insert_records_" + resource_label]
             )
+            
+            (
+                tasks_dict["check_" + resource_label + "_insert_method"]
+                >> Label("Upsert")
+                >> tasks_dict["insert_records_" + resource_label]
+            )
+
             (
                 tasks_dict["insert_records_" + resource_label]
                 >> Label("Success")

@@ -1156,6 +1156,7 @@ def stream_to_datastore(
     resource_id: str,
     file_path: str,
     attributes: Dict,
+    primary_key: None,
     encoding: str = "latin1",
     batch_size: int = 20000,
     do_not_cache: bool = False,
@@ -1172,6 +1173,8 @@ def stream_to_datastore(
         the path of data file
     - attributes : Dict
         the attributes section of yaml config (data fields)
+    - primary_key : str, Optional
+        the unique key of datastore
     - encoding: str, Optional
         the encoding form of data file
     - batch_size: int, Optional
@@ -1212,15 +1215,7 @@ def stream_to_datastore(
         Returns:
             None
         """
-
-        # parse source and target names
-        working_attributes = []
-        for attr in attributes:
-            if "id" in attr.keys():
-                working_attributes.append(attr)
-            elif "source_name" in attr.keys():
-                attr["id"] = attr["target_name"]
-                working_attributes.append(attr)
+        working_attributes = misc_utils.parse_source_and_target_names(attributes)
 
         # insert data into ckan
         ckan.action.datastore_create(
@@ -1230,6 +1225,39 @@ def stream_to_datastore(
             force=True,
             do_not_cache=do_not_cache,
         )
+
+    def upsert_into_ckan(records: List) -> None:
+        """
+        receives data as list of dicts, puts that data in CKAN
+        Parameters:
+        - records : List
+            data records as list of dicts
+
+        Returns:
+            None
+        """
+        working_attributes = misc_utils.parse_source_and_target_names(attributes)
+
+        # check if datastore_active (datastore exists)
+        datastore_active = ckan.action.resource_show(id=resource_id)["datastore_active"]
+
+        if str(datastore_active).lower() == "true":
+            ckan.action.datastore_upsert(
+                resource_id=resource_id,
+                records=records,
+                force=True,
+            )
+        else:
+            logging.info("Resource not exists, create resource first.")
+            logging.info(f"Creating datastore_resource: {resource_id}")
+            ckan.action.datastore_create(
+                id=resource_id,
+                records=records,
+                primary_key=primary_key,
+                fields=working_attributes,
+                force=True,
+                do_not_cache=True,
+            )
 
     csv.field_size_limit(sys.maxsize)
     ckan = misc_utils.connect_to_ckan()
@@ -1241,6 +1269,8 @@ def stream_to_datastore(
     total_count = 0
     curr_batch_count = 0
     records = []
+    if primary_key:
+        logging.info(f"Primary key is: {primary_key}")
 
     for row in csv_generator:
         total_count += 1
@@ -1250,7 +1280,15 @@ def stream_to_datastore(
         # when this batch is the max size, insert the data into CKAN
         if len(records) >= batch_size:
             logging.info("Loading {}th records".format(str(total_count)))
-            insert_into_ckan(records)
+
+            if primary_key:
+                # if primary key has value; use upsert method
+                logging.info(f"Upserting datastore_resource...")
+                upsert_into_ckan(records)
+            else:
+                # regular insert into ckan method
+                logging.info(f"Inserting datastore_resource...")
+                insert_into_ckan(records)
 
             # reset current batch
             records.clear()
@@ -1259,7 +1297,15 @@ def stream_to_datastore(
     # insert the last batch into CKAN
     if len(records) != 0:
         logging.info(f"Loading last {len(records)} records")
-        insert_into_ckan(records)
+
+        if primary_key:
+            # if primary key has value; use upsert method
+            logging.info(f"Upserting datastore_resource...")
+            upsert_into_ckan(records)
+        else:
+            # regular insert into ckan method
+            logging.info(f"Inserting datastore_resource...")
+            insert_into_ckan(records)
 
     # make sure datastore_active is set to True
     datastore_active = ckan.action.resource_show(id=resource_id)["datastore_active"]

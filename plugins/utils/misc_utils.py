@@ -304,3 +304,25 @@ def connect_to_ckan():
     CKAN_APIKEY = CKAN_CREDS[ACTIVE_ENV]["apikey"]#
 
     return ckanapi.RemoteCKAN(apikey=CKAN_APIKEY, address=CKAN)
+
+def parse_source_and_target_names(attributes):
+    '''
+    Parse source and target names from a list of dicts from a YAML config
+    resource attributes section, return a list of working attributes.
+
+    Parameters:
+    - attributes : List
+        the attributes section of yaml config (data fields)
+    
+    Returns:
+        working_attributes : List
+    '''
+    working_attributes = []
+    for attr in attributes:
+        if "id" in attr.keys():
+            working_attributes.append(attr)
+        elif "source_name" in attr.keys():
+            attr["id"] = attr["target_name"]
+            working_attributes.append(attr)
+    
+    return working_attributes
