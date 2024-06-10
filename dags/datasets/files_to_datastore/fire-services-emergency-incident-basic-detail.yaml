@@ -1,7 +1,7 @@
 # package name
 fire-services-emergency-incident-basic-detail:
   # DAG info
-  schedule: "@once"
+  schedule: "10 10 * * 1"
   dag_owner_name: Mackenzie
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
@@ -36,9 +36,9 @@ fire-services-emergency-incident-basic-detail:
 
   resources:
     # resource name
-    Basic incidents details 2022:
+    Basic incidents details Since 2023:
       format: csv
-      url: https://opendata.toronto.ca/fire.services/fire-services-basic-incident-details/fire-services-basic-incident-details_2022.csv
+      url: https://opendata.toronto.ca/fire.services/fire-services-basic-incident-details/fire-services-basic-incident-details.csv
       attributes:
         - id: INCIDENT_NUMBER
           type: text
@@ -82,17 +82,17 @@ fire-services-emergency-incident-basic-detail:
             notes: Nearest major or minor intersection in the ward where the incident occurred
         - id: TFS_Alarm_Time
           type: timestamp
-          format: "%Y-%m-%d %H:%M:%S.%f"
+          format: "%Y-%m-%dT%H:%M:%S"
           info:
             notes: Timestamp of when TFS was notified of the incident
         - id: TFS_Arrival_Time
           type: timestamp
-          format: "%Y-%m-%d %H:%M:%S.%f"
+          format: "%Y-%m-%dT%H:%M:%S"
           info:
             notes: Timestamp of first arriving unit to incident
         - id: Last_TFS_Unit_Clear_Time
           type: timestamp
-          format: "%Y-%m-%d %H:%M:%S.%f"
+          format: "%Y-%m-%dT%H:%M:%S"
           info:
             notes: Timestamp of last unit cleared from incident
         - id: Persons_Rescued
@@ -103,6 +103,73 @@ fire-services-emergency-incident-basic-detail:
           type: text
           info:
             notes: ""
+    #Basic incidents details 2022:
+    #  format: csv
+    #  url: https://opendata.toronto.ca/fire.services/fire-services-basic-incident-details/fire-services-basic-incident-details_2022.csv
+    #  attributes:
+    #    - id: INCIDENT_NUMBER
+    #      type: text
+    #      info:
+    #        notes: TFS incident number 
+    #    - id: Initial_CAD_Event_Type
+    #      type: text
+    #      info:
+    #        notes: "First event type in CAD system of this incident. In situations where the initial CAD event type is medical OR the final incident type is medical, the field is set to medical"
+    #    - id: Initial_CAD_Event_Call_Type
+    #      type: text
+    #      info:
+    #        notes: "First call type in CAD system of this incident.  Call type is a group of event types. In situations where the initial CAD event type is medical OR the final incident type is medical, the field is set to medical"
+    #    - id: Final_Incident_Type
+    #      type: text
+    #      info:
+    #        notes: "Final incident type. In situations where the initial CAD event type is medical OR the final incident type is medical, the field is set to medical"
+    #    - id: Event_Alarm_Level
+    #      type: int
+    #      info:
+    #        notes: Alarm level of the event
+    #    - id: Call_Source
+    #      type: text
+    #      info:
+    #        notes: Source of the call to TFS (e.g., 911 call, Alarm, referal agency, etc.)
+    #    - id: Incident_Station_Area
+    #      type: text
+    #      info:
+    #        notes: TFS Station area where the incident occurred
+    #    - id: Incident_Ward
+    #      type: text
+    #      info:
+    #        notes: Ward where the incident occurred, when available
+    #    - id: Ward_At_Event_Dispatch
+    #      type: text
+    #      info:
+    #        notes: null
+    #    - id: Intersection
+    #      type: text
+    #      info:
+    #        notes: Nearest major or minor intersection in the ward where the incident occurred
+    #    - id: TFS_Alarm_Time
+    #      type: timestamp
+    #      format: "%Y-%m-%d %H:%M:%S.%f"
+    #      info:
+    #        notes: Timestamp of when TFS was notified of the incident
+    #    - id: TFS_Arrival_Time
+    #      type: timestamp
+    #      format: "%Y-%m-%d %H:%M:%S.%f"
+    #      info:
+    #        notes: Timestamp of first arriving unit to incident
+    #    - id: Last_TFS_Unit_Clear_Time
+    #      type: timestamp
+    #      format: "%Y-%m-%d %H:%M:%S.%f"
+    #      info:
+    #        notes: Timestamp of last unit cleared from incident
+    #    - id: Persons_Rescued
+    #      type: int
+    #      info:
+    #        notes: Number of persons rescued
+    #    - id: geometry
+    #      type: text
+    #      info:
+    #        notes: ""
 #    Basic incidents details 2021:
 #      format: csv
 #      url: https://opendata.toronto.ca/fire.services/fire-services-basic-incident-details/fire-services-basic-incident-details_2021.csv
