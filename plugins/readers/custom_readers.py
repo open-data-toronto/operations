@@ -431,3 +431,20 @@ def washroom_facilities():
                 
                 yield misc_utils.parse_geometry_from_row(location["properties"])
 
+
+def parks_drinking_fountains():
+    
+    # get source data
+    locations_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_PFR_washroom_drinking_water_source/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token="
+    locations = json.loads(requests.get(locations_url).text)["features"]
+
+    status_url = "https://www.toronto.ca/data/parks/live/dws_allupdates.json"
+    statuses = json.loads(requests.get(status_url).text)["locations"]
+
+    for status in statuses:
+        for location in locations:
+            # if asset ids match, combine into dict and yield it
+            if status["AssetID"] == location["properties"]["asset_id"]:
+                location["properties"].update(status)
+                
+                yield misc_utils.parse_geometry_from_row(location["properties"])
