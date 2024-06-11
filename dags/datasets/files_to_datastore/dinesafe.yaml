@@ -35,6 +35,9 @@ dinesafe:
     Dinesafe:
       format: csv
       url: https://secure.toronto.ca/opendata/ds/od_csv/v1?format=csv
+      custom_reader: dinesafe
+      datastore_upsert:
+        primary_key: "unique_id"
       attributes:
         - id: "Rec #"
           type: int
@@ -101,5 +104,7 @@ dinesafe:
           type: float
           info:
             notes: "Longitude of establishment"
-        
-            
+        - id: "unique_id"
+          type: text
+          info:
+            notes: 'Unique composite key'

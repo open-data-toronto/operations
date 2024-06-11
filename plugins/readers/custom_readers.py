@@ -477,3 +477,38 @@ def section_37():
     for i in range(5, row_count + 1):
         if ws.cell(row=i, column=5).value:
             yield {k:str(ws.cell(row=i, column=v).value) if ws.cell(row=i, column=v).value else None for k,v in fieldmap.items()}
+
+
+def dinesafe():
+    from io import StringIO
+    import csv
+    import hashlib
+    url = "https://secure.toronto.ca/opendata/ds/od_csv/v1?format=csv"
+    with requests.get(url, stream=True) as r:   
+            
+        iterator = (line.decode("latin1") for line in r.iter_lines())
+
+        header_reader = csv.reader(StringIO(next(iterator)))
+        for line in header_reader:
+            headers = line
+    
+        reader = csv.DictReader(iterator, fieldnames = headers)
+        
+        for row in reader:
+            # add a unique primary key as required by datastore_upsert
+            unique_composite_key = (
+                row["Establishment ID"]
+                + "_"
+                + row["Inspection ID"]
+                + "_"
+                + row["Infraction Details"]
+            ).encode("utf-8")
+            
+            # create hash value
+            hash_value = hashlib.md5(unique_composite_key)
+            row["unique_id"] = hash_value.hexdigest()
+
+            # remove old key
+            row.pop("Rec #")
+
+            yield row
