@@ -15,6 +15,8 @@ washroom-facilities:
   tags:
   - name: washrooms
     vocabulary_id: null
+  - name: bathrooms
+    vocabulary_id: null
   information_url: https://www.toronto.ca/explore-enjoy/parks-gardens-beaches/
   excerpt: This dataset contains information on washroom facilities operated by Parks,
     Forestry, and Recreation Division of the City of Toronto.
@@ -24,49 +26,16 @@ washroom-facilities:
 
     These facilities include: washroom buildings in parks; portable toilets in parks; or washrooms located inside community centres, schools, pool buildings, rink buildings, fieldhouses and clubhouses. Only washrooms open for public use have been identified in this dataset. This dataset does not include washrooms that may be private or used by members/staff only. 
 
-    Washroom facility information found in this dataset include: 
-
-    * Asset ID 
-    * Park Name 
-    * Alternative Asset Name  
-    * Washroom Type 
-    * Accessibility Features 
-    * Hours 
-    * Location Details 
-    * Address 
-
-    The operational status of a washroom is updated in near real-time by staff throughout the day. The most updated information can be found by accessing the JSON file linked below: 
-
-    [https://www.toronto.ca/data/parks/live/washroom_allupdates.json](https://www.toronto.ca/data/parks/live/washroom_allupdates.json)
-
-    
-
-    Operational Statuses include: 
-
-    * 0 = closed 
-    * 1 = open 
-    * 2 = service alert 
-
-    Every washroom is identified by (X, Y) GIS coordinate. 
-
-    
-    Two files are available for download:
-
-    * Washroom Facilities - List of park and recreation centre washroom facilities and their daily operational status.
-    * Location data - List of park drinking water sources and washroom facilities with geographic coordinates, as well as additional information including asset type, address, and location details. Note: Drinking water sources are included in the location data file and can be excluded by filtering the data to [Type] = Washroom Building.
-
     The data provided is sourced from the City of Toronto Parks, Forestry and Recreation Asset Management System. The dataset has been validated by on-site parks and recreation supervisors and through necessary inter-divisional staff.  
 
     **Note:** 
 
     This dataset only contains information about washroom facilities operated by Parks, Forestry and Recreation division of the City of Toronto. All other City-owned washrooms (either public, or private) are out of scope of this dataset. 
 
-    PFR publishes real-time updates directly on the [Parks and Recreation Washrooms and Drinking Water](https://www.toronto.ca/explore-enjoy/recreation/washrooms-drinking-water-in-parks-recreational-facilities/) webpage. 
-
   resources:
-    Location Data:
-      format: geojson
-      agol: true
+    Washroom Facilities:
+      format: csv
+      custom_reader: washroom_facilities
       url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_PFR_washroom_drinking_water_source/FeatureServer/0
       attributes:
       - id: id
@@ -109,6 +78,38 @@ washroom-facilities:
         type: text
         info:
           notes: 'Street address of the park, where the drinking water source is located.'
+      - id: PostedDate
+        type: timestamp
+        format: "%Y-%m-%d %H:%M:%S"
+        info:
+          notes: Date status was posted
+      - id: AssetName
+        type: text
+        info:
+          notes: This asset's name
+      #- id: SeasonStart
+      #  type: text
+      #  info:
+      #    notes: When the season for this asset starts
+      #- id: SeasonEnd
+      #  type: text
+      #  info:
+      #    notes: When the season for this asset ends
+      - id: Reason
+        type: text
+        info:
+          notes: Reason for a particular status
+      - id: Comments
+        type: text
+        info:
+          notes: Open field for comments on this asset
+      - id: Status
+        type: text
+        info:
+          notes: |
+            * 0 = closed 
+            * 1 = open 
+            * 2 = service alert 
       - id: geometry
         type: text
         info:
