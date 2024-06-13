@@ -36,7 +36,7 @@ fire-services-emergency-incident-basic-detail:
 
   resources:
     # resource name
-    Basic incidents details Since 2023:
+    Basic incidents details 2023 onward:
       format: csv
       url: https://opendata.toronto.ca/fire.services/fire-services-basic-incident-details/fire-services-basic-incident-details.csv
       attributes:
