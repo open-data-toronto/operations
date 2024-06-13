@@ -97,11 +97,11 @@ def make_measures_records(measures):
         
         assert len(i["c"]) == 1, f"Item '{i['m']}' ({i['id']}) belongs to more than 1 category: {item['c']}"
         
-        item["c"] = item["c"][0]
+        item["c"] = item["c"][0].replace("&amp;", "&")
         
         for dp in data_points:
             r = { k: v for k, v in {**item, **dp}.items() if v == v }
-            r["m"] = r["m"].replace("\n", " ")
+            r["m"] = r["m"].replace("\n", " ").replace("&amp;", "&")
             r["ds"] = r["ds"].replace("&amp;", "&")
             r.pop("ytd")
             r.pop("ht")
@@ -186,7 +186,7 @@ def build_narratives_df(notes):
         if len(v) > 10:
             for n in v.split('<br /><br />'):
                 note = None
-                nn = n.replace("<br />", "").strip()
+                nn = n.replace("<br />", "").strip().replace("&amp;", "&")
                 if re.fullmatch(pattern1["b"], nn, flags=0):
                     note = string_to_dict(nn,pattern1["a"])
                 elif re.fullmatch(pattern2["b"], nn, flags=0):
