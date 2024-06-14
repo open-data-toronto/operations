@@ -448,3 +448,32 @@ def parks_drinking_fountains():
                 location["properties"].update(status)
                 
                 yield misc_utils.parse_geometry_from_row(location["properties"])
+
+
+def section_37():
+    import openpyxl
+    from io import BytesIO
+
+    base = "https://opendata.toronto.ca/city.planning/section-37-benefits/"
+
+    path = base + "rptNB-CommunityBenefits - BY-law summaries.xlsx"
+    file = requests.get(path).content
+    wb = openpyxl.load_workbook(BytesIO(file))
+    ws = wb.active
+
+    row_count = ws.max_row
+    
+    fieldmap = {
+        "Ward": 4,
+        "Council/OMB Approval Date": 5,
+        "Cash Contribution": 7,
+        "By-law No": 6,
+        "Address": 8,
+        "Description of Benefits": 9,
+        #"Comments": 10,
+        }
+    
+
+    for i in range(5, row_count + 1):
+        if ws.cell(row=i, column=5).value:
+            yield {k:str(ws.cell(row=i, column=v).value) if ws.cell(row=i, column=v).value else None for k,v in fieldmap.items()}

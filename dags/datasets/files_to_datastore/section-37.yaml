@@ -34,7 +34,8 @@ section-37:
   resources:
     Secured by Section 37:
       format: csv
-      url: http://opendata.toronto.ca/city.planning/section-37-benefits/Secured by Section 37.csv
+      url: https://opendata.toronto.ca/city.planning/section-37-benefits/rptNB-CommunityBenefits%20-%20BY-law%20summaries.xlsx
+      custom_reader: section_37
       attributes:
       - id: Ward
         type: text
