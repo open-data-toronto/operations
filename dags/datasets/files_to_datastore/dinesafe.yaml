@@ -39,10 +39,6 @@ dinesafe:
       datastore_upsert:
         primary_key: "unique_id"
       attributes:
-        - id: "Rec #"
-          type: int
-          info:
-            notes: Unique ID fo ran entire record in this dataset
         - id: Establishment ID
           type: int
           info:
