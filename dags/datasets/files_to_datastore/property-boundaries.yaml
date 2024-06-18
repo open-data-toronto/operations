@@ -1,0 +1,124 @@
+property-boundaries:
+  schedule: '30 3 * * *'
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Property Boundaries
+  date_published: '2024-06-27 05:49:09.917562'
+  dataset_category: Map
+  refresh_rate: Daily
+  owner_division: Information & Technology
+  owner_section: null
+  owner_unit: Geospatial Competency Centre
+  owner_email: gcc@toronto.ca
+  civic_issues: null
+  topics: 
+  - Locations and Mapping
+  tags:
+  - name: Buildings
+    vocabulary_id: null
+  - name: GIS
+    vocabulary_id: null
+  - name: land
+    vocabulary_id: null
+  - name: parcels 
+    vocabulary_id: null
+  information_url: null
+  excerpt: Layer from the City’s topographic mapping products representing the physical area of buildings.
+  limitations: Data is collected via manual digitization from aerial imagery. It has a ground accuracy of +/- 30cm. Added/deleted/moved features may not be reflected in the dataset immediately due to operational constraints. Due to the inability to see features located close to tall buildings, or in areas of deep shadow; some features may not be collected. Based on the sheer scale and physical area of the City of Toronto not all features are collected annually. This data is not to be used as a substitute for a legal survey. The data is to be used for analysis and visualization purposes.
+  notes: |
+    This data outlines the geographical area of all properties in the City of Toronto. While every attempt is made to keep this dataset up to date, it has been compiled over many years, from numerous records of varying age and reliability. As such, the resulting accuracy of the boundary mapping information renders it suitable for general planning purposes only and is not a substitute for a plan of survey.
+
+    Column Definition + OBJECTID represents a unique identifier. It is not guaranteed to be consistent between data updates.
+
+  resources:
+    Property Boundaries:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_MUN_PARCEL/FeatureServer/0
+      attributes:
+      - id: PARCELID
+        type: int
+        info:
+          notes: Unique ID of Parcel
+      - id: FEATURE_TYPE
+        type: text
+        info:
+          notes: |
+            * Condo - A closed boundary that represents the extent of ownership by a Condominium Corporation. 
+            * Corridor - Describes a section of legal Right-of-Way. 
+            * Reserve - A unit of land of varying width (usually 0.3 metres (1 foot) wide) used to restrict access to private/public properties, such as access to adjoining public highways. 
+            * Common - A municipal parcel that is not designated as Corridor, Reserve or Condominium. A subdivision lot is a typical Common parcel.
+      - id: DATE_EFFECTIVE
+        type: date
+        format: epoch
+        info:
+          notes:  System generated
+      - id: DATE_EXPIRY
+        type: date
+        format: epoch
+        info:
+          notes:  System generated
+      - id: PLANID
+        type: int
+        info:
+          notes:  Internal unique ID of the plan
+      - id: PLAN_DESCRIPTION
+        type: text
+        info:
+          notes:  Description from plan [if available]
+      - id: PLAN_NAME
+        type: text
+        info:
+          notes:  Plan name [if available]
+      - id: PLAN_TYPE
+        type: text
+        info:
+          notes:  Type of plan [if available]
+      - id: STATEDAREA
+        type: text
+        info:
+          notes:  Area of parcel as stated by plan [if available]
+      - id: SOURCE_ID
+        type: int
+        info:
+          notes:  Internal source ID
+      - id: ADDRESS_POINT_ID
+        type: int
+        info:
+          notes:  Unique ID of the main address point related to the parcel
+      - id: ADDRESS_NUMBER
+        type: text
+        info:
+          notes:  Address number
+      - id: LINEAR_NAME_ID
+        type: int
+        info:
+          notes:  Unique ID of the street name
+      - id: LINEAR_NAME_FULL
+        type: text
+        info:
+          notes:  Street name
+      - id: AROLL_SOURCE_DESC
+        type: text
+        info:
+          notes:  Source of parcel info
+      - id: ADDRESS_ID
+        type: int
+        info:
+          notes:  Unique ID of the address
+      - id: OBJECTID
+        type: text
+        info:
+          notes:  System generated
+      - id: TRANS_ID_CREATE
+        type: float
+        info:
+          notes:  System generated
+      - id: TRANS_ID_EXPIRE
+        type: float
+        info:
+          notes:  System generated
+      - id: geometry
+        type: text
+        info:
+          notes: ''
