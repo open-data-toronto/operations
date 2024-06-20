@@ -1,0 +1,154 @@
+sewer-pressurized-mains:
+  jira_issue_id: DIA-62
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/216513
+  schedule: '23 20 * 1 *'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: 'Sewer Pressurized Mains'
+  date_published: '2024-06-20 06:55:19.961977'
+  dataset_category: Map
+  refresh_rate: As available
+  owner_division: Toronto Water
+  owner_section: Water Infrastructure Management
+  owner_unit: Development & Growth Transformation Project Office
+  owner_email: twag@toronto.ca
+  civic_issues: null
+  topics:
+  - Water
+  tags: 
+  - name: sewage
+    vocabulary_id: null
+  information_url: null
+  excerpt: This dataset provides pertinent information on the location of pressurized sewer system pipes
+  limitations: |
+    "As Is" Nature of Information/No Warranty
+    * The Information is provided by the City solely on “as is” basis and, without limiting the foregoing, the Information is provided for reference and general information purposes only.
+    
+    * While the City makes reasonable efforts to provide accurate Information, the Information:
+    
+    * may not reflect the actual circumstances of the City infrastructure at any time including, without limitation, the past, current or full extent or state of the particular City infrastructure;
+    
+    * may be based on limited information available at the time the Information was created; 
+    
+    * may be subject to change at any time, without notice, and any updating of records concerning City infrastructure may only occur periodically from time to time;
+    
+    * may not reflect the current circumstances at the time the User accesses the Information;
+    
+    * is not intended to be an exhaustive record of information concerning or related to any particular City infrastructure or infrastructure adjacent thereto;
+    
+    * may be manually transcribed and include transcription errors;
+    
+    * may reflect approximations of the circumstances rather than actual circumstances; and
+    
+    * is only intended for general informational purposes.
+    
+    * The Information is not to be used as a substitute for diligent field examinations legal surveys, subsurface investigations and other inspections or actions, as a prudent person would undertake and utilize. The User should obtain appropriate professional engineering and other advice and access resources relevant to their particular circumstances.
+    
+    The User acknowledges and accepts the foregoing limitations, without limitations, on the accuracy of the Information.
+
+    This sewer dataset cannot be presented as part of a development, infrastructure or engineering planning or design application. Requests for official sewer and water infrastructure maps must follow the process stipulated on the [City's Utility Maps & Engineering Drawings](https://www.toronto.ca/city-government/data-research-maps/utility-maps-engineering-drawings/) website.
+    
+    The Data Preview in this dataset shows a sample of the data. The full dataset is available in the downloaded file.
+    
+  notes: This dataset provides pertinent information on the location of pressurized sewer system pipes (main and trunk), their characteristics (e.g. pipe diameter, material, invert elevations at upstream and downstream junctions etc.) and the classification of sewers by flow medium. The data is updated on a continual daily basis. The data is intended to support development and growth by facilitating pre-application discussions and preparation of servicing reports by Developers (and their teams).
+  resources:  
+    Sewer Pressurized Main:
+      format: geojson
+      agol: true
+      url: https://services5.arcgis.com/MFwjjnaTnj9B3bil/arcgis/rest/services/COT_Geospatial_TW_Sewer_Pressurized_Main_Ext_View/FeatureServer/0
+      attributes:
+      - source_name: FACILITYID
+        target_name: Sewer Pressurized Asset Identification
+        type: text
+        info:
+          notes: Identification number assigned by the City of Toronto
+      - source_name: FROMMH
+        target_name: Sewer Pressurized Flow Type
+        type: text
+        info:
+          notes: Type of medium flowing in sewer (e.g. storm, sanitary, combined storm and sanitary)
+      - source_name: TOMH
+        target_name: Sewer Pressurized Structure Type
+        type: text
+        info:
+          notes: Sewer main structure type (FM - forcemain, PSL - Pressure Sewer Line)
+      - source_name: TWIN_NUMBER
+        target_name: Sewer Pressurized Upstream Maintenance Hole
+        type: int
+        info:
+          notes: Identification number of upstream maintenance hole
+      - source_name: WATERTYPE
+        target_name: Sewer Pressurized Downstream Maintenance Hole
+        type: text
+        info:
+          notes: Identification number of downstream maintenance hole
+      - source_name: STRUC_TYPE
+        target_name: Sewer Pressurized Twin Number
+        type: text
+        info:
+          notes: Distinguishes pipes that have the same upstream and downstream maintenance holes.
+      - source_name: LOCDESC
+        target_name: Sewer Pressurized Location Description
+        type: text
+        info:
+          notes: Address or location description
+      - source_name: OWNEDBY
+        target_name: Sewer Pressurized Owned By
+        type: text
+        info:
+          notes: Ownership group of the pressurized sewer
+      - source_name: MAINTBY
+        target_name: Sewer Pressurized Managed By
+        type: text
+        info:
+          notes: Maintenance group of the pressurized sewer
+      - source_name: INSTALLDATE
+        target_name: Sewer Pressurized Install Date
+        type: timestamp
+        format: epoch
+        info:
+          notes: Approximate construction date
+      - source_name: DIAMETER
+        target_name: Sewer Pressurized Diameter
+        type: int
+        info:
+          notes: Pipe diameter (millimetres)
+      - source_name: MATERIAL
+        target_name: Sewer Pressurized Material
+        type: text
+        info:
+          notes: Pipe material (CI - cast iron, PVC - polyvinyl chloride etc.)
+      - source_name: MAINSHAPE
+        target_name: Sewer Pressurized Main Shape
+        type: text
+        info:
+          notes: Pipe cross-sectional shape (e.g. circular)
+      #- source_name: INVERT_UP
+      #  target_name: Sewer Pressurized Invert Upstream
+      #  type: text
+      #  info:
+      #    notes: Upstream invert elevation (metres)
+      #- source_name: INVERT_DN
+      #  target_name: Sewer Pressurized Invert Downstream
+      #  type: text
+      #  info:
+      #    notes: Downstream invert elevation (metres)
+      - source_name: MEASUREDLENGTH
+        target_name: Sewer Pressurized Measured Length
+        type: float
+        info:
+          notes: Approximate span of the selected pipes (metres)
+      - source_name: TRUNK_SEWER
+        target_name: Sewer Pressurized Trunk Sewer
+        type: text
+        info:
+          notes: Yes or No label denoting a Trunk Sewer
+      - source_name: TRUNK_NAME
+        target_name: Sewer Pressurized Trunk Name
+        type: text
+        info:
+          notes: Identification name assigned by the City of Toronto
+      - id: geometry
+        type: text
+        info:
+          notes: ''
