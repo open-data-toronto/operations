@@ -1,0 +1,148 @@
+litter-bin-collection-frequency:
+  jira_issue_id: DIA-314
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/223722
+  schedule: '40 16 1 * *'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Litter Bin Collection Frequency
+  date_published: '2024-06-20 05:02:14.841207'
+  dataset_category: Map
+  refresh_rate: Semi-annually
+  owner_division: Solid Waste Management Services
+  owner_section: Infrastructure & Resource Management
+  owner_unit: Street Litter Bin Collection (City Wide)
+  owner_email: Nazifa.Uddin@toronto.ca
+  civic_issues: null
+  topics:
+  - City Government
+  - Garbage and Recycling
+  - Locations and Mapping
+  tags:
+  - name: SWMS
+    vocabulary_id: null
+  - name: collections
+    vocabulary_id: null
+  - name: garbage
+    vocabulary_id: null
+  - name: litter
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/recycling-organics-garbage/litter/
+  excerpt: The >10,000 garbage/recycling street litter bins across the city and the frequency of their collection
+  limitations: |
+    The main things to consider:
+
+    * Collection frequencies are based on usage which fluctuates based on season (e.g. usage and collection frequencies are lower in colder months versus the summer months). This dataset will be updated every November and every April (6-month duration) to account for the seasonal changes to collection frequencies.
+    * This dataset reflects the number of days each litter bin is serviced each week versus the overall number of times they are serviced each week.
+    * Service levels are shown for each bin, however only those with a status of “existing” are collected. Those with a status of “planned” or “temporarily removed” are not currently collected.
+
+  notes: |
+    There are more than 10,000 garbage/recycling street litter bins across the city and the frequency of collection varies based on the location and/or usage of each bin and seasonality. Bins located in Business Improvement Areas and the downtown core are collected daily with some bins in these areas receiving additional collection during the day as required, and where it is feasible to do so.
+
+    Every week more than 50,000 collections of street litter bins are scheduled with the majority of these taking place at night for safety and efficiency reasons.
+
+    In 2023, there was an average of 43 validated service requests per week for uncollected or overflowing bins. This reflects a reliability rate for the scheduled collections of more than 99.9 per cent.
+
+    In 2023, only about 20 per cent of service requests for overflowing or uncollected bins were repeats of the same location and just under 5 per cent were locations that received three or more service requests.
+
+    Any overflowing bins should be reported to 311. Solid Waste Management Services addresses any service requests related to overflowing street litter bins within 24 hours. 
+
+  resources:
+    Litter Bin Collection Frequency:
+      format: csv
+      url: https://opendata.toronto.ca/solid.waste.management.services/litter-bin-collection-frequency/Litter Bin Frequency Dataset.csv
+      encoding: utf-8-sig
+      attributes:
+      #- source_name: FID
+      #  target_name: FID
+      #  type: text
+      #  info:
+      #    notes: contains OBJECTID information
+      #- source_name: Shape
+      #  target_name: Shape
+      #  type: text
+      #  info:
+      #    notes: Geometry of the file
+      - source_name: _id1
+        target_name: LOC ID
+        type: text
+        info:
+          notes: Locational ID
+      - source_name: ID3
+        target_name: BIN ID
+        type: text
+        info:
+          notes: Bin Identification
+      - source_name: ADDRESS4
+        target_name: ADDRESS NUM
+        type: text
+        info:
+          notes: Street Number of Address
+      - source_name: ADDRESS5
+        target_name: ADDRESS ST
+        type: text
+        info:
+          notes: Address Name litter bin is located
+      - source_name: FRONTIN6
+        target_name: FRONTING ST
+        type: text
+        info:
+          notes: 'Front side of the address '
+      - source_name: SIDE7
+        target_name: SIDE
+        type: text
+        info:
+          notes: Side litter bin is located on the street
+      - source_name: FROMSTR8
+        target_name: FROM ST
+        type: text
+        info:
+          notes: Adjacent street that is from the address the litter bin is on
+      - source_name: DIRECTI9
+        target_name: DIRECTION
+        type: text
+        info:
+          notes: Direction of the road
+      - source_name: SITEID10
+        target_name: SITE ID
+        type: text
+        info:
+          notes: Litter Bin ID number
+      - source_name: WARD11
+        target_name: WARD
+        type: text
+        info:
+          notes: Ward of the Litter Bin
+      - source_name: BIA12
+        target_name: BIA
+        type: text
+        info:
+          notes: Business Improvement Area the Litter Bin is located in
+      - source_name: ASSETTY13
+        target_name: ASSET TYPE
+        type: text
+        info:
+          notes: Category of Litter Bin use
+      - source_name: STATUS14
+        target_name: STATUS
+        type: text
+        info:
+          notes: Status of the litter bin location
+      - source_name: BARCODE15
+        target_name: BARCODE
+        type: text
+        info:
+          notes: barcode found on litter bin
+      - source_name: SDE_STA16
+        target_name: SDE STATUS
+        type: int
+        info:
+          notes: null
+      - source_name: SERVICED
+        target_name: DAYS SERVICED
+        type: int
+        info:
+          notes: Number of days in the week the litter bin is serviced
+      - id: geometry
+        type: text
+        info:
+          notes: null

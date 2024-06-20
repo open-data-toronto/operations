@@ -169,8 +169,8 @@ def parse_geometry_from_row(source_row):
     '''input row as dict, output same row with geometry object
     made of that rows geometric contents'''
 
-    latitude_attributes = ["lat", "latitude", "y", "y coordinate"]
-    longitude_attributes = ["long", "longitude", "x", "x coordinate"]
+    latitude_attributes = ["lat", "latitude", "y", "y coordinate", "point_y"]
+    longitude_attributes = ["long", "longitude", "x", "x coordinate", "point_x"]
     
     for attr in source_row:
         if attr.lower() in latitude_attributes:
