@@ -1,0 +1,83 @@
+water-valves:
+  jira_issue_id: DTSD-7763
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/216514
+  schedule: '17 15 * * 1'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: 'Water Valves'
+  date_published: '2024-06-20 00:32:36.404148'
+  dataset_category: Map
+  refresh_rate: As available
+  owner_division: Toronto Water
+  owner_section: Water Infrastructure Management
+  owner_unit: Development & Growth Transformation Project Office
+  owner_email: twag@toronto.ca
+  civic_issues: null
+  topics:
+  - Water
+  tags: 
+  - name: hydrant
+    vocabulary_id: null
+  information_url: null
+  excerpt: This dataset provides pertinent information on the location of water system valves and valve characteristics
+  limitations: |
+    "As Is" Nature of Information/No Warranty
+    
+    * The Information is provided by the City solely on “as is” basis and, without limiting the foregoing, the Information is provided for reference and general information purposes only.
+    
+    * While the City makes reasonable efforts to provide accurate Information, the Information:
+    
+    * may not reflect the actual circumstances of the City infrastructure at any time including, without limitation, the past, current or full extent or state of the particular City infrastructure;
+    
+    * may be based on limited information available at the time the Information was created; 
+    
+    * may be subject to change at any time, without notice, and any updating of records concerning City infrastructure may only occur periodically from time to time;
+    
+    * may not reflect the current circumstances at the time the User accesses the Information;
+    
+    * is not intended to be an exhaustive record of information concerning or related to any particular City infrastructure or infrastructure adjacent thereto;
+    
+    * may be manually transcribed and include transcription errors;
+    
+    * may reflect approximations of the circumstances rather than actual circumstances; and
+    
+    * is only intended for general informational purposes.
+    
+    * The Information is not to be used as a substitute for diligent field examinations legal surveys, subsurface investigations and other inspections or actions, as a prudent person would undertake and utilize. The User should obtain appropriate professional engineering and other advice and access resources relevant to their particular circumstances.
+    
+    The User acknowledges and accepts the foregoing limitations, without limitations, on the accuracy of the Information.
+
+    This dataset cannot be presented as part of a development, infrastructure or engineering planning or design application. Requests for official sewer and water infrastructure maps must follow the process stipulated on the [City's Utility Maps & Engineering Drawings](https://www.toronto.ca/city-government/data-research-maps/utility-maps-engineering-drawings/) website.
+
+    The Data Preview in this dataset shows a sample of the data. The full dataset is available in the downloaded file.
+  notes: This dataset provides pertinent information on the location of water system valves and valve characteristics (e.g. diameter, type of valve etc.). The data is updated on a continual daily basis. The data is intended to support development and growth by facilitating pre-application discussions and preparation of servicing reports by Developers (and their teams).
+  resources:
+    Water Valve:
+      format: geojson
+      agol: true
+      url: https://services5.arcgis.com/MFwjjnaTnj9B3bil/arcgis/rest/services/COT_Geospatial_TW_Water_System_Valve_Ext_View/FeatureServer/0
+      attributes:
+      - source_name: FACILITYID
+        target_name: Asset ID
+        type: text
+        info:
+          notes: Identification number assigned by the City of Toronto
+      - source_name: DIAMETER
+        target_name: Water Valve Diameter
+        type: int
+        info:
+          notes: Valve diameter (millimetres)
+      - source_name: ASSET_PURPOSE
+        target_name: Water Valve Purpose
+        type: text
+        info:
+          notes: Related function in the water system (e.g. distribution, pressure district area, transmission-distribution, transmission etc.)
+      - source_name: VALVETYPE
+        target_name: Water Valve Type
+        type: text
+        info:
+          notes: Type of valve (gate, butterfly etc.)
+      - id: geometry
+        type: text
+        info:
+          notes: ''
