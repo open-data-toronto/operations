@@ -91,6 +91,10 @@ municipal-licensing-and-standards-business-licences-and-permits:
         type: 'text'
         info:
           notes: 'Client address postal code'
+      - id: Ward
+        type: 'text'
+        info:
+          notes: Client address ward
       - id: Conditions
         type: 'text'
         info:
