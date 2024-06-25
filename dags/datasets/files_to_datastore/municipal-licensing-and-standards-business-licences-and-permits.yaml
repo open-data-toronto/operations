@@ -92,9 +92,9 @@ municipal-licensing-and-standards-business-licences-and-permits:
         info:
           notes: 'Client address postal code'
       - id: Ward
-        type: 'text'
+        type: id
         info:
-          notes: Client address ward
+          notes: Client address ward number
       - id: Conditions
         type: 'text'
         info:
