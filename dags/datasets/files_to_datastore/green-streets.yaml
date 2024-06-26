@@ -1,0 +1,120 @@
+green-streets:
+  jira_issue_id: DIA-304
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/220946
+  schedule: 10 5 1 * *
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Green Streets
+  date_published: '2024-06-05 20:08:54.499545'
+  dataset_category: Map
+  refresh_rate: Annually
+  owner_division: Transportation Services
+  owner_section: Planning, Design & Management
+  owner_unit: Asset Management
+  owner_email: greenstreets@toronto.ca
+  civic_issues:
+  - Climate change
+  topics:
+  - Development
+  - Environment
+  - Transportation
+  - Water
+  tags:
+  - name: Green
+    vocabulary_id: null
+  - name: LID
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/enhancing-our-streets-and-public-realm/green-streets/green-streets-projects/green-streets-map/#location=&lat=&lng=&zoom=
+  excerpt: The Green Streets Map provides an overview of green infrastructure, assets
+    that capture rainwater and direct it to plants and trees, that have been constructed
+    throughout the City.
+  limitations: null
+  notes: 'Green Streets are roads that include '
+  resources:
+    Green Streets Map:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_Green_Infrastructure_points/FeatureServer/0
+      attributes:
+      - source_name: ID
+        target_name: Asset Identifier
+        type: text
+        info:
+          notes: Identification number assigned by City of Toronto for external map
+      - source_name: OBJECTID_POLY
+        target_name: Asset Identifier (Secondary)
+        type: text
+        info:
+          notes: Identification number assigned by City of Toronto for internal map
+      - source_name: COMMON_NAME
+        target_name: Common Name
+        type: text
+        info:
+          notes: The location of the asset and the infrastructure type
+      - source_name: LOCATION
+        target_name: Location
+        type: text
+        info:
+          notes: The location of the asset
+      - source_name: PROJECT_TYPE
+        target_name: Project Type
+        type: text
+        info:
+          notes: Type of green infrastructure asset
+      - source_name: GI_TYPE
+        target_name: Green Infrastructure Type
+        type: text
+        info:
+          notes: Type of green infrastructure asset
+      - source_name: YEAR_CONSTRUCTED
+        target_name: Year Constructed
+        type: date
+        format: epoch
+        info:
+          notes: Year asset was constructed
+      - source_name: DESCRIPTION
+        target_name: Description
+        type: text
+        info:
+          notes: A description of the asset based on type and location
+      - source_name: IMAGE_NAME
+        target_name: Original Photo File Name
+        type: text
+        info:
+          notes: Original photo file name
+      - source_name: IMAGE_ALT_TEXT
+        target_name: Description of Photo
+        type: text
+        info:
+          notes: 'Accessible description of the photo '
+      #- source_name: DEFINITION_URL
+      #  target_name: Website Definition Link
+      #  type: text
+      #  info:
+      #    notes: Link to definitions of green infrastructure on the external City
+      #      website
+      - source_name: EXTERNAL_FILE_TEXT
+        target_name: External File Name
+        type: text
+        info:
+          notes: Case study file name for additional information
+      - source_name: EXTERNAL_FILE_URL
+        target_name: External File URL
+        type: text
+        info:
+          notes: Website for case study file name for additional information
+      - source_name: EXTERNAL_URL_TEXT
+        target_name: External URL Name
+        type: text
+        info:
+          notes: Case study file name for additional information
+      - source_name: EXTERNAL_URL
+        target_name: External File
+        type: text
+        info:
+          notes: Website for case study file name for additional information
+      - id: geometry
+        type: text
+        info:
+          notes: ''
+        
