@@ -620,3 +620,8 @@ traffic-signal-timing:
   Traffic Signal Timing:
     format: zip
     url: https://opendata.toronto.ca/transportation.services/traffic-signal-timing/traffic-signals-timing.zip
+
+311-contact-centre-performance-metrics:
+  CXD-311 Metrics:
+    format: xlsx
+    url: https://opendata.toronto.ca/311/311-contact-centre-performance-metrics/CXD-311 Metrics.xlsx
