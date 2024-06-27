@@ -1,14 +1,14 @@
 # package name
 green-spaces:
   # DAG info
-  schedule: "@once"
+  schedule: "55 21 * * 2"
   dag_owner_name: Mackenzie
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
   # mandatory package attributes
   title: "Green Spaces"
   date_published: "2019-07-23 17:47:38.364157"
-  refresh_rate: As available
+  refresh_rate: Monthly
   dataset_category: Map
 
   # optional package attributes
