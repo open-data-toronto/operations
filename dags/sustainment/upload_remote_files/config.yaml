@@ -624,4 +624,4 @@ traffic-signal-timing:
 311-contact-centre-performance-metrics:
   CXD-311 Metrics:
     format: xlsx
-    url: https://opendata.toronto.ca/311/311-contact-centre-performance-metrics/CXD-311 Metrics.xlsx
+    url: https://opendata.toronto.ca/toronto.311/311-contact-centre-performance-metrics/CXD-311 Metrics.xlsx
