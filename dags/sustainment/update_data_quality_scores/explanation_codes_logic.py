@@ -302,7 +302,12 @@ def explanation_code_catalogue(**kwargs):
                         continue
 
                     try:
-                        content, fields = dqs_utils.read_datastore(ckan, r["id"])
+                        data_path, fields = dqs_utils.read_datastore(ckan, r["id"])
+                        content = pd.read_csv(data_path, index_col=False)
+                        
+                        # drop columns which is not useful
+                        content = content.drop("_id", axis=1)
+                        
                         records = {
                             "package": p["name"],
                             "resource": r["name"],

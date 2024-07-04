@@ -87,32 +87,29 @@ def attribue_description_check(columns):
     return counter == 0, missing_cols
 
 
-def read_datastore(ckan, rid, rows=10000):
+def read_datastore(ckan, rid, rows=20000):
+    import csv
+
     records = []
 
     has_more = True
     while has_more:
         result = ckan.action.datastore_search(id=rid, limit=rows, offset=len(records))
 
+        logging.info(len(result["records"]))
         records += result["records"]
         has_more = len(records) < result["total"]
 
-    df = pd.DataFrame(records).drop("_id", axis=1)
+    column_names = [x["id"] for x in result["fields"]]
+    logging.info(column_names)
+    
+    data_path = "/data/operations/dags/sustainment/update_data_quality_scores/data.csv"
+    with open(data_path, 'w', newline='') as f:
+        dict_writer = csv.DictWriter(f, column_names)
+        dict_writer.writeheader()
+        dict_writer.writerows(records)
 
-    # error handling if geometry is invalid.
-    if "geometry" in df.columns:
-        try:
-            df["geometry"] = df["geometry"].apply(
-                lambda x: shape(json.loads(x)) if x != "None" else None
-            )
-            df = gpd.GeoDataFrame(df, crs="epsg:4326")
-
-        except Exception as e:
-            logging.error(e)
-            logging.warning("Invalid Geometry. Skipping Calculation for this resource.")
-
-    return df, [x for x in result["fields"] if x["id"] != "_id"]
-
+    return data_path, [x for x in result["fields"] if x["id"] != "_id"]
 
 def force_run_all(**kwargs):
     # Get force run from airflow dag configuration
