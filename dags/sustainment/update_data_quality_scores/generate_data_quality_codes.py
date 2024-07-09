@@ -318,12 +318,6 @@ with DAG(
         python_callable=send_success_msg,
     )
 
-    delete_tmp_dir = PythonOperator(
-        task_id="delete_tmp_data_dir",
-        python_callable=airflow_utils.delete_tmp_data_dir,
-        op_kwargs={"dag_id": JOB_NAME},
-    )
-
     [packages, create_tmp_dir, check_force_run] >> run_schedule
 
     run_schedule >> [run_daily_dataset, run_all_dataset] >> dataset_run_list
@@ -343,7 +337,6 @@ with DAG(
             delete_raw_scores_explanation_code_tmp_file,
             delete_final_scores_explanation_code_tmp_file,
         ]
-        >> delete_tmp_dir
     )
 
     add_scores >> send_notification

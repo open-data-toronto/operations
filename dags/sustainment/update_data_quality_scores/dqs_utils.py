@@ -87,27 +87,27 @@ def attribue_description_check(columns):
     return counter == 0, missing_cols
 
 
-def read_datastore(ckan, rid, rows=20000):
+def read_datastore(ckan, rid, dir_path, rows=20000):
     import csv
 
-    records = []
-
-    has_more = True
-    while has_more:
-        result = ckan.action.datastore_search(id=rid, limit=rows, offset=len(records))
-
-        logging.info(len(result["records"]))
-        records += result["records"]
-        has_more = len(records) < result["total"]
-
+    # get column names
+    result = ckan.action.datastore_search(id=rid, limit=rows)
     column_names = [x["id"] for x in result["fields"]]
-    logging.info(column_names)
-    
-    data_path = "/data/operations/dags/sustainment/update_data_quality_scores/data.csv"
-    with open(data_path, 'w', newline='') as f:
+
+    data_path = str(dir_path) + "/data.csv"
+    with open(data_path, "w", newline="") as f:
+        counter = 0
         dict_writer = csv.DictWriter(f, column_names)
         dict_writer.writeheader()
-        dict_writer.writerows(records)
+        has_more = True
+
+        # read and write the data in batch of 20000
+        while has_more:
+            result = ckan.action.datastore_search(id=rid, limit=rows, offset=counter)
+            counter += len(result["records"])
+            has_more = counter < result["total"]
+            dict_writer.writerows(result["records"])
+    logging.info("------------------------- Records read and saved...")
 
     return data_path, [x for x in result["fields"] if x["id"] != "_id"]
 
