@@ -10,7 +10,7 @@ from airflow.models import Variable
 from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.operators.dummy import DummyOperator
 from sustainment.update_data_quality_scores import explanation_codes_logic, dqs_utils
-from utils import airflow_utils, ckan_utils
+from utils import airflow_utils, ckan_utils, misc_utils
 from utils_operators.slack_operators import task_failure_slack_alert
 
 from ckan_operators.resource_operator import GetOrCreateResourceOperator
@@ -291,6 +291,16 @@ with DAG(
         provide_context=True,
     )
 
+    delete_data_tmp_file = PythonOperator(
+        task_id="delete_data_tmp_file",
+        python_callable=misc_utils.delete_file,
+        op_kwargs={
+            "dag_tmp_dir": "/data/tmp/generate_data_quality_codes",
+            "file_name": "data.csv",
+        },
+        provide_context=True,
+    )
+
     get_or_create_explanation_code_resource = GetOrCreateResourceOperator(
         task_id="get_or_create_explanation_code_resource",
         package_name_or_id=PACKAGE_DQS,
@@ -336,6 +346,7 @@ with DAG(
         >> [
             delete_raw_scores_explanation_code_tmp_file,
             delete_final_scores_explanation_code_tmp_file,
+            delete_data_tmp_file
         ]
     )
 
