@@ -118,11 +118,19 @@ toronto-shelter-system-flow:
           type: "int"
           info:
             notes: "Age is calculated using the self-reported date of birth and the time the data was extracted form SMIS (Shelter Management Information System)."
-        - id: age25-44
+        - id: age25-34
           type: "int"
           info:
             notes: "Age is calculated using the self-reported date of birth and the time the data was extracted form SMIS (Shelter Management Information System)."
-        - id: age45-64
+        - id: age35-44
+          type: "int"
+          info:
+            notes: "Age is calculated using the self-reported date of birth and the time the data was extracted form SMIS (Shelter Management Information System)."
+        - id: age45-54
+          type: "int"
+          info:
+            notes: "Age is calculated using the self-reported date of birth and the time the data was extracted form SMIS (Shelter Management Information System)."
+        - id: age55-64
           type: "int"
           info:
             notes: "Age is calculated using the self-reported date of birth and the time the data was extracted form SMIS (Shelter Management Information System)."
