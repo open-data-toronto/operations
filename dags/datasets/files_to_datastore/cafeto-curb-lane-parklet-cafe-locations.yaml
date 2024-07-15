@@ -1,14 +1,14 @@
 # package name
 cafeto-curb-lane-parklet-cafe-locations:
   # DAG info
-  schedule: "@once"
+  schedule: "50 18 * * 2"
   dag_owner_name: Mackenzie
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
   # mandatory package attributes
   title: "CaféTO Curb Lane - Parklet Café Locations"
   date_published: "2022-05-26 17:29:01.383647"
-  refresh_rate: As available
+  refresh_rate: Monthly
   dataset_category: Map
 
   # optional package attributes
@@ -36,29 +36,55 @@ cafeto-curb-lane-parklet-cafe-locations:
     # resource name
     Cafe TO Locations:
       format: geojson
-      url: https://opendata.toronto.ca/transportation.services/cafe-to/CafeTO_Locations_with_Years_2022.geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_cafe_to/FeatureServer/0
       attributes:
-        - id: "id"
+        - id: "INTERVENTION_TYPE"
           type: "text"
           info:
-            notes: Id associated with the location
-        - id: "intersecti"
+            notes: Type of Café (Curb Lane Cafés, Sidewalk Cafés, Private Property Patios)
+        - id: "LICENCE_NUMBER"
           type: "text"
           info:
-            notes: The BIA the location is in
-        - id: "interventi"
+            notes: Licence Number issued by the City of Toronto
+        - id: "OPERATOR_NAME"
           type: "text"
           info:
-            notes: Type of closure (Café, Temporary Loading Zone, Public Parklet, Bicycle Parking)
-        - id: "installati"
+            notes: Name that the company operates under
+        - id: "BUSINESS_ADDRESS"
           type: "text"
           info:
-            notes: Where the installation is located
-        - id: "Year"
-          type: "int"
+            notes: Client's business address
+        - id: "PROPOSED_STREET_LOCATION"
+          type: "text"
           info:
-            notes: The year the location was active
+            notes: Street name of café
+        - id: "WARD_NAME"
+          type: "text"
+          info:
+            notes: Ward location of café
+        - id: "BIA_NAME"
+          type: "text"
+          info:
+            notes: Name of Business Improvement Area where café is located
+        - id: "STREET_NAME_SHORTENED"
+          type: "text"
+          info:
+            notes: Street name of business address
+        - id: "MUNICIPAL_ADDRESS"
+          type: "text"
+          info:
+            notes: Client's business address
+        - id: "CATEGORY"
+          type: "text"
+          info:
+            notes: Type of licence or permit
+        - id: "CONDITIONS"
+          type: "text"
+          info:
+            notes: Restriction on the licence/permit as recorded in the licensing system        
         - id: "geometry"
           type: "text"
           info:
             notes:  ""
+        
