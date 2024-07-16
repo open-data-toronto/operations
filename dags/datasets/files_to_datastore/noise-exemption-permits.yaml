@@ -1,0 +1,113 @@
+noise-exemption-permits:
+  jira_issue_id: DIA-309
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/223023
+  schedule: '15 18 * * *'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Noise Exemption Permits
+  date_published: '2024-06-25 13:33:48.363784'
+  dataset_category: Table
+  refresh_rate: Daily
+  owner_division: Municipal Licensing & Standards
+  owner_section: Policy & Strategic Support
+  owner_unit: Business Planning Performance & Intelligence
+  owner_email: NoiseTO@toronto.ca
+  civic_issues: null
+  topics:
+  - Permits and Licenses
+  - Business
+  tags:
+  - name: allowed
+    vocabulary_id: null
+  - name: disturbance
+    vocabulary_id: null
+  - name: event
+    vocabulary_id: null
+  - name: exemption
+    vocabulary_id: null
+  - name: licence
+    vocabulary_id: null
+  - name: loud
+    vocabulary_id: null
+  - name: noise
+    vocabulary_id: null
+  - name: permission
+    vocabulary_id: null
+  - name: permit
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/public-notices-bylaws/bylaw-enforcement/noise/
+  excerpt: This dataset contains all active noise exemption permits that have been
+    approved by the City.
+  limitations: null
+  notes: |  
+    The Noise Bylaw provides standards for noise in Toronto. This includes decibel
+    limits and time restrictions for some types of noise. Individuals and organizations
+    can apply for a noise exemption permit for specific events or activities that
+    may be in contravention of the Noise Bylaw if all application requirements are
+    met.
+
+    For more information please visit the [Noise webpage](https://www.toronto.ca/city-government/public-notices-bylaws/bylaw-enforcement/noise/).
+
+    Note: This dataset is refreshed daily between between 12:00 p.m. and 1 p.m.
+     
+  resources:
+    Noise Exemption Permits:
+      format: 'csv'
+      url: http://opendata.toronto.ca/municipal.licensing.standards/noise-exemption-permits/noise-exemption-permits.csv
+      attributes:         
+      - id: Licence Number
+        type: text
+        info:
+          notes: "Number of licence issued by City of Toronto"
+      - id: Permit Type
+        type: text
+        info:
+          notes: "Application Class Name"
+      - id: Operating Name
+        type: text
+        info:
+          notes: "Name that company operates under"
+      - id: Client Name
+        type: text
+        info:
+          notes: "Name that the licence is issued to"
+      - id: Address
+        type: text
+        info:
+          notes: "Street Number,Street Name,Unit,City,Province,Postal Code"
+      - id: Location Name
+        type: text
+        info:
+          notes: "Name of Location if applicable "
+      - id: Ward
+        type: text
+        info:
+          notes: "Ward Number"
+      - id: Issue Date
+        type: timestamp
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: "Application Date"
+      - id: Expected End Date
+        type: timestamp
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: "Expected End Date"
+      - id: Actual End Date
+        type: timestamp
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: "Actual End Date"
+      #- id: Conditions
+      #  type: text
+      #  info:
+      #    notes: "Restriction on the licence/permit as recorded in the licensing system"
+      - id: Public Conditions
+        type: text
+        info:
+          notes: "Additional Restriction/comment on the licence/permit"
+      - id: Hours of Operation
+        type: text
+        info:
+          notes: "Hours of Operation as per licence/permit"
+        
