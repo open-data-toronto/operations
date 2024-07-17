@@ -37,7 +37,7 @@ cafeto-curb-lane-parklet-cafe-locations:
     Cafe TO Locations:
       format: geojson
       agol: true
-      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_cafe_to/FeatureServer/0
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_cafeTO/FeatureServer/0
       attributes:
         - id: "INTERVENTION_TYPE"
           type: "text"
