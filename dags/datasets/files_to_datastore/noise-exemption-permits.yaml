@@ -36,7 +36,7 @@ noise-exemption-permits:
   - name: permit
     vocabulary_id: null
   information_url: https://www.toronto.ca/city-government/public-notices-bylaws/bylaw-enforcement/noise/
-  excerpt: This dataset contains all active noise exemption permits that have been
+  excerpt: This dataset contains all noise exemption permits that have been
     approved by the City.
   limitations: null
   notes: |  
@@ -48,7 +48,7 @@ noise-exemption-permits:
 
     For more information please visit the [Noise webpage](https://www.toronto.ca/city-government/public-notices-bylaws/bylaw-enforcement/noise/).
 
-    Note: This dataset is refreshed daily between between 12:00 p.m. and 1 p.m.
+    Note: This dataset is refreshed daily between 12:00 p.m. and 1 p.m.
      
   resources:
     Noise Exemption Permits:
