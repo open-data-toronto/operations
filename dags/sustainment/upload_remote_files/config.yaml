@@ -175,7 +175,7 @@ parking-ticket-trials:
 pcard-expenditures:
   pcard-expenses:
     format: zip
-    url: https://opendata.toronto.ca/accounting/pcard/expenditures.zip
+    url: https://opendata.toronto.ca/accounting.services/pcard-expenditures/expenditures.zip
 property-boundaries:
   Property Boundaries (wgs84) - geojson:
     format: zip
