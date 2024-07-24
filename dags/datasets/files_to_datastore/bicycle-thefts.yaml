@@ -49,6 +49,7 @@ bicycle-thefts:
             notes: Primary Offence Type
         - id: OCC_DATE
           type: date
+          format: epoch
           info:
             notes: Date of Offence
         - id: OCC_YEAR
@@ -77,6 +78,7 @@ bicycle-thefts:
             notes: Hour Offence Occurred
         - id: REPORT_DATE
           type: date
+          format: epoch
           info:
             notes: Date Offence was Reported
         - id: REPORT_YEAR
