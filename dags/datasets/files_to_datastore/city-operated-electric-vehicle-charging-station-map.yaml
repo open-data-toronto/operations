@@ -1,0 +1,61 @@
+city-operated-electric-vehicle-charging-station-map:
+  jira_issue_id: DIA-342
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/233341
+  schedule: "30 4 7 */3 *"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: 'the City Operated Electric Vehicle Charging Station Map'
+  date_published: '2024-07-25 10:19:49.068054'
+  dataset_category: Map
+  refresh_rate: Quarterly
+  owner_division: Environment & Climate
+  owner_section: null
+  owner_unit: null
+  owner_email: transform@toronto.ca
+  civic_issues:
+  - Climate change
+  topics:
+  - Environment
+  tags: []
+  information_url: https://www.toronto.ca/services-payments/water-environment/environmentally-friendly-city-initiatives/reports-plans-policies-research/electric-vehicles/city-operated-ev-charging-stations-map/#location=&lat=&lng=&zoom=
+  excerpt: The map shows an expanding network of publicly accessible electric vehicle
+    (EV) charging stations operated by the City of Toronto.
+  limitations: The map includes City-provided charging stations but is not a map of
+    all public charging stations in Toronto.
+  notes: "The map shows an expanding network of publicly accessible electric vehicle\
+    \ (EV) charging stations operated by the City of Toronto. The City provides public\
+    \ EV charging stations at both on-street and off-street parking facilities, which\
+    \ are managed by Toronto Parking Authority (TPA), an agency of the City of Toronto.\
+    \ Moving from fossil fuel-powered vehicles to EVs is a key action in reaching\
+    \ the City\u2019s goal of achieving net zero GHG emissions by 2040. For more information,\
+    \ visit [TransformTO Net Zero Strategy](https://www.toronto.ca/services-payments/water-environment/environmentally-friendly-city-initiatives/transformto)."
+  resources:
+    City Operated Electric Vehicle Charging Station Map:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_EV_Chargers/FeatureServer/0
+      attributes:
+      - id: Location
+        type: text
+        info:
+          notes: Location of EV charger
+      - id: Address
+        type: text
+        info:
+          notes: Address of EV charger
+      - id: Type
+        type: text
+        info:
+          notes: Green P underground lot or onstreet EV charger
+      - id: Level2_Charging_Ports
+        type: int
+        info:
+          notes: Number of Level 2 charger ports
+      - id: Level3_Charging_Ports
+        type: int
+        info:
+          notes: Number of Level 3 charger ports
+      - id: geometry
+        type: text
+        info:
+          notes: ''
