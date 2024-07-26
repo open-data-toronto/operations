@@ -124,8 +124,8 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
 
                 # Inquiry Source (city council, public, etc)
                 if fields["customfield_12376"]:
-                    inquiry_source = fields["customfield_12376"].get("value", None)                        
-                
+                    inquiry_source = fields["customfield_12376"].get("value", None)
+
                 # ticket name
                 ticket_name = fields["summary"]
 
@@ -137,8 +137,10 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                     request_type = "Unknown"
 
                 # time to first response
-                completedCycles = fields["customfield_10602"].get("completedCycles", None)
-                
+                completedCycles = fields["customfield_10602"].get(
+                    "completedCycles", None
+                )
+
                 first_response_time = (
                     completedCycles[0]["stopTime"]["jira"] if completedCycles else None
                 )
@@ -146,7 +148,7 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                 # ticket created time
                 created_time = fields["created"]
 
-                # linked ticket id 
+                # linked ticket id
                 issue_links = fields["issuelinks"]
                 if issue_links:
                     inward_issue_lst = [
@@ -180,9 +182,11 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                                 "Inquiry Source": inquiry_source,
                                 "Request Type": request_type,
                                 "Created": created_time[:-9],
-                                "First Response": first_response_time[:-9]
-                                if first_response_time
-                                else None,
+                                "First Response": (
+                                    first_response_time[:-9]
+                                    if first_response_time
+                                    else None
+                                ),
                                 "From Status": from_status,
                                 "To Status": to_status,
                                 "Status Timestamp": timestamp,
@@ -199,9 +203,11 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                             "Inquiry Source": inquiry_source,
                             "Request Type": request_type,
                             "Created": created_time[:-9],
-                            "First Response": first_response_time[:-9]
-                            if first_response_time
-                            else None,
+                            "First Response": (
+                                first_response_time[:-9]
+                                if first_response_time
+                                else None
+                            ),
                             "From Status": None,
                             "To Status": None,
                             "Status Timestamp": None,
@@ -209,12 +215,50 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                         }
                     ]
 
+                # Check if last changelog status match final ticket status; if not append final status.
+                final_ticket_status = fields["customfield_10502"]["currentStatus"][
+                    "status"
+                ]
+                final_status_timestamp = fields["customfield_10502"]["currentStatus"][
+                    "statusDate"
+                ]["jira"]
+
+                if (
+                    final_ticket_status != status_log[-1]["To Status"]
+                    and changelog_histories
+                ):
+                    logging.info(
+                        f"Updating Final Ticket Status to {final_ticket_status}"
+                    )
+                    status_log.append(
+                        {
+                            "Ticket Id": ticket_id,
+                            "Ticket Name": ticket_name,
+                            "Inquiry Source": inquiry_source,
+                            "Request Type": request_type,
+                            "Created": created_time[:-9],
+                            "First Response": (
+                                first_response_time[:-9]
+                                if first_response_time
+                                else None
+                            ),
+                            "From Status": status_log[-1]["To Status"],
+                            "To Status": final_ticket_status,
+                            "Status Timestamp": final_status_timestamp[:-9],
+                            "Linked Ticket Id": inward_issue,
+                        }
+                    )
+
                 records.extend(status_log)
 
         logging.info(records[5])
 
         # sort records by key, status date, and created date
-        sorted_records = sorted(records, key=lambda d: (d["Created"], d["Ticket Id"], d["Status Timestamp"]), reverse=True)
+        sorted_records = sorted(
+            records,
+            key=lambda d: (d["Created"], d["Ticket Id"], d["Status Timestamp"]),
+            reverse=True,
+        )
 
         return sorted_records
 
