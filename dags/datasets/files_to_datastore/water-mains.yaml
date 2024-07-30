@@ -55,7 +55,7 @@ water-mains:
     Transmission main:
       format: geojson
       agol: true
-      url: https://services5.arcgis.com/MFwjjnaTnj9B3bil/arcgis/rest/services/COT_Geospatial_TW_Transmiss_Main_View/FeatureServer/0
+      url: https://services5.arcgis.com/MFwjjnaTnj9B3bil/ArcGIS/rest/services/COTGEO_TW_WTRANSMAIN/FeatureServer/0
       attributes:
       - source_name: FACILITYID
         target_name: Watermain Asset Identification
@@ -79,8 +79,8 @@ water-mains:
           notes: Pipe material (CI - cast iron, PVC - polyvinyl chloride etc.)
       - source_name: INSTALLDATE
         target_name: Watermain Install Date
-        type: timestamp
-        format: epoch
+        type: date
+        format: "%Y-%m-%d"
         info:
           notes: Approximate construction date
       - source_name: CONST_YR
