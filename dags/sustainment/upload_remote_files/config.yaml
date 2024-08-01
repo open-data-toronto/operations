@@ -226,6 +226,10 @@ ttc-routes-and-schedules:
   TTC Routes and Schedules Data:
     format: zip
     url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/OpenData_TTC_Schedules.zip
+surface-routes-and-schedules-for-bustime:
+  SurfaceGTFS:
+    format: zip
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/SurfaceGTFS.zip 
 # utility-cut-permits:
 #   utility-cut-permits:
 #     format: zip
