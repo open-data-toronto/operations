@@ -1,0 +1,164 @@
+hate-crimes-open-data:
+  jira_issue_id: DIA-360
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/237250
+  schedule: '@once'
+  dag_owner_name: Yanan Zhang
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Hate Crimes Open Data
+  date_published: '2024-08-06 15:09:21.512671'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Policy, Planning, Finance & Administration
+  owner_section: null
+  owner_unit: null
+  owner_email: Analytics.Innovation@torontopolice.on.ca
+  civic_issues: null
+  topics:
+  - Public safety
+  tags: []
+  information_url: null
+  excerpt: Hate Crime occurrences by reported date.
+  limitations: "This data only includes confirmed hate crimes. This data does not include occurrences that have been deemed unfounded or classified as hate incidents.\r\n\r\nThe dataset is intended to provide communities with information regarding public safety and awareness. The location of Hate Crime occurrences have been grouped to the neighbourhood level to protect the privacy of parties and communities involved in the occurrence."
+  notes: "This dataset includes all verified Hate Crime occurrences investigated by the Hate Crime Unit by reported date since 2018. The Hate Crime categories (bias categories) include Age, Mental or Physical Disability, Race, Ethnicity, Language, Religion, Sexual Orientation, Gender and Other Similar Factor.\r\n\r\nThis data is provided at the offence and/or occurrence level, therefore one occurrence may have multi-bias categories associated to the victim used to categorize the hate crime. \r\n\r\n**Definitions**\r\n\r\n**Hate Crime**\r\n\r\nA hate crime is a criminal offence committed against a person or property motivated in whole or in part by bias, prejudice or hate based on race, national or ethnic origin, language, colour, religion, sex, age, mental or physical disability, sexual orientation or gender identity or expression or any other similar factor.\r\n\r\n**Hate Incident**\r\n\r\nA hate incident is a non-criminal action or behaviour that is motivated by hate against an identifiable group. Examples of hate incidents include using racial slurs, or insulting a person because of their ethnic or religious dress or how they identify."
+  resources:
+    Hate Crimes Open Data:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/HATE_CRIME_OPEN_DATA/FeatureServer/0
+      attributes:
+      - source_name: EVENT_UNIQUE_ID
+        target_name: EVENT_UNIQUE_ID
+        type: text
+        info:
+          notes: Offence Number
+      - source_name: OCCURRENCE_YEAR
+        target_name: OCCURRENCE_YEAR
+        type: text
+        info:
+          notes: Year Offence Occurred
+      - source_name: OCCURRENCE_DATE
+        target_name: OCCURRENCE_DATE
+        type: date
+        format: epoch
+        info:
+          notes: Date Offence Occurred (time is displayed in UTC format when downloaded
+            as a CSV)
+      - source_name: OCCURRENCE_TIME
+        target_name: OCCURRENCE_TIME
+        type: text
+        info:
+          notes: Time of Day Offence Occurred
+      - source_name: REPORTED_YEAR
+        target_name: REPORTED_YEAR
+        type: text
+        info:
+          notes: Year Offence was Reported
+      - source_name: REPORTED_DATE
+        target_name: REPORTED_DATE
+        type: date
+        format: epoch
+        info:
+          notes: Date Offence was Reported (time is displayed in UTC format when downloaded
+            as a CSV)
+      - source_name: REPORTED_TIME
+        target_name: REPORTED_TIME
+        type: text
+        info:
+          notes: Time of Day Offence was Reported
+      - source_name: DIVISION
+        target_name: DIVISION
+        type: text
+        info:
+          notes: Police Division where Offence Occurred
+      - source_name: LOCATION_TYPE
+        target_name: LOCATION_TYPE
+        type: text
+        info:
+          notes: Location Type of the Offence
+      - source_name: AGE_BIAS
+        target_name: AGE_BIAS
+        type: text
+        info:
+          notes: "A Hate Crime committed on the basis of the Suspect\u2019s perception\
+            \ of the Victim\u2019s age"
+      - source_name: MENTAL_OR_PHYSICAL_DISABILITY
+        target_name: MENTAL_OR_PHYSICAL_DISABILITY
+        type: text
+        info:
+          notes: "A Hate Crime committed on the basis of the Suspect\u2019s perception\
+            \ of the Victim\u2019s mental or physical disability"
+      - source_name: RACE_BIAS
+        target_name: RACE_BIAS
+        type: text
+        info:
+          notes: "A Hate Crime committed on the basis of the Suspect\u2019s perception\
+            \ of the Victim\u2019s race."
+      - source_name: ETHNICITY_BIAS
+        target_name: ETHNICITY_BIAS
+        type: text
+        info:
+          notes: "A Hate Crime committed on the basis of the Suspect\u2019s perception\
+            \ of the Victim\u2019s ethnicity"
+      - source_name: LANGUAGE_BIAS
+        target_name: LANGUAGE_BIAS
+        type: text
+        info:
+          notes: "A Hate Crime committed on the basis of the Suspect\u2019s perception\
+            \ of the Victim\u2019s language"
+      - source_name: RELIGION_BIAS
+        target_name: RELIGION_BIAS
+        type: text
+        info:
+          notes: "A Hate Crime committed on the basis of the Suspect\u2019s perception\
+            \ of the Victim\u2019s religion"
+      - source_name: SEXUAL_ORIENTATION_BIAS
+        target_name: SEXUAL_ORIENTATION_BIAS
+        type: text
+        info:
+          notes: "A Hate Crime committed on the basis of the Suspect\u2019s perception\
+            \ of the Victim\u2019s sexual orientation"
+      - source_name: GENDER_BIAS
+        target_name: GENDER_BIAS
+        type: text
+        info:
+          notes: "A Hate Crime committed on the basis of the Suspect\u2019s perception\
+            \ of the Victim\u2019s gender "
+      - source_name: MULTIPLE_BIAS 
+        target_name: MULTIPLE_BIAS
+        type: text
+        info:
+          notes: A Hate Crime with more than one Bias Category
+      - source_name: PRIMARY_OFFENCE
+        target_name: PRIMARY_OFFENCE
+        type: text
+        info:
+          notes: The Offence committed in relation to the Hate Crime.
+      - source_name: HOOD_158
+        target_name: HOOD_158
+        type: text
+        info:
+          notes: "Identifier of Neighbourhood using City of Toronto's new 158 neighbourhood structure"
+      - source_name: NEIGHBOURHOOD_158
+        target_name: NEIGHBOURHOOD_158
+        type: text
+        info:
+          notes: "Name of Neighbourhood using City of Toronto's new 158 neighbourhood
+            structure"
+      - source_name: HOOD_140
+        target_name: HOOD_140
+        type: text
+        info:
+          notes: "Identifier of Neighbourhood using City of Toronto's old 140 neighbourhood
+            structure"
+      - source_name: NEIGHBOURHOOD_140
+        target_name: NEIGHBOURHOOD_140
+        type: text
+        info:
+          notes: "Name of Neighbourhood using City of Toronto's old 140 neighbourhood structure"
+      - source_name: ARREST_MADE
+        target_name: ARREST_MADE
+        type: text
+        info:
+          notes: An entity can be considered arrested when a charge is laid, recommended
+            or the person(s) who committed the offence has been identified and taken
+            into custody for the same.
