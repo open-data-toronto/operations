@@ -1,0 +1,47 @@
+police-annual-statistical-report-regulated-interactions:
+  jira_issue_id: DIA-362
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/237680
+  schedule: '@once'
+  dag_owner_name: Yanan Zhang
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Police Annual Statistical Report - Regulated Interactions
+  date_published: '2024-08-08 15:25:29.881297'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Policy, Planning, Finance & Administration
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca
+  civic_issues: null
+  topics:
+  - City government
+  - Public safety
+  tags: []
+  information_url: https://data.torontopolice.on.ca/datasets/TorontoPS::regulated-interactions-asr-ri-tbl-001/about
+  excerpt: The data provided in this table describes situations around the data collected in the interaction.
+  limitations: null
+  notes: "The Toronto’s Police Service Annual Statistical Report (ASR) is a comprehensive overview of police related statistics including reported crimes, victims of crime, search of persons, firearms, traffic collisions, personnel, budget, communications, public complaints, regulated interactions and other administrative information.\r\n\r\nIn a letter dated December 11th, 2018, Justice Michael Tulloch defined “regulated interaction” as; “Where police collect identifying information from an individual about the individual on or after January 1, 2017, and the Regulation applies to the interaction. Where an interaction qualifies as a regulated interaction, police officers are required to do a number of things, including provide a reason for the interaction and a receipt documenting the interaction”.\r\n\r\nThe data provided in this table describes situations around the data collected in the interaction."
+  resources:
+    Regulated Interactions:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Regulated_Interactions/FeatureServer/0
+      attributes:
+      - source_name: Index_
+        target_name: Index
+        type: int
+        info:
+          notes: Unique identifier
+      - id: Year
+        type: int
+        info:
+          notes: Year was reported
+      - id: Category
+        type: text
+        info:
+          notes: Mandated collection category
+      - source_name: Count_
+        target_name: Count
+        type: text
+        info:
+          notes: Total Count
