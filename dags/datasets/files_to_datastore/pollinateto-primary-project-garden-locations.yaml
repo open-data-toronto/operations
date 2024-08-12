@@ -1,0 +1,124 @@
+pollinateto-primary-project-garden-locations:
+  jira_issue_id: DIA-365
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/238180
+  schedule: '19 5 1 * *'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: PollinateTO Primary Project Garden Locations
+  date_published: '2024-08-12 12:47:09.374441'
+  dataset_category: Map
+  refresh_rate: Annually
+  owner_division: Environment & Climate
+  owner_section: null
+  owner_unit: Outreach and Engagement
+  owner_email: pollinateto@toronto.ca
+  civic_issues:
+  - Climate change
+  topics:
+  - Environment
+  - Locations and mapping
+  - Parks and recreation
+  tags:
+  - name: PollinateTO
+    vocabulary_id: null
+  - name: gardens
+    vocabulary_id: null
+  - name: habitat
+    vocabulary_id: null
+  - name: parks
+    vocabulary_id: null
+  - name: pollinators
+    vocabulary_id: null
+  - name: schools
+    vocabulary_id: null
+  information_url: https://toronto.ca/pollinateTO
+  excerpt: Project details and locations of PollinateTO Grant-funded projects across
+    Toronto.
+  limitations: Garden locations are all publicly visible and accessible, but some
+    are located on private property.
+  notes: This dataset contains information on the locations of primary gardens for
+    PollinateTO Grant recipients. Garden types, features of locations, and names of
+    projects are included.
+  resources:
+    PollinateTO Primary Project Garden Locations:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_PollinateTO/FeatureServer/0
+      attributes: 
+      - id: ID
+        type: int
+        info:
+          notes: 
+      - id: YEAR_FUNDED
+        type: int
+        info:
+          notes: The year the project received PollinateTO funding
+      - id: GROUP_NAME
+        type: text
+        info:
+          notes: Name of group 
+      - id: PROJECT_NAME
+        type: text
+        info:
+          notes: Name of project
+      - id: GARDEN_TYPE
+        type: text
+        info:
+          notes: Type of function the garden serves at it's location
+      - id: NUMBER_OF_GARDENS
+        type: int
+        info:
+          notes: Number of gardens created
+      - id: ESTIMATED_GARDEN_SIZE
+        type: float
+        info:
+          notes: Estimated cumulative size of garden(s)
+      - id: NEIGHBOURHOOD_NUMBER
+        type: int
+        info:
+          notes: Neighbourhood number where project is located
+      - id: NIA_OR_EN
+        type: text
+        info:
+          notes: Whether the project is located in a Neighbourhood Improvement Area or Emerging Neighbourhood
+      - id: PRIMARY_LOCATION_NAME
+        type: text
+        info:
+          notes: Name of location associated with the primary garden
+      - id: PRIMARY_GARDEN_ADDRESS
+        type: text
+        info:
+          notes: Address of location associated with the primary garden
+      - id: POSTAL_CODE
+        type: text
+        info:
+          notes: Postal code of primary garden location
+      - id: IS_INDIGENOUS_GARDEN
+        type: text
+        info:
+          notes: Indicates Indigenous-led projects
+      - id: WARD_NAME
+        type: text
+        info:
+          notes: Ward where project is located
+      - id: WARD_NUMBER
+        type: int
+        info:
+          notes: Ward number
+      - id: DESCRIPTION
+        type: text
+        info:
+          notes: Description of project
+      - id: IMAGE_NAME
+        type: text
+        info:
+          notes: Images
+      - id: IMAGE_ALT_TEXT
+        type: text
+        info:
+          notes: Image description
+      - id: geometry
+        type: text
+        info:
+          notes: null
+      
