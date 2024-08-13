@@ -629,3 +629,8 @@ traffic-signal-timing:
   CXD-311 Metrics:
     format: xlsx
     url: https://opendata.toronto.ca/toronto.311/311-contact-centre-performance-metrics/CXD-311 Metrics.xlsx
+
+events-at-nathan-phillips-square:
+  Approved Events 2024:
+    format: xlsx
+    url: https://opendata.toronto.ca/economic.development.culture/events-at-nathan-phillips-square/(FINAL) List of approved events 2024.xlsx
