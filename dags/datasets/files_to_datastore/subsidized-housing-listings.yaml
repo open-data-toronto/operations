@@ -1,0 +1,274 @@
+subsidized-housing-listings:
+  jira_issue_id: DTSD-6512
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/205855
+  schedule: '20 20 * * 1'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Subsidized Housing Listings
+  date_published: '2024-07-23 06:17:01.790895'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Housing Secretariat
+  owner_section: Housing Stability Services
+  owner_unit: Access to Housing
+  owner_email: hss@toronto.ca
+  civic_issues:
+  - Affordable housing
+  topics:
+  - Community Services
+  - Locations and Mapping
+  tags: 
+  - name: subsidy
+    vocabulary_id: null
+  - name: affordable housing
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/employment-social-support/housing-support/rent-geared-to-income-subsidy/subsidized-housing-listings
+  excerpt: The Subsidized Housing Listings dataset represents the portfolio of buildings in the City of Toronto that use the Centralized Waiting List (CWL) to fill Rent-Geared-to-Income vacancies. The dataset provides building and unit level details.
+  limitations: Amenities are reflective of what information is currently made available
+    by the providers.
+  notes: |
+    The Subsidized Housing Listings dataset represents the portfolio of subsidized buildings in the City of Toronto that use the Centralized Waiting List (CWL) to fill Rent-Geared-to-Income vacancies.
+
+    At a building level the list includes:
+
+    Complex Name, Provider Type, Building Address, Building Type, Unit Sizes, Accessibility and Amenities
+
+    At a unit level the list includes:
+
+    The number of subsidized units, The number of market rent units, The household income limit by unit size, Units available in the previous calendar year and Additional Considerations
+  resources: 
+    # resource name
+    Subsidized Housing:
+      agol: True
+      format: json
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_Subsidized_Housing/FeatureServer/0
+      attributes:
+      - source_name: DEVELOPMENT_NAME
+        target_name: "Building Complex Name"
+        type: text
+        info:
+          notes: "The Name of the Building Complex"
+      - source_name: BUILDING_LIST
+        target_name: "Building Address List"
+        type: text
+        info:
+          notes: "The address the buildings associated with the building complex"
+      - source_name: WARD_CODE
+        target_name: "Ward"
+        type: text
+        info:
+          notes: "Ward where the building complex is situated"
+      - source_name: PROVIDER_TYPE
+        target_name: "Provider Type"
+        type: text
+        info:
+          notes: "The type of provider that manages the building complex"
+      - source_name: PROVIDER_NAME
+        target_name: "Provider Name"
+        type: text
+        info:
+          notes: "The name of the provider"
+      - source_name: PROVIDER_LINK
+        target_name: "Provider Website"
+        type: text
+        info:
+          notes: "The website of the provider"
+      - source_name: BUILDING_TYPE
+        target_name: "Building Type"
+        type: text
+        info:
+          notes: "The type of building (ex. High rise, townhouse)"
+      - source_name: BUILDING_STREET_NUMBER
+        target_name: "Building Street Number"
+        type: text
+        info:
+          notes: "The building street number"
+      - source_name: BUILDING_ADDRESS_TEXT
+        target_name: "Building Address"
+        type: text
+        info:
+          notes: "The building address"
+      - source_name: BUILDING_CITY
+        target_name: "Building City"
+        type: text
+        info:
+          notes: "The city the building is in"
+      - source_name: BUILDING_POSTAL_CODE
+        target_name: "Building Postal Code"
+        type: text
+        info:
+          notes: "The building postal code"
+      - source_name: IS_SENIOR
+        target_name: "Senior Building"
+        type: text
+        info:
+          notes: "If the building is designated for seniors (59+)"
+      - source_name: HAS_ROOM
+        target_name: "Room"
+        type: text
+        info:
+          notes: "Identifies if the building contains units of this size"
+      - source_name: HAS_BACHELOR
+        target_name: "Bachelor"
+        type: text
+        info:
+          notes: "Identifies if the building contains units of this size"
+      - source_name: HAS_ONE_BEDROOM
+        target_name: "One Bedroom"
+        type: text
+        info:
+          notes: "Identifies if the building contains units of this size"
+      - source_name: HAS_TWO_BEDROOM
+        target_name: "Two Bedroom"
+        type: text
+        info:
+          notes: "Identifies if the building contains units of this size"
+      - source_name: HAS_THREE_BEDROOM
+        target_name: "Three Bedroom"
+        type: text
+        info:
+          notes: "Identifies if the building contains units of this size"
+      - source_name: HAS_FOUR_BEDROOM
+        target_name: "Four Bedroom"
+        type: text
+        info:
+          notes: "Identifies if the building contains units of this size"
+      - source_name: HAS_FIVE_BEDROOM
+        target_name: "Five Bedroom"
+        type: text
+        info:
+          notes: "Identifies if the building contains units of this size"
+      - source_name: HAS_SIX_BEDROOM
+        target_name: "Six Bedroom"
+        type: text
+        info:
+          notes: "Identifies if the building contains units of this size"
+      - source_name: HAS_BALCONY
+        target_name: "Balcony"
+        type: text
+        info:
+          notes: "Identifies if the building has a balcony"
+      - source_name: HAS_COMMUNAL_BALCONY
+        target_name: "Communal Balcony"
+        type: text
+        info:
+          notes: "Identifies if the building has a communal balcony"
+      - source_name: HAS_AIR_CONDITIONING
+        target_name: "Air Conditioning"
+        type: text
+        info:
+          notes: "Identifies if the building has air conditioning"
+      - source_name: HAS_ELEVATORS
+        target_name: "Elevators"
+        type: text
+        info:
+          notes: "Identifies if the building has elevators"
+      - source_name: HAS_STAIRS_ONLY
+        target_name: "Stairs Only"
+        type: text
+        info:
+          notes: "Identifies if the building has stairs only"
+      - source_name: HAS_HYDRO_INCLUDED
+        target_name: "Hydro Included"
+        type: text
+        info:
+          notes: "Identifies if the building has hydro included"
+      - source_name: HAS_PARKING
+        target_name: "Parking"
+        type: text
+        info:
+          notes: "Identifies if the building has parking"
+      - source_name: IS_WHEELCHAIR_ACCESS_BUILDING
+        target_name: "Wheelchair Accessible Building"
+        type: text
+        info:
+          notes: "Identifies if the building is wheelchair accessible"
+      - source_name: IS_WHEELCHAIR_ACCESSIBLE_UNIT
+        target_name: "Wheelchair Accessible Units"
+        type: text
+        info:
+          notes: "Identifies if the building has wheelchair accessible units"
+      - source_name: IS_MODIFIED_UNIT
+        target_name: "Modified Unit"
+        type: text
+        info:
+          notes: "Identifies if the building has modified unit"
+      - source_name: IS_SMOKE_FREE
+        target_name: "Smoke Free"
+        type: text
+        info:
+          notes: "Identifies if the building is smoke free"
+      - source_name: IS_FOR_TERMINALLY_ILL
+        target_name: "Terminally Ill"
+        type: text
+        info:
+          notes: "Identifies if the building honours the terminally ill priority"
+      - source_name: MANDATE1
+        target_name: "Building Mandate1"
+        type: text
+        info:
+          notes: "Identifies if the building has mandates that apply which limit who is eligible for the building"
+      - source_name: MANDATE2
+        target_name: "Building Mandate2"
+        type: text
+        info:
+          notes: "Identifies if the building has mandates that apply which limit who is eligible for the building"
+      - source_name: IMAGE1
+        target_name: "Building Image"
+        type: text
+        info:
+          notes: "Is a building image"
+      - source_name: LONGITUDE
+        target_name: "Longitude"
+        type: text
+        info:
+          notes: "Identifies the longitude of the building"
+      - source_name: LATITUDE
+        target_name: "Latitude"
+        type: text
+        info:
+          notes: "Identifies the latitude of the building"
+      
+    Subsidized Housing Units:
+      agol: True
+      format: json
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_Subsidized_Housing_Units/FeatureServer/0
+      attributes:
+        - source_name: DEVELOPMENT_NAME
+          target_name: "Building Complex Name"
+          type: text
+          info:
+            notes: "The Name of the Building Complex"
+        - source_name: UNIT_SIZE
+          target_name: "Unit Size"
+          type: text
+          info:
+            notes: "Identifies the size of the unit"
+        - source_name: MANDATE_DESCRIPTION
+          target_name: "Mandate Description"
+          type: text
+          info:
+            notes: "Identifies any mandates applicable to the building and unit"
+        - source_name: INCOME_CUTOFF
+          target_name: "Household Income Limit"
+          type: text
+          info:
+            notes: "Provides the income limit to be eligible for the particular unit size"
+        - source_name: ANNUAL_TURNOVER
+          target_name: "Units Available in the Last 12 Months"
+          type: text
+          info:
+            notes: "Provides the number of units available in the last 12 Months"
+        - source_name: MARKET_QUANTITY
+          target_name: "Number of Market Rent Units"
+          type: text
+          info:
+            notes: "Provides the number of units in the building that are market rent"
+        - source_name: SUBSIDIZED_QUANTITY
+          target_name: "Number of Subsidized Units"
+          type: text
+          info:
+            notes: "Provides the number of units in the building that are subsidized"
+
+      
+        
