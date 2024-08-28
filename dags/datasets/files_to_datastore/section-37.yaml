@@ -33,39 +33,40 @@ section-37:
 
   resources:
     Secured by Section 37:
-      format: csv
-      url: https://opendata.toronto.ca/city.planning/section-37-benefits/rptNB-CommunityBenefits%20-%20BY-law%20summaries.xlsx
-      custom_reader: section_37
+      format: xlsx
+      sheet: qNewName
+      url: https://opendata.toronto.ca/city.planning/section-37-benefits/s3745 Benefits.xlsx
+      #custom_reader: section_37
       attributes:
       - id: Ward
         type: text
         info:
           notes: "For more information about Toronto's 25-ward system, please visit the [Ward Profiles](https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/ward-profiles/) page."
-      - id: Council/OMB Approval Date
+      - id: Council/OMB Date
         type: timestamp
-        format: '%Y-%m-%d %H:%M:%S'
+        format: '%m-%d-%Y'
         info:
           notes: "To find the Council decision, please browse the [Toronto Meeting Management Information System](https://secure.toronto.ca/council/#/highlights)"
-      - id: Cash Contribution
+      - id: Monetary Value
         type: float
         info:
           notes: "This cash contribution is the total amount secured. In some cases, the City has not yet received the contribution given the payment schedule indicated in the by-law."
-      - id: By-law No
+      - id: ByLaw
         type: text
         info:
           notes: "To search for the specific by-law, please browse the [By-Law Registry](https://www.toronto.ca/legdocs/bylaws/lawlists.htm?1708637384158) using the by-law number."
-      - id: Address
+      - id: Location
         type: text
         info:
           notes: "All City applications are found in the [Application Information Centre](https://www.toronto.ca/city-government/planning-development/application-information-centre/#location=&lat=&lng=&zoom=)"
-      - id: Description of Benefits
+      - id: Community Benefits
         type: text
         info:
           notes: "These descriptions are excerpts from the by-law. "
-      #- id: Comments
-      #  type: text
-      #  info:
-      #    notes: ''
+      - id: Comments
+        type: text
+        info:
+          notes: ''
 
     #Section 37 Financial Details:
     #  format: csv

@@ -24,7 +24,7 @@ fire-station-locations:
     fire-station-locations:
       format: geojson
       agol: true
-      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_FIRE_FACILITY/FeatureServer/0
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial25/FeatureServer/3
       attributes:
       - id: ADDRESS_POINT_ID
         type: float
