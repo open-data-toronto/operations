@@ -483,3 +483,31 @@ def dinesafe():
             row.pop("Rec #")
 
             yield row
+
+
+def tennis_courts_facilities():
+    url = "https://www.toronto.ca/data/parks/live/tennislist.json?_=1722446635835"
+    records = json.loads(requests.get(url).content)["all"]
+
+    for record in records:
+        
+        # clean coordinates
+        lng = float(record["lng"]) if record["lng"] else None
+        lat = float(record["lat"]) if record["lat"] else None
+
+        yield {
+            "ID": record["ID"],
+            "Name": record["Name"],
+            "Type": record["Type"],
+            "Lights": record["Lights"],
+            "Courts": record["Courts"],
+            "Phone": record["Phone"],
+            "ClubName": record["ClubName"],
+            "ClubWebsite": record["ClubWebsite"],
+            "ClubInfo": record["ClubInfo"],
+            "LocationAddress": record["LocationAddress"],
+            "WinterPlay": record["WinterPlay"],
+            "geometry": json.dumps(
+                {"type": "Point", "coordinates": [lng, lat]}
+            )
+        }

@@ -1,0 +1,79 @@
+tennis-courts-facilities:
+  schedule: '@once'
+  dag_owner_name: 'Yanan'
+  dag_owner_email: 'yanan.zhang@toronto.ca'
+  title: Tennis Courts Facilities
+  date_published: '2019-07-23 18:05:08.146903'
+  refresh_rate: Annually
+  dataset_category: Map
+  owner_division: Parks, Forestry & Recreation
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: Community services,Locations and mapping,Parks and recreation
+  tags:
+  - name: tennis court
+    vocabulary_id: null
+  - name: tennis facility
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/data/parks/prd/facilities/tennis/index.html
+  excerpt: This dataset contains information on City's tennis courts facilities and
+    associated amenities
+  limitations: null
+  notes: "This dataset includes data on tennis court locations that belong to the City of Toronto. \r\n\r\nSome locations are public, others are 'clubs' (these sites are operated by not-for-profit Community Tennis Clubs and require a membership with some access available for non-members during public access hours) - refer to ‘Club’ in the [Type] column. Tennis courts may be lit or not. Every Location is identified by (X, Y) GIS coordinate. \r\n\r\nYou will find the following in this dataset:\r\n\r\n  * ID\r\n  * Name\r\n  * Type (Public or Club)\r\n  * Lights (Y/N)\r\n  * Courts\r\n  * Phone\r\n  * ClubName\r\n  * ClubWebsite\r\n  * ClubInfo\r\n  * LocationAddress\r\n  * WinterPlay (Y/N)\r\n  * Primary Permitting Status (Club or Public)\r\n  * GIS coordinates\r\n\r\nFor more information, see the [tennis court listings page] (https://www.toronto.ca/data/parks/prd/facilities/tennis/index.html).\r\n\r\nHistorical data is also provided from March 31, 2017.\r\n\r\nThe source of the data is  the City of Toronto Parks, Forestry & Recreation Asset Management System. Dataset has gone through necessary inter-divisional validation and on-site validation with parks supervisors."
+  resources:
+    #resource name
+    Tennis Courts Facilities:
+      format: geojson
+      custom_reader: tennis_courts_facilities
+      url: https://www.toronto.ca/data/parks/live/tennislist.json?_=1722446635835
+      attributes:
+        - id: ID
+          type: text
+          info:
+            notes: ''
+        - id: Name
+          type: text
+          info:
+            notes: ''
+        - id: Type
+          type: text
+          info:
+            notes: ''
+        - id: Lights
+          type: text
+          info:
+            notes: ''
+        - id: Courts
+          type: text
+          info:
+            notes: ''
+        - id: Phone
+          type: text
+          info:
+            notes: ''
+        - id: ClubName
+          type: text
+          info:
+            notes: ''
+        - id: ClubWebsite
+          type: text
+          info:
+            notes: ''
+        - id: ClubInfo
+          type: text
+          info:
+            notes: ''
+        - id: LocationAddress
+          type: text
+          info:
+            notes: ''
+        - id: WinterPlay
+          type: text
+          info:
+            notes: ''
+        - id: geometry
+          type: text
+          info:
+            notes: ''
