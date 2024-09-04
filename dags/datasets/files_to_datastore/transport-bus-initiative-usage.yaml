@@ -37,14 +37,14 @@ transport-bus-initiative-usage:
   limitations: No personal data was collected from clients using the service, so total
     unique users of the service can not be counted. Client counts for each date may
     include individuals who attended the service on multiple evenings.
-  notes: "This data set provides daily data about use of the TTC\u2019s Transport\
-    \ Bus Initiative."
+  notes: "This data set provides daily data about use of the TTC’s Transport Bus Initiative.\r\n\r\nThis initiative was implemented from November 2023 to April 2024 in response to the ongoing use of the transit network by persons experiencing homelessness. TTC buses provided transport from Union and Spadina stations to warming centres and shelters, and offered a temporary respite at Spadina Station when space was unavailable."
   resources:
     Transport Bus Initiative Usage:
       format: csv
       url: https://opendata.toronto.ca/shelter.support.housing.administration/transport-bus-initiative-usage/transport_bus_initiative.csv
       attributes: 
-        - id: Date
+        - source_name: "ï»¿Date"
+          target_name: "Date"
           type: timestamp
           format: "%m-%d-%Y"
           info:
