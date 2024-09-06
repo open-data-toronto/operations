@@ -63,10 +63,6 @@ section-37:
         type: text
         info:
           notes: "These descriptions are excerpts from the by-law. "
-      - id: Comments
-        type: text
-        info:
-          notes: ''
 
     #Section 37 Financial Details:
     #  format: csv
