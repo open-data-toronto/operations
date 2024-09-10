@@ -1,0 +1,131 @@
+strollto:
+  jira_issue_id: DIA-343
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/233470
+  schedule: '@once'
+  dag_owner_name: Yanan Zhang
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: StrollTO
+  date_published: '2024-09-10 10:15:31.167559'
+  dataset_category: Map
+  refresh_rate: Annually
+  owner_division: Economic Development & Culture
+  owner_section: Film and Entertainment Industries
+  owner_unit: Visitor Economy Office
+  owner_email: strollto@toronto.ca
+  civic_issues:
+  - Mobility
+  topics:
+  - Culture and tourism
+  - Locations and mapping
+  - Parks and recreation
+  tags:
+  - name: itinerary
+    vocabulary_id: null
+  - name: self-guided
+    vocabulary_id: null
+  - name: stroll
+    vocabulary_id: null
+  - name: strollto
+    vocabulary_id: null
+  - name: tour
+    vocabulary_id: null
+  - name: walking
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/explore-enjoy/festivals-events/showloveto/local-strolls/strollto/
+  excerpt: "This dataset list points of interest associated with each of Toronto\u2019\
+    s 158 neighbourhoods as compiled by the Visitor Economy Office. The self-guided\
+    \ itineraries are built around Toronto\u2019s main streets to highlight attractions,\
+    \ public art, green spaces, historic buildings and more.  "
+  limitations: 'Please note that the list is not comprehensive as each neighbourhood
+    features a maximum of 15 points of interest. The points of interest are subject
+    to change as the itineraries are updated annually to ensure accuracy. '
+  notes: "This dataset list points of interest associated with each of Toronto’s 158 neighbourhoods as compiled by the Visitor Economy Office. The self-guided itineraries are built around Toronto’s main streets to highlight attractions, public art, green spaces, historic buildings and more.  \r\n\r\nTo suggest inclusion of additional points of interest or for any comments or update requests to existing comments please email stroll@toronto.ca. \r\n\r\nThe list was last updated spring 2024. "
+  resources:
+    StrollTO POI Details:
+      format: csv
+      url: https://opendata.toronto.ca/economic.development.culture/strollto/StrollTO POI Details Apr 11, 24.csv
+      attributes:
+      - id: Neighbourhood
+        type: text
+        info:
+          notes: Neighbourhood name
+      - id: Neighbourhood_Num
+        type: text
+        info: 
+          notes: Neighbourhood number 
+      - id: Ward
+        type: text
+        info: 
+          notes: Ward number 
+      - id: Ward_Name
+        type: text
+        info: 
+          notes: Ward name
+      - id: Order
+        type: text
+        info: 
+          notes: "Order the point of interest appears within the neighbourhood itinerary"
+      - id: Title
+        type: text
+        info: 
+          notes: "Point of interest title"
+      - id: Address
+        type: text
+        info: 
+          notes: "Address of point of interest. Where an address is not available a general description of the area is provided."
+      - id: Description
+        type: text
+        info: 
+          notes: "Descriptive text providing detailed information about the point of interest"
+      - id: Link_URL
+        type: text
+        info: 
+          notes: "Hyperlink attached to point of interest title"
+      - id: geometry
+        type: text
+        info: 
+          notes: ''
+    StrollTO Starting Points:
+      format: csv
+      url: https://opendata.toronto.ca/economic.development.culture/strollto/StrollTO Starting Points Apr 11, 24.csv
+      attributes:
+      - id: Neighbourhood
+        type: text
+        info:
+          notes: Neighbourhood name
+      - id: Neighbourhood_Num
+        type: text
+        info: 
+          notes: Neighbourhood number 
+      - id: Ward
+        type: text
+        info: 
+          notes: Ward number 
+      - id: Ward_Name
+        type: text
+        info: 
+          notes: Ward name
+      - id: Title
+        type: text
+        info: 
+          notes: "Title of the neighbourhood stroll (often same or similar to neighbourhood name)"
+      - id: Main_Streets
+        type: text
+        info: 
+          notes: "Main streets included as part of the neighbourhood stroll"
+      - id: Description
+        type: text
+        info: 
+          notes: "Descriptive text providing information about the neighbourhood."
+      - id: Accessibility
+        type: text
+        info: 
+          notes: "Text providing physical accessibility information about the points of interest within the neighbourhood stroll"
+      - id: BIA
+        type: text
+        info: 
+          notes: "Business Improvement Areas located within the area covered by the neighbourhood stroll"
+      - id: geometry
+        type: text
+        info: 
+          notes: ''
