@@ -1,10 +1,10 @@
 tennis-courts-facilities:
-  schedule: '@once'
+  schedule: '5 4 * * 1,4'
   dag_owner_name: 'Yanan'
   dag_owner_email: 'yanan.zhang@toronto.ca'
   title: Tennis Courts Facilities
   date_published: '2019-07-23 18:05:08.146903'
-  refresh_rate: Annually
+  refresh_rate: As available
   dataset_category: Map
   owner_division: Parks, Forestry & Recreation
   owner_section: null
