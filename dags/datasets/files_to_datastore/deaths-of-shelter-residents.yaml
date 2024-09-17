@@ -1,0 +1,99 @@
+deaths-of-shelter-residents:
+  jira_issue_id: DTSD-4812
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/187987
+  schedule: '45 5 * * 1'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Deaths of Shelter Residents
+  date_published: '2024-09-17 10:32:39.458889'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: Toronto Shelter & Support Services
+  owner_section: Service Planning & Integrity
+  owner_unit: Business Intelligence
+  owner_email: tsssdata@toronto.ca
+  civic_issues:
+  - Affordable housing
+  - Poverty reduction
+  topics:
+  - Community Services
+  - Health
+  tags:
+  - name: homelessness
+    vocabulary_id: null
+  - name: shelter
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/data-research-maps/research-reports/housing-and-homelessness-research-and-reports/deaths-of-shelter-residents/
+  excerpt: Monthly counts of Toronto shelter residents who have passed away.
+  limitations: "For reasons of client privacy and respect for confidentiality, even in death, we are not able to provide names, dates of birth, place of death, or any other information that might identify the deceased. We can present this data in aggregate form only. Average age of death is not provided in instances where only one decedent is represented in the data."
+  notes: "This dataset provides data about Deaths of Shelter Residents.\r\n\r\nMore information on the initiative is available on the City’s website: [Deaths of Shelter Residents](https://www.toronto.ca/city-government/data-research-maps/research-reports/housing-and-homelessness-research-and-reports/deaths-of-shelter-residents/)."
+  resources:
+    Deaths of Shelter Residents:
+      format: csv
+      url: https://opendata.toronto.ca/shelter.support.housing.administration/deaths-of-shelter-residents/dosr-2024.csv
+      attributes: 
+      - id: Year
+        type: int
+        info:
+          notes: The calendar year being reported on
+      - id: Month
+        type: text
+        info:
+          notes: The month being reported on
+      - id: Total decedents
+        type: int
+        info:
+          notes: The total number of shelter residents who died in the reported month/year.
+      - id: Male 
+        type: int
+        info:
+          notes: The total number of male shelter residents who died in the reported month/year.
+      - id: Female
+        type: int
+        info:
+          notes: The total number of female shelter residents who died in the reported month/year.
+      - id: "Transgender/Non-binary/Two-Spirit"
+        type: text
+        info:
+          notes: The total number of transgender, non-binary, and Two-Spirit shelter residents who died in the reported month/year.
+    Deaths of Shelter Residents Mean Age:
+      format: csv
+      url: https://opendata.toronto.ca/shelter.support.housing.administration/deaths-of-shelter-residents/dosr-mean-age.csv
+      attributes: 
+      - id: Year
+        type: text
+        info:
+          notes: The calendar year being reported on. Data for current year are shared as year-to-date.
+      - id: Total decedents
+        type: text
+        info:
+          notes: The total number of shelter residents who died in the reported year.
+      - id: "Average age of death, all decedents"
+        type: int
+        info:
+          notes: The average (mean) age of all shelter residents who died in the reported year.
+      - id: Male decedents 
+        type: int
+        info:
+          notes: The total number of male shelter residents who died in the reported year.
+      - id: "Average age of death, male decedents"
+        type: int
+        info:
+          notes: The average (mean) age of all male shelter residents who died in the reported year.
+      - id: Female decedents
+        type: int
+        info:
+          notes: The total number of female shelter residents who died in the reported year.
+      - id: "Average age of death, female decedents"
+        type: text
+        info:
+          notes: The average (mean) age of all female shelter residents who died in the reported year.
+      - id: "Transgender/Non-binary/Two-Spirit decedents"
+        type: text
+        info:
+          notes: The total number of transgender, non-binary, and Two-Spirit shelter residents who died in the reported year.
+      - source_name: "Average age of death, transgender/non-binary/two-spirit decedents"
+        target_name: "Avg age of death, transgender/non-binary/two-spirit decedents"
+        type: text
+        info:
+          notes: The average (mean) age of all transgender, non-binary, and Two-Spirit shelter residents shelter residents who died in the reported year.
