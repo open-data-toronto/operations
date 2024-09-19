@@ -63,27 +63,27 @@ sewer-pressurized-mains:
         info:
           notes: Identification number assigned by the City of Toronto
       - source_name: FROMMH
-        target_name: Sewer Pressurized Flow Type
+        target_name: Sewer Pressurized Upstream Maintenance Hole
         type: text
         info:
           notes: Type of medium flowing in sewer (e.g. storm, sanitary, combined storm and sanitary)
       - source_name: TOMH
-        target_name: Sewer Pressurized Structure Type
+        target_name: Sewer Pressurized Downstream Maintenance Hole
         type: text
         info:
           notes: Sewer main structure type (FM - forcemain, PSL - Pressure Sewer Line)
       - source_name: TWIN_NUMBER
-        target_name: Sewer Pressurized Upstream Maintenance Hole
+        target_name: Sewer Pressurized Twin Number
         type: int
         info:
           notes: Identification number of upstream maintenance hole
       - source_name: WATERTYPE
-        target_name: Sewer Pressurized Downstream Maintenance Hole
+        target_name: Sewer Pressurized Flow Type
         type: text
         info:
           notes: Identification number of downstream maintenance hole
       - source_name: STRUC_TYPE
-        target_name: Sewer Pressurized Twin Number
+        target_name: Sewer Pressurized Structure Type
         type: text
         info:
           notes: Distinguishes pipes that have the same upstream and downstream maintenance holes.
