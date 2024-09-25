@@ -1,24 +1,22 @@
-import json
 import ast
-import requests
 import csv
+import json
 import logging
-
-from typing import List, Dict
-from airflow.decorators import dag, task
-from airflow.operators.python import PythonOperator
-from airflow.models import Variable
 from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Dict, List
 
-from utils import misc_utils, airflow_utils
-from utils_operators.slack_operators import (
-    task_failure_slack_alert,
-    GenericSlackOperator,
-)
+import requests
+from airflow.decorators import dag, task
+from airflow.models import Variable
+from airflow.operators.python import PythonOperator
 from ckan_operators.package_operator import GetOrCreatePackageOperator
 from ckan_operators.resource_operator import GetOrCreateResourceOperator
-
+from utils import airflow_utils, misc_utils
+from utils_operators.slack_operators import (
+    GenericSlackOperator,
+    task_failure_slack_alert,
+)
 
 default_args = {
     "owner": "Yanan",
@@ -29,6 +27,13 @@ default_args = {
     "retry_delay": timedelta(seconds=3),
     "pool": "ckan_pool",
     "retries": 1,
+    "etl_mapping": [
+        {
+            "source": "https://toronto.atlassian.net/jira/servicedesk/projects/DIA/queues/custom/1037",
+            "target_package_name": "open-data-intake",
+            "target_resource_name": "Toronto Open Data Intake",
+        }
+    ],
 }
 
 
@@ -60,7 +65,7 @@ def open_data_intake():
         "notes": """This dataset displays the Open Data intake queue in its raw form. Data here contains attributes relating to how the Toronto Open Data team manages its various requests for updating old and publishing new datasets the Toronto Open Data Portal. \n
 Typically, an "Open Data Inquiry" ticket is first opened, prompting Open Data to investigate the possibility of updating or adding new data to the portal. Once the investigation is finished, another ticket will be opened, directing Open Data staff to "Publish a New Open Dataset Page" or "Update an Existing Open Dataset Page". These tickets will be related to the initial inquiry so to track the history of a change from beginning (Inquiry) to end (Publication or Update).\n
 Records here are direct from an internal ticket management system, so they match exactly what Open Data staff are working with. Each record is a period of time in which a ticket was in a particular status. \n
-The creation of this data is to support council motion [2023.EX10.18](https://secure.toronto.ca/council/agenda-item.do?item=2023.EX10.18) and shared with the hopes that it will inform the public what Open Data is working on, and what datasets Open Data is updating or publishing.\n   
+The creation of this data is to support council motion [2023.EX10.18](https://secure.toronto.ca/council/agenda-item.do?item=2023.EX10.18) and shared with the hopes that it will inform the public what Open Data is working on, and what datasets Open Data is updating or publishing.\n
         """,
     }
 
@@ -129,6 +134,13 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                 # ticket name
                 ticket_name = fields["summary"]
 
+                # owner division
+                owner_division = (
+                    fields["customfield_11827"][0]["value"]
+                    if fields["customfield_11827"]
+                    else None
+                )
+
                 # get ticket request type
                 # some tickets have this value empty
                 try:
@@ -163,6 +175,16 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
 
                 logging.info(f"Generate Status Log for Ticket {ticket_id}")
 
+                # get public descriptions
+                public_description_histories = [
+                    changelog
+                    for changelog in ast.literal_eval(ticket["changelog"])["histories"]
+                    if changelog["items"][0]["field"] == "Public Description"
+                ]
+                
+                public_description = public_description_histories[0]["items"][0]["toString"] if public_description_histories else None
+                logging.info(public_description)
+
                 # get change histories only for status change
                 changelog_histories = [
                     changelog
@@ -180,6 +202,8 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                                 "Ticket Id": ticket_id,
                                 "Ticket Name": ticket_name,
                                 "Inquiry Source": inquiry_source,
+                                "Division": owner_division,
+                                "Public Description": public_description,
                                 "Request Type": request_type,
                                 "Created": created_time[:-9],
                                 "First Response": (
@@ -201,6 +225,8 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                             "Ticket Id": ticket_id,
                             "Ticket Name": ticket_name,
                             "Inquiry Source": inquiry_source,
+                            "Division": owner_division,
+                            "Public Description": public_description,
                             "Request Type": request_type,
                             "Created": created_time[:-9],
                             "First Response": (
@@ -235,6 +261,8 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                             "Ticket Id": ticket_id,
                             "Ticket Name": ticket_name,
                             "Inquiry Source": inquiry_source,
+                            "Division": owner_division,
+                            "Public Description": public_description,
                             "Request Type": request_type,
                             "Created": created_time[:-9],
                             "First Response": (
@@ -270,6 +298,8 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
             "Ticket Id": "Unique identifier for a ticket in the city's internal system",
             "Ticket Name": "Working, plain-English name given to the ticket. These are not unique IDs and can change at the discretion of the Open Data team",
             "Inquiry Source": "Where the request/inquiry originated (Public, Private Business, Academia, City Division, City Council, etc)",
+            "Division": "Which city division this request is associated with.",
+            "Public Description": "A short description of the dataset.",
             "Request Type": "**Open Data Inquiry** is where most intake starts; it's where Open Data staff investigate the existance of a requested dataset and feasibility of publishing it. From there, it can become a **Publish New Open Dataset Page**, which is the process of connecting to city systems containing data to be published, and reviewing the content and context on an open dataset page before it's published. **Update Existing Open Dataset Page** tickets are the process of making and validating changes to the schema, source system or metadata of an existing page. Some of these values are 'Unknown' because these statuses were introduced after these tickets were made.",
             "Created": "The ticket's original creation time",
             "First Response": "When open data team first replied to this ticket",
@@ -360,6 +390,7 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
         op_kwargs={"dag_id": package_name},
     )
 
+    # task flow starts here
     get_or_create_package >> get_or_create_public_jira_queue_resource
 
     inserted_records = insert_records_into_datastore(
