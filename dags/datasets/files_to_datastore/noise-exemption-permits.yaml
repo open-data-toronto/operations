@@ -1,7 +1,7 @@
 noise-exemption-permits:
   jira_issue_id: DIA-309
   jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/223023
-  schedule: '15 18 * * *'
+  schedule: '0 23 * * *'
   dag_owner_name: Mackenzie Nichols
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Noise Exemption Permits
