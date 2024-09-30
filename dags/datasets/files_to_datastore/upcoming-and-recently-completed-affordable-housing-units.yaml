@@ -47,49 +47,63 @@ upcoming-and-recently-completed-affordable-housing-units:
       format: csv
       url: https://opendata.toronto.ca/housing.secretariat/Affordable Housing Pipeline.csv
       attributes:
-        - id: Project ID
-          type: "text"
-          info:
-           notes: "Unique ID for the project"
-        - id: Addresses
-          type: "text"
-          info:
-            notes: "For projects with multiple addresses, all addresses recorded here"
-        - id: Anchor Address
-          type: "text"
-          info:
-            notes: "The main address which a project is geocoded under (where multiple addresses exist)"
-        - id: Status
-          type: "text"
-          info:
-            notes: |
-              The status of the project in the development process.
-                - Pre-Planning: project has been approved for financial incentives, but does not yet have its first planning approval
-                - Under Review: project is under review by City Planning and has its first planning approval
-                - Final Planning Approval: project has received it’s final planning approval
-                - Under Construction: project is under construction
-                - Occupied: project has begun to occupy units
-        - id: Ward
-          type: "text"
-          info:
-            notes: "Ward number of project"
-        - id: "Affordable Homes Approved (2020 - Present)"
-          type: "text"
-          info:
-            notes: "Affordable homes counted towards the City’s HousingTO Target of 41,000 affordable homes (2020 approval onward)"
-        - id: "Total ARH Approved (2017 - Present)"
-          type: "text"
-          info:
-            notes: "The total number of affordable homes approved for the project, dating back to January 1 2017 to present."
-        - id: "Rent-Controlled Market Units Approved"
-          type: "text"
-          info:
-            notes: "The number of rent-controlled market rental homes approved as part of the project, which counts towards the City’s HousingTO target to create 17,500 rent-controlled market homes"
-        - id: RGI Homes Approved
-          type: "text"
-          info:
-            notes: "The number of rent-geared-to-income homes approved as part of a project. Note that this count is a subset of the Affordable Homes Approved (2020 – Present) column. These RGI Homes count towards the City’s HousingTO target to create 6,500 RGI Homes."
-        - id: geometry
-          type: "text"
-          info:
-            notes: ""
+      - source_name: PROJECT_ID
+        target_name: Project ID
+        type: "text"
+        info:
+          notes: "Unique ID for the project"
+      - source_name: ADDRESSES
+        target_name: Addresses
+        type: "text"
+        info:
+          notes: "For projects with multiple addresses, all addresses recorded here"
+      - source_name: ANCHOR_ADDRESS
+        target_name: Anchor Address
+        type: "text"
+        info:
+          notes: "The main address which a project is geocoded under (where multiple addresses exist)"
+      - source_name: STATUS
+        target_name: Status
+        type: "text"
+        info:
+          notes: |
+            The status of the project in the development process.
+              - Pre-Planning: project has been approved for financial incentives, but does not yet have its first planning approval
+              - Under Review: project is under review by City Planning and has its first planning approval
+              - Final Planning Approval: project has received it’s final planning approval
+              - Under Construction: project is under construction
+              - Occupied: project has begun to occupy units
+      - source_name: WARD_NUMBER
+        target_name: Ward Number
+        type: "text"
+        info:
+          notes: "Ward number of project"
+      - source_name: WARD_NAME
+        target_name: Ward Name
+        type: "text"
+        info:
+          notes: "Ward Name of project"
+      - source_name: AFFORDABLE_HOMES_APPROVED_2017_TO_PRESENT
+        target_name: "Affordable Homes Approved (2017 - Present)"
+        type: "text"
+        info:
+          notes: "Affordable homes counted towards the City's HousingTO Target of 41,000 affordable homes (2020 approval onward)"
+      - source_name: TOTAL_AFFORDABLE_HOMES_APPROVED_2017_TO_PRESENT
+        target_name: "Total ARH Approved (2017 - Present)"
+        type: "text"
+        info:
+          notes: "The total number of affordable homes approved for the project, dating back to January 1 2017 to present."
+      - source_name: RENT_CONTROLLED_MARKET_UNITS_APPROVED
+        target_name: "Rent-Controlled Market Units Approved"
+        type: "text"
+        info:
+          notes: "The number of rent-controlled market rental homes approved as part of the project, which counts towards the City’s HousingTO target to create 17,500 rent-controlled market homes"
+      - source_name: RGI_HOMES_APPROVED  
+        target_name: RGI Homes Approved
+        type: "text"
+        info:
+          notes: "The number of rent-geared-to-income homes approved as part of a project. Note that this count is a subset of the Affordable Homes Approved (2020 – Present) column. These RGI Homes count towards the City’s HousingTO target to create 6,500 RGI Homes."
+      - id: geometry
+        type: "text"
+        info:
+          notes: ""
