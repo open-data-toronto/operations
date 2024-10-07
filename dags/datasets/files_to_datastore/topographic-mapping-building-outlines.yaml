@@ -61,10 +61,12 @@ topographic-mapping-building-outlines:
           notes: 'Unique ID of the feature'
       - id: LAST_GEOMETRY_MAINT
         type: date
+        format: epoch
         info:
           notes: 'Date of last geometry edit'
       - id: LAST_ATTRIBUTE_MAINT 
         type: date
+        format: epoch
         info:
           notes: 'Date of the last attribute edit'
       - id: geometry
