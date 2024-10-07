@@ -1,0 +1,59 @@
+cultural-festivals-funding-program-recipients:
+  jira_issue_id: DIA-383
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/247257
+  schedule: '@once'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Cultural Festivals Funding Program recipients
+  date_published: '2024-10-07 15:11:42.865413'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Economic Development & Culture
+  owner_section: Arts & Culture Services
+  owner_unit: Cultural Partnerships
+  owner_email: christopher.jones@toronto.ca
+  civic_issues:
+  - Fiscal responsibility
+  topics:
+  - Culture and tourism
+  tags:
+  - name: culture grants
+    vocabulary_id: null
+  - name: festivals funding
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/grants-incentives-rebates/arts-culture-grants/cultural-festivals-funding-program/
+  notes: "The Cultural Festivals Funding Program (CFFP) is designed to support the\
+    \ development of the festival sector in a manner that is accessible, transparent\
+    \ and accountable. The CFFP  advances the City\u2019s access, equity and inclusion\
+    \ goals, including reconciliation with Indigenous peoples."
+  excerpt: Grant recipients of the Cultural Festivals Funding Program (CFFP)
+  resources:
+    2024 Cultural Festivals Funding Program recipients:
+      format: csv
+      url: https://opendata.toronto.ca/economic.development.culture/cultural-festivals-funding-program-recipients/cultural-festivals-funding-program-recipients.csv
+      attributes: 
+        - id: Project Name
+          type: text
+          info:
+            notes: Name of the Project
+        - id: Organization Legal Name
+          type: text
+          info:
+            notes: Name of the organization associated
+        - id: Stream
+          type: text
+          info:
+            notes: Category
+        - id: Grant
+          type: float
+          info:
+            notes: Size of grant in CAD
+        - id: Ward
+          type: text
+          info:
+            notes: Ward associated
+        - id: Year
+          type: int
+          info:
+            notes: Year of grant
+        
