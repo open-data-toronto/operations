@@ -137,3 +137,13 @@ def get_run_schedule(**kwargs):
         return "run_all_dataset"
     else:
         return "run_daily_dataset"
+
+def check_resource_format(package):
+    '''
+    Check if a filestore dataset's resources only in format of [CSV, XLSX, XLS, ZIP]
+    '''
+    format_list = package["formats"].split(',')
+    penalize_flag = set(format_list).issubset({"CSV", "XLSX", "XLS", "ZIP"})
+    
+    return penalize_flag
+    

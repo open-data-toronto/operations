@@ -131,9 +131,9 @@ def score_accessibility(p, resource, dataset_type, etl_inventory):
     """
 
     # Don't penalize for being filestore/don't have pipeline for real-time dataset
-    rr = p["refresh_rate"].lower()
-    if rr == "real-time":
-        return 1
+    # rr = p["refresh_rate"].lower()
+    # if rr == "real-time":
+    #     return 1
 
     metrics = {}
     metrics["tags"] = 1 if "tags" in p and (p["num_tags"] > 0) else 0.5
@@ -146,9 +146,14 @@ def score_accessibility(p, resource, dataset_type, etl_inventory):
     else:
         engine_info = None
 
+    filestore_penalize_flag = dqs_utils.check_resource_format(p)
+
     if dataset_type == "datastore":
         metrics["pipeline"] = 1 if engine_info else 0.5
     if dataset_type == "filestore":
-        metrics["pipeline"] = 0.8 if engine_info else 0.5
+        if filestore_penalize_flag:
+            return 0
+        else:
+            metrics["pipeline"] = 0.8 if engine_info else 0.5
 
     return np.mean(list(metrics.values()))
