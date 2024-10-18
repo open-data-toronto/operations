@@ -1,0 +1,69 @@
+multi-tenant-house-licences:
+  jira_issue_id: DIA-373
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/241937
+  schedule: '10 15 * * *'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: 'Multi-Tenant (Rooming) House Licences '
+  date_published: '2024-09-23 13:10:23.874714'
+  dataset_category: Table
+  refresh_rate: Daily
+  owner_division: Municipal Licensing & Standards
+  owner_section: Policy & Strategic Support
+  owner_unit: Business Planning Performance & Intelligence
+  owner_email: multitenanthousing@toronto.ca
+  civic_issues:
+  - Affordable housing
+  topics:
+  - Permits and licenses
+  tags:
+  - name: housing
+    vocabulary_id: null
+  - name: licence
+    vocabulary_id: null
+  - name: multi-tenant
+    vocabulary_id: null
+  - name: rooming
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/housing-shelter/multi-tenant-rooming-houses/
+  excerpt: This dataset contains all active and inactive multi-tenant (rooming) house
+    licences.
+  limitations: null
+  notes: |
+    All operators of multi-tenant houses across the City of Toronto are required
+    to obtain a licence to operate. The following dataset includes all active and
+    inactive licences issued by Municipal Licensing & Standards.
+
+    This dataset shows each licence broken down by status. An 'active' status indicates that the operator of a multi-tenant house holds an active licence. An 'in progress' status indicates that the operator is actively seeking a licence or renewal. An 'inactive' status indicates that the operator has let their licence expire and/or the operator has recently closed operations, but has yet to be confirmed by ML&S.
+
+    For more information, please visit the Multi-Tenant (Rooming) Houses [website](https://www.toronto.ca/community-people/housing-shelter/multi-tenant-rooming-houses/).
+
+    Note: This dataset is refreshed daily between 12:00 p.m. and 1 p.m.
+
+  resources:
+    Multi Tenant House Licences:
+      format: 'csv'
+      url: https://opendata.toronto.ca/municipal.licensing.standards/multi-tenant-house-licences/multi-tenant-house-licences.csv
+      attributes:
+      - id: SiteAddress
+        type: text
+        info:
+          notes: 'This is the address of the multi-tenant house. '      
+      - id: District
+        type: text
+        info:
+          notes: 'This is the district that the multi-tenant house is located in. '
+      - id: Ward
+        type: text
+        info:
+          notes: This is the ward that the multi-tenant house is located in. All data
+            is provided based on the 25-ward system.
+      - id: 'Status'
+        type: text
+        info:
+          notes: 'This is the current licence status of a multi-tenant house. An ''active''
+            status indicates that the operator of the multi-tenant house holds an
+            active licence. An ''in progress'' status indicates that the operator
+            is actively seeking a licence/renewal. An ''inactive'' status indicates
+            that the operator has let their licence expire and/or the operator has
+            closed operations.'
