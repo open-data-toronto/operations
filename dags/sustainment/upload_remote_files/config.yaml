@@ -540,7 +540,7 @@ report-request-log-city-council-and-its-committees:
 red-light-camera-annual-charges:
   Red Light Camera Annual Charges:
     format: xlsx
-    url: https://opendata.toronto.ca/transportation.services/red-light-camera-charges/RLC Annual Charges 2007-2023.xlsx
+    url: https://opendata.toronto.ca/transportation.services/red-light-camera-charges/RLC Annual Charges.xlsx
 
 ##### agol ckan sync
 neighbourhood-improvement-areas:
