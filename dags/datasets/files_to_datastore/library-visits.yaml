@@ -39,7 +39,7 @@ library-visits:
     # resource name
     tpl-visits-annual-by-branch-2012-2022:
       format: csv
-      url: https://opendata.toronto.ca/toronto.public.library/tpl-visits-annual-by-branch-2012-2022.csv
+      url: https://opendata.toronto.ca/toronto.public.library/tpl-visits-annual-by-branch-2012-2023.csv
       attributes:
         - id: Year
           type: int
