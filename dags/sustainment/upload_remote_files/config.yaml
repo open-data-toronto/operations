@@ -221,7 +221,7 @@ rain-gauge-locations-and-precipitation:
 triangular-irregular-network-tin:
   triangular-irregular-network:
     format: shp
-    url: https://opendata.toronto.ca/technology.services/TIN/2015_TIN.zip
+    url: https://opendata.toronto.ca/technology.services/TIN/triangular-irregular-network.zip
 ttc-routes-and-schedules:
   TTC Routes and Schedules Data:
     format: zip
