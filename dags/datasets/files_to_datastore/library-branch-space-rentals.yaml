@@ -1,0 +1,63 @@
+# package name
+library-branch-space-rentals:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: Library Branch Space Rentals
+  date_published: "2024-10-23 10:47:38.364157"
+  refresh_rate: Annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Toronto Public Library
+  owner_section: null
+  owner_unit: null
+  owner_email: planning@tpl.ca
+
+  civic_issues: null
+  topics: 
+    - Community services
+  tags:
+  - name: library
+    vocabulary_id: null
+  - name: tpl
+    vocabulary_id: null
+
+  information_url: https://www.torontopubliclibrary.ca/opendata
+  excerpt: This dataset lists Toronto Public Library spaces that are available for the public to rent including the size of the spaces and seating capacity.
+  limitations: null
+  notes: |
+    This dataset lists Toronto Public Library spaces that are available for the public to rent including the size of
+    the spaces and seating capacity. As well as providing names, the corresponding branch codes are included.
+    Addresses and other branch details are available through the Library Branch General Information dataset. To
+    refer to the fees, the underlying principles and priorities, please refer to the Community and Event Space
+    Rental Policy on the Toronto Public Library website.
+  resources:
+    # resource name
+    tpl-branch-space-rentals-2024:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.public.library/tpl-branch-space-rentals-2024.csv
+      attributes:
+        - id: Type
+          type: text
+          info:
+            notes: "There are 5 types of rooms: community rooms, program rooms, study pods/study rooms, theatres, and venues."
+        - id: Name
+          type: text
+          info:
+            notes: The name of the room.
+        - id: MaxCapacity
+          type: int
+          info:
+            notes: The maximum seating capacity for rooms that are configured for theatre-style seating.
+        - id: Square footage
+          type: text
+          info:
+            notes: Size of the room in square feet. Exceptions are study pods and study rooms, which are small and where we do not have calculated square footage.
+        - id: Branch Code
+          type: text
+          info:
+            notes: A unique code that identifies the branch.
