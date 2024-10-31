@@ -53,7 +53,7 @@ bicycle-thefts:
           info:
             notes: Date of Offence
         - id: OCC_YEAR
-          type: float
+          type: text
           info:
             notes: Year Offence Occurred
         - id: OCC_MONTH
@@ -65,15 +65,15 @@ bicycle-thefts:
           info:
             notes: Day of the Month Offence Occurred
         - id: OCC_DAY
-          type: float
+          type: text
           info:
             notes: Day of the Year Offence Occurred
         - id: OCC_DOY
-          type: float
+          type: text
           info:
             notes: Day of the Week Offence Occurred
         - id: OCC_HOUR
-          type: float
+          type: text
           info:
             notes: Hour Offence Occurred
         - id: REPORT_DATE
@@ -82,7 +82,7 @@ bicycle-thefts:
           info:
             notes: Date Offence was Reported
         - id: REPORT_YEAR
-          type: float
+          type: text
           info:
             notes: Year Offence was Reported
         - id: REPORT_MONTH
@@ -94,15 +94,15 @@ bicycle-thefts:
           info:
             notes: Day of the Month Offence was Reported
         - id: REPORT_DAY
-          type: float
+          type: text
           info:
             notes: Day of the Year Offence was Reported
         - id: REPORT_DOY
-          type: float
+          type: text
           info:
             notes: Day of the Week Offence was Reported
         - id: REPORT_HOUR
-          type: float
+          type: text
           info:
             notes: Hour Offence was Reported
         - id: DIVISION
@@ -130,7 +130,7 @@ bicycle-thefts:
           info:
             notes: Type of Bicycle
         - id: BIKE_SPEED
-          type: float
+          type: text
           info:
             notes: Speed of Bicycle
         - id: BIKE_COLOUR
@@ -145,6 +145,14 @@ bicycle-thefts:
           type: text
           info:
             notes: Status of Bicycle
+        - id: LONG_WGS84
+          type: float
+          info:
+            notes: Longitude coordinate
+        - id: LAT_WGS84
+          type: float
+          info:
+            notes: Latitude coordinate
         - id: "geometry"
           type: "text"
           info:

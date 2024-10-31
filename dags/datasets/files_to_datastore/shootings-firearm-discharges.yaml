@@ -81,7 +81,7 @@ shootings-firearm-discharges:
           info:
             notes: Date of Offence
         - id: OCC_YEAR
-          type: float
+          type: text
           info:
             notes: Year Offence Occurred
         - id: OCC_MONTH
@@ -93,15 +93,15 @@ shootings-firearm-discharges:
           info:
             notes: Day of the Month Offence Occurred
         - id: OCC_DOY
-          type: float
+          type: text
           info:
             notes: Day of the Week Offence Occurred
         - id: OCC_DAY
-          type: float
+          type: text
           info:
             notes: Day of the Year Offence Occurred
         - id: OCC_HOUR
-          type: float
+          type: text
           info:
             notes: Hour of Day Offence Occurred
         - id: OCC_TIME_RANGE
@@ -113,11 +113,11 @@ shootings-firearm-discharges:
           info:
             notes: Police Division where Offence Occurred
         - id: DEATH
-          type: float
+          type: int
           info:
             notes: Count of Deaths caused by the Shooting
         - id: INJURIES
-          type: float
+          type: int
           info:
             notes: Count of Injured Persons caused by the Shooting
         - id: HOOD_158
@@ -136,6 +136,14 @@ shootings-firearm-discharges:
           type: text
           info:
             notes: Name of Neighbourhood using City of Toronto's old 140 neighbourhood structure
+        - id: LONG_WGS84
+          type: float
+          info:
+            notes: Longitude coordinate
+        - id: LAT_WGS84
+          type: float
+          info:
+            notes: Latitude coordinate
         - id: "geometry"
           type: "text"
           info:

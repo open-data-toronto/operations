@@ -58,7 +58,7 @@ major-crime-indicators:
           info:
             notes: Date of Offence
         - id: REPORT_YEAR
-          type: float
+          type: text
           info:
             notes: Year Offence was Reported
         - id: REPORT_MONTH
@@ -66,11 +66,11 @@ major-crime-indicators:
           info:
             notes: Month Offence was Reported
         - id: REPORT_DAY
-          type: float
+          type: text
           info:
             notes: Day of the Month Offence was Reported
         - id: REPORT_DOY
-          type: float
+          type: text
           info:
             notes: Day of the Year Offence was Reported
         - id: REPORT_DOW
@@ -78,11 +78,11 @@ major-crime-indicators:
           info:
             notes: Day of the Week Offence was Reported
         - id: REPORT_HOUR
-          type: float
+          type: text
           info:
             notes: Hour Offence was Reported
         - id: OCC_YEAR
-          type: float
+          type: text
           info:
             notes: Year Offence Occurred
         - id: OCC_MONTH
@@ -90,11 +90,11 @@ major-crime-indicators:
           info:
             notes: Month Offence Occurred
         - id: OCC_DAY
-          type: float
+          type: text
           info:
             notes: Day of the Month Offence Occurred
         - id: OCC_DOY
-          type: float
+          type: text
           info:
             notes: Day of the Year Offence Occurred
         - id: OCC_DOW
@@ -102,7 +102,7 @@ major-crime-indicators:
           info:
             notes: Day of the Week Offence Occurred
         - id: OCC_HOUR
-          type: float
+          type: text
           info:
             notes: Hour Offence Occurred
         - id: DIVISION
@@ -118,11 +118,11 @@ major-crime-indicators:
           info:
             notes: Premises Type of Offence
         - id: UCR_CODE
-          type: float
+          type: text
           info:
             notes: UCR Code for Offence
         - id: UCR_EXT
-          type: float
+          type: text
           info:
             notes: UCR Extension for Offence
         - id: OFFENCE
@@ -149,5 +149,13 @@ major-crime-indicators:
           type: text
           info:
             notes: Name of Neighbourhood using City of Toronto's old 140 neighbourhood structure
+        - id: LONG_WGS84
+          type: float
+          info:
+            notes: Longitude coordinate
+        - id: LAT_WGS84
+          type: float
+          info:
+            notes: Latitude coordinate
         
         

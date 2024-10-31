@@ -50,23 +50,23 @@ police-annual-statistical-report-traffic-collisions:
           info:
             notes: "Date Collision Occurred (time is displayed in UTC format when downloaded as a CSV)"
         - id: OCC_MONTH
-          type: "text"
+          type: text
           info:
             notes: "Month Collision Occurred"
         - id: OCC_DOW
-          type: "text"
+          type: text
           info:
             notes: "Day of Week Collision Occurred"
         - id: OCC_YEAR
-          type: "int"
+          type: text
           info:
             notes: "Year Collision Occurred"
         - id: OCC_HOUR
-          type: "int"
+          type: text
           info:
             notes: "Hour Collision Occurred"
         - id: DIVISION
-          type: "text"
+          type: text
           info:
             notes: "Police Division where Collision Occurred"
         - id: FATALITIES

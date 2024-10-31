@@ -51,7 +51,7 @@ police-annual-statistical-report-homicide:
           info:
             notes: Date of Offence
         - id: OCC_YEAR
-          type: float
+          type: text
           info:
             notes: Year Offence Occurred
         - id: OCC_MONTH
@@ -59,7 +59,7 @@ police-annual-statistical-report-homicide:
           info:
             notes: Month Offence Occurred
         - id: OCC_DAY
-          type: float
+          type: text
           info:
             notes: Day of the Month Offence Occurred
         - id: OCC_DOW
@@ -67,7 +67,7 @@ police-annual-statistical-report-homicide:
           info:
             notes: Day of the Week Offence Occurred
         - id: OCC_DOY
-          type: float
+          type: text
           info:
             notes: Day of the Year Offence Occurred
         - id: DIVISION
@@ -94,6 +94,14 @@ police-annual-statistical-report-homicide:
           type: text
           info:
             notes: Name of Neighbourhood using City of Toronto's old 140 neighbourhood structure
+        - id: LONG_WGS84
+          type: float
+          info:
+            notes: Longitude coordinate
+        - id: LAT_WGS84
+          type: float
+          info:
+            notes: Latitude coordinate
         - id: "geometry"
           type: "text"
           info:
