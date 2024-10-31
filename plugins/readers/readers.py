@@ -34,12 +34,14 @@ class Reader(ABC):
             schema: list = None, 
             out_dir: str = "",
             filename: str = None,
+            query_params: str = "1=1" ,
             **kwargs,
         ):
 
         if source_url:
             self.source_url = misc_utils.validate_url(source_url)
         self.schema = schema
+        self.query_params = query_params
 
         self.cleaners = {
             "text": str,
@@ -176,7 +178,7 @@ class AGOLReader(Reader):
         overflow = True
         offset = 0
         params = {
-            "where": "1=1",
+            "where": self.query_params,
             "outSR": 4326,
             "f": "geojson",
             "resultType": "standard",

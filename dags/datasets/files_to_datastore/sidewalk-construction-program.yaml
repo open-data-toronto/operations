@@ -1,0 +1,121 @@
+sidewalk-construction-program:
+  jira_issue_id: DIA-390
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/251305
+  schedule: '@once'
+  dag_owner_name: Yanan Zhang
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Sidewalk Construction Program
+  date_published: '2024-10-30 17:23:04.633126'
+  dataset_category: Map
+  refresh_rate: As available
+  owner_division: Transportation Services
+  owner_section: Planning, Design and Management
+  owner_unit: Cycling and Pedestrian Projects
+  owner_email: newsidewalks@toronto.ca
+  civic_issues: null
+  topics:
+  - Transportation
+  tags:
+  - name: missingsidewalk
+    vocabulary_id: null
+  - name: sidewalk
+    vocabulary_id: null
+  - name: sidewalkprogram
+    vocabulary_id: null
+  - name: torontosidewalk
+    vocabulary_id: null
+  information_url: https://map.toronto.ca/toinview/
+  excerpt: The City of Toronto's Missing Sidewalk Installation Program Dataset is
+    planned sidewalk construction locations and details planned for construction in
+    the near-term along all transportation corridors within the City of Toronto limits.
+  limitations: The City of Toronto's Missing Sidewalk Installation Program Dataset is planned sidewalk construction locations and details planned for construction in the near-term along all transportation corridors within the City of Toronto limits.
+  notes: |
+    The City of Toronto's Missing Sidewalk Installation Program Dataset illustrates the locations and details of planned sidewalks scheduled for construction in the near term along all transportation corridors within the City of Toronto limits.
+    
+    Through the Missing Sidewalk Installation Program, Transportation Services reviews opportunities to install sidewalks on all roadways where they are missing, primarily through bundling with state-of-good-repair roadway work. Bundling with state-of-good repair projects is the most cost-efficient and least disruptive time to add a sidewalk and is in keeping with Council direction as part of the Vision Zero 2.0 Road Safety Plan Update. This allows for more flexibility in sidewalk design in order minimize impacts such as tree removals and associated cost savings by bundling capital projects.
+    
+    All new sidewalk projects undergo consultation with residents and property owners and are reported annually to the Infrastructure & Environment Committee with recommendations to City Council.
+    
+    For more information about the program, visit [Sidewalks in Toronto](https://www.toronto.ca/services-payments/streets-parking-transportation/sidewalk-tours-wayfinding/sidewalks-in-toronto).
+  resources:
+    Sidewalk Construction Program:
+      agol: True
+      query_params: "inv_display_program ='TS_Sidewalk'"
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_TOINVIEW_PROGRAM_LINE/FeatureServer/0
+      attributes:
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: PROJ_NUM
+        type: text
+        info:
+          notes: ''
+      - id: LAST_UPDATED_DATE
+        type: date
+        format: epoch
+        info:
+          notes: ''
+      - id: INV_PROJECT
+        type: text
+        info:
+          notes: ''
+      - id: INV_LOCATION
+        type: text
+        info:
+          notes: ''
+      - id: INV_DETAIL
+        type: text
+        info:
+          notes: ''
+      - id: INV_DURATION_PUBLIC
+        type: text
+        info:
+          notes: ''
+      - id: INV_STATUS
+        type: text
+        info:
+          notes: ''
+      - id: INV_PRIORITY
+        type: text
+        info:
+          notes: ''
+      - id: INV_OWNER
+        type: text
+        info:
+          notes: ''
+      - id: INV_PUBLIC_CONTACT_NAME
+        type: text
+        info:
+          notes: ''
+      - id: INV_PUBLIC_CONTACT_EMAIL
+        type: text
+        info:
+          notes: ''
+      - id: INV_WEB_SITE
+        type: text
+        info:
+          notes: ''
+      - id: INV_DISPLAY_PROGRAM
+        type: text
+        info:
+          notes: ''
+      - id: INV_DISPLAY_SYMBOL
+        type: text
+        info:
+          notes: ''
+      - id: INV_START_YEAR
+        type: text
+        info:
+          notes: ''
+      - id: CONTR_NUMBER
+        type: text
+        info:
+          notes: ''
+      - id: "geometry"
+        type: text
+        info:
+          notes: ''
+        
+
