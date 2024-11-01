@@ -82,7 +82,7 @@ def test_csv_reader_special_chars():
 def test_geojson_reader():
     '''Inits csv reader with a source with special chars for testing'''
     test_source_url = "https://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.geojson"
-    with open("/data/operations/plugins/readers/test_geojson_schema.yaml", "r") as f:
+    with open("/data/operations/plugins/readers/tests/test_geojson_schema.yaml", "r") as f:
         config = yaml.load(f, yaml.SafeLoader)
     test_schema = config["traffic-calming-database"]["resources"]["Traffic Calming Database"]["attributes"]
     test_filename = "test_json_output.csv"
@@ -100,7 +100,7 @@ def test_geojson_reader():
 def test_json_reader():
     '''Inits csv reader with a source with special chars for testing'''
     test_source_url = "https://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json"
-    with open("/data/operations/plugins/readers/test_json_schema.yaml", "r") as f:
+    with open("/data/operations/plugins/readers/tests/test_json_schema.yaml", "r") as f:
         config = yaml.load(f, yaml.SafeLoader)
     test_schema = config["earlyon-child-and-family-centres"]["resources"]["EarlyON Child and Family Centres Locations - geometry"]["attributes"]
     test_filename = "test_geojson_output.csv"
@@ -117,7 +117,7 @@ def test_json_reader():
 def test_json_reader_jsonpath():
     '''Inits csv reader with a source with special chars for testing'''
     test_source_url = "https://opendata.toronto.ca/DummyDatasets/tpl-events-feed_mod3.json"
-    with open("/data/operations/plugins/readers/test_json_schema_jsonpath.yaml", "r") as f:
+    with open("/data/operations/plugins/readers/tests/test_json_schema_jsonpath.yaml", "r") as f:
         config = yaml.load(f, yaml.SafeLoader)
     test_schema = config["earlyon-child-and-family-centres"]["resources"]["EarlyON Child and Family Centres Locations - geometry"]["attributes"]
     test_filename = "test_geojson_output_jsonpath.csv"
@@ -205,7 +205,11 @@ def test_select_reader():
 
         package_name = list(config.keys())[0]
         resource_config = config[package_name]["resources"]
-        reader = select_reader(package_name, resource_config)
-        print(reader)
+        
+        for resource_name in resource_config.keys():
+            config = resource_config[resource_name]
+            
+            reader = select_reader(package_name, resource_name, config)
+            print(reader)
 
-        assert type(reader) == reader_class, f"{test_format} needs {reader_class}, not {type(reader)}"
+            assert type(reader) == reader_class, f"{test_format} needs {reader_class}, not {type(reader)}"
