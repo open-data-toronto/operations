@@ -35,6 +35,7 @@ ambulance-station-locations:
     ambulance-station-locations:
       format: geojson
       agol: true
+      query_params: "MUNICIPALITY ='North York'"
       url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_EMS/FeatureServer/0
       attributes:
       - id: ADDRESS_POINT_ID
