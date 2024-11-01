@@ -34,14 +34,12 @@ class Reader(ABC):
             schema: list = None, 
             out_dir: str = "",
             filename: str = None,
-            query_params: str = "1=1" ,
             **kwargs,
         ):
 
         if source_url:
             self.source_url = misc_utils.validate_url(source_url)
         self.schema = schema
-        self.query_params = query_params
 
         self.cleaners = {
             "text": str,
@@ -155,6 +153,15 @@ class AGOLReader(Reader):
     
     params - optional input to control query sent to AGOL'''
 
+    def __init__(
+        self,
+        query_params: str = "1=1",
+        **kwargs
+    ):        
+
+        super().__init__(**kwargs)
+        self.query_params = query_params
+
     def generate_url(
         self,
         params: dict = {
@@ -173,7 +180,6 @@ class AGOLReader(Reader):
 
     def read(self):
         '''Return generator yielding AGOL rows as dicts'''
-        self.generate_url()
 
         overflow = True
         offset = 0
