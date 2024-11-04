@@ -26,7 +26,7 @@ def test_csv_reader():
     test_schema = config["upcoming-and-recently-completed-affordable-housing-units"][
         "resources"
     ]["Affordable Rental Housing Pipeline"]["attributes"]
-    test_filename = "test_csv_output.csv"
+    test_filename = "/test_fixtures/test_csv_output.csv"
 
     return CSVReader(
         source_url=test_source_url,
@@ -45,7 +45,7 @@ def test_agol_reader():
     test_schema = config["ambulance-station-locations"]["resources"][
         "ambulance-station-locations"
     ]["attributes"]
-    test_filename = "test_agol_output.csv"
+    test_filename = "/test_fixtures/test_agol_output.csv"
 
     return AGOLReader(
         source_url=test_source_url,
@@ -64,7 +64,7 @@ def test_agol_reader_with_query_params():
     test_schema = config["ambulance-station-locations"]["resources"][
         "ambulance-station-locations"
     ]["attributes"]
-    test_filename = "test_agol_param_output.csv"
+    test_filename = "/test_fixtures/test_agol_param_output.csv"
     test_query_params = config["ambulance-station-locations"]["resources"][
         "ambulance-station-locations"
     ]["query_params"]
@@ -90,7 +90,7 @@ def test_excel_reader():
     test_sheet = sheet = config["deaths-of-people-experiencing-homelessness"][
         "resources"
     ]["Homeless deaths by demographics"]["sheet"]
-    test_filename = "test_excel_output.csv"
+    test_filename = "/test_fixtures/test_excel_output.csv"
 
     return ExcelReader(
         source_url=test_source_url,
@@ -112,7 +112,7 @@ def test_csv_reader_special_chars():
     test_schema = config["members-of-toronto-city-council-voting-record"]["resources"][
         "member-voting-record-2018-2022"
     ]["attributes"]
-    test_filename = "test_csv_output_special_chars.csv"
+    test_filename = "/test_fixtures/test_csv_output_special_chars.csv"
 
     return CSVReader(
         source_url=test_source_url,
