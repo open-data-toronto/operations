@@ -1,0 +1,163 @@
+upcoming-and-recently-completed-affordable-housing-units:
+  jira_issue_id: DTSD-1481
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/156849
+  schedule: '45 4 1 * *'
+  dag_owner_name: Mackenzie.Nichols4
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Affordable Housing Pipeline
+  date_published: '2023-03-17 13:37:14.623384'
+  dataset_category: Map
+  refresh_rate: Quarterly
+  owner_division: Housing Secretariat
+  owner_section: Housing Development, Renewal and Improvement
+  owner_unit: Housing Development and Revitalization
+  owner_email: housingplan@toronto.ca
+  civic_issues: Affordable Housing
+  topics:
+  - Development
+  - Locations and Mapping
+  tags:
+  - name: Affordable
+    vocabulary_id: null
+  - name: Housing
+    vocabulary_id: null
+  - name: data
+    vocabulary_id: null
+  - name: development
+    vocabulary_id: null
+  - name: map
+    vocabulary_id: null
+  - name: pipeline
+    vocabulary_id: null
+  - name: rental
+    vocabulary_id: null
+  - name: rentals
+    vocabulary_id: null
+  - name: upcoming
+    vocabulary_id: null
+  information_url: null
+  excerpt: This section contains data on upcoming affordable rental homes that are in development and have received an approval from City Council either as initial approval for financial incentives through a City housing program
+  limitations: null
+  notes: |
+    This section contains data on upcoming affordable rental homes that are in development and have received an approval from City Council either as initial approval for financial incentives through a City housing program (for example, Open Door, Housing Now, etc.) or as part of a development application (for example, through the former Section 37 density bonusing regulation, Community Benefits Charge, etc.), since January 1, 2017. The data highlights affordable rental homes that are still in the pre-construction stage of the development process, homes that are currently under construction, and homes that have been recently completed.
+    These affordable rental homes meet the City's current definition of affordable rental housing, with rent, including utilities, at or below 100 per cent of Average Market Rent (AMR).
+
+  resources: 
+    Affordable Rental Housing Pipeline:
+      format: csv
+      url: https://opendata.toronto.ca/housing.secretariat/COT_affordable_rental_housing.csv
+      attributes:
+        #- id: ID
+        #  type: "text"
+        #  info:
+        #    notes: "Unique ID for each project "
+        - id: Address
+          type: "text"
+          info:
+            notes: "Includes the municipal address(es) of the building/complex where the affordable units will be built. There can be multiple addresses listed in this field. For large scale projects, it includes the name of the neighbourhood or the project name, as well as the phase(s) if applicable / known at the date of the last update of the dataset."
+        - id: Anchor_Address_
+          type: "text"
+          info:
+            notes: "Address used to map projects."
+        - id: Ward_Number
+          type: "text"
+          info:
+            notes: "Current number of the municipal ward where the project is located."
+        - id: Pgm_Incntve_frst_appr_date
+          type: "date"
+          format: "%m/%d/%Y"
+          info:
+            notes: "The initial date when Council approved financial incentives to a project, and where the number of units is stated. If this date is not available, then the date when Council approved the number of units through another type of report (Housing Now, By-Law Zoning) is used"
+        #- id: Intl_Aff_Rent_Units_App
+        #  type: "text"
+        #  info:
+        #    notes: "The initial number of affordable rental units approved"
+        #- id: Rcnt_Units_App
+        #  type: "text"
+        #  info:
+        #    notes: "The most recent number of approved affordable rental units"
+        - id: First_Planning_Approval_date
+          type: "date"
+          format: "%m/%d/%Y"
+          info:
+            notes: "The date on which the Official Plan and/or Zoning By-law Amendment application was approved in principle by Toronto City Council or the Ontario Land Tribunal (OLT). For Minor Variance applications (MV), the date the application is approved in principle by the Committee of Adjustment or, if appealed, by the Toronto Local Appeal Body (TLAB) or OLT."
+        #- id: Affordable_Units_Conf_first
+        #  type: "text"
+        #  info:
+        #    notes: "The number of affordable rental units approved through Planning approval"
+        - id: IBMS_Folder_Num
+          type: "text"
+          info:
+            notes: "The Integrated Business Management System (IBMS) number for this project"
+        #- id: Most_recent_planning_applicati
+        #  type: "text"
+        #  info:
+        #    notes: ""
+        #- id: Most_recent_planning_app_date
+        #  type: "date"
+        #  format: "%m/%d/%Y"
+        #  info:
+        #    notes: ""
+        #- id: Revised_number_of_affordable_r
+        #  type: "text"
+        #  info:
+        #    notes: ""
+        - id: Most_recent_number_of_affordab
+          type: "text"
+          info:
+            notes: "Most up to date number of units based on most recent application received for a project; this only tracks the most recent # for the purpose of the dataset.  In cases where the approval secured a portion of the total residential Gross Floor Area (GFA) as affordable housing and not a specific number of affordable units, the number of units is estimated."
+        - id: Construction_Start_Date
+          type: "text"
+          info:
+            notes: "The date a project is assumed to be under construction. For most projects, the date when the first building permit for shoring or a new building is issued by Toronto Building."
+        #- id: Shoring-Excavation_Issued
+        #  type: "date"
+        #  format: "%m/%d/%Y"
+        #  info:
+        #    notes: "The date a shoring or excavation permit was issued"
+        #- id: Shoring-Excavation_Num
+        #  type: "text"
+        #  info:
+        #    notes: "The shoring or excavation permit number"
+        #- id: New_Building_Permit_Issued
+        #  type: "date"
+        #  format: "%m/%d/%Y"
+        #  info:
+        #    notes: "The date a new building permit was issued for this project"
+        #- id: New_Building_Permit_Closed
+        #  type: "text"
+        #  info:
+        #    notes: ""
+        #- id: New_Building_Permit_App_Num
+        #  type: "text"
+        #  info:
+        #    notes: "The new building permit application number"
+        - id: Actual_Construction_Completion
+          type: "text"
+          info:
+            notes: "The date that the units are considered built and are ready for occupancy. The date the first occupancy permit for a development is issued is used to determine that a project is “completed”."
+        - id: Occupancy_Permit_Issued
+          type: "date"
+          format: "%m/%d/%Y"
+          info:
+            notes: "The date an occupancy permit is issued for a project; used as proxy to determine 'Actual Construction Completion' for multi-res"
+        - id: Occupancy_Permit_Number
+          type: "text"
+          info:
+            notes: "The Occupancy Permit # for a project; used to determine construction completion"
+        - id: Units_Built_Num
+          type: "text"
+          info:
+            notes: "The number of units completed"
+        #- id: Length_of_Affordability_Years
+        #  type: "text"
+        #  info:
+        #    notes: "The number of years this project will maintain its affordable units for"
+        #- id: Depth_of_Affordability_Pct
+        #  type: "text"
+        #  info:
+        #    notes: "The depth of affordability of the units, expressed as a percentage of Average Market Rent"
+        - id: geometry
+          type: "text"
+          info:
+            notes: ""
