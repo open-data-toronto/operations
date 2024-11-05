@@ -149,9 +149,15 @@ class CSVReader(Reader):
 
 
 class AGOLReader(Reader):
-    '''Reads a AGOL from a URL and writes it locally
+    '''
+    Reads a AGOL from a URL and writes it locally
+
+    - query_params : str
+        optional input to control query sent to AGOL, e.g. "inv_display_program ='TS_Sidewalk'"
     
-    params - optional input to control query sent to AGOL'''
+    Returns:
+            Generator
+    '''
 
     def __init__(
         self,

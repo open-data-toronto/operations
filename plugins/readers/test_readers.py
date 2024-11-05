@@ -148,7 +148,9 @@ def test_geojson_reader():
 def test_json_reader():
     """Inits csv reader with a source with special chars for testing"""
     test_source_url = "https://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json"
-    with open("/data/operations/plugins/readers/test_fixtures/test_json_schema.yaml", "r") as f:
+    with open(
+        "/data/operations/plugins/readers/test_fixtures/test_json_schema.yaml", "r"
+    ) as f:
         config = yaml.load(f, yaml.SafeLoader)
     test_schema = config["earlyon-child-and-family-centres"]["resources"][
         "EarlyON Child and Family Centres Locations - geometry"
@@ -170,7 +172,8 @@ def test_json_reader_jsonpath():
         "https://opendata.toronto.ca/DummyDatasets/tpl-events-feed_mod3.json"
     )
     with open(
-        "/data/operations/plugins/readers/test_fixtures/test_json_schema_jsonpath.yaml", "r"
+        "/data/operations/plugins/readers/test_fixtures/test_json_schema_jsonpath.yaml",
+        "r",
     ) as f:
         config = yaml.load(f, yaml.SafeLoader)
     test_schema = config["earlyon-child-and-family-centres"]["resources"][
