@@ -1,7 +1,7 @@
 sidewalk-construction-program:
   jira_issue_id: DIA-390
   jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/251305
-  schedule: '@once'
+  schedule: '45 14 * * *'
   dag_owner_name: Yanan Zhang
   dag_owner_email: yanan.zhang@toronto.ca
   title: Sidewalk Construction Program
