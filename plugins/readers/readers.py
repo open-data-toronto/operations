@@ -153,7 +153,8 @@ class AGOLReader(Reader):
     Reads a AGOL from a URL and writes it locally
 
     - query_params : str
-        optional input to control query sent to AGOL, e.g. "inv_display_program ='TS_Sidewalk'"
+        optional input to control additional query params sent to AGOL,
+        e.g. "inv_display_program ='TS_Sidewalk'"
     
     Returns:
             Generator

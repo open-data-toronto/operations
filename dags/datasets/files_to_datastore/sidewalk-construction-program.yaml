@@ -5,7 +5,7 @@ sidewalk-construction-program:
   dag_owner_name: Yanan Zhang
   dag_owner_email: yanan.zhang@toronto.ca
   title: Sidewalk Construction Program
-  date_published: '2024-10-30 17:23:04.633126'
+  date_published: '2024-11-07 10:23:04.633126'
   dataset_category: Map
   refresh_rate: As available
   owner_division: Transportation Services
@@ -47,7 +47,7 @@ sidewalk-construction-program:
       - id: OBJECTID
         type: int
         info:
-          notes: ''
+          notes: 'Unique row identifier for sidewalk database'
       - id: PROJ_NUM
         type: text
         info:
@@ -56,43 +56,51 @@ sidewalk-construction-program:
         type: date
         format: epoch
         info:
-          notes: ''
-      - id: INV_PROJECT
+          notes: 'The most recent date on which the project information was revised or updated'
+      - source_name: INV_PROJECT
+        target_name: PROJECT
         type: text
         info:
-          notes: ''
-      - id: INV_LOCATION
+          notes: 'Sidewalk Construction'
+      - source_name: INV_LOCATION
+        target_name: LOCATION
         type: text
         info:
-          notes: ''
-      - id: INV_DETAIL
+          notes: 'The name, beginning and end of the street where the sidewalk project is located'
+      - source_name: INV_DETAIL
+        target_name: DETAILS
         type: text
         info:
-          notes: ''
-      - id: INV_DURATION_PUBLIC
+          notes: 'Project scope summary'
+      - source_name: INV_DURATION_PUBLIC
+        target_name: DURATION/ Construction Timeline
         type: text
         info:
-          notes: ''
-      - id: INV_STATUS
+          notes: 'The year in which the project begins and ends'
+      - source_name: INV_STATUS
+        target_name: STATUS
         type: text
         info:
-          notes: ''
+          notes: 'The status of the project'
       - id: INV_PRIORITY
         type: text
         info:
           notes: ''
-      - id: INV_OWNER
+      - source_name: INV_OWNER
+        target_name: OWNER
         type: text
         info:
-          notes: ''
-      - id: INV_PUBLIC_CONTACT_NAME
+          notes: 'Owner of all sidewalk projects is Transportation Services'
+      - source_name: INV_PUBLIC_CONTACT_NAME
+        target_name: CONTACT_NAME
         type: text
         info:
-          notes: ''
-      - id: INV_PUBLIC_CONTACT_EMAIL
+          notes: 'Contact person information'
+      - source_name: INV_PUBLIC_CONTACT_EMAIL
+        target_name: CONTACT_EMAIL
         type: text
         info:
-          notes: ''
+          notes: 'Contact email address'
       - id: INV_WEB_SITE
         type: text
         info:
@@ -105,10 +113,11 @@ sidewalk-construction-program:
         type: text
         info:
           notes: ''
-      - id: INV_START_YEAR
+      - source_name: INV_START_YEAR
+        target_name: START_YEAR
         type: text
         info:
-          notes: ''
+          notes: 'The year in which the project begins'
       - id: CONTR_NUMBER
         type: text
         info:
