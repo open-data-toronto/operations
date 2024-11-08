@@ -42,6 +42,15 @@ class TOPICS(BaseModel):
     ]
 
 
+class FORMAT(BaseModel):
+    format: Literal[
+        "csv",
+        "xlsx",
+        "json",
+        "geojson",
+    ]
+
+
 CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
 counter = 0
 
@@ -71,3 +80,16 @@ for file in sorted(os.listdir(CONFIG_FOLDER)):
             except ValidationError as e:
                 print(f"{validation_civic_issues}\n" f"{validation_topics}")
                 print(e)
+
+            resources_config = yaml_obj[package_name]["resources"]
+            for resource in resources_config:
+
+                # format validator
+                format = resources_config[resource]["format"]
+                validation_format = {"format": format}
+                try:
+                    FORMAT(**validation_format)
+
+                except ValidationError as e:
+                    print(f"{resource}: format: {format}")
+                    print(e)
