@@ -1,7 +1,7 @@
 import os
 import yaml
 from pydantic import BaseModel, ValidationError
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Dict
 
 
 class CIVIC_ISSUE(BaseModel):
@@ -51,45 +51,50 @@ class FORMAT(BaseModel):
     ]
 
 
-CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
-counter = 0
+def validator(model: [CIVIC_ISSUE, TOPICS, FORMAT], validation_data: Dict):
+    try:
+        model(**validation_data)
+    except ValidationError as e:
+        print(f"{validation_data}")
+        for error in e.errors():
+            print(error)
 
-for file in sorted(os.listdir(CONFIG_FOLDER)):
-    if file.endswith(".yaml"):
-        counter += 1
 
-        # load yaml file
-        with open(CONFIG_FOLDER + "/" + file, "r") as f:
-            yaml_obj = yaml.load(f, yaml.SafeLoader)
-            package_name = list(yaml_obj.keys())[0]
+def main():
 
-            print(f"Processing yaml file {counter}: {package_name}")
+    CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
+    counter = 0
 
-            # civic issue validator
-            civic_issues = yaml_obj[package_name]["civic_issues"]
-            validation_civic_issues = {"civic_issues": civic_issues}
+    for file in sorted(os.listdir(CONFIG_FOLDER)):
+        if file.endswith(".yaml"):
+            counter += 1
 
-            # topics validator
-            topics = yaml_obj[package_name]["topics"]
-            validation_topics = {"topics": topics}
+            # load yaml file
+            with open(CONFIG_FOLDER + "/" + file, "r") as f:
+                yaml_obj = yaml.load(f, yaml.SafeLoader)
+                package_name = list(yaml_obj.keys())[0]
 
-            try:
-                CIVIC_ISSUE(**validation_civic_issues)
-                TOPICS(**validation_topics)
+                print("-----------------------------------------------------------")
+                print(f"Processing yaml file {counter}: {package_name}")
 
-            except ValidationError as e:
-                print(f"{validation_civic_issues}\n" f"{validation_topics}")
-                print(e)
+                # civic issue validator
+                civic_issues = yaml_obj[package_name]["civic_issues"]
+                validation_civic_issues = {"civic_issues": civic_issues}
+                validator(CIVIC_ISSUE, validation_civic_issues)
 
-            resources_config = yaml_obj[package_name]["resources"]
-            for resource in resources_config:
+                # topics validator
+                topics = yaml_obj[package_name]["topics"]
+                validation_topics = {"topics": topics}
+                validator(TOPICS, validation_topics)
 
-                # format validator
-                format = resources_config[resource]["format"]
-                validation_format = {"format": format}
-                try:
-                    FORMAT(**validation_format)
+                resources_config = yaml_obj[package_name]["resources"]
+                for resource in resources_config:
 
-                except ValidationError as e:
-                    print(f"{resource}: format: {format}")
-                    print(e)
+                    # format validator
+                    format = resources_config[resource]["format"]
+                    validation_format = {"format": format}
+                    validator(FORMAT, validation_format)
+
+
+if __name__ == "__main__":
+    main()
