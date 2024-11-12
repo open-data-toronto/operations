@@ -11,7 +11,8 @@ committee-of-adjustment-applications:
   owner_unit: null
   owner_email: cityplanning@toronto.ca
   civic_issues: null
-  topics: City government
+  topics: 
+    - City government
   tags:
   - name: committee of adjustment
     vocabulary_id: null

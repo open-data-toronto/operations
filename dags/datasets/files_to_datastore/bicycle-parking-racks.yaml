@@ -11,8 +11,12 @@ bicycle-parking-racks:
   owner_section: null
   owner_unit: null
   owner_email: opendata@toronto.ca
-  civic_issues: Mobility
-  topics: Development and infrastructure,Locations and mapping,Transportation
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Development and infrastructure
+    - Locations and mapping
+    - Transportation
   tags:
   - name: bicycle
     vocabulary_id: null

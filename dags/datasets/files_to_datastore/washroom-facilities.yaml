@@ -11,7 +11,9 @@ washroom-facilities:
   owner_unit: null
   owner_email: pfrdatagovernance@toronto.ca
   civic_issues: null
-  topics: Locations and mapping,Parks and recreation
+  topics: 
+    - Locations and mapping
+    - Parks and recreation
   tags:
   - name: washrooms
     vocabulary_id: null

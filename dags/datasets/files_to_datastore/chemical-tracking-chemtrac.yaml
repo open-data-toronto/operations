@@ -11,7 +11,10 @@ chemical-tracking-chemtrac:
   owner_unit: null
   owner_email: opendata@toronto.ca
   civic_issues: null
-  topics: Public safety,Health,Environment
+  topics: 
+    - Public safety
+    - Health
+    - Environment
   tags:
     - name: air contaminant
       vocabulary_id: null

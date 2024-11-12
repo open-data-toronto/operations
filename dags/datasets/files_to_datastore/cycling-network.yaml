@@ -10,8 +10,11 @@ cycling-network:
   owner_section: Project Design and Management
   owner_unit: Cycling and Pedestring Projects
   owner_email: cycling@toronto.ca
-  civic_issues: Mobility
-  topics: Locations and mapping,Transportation
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Locations and mapping
+    - Transportation
   tags:
   - name: bicycle lane
     vocabulary_id: null

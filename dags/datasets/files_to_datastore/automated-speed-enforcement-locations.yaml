@@ -11,8 +11,11 @@ automated-speed-enforcement-locations:
   owner_section: 'Permits and Enforcement'
   owner_unit: Automated Enforcement
   owner_email: ASE@toronto.ca
-  civic_issues: Mobility
-  topics: Transportation,Locations and mapping
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Transportation
+    - Locations and mapping
   tags:
   - name: driving
     vocabulary_id: null

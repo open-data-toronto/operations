@@ -10,8 +10,10 @@ traffic-cameras:
   owner_section: null
   owner_unit: null
   owner_email: opendata@toronto.ca
-  civic_issues: Mobility
-  topics: Transportation
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Transportation
   tags:
   - name: traffic camera
     vocabulary_id: null

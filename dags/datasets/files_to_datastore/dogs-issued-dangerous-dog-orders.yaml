@@ -14,7 +14,7 @@ dogs-issued-dangerous-dog-orders:
   owner_email: tasemru@toronto.ca
   civic_issues: null
   topics:
-  - Public Safety
+    - Public safety
   tags:
   - name: bite
     vocabulary_id: null
@@ -34,7 +34,7 @@ dogs-issued-dangerous-dog-orders:
 
   resources:
     Dogs Issued Dangerous Dog Orders:
-      format: 'CSV'
+      format: csv
       url: https://opendata.toronto.ca/municipal.licensing.standards/dogs-issued-dangerous-dog-orders/dogs-issued-dangerous-dog-orders.csv
       attributes: 
       - id: Forward_Sortation_Area

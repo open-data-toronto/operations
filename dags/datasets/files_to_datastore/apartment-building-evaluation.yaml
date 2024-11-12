@@ -10,8 +10,15 @@ apartment-building-evaluation:
   owner_section: Policy & Strategic Support
   owner_unit: null
   owner_email: RentSafeTO@toronto.ca
-  civic_issues: Affordable housing,Poverty reduction,Fiscal responsibility
-  topics: Locations and mapping,City government,Business,Development and infrastructure
+  civic_issues: 
+    - Affordable housing
+    - Poverty reduction
+    - Fiscal responsibility
+  topics: 
+    - Locations and mapping
+    - City government
+    - Business
+    - Development and infrastructure
   tags: []
   information_url: https://www.toronto.ca/community-people/housing-shelter/rental-housing-standards/apartment-building-standards/
   excerpt: 'This dataset contains building evaluation data for rental buildings that

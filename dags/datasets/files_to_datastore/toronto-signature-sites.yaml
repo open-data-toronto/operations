@@ -13,10 +13,10 @@ toronto-signature-sites:
   owner_unit: Business Retention and Expansion
   owner_email: bizconnect@toronto.ca
   civic_issues:
-  - Poverty reduction
+    - Poverty reduction
   topics:
-  - Business
-  - Development
+    - Business
+    - Development and infrastructure
   tags: 
   - name: property
     vocabulary_id: null

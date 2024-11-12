@@ -14,7 +14,7 @@ short-term-rental-program-data:
   owner_email: ShortTermRentals@toronto.ca
   civic_issues: null
   topics:
-  - Permits and Licenses
+    - Permits and licenses
   tags: 
     - name: airbnb
       vocabulary_id: null

@@ -12,7 +12,9 @@ cultural-hotspot-points-of-interest:
   owner_unit: null
   owner_email: opendata@toronto.ca
   civic_issues: null
-  topics: Locations and mapping,Culture and tourism
+  topics: 
+    - Locations and mapping
+    - Culture and tourism
   tags:
   - name: culture
     vocabulary_id: null

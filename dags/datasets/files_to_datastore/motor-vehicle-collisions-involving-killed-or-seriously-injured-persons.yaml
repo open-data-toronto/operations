@@ -11,7 +11,8 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
   owner_unit: null
   owner_email: Analytics.Innovation@torontopolice.on.ca
   civic_issues: null
-  topics: Public safety
+  topics: 
+    - Public safety
   tags:
   - name: Accidents
     vocabulary_id: null

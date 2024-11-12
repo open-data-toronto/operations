@@ -11,7 +11,8 @@ registry-of-declared-interest:
   owner_unit: null
   owner_email: clerk@toronto.ca
   civic_issues: null
-  topics: City government
+  topics: 
+    - City government
   tags:
   - name: city council
     vocabulary_id: null

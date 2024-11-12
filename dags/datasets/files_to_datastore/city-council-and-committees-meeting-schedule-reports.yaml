@@ -11,7 +11,8 @@ city-council-and-committees-meeting-schedule-reports:
   owner_unit: null
   owner_email: opendata@toronto.ca
   civic_issues: null
-  topics: City government
+  topics: 
+    - City government
   tags:
   - name: city council
     vocabulary_id: null

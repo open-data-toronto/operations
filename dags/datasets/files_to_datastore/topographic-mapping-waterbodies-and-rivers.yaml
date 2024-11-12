@@ -12,7 +12,7 @@ topographic-mapping-waterbodies-and-rivers:
   owner_email: gcc@toronto.ca
   civic_issues: null
   topics: 
-  - Locations and Mapping
+    - Locations and mapping
   tags:
   - name: GIS
     vocabulary_id: null

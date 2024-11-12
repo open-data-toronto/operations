@@ -12,7 +12,9 @@ street-furniture-bicycle-parking:
   owner_unit: null
   owner_email: Sandro.Tersigni@toronto.ca
   civic_issues: null
-  topics: Transportation,Health
+  topics: 
+    - Transportation
+    - Health
   tags: []
   information_url: http://gis.toronto.ca/arcgis/rest/services/primary/cot_geospatial2_mtm/MapServer/27
   excerpt: "Bike Parking location and asset type data maintained by the City of Toronto's\

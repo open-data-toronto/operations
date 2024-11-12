@@ -12,9 +12,10 @@ centralized-waiting-list-activity-for-social-housing:
   owner_section: 'Housing Stability Services '
   owner_unit: 'Access to Housing '
   owner_email: housingplan@toronto.ca
-  civic_issues: Affordable Housing
+  civic_issues: 
+    - Affordable housing
   topics:
-  - Development
+    - Development and infrastructure
   tags:
   - name: Housing
     vocabulary_id: null

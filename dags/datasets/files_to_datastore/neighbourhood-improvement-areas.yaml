@@ -10,8 +10,13 @@ neighbourhood-improvement-areas:
   owner_section: null
   owner_unit: null
   owner_email: opendata@toronto.ca
-  civic_issues: Affordable housing,Poverty reduction,Mobility
-  topics: Community services,Locations and mapping
+  civic_issues: 
+    - Affordable housing
+    - Poverty reduction
+    - Mobility
+  topics: 
+    - Community services
+    - Locations and mapping
   tags:
   - name: map
     vocabulary_id: null

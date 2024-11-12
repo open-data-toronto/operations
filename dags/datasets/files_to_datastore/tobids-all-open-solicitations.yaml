@@ -11,7 +11,9 @@ tobids-all-open-solicitations:
   owner_unit: null
   owner_email: supplychain@toronto.ca
   civic_issues: null
-  topics: City government,Finance
+  topics: 
+    - City government
+    - Finance
   tags:
   - name: call documents
     vocabulary_id: null

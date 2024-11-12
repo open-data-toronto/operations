@@ -11,7 +11,8 @@ members-of-toronto-city-council-meeting-attendance:
   owner_unit: null
   owner_email: clerk@toronto.ca
   civic_issues: null
-  topics: City government
+  topics: 
+    - City government
   tags:
   - name: city coucil
     vocabulary_id: null

@@ -11,8 +11,11 @@ bicycle-parking-high-capacity-outdoor:
   owner_section: null
   owner_unit: null
   owner_email: opendata@toronto.ca
-  civic_issues: Mobility
-  topics: Locations and mapping,Transportation
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Locations and mapping
+    - Transportation
   tags:
   - name: bicycle parking
     vocabulary_id: null

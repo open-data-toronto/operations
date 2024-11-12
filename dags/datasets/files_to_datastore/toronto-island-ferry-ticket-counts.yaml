@@ -14,9 +14,9 @@ toronto-island-ferry-ticket-counts:
   owner_email: pfr.researchanalytics@toronto.ca
   civic_issues: null
   topics:
-  - Transportation
-  - Culture & Tourism
-  - Parks and Recreation
+    - Transportation
+    - Culture and tourism
+    - Parks and recreation
   tags:
   - name: Ferry
     vocabulary_id: null

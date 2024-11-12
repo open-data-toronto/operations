@@ -11,7 +11,10 @@ tennis-courts-facilities:
   owner_unit: null
   owner_email: opendata@toronto.ca
   civic_issues: null
-  topics: Community services,Locations and mapping,Parks and recreation
+  topics: 
+    - Community services
+    - Locations and mapping
+    - Parks and recreation
   tags:
   - name: tennis court
     vocabulary_id: null

@@ -12,7 +12,10 @@ bicycle-shops:
   owner_unit: null
   owner_email: opendata@toronto.ca
   civic_issues: null
-  topics: Business,Locations and mapping,Transportation
+  topics: 
+    - Business
+    - Locations and mapping
+    - Transportation
   tags:
   - name: bike shops
     vocabulary_id: null

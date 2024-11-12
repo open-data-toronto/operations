@@ -14,8 +14,8 @@ noise-exemption-permits:
   owner_email: NoiseTO@toronto.ca
   civic_issues: null
   topics:
-  - Permits and Licenses
-  - Business
+    - Permits and licenses
+    - Business
   tags:
   - name: allowed
     vocabulary_id: null

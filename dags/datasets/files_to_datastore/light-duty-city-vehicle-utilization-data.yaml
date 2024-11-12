@@ -13,9 +13,9 @@ light-duty-city-vehicle-utilization-data:
   owner_unit: Fleet Asset Management
   owner_email: fleetservices@toronto.ca
   civic_issues:
-  - Fiscal responsibility
+    - Fiscal responsibility
   topics:
-  - City Government
+    - City government
   tags:
   - name: Fleet
     vocabulary_id: null

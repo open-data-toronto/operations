@@ -20,8 +20,8 @@ places-of-interest-and-toronto-attractions:
   civic_issues: null
   topics: 
     - Business
-    - Culture and Tourism
-    - Locations and Mapping
+    - Culture and tourism
+    - Locations and mapping
   tags: 
     - name: attractions
       vocabulary_id: null

@@ -12,7 +12,10 @@ ambulance-station-locations:
   owner_unit: null
   owner_email: 'bikram.chawla@toronto.ca '
   civic_issues: null
-  topics: Health,Locations and mapping,Public safety
+  topics: 
+    - Health
+    - Locations and mapping
+    - Public safety
   tags:
   - name: ambulance
     vocabulary_id: null

@@ -11,8 +11,15 @@ pedestrian-network:
   owner_section: Geospatial Competency Centre
   owner_unit: Data Analytics and Visualization Team
   owner_email: gcc@toronto.ca
-  civic_issues: Affordable housing,Poverty reduction,Mobility,Climate change
-  topics: Transportation,Locations and mapping,Parks and recreation
+  civic_issues: 
+    - Affordable housing
+    - Poverty reduction
+    - Mobility
+    - Climate change
+  topics: 
+    - Transportation
+    - Locations and mapping
+    - Parks and recreation
   tags: []
   information_url: null
   excerpt: This data is based on the sidewalk inventory from Transportation Services,

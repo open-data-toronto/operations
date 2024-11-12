@@ -12,7 +12,9 @@ municipal-licensing-and-standards-business-licences-and-permits:
   owner_unit: null
   owner_email: MLSBusinessLicence@toronto.ca
   civic_issues: null
-  topics: Business,Permits and licenses
+  topics: 
+    - Business
+    - Permits and licenses
   tags:
   - name: busincess licence
     vocabulary_id: null

@@ -11,8 +11,12 @@ red-light-cameras:
   owner_section: null
   owner_unit: null
   owner_email: ' TorontoRLC@toronto.ca'
-  civic_issues: Mobility
-  topics: Locations and mapping,Public safety,Transportation
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Locations and mapping
+    - Public safety
+    - Transportation
   tags:
   - name: red light
     vocabulary_id: null

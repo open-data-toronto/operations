@@ -12,10 +12,11 @@ upcoming-and-recently-completed-affordable-housing-units:
   owner_section: Housing Development, Renewal and Improvement
   owner_unit: Housing Development and Revitalization
   owner_email: housingplan@toronto.ca
-  civic_issues: Affordable Housing
+  civic_issues: 
+    - Affordable housing
   topics:
-  - Development
-  - Locations and Mapping
+    - Development and infrastructure
+    - Locations and mapping
   tags:
   - name: Affordable
     vocabulary_id: null

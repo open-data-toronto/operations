@@ -11,7 +11,9 @@ building-permits-cleared-permits:
   owner_unit: null
   owner_email: Ryan.Persaud@toronto.ca
   civic_issues: null
-  topics: Development and infrastructure,Permits and licenses
+  topics: 
+    - Development and infrastructure
+    - Permits and licenses
   tags:
   - name: building permit
     vocabulary_id: null

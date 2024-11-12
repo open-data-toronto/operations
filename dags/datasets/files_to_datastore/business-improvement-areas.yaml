@@ -12,7 +12,9 @@ business-improvement-areas:
   owner_unit: null
   owner_email: opendata@toronto.ca
   civic_issues: null
-  topics: Business,Locations and mapping
+  topics: 
+    - Business
+    - Locations and mapping
   tags:
   - name: bia
     vocabulary_id: null

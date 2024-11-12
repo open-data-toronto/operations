@@ -13,10 +13,10 @@ city-of-toronto-free-public-wifi:
   owner_unit: ConnectTO
   owner_email: Michel.Mersereau@toronto.ca
   civic_issues:
-  - Poverty reduction
+    - Poverty reduction
   topics:
-  - Community Services
-  - Locations and Mapping
+    - Community services
+    - Locations and mapping
   tags:
   - name: Internet
     vocabulary_id: null

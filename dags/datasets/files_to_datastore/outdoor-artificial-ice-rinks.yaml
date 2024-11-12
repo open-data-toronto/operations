@@ -11,7 +11,8 @@ outdoor-artificial-ice-rinks:
   owner_unit: null
   owner_email: pfrdatagovernance@toronto.ca
   civic_issues: null
-  topics: Parks and recreation
+  topics: 
+    - Parks and recreation
   tags:
   - name: ice rink
     vocabulary_id: null

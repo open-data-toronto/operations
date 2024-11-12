@@ -12,8 +12,8 @@ real-estate-asset-inventory:
   owner_email: realestate@toronto.ca
   civic_issues: null
   topics: 
-    - City Government
-    - Locations and Mapping
+    - City government
+    - Locations and mapping
   tags: 
     - name: property
       vocabulary_id: null

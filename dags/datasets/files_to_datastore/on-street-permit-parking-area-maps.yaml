@@ -11,8 +11,11 @@ on-street-permit-parking-area-maps:
   owner_section: null
   owner_unit: null
   owner_email: opendata@toronto.ca
-  civic_issues: Mobility
-  topics: Locations and mapping,Transportation
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Locations and mapping
+    - Transportation
   tags:
   - name: maps
     vocabulary_id: null

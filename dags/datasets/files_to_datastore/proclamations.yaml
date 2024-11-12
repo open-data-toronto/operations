@@ -10,8 +10,10 @@ proclamations:
   owner_section: Strategic Protocol & External Relations
   owner_unit: Community Recognition Team
   owner_email: annette.velhopereira@toronto.ca
-  civic_issues: affordable_housing
-  topics: City government
+  civic_issues: 
+    - Affordable housing
+  topics: 
+    - City government
   tags: 
     - name: holidays
       vocabulary_id: null

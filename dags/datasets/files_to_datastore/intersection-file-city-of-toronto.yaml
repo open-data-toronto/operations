@@ -10,8 +10,10 @@ intersection-file-city-of-toronto:
   owner_section: null
   owner_unit: null
   owner_email: gcc@toronto.ca
-  civic_issues: Mobility
-  topics: Locations and mapping
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Locations and mapping
   tags:
   - name: intersections
     vocabulary_id: null

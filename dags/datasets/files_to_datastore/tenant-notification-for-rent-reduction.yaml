@@ -10,8 +10,13 @@ tenant-notification-for-rent-reduction:
   owner_section: null
   owner_unit: null
   owner_email: Sara.Jackson@toronto.ca
-  civic_issues: Affordable housing,Poverty reduction
-  topics: City government,Community services,Finance
+  civic_issues: 
+    - Affordable housing
+    - Poverty reduction
+  topics: 
+    - City government
+    - Community services
+    - Finance
   tags:
   - name: landlords
     vocabulary_id: null

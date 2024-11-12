@@ -17,9 +17,11 @@ toronto-fire-services-run-areas:
   owner_unit: null
   owner_email: FireAnalytics@toronto.ca
 
-  civic_issues: Poverty reduction
+  civic_issues: 
+    - Poverty reduction
   topics: 
-    - Locations and mapping,Public safety
+    - Locations and mapping
+    - Public safety
   tags: 
     - name: tag
       vocabulary_id: null

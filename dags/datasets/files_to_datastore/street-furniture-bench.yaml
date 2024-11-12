@@ -12,7 +12,11 @@ street-furniture-bench:
   owner_unit: null
   owner_email: Sandro.Tersigni@toronto.ca
   civic_issues: null
-  topics: City government,Culture and tourism,Locations and mapping,Transportation
+  topics: 
+    - City government
+    - Culture and tourism
+    - Locations and mapping
+    - Transportation
   tags:
   - name: bench
     vocabulary_id: null

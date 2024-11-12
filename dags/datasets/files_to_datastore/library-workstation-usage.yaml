@@ -18,7 +18,8 @@ library-workstation-usage:
   owner_email: planning@tpl.ca
 
   civic_issues: null
-  topics: Community services
+  topics: 
+    - Community services
   tags:
   - name: library
     vocabulary_id: null

@@ -14,9 +14,9 @@ park-and-recreation-facility-projects:
   owner_email: engagePDCP@toronto.ca
   civic_issues: null
   topics:
-  - Development
-  - Locations and Mapping
-  - Parks and Recreation
+    - Development and infrastructure
+    - Locations and mapping
+    - Parks and recreation
   tags:
   - name: parks
     vocabulary_id: null

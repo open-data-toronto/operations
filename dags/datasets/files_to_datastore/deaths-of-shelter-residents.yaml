@@ -13,11 +13,11 @@ deaths-of-shelter-residents:
   owner_unit: Business Intelligence
   owner_email: tsssdata@toronto.ca
   civic_issues:
-  - Affordable housing
-  - Poverty reduction
+    - Affordable housing
+    - Poverty reduction
   topics:
-  - Community Services
-  - Health
+    - Community services
+    - Health
   tags:
   - name: homelessness
     vocabulary_id: null

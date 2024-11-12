@@ -12,9 +12,10 @@ active-affordable-and-social-housing-units:
   owner_section: 'Housing Secretariat '
   owner_unit: Operations Support
   owner_email: housingplan@toronto.ca
-  civic_issues: Affordable Housing
+  civic_issues: 
+    - Affordable housing
   topics:
-  - Development
+  - Development and infrastructure
   tags:
   - name: Affordable
     vocabulary_id: null

@@ -11,7 +11,9 @@ parks-and-recreation-facilities:
   owner_unit: null
   owner_email: opendata@toronto.ca
   civic_issues: null
-  topics: Locations and mapping,Parks and recreation
+  topics: 
+    - Locations and mapping
+    - Parks and recreation
   tags:
   - name: parks and rec
     vocabulary_id: null

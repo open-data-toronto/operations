@@ -11,8 +11,11 @@ city-wards:
   owner_section: null
   owner_unit: null
   owner_email: opendata@toronto.ca
-  civic_issues: Mobility
-  topics: City government,Locations and mapping
+  civic_issues: 
+    - Mobility
+  topics: 
+    - City government
+    - Locations and mapping
   tags:
   - name: city wards
     vocabulary_id: null

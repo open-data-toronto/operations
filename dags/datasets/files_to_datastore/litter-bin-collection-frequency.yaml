@@ -14,9 +14,9 @@ litter-bin-collection-frequency:
   owner_email: Nazifa.Uddin@toronto.ca
   civic_issues: null
   topics:
-  - City Government
-  - Garbage and Recycling
-  - Locations and Mapping
+    - City government
+    - Garbage and recycling
+    - Locations and mapping
   tags:
   - name: SWMS
     vocabulary_id: null

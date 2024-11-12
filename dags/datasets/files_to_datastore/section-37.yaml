@@ -10,8 +10,12 @@ section-37:
   owner_section: null
   owner_unit: null
   owner_email: cityplanning@toronto.ca
-  civic_issues: Affordable housing
-  topics: Development and infrastructure,City government,Locations and mapping
+  civic_issues: 
+    - Affordable housing
+  topics: 
+    - Development and infrastructure
+    - City government
+    - Locations and mapping
   tags:
   - name: benefits
     vocabulary_id: null

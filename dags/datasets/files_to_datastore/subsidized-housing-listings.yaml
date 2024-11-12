@@ -13,10 +13,10 @@ subsidized-housing-listings:
   owner_unit: Access to Housing
   owner_email: hss@toronto.ca
   civic_issues:
-  - Affordable housing
+    - Affordable housing
   topics:
-  - Community Services
-  - Locations and Mapping
+    - Community services
+    - Locations and mapping
   tags: 
   - name: subsidy
     vocabulary_id: null

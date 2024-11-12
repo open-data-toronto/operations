@@ -11,7 +11,9 @@ dinesafe:
   owner_unit: null
   owner_email: PublicHealth@toronto.ca
   civic_issues: null
-  topics: Public safety,Health
+  topics: 
+    - Public safety
+    - Health
   tags:
   - name: dinesafe
     vocabulary_id: null

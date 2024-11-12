@@ -11,8 +11,12 @@ clothing-drop-box-locations:
   owner_section: null
   owner_unit: null
   owner_email: Fiona.chapman@toronto.ca
-  civic_issues: Poverty reduction
-  topics: Community services,Locations and mapping,Permits and licenses
+  civic_issues: 
+    - Poverty reduction
+  topics: 
+    - Community services
+    - Locations and mapping
+    - Permits and licenses
   tags:
   - name: clothing drop box
     vocabulary_id: null

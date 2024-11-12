@@ -11,7 +11,9 @@ registered-programs-and-drop-in-courses-offering:
   owner_unit: null
   owner_email: pfr@toronto.ca
   civic_issues: null
-  topics: Community services,Parks and recreation
+  topics: 
+    - Community services
+    - Parks and recreation
   tags:
   - name: drop in
     vocabulary_id: null

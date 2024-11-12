@@ -10,8 +10,10 @@ building-construction-demolition-violations:
   owner_section: null
   owner_unit: null
   owner_email: Ryan.Persaud@toronto.ca
-  civic_issues: Fiscal responsibility
-  topics: Development
+  civic_issues: 
+    - Fiscal responsibility
+  topics: 
+    - Development and infrastructure
   tags:
   - name: building permit
     vocabulary_id: null

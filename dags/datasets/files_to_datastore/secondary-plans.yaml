@@ -11,8 +11,11 @@ secondary-plans:
   owner_section: null
   owner_unit: null
   owner_email: opendata@toronto.ca
-  civic_issues: Mobility
-  topics: Development and infrastructure,Locations and mapping
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Development and infrastructure
+    - Locations and mapping
   tags:
   - name: development
     vocabulary_id: null

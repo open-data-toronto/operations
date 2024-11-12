@@ -11,7 +11,8 @@ address-points-municipal-toronto-one-address-repository:
   owner_unit: null
   owner_email: opendata@toronto.ca
   civic_issues: null
-  topics: Locations and mapping
+  topics: 
+    - Locations and mapping
   tags:
   - name: address
     vocabulary_id: null

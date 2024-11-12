@@ -13,12 +13,12 @@ green-streets:
   owner_unit: Asset Management
   owner_email: greenstreets@toronto.ca
   civic_issues:
-  - Climate change
+    - Climate change
   topics:
-  - Development
-  - Environment
-  - Transportation
-  - Water
+    - Development and infrastructure
+    - Environment
+    - Transportation
+    - Water
   tags:
   - name: Green
     vocabulary_id: null

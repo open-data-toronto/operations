@@ -12,7 +12,9 @@ community-council-boundaries:
   owner_unit: null
   owner_email: opendata@toronto.ca
   civic_issues: null
-  topics: City government,Locations and mapping
+  topics: 
+    - City government
+    - Locations and mapping
   tags:
   - name: community council boundary
     vocabulary_id: null

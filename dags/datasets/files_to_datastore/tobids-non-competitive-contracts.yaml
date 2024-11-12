@@ -11,7 +11,8 @@ tobids-non-competitive-contracts:
   owner_unit: null
   owner_email: supplychain@toronto.ca
   civic_issues: null
-  topics: Business
+  topics: 
+    - Business
   tags: []
   information_url: https://www.toronto.ca/business-economy/doing-business-with-the-city/searching-bidding-on-city-contracts/toronto-bids-portal/#non_competitive
   excerpt: The Non-Competitive Contracts dataset contains a list of non-competitive

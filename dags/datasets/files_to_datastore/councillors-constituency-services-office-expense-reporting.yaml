@@ -11,7 +11,9 @@ councillors-constituency-services-office-expense-reporting:
   owner_unit: null
   owner_email: opendata@toronto.ca
   civic_issues: null
-  topics: City government,Finance
+  topics: 
+    - City government
+    - Finance
   tags:
   - name: council budget
     vocabulary_id: null

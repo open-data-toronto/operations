@@ -12,7 +12,11 @@ street-furniture-public-washroom:
   owner_unit: null
   owner_email: Sandro.Tersigni@toronto.ca
   civic_issues: null
-  topics: City government,Culture and tourism,Locations and mapping,Transportation
+  topics:
+    - City government
+    - Culture and tourism
+    - Locations and mapping
+    - Transportation
   tags:
   - name: automated public toilet
     vocabulary_id: null
