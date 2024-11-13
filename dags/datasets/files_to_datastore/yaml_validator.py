@@ -51,11 +51,13 @@ class FORMAT(BaseModel):
     ]
 
 
-def validator(model: [CIVIC_ISSUE, TOPICS, FORMAT], validation_data: Dict):
+def validator(
+    model: [CIVIC_ISSUE, TOPICS, FORMAT], validation_data: Dict, file_name: str
+) -> None:
     try:
         model(**validation_data)
     except ValidationError as e:
-        print(f"{validation_data}")
+        print(f"Yaml file: {file_name} \n {validation_data}")
         for error in e.errors():
             print(error)
 
@@ -64,6 +66,8 @@ def main():
 
     CONFIG_FOLDER = os.path.dirname(os.path.realpath(__file__))
     counter = 0
+
+    print("Validating yamls...")
 
     for file in sorted(os.listdir(CONFIG_FOLDER)):
         if file.endswith(".yaml"):
@@ -74,18 +78,15 @@ def main():
                 yaml_obj = yaml.load(f, yaml.SafeLoader)
                 package_name = list(yaml_obj.keys())[0]
 
-                print("-----------------------------------------------------------")
-                print(f"Processing yaml file {counter}: {package_name}")
-
                 # civic issue validator
                 civic_issues = yaml_obj[package_name]["civic_issues"]
                 validation_civic_issues = {"civic_issues": civic_issues}
-                validator(CIVIC_ISSUE, validation_civic_issues)
+                validator(CIVIC_ISSUE, validation_civic_issues, package_name)
 
                 # topics validator
                 topics = yaml_obj[package_name]["topics"]
                 validation_topics = {"topics": topics}
-                validator(TOPICS, validation_topics)
+                validator(TOPICS, validation_topics, package_name)
 
                 resources_config = yaml_obj[package_name]["resources"]
                 for resource in resources_config:
@@ -93,7 +94,7 @@ def main():
                     # format validator
                     format = resources_config[resource]["format"]
                     validation_format = {"format": format}
-                    validator(FORMAT, validation_format)
+                    validator(FORMAT, validation_format, package_name)
 
 
 if __name__ == "__main__":
