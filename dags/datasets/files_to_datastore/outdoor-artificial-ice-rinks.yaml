@@ -1,10 +1,10 @@
 outdoor-artificial-ice-rinks:
-  schedule: '@once'
+  schedule: "20 19 * * *"
   dag_owner_name: 'Mackenzie'
   dag_owner_email: 'mackenzie.nichols4@toronto.ca'
   title: Outdoor Artificial Ice Rinks
   date_published: '2019-07-23 17:48:48.066766'
-  refresh_rate: Annually
+  refresh_rate: Daily
   dataset_category: Map
   owner_division: Parks, Forestry & Recreation
   owner_section: null
@@ -30,21 +30,16 @@ outdoor-artificial-ice-rinks:
     
     Artificial ice rinks are located in parks, on playgrounds, at Community Recreation Centres, and at Civic Centre Squares. The dataset provides details on location information, ice rink (i.e. pad) size and lighting conditions. 
     
-      The outdoor artificial ice rinks and skate trails information found in this dataset include: 
+    The operational status of an outdoor artificial ice rink is updated in near real-time by staff throughout the day. The most updated information can be found by accessing the JSON file linked below:
 
-    *	Parent Asset Name
-    *	Asset ID
-    *	Asset Name
-    *	Park Name
-    *	Public Name
-    *	Pad Length
-    *	Pad Width
-    *	Ice Pad Type
-    *	Boards (Ice Rink)
-    *	Lit Area
-    *	Community Council Area
-    *	Ward
-    *	Address
+    [https://www.toronto.ca/data/parks/live/skate_allupdates.json](https://www.toronto.ca/data/parks/live/skate_allupdates.json)
+
+    Operational Statuses include:
+    * 0 = closed
+    * 1 = open
+    * 2 = service alert
+
+    The json file and the rink list should be joined by first parsing the numeric digits from the [locations] column in the json, and then joining to the rink file on [locationid]. Note: The json file will only show status information for ice pads that have active service alerts on them.
     
     The data provided is sourced from the City of Toronto Parks, Forestry and Recreation Asset Management System. The dataset has been validated on-site by parks supervisors and through necessary inter-divisional staff. 
     
@@ -54,10 +49,10 @@ outdoor-artificial-ice-rinks:
 
   resources:
     # resource name
-    Outdoor Ice Rinks:
+    Outdoor Artificial Ice Rinks:
       format: xlsx
-      sheet: Sheet1
-      url: https://opendata.toronto.ca/parks.forestry.recreation/outdoor-ice-rinks/outdoor-ice-rinks-data-4326.xlsx
+      url: "https://opendata.toronto.ca/parks.forestry.recreation/outdoor-ice-rinks/Outdoor Ice Rinks - Winter 2024.xlsx"
+      sheet: Outdoor Ice Rinks - Winter 2025
       attributes:
         - id: "Parent Asset Name"
           type: "text"
@@ -71,6 +66,10 @@ outdoor-artificial-ice-rinks:
           type: "text"
           info:
             notes: "Name of the asset"
+        - id: locationid
+          type: "text"
+          info:
+            notes: "id of the parent asset (i.e. location id)"
         - id: "Public Name"
           type: "text"
           info:
@@ -83,18 +82,18 @@ outdoor-artificial-ice-rinks:
           type: "text"
           info:
             notes: "Width of an ice pad in feet"
-        - id: "Ice Pad Type"
+        - id: Ice Pad Type
           type: "text"
           info:
-            notes: "Ex: Outdoor Ice Pad, Skate Rail"
-        - id: "Boards (Ice Rink)"
+            notes: ""
+        - id: Boards (Ice Rink)
           type: "text"
           info:
-            notes: "Identifies if the rink has boards or not"
-        - id: "Rink is Lit"
+            notes: ""
+        - id: Rink is Lit
           type: "text"
           info:
-            notes: "Yes or No"
+            notes: ""       
         - id: "Address"
           type: "text"
           info:
