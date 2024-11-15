@@ -1,7 +1,7 @@
 import os
 import yaml
 from pydantic import BaseModel, ValidationError
-from typing import List, Literal, Optional, Dict
+from typing import List, Literal, Optional, Dict, Union
 
 
 class CIVIC_ISSUE(BaseModel):
@@ -52,7 +52,7 @@ class FORMAT(BaseModel):
 
 
 def validator(
-    model: [CIVIC_ISSUE, TOPICS, FORMAT], validation_data: Dict, file_name: str
+    model: Union[CIVIC_ISSUE, TOPICS, FORMAT], validation_data: Dict, file_name: str
 ) -> None:
     try:
         model(**validation_data)
