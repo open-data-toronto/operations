@@ -1,0 +1,69 @@
+topographic-mapping-edge-of-road:
+  schedule: '@once'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: "Topographic Mapping - Edge of Road"
+  date_published: '2019-10-17 19:44:23.525924'
+  refresh_rate: Quarterly
+  dataset_category: Map
+  owner_division: Information & Technology
+  owner_section: null
+  owner_unit: 'Geospatial Competency Centre'
+  owner_email: gcc@toronto.ca
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Locations and mapping
+    - Transportation
+  tags: []
+  information_url: null
+  excerpt: "Layer from the City\u2019s topographic mapping products representing the\
+    \ physical area of the City\u2019s street system."
+  limitations: Data is collected via manual digitization from aerial imagery. It has
+    a ground accuracy of +/- 30cm. Added/deleted/moved features may not be reflected
+    in the dataset immediately due to operational constraints. Due to the inability
+    to see features located close to tall buildings, or in areas of deep shadow; some
+    features may not be collected. Based on the sheer scale and physical area of the
+    City of Toronto not all features are collected annually. This data is not to be
+    used as a substitute for a legal survey. The data is to be used for analysis and
+    visualization purposes.
+  notes: "Polygon layer representing the physical area of the City\u2019s street system.\
+    \ Part of the City\u2019s topographic mapping products, the data is collected\
+    \ from high resolution aerial photography. The data is a representation of the\
+    \ physical features that are visually identifiable in an aerial photograph. "
+  resources:
+    Edge of Roadway:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_TOPO_EDGE_OF_ROAD/FeatureServer/0
+      attributes:
+      - id: SUBTYPE_CODE
+        type: int
+        info:
+          notes: ''
+      - id: SUBTYPE_DESC
+        type: text
+        info:
+          notes: ''
+      - id: ELEVATION
+        type: text
+        info:
+          notes: ''
+      - id: LAST_GEOMETRY_MAINT
+        type: timestamp
+        format: epoch
+        info:
+          notes: ''
+      - id: LAST_ATTRIBUTE_MAINT
+        type: timestamp
+        format: epoch
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

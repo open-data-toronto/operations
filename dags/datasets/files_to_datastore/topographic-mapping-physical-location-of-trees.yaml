@@ -1,0 +1,79 @@
+topographic-mapping-physical-location-of-trees:
+  schedule: '@once'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: "Topographic Mapping - Physical location of trees"
+  date_published: '2019-10-18 17:43:31.130684'
+  refresh_rate: Quarterly
+  dataset_category: Map
+  owner_division: Information & Technology
+  owner_section: null
+  owner_unit: 'Geospatial Competency Centre'
+  owner_email: gcc@toronto.ca
+  civic_issues: 
+    - Climate change
+  topics: 
+    - Locations and mapping
+    - Environment
+  tags: []
+  information_url: null
+  excerpt: "Layer from the City\u2019s topographic mapping products representing the\
+    \ physical location of trees."
+  limitations: "Data is collected via automated extraction from aerial LiDAR using\
+    \ custom developed procedures using open source tools. The City is currently in\
+    \ the process of publishing these methodologies for public use. This code is deemed\
+    \ \u201Cin development\u201D and therefore the quality/accuracy of the derived\
+    \ tree points layer will improve with time. Added/deleted/moved features may not\
+    \ be reflected in the dataset immediately due to operational constraints. Due\
+    \ to the inability to see features located close to tall buildings, or in areas\
+    \ of deep shadow; some features may not be collected. This data is not to be used\
+    \ as a substitute for a legal survey. The data is to be used for analysis and\
+    \ visualization purposes."
+  notes: "Point layer representing the physical location of trees. Part of the City\u2019\
+    s topographic mapping products, the data is collected from high resolution aerial\
+    \ photography. The data is a representation of the physical features that are\
+    \ visually identifiable in an aerial photograph. "
+  resources:
+    Tree Points:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_TOPO_TREE/FeatureServer/0
+      attributes:
+      - id: SUBTYPE_CODE
+        type: int
+        info:
+          notes: ''
+      - id: SUBTYPE_DESC
+        type: text
+        info:
+          notes: ''
+      - id: ELEVATION
+        type: text
+        info:
+          notes: ''
+      - id: DERIVED_HEIGHT
+        type: text
+        info:
+          notes: ''
+      - id: DERIVED_OWNER
+        type: text
+        info:
+          notes: ''
+      - id: LAST_GEOMETRY_MAINT
+        type: timestamp
+        format: epoch
+        info:
+          notes: ''
+      - id: LAST_ATTRIBUTE_MAINT
+        type: timestamp
+        format: epoch
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''

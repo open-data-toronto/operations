@@ -1,0 +1,69 @@
+topographic-mapping-poles:
+  schedule: '@once'
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: "Topographic Mapping - Poles"
+  date_published: '2019-07-23 18:05:15.867528'
+  refresh_rate: As available
+  dataset_category: Map
+  owner_division: Information & Technology
+  owner_section: null
+  owner_unit: null
+  owner_email: gcc@toronto.ca
+  civic_issues: null
+  topics: 
+    - Locations and mapping
+  tags: []
+  information_url: null
+  excerpt: "Photogrammetrically derived point dataset of pole features.\t\t"
+  limitations: null
+  notes: "\n\nTopographic mapping includes features that are visible on the ground\
+    \ (planimetric), or can be derived from photogrammetric measurements. The pole\
+    \ dataset is broken down into the following subtypes:\n\n \n\n- Circular Hydro\
+    \ Tower\n\n- Pedestrian Light Pole\n\n- Street Light Pole\n\n- Street Light and\
+    \ Traffic Signal Pole\n\n- Traffic Signal Pole\n\n- Miscellaneous Pole\n\n \n\n\
+    **Limitation:**\n\nData is collected via manual digitization from aerial imagery.\
+    \ It has a ground accuracy of +- 30cm. Poles added/deleted/moved through construction\
+    \ may not be reflected in the dataset immediately due to operational constraints.\
+    \ Due to the inability to see poles located close to tall buildings, or in areas\
+    \ of deep shadow; some poles may not be collected at all.\n"
+  resources:
+    Poles:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_TOPO_POLE/FeatureServer/0
+      attributes:
+      - id: SUBTYPE_CODE
+        type: int
+        info:
+          notes: ''
+      - id: SUBTYPE_DESC
+        type: text
+        info:
+          notes: ''
+      - id: ELEVATION
+        type: text
+        info:
+          notes: ''
+      - id: DERIVED_HEIGHT
+        type: text
+        info:
+          notes: ''
+      - id: LAST_GEOMETRY_MAINT
+        type: timestamp
+        format: epoch
+        info:
+          notes: ''
+      - id: LAST_ATTRIBUTE_MAINT
+        type: timestamp
+        format: epoch
+        info:
+          notes: ''
+      - id: OBJECTID
+        type: int
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''
