@@ -36,33 +36,33 @@ topographic-mapping-poles:
       - id: SUBTYPE_CODE
         type: int
         info:
-          notes: ''
+          notes: 'Feature Subtype code'
       - id: SUBTYPE_DESC
         type: text
         info:
-          notes: ''
+          notes: 'Feature Subtype description'
       - id: ELEVATION
         type: text
         info:
-          notes: ''
+          notes: 'Feature Subtype description'
       - id: DERIVED_HEIGHT
         type: text
         info:
-          notes: ''
+          notes: 'Height of feature (derived from LiDAR heightmap)'
       - id: LAST_GEOMETRY_MAINT
         type: timestamp
         format: epoch
         info:
-          notes: ''
+          notes: 'Last geometry maintenance date'
       - id: LAST_ATTRIBUTE_MAINT
         type: timestamp
         format: epoch
         info:
-          notes: ''
+          notes: 'Last attribute maintenance date'
       - id: OBJECTID
         type: int
         info:
-          notes: ''
+          notes: 'Object ID (non-persistent unique ID)'
       - id: geometry
         type: text
         info:

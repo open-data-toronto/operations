@@ -215,6 +215,9 @@ class AGOLReader(Reader):
                 this_record = object["properties"]
                 if object.get("geometry", None):
                     this_record["geometry"] = json.dumps(object["geometry"])
+                else:
+                    # if no geometry field, assign to None
+                    this_record["geometry"] = None
                 
                 for attr in self.schema:
                     # remap column names if in config file

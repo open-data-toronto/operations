@@ -7,6 +7,7 @@ import csv
 import ckanapi
 import json
 from datetime import datetime
+import pytz
 
 def stream_download_to_md5(url):
     '''streams input url into returned md5 hash string'''
@@ -118,7 +119,7 @@ def clean_date_format(input, input_format=None):
         if input_format == "epoch":
             # assumes input is in milliseconds
 
-            datetime_object = datetime.fromtimestamp(int(input)/1e3)
+            datetime_object = datetime.fromtimestamp(int(input)/1e3, tz=pytz.timezone('US/Eastern'))
             try:
                 return datetime_object.strftime("%Y-%m-%dT%H:%M:%S")
             except ValueError:
