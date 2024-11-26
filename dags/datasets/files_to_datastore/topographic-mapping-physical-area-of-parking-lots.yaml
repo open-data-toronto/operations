@@ -1,5 +1,5 @@
 topographic-mapping-physical-area-of-parking-lots:
-  schedule: '@once'
+  schedule: '0 5 5 */3 *'
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
   title: "Topographic Mapping - Physical area of parking lots"
