@@ -142,7 +142,7 @@ def check_resource_format(package):
     '''
     Check if a filestore dataset's resources only in format of [CSV, XLSX, XLS, ZIP]
     '''
-    format_list = package["formats"].split(',')
+    format_list = package["formats"]
     penalize_flag = set(format_list).issubset({"CSV", "XLSX", "XLS", "ZIP"})
     
     return penalize_flag
