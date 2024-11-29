@@ -637,3 +637,13 @@ events-at-nathan-phillips-square:
   Approved Events:
     format: xlsx
     url: https://opendata.toronto.ca/economic.development.culture/events-at-nathan-phillips-square/(FINAL) List of approved events 2024.xlsx
+
+topographic-mapping-physical-location-of-trees:
+  Tree Point:
+    format: shp
+    url: https://opendata.toronto.ca/technology.services/Tree_Point/TREE_WGS84.zip
+
+topographic-mapping-waterbodies-rivers:
+  Waterbodies & Rivers:
+    format: shp
+    url: https://opendata.toronto.ca/technology.services/Waterbody/Waterbody_WGS84.zip
