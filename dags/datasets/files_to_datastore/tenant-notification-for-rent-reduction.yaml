@@ -49,10 +49,10 @@ tenant-notification-for-rent-reduction:
     (iii)   No notice is required if a property is exempt from the rent reduction provisions of the Residential Tenancies Act (s.131)
   resources:
     #resource name
-    Tenant Notification for Rent Reduction 2023:
+    Tenant Notification for Rent Reduction 2024:
       format: xlsx
-      url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction 2023 - datastore.xlsx
-      sheet: Open Data Final 2023
+      url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction 2024.xlsx
+      sheet: Open Data Final 2024
       attributes:
         - id: Street Number
           type: text
@@ -102,7 +102,7 @@ tenant-notification-for-rent-reduction:
           type: text
           info:
             notes: 'This identifies the properties that received a notice'
-        - id: Notices Mailed On
+        - id: Notices Mailed On*
           type: text
           info:
             notes: 'This is the date that the notices were issued'
@@ -110,6 +110,67 @@ tenant-notification-for-rent-reduction:
           type: text
           info:
             notes: 'This states the reason why a resident did not receive notice of a rent reduction. See examples for more information.'
+    #Tenant Notification for Rent Reduction 2023:
+    #  format: xlsx
+    #  url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction 2023 - datastore.xlsx
+    #  sheet: Open Data Final 2023
+    #  attributes:
+    #    - id: Street Number
+    #      type: text
+    #      info:
+    #        notes: 'This is the street number'
+    #    - id: To Street Number
+    #      type: text
+    #      info:
+    #        notes: 'This is part of the street number range'
+    #    - id: Street Suffix
+    #      type: text
+    #      info:
+    #        notes: 'This is the street number suffix (e.g. 11A )'
+    #    - id: Street Name
+    #      type: text
+    #      info:
+    #        notes: 'This is the name of the street'
+    #    - id: Street Code
+    #      type: text
+    #      info:
+    #        notes: 'This is the type of street (e.g. Crescent, Avenue)'
+    #    - id: Street Direction
+    #      type: text
+    #      info:
+    #        notes: 'This is part of the street name (e.g. Queen St. West)'
+    #    - id: Unit Type
+    #      type: text
+    #      info:
+    #        notes: 'This is the type of unit (e.g. Penthouse (PH), Suite )'
+    #    - id: Unit
+    #      type: text
+    #      info:
+    #        notes: 'This is the unit number'
+    #    - id: Political Ward
+    #      type: text
+    #      info:
+    #        notes: 'This is the ward that the property is located in'
+    #    - id: "Tax Reduction %"
+    #      type: text
+    #      info:
+    #        notes: 'Percentage of property tax reduction'
+    #    - id: "Rent Reduction %"
+    #      type: text
+    #      info:
+    #        notes: 'The percentage  rate in which the property tax was reduced.'
+    #    - id: "Tenant Notices Mailed (Y/N)"
+    #      type: text
+    #      info:
+    #        notes: 'This identifies the properties that received a notice'
+    #    - id: Notices Mailed On
+    #      type: text
+    #      info:
+    #        notes: 'This is the date that the notices were issued'
+    #    - id: Reason Notices Not Mailed
+    #      type: text
+    #      info:
+    #        notes: 'This states the reason why a resident did not receive notice of a rent reduction. See examples for more information.'
     #Tenant Notification for Rent Reduction 2022:
     #  format: xlsx
     #  url: https://opendata.toronto.ca/revenue.services/tenant-notification-for-rent-reduction/Tenant Notification for Rent Reduction-2022-datastore.xlsx
