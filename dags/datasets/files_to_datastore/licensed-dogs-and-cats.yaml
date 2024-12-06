@@ -1,0 +1,56 @@
+licensed-dogs-and-cats:
+  dag_owner_name: 'mnichol4'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Licensed Dogs and Cats
+  date_published: '2024-12-06 16:35:28.527043'
+  dataset_category: Table
+  refresh_rate: Daily
+  owner_division: Municipal Licensing & Standards
+  owner_section: null
+  owner_unit: null
+  owner_email: animalservices@toronto.ca
+  civic_issues: null
+  topics:
+  - Community services
+  tags:
+  - name: animals
+    vocabulary_id: null
+  - name: pets
+    vocabulary_id: null
+  - name: licences
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/animalservices
+  excerpt: The reports include data on licensed dogs and cats residing in Toronto after year 2023, including primary breed, Forward Sortation Area (FSA), and year of licensing.
+  limitations: null
+  notes: |
+    The reports include data on licensed dogs and cats residing in Toronto after year 2023, including primary breed, Forward Sortation Area (FSA), and year of licensing.
+
+    For data before 2023, please visit:
+
+    Licensed Dog and Cat Names: https://open.toronto.ca/dataset/licensed-dog-and-cat-names/ 
+
+    Licensed Dogs and Cats Reports: https://open.toronto.ca/dataset/licensed-dogs-and-cats-reports/ 
+
+  schedule: '10 15 * * *'
+  resources: 
+    Licensed Dogs and Cats:
+        format: csv
+        url: https://opendata.toronto.ca/municipal.licensing.standards/licensed-dogs-and-cats/licensed-dogs-and-cats.csv
+        attributes:
+          - id: "Year"
+            type: int
+            info:
+              notes: Year of licence issued
+          - id: "FSA"
+            type: text
+            info:
+              notes: Forward Sortation Area; first 3 characters of the postal code
+          - id: "ANIMAL_TYPE"
+            type: text
+            info:
+              notes: Dog or Cat
+          - id: "PRIMARY_BREED"
+            type: text
+            info:
+              notes: Breed of each animal
+          

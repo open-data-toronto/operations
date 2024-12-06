@@ -1,0 +1,72 @@
+municipal-licensing-and-standards-toronto-animal-shelter-activity:
+  dag_owner_name: 'mnichol4'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Municipal Licensing and Standards - Toronto Animal Shelter Activity
+  date_published: '2019-07-23 17:46:42.23579'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Municipal Licensing & Standards
+  owner_section: null
+  owner_unit: null
+  owner_email: animalservices@toronto.ca
+  civic_issues: null
+  topics:
+  - City government
+  - Community services
+  tags:
+  - name: animal services
+    vocabulary_id: null
+  - name: animal shelter
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/animals-pets/animal-shelters/
+  excerpt: Toronto Animal Services (TAS) operates three Animal Centres and is responsible
+    for sheltering animals that are lost or surrendered by owners or animals that
+    are available for adoption to new homes.
+  limitations: null
+  notes: "\r\nToronto Animal Services (TAS) operates three Animal Shelters, and cares\
+    \ for animals that are lost or surrendered by owners and animals that are available\
+    \ for adoption to new homes. This dataset contains Shelter Activity statistics\
+    \ for the three TAS shelters. TAS also provides the following services:\r\n\r\n\
+    - 24-hour emergency response to calls for animals that are injured, in distress\
+    \ or are jeopardizing the safety of the public \r\n\r\n- mobile spay/neuter clinic\
+    \ for pet owners in neighbourhood improvement areas  \r\n\r\n- promotion of responsible\
+    \ pet ownership through programs, events and enforcement of the Municipal Code,\
+    \ Chapter 349 and other animal- related laws\r\n\r\n \r\n"
+  schedule: '5 5 1 * *'
+  resources: 
+    Shelter Intake Activity since 2023:
+      format: csv
+      url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-toronto-animal-shelter-activity/Shelter_Intake_Activity.csv
+      attributes:
+        - id: Intake Year
+          type: text
+          info:
+            notes: Year of activity
+        - id: Intake Type
+          type: text
+          info:
+            notes: Type of intake
+        - id: Animal Type
+          type: text
+          info:
+            notes: Type of animal
+        - id: Intake Subtype
+          type: text
+          info:
+            notes: Subtype of intake
+    Shelter Outcome Activity since 2023:
+      format: csv
+      url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-toronto-animal-shelter-activity/Shelter_Outcome_Activity.csv
+      attributes:
+        - id: Outcome Year
+          type: text
+          info:
+            notes: Year of outcome's occurence
+        - id: Animal Type
+          type: text
+          info:
+            notes: Type of animal
+        - id: Outcome Description
+          type: text
+          info:
+            notes: Brief description of what happened

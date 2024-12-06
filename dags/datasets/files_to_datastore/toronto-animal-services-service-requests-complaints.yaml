@@ -1,0 +1,52 @@
+toronto-animal-services-service-requests-complaints:
+  dag_owner_name: 'mnichol4'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Toronto Animal Services - Service Requests & Complaints
+  date_published: '2020-10-02 16:35:28.527043'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Municipal Licensing & Standards
+  owner_section: 'Animal Services '
+  owner_unit: Enforcement & Mobile Response
+  owner_email: animalservices@toronto.ca
+  civic_issues: null
+  topics:
+  - Community services
+  tags:
+  - name: animals
+    vocabulary_id: null
+  - name: complaints
+    vocabulary_id: null
+  - name: pets
+    vocabulary_id: null
+  - name: requests
+    vocabulary_id: null
+  information_url: http://www.toronto.ca/animalservices
+  excerpt: The data includes requests for service regarding live and dead animals
+    and complaints regarding public safety and bylaw infractions.
+  limitations: null
+  notes: The data includes all service requests related to animals that responded
+    to by Toronto Animal Services Mobile Response Unit. These requests include responses
+    to injured animals, dead animals, stray animals and animals in need of protective
+    care. The complaints investigated by Toronto Animal Services Enforcement Unit
+    are related to dogs that have bitten or attacked and other by-law enforcement
+    matters.
+  schedule: '20 20 1 * *'
+  resources: 
+    Service Requests and Complaints since 2023:
+        format: csv
+        url: https://opendata.toronto.ca/municipal.licensing.standards/toronto-animal-services-service-requests-complaints/toronto-animal-services-service-requests-complaints.csv
+        attributes:
+          - id: "Activity Year"
+            type: text
+            info:
+              notes: Year of activity
+          - id: "Mobile_Enforcement"
+            type: text
+            info:
+              notes: Type of enforcement
+          - id: "SR Type"
+            type: text
+            info:
+              notes: Type of service request
+          
