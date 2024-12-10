@@ -1,0 +1,53 @@
+toronto-police-staffing-by-command:
+  dag_owner_name: 'mnichol4'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Toronto Police Staffing by Command
+  date_published: '2024-12-10 10:07:50.878753'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Toronto Police Services
+  owner_section: Analytics & Innovation
+  owner_unit: null
+  owner_email: Analytics.Innovation@torontopolice.on.ca
+  civic_issues:
+  - Fiscal responsibility
+  topics:
+  - Finance
+  tags: []
+  information_url: null
+  excerpt: "This datasets includes the Toronto Police Service's approved and\
+    \ actual staffing level summarized by command. "
+  limitations: null
+  notes: "This datasets includes the Toronto Police Service's approved and actual\
+    \ staffing level summarized by command. "
+  schedule: '@once'
+  resources: 
+    TPS Staffing by command:
+      format: 'json'
+      agol: true
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/StaffingbyCommand/FeatureServer/0
+      attributes:
+      - id: Year
+        type: int
+        info:
+          notes: "Fiscal Year"
+      - id: Type_of_Metric
+        type: text
+        info:
+          notes: "Type of Metric"
+      - id: Organizational_Entity
+        type: text
+        info:
+          notes: "Organizational entity"
+      - id: Command_Name 
+        type: text
+        info:
+          notes: "Command name"
+      - id: Category
+        type: text
+        info:
+          notes: "Category"
+      - id: Count_
+        type: int
+        info:
+          notes: "Staffing Amount"

@@ -31,7 +31,7 @@ toronto-police-budget-by-command:
     TPS Budget by command:
       format: 'json'
       agol: true
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_by_Command/FeatureServer/0/
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/BudgetbyCommand/FeatureServer/0
       attributes:
       - id: Year
         type: int
@@ -41,14 +41,14 @@ toronto-police-budget-by-command:
         type: text
         info:
           notes: "Type of Metric"
-      - id: Organization_Entity
+      - id: Organizational_Entity
         type: text
         info:
           notes: "Organizational entity"
-      - id: Command
+      - id: Command_Name 
         type: text
         info:
-          notes: "Command"
+          notes: "Command name"
       - id: Category
         type: text
         info:

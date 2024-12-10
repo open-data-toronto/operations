@@ -19,15 +19,74 @@ toronto-police-budget:
     - name: Annual Statistical Report
       vocabulary_id: null
   information_url: null
-  excerpt: This datasets includes the Toronto Police Service’s approved budget and actual expenditures.
+  excerpt: This datasets includes the Toronto Police Service's approved budget and actual expenditures.
 
   limitations: null
   notes: |
-    This dataset includes a line-by-line breakdown of the Toronto Police Service’s approved budget and actual expenditures at a Service-wide level. Approved budget and actual expenditures are defined as follows:
+    This dataset includes a line-by-line breakdown of the Toronto Police Service's approved budget and actual expenditures at a Service-wide level. Approved budget and actual expenditures are defined as follows:
 
-    * **Approved Budget**: Operating funding approved by the Toronto Police Services Board and City Council for a specific fiscal year. 
-    * **Actual Expenditures**: Operating expenses incurred by the Toronto Police Service during a fiscal year.
+    Definitions:
+
+    **Approved Budget**: Operating funding approved by the Toronto Police Services Board and City Council for a specific fiscal year.
+
+    **Actual Expenditures**: Operating expenses incurred by the Toronto Police Service during a fiscal year.
+
+    **Proposed Budget**: Operating funding presented to the Toronto Police Services Board for approval for a specific fiscal year.
+
+    **SAP**: Enterprise resource planning software suite made by SAP SE. This is the system of record for financial information of the Toronto Police Service.
+
+    For more information on the TPS Budget, please visit https://www.torontopolice.on.ca/budget/ .
   resources:
+    TPS Budget 2025:
+      format: 'json'
+      agol: true
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_2025/FeatureServer/0
+      attributes:
+      - id: Fiscal_Year
+        type: int
+        info:
+          notes: "Fiscal Year"
+      - id: Budget_Type
+        type: text
+        info:
+          notes: "Approved or Proposed Budget"
+      - id: Organizational_Entity
+        type: text
+        info:
+          notes: "Organization within TPS"
+      - id: Command_Name
+        type: text
+        info:
+          notes: "Name of Command"
+      - id: Pillar_Name
+        type: text
+        info:
+          notes: "Name of Pillar"
+      - id: District_Name
+        type: text
+        info:
+          notes: "Name of district"
+      - id: Unit_Name
+        type: text
+        info:
+          notes: ""
+      - id: Feature_Category
+        type: text
+        info:
+          notes: ""
+      - id: Cost_Element
+        type: text
+        info:
+          notes: "Cost Element number"
+      - id: Cost_Element_Long_Name
+        type: text
+        info:
+          notes: "Cost Element name"
+      - id: Amount
+        type: text
+        info:
+          notes: "Budget amount"
+
     TPS Budget 2024:
       format: 'json'
       agol: true
@@ -66,7 +125,7 @@ toronto-police-budget:
         info:
           notes: ""
       - id: Cost_Element
-        type: int
+        type: text
         info:
           notes: "Cost Element number"
       - id: Cost_Element_Long_Name
@@ -116,7 +175,7 @@ toronto-police-budget:
         info:
           notes: ""
       - id: Cost_Element
-        type: int
+        type: text
         info:
           notes: "Cost Element number"
       - id: Cost_Element_Long_Name
@@ -166,7 +225,7 @@ toronto-police-budget:
         info:
           notes: ""
       - id: Cost_Element
-        type: int
+        type: text
         info:
           notes: "Cost Element number"
       - id: Cost_Element_Long_Name
@@ -216,7 +275,7 @@ toronto-police-budget:
         info:
           notes: ""
       - id: Cost_Element
-        type: int
+        type: text
         info:
           notes: "Cost Element number"
       - id: Cost_Element_Long_Name
