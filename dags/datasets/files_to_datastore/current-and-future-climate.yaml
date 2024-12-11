@@ -1,0 +1,283 @@
+current-and-future-climate:
+  jira_issue_id: DIA-410
+  jira_issue_url: https://toronto.atlassian.net/browse/DIA-410
+  schedule: '@once'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: 'Current and Future Climate'
+  date_published: '2024-12-11 00:51:46.096443'
+  dataset_category: Table
+  refresh_rate: As available
+  owner_division: Environment & Climate
+  owner_section: Policy, Planning and Outreach
+  owner_unit: Policy & Research
+  owner_email: Environmentandclimate@toronto.ca 
+  civic_issues: 
+  - Climate change
+  topics:
+  - Environment
+  tags:
+  - name: adaptation
+    vocabulary_id: null
+  - name: climate
+    vocabulary_id: null
+  - name: climate change
+    vocabulary_id: null
+  - name: cooling
+    vocabulary_id: null
+  - name: flood
+    vocabulary_id: null
+  - name: precipitation
+    vocabulary_id: null
+  - name: resilience
+    vocabulary_id: null
+  - name: storm
+    vocabulary_id: null
+  - name: weather
+    vocabulary_id: null
+  information_url: null
+  excerpt: This dataset presents how Toronto's climate has changed in recent history, and what future climate conditions could look like for the remainder of the 21st century under two potential greenhouse gas emissions scenarios. 
+  limitations: The information used in the production of this dataset represents the best information available to TRCA at the time the study was conducted (Summer 2024). The data is provided “as is” without warranty of any kind, including, without limitation, the warranties of merchantability, fitness for a particular purpose, identity or ownership of data or information, or that the use of such data or information will not infringe any patent, intellectual property, or proprietary rights of any party.   
+  notes: |
+    This dataset was developed by Toronto and Region Conservation Authority for the City of Toronto.
+
+    This data shows climate projections for 53 climate variables across two climate scenarios (SSP2-4.5 and SSP5-8.5) and three future time periods (2015-2040, 2041- 2070, 2071-2100). This dataset represents the averages across the City of Toronto's municipal boundary area. Climate variables covering temperature, precipitation, extreme heat and cold days, dry days, agricultural variables, freeze-thaw cycles, and freezing rain potential are presented.  
+    
+  resources:
+    Climate Variables:
+      format: 'csv'
+      url: https://opendata.toronto.ca/environment.energy/current-and-future-climate/Climate_Variables_OpenData.csv
+      attributes:
+        - id: Climate Scenario
+          type: text
+          info:
+            notes: A potential future climate scenario modeled by the IPCC and PCIC/ECCC representing potential futures based on different emissions and socioeconomic pathways (CMIP6 Canadian Downscaled Climate Scenarios – Univariate CMIP6)
+        - id: Time Horizon
+          type: text
+          info:
+            notes: The (approximately) 30-year time horizon represented by the climate models.
+        - id: Distribution 
+          type: text
+          info:
+            notes: Represents the statistical distribution of the model output with an average (median), low (10th percentile), and high (90th percentile) value.
+        - id: ANNUAL_MEAN_TEMPERATURE
+          type: text
+          info:
+            notes: Yearly average of the maximum and minimum temperature in Toronto
+        - id: WINTER_MEAN_TEMPERATURE
+          type: text
+          info:
+            notes: Average of the maximum and minimum temperature for December, January, and February (DFJ)
+        - id: SPRING_MEAN_TEMPERATURE
+          type: text
+          info:
+            notes: Average of the maximum and minimum temperature for March, April, and May (MAM)
+        - id: SUMMER_MEAN_TEMPERATURE
+          type: text
+          info:
+            notes: Average of the maximum and minimum temperature for June, July, and August (JJA)
+        - id: FALL_MEAN_TEMPERATURE
+          type: text
+          info:
+            notes: Average of the maximum and minimum temperature for September, October, and November (SON)
+        - id: ANNUAL_MAXIMUM_TEMPERATURE
+          type: text
+          info:
+            notes: The average of daily maximum temperatures at a location for a specified time interval
+        - id: WINTER_MAXIMUM_TEMPERATURE
+          type: text
+          format: "%Y/%m/%d %H:%M:%S"
+          info:
+            notes: Winter months include December, January, and February (DFJ)
+        - id: SPRING_MAXIMUM_TEMPERATURE
+          type: text
+          info:
+            notes: Spring months include March, April, and May (MAM)
+        - id: SUMMER_MAXIMUM_TEMPERATURE
+          type: text
+          info:
+            notes: Summer months include June, July, and August (JJA)
+        - id: FALL_MAXIMUM_TEMPERATURE
+          type: text
+          info:
+            notes: Fall months include September, October, and November (SON)
+        - id: ANNUAL_MINIMUM_TEMPERATURE
+          type: text
+          info:
+            notes: The average of daily minimum temperatures at a location for a specified time interval
+        - id: WINTER_MINIMUM_TEMPERATURE
+          type: text
+          info:
+            notes: Winter months include December, January, and February (DFJ)
+        - id: SPRING_MINIMUM_TEMPERATURE
+          type: text
+          info:
+            notes: Spring months include March, April, and May (MAM)
+        - id: SUMMER_MINIMUM_TEMPERATURE
+          type: text
+          info:
+            notes: Summer months include June, July, and August (JJA)
+        - id: FALL_MINIMUM_TEMPERATURE
+          type: text
+          info:
+            notes: Fall months include September, October, and November (SON)
+        - id: DAYS_ABOVE_35C
+          type: text
+          info:
+            notes: The number of days in a year when daily maximum temperature exceeds 35˚C (or > 35˚C)
+        - id: DAYS_ABOVE_30C
+          type: text
+          info:
+            notes: The number of days in a year when daily maximum temperature exceeds 30˚C (or > 30˚C)
+        - id: DAYS_ABOVE_25C
+          type: text
+          info:
+            notes: The number of days in a year when daily maximum temperature exceeds 25˚C (or > 25˚C)
+        - id: DAYS_ABOVE_20C_TROPICAL_NIGHTS
+          type: text
+          info:
+            notes: A tropical night occurs when daily minimum temperature stays above 20˚C (or > 20˚C)
+        - id: HOTTEST_DAY_TEMPERATURE
+          type: text
+          info:
+            notes: The maximum of daily maximum temperatures (°C), representing the hottest daytime temperature at a loction for a specified time interval
+        - id: TEMPERATURE_BASED_HEAT_WARNING_FREQUENCY
+          type: text
+          info:
+            notes: A Heat Warning is issued for southern Ontario when there is a forecast of two or more consecutive days with daytime maximum temperatures of 31°C or warmer, together with nighttime minimum temperatures of 20°C or warmer or when there is a forecast of two or more consecutive days with humidex values expected to reach 40 or higher. 
+        - id: MAXIMUM_CONSECUTIVE_TEMPERATURE_BASED_HEAT_WARNING_DAYS
+          type: text
+          info:
+            notes: The maximum number of consecutive days when there is a forecast of two or more consecutive days with daytime maximum temperatures of 31°C or warmer, together with nighttime minimum temperatures of 20°C or warmer
+        - id: HUMIDEX_ABOVE_30
+          type: text
+          info:
+            notes: The number of days in a year when the maximum humidex exceeds 30
+        - id: HUMIDEX_ABOVE_35
+          type: text
+          format: "%Y/%m/%d %H:%M:%S"
+          info:
+            notes: The number of days in a year when the maximum humidex exceeds 35
+        - id: HUMIDEX_ABOVE_40
+          type: text
+          info:
+            notes: The number of days in a year when the maximum humidex exceeds 40
+        - id: DAYS_BELOW_MINUS_20C
+          type: text
+          info:
+            notes: The number of days in a year when daily minimum temperature drops below -20˚C (or < -20˚C)
+        - id: DAYS_BELOW_MINUS_10C
+          type: text
+          info:
+            notes: The number of days in a year when daily minimum temperature drops below -10˚C (or < -10˚C)
+        - id: DAYS_BELOW_0C_FROST_DAYS
+          type: text
+          info:
+            notes: The number of days in a year when daily minimum temperature is lower than 0˚C (or < 0˚C). Under these conditions, frost may form on the ground or on cold surfaces
+        - id: HEATING_DEGREE_DAYS
+          type: text
+          info:
+            notes: The degree to which average daily temperatures are below 18°C (or < 18°C). This is often used to represent heating demand for buildings.
+        - id: COOLING_DEGREE_DAYS
+          type: text
+          info:
+            notes: The degree to which average daily temperatures are above 18°C (or > 18°C). This is often used to represent air conditioning demand for buildings.
+        - id: ANNUAL_TOTAL_PRECIPITATION
+          type: text
+          info:
+            notes: The sum of the total rainfall and the water equivalent of the total snowfall (mm) at the location during a specified time interval
+        - id: WINTER_TOTAL_PRECIPITATION
+          type: text
+          info:
+            notes: Winter months include December, January, and February (DFJ)
+        - id: SPRING_TOTAL_PRECIPITATION
+          type: text
+          info:
+            notes: Spring months include March, April, and May (MAM)
+        - id: SUMMER_TOTAL_PRECIPITATION
+          type: text
+          info:
+            notes: Summer months include June, July, and August (JJA)
+        - id: FALL_TOTAL_PRECIPITATION
+          type: text
+          info:
+            notes: Fall months include September, October, and November (SON)
+        - id: MAXIMUM_1DAY_PRECIPITATION
+          type: text
+          info:
+            notes: The maximum amount of precipitation (mm) in one day over a given period of time
+        - id: MAXIMUM_3DAY_PRECIPITATION
+          type: text
+          info:
+            notes: The maximum amount of precipitation (mm) in three days over a given period of time
+        - id: SIMPLE_DAILY_INTENSITY_INDEX
+          type: text
+          info:
+            notes: Average intensity (mm/day) over a given period of time, calculated as total wet day precipitation (> 0.2 mm) divided by the total number of wet days
+        - id: 95TH_PERCENTILE_PRECIPITATION
+          type: text
+          info:
+            notes: Total precipitation when daily precipitation is greater than or equal to the 95th percentile (the value where 95% of all measurements are under it, and 5% of measurements are over it)
+        - id: 99TH_PERCENTILE_PRECIPITATION
+          type: text
+          info:
+            notes: Total precipitation when daily precipitation is greater than or equal to the 99th percentile (the value where 99% of all measurements are under it, and 1% of measurements are over it)
+        - id: MAXIMUM_CONSECUTIVE_WET_DAYS
+          type: text
+          format: "%Y/%m/%d %H:%M:%S"
+          info:
+            notes: The maximum number of consecutive days when precipitation was greater than 0.2 mm (or > 0.2)
+        - id: ANNUAL_TOTAL_DRY_DAYS
+          type: text
+          info:
+            notes: The number of days in a year when precipitation was less than 0.2 mm (or < 0.2)
+        - id: MAXIMUM_CONSECUTIVE_DRY_DAYS
+          type: text
+          info:
+            notes: The maximum number of consecutive days when precipitation was less than 0.2 mm (or < 0.2)
+        - id: FROST_FREE_SEASON_START_DATE
+          type: text
+          info:
+            notes: The last date in a year when daily minimum temperature stays above 0°C after 5 consecutive days (before July 15)
+        - id: FROST_FREE_SEASON_END_DATE
+          type: text
+          info:
+            notes: The first date in a year when daily minimum temperature falls below 0˚C after 5 consecutive days (after July 15)
+        - id: FROST_FREE_SEASON_LENGTH
+          type: text
+          info:
+            notes: The number of days in a year between the start of the frost-free season (when daily minimum temperature stays above 0°C after 5 consecutive days before July 15) and end of the frost-free season (when daily minimum temperature falls below 0˚C after 5 consecutive days after July 15)
+        - id: CORN_HEAT_UNITS
+          type: text
+          info:
+            notes: Corn heat units (CHU) provides an index of the amount of heat available for the growth of corn with daily maximum temperature above 10˚C and nighttime temperature above 4.4˚C. Generally, at least 2200 CHUs are required to grow corn
+        - id: GROWING_DEGREE_DAYS_BASE_0C
+          type: text
+          info:
+            notes: Growing degree days (GDDs) provides an index of the amount of heat available for the growth and development of plants and insects. Different base temperatures (0, 4, 5, 10, 15°C) are used to capture results for organisms that demand different amounts of heat
+        - id: CANOLA_GROWING_DEGREE_DAYS_BASE_4C
+          type: text
+          info:
+            notes: Growing degree days (GDDs) provides an index of the amount of heat available for the growth and development of plants and insects. Different base temperatures (0, 4, 5, 10, 15°C) are used to capture results for organisms that demand different amounts of heat
+        - id: FORAGE_CROPS_GROWING_DEGREE_DAYS_BASE_5C
+          type: text
+          info:
+            notes: Growing degree days (GDDs) provides an index of the amount of heat available for the growth and development of plants and insects. Different base temperatures (0, 4, 5, 10, 15°C) are used to capture results for organisms that demand different amounts of heat
+        - id: CORN_AND_BEAN_GROWING_DEGREE_DAYS_BASE_10C
+          type: text
+          info:
+            notes: Growing degree days (GDDs) provides an index of the amount of heat available for the growth and development of plants and insects. Different base temperatures (0, 4, 5, 10, 15°C) are used to capture results for organisms that demand different amounts of heat
+        - id: GROWING_DEGREE_DAYS_BASE_15C
+          type: text
+          info:
+            notes: Growing degree days (GDDs) provides an index of the amount of heat available for the growth and development of plants and insects. Different base temperatures (0, 4, 5, 10, 15°C) are used to capture results for organisms that demand different amounts of heat
+        - id: FREEZE_THAW_CYCLES
+          type: text
+          info:
+            notes: A simple count of the number of days when temperature fluctuates between freezing and non-freezing temperatures
+        - id: FREEZING_RAIN_POTENTIAL
+          type: text
+          info:
+            notes: The number of days in a year when daily minimum temperature is greater than -2˚C and daily maximum temperature is below 2˚C
+          
+      
