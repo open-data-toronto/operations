@@ -35,7 +35,7 @@ library-workstation-usage:
     NOTE: A different reporting method was used for 2012 to 2017. The totals for these years are estimates based on manual counts of workstation activity executed on a quarterly basis.
   resources:
     # resource name
-    tpl-workstation-usage-annual-by-branch-2018-2022:
+    tpl-workstation-usage-annual-by-branch:
       format: csv
       url: https://opendata.toronto.ca/toronto.public.library/tpl-workstation-usage-annual-by-branch-2018-2023.csv
       attributes:
