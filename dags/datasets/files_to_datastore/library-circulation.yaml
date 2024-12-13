@@ -32,7 +32,7 @@ library-circulation:
   notes: This dataset shows the annual circulation of materials at Toronto Public Library branches. Circulation is defined as a combination of first-time checkouts (i.e. when items are initially borrowed) and renewals (i.e. transactions that extend the due dates of borrowed items). This data covers the circulation of physical materials (e.g. books, CDs, DVDs, etc.) and electronic resources (e.g. ebooks, streaming content, etc.). The branch associated with a circulation total is the library from which the transactions were processed. For online renewals of physical materials, the circulation is associated with the home branch of the renewing customer. The VIR (Virtual Library) branch code is used to represent all electronic circulation totals.
   resources:
     # resource name
-    tpl-circulation-annual-by-branch-2012-2022:
+    tpl-circulation-annual-by-branch:
       format: csv
       url: https://opendata.toronto.ca/toronto.public.library/tpl-circulation-annual-by-branch-2012-2023.csv
       attributes:

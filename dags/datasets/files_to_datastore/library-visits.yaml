@@ -38,7 +38,7 @@ library-visits:
     The BKONE branch code is used to represent the combined visits for both bookmobiles.
   resources:
     # resource name
-    tpl-visits-annual-by-branch-2012-2022:
+    tpl-visits-annual-by-branch:
       format: csv
       url: https://opendata.toronto.ca/toronto.public.library/tpl-visits-annual-by-branch-2012-2023.csv
       attributes:
