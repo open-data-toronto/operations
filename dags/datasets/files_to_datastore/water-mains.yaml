@@ -52,7 +52,7 @@ water-mains:
     The Data Preview in this dataset shows a sample of the data. The full dataset is available in the downloaded file.
   notes: This dataset provides pertinent information on the location of water system pipes, watermain type based on function, and pipe characteristics (e.g. diameter, material etc.). The data is updated on a continual daily basis. The data is intended to support development and growth by facilitating pre-application discussions and preparation of servicing reports by Developers (and their teams).
   resources:
-    Transmission main:
+    Transmission Watermain:
       format: geojson
       agol: true
       url: https://services5.arcgis.com/MFwjjnaTnj9B3bil/ArcGIS/rest/services/COTGEO_TW_WTRANSMAIN/FeatureServer/0
@@ -76,7 +76,7 @@ water-mains:
         target_name: Watermain Material
         type: text
         info:
-          notes: Pipe material (CI - cast iron, PVC - polyvinyl chloride etc.)
+          notes: Pipe material (AC - Asbestos Cement/Transite, CI - Cast Iron, CICL - Cast Iron Cement Lined, COP - Copper, CP - Concrete, DICL - Ductile Iron Cement Lined, DIP - Ductile Iron, HDPE - High Density Polyethylene, PE - Polyethylene, PVC - Polyvinyl  Chloride, PVCO - Molecular Oriented Polyvinyl Chloride, SP - Steel, SPCL - Steel Pipe Cement Lined, UNK - Unknown/Other)
       - source_name: INSTALLDATE
         target_name: Watermain Install Date
         type: date
@@ -103,7 +103,7 @@ water-mains:
         info:
           notes: ''
 
-    Water Main:
+    Distribution Watermain:
       format: geojson
       agol: true
       url: https://services5.arcgis.com/MFwjjnaTnj9B3bil/arcgis/rest/services/COT_Geospatial_TW_Water_Main_Ext_View/FeatureServer/0
@@ -127,7 +127,7 @@ water-mains:
         target_name: Watermain Material
         type: text
         info:
-          notes: Pipe material (CI - cast iron, PVC - polyvinyl chloride etc.)
+          notes: Pipe material (AC - Asbestos Cement/Transite, CI - Cast Iron, CICL - Cast Iron Cement Lined, COP - Copper, CP - Concrete, DICL - Ductile Iron Cement Lined, DIP - Ductile Iron, HDPE - High Density Polyethylene, PE - Polyethylene, PVC - Polyvinyl  Chloride, PVCO - Molecular Oriented Polyvinyl Chloride, SP - Steel, SPCL - Steel Pipe Cement Lined, UNK - Unknown/Other)
       - source_name: INSTALLDATE
         target_name: Watermain Install Date
         type: timestamp
