@@ -117,7 +117,7 @@ sewer-pressurized-mains:
         target_name: Sewer Pressurized Material
         type: text
         info:
-          notes: Pipe material (CI - cast iron, PVC - polyvinyl chloride etc.)
+          notes: Pipe material (ABS - ABS Plastic, AC - Asbestos Cement, BMP - Brick Masonry, BR - Brick, CCYL - Concrete Cylinder Pipe, CI - Cast Iron, CICL - Cast Iron Cement Lined, CMP - Corrugated Metal, CONC - Concrete - Cast-In-Place, COP - Copper, CP - Concrete (Non-Reinforced), CR - Prestressed Concrete, CT - Clay Tile, DICL - Ductile Iron Cement Line, DIP - Ductile Iron, EARGEO - Earth & Geotextile, FRP - Fiberglass Reinforced, GP - Galvanized Pipe, GRC - Glass Reinforced Cement, HDPE - High Density Polyethylene, LEAD - Lead, OTH - Other, PCCP - Pre-Stressed Concrete Cylinder, PE - Polyethylene, PP - Polypropylene, PSC - Plastic/Steel Composite, PVC - Polyvinyl Chloride, PVCO - Molecular Oriented Polyvinyl Chloride, RPM - Reinforced Plastic (Truss), SP - Steel, SPCL - Steel Pipe Cement Lined, TRR - Transite Ringtite, TRS - Transite Simplex, TTE - Transite, UNK - Unknown, VCP - Vitrified Clay, WD - Wood)
       - source_name: MAINSHAPE
         target_name: Sewer Pressurized Main Shape
         type: text
