@@ -50,7 +50,7 @@ sewer-gravity-mains:
     
     The Data Preview in this dataset shows a sample of the data. The full dataset is available in the downloaded file.
     
-  notes: This dataset provides pertinent information on the location of gravity sewer system pipes (main and trunk), their characteristics (e.g. pipe diameter, cross section shape, material, invert elevations at upstream and downstream junctions etc.) and the classification of sewers by flow medium. The data is updated on a continual daily basis. The data is intended to support development and growth by facilitating pre-application discussions and preparation of servicing reports by Developers (and their teams).
+  notes: This dataset provides pertinent information on the location of gravity sewer system pipes (main and trunk), their characteristics (e.g. pipe diameter, cross section shape, material) and the classification of sewers by flow medium. The data is updated on a continual daily basis. The data is intended to support development and growth by facilitating pre-application discussions and preparation of servicing reports by Developers (and their teams).
   resources:
     Sewer Gravity Main:
       format: geojson
@@ -117,7 +117,7 @@ sewer-gravity-mains:
         target_name: Sewer Gravity Material
         type: text
         info:
-          notes: Pipe material (CI - cast iron, PVC - polyvinyl chloride etc.)
+          notes: Pipe material (AC- Asbestos Cement, BR- Brick, CAS -Cast Iron, CIPP - Cured-in-Place Pipe Lining, CMP - Corrugated Metal Pipe, CP - Concrete Pipe (non-reinforced), CSB - Concrete Segments (bolted), CSU - Concrete Segments (Unbolted), CT - Clay Tile, DIP - Ductile Iron Pipe, FRP - Fiberglass Reinforced Pipe, GRC - Glass Reinforced Cement, OB - Pitch Fiber (Tar Paper), PCCP - Pre-Stressed Concrete Cylinder Pipe, PE - Polyethylene, PP - Polypropylene, PSC - Plastic-Steel Composite, PVC - Polyvinyl Chloride, RPM - Reinforced Plastic Pipe (Truss Pipe), SB - Segmented Block, SP - Steel Pipe, TTE - Transite Pipe, VCP - Vitrified Clay Pipe, D - Wood, XXX - Unknown, ZZZ - Other)
       - source_name: MAINSHAPE
         target_name: Sewer Gravity Main Shape
         type: text
