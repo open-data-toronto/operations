@@ -8,14 +8,14 @@ places-of-interest-and-toronto-attractions:
   # mandatory package attributes
   title: "Places of Interest and Toronto Attractions"
   date_published: "2019-07-23 17:52:55.465588"
-  refresh_rate: As available
+  refresh_rate: Annually
   dataset_category: Map
 
   # optional package attributes
   owner_division: Economic Development & Culture
   owner_section: null
   owner_unit: null
-  owner_email: alok.sharma@toronto.ca
+  owner_email: visitoreconomy@toronto.ca
 
   civic_issues: null
   topics: 
@@ -49,20 +49,17 @@ places-of-interest-and-toronto-attractions:
       vocabulary_id: null
 
   information_url: null
-  excerpt: A listing of attractions in Toronto, as determined by Visitor Services. This is not necessarily a comprehensive listing, and will continue to expand over time. This information has been gathered through research and day-to-day operations of the Visitor Services Department.
-  limitations: "The Places of Interest dataset is currently under review and is expected to be updated in 2022. Please note that the list is not comprehensive. Under normal circumstances, this list is reviewed and  updated annually. Due to the City of Toronto's team response to COVID-19, updates to data have not taken place on schedule. Therefore, the accuracy of this data is not guaranteed at this time."
+  excerpt: A listing of attractions in Toronto, as determined by Visitor Economy Office. This is not necessarily a comprehensive listing, and will continue to expand over time. This information has been gathered through research and day-to-day operations of the Visitor Economy Office Department.
+  limitations: Please note that the list is not comprehensive. Under normal circumstances, this list is reviewed and updated annually. 
   notes: |
-    A listing of attractions in Toronto, as determined by Visitor Services. This is not necessarily a comprehensive listing, and will continue to expand over time. This information has been gathered through research and day-to-day operations of the Visitor Services Department
-    
-    To suggest inclusion of an additional locations or for any comments or update requests to existing comment please email [visitorservices@toronto.ca](mailto:visitorservices@toronto.ca)
-    
-    _Please note: This data was originally accompanied by a tabular file which needed to be removed as it included information intended for internal discussion purposes only and was created by the subjective opinion of City of Toronto staff. As this discussion information did not use scientific/methodical evidence to determine the values, the publishing of it would mislead the reader.
+    This dataset contains a listing of attractions in Toronto including parks, landmarks, museums and more, curated by the Visitor Economy Office. The data provided is sourced from research and day-to-day operations of the Toronto Tourist Information Centre. This is not a comprehensive directory and will continue to expand over time.  
+    Please email visitoreconomy@toronto.ca to request edits or additions to the list.  
+
   resources:
     # resource name
     Places of Interest and Attractions:
-      agol: True
-      format: geojson
-      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_ATTRACTION/FeatureServer/0
+      format: csv
+      url: http://opendata.toronto.ca/economic.development.culture/places-of-interest-and-toronto-attractions/POI.csv
       attributes:
         - id: ADDRESS_INFO
           type: "text"
@@ -164,7 +161,7 @@ places-of-interest-and-toronto-attractions:
           type: "float"
           info:
             notes: ""
-        - id: WARD_2018
+        - id: WARD_2021
           type: "float"
           info:
             notes: ""
