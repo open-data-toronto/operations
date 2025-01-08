@@ -647,3 +647,8 @@ topographic-mapping-waterbodies-rivers:
   Waterbodies & Rivers:
     format: shp
     url: https://opendata.toronto.ca/technology.services/Waterbody/Waterbody_WGS84.zip
+
+2022-2024-cycling-program:
+  2025-2027 Programmed_Cycling_Projects:
+    format: zip
+    url: https://opendata.toronto.ca/transportation.services/cycling-program/Programmed25-27_Cycling_Projects.zip

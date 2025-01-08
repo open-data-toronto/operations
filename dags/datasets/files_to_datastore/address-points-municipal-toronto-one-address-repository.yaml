@@ -43,7 +43,7 @@ address-points-municipal-toronto-one-address-repository:
     Address Points:
       format: geojson
       agol: true
-      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial27/FeatureServer/101
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_ADDRESS_POINT/FeatureServer/0
       attributes:
       - id: ADDRESS_POINT_ID
         type: int
