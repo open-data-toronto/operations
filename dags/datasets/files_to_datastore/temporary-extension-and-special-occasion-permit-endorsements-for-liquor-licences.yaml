@@ -1,0 +1,92 @@
+temporary-extension-and-special-occasion-permit-endorsements-for-liquor-licences:
+  jira_issue_id: DIA-336
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/230612
+  schedule: '15 15 * * *'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Temporary Extension and Special Occasion Permit Endorsements for Liquor Licences
+  date_published: '2024-11-14 18:49:51.971260'
+  dataset_category: Map
+  refresh_rate: Daily
+  owner_division: "City Clerk's Office"
+  owner_section: Secretariat
+  owner_unit: Registry Services
+  owner_email: liquorlicence@toronto.ca
+  civic_issues: null
+  topics:
+  - Culture and tourism
+  - Locations and mapping
+  - Permits and licenses
+  tags:
+  - name: 4am
+    vocabulary_id: null
+  - name: Extensions
+    vocabulary_id: null
+  - name: Liquor
+    vocabulary_id: null
+  - name: Permits
+    vocabulary_id: null
+  - name: SOP
+    vocabulary_id: null
+  - name: Temporary
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/permits-licences-bylaws/licence-to-serve-alcohol/
+  excerpt: TBC
+  limitations: |
+    Event organizers or establishments may not be approved to host events on every date in the date range noted. The date range indicates the first and the last date they are approved to hold events on.
+
+    Please note: An application being endorsed as municipally significant does not mean the event has been approved. For the status of an application, please contact the [Alcohol and Gaming Commission of Ontario](https://www.agco.ca/en)
+  notes: |
+    All temporary liquor licence applications that have been endorsed as municipally significant by the City of Toronto are shown on the map below.
+
+    Search the records by location (premise), applicant, or address and filter by ward or application type. Liquor licence application information is reported by year. Liquor applications cannot be filtered by a specific date at this time.
+
+    Event organizers or establishments may not be approved to host events on every date in the date range noted. The date range indicates the first and the last date they are approved to hold events on.
+  resources:
+    Temporary Extension and Special Occasion Permit Endorsements for Liquor Licences:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_Liquor_Licence/FeatureServer/0
+      attributes:
+      - id: ID
+        type: int
+        info:
+          notes: Record ID
+      - id: WARD
+        type: int
+        info:
+          notes: Ward ID
+      - id: WARD_NAME
+        type: text
+        info:
+          notes: Name of Ward
+      - id: ESTABLISHMENT
+        type: text
+        info:
+          notes: The name of the business that has applied for a temporary extension of liquor licence.
+      - id: ADDRESS
+        type: text
+        info:
+          notes: The address/location of where the event is occurring.
+      - id: APPLICATION_TYPE
+        type: text
+        info:
+          notes: The is the type of application being applied for. This could be a temporary extension of hours of service or premises, or a Special Occasion Permits.
+      - id: STARTING_DATE
+        type: timestamp
+        format: epoch
+        info:
+          notes: The first date applied for in the application. Not all dates in between the start and end dates on the application may have been applied for.
+      - id: ENDING_DATE
+        type: timestamp
+        format: epoch
+        info:
+          notes: The last date applied for in the application. Not all dates in between the start and end dates on the application may have been applied for.
+      - id: LICENCE_YEAR
+        type: int
+        info:
+          notes: Year of the event occurring that was applied for.
+      - id: geometry
+        type: text
+        info:
+          notes: ''
