@@ -14,7 +14,7 @@ from utils_operators.slack_operators import task_failure_slack_alert, SlackWrite
 from airflow.decorators import dag, task
 
 CONFIG_FOLDER = "/data/operations/dags/datasets/files_to_datastore"
-TMP_DIR = "data/tmp/"
+TMP_DIR = "/data/tmp/"
 CKAN = misc_utils.connect_to_ckan()
 
 
@@ -143,6 +143,13 @@ def thorough_tests():
             output[dag_id]["test_update_success"] = (
                 results["updated"] == True and results["state"] == "success"
             )
+
+            # check if data has been properly loaded
+            data_equal = misc_utils.check_data_consistency(
+                package_name=package_name, tmp_dir=TMP_DIR, ckan=CKAN
+            )
+
+            output[dag_id]["test_data_loaded"] = data_equal
 
         logging.info(output)
         return output

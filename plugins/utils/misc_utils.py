@@ -326,3 +326,48 @@ def parse_source_and_target_names(attributes):
             working_attributes.append(attr)
     
     return working_attributes
+
+def check_data_consistency(package_name, tmp_dir, ckan):
+    """Compare if ckan resource's record count is consistent with that of downloaded file in tmp folder.
+
+    Args:
+        package_name (str): Name of the dataset package
+        tmp_dir (str): Filepath of downloaded resources
+        ckan (RemoteCKAN): CKAN api function
+
+    Returns:
+        if file is consistent: bool
+    """
+    data_equals = []
+    p = ckan.action.package_show(id=package_name)
+    for r in p["resources"]:
+        datastore_active = r.get("datastore_active", None)
+        resource_name = r["name"]
+        if str(datastore_active).lower() == "true":
+            url = r["url"]
+            response = requests.get(url).content
+
+            resource_path = f"{tmp_dir}{package_name}/temp_{resource_name}.csv"
+            backup_path = f"{tmp_dir}{package_name}/backup_{resource_name}.csv"
+            # write file pull ckan datastore resource
+            with open(resource_path, "wb") as f:
+                f.write(response)
+
+            with open(resource_path, "rb") as f:
+                ckan_num_lines = sum(1 for _ in f)
+            with open(backup_path, "rb") as f:
+                source_num_lines = sum(1 for _ in f)
+
+            if ckan_num_lines == source_num_lines:
+                file_equal = True
+            else:
+                file_equal = False
+                logging.warning(f"Resource file {resource_name} not consistent!!!")
+        
+        # remove temp file pulled from ckan resource
+        if os.path.exists(resource_path):
+            os.remove(resource_path)
+
+        data_equals.append(file_equal)
+
+    return all(data_equals)

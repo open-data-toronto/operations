@@ -1,11 +1,11 @@
 parks-and-recreation-facilities:
   schedule: '20 20 1 * *'
-  dag_owner_name: ''
-  dag_owner_email: ''
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
   title: Parks and Recreation Facilities
   date_published: '2019-07-23 17:52:21.401168'
   refresh_rate: As available
-  dataset_category: Document
+  dataset_category: Map
   owner_division: Parks, Forestry & Recreation
   owner_section: null
   owner_unit: null
