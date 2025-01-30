@@ -1,0 +1,247 @@
+traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts:
+  jira_issue_id: DIA-412
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/255240
+  schedule: 30 4 * * *
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Traffic Volumes - Midblock Vehicle Speed, Volume and Classification Counts
+  date_published: '2024-12-04 14:08:37.958534'
+  dataset_category: Table
+  refresh_rate: Daily
+  owner_division: Transportation Services
+  owner_section: Policy, Data & Strategic Initiatives (PDSI)
+  owner_unit: Transportation Data & Analytics
+  owner_email: VolumeCollision_Requests@toronto.ca
+  civic_issues:
+  - Mobility
+  topics:
+  - Transportation
+  tags:
+  - name: atr
+    vocabulary_id: null
+  - name: traffic-speed
+    vocabulary_id: null
+  - name: traffic-volume
+    vocabulary_id: null
+  - name: truck-volume
+    vocabulary_id: null
+  - name: vehicle-classification
+    vocabulary_id: null
+  information_url: null
+  excerpt: This dataset includes all available vehicle volumes, speeds, and volumes
+    by vehicle type at road segments across the City.
+  limitations: |
+    * Raw data files are large (>1GB) and are best explored by loading the file into a database
+
+    * Data are collected on an ad-hoc, as needed basis, therefore does not have comprehensive temporal or geographic coverage
+
+    * Dataset works best if opened with GIS software and overlaid with Toronto Centreline and Intersection File datasets
+
+    * Limited to the City of Toronto geographical boundary
+  notes: |
+    The City of Toronto's Transportation Services Division collects short-term traffic count data across the City on an ad-hoc basis to support a variety of safety initiatives and projects.
+
+    The data available in this repository are a full collection of Speed, Volume and Classification Counts conducted across the City since 1993.
+
+    The two most common types of short-term traffic counts are Turning Movement Counts and Speed / Volume / Classification Counts.
+
+    *[Turning Movement Count data, comprised of motor vehicle, bicycle and pedestrian movements through intersections, can be found here](https://open.toronto.ca/dataset/traffic-volumes-at-intersections-for-all-modes/).*
+
+    Speed / Volume / Classification Counts are collected using pneumatic rubber tubes installed across the roadway.
+
+    This dataset is a critical input into transportation safety initiatives, infrastructure design and program design such as speed limit changes, signal coordination studies, traffic calming and complete street designs.
+
+    Each Speed / Volume / Classification Count is comprised of motor vehicle count data collected over a continuous 24-hour to 168-hour period (1-7 days), at a single location. A handful of non-standard 2-week counts are also included. Some key notes about these counts include:
+
+    - Not all counts have complete speed and classification data. These data are provided for locations and dates only where they exist.
+    - Raw data are recorded in 15-minute intervals.
+    - Raw data are recorded separately for each direction of traffic movement. Some data are only available for one direction, even if the street is two-way.
+    - Within each 15 minute interval, speed data are aggregated into approximately 5 km/h increments.
+    - Within each 15 minute interval, classification data are aggregated into vehicle type bins by the number of axles, according to the FWHA classification system attached below.
+
+    The following files showing different views of the data are available:
+
+    - **Data Dictionary (*svc\_data\_dictionary.xlsx*)**: Provides a detailed definition of every data field in all files.
+    - **Summary Data (*svc\_summary\_data*)**: Provides metadata about every Speed / Volume / Classification Count available, including information about the count location and count date, as well as summary data about each count (total vehicle volumes, average daily volumes, a.m. and p.m. peak hour volumes, average / 85 percentile / 95 percentile speeds, where available, and heavy vehicle percentage, where available).
+    - **Most Recent Count Data (*svc\_most\_recent\_summary\_data*):** Provides metadata about the most recent Speed / Volume / Classification Count data available at each location for which a count exists, including information about the count location and count date, as well as the summary data provided in the “Summary Data” file (see above).
+    - **Volume Raw Data (*svc\_raw\_data\_volume\_yyyy\_yyyy*):** These files—grouped by 5-10 year interval—provide volume data in 15-minute intervals, for each direction separately, for every volume-only count available.
+    - **Speed Raw Data (*svc\_raw\_data\_speed\_yyyy\_yyyy*):** These files—grouped by 5-10 year interval—provide volume data aggregated into speed bins in approximately 5 km/h increments. Speed data are NOT available for all counts.
+    - **Classification Raw Data (*svc\_raw\_data\_classification\_yyyy\_yyyy*):** These files—grouped by 5-10 year interval—provide classification data aggregated into vehicle type bins by the number of axles, according to the FWHA classification system. Classification data are NOT available for all counts.
+    - **FWHA Classification Reference (*fwha\_classification.png*):** Provides a reference for the FWHA classification system.
+
+    This dataset references the [City of Toronto's Street Centreline](https://open.toronto.ca/dataset/toronto-centreline-tcl/) dataset, [Intersection File dataset](https://open.toronto.ca/dataset/intersection-file-city-of-toronto/) and [Street Traffic Signal dataset](https://open.toronto.ca/dataset/traffic-signals-tabular/).
+  resources:
+    svc_most_recent_summary_data:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_most_recent_summary_data.csv
+      attributes: 
+        - id: latest_count_id
+          type: int
+          info:
+            notes: Unique identifier for each SVC count. Use this ID to cross-reference 15-minute observations in svc\_raw\_data files.
+        - id: latest_count_type
+          type: text
+          info:
+            notes: Type of data collected.ATR\_VOLUME = Volume data only. ATR\_SPEED\_VOLUME = Speed and volume data. VEHICLE\_CLASS = Vehicle classification and volume data
+        - id: latest_count_date_start
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date on which the count started
+        - id: latest_count_date_end
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date on which the count ended
+        - id: latest_count_duration
+          type: text
+          info:
+            notes: Count duration, in hours
+        - id: location_name
+          type: text
+          info:
+            notes: "Human-readable name of the location where the count was conducted (e.g. Bloor St: Yonge St - Park Rd)"
+        - id: longitude
+          type: float
+          info:
+            notes: Longitude GPS coordinate
+        - id: latitude
+          type: float
+          info:
+            notes: Latitude GPS coordinate
+        - id: centreline_id
+          type: int
+          info:
+            notes: Unique location identifier that corresponds to the Toronto Centreline (https://open.toronto.ca/dataset/toronto-centreline-tcl/). Cross-reference with the TCL to find spatial geometry for mapping.
+        - id: avg_daily_vol
+          type: float
+          info:
+            notes: The average daily vehicle volume over the count duration. Calculated by summing the grand total of vehicles observed over the count duration, divided by the count duration in days.
+        - id: avg_weekday_daily_vol
+          type: float
+          info:
+            notes: The average weekday daily vehicle volume over the count duration. If the study was conducted on weekdays only, this is the same as the average daily volume. If the study was conducted on a weekend, this value will be none. If the study was conducted over both weekdays and weekends (i.e. one or two weeks), this is the average daily volume of weekdays only.
+        - id: avg_weekend_daily_vol
+          type: float
+          info:
+            notes: Most traffic volume counts are conducted during the week. A handful of counts are done on weekends, or over periods of one or two weeks. For these counts, we calculate the average weekend daily volume. Similar to the average daily volume but considers only volume observations that fall on a weekend (Saturday or Sunday).
+        - id: avg_wkdy_am_peak_start
+          type: text          
+          info:
+            notes: Start of the average weekday AM peak hour. The AM peak hour is the one-hour continuous period between 6:30-10:30am during which the highest motor vehicle volume is observed moving through the roadway, for all available directions (one or both directions). Bicycles are not included. Calculated for weekdays only. If the study was conducted on a weekend, this value will be none. For counts with a duration longer than 24 hours, the AM peak is calculated by first calculating "average" volumes for each 15-minute period in the day, then finding the hour with the highest motor vehicle volume based on the averaged volumes.
+        - id: avg_wkdy_am_peak_vol
+          type: float
+          info:
+            notes: Average motor vehicles counted during the AM peak hour. Includes the sum of all available directions (one or both directions). Bicycles are not included. Calculated for weekdays only. If the study was conducted on a weekend, this value will be none.
+        - id: avg_wkdy_pm_peak_start
+          type: text          
+          info:
+            notes: Start of the average weekday PM peak hour. The PM peak hour is the one-hour continuous period between 2:00-8:00pm during which the highest motor vehicle volume is observed moving through the roadway, for all available directions (one or both directions). Bicycles are not included. Calculated for weekdays only. If the study was conducted on a weekend, this value will be none. For counts with a duration longer than 24 hours, the PM peak is calculated by first calculating "average" volumes for each 15-minute period in the day, then finding the hour with the highest motor vehicle volume based on the averaged volumes.
+        - id: avg_wkdy_pm_peak_vol
+          type: float
+          info:
+            notes: Average motor vehicles counted during the PM peak hour. Includes the sum of all available directions (one or both directions). Bicycles are not included. Calculated for weekdays only. If the study was conducted on a weekend, this value will be none.
+        - id: avg_speed
+          type: float
+          info:
+            notes: If speed data are available for the count, the mean (average) speed of all vehicles over the entire count duration. NOT the same as 50th percentile speed. If the count was conducted on a two-way road, and both directions of travel were observed, counts from both directions are included in the calculation.
+        - id: avg_85th_percentile_speed
+          type: float
+          info:
+            notes: If speed data are available for the study, the 85th percentile speed is the speed at or below which 85% of vehicles travel. Calculated over all count days. If the count was conducted on a two-way road, and both directions of travel were observed, counts from both directions are included in the calculation.
+        - id: avg_95th_percentile_speed
+          type: float
+          info:
+            notes: If speed data are available for the study, the 95th percentile speed is the speed at or below which 95% of vehicles travel. Calculated over all count days. If the count was conducted on a two-way road, and both directions of travel were observed, counts from both directions are included in the calculation.
+        - id: avg_heavy_pct
+          type: float
+          info:
+            notes: If vehicle classification was collected, the percentage of motor vehicles considered heavy vehicles over the count duration. Put simply, this is the percentage of buses, single-unit, and articulated trucks. The percentage is calculated by summing the volume of vehicles in FWHA classes 4-13 inclusive, over the total vehicle volume.
+
+    svc_summary_data:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_summary_data.csv
+      attributes: 
+        - id: count_id
+          type: int
+          info:
+            notes: Unique identifier for each SVC count. Use this ID to cross-reference 15-minute observations in svc\_raw\_data files.
+        - id: count_type
+          type: text
+          info:
+            notes: Type of data collected.ATR\_VOLUME = Volume data only.ATR\_SPEED\_VOLUME = Speed and volume data.VEHICLE\_CLASS = Vehicle classification and volume data
+        - id: count_date_start
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date on which the count started
+        - id: count_date_end
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date on which the count ended
+        - id: count_duration
+          type: text
+          info:
+            notes: Count duration, in hours
+        - id: location_name
+          type: text
+          info:
+            notes: "Human-readable name of the location where the count was conducted (e.g. Bloor St: Yonge St - Park Rd)"
+        - id: longitude
+          type: float
+          info:
+            notes: Longitude GPS coordinate
+        - id: latitude
+          type: float
+          info:
+            notes: Latitude GPS coordinate
+        - id: centreline_id
+          type: int
+          info:
+            notes: Unique location identifier that corresponds to the Toronto Centreline (https://open.toronto.ca/dataset/toronto-centreline-tcl/). Cross-reference with the TCL to find spatial geometry for mapping.
+        - id: avg_daily_vol
+          type: float
+          info:
+            notes: The average daily vehicle volume over the count duration. Calculated by summing the grand total of vehicles observed over the count duration, divided by the count duration in days.
+        - id: avg_weekday_daily_vol
+          type: float
+          info:
+            notes: The average weekday daily vehicle volume over the count duration. If the study was conducted on weekdays only, this is the same as the average daily volume. If the study was conducted on a weekend, this value will be none. If the study was conducted over both weekdays and weekends (i.e. one or two weeks), this is the average daily volume of weekdays only.
+        - id: avg_weekend_daily_vol
+          type: float
+          info:
+            notes: Most traffic volume counts are conducted during the week. A handful of counts are done on weekends, or over periods of one or two weeks. For these counts, we calculate the average weekend daily volume. Similar to the average daily volume but considers only volume observations that fall on a weekend (Saturday or Sunday).
+        - id: avg_wkdy_am_peak_start
+          type: text          
+          info:
+            notes: Start of the average weekday AM peak hour. The AM peak hour is the one-hour continuous period between 6:30-10:30am during which the highest motor vehicle volume is observed moving through the roadway, for all available directions (one or both directions). Bicycles are not included. Calculated for weekdays only. If the study was conducted on a weekend, this value will be none. For counts with a duration longer than 24 hours, the AM peak is calculated by first calculating "average" volumes for each 15-minute period in the day, then finding the hour with the highest motor vehicle volume based on the averaged volumes.
+        - id: avg_wkdy_am_peak_vol
+          type: float
+          info:
+            notes: Average motor vehicles counted during the AM peak hour. Includes the sum of all available directions (one or both directions). Bicycles are not included. Calculated for weekdays only. If the study was conducted on a weekend, this value will be none.
+        - id: avg_wkdy_pm_peak_start
+          type: text          
+          info:
+            notes: Start of the average weekday PM peak hour. The PM peak hour is the one-hour continuous period between 2:00-8:00pm during which the highest motor vehicle volume is observed moving through the roadway, for all available directions (one or both directions). Bicycles are not included. Calculated for weekdays only. If the study was conducted on a weekend, this value will be none. For counts with a duration longer than 24 hours, the PM peak is calculated by first calculating "average" volumes for each 15-minute period in the day, then finding the hour with the highest motor vehicle volume based on the averaged volumes.
+        - id: avg_wkdy_pm_peak_vol
+          type: float
+          info:
+            notes: Average motor vehicles counted during the PM peak hour. Includes the sum of all available directions (one or both directions). Bicycles are not included. Calculated for weekdays only. If the study was conducted on a weekend, this value will be none.
+        - id: avg_speed
+          type: float
+          info:
+            notes: If speed data are available for the count, the mean (average) speed of all vehicles over the entire count duration. NOT the same as 50th percentile speed. If the count was conducted on a two-way road, and both directions of travel were observed, counts from both directions are included in the calculation.
+        - id: avg_85th_percentile_speed
+          type: float
+          info:
+            notes: If speed data are available for the study, the 85th percentile speed is the speed at or below which 85% of vehicles travel. Calculated over all count days. If the count was conducted on a two-way road, and both directions of travel were observed, counts from both directions are included in the calculation.
+        - id: avg_95th_percentile_speed
+          type: float
+          info:
+            notes: If speed data are available for the study, the 95th percentile speed is the speed at or below which 95% of vehicles travel. Calculated over all count days. If the count was conducted on a two-way road, and both directions of travel were observed, counts from both directions are included in the calculation.
+        - id: avg_heavy_pct
+          type: float
+          info:
+            notes: If vehicle classification was collected, the percentage of motor vehicles considered heavy vehicles over the count duration. Put simply, this is the percentage of buses, single-unit, and articulated trucks. The percentage is calculated by summing the volume of vehicles in FWHA classes 4-13 inclusive, over the total vehicle volume.
+
