@@ -652,3 +652,78 @@ topographic-mapping-waterbodies-rivers:
   2025-2027 Programmed_Cycling_Projects:
     format: zip
     url: https://opendata.toronto.ca/transportation.services/cycling-program/Programmed25-27_Cycling_Projects.zip
+
+bicycle-cordon-count-2010-2013-2014:
+  Cordon Count 15 Minute Volumes - 2010, 2013, and 2014:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/bicycle-cordon-count/opendata_cordon_count_2010_2013_2014_vol_15min.csv
+  Data Dictionary Cordon Count - 2010, 2013, and 2014:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/bicycle-cordon-count/data_dictionary_cordon_count_2010_2013_2014.csv
+
+bicycle-and-micromobility-cordon-count:
+  Bicycle and Micromobility Cordon Count 2022 - Raw Data:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/bicycle-cordon-count/opendata_cordon_count_2022_count_raw.csv
+  Bicycle and Micromobility Cordon Count 2022 - Data Dictionary:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/bicycle-cordon-count/opendata_cordon_count_2022_data_dictionary.csv
+
+traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts:
+  svc_raw_data_class_2000_2004:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_class_2000_2004.csv 
+  svc_raw_data_class_2005_2009:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_class_2005_2009.csv 
+  svc_raw_data_class_2010_2014:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_class_2010_2014.csv 
+  svc_raw_data_class_2015_2019:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_class_2015_2019.csv 
+  svc_raw_data_class_2020_2024:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_class_2020_2024.csv 
+  svc_raw_data_speed_1990_1994:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_speed_1990_1994.csv 
+  svc_raw_data_speed_1995_1999:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_speed_1995_1999.csv 
+  svc_raw_data_speed_2000_2004:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_speed_2000_2004.csv 
+  svc_raw_data_speed_2005_2009:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_speed_2005_2009.csv 
+  svc_raw_data_speed_2010_2014:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_speed_2010_2014.csv 
+  svc_raw_data_speed_2015_2019:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_speed_2015_2019.csv 
+  svc_raw_data_speed_2020_2024:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_speed_2020_2024.csv 
+  svc_raw_data_volume_1990_1994:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_volume_1990_1994.csv 
+  svc_raw_data_volume_1995_1999:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_volume_1995_1999.csv 
+  svc_raw_data_volume_2000_2004:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_volume_2000_2004.csv 
+  svc_raw_data_volume_2005_2009:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_volume_2005_2009.csv 
+  svc_raw_data_volume_2010_2014:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_volume_2010_2014.csv 
+  svc_raw_data_volume_2015_2019:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_volume_2015_2019.csv 
+  svc_raw_data_volume_2020_2024:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_volume_2020_2024.csv

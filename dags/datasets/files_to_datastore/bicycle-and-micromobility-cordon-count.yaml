@@ -1,0 +1,209 @@
+# package name
+bicycle-and-micromobility-cordon-count:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Yanan
+  dag_owner_email: yanan.zhang@toronto.ca
+
+  # mandatory package attributes
+  title: Bicycle and Micromobility Cordon Count
+  date_published: "2025-01-15 10:33:52.94697"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Transportation Services
+  owner_section: Policy, Data & Strategic Initiatives
+  owner_unit: Data & Analytics
+  owner_email: transportationdata@toronto.ca
+
+  civic_issues: 
+    - Climate change
+    - Mobility
+  topics: 
+    - Development and infrastructure
+    - Transportation
+  tags:
+    - name: bicycle
+      vocabulary_id: null
+    - name: cordon
+      vocabulary_id: null
+    - name: micromobility
+      vocabulary_id: null
+    - name: cycling
+      vocabulary_id: null
+
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/cycling-in-toronto/cycling-events-and-programs/
+  excerpt: This dataset includes micromobility counts and classifications collected during the City of Toronto Bicycle and Micromobility Cordon Count study carried out in 2022.
+  limitations: |
+    * A Cordon Count only provides a count of people observed crossing the cordon boundary during the day, in either direction. It does not represent the total number of people cycling or using micromobility devices in the downtown area. The cordon count does not capture trips that start and end within the cordon boundary. Individuals could be counted crossing a count station multiple times within a day or an individual trip.
+    * Since cordon count data were collected on a single day, natural day-to-day variations in cycling volume should be taken into consideration when comparing data between the two cordons or year-over-year.
+    * Some cordon boundary crossings, typically low volume roads or trails, were excluded from the cordon count due to resource limitations.
+    * Classifications were determined by staff viewing videos of the street and are subject to human error and subjectivity of individual perception.
+  notes: |
+    The data in this repository were collected as part of the 2022 Toronto Micromobility Cordon and Classification Count. The dataset contains information on how many cyclists and micromobility users are riding on specific downtown streets, when and where they are riding, and other characteristics such as device type, apparent trip purpose, and whether they are riding in a bicycle lane, in mixed-traffic, or on the sidewalk.
+
+    Seven screenlines that together make up two cordon boundaries were included in the study. The inner cordon is bounded by Bloor Street, Spadina Avenue, Queen's Quay and Jarvis Street. The outer cordon is bounded by Dufferin Street, the CP Rail Corridor (mostly parallel with Dupont Street), the Don River, and Lake Ontario. A few additional count locations not on cordon boundaries were also included to capture key high-volume locations. 
+
+    Each cordon was counted on a single day, between 7 a.m. and 7 p.m. The Cordon Count was conducted in early fall. Mid-week, good weather days were chosen to best represent typical weekday cycling and micromobility travel patterns.
+
+    The counts are separated by date, location, and direction of travel. A count summary table, a table of disaggregated counts and classifications, and a classification dictionary table are included. The data are fully anonymous.
+
+    A report on the findings of the 2022 Bicycle and Micromobility Cordon Count is available at [Cycling Data, Events & Programs](https://www.toronto.ca/services-payments/streets-parking-transportation/cycling-in-toronto/cycling-events-and-programs).
+
+    Previous iterations of the study can be found at [Bicycle Cordon Count: 2010, 2013, 2014](https://open.toronto.ca/dataset/bicycle-cordon-count-2010-2013-2014).
+  resources:
+    # resource name
+    Bicycle and Micromobility Cordon Count 2022 - Count Summary:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/bicycle-cordon-count/opendata_cordon_count_2022_count_summary.csv
+      attributes:
+        - source_name: site_dir_uid
+          target_name: Site and Direction ID
+          type: int
+          info:
+            notes: Unique identifier for each [location + direction of travel + count date] combination.
+        - source_name: site_id
+          target_name: Site ID
+          type: int
+          info:
+            notes: Location identifier specific to the cordon count program
+        - source_name: location_name
+          target_name: Location Description 
+          type: text
+          info:
+            notes: Location of the count station described by the primary street and cross streets or directional offset
+        - source_name: dir_travel
+          target_name: Direction of Travel 
+          type: text
+          info:
+            notes: Direction of travel (e.g. NB for Northbound)       
+        - source_name: count_year
+          target_name: Count Year 
+          type: int
+          info:
+            notes: The year the cordon count was conducted (yyyy)       
+        - source_name: count_date
+          target_name: Date 
+          type: text
+          info:
+            notes: The date the data was recorded in the field (yyyy-mm-dd)       
+        - source_name: centreline_id
+          target_name: Centreline ID 
+          type: int
+          info:
+            notes: Toronto Centreline (TCL) unique identifier. TCL is a data set of linear features representing streets, walkways, rivers, railways, highways and administrative boundaries.
+        - source_name: cordon
+          target_name: Cordon
+          type: text
+          info:
+            notes: An enclosed geographic area bounded by a set of screenlines, designed with the intent to count every micromobility user crossing the boundary    
+        - source_name: screenline
+          target_name: Screenline 
+          type: text
+          info:
+            notes: An imaginary, usually linear, boundary crossing multiple city streets. A cordon is defined by multiple screenlines.
+        - source_name: inbound_dir
+          target_name: Inbound Direction 
+          type: text
+          info:
+            notes: People travelling this direction are entering the cordon, i.e. heading towards the city centre. "N/A" if the count station is not located on a cordon boundary.
+        - source_name: oneway_dir
+          target_name: One-Way Street Direction 
+          type: text
+          info:
+            notes: Flow direction of one-way streets (e.g. NB for Northbound); or "Not One-Way"
+        - source_name: road_class
+          target_name: Road Classification 
+          type: text
+          info:
+            notes: Road Classification, as defined by the City of Toronto Road Classification System
+        - source_name: cycling_infra
+          target_name: Cycling Infrastructure 
+          type: text
+          info:
+            notes: Cycling-specific infrastructure, by direction, at the time of the cordon count.
+        - source_name: tot_vol
+          target_name: Total Volume 
+          type: text
+          info:
+            notes: Total 12-hour volume of micromobility users collected from 7 a.m. to 7 p.m.       
+        - source_name: tot_type_std
+          target_name: Standard Bicycle Type
+          type: int
+          info:
+            notes: Total "Standard Bicycle" type classifications       
+        - source_name: tot_type_cargo
+          target_name: Cargo Bicycle Type
+          type: int
+          info:
+            notes: Total "Cargo Bicycle" type classifications
+        - source_name: tot_type_bike_share
+          target_name: Bike Share Type
+          type: int
+          info:
+            notes: Total "Bike Share" type classifications
+        - source_name: tot_type_ebike
+          target_name: E-Bicycle Type
+          type: int
+          info:
+            notes: Total "E-Bicycle" type classifications
+        - source_name: tot_type_escooter
+          target_name: E-Scooter Type
+          type: int
+          info:
+            notes: Total "E-Scooter" type classifications
+        - source_name: tot_type_moped
+          target_name: Moped Type
+          type: int
+          info:
+            notes: Total "Moped" type classifications
+        - source_name: tot_type_oth_bike
+          target_name: Other Bicycle or Micromobility Type
+          type: int
+          info:
+            notes: Total "Other Bicycle or Micromobility" type classifications
+        - source_name: tot_type_oth_non_mot
+          target_name: Other Non-Motorized Type
+          type: int
+          info:
+            notes: Total "Other Non-Motorized" type classifications
+        - source_name: tot_pur_std
+          target_name: Standard-Unknown Purpose
+          type: int
+          info:
+            notes: Total "Standard-Unknown" percieved purpose classifications
+        - source_name: tot_pur_delivery
+          target_name: Food or Cargo Delivery Purpose
+          type: int
+          info:
+            notes: Total "Food or Cargo Delivery" percieved purpose classifications
+        - source_name: tot_pur_sport
+          target_name: Sport Purpose
+          type: int
+          info:
+            notes: Total "Sport" percieved purpose classifications
+        - source_name: tot_pur_passenger
+          target_name: Carrying Passenger Purpose
+          type: int
+          info:
+            notes: Total "Carrying Passenger" percieved purpose classifications
+        - source_name: tot_infra_bike_lane_trail
+          target_name: Bike Lane or Trail Infrastructure Use
+          type: int
+          info:
+            notes: Total "Bike Lane or Trail" infrastructure usage classifications
+        - source_name: tot_infra_sidewalk
+          target_name: Sidewalk Infrastructure Use
+          type: int
+          info:
+            notes: Total "Sidewalk" infrastructure usage classifications
+        - source_name: tot_infra_roadway
+          target_name: Roadway Infrastructure Use
+          type: int
+          info:
+            notes: Total "Roadway/Mixed-Traffic" infrastructure usage classifications
+        - id: geometry
+          type: text
+          info:
+            notes: Point geometry representing the count station location
