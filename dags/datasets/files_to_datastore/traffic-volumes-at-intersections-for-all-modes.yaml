@@ -6,7 +6,7 @@ traffic-volumes-at-intersections-for-all-modes:
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
   # mandatory package attributes
-  title: "Traffic Volumes at Intersections for All Modes"
+  title: "Traffic Volumes - Multimodal Intersection Turning Movement Counts"
   date_published: "2021-03-11 14:13:46.660574"
   refresh_rate: Daily
   dataset_category: Table
@@ -24,1312 +24,1454 @@ traffic-volumes-at-intersections-for-all-modes:
   tags: 
     - name: turns
       vocabulary_id: null
-
+    - name: traffic volume
+      vocabulary_id: null
+    - name: turning movement count
+      vocabulary_id: null
+    - name: tmc
+      vocabulary_id: null
+    - name: multimodal
+      vocabulary_id: null
+    - name: bicycle volume
+      vocabulary_id: null
+    - name: bike volume
+      vocabulary_id: null
+    - name: intersection
+      vocabulary_id: null
+    
   information_url: null
-  excerpt: This dataset includes all available Turning Movement Count traffic volume data observed at locations across the City. The data is separated by location, date of count, mode of transportation, direction, and movement pattern (if available).
-  limitations: null
+  excerpt: This dataset includes all available Turning Movement Count traffic volumes observed at intersections across the City. Car, truck, bus, bicycle and pedestrian volumes and respective direction of travel and movements are included, where available.
+  limitations: |   
+    * Prior to 2014, bicycle volumes may be underreported because of technology limitations
+
+    * Data are collected on an ad-hoc, as needed basis, therefore does not have comprehensive temporal or geographic coverage
+        
+    * Dataset works best if opened with GIS software and overlaid with Toronto Centreline and Intersection File datasets
+        
+    * Limited to the City of Toronto geographical boundary
+
   notes: |
-    The City of Toronto's Transportation Services Division collects traffic volume data across the city from a variety of sources for a number of purposes. This data generally takes one of two forms:
-    
-    * __Automatic Traffic Recorder (ATR) Counts:__ Segment-level volumes reflecting the total volume on a specific street moving in a specific direction (e.g. the total number of cyclists observed on Queen Street, heading Eastbound, just west of Dufferin Street)
-    
-    * __Turning Movement Counts (TMCs):__ Movements observed at a specific intersection, typically indicating the total volume observed at each leg (i.e. North, South, East, or West) of the intersection and, if applicable, the observed turning movement by mode.
-    
-    The data available in this repository are a full collection of TMCs across the City. These reflect the total volumes observed at specific intersections, segmented by direction of approach, turning movement (if applicable), and mode (car, truck, bus, pedestrian, cyclist, other).
-    
-    Each TMC is comprised of data for a single day at a single location. A TMC typically includes data for a total of 8 non-continuous hours throughout the day, and the data is reported in a series of 15-minute intervals.
-    
-    The data are available in three formats:
-    
-    + __Count Metadata (count-metadata.zip):__ Metadata about each TMC
-    
-    + __Count Locations (locations.zip):__ Metadata about locations where a TMC has been conducted
-    
-    + __Raw Data (raw-data-[decade].zip – latest raw counts by location, grouped by decade):__ Volumes by mode (car, truck, busy, pedestrian, cyclist, other), by direction of approach/leg of intersection (North, South, East, West), and movement where applicable, binned in 15-minute increments.
-    
-    
-    This dataset references the City of [Toronto's Street Centreline](https://open.toronto.ca/dataset/toronto-centreline-tcl/) dataset, [Intersection File dataset](https://open.toronto.ca/dataset/intersection-file-city-of-toronto/), and [Street Traffic Signal dataset](https://open.toronto.ca/dataset/traffic-signals-tabular/).
-    
+    The City of Toronto's Transportation Services Division collects short-term traffic count data across the City on an ad-hoc basis to support a variety of safety initiatives and projects.
+
+    The data available in this repository are a full collection of Turning Movement Counts (TMC) conducted across the City since 1984.
+
+    The two most common types of short-term traffic counts are Turning Movement Counts and Speed / Volume / Classification Counts.
+
+    *[Speed / Volume / Classification Count data, comprised of vehicle speeds and volumes broken down by vehicle type, can be found here](https://open.toronto.ca/dataset/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/).*
+
+    Turning Movement Counts include the movements of motor vehicles, bicycles, and pedestrians through intersections. Counts are captured using video technology. Older counts were conducted manually by field staff.
+
+    The City of Toronto uses this data to inform signal timing and infrastructure design.
+
+    Each Turning Movement Count is comprised of data collected over 8 non-continuous hours (before September 2023) or over a continuous 14-hour period (September 2023 and after), at a single location. Some key notes about these counts include:
+
+    - Motor vehicle volumes are available for movements through the intersection (left-turn, right-turn and through-movement for each leg of the intersection).
+    - Motor vehicle volumes are further broken down by vehicle type (car, truck, bus).
+    - Total bicycle volumes approaching the intersection from each direction are available.
+    - Total pedestrian volumes crossing each leg of the intersection are available.
+    - Raw data are recorded and aggregated into 15-minute intervals.
+
+    The following files showing different views of the data are available:
+
+    - **Data Dictionary (*tmc\_data\_dictionary.xlsx*)**: Provides a detailed definition of every data field in all files.
+    - **Summary Data (*tmc\_summary\_data*)**: Provides metadata about every TMC available, including information about the count location and count date, as well as summary data about each count (total 8- or 14-hour pedestrian volumes, total 8- or 14-hour vehicle and bicycle volumes for each approach to the intersection, percent of total that are heavy vehicles and a.m. and p.m. peak hour vehicle and bicycle volumes).
+    - **Most Recent Count Data (*tmc\_most\_recent\_summary\_data*)**: Provides metadata about the most recent TMC available at each location for which a TMC exists, including information about the count location and count date, as well as the summary data provided in the “Summary Data” file (see above).
+    - **Raw Data (*tmc\_raw\_data\_yyyy\_yyyy*)**: These files—grouped by 5-10 year interval—provide count volumes for cars, trucks, buses, cyclists and pedestrians in 15-minute intervals, for movements through the intersection, for every TMC available. Vehicle volumes are broken down by movement through the intersection (left-turn, right-turn and through-movement, for each approach), cyclist volumes are broken down by leg they enter the intersection and pedestrian volumes are broken down by the leg of the intersection they are counted crossing.
+
+    This dataset references the City of [Toronto's Street Centreline](https://open.toronto.ca/dataset/toronto-centreline-tcl/) dataset, [Intersection File dataset](https://open.toronto.ca/dataset/intersection-file-city-of-toronto/) and [Street Traffic Signal dataset](https://open.toronto.ca/dataset/traffic-signals-tabular/).
+
   resources:
     # resource name
-    raw-data-2020-2029:
+    tmc_most_recent_summary_data:
       format: csv
-      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_2020_2029.csv
+      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmc_most_recent_summary_data.csv
       attributes:
-        - id: count_id
+        - id: latest_count_id
           type: int
           info:
-            notes: Unique identified for the traffic study conducted to gather count data. This corresponds with the count_id field in the raw_data_[decade] table.
-        - id: count_date
-          type: date
-          format: "%Y-%m-%d"
-          info:
-            notes: Date of count
-        - id: location_id
-          type: int
-          info:
-            notes: Unique location identifier
-        - id: location
-          type: text
-          info:
-            notes: Textual description of the location
-        - id: lng
-          type: float
-          info:
-            notes:  "Longitude"
-        - id: lat
-          type: float
-          info:
-            notes: Latitude
-        - id: centreline_type
-          type: int
-          info:
-            notes: Type of location (road segment = 1, intersection = 2). If empty, this location could not be lined up with the Toronto Centreline.
-        - id: centreline_id
-          type: int
-          info:
-            notes: Toronto Centreline Layer identifier. When centreline\_type = 1, this corresponds with a road segment in the [City of Toronto's Street Centreline (TCL)](https://open.toronto.ca/dataset/toronto-centreline-tcl/) dataset (CENTRELINE_ID). When centreline\_type = 2, this corresponds with an intersection in the City of Toronto's [Intersection File](https://open.toronto.ca/dataset/intersection-file-city-of-toronto/) dataset. When centreline\_type is empty, this is also empty. 
-        - id: px
-          type: int
-          info:
-            notes: The year the location was active
-        - id: time_start
-          type: timestamp
-          format: "%Y-%m-%d %H:%M:%S"
-          info:
-            notes:  ""
-        - id: time_end
-          type: timestamp
-          format: "%Y-%m-%d %H:%M:%S"
-          info:
-            notes: Id associated with the location
-        - id: sb_cars_r
-          type: int
-          info:
-            notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and turn right
-        - id: sb_cars_t
-          type: int
-          info:
-            notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-        - id: sb_cars_l
-          type: int
-          info:
-            notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and turn left
-        - id: nb_cars_r
-          type: int
-          info:
-            notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and turn right
-        - id: nb_cars_t
-          type: int
-          info:
-            notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-        - id: nb_cars_l
-          type: int
-          info:
-            notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and turn left
-        - id: wb_cars_r
-          type: int
-          info:
-            notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and turn right
-        - id: wb_cars_t
-          type: int
-          info:
-            notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-        - id: wb_cars_l
-          type: int
-          info:
-            notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and turn left
-        - id: eb_cars_r
-          type: int
-          info:
-            notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-        - id: eb_cars_t
-          type: int
-          info:
-            notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-        - id: eb_cars_l
-          type: int
-          info:
-            notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-        - id: sb_truck_r
-          type: int
-          info:
-            notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and turn right
-        - id: sb_truck_t
-          type: int
-          info:
-            notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-        - id: sb_truck_l
-          type: int
-          info:
-            notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and turn left
-        - id: nb_truck_r
-          type: int
-          info:
-            notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and turn right
-        - id: nb_truck_t
-          type: int
-          info:
-            notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-        - id: nb_truck_l
-          type: int
-          info:
-            notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and turn left
-        - id: wb_truck_r
-          type: int
-          info:
-            notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and turn right
-        - id: wb_truck_t
-          type: int
-          info:
-            notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-        - id: wb_truck_l
-          type: int
-          info:
-            notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and turn left
-        - id: eb_truck_r
-          type: int
-          info:
-            notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-        - id: eb_truck_t
-          type: int
-          info:
-            notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-        - id: eb_truck_l
-          type: int
-          info:
-            notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-        - id: sb_bus_r
-          type: int
-          info:
-            notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and turn right
-        - id: sb_bus_t
-          type: int
-          info:
-            notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-        - id: sb_bus_l
-          type: int
-          info:
-            notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and turn left
-        - id: nb_bus_r
-          type: int
-          info:
-            notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and turn right
-        - id: nb_bus_t
-          type: int
-          info:
-            notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-        - id: nb_bus_l
-          type: int
-          info:
-            notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and turn left
-        - id: wb_bus_r
-          type: int
-          info:
-            notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and turn right
-        - id: wb_bus_t
-          type: int
-          info:
-            notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-        - id: wb_bus_l
-          type: int
-          info:
-            notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and turn left
-        - id: eb_bus_r
-          type: int
-          info:
-            notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-        - id: eb_bus_t
-          type: int
-          info:
-            notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-        - id: eb_bus_l
-          type: int
-          info:
-            notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-        - id: nx_peds
-          type: int
-          info:
-            notes: Volume of pedestrians that crossed the north leg of the intersection
-        - id: sx_peds
-          type: int
-          info:
-            notes: Volume of pedestrians that crossed the south leg of the intersection
-        - id: ex_peds
-          type: int
-          info:
-            notes: Volume of pedestrians that crossed the east leg of the intersection
-        - id: wx_peds
-          type: int
-          info:
-            notes: Volume of pedestrians that crossed the west leg of the intersection
-        - id: nx_bike
-          type: int
-          info:
-            notes: Volume of bikes that crossed the north leg of the intersection
-        - id: sx_bike
-          type: int
-          info:
-            notes: Volume of bikes that crossed the south leg of the intersection
-        - id: ex_bike
-          type: int
-          info:
-            notes: Volume of bikes that crossed the east leg of the intersection
-        - id: wx_bike
-          type: int
-          info:
-            notes: Volume of bikes that crossed the west leg of the intersection
-        - id: nx_other
-          type: int
-          info:
-            notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the north leg of the intersection
-        - id: sx_other
-          type: int
-          info:
-            notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the south leg of the intersection
-        - id: ex_other
-          type: int
-          info:
-            notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the east leg of the intersection
-        - id: wx_other
-          type: int
-          info:
-            notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the west leg of the intersection
-    #raw-data-2010-2019:
-    #  format: csv
-    #  url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_2010_2019.csv
-    #  attributes:
-    #    - id: count_id
-    #      type: int
-    #      info:
-    #        notes: Unique identified for the traffic study conducted to gather count data. This corresponds with the count_id field in the raw_data_[decade] table.
-    #    - id: count_date
-    #      type: date
-    #      info:
-    #        notes: Date of count
-    #    - id: location_id
-    #      type: int
-    #      info:
-    #        notes: Unique location identifier
-    #    - id: location
-    #      type: text
-    #      info:
-    #        notes: Textual description of the location
-    #    - id: lng
-    #      type: float
-    #      info:
-    #        notes:  "Longitude"
-    #    - id: lat
-    #      type: float
-    #      info:
-    #        notes: Latitude
-    #    - id: centreline_type
-    #      type: int
-    #      info:
-    #        notes: Type of location (road segment = 1, intersection = 2). If empty, this location could not be lined up with the Toronto Centreline.
-    #    - id: centreline_id
-    #      type: int
-    #      info:
-    #        notes: Toronto Centreline Layer identifier. When centreline\_type = 1, this corresponds with a road segment in the [City of Toronto's Street Centreline (TCL)](https://open.toronto.ca/dataset/toronto-centreline-tcl/) dataset (CENTRELINE_ID). When centreline\_type = 2, this corresponds with an intersection in the City of Toronto's [Intersection File](https://open.toronto.ca/dataset/intersection-file-city-of-toronto/) dataset. When centreline\_type is empty, this is also empty. 
-    #    - id: px
-    #      type: int
-    #      info:
-    #        notes: The year the location was active
-    #    - id: time_start
-    #      type: timestamp
-    #      info:
-    #        notes:  ""
-    #    - id: time_end
-    #      type: timestamp
-    #      info:
-    #        notes: Id associated with the location
-    #    - id: sb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and turn right
-    #    - id: sb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-    #    - id: sb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and turn left
-    #    - id: nb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and turn right
-    #    - id: nb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-    #    - id: nb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and turn left
-    #    - id: wb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and turn right
-    #    - id: wb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-    #    - id: wb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and turn left
-    #    - id: eb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-    #    - id: eb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-    #    - id: eb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-    #    - id: sb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and turn right
-    #    - id: sb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-    #    - id: sb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and turn left
-    #    - id: nb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and turn right
-    #    - id: nb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-    #    - id: nb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and turn left
-    #    - id: wb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and turn right
-    #    - id: wb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-    #    - id: wb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and turn left
-    #    - id: eb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-    #    - id: eb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-    #    - id: eb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-    #    - id: sb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and turn right
-    #    - id: sb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-    #    - id: sb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and turn left
-    #    - id: nb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and turn right
-    #    - id: nb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-    #    - id: nb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and turn left
-    #    - id: wb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and turn right
-    #    - id: wb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-    #    - id: wb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and turn left
-    #    - id: eb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-    #    - id: eb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-    #    - id: eb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-    #    - id: nx_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the north leg of the intersection
-    #    - id: sx_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the south leg of the intersection
-    #    - id: ex_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the east leg of the intersection
-    #    - id: wx_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the west leg of the intersection
-    #    - id: nx_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the north leg of the intersection
-    #    - id: sx_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the south leg of the intersection
-    #    - id: ex_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the east leg of the intersection
-    #    - id: wx_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the west leg of the intersection
-    #    - id: nx_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the north leg of the intersection
-    #    - id: sx_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the south leg of the intersection
-    #    - id: ex_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the east leg of the intersection
-    #    - id: wx_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the west leg of the intersection
-    #raw-data-2000-2009:
-    #  format: csv
-    #  url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_2000_2009.csv
-    #  attributes:
-    #    - id: count_id
-    #      type: int
-    #      info:
-    #        notes: Unique identified for the traffic study conducted to gather count data. This corresponds with the count_id field in the raw_data_[decade] table.
-    #    - id: count_date
-    #      type: date
-    #      info:
-    #        notes: Date of count
-    #    - id: location_id
-    #      type: int
-    #      info:
-    #        notes: Unique location identifier
-    #    - id: location
-    #      type: text
-    #      info:
-    #        notes: Textual description of the location
-    #    - id: lng
-    #      type: float
-    #      info:
-    #        notes:  "Longitude"
-    #    - id: lat
-    #      type: float
-    #      info:
-    #        notes: Latitude
-    #    - id: centreline_type
-    #      type: int
-    #      info:
-    #        notes: Type of location (road segment = 1, intersection = 2). If empty, this location could not be lined up with the Toronto Centreline.
-    #    - id: centreline_id
-    #      type: int
-    #      info:
-    #        notes: Toronto Centreline Layer identifier. When centreline\_type = 1, this corresponds with a road segment in the [City of Toronto's Street Centreline (TCL)](https://open.toronto.ca/dataset/toronto-centreline-tcl/) dataset (CENTRELINE_ID). When centreline\_type = 2, this corresponds with an intersection in the City of Toronto's [Intersection File](https://open.toronto.ca/dataset/intersection-file-city-of-toronto/) dataset. When centreline\_type is empty, this is also empty. 
-    #    - id: px
-    #      type: int
-    #      info:
-    #        notes: The year the location was active
-    #    - id: time_start
-    #      type: timestamp
-    #      info:
-    #        notes:  ""
-    #    - id: time_end
-    #      type: timestamp
-    #      info:
-    #        notes: Id associated with the location
-    #    - id: sb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and turn right
-    #    - id: sb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-    #    - id: sb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and turn left
-    #    - id: nb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and turn right
-    #    - id: nb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-    #    - id: nb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and turn left
-    #    - id: wb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and turn right
-    #    - id: wb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-    #    - id: wb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and turn left
-    #    - id: eb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-    #    - id: eb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-    #    - id: eb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-    #    - id: sb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and turn right
-    #    - id: sb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-    #    - id: sb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and turn left
-    #    - id: nb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and turn right
-    #    - id: nb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-    #    - id: nb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and turn left
-    #    - id: wb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and turn right
-    #    - id: wb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-    #    - id: wb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and turn left
-    #    - id: eb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-    #    - id: eb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-    #    - id: eb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-    #    - id: sb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and turn right
-    #    - id: sb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-    #    - id: sb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and turn left
-    #    - id: nb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and turn right
-    #    - id: nb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-    #    - id: nb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and turn left
-    #    - id: wb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and turn right
-    #    - id: wb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-    #    - id: wb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and turn left
-    #    - id: eb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-    #    - id: eb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-    #    - id: eb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-    #    - id: nx_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the north leg of the intersection
-    #    - id: sx_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the south leg of the intersection
-    #    - id: ex_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the east leg of the intersection
-    #    - id: wx_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the west leg of the intersection
-    #    - id: nx_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the north leg of the intersection
-    #    - id: sx_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the south leg of the intersection
-    #    - id: ex_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the east leg of the intersection
-    #    - id: wx_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the west leg of the intersection
-    #    - id: nx_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the north leg of the intersection
-    #    - id: sx_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the south leg of the intersection
-    #    - id: ex_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the east leg of the intersection
-    #    - id: wx_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the west leg of the intersection
-    #raw-data-1990-1999:
-    #  format: csv
-    #  url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_1990_1999.csv
-    #  attributes:
-    #    - id: count_id
-    #      type: int
-    #      info:
-    #        notes: Unique identified for the traffic study conducted to gather count data. This corresponds with the count_id field in the raw_data_[decade] table.
-    #    - id: count_date
-    #      type: date
-    #      info:
-    #        notes: Date of count
-    #    - id: location_id
-    #      type: int
-    #      info:
-    #        notes: Unique location identifier
-    #    - id: location
-    #      type: text
-    #      info:
-    #        notes: Textual description of the location
-    #    - id: lng
-    #      type: float
-    #      info:
-    #        notes:  "Longitude"
-    #    - id: lat
-    #      type: float
-    #      info:
-    #        notes: Latitude
-    #    - id: centreline_type
-    #      type: int
-    #      info:
-    #        notes: Type of location (road segment = 1, intersection = 2). If empty, this location could not be lined up with the Toronto Centreline.
-    #    - id: centreline_id
-    #      type: int
-    #      info:
-    #        notes: Toronto Centreline Layer identifier. When centreline\_type = 1, this corresponds with a road segment in the [City of Toronto's Street Centreline (TCL)](https://open.toronto.ca/dataset/toronto-centreline-tcl/) dataset (CENTRELINE_ID). When centreline\_type = 2, this corresponds with an intersection in the City of Toronto's [Intersection File](https://open.toronto.ca/dataset/intersection-file-city-of-toronto/) dataset. When centreline\_type is empty, this is also empty. 
-    #    - id: px
-    #      type: int
-    #      info:
-    #        notes: The year the location was active
-    #    - id: time_start
-    #      type: timestamp
-    #      info:
-    #        notes:  ""
-    #    - id: time_end
-    #      type: timestamp
-    #      info:
-    #        notes: Id associated with the location
-    #    - id: sb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and turn right
-    #    - id: sb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-    #    - id: sb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and turn left
-    #    - id: nb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and turn right
-    #    - id: nb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-    #    - id: nb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and turn left
-    #    - id: wb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and turn right
-    #    - id: wb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-    #    - id: wb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and turn left
-    #    - id: eb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-    #    - id: eb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-    #    - id: eb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-    #    - id: sb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and turn right
-    #    - id: sb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-    #    - id: sb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and turn left
-    #    - id: nb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and turn right
-    #    - id: nb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-    #    - id: nb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and turn left
-    #    - id: wb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and turn right
-    #    - id: wb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-    #    - id: wb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and turn left
-    #    - id: eb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-    #    - id: eb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-    #    - id: eb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-    #    - id: sb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and turn right
-    #    - id: sb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-    #    - id: sb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and turn left
-    #    - id: nb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and turn right
-    #    - id: nb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-    #    - id: nb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and turn left
-    #    - id: wb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and turn right
-    #    - id: wb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-    #    - id: wb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and turn left
-    #    - id: eb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-    #    - id: eb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-    #    - id: eb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-    #    - id: nx_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the north leg of the intersection
-    #    - id: sx_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the south leg of the intersection
-    #    - id: ex_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the east leg of the intersection
-    #    - id: wx_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the west leg of the intersection
-    #    - id: nx_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the north leg of the intersection
-    #    - id: sx_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the south leg of the intersection
-    #    - id: ex_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the east leg of the intersection
-    #    - id: wx_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the west leg of the intersection
-    #    - id: nx_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the north leg of the intersection
-    #    - id: sx_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the south leg of the intersection
-    #    - id: ex_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the east leg of the intersection
-    #    - id: wx_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the west leg of the intersection
-    #raw-data-1980-1989:
-    #  format: csv
-    #  url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_1980_1989.csv
-    #  attributes:
-    #    - id: count_id
-    #      type: int
-    #      info:
-    #        notes: Unique identified for the traffic study conducted to gather count data. This corresponds with the count_id field in the raw_data_[decade] table.
-    #    - id: count_date
-    #      type: date
-    #      info:
-    #        notes: Date of count
-    #    - id: location_id
-    #      type: int
-    #      info:
-    #        notes: Unique location identifier
-    #    - id: location
-    #      type: text
-    #      info:
-    #        notes: Textual description of the location
-    #    - id: lng
-    #      type: float
-    #      info:
-    #        notes:  "Longitude"
-    #    - id: lat
-    #      type: float
-    #      info:
-    #        notes: Latitude
-    #    - id: centreline_type
-    #      type: int
-    #      info:
-    #        notes: Type of location (road segment = 1, intersection = 2). If empty, this location could not be lined up with the Toronto Centreline.
-    #    - id: centreline_id
-    #      type: int
-    #      info:
-    #        notes: Toronto Centreline Layer identifier. When centreline\_type = 1, this corresponds with a road segment in the [City of Toronto's Street Centreline (TCL)](https://open.toronto.ca/dataset/toronto-centreline-tcl/) dataset (CENTRELINE_ID). When centreline\_type = 2, this corresponds with an intersection in the City of Toronto's [Intersection File](https://open.toronto.ca/dataset/intersection-file-city-of-toronto/) dataset. When centreline\_type is empty, this is also empty. 
-    #    - id: px
-    #      type: int
-    #      info:
-    #        notes: The year the location was active
-    #    - id: time_start
-    #      type: timestamp
-    #      info:
-    #        notes:  ""
-    #    - id: time_end
-    #      type: timestamp
-    #      info:
-    #        notes: Id associated with the location
-    #    - id: sb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and turn right
-    #    - id: sb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-    #    - id: sb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling southbound (i.e. from north to south) and turn left
-    #    - id: nb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and turn right
-    #    - id: nb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-    #    - id: nb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling northbound (i.e. from south to north) and turn left
-    #    - id: wb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and turn right
-    #    - id: wb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-    #    - id: wb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling westbound (i.e. from east to west) and turn left
-    #    - id: eb_cars_r
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-    #    - id: eb_cars_t
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-    #    - id: eb_cars_l
-    #      type: int
-    #      info:
-    #        notes: Volume of cars that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-    #    - id: sb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and turn right
-    #    - id: sb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-    #    - id: sb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling southbound (i.e. from north to south) and turn left
-    #    - id: nb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and turn right
-    #    - id: nb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-    #    - id: nb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling northbound (i.e. from south to north) and turn left
-    #    - id: wb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and turn right
-    #    - id: wb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-    #    - id: wb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling westbound (i.e. from east to west) and turn left
-    #    - id: eb_truck_r
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-    #    - id: eb_truck_t
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-    #    - id: eb_truck_l
-    #      type: int
-    #      info:
-    #        notes: Volume of trucks that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-    #    - id: sb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and turn right
-    #    - id: sb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and pass straight through
-    #    - id: sb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling southbound (i.e. from north to south) and turn left
-    #    - id: nb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and turn right
-    #    - id: nb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and pass straight through
-    #    - id: nb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling northbound (i.e. from south to north) and turn left
-    #    - id: wb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and turn right
-    #    - id: wb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and pass straight through
-    #    - id: wb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling westbound (i.e. from east to west) and turn left
-    #    - id: eb_bus_r
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and turn right
-    #    - id: eb_bus_t
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and pass straight through
-    #    - id: eb_bus_l
-    #      type: int
-    #      info:
-    #        notes: Volume of buses that approach the intersection travelling eastbound (i.e. from west to east) and turn left
-    #    - id: nx_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the north leg of the intersection
-    #    - id: sx_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the south leg of the intersection
-    #    - id: ex_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the east leg of the intersection
-    #    - id: wx_peds
-    #      type: int
-    #      info:
-    #        notes: Volume of pedestrians that crossed the west leg of the intersection
-    #    - id: nx_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the north leg of the intersection
-    #    - id: sx_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the south leg of the intersection
-    #    - id: ex_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the east leg of the intersection
-    #    - id: wx_bike
-    #      type: int
-    #      info:
-    #        notes: Volume of bikes that crossed the west leg of the intersection
-    #    - id: nx_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the north leg of the intersection
-    #    - id: sx_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the south leg of the intersection
-    #    - id: ex_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the east leg of the intersection
-    #    - id: wx_other
-    #      type: int
-    #      info:
-    #        notes: Volume of other non-vehicle modes (e.g. skateboard, scooter, etc) that crossed the west leg of the intersection
-    count_metadata:
-      format: csv
-      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_count_metadata.csv
-      attributes:
-        - id: count_id
-          type: int
-          info:
-            notes: Unique identified for the traffic study conducted to gather count data. This corresponds with the count_id field in the raw_data_[decade] table.
-        - id: count_date
-          type: date
-          format: "%Y-%m-%d"
-          info:
-            notes: Date of count
-        - id: location_id
-          type: int
-          info:
-            notes: Unique location identifier
-        - id: location
-          type: text
-          info:
-            notes: Textual description of the location
-        - id: lng
-          type: float
-          info:
-            notes:  "Longitude"
-        - id: lat
-          type: float
-          info:
-            notes: Latitude
-        - id: centreline_type
-          type: int
-          info:
-            notes: Type of location (road segment = 1, intersection = 2). If empty, this location could not be lined up with the Toronto Centreline.
-        - id: centreline_id
-          type: int
-          info:
-            notes: Toronto Centreline Layer identifier. When centreline\_type = 1, this corresponds with a road segment in the [City of Toronto's Street Centreline (TCL)](https://open.toronto.ca/dataset/toronto-centreline-tcl/) dataset (CENTRELINE_ID). When centreline\_type = 2, this corresponds with an intersection in the City of Toronto's [Intersection File](https://open.toronto.ca/dataset/intersection-file-city-of-toronto/) dataset. When centreline\_type is empty, this is also empty. 
-        - id: px
-          type: int
-          info:
-            notes: The year the location was active
-    locations:
-      format: csv
-      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmcs_locations.csv
-      attributes:
-        - id: location_id
-          type: int
-          info:
-            notes: Unique location identifier
-        - id: location
-          type: text
-          info:
-            notes: Textual description of the location
-        - id: lng
-          type: float
-          info:
-            notes:  "Longitude"
-        - id: lat
-          type: float
-          info:
-            notes: Latitude
-        - id: centreline_type
-          type: int
-          info:
-            notes: Type of location (road segment = 1, intersection = 2). If empty, this location could not be lined up with the Toronto Centreline.
-        - id: centreline_id
-          type: int
-          info:
-            notes: Toronto Centreline Layer identifier. When centreline\_type = 1, this corresponds with a road segment in the [City of Toronto's Street Centreline (TCL)](https://open.toronto.ca/dataset/toronto-centreline-tcl/) dataset (CENTRELINE_ID). When centreline\_type = 2, this corresponds with an intersection in the City of Toronto's [Intersection File](https://open.toronto.ca/dataset/intersection-file-city-of-toronto/) dataset. When centreline\_type is empty, this is also empty. 
-        - id: px
-          type: int
-          info:
-            notes: The year the location was active
+            notes: Unique identifier for each Turning Movement Count. Use this ID to cross-reference 15-minute observations in tmc\_raw\_data files.
         - id: latest_count_date
           type: date
           format: "%Y-%m-%d"
           info:
-            notes: Latest date for this count
+            notes: Date the count was conducted. For Turning Movement Counts, studies are conducted on one day only.
+        - id: location_name
+          type: text
+          info:
+            notes: Human-readable name of the location where the count was conducted (e.g. Bloor Street / Yonge Street)
+        - id: longitude
+          type: float
+          info:
+            notes: Longitude GPS coordinate
+        - id: latitude
+          type: float
+          info:
+            notes: Latitude GPS coordinate
+        - id: centreline_type
+          type: text
+          info:
+            notes: Intersection node or Midblock segment. Spatial geometry can be found by using centreline\_type and centreline\_id to lookup spatial information in the Toronto Centreline and Intersection File datasets. If the centreline\_type is Intersection, cross-reference centreline\_id with INTERSECTION\_ID in the Intersection File dataset (https://open.toronto.ca/dataset/intersection-file-city-of-toronto/). If the centreline\_type is Midblock, cross-reference centreline\_id with CENTRELINE\_ID in the  Toronto Centreline dataset (https://open.toronto.ca/dataset/toronto-centreline-tcl/).
+        - id: centreline_id
+          type: int
+          info:
+            notes: Unique location identifier that corresponds to the Toronto Centreline or Intersection File datasets. Join to the Toronto Centreline dataset for segments. Join to the Intersection File dataset for nodes.
+        - id: px
+          type: int
+          info:
+            notes: If there is a traffic control signal at the location, this is the unique identifier for the signal. Join to Traffic Signals Tabular (https://open.toronto.ca/dataset/traffic-signals-tabular/).
+        - id: count_duration
+          type: text
+          info:
+            notes: "Duration of count (14, 8R, 8S). 14 = 14-hours of data collected over a continuous period from 6:00am-8:00pm. 8R = 8-hours of data collected during the non-continuous Routine schedule of 7:30 - 9:30 / 10:00 - 12:00 / 13:00 - 15:00 / 16:00 - 18:00. 8S = 8-hours of data collected during the non-continuous School schedule of 7:30 - 9:30 / 10:00 - 11:00 / 12:00 - 13:30 / 14:15 - 15:45 / 16:00 - 18:00"
+        - id: total_vehicle
+          type: int
+          info:
+            notes: Total motor vehicle volume over the count duration. Motor vehicles include cars, trucks, and buses.
+        - id: total_bike
+          type: int
+          info:
+            notes: Total bicycle volume over the count duration
+        - id: total_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), over the count duration
+        - id: total_pedestrian
+          type: int
+          info:
+            notes: "Total pedestrian volume crossing any leg of the intersection, over the count duration NOTE: Pedestrians are counted once for each leg of the intersection they cross. For example, if a pedestrian crosses the north leg, then the east leg, they are counted once crossing the north leg, and once crossing the east leg."
+        - id: am_peak_start
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: Start of the AM Peak hour. The AM Peak hour is the continuous one-hour period between 6:30-10:30AM during which the total number of motor vehicles (cars, trucks, buses) that enter the intersection is the greatest.
+        - id: am_peak_vehicle
+          type: int
+          info:
+            notes: Volume of motor vehicles observed during the AM peak hour
+        - id: am_peak_bike
+          type: int
+          info:
+            notes: Volume of bicycles observed during the AM peak hour
+        - id: am_peak_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), during the AM peak hour
+        - id: pm_peak_start
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: Start of the PM Peak hour. The PM Peak hour is the continuous one-hour period between 2:00-8:00PM during which the total number of motor vehicles (cars, trucks, buses) that enter the intersection is the greatest.
+        - id: pm_peak_vehicle
+          type: int
+          info:
+            notes: Volume of motor vehicles observed during the PM peak hour
+        - id: pm_peak_bike
+          type: int
+          info:
+            notes: Volume of bicycles observed during the PM peak hour
+        - id: pm_peak_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), during the PM peak hour
+        - id: n_appr_vehicle
+          type: int
+          info:
+            notes: Volume of motor vehicles that enter the intersection from the north leg (approach), over the count duration
+        - id: n_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach), over the count duration NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the north leg, plus bicycles riding in the crosswalk area across the west leg"
+        - id: n_appr_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), that enter the intersection from the north leg (approach), over the count duration
+        - id: e_appr_vehicle
+          type: int
+          info:
+            notes: Volume of vehicles that enter the intersection from the east leg (approach), over the count duration
+        - id: e_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the east leg (approach), over the count duration NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the east leg, plus bicycles riding in the crosswalk area across the north leg"
+        - id: e_appr_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), that enter the intersection from the east leg (approach), over the count duration
+        - id: s_appr_vehicle
+          type: int
+          info:
+            notes: Volume of vehicles that enter the intersection from the south leg (approach), over the count duration
+        - id: s_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the south leg (approach), over the count duration NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the south leg, plus bicycles riding in the crosswalk area across the east leg"
+        - id: s_appr_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), that enter the intersection from the south leg (approach), over the count duration
+        - id: w_appr_vehicle
+          type: int
+          info:
+            notes: Volume of vehicles that enter the intersection from the west leg (approach), over the count duration
+        - id: w_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the west leg (approach), over the count duration NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the west leg, plus bicycles riding in the crosswalk area across the south leg"
+        - id: w_appr_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), that enter the intersection from the west leg (approach), over the count duration
+    tmc_summary_data:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmc_summary_data.csv
+      attributes:
+        - id: count_id
+          type: int
+          info:
+            notes: Unique identifier for each Turning Movement Count. Use this ID to cross-reference 15-minute observations in tmc\_raw\_data files.
+        - id: count_date
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date the count was conducted. For Turning Movement Counts, studies are conducted on one day only.
+        - id: location_name
+          type: text
+          info:
+            notes: Human-readable name of the location where the count was conducted (e.g. Bloor Street / Yonge Street)
+        - id: longitude
+          type: float
+          info:
+            notes: Longitude GPS coordinate
+        - id: latitude
+          type: float
+          info:
+            notes: Latitude GPS coordinate
+        - id: centreline_type
+          type: text
+          info:
+            notes: "Intersection node or Midblock segment. Spatial geometry can be found by using centreline\_type and centreline\_id to lookup spatial information in the Toronto Centreline and Intersection File datasets. If the centreline\_type is Intersection, cross-reference centreline\_id with INTERSECTION\_ID in the Intersection File dataset (https://open.toronto.ca/dataset/intersection-file-city-of-toronto/). If the centreline_type is Midblock, cross-reference centreline_id with CENTRELINE_ID in the  Toronto Centreline dataset (https://open.toronto.ca/dataset/toronto-centreline-tcl/)."
+        - id: centreline_id
+          type: int
+          info:
+            notes: Unique location identifier that corresponds to the Toronto Centreline or Intersection File datasets. Join to the Toronto Centreline dataset for segments. Join to the Intersection File dataset for nodes.
+        - id: px
+          type: int
+          info:
+            notes: If there is a traffic control signal at the location, this is the unique identifier for the signal. Join to Traffic Signals Tabular (https://open.toronto.ca/dataset/traffic-signals-tabular/).
+        - id: count_duration
+          type: text
+          info:
+            notes: "Duration of count (14, 8R, 8S) 14 = 14-hours of data collected over a continuous period from 6:00am-8:00pm 8R = 8-hours of data collected during the non-continuous Routine schedule of 7:30 - 9:30 / 10:00 - 12:00 / 13:00 - 15:00 / 16:00 - 18:00 8S = 8-hours of data collected during the non-continuous School schedule of 7:30 - 9:30 / 10:00 - 11:00 / 12:00 - 13:30 / 14:15 - 15:45 / 16:00 - 18:00"
+        - id: total_vehicle
+          type: int
+          info:
+            notes: Total motor vehicle volume over the count duration. Motor vehicles include cars, trucks, and buses.
+        - id: total_bike
+          type: int
+          info:
+            notes: Total bicycle volume over the count duration
+        - id: total_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), over the count duration
+        - id: total_pedestrian
+          type: int
+          info:
+            notes: "Total pedestrian volume crossing any leg of the intersection, over the count duration NOTE: Pedestrians are counted once for each leg of the intersection they cross. For example, if a pedestrian crosses the north leg, then the east leg, they are counted once crossing the north leg, and once crossing the east leg."
+        - id: am_peak_start
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: Start of the AM Peak hour. The AM Peak hour is the continuous one-hour period between 6:30-10:30AM during which the total number of motor vehicles (cars, trucks, buses) that enter the intersection is the greatest.
+        - id: am_peak_vehicle
+          type: int
+          info:
+            notes: Volume of motor vehicles observed during the AM peak hour
+        - id: am_peak_bike
+          type: int
+          info:
+            notes: Volume of bicycles observed during the AM peak hour
+        - id: am_peak_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), during the AM peak hour
+        - id: pm_peak_start
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: Start of the PM Peak hour. The PM Peak hour is the continuous one-hour period between 2:00-8:00PM during which the total number of motor vehicles (cars, trucks, buses) that enter the intersection is the greatest.
+        - id: pm_peak_vehicle
+          type: int
+          info:
+            notes: Volume of motor vehicles observed during the PM peak hour
+        - id: pm_peak_bike
+          type: int
+          info:
+            notes: Volume of bicycles observed during the PM peak hour
+        - id: pm_peak_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), during the PM peak hour
+        - id: n_appr_vehicle
+          type: int
+          info:
+            notes: Volume of motor vehicles that enter the intersection from the north leg (approach), over the count duration
+        - id: n_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach), over the count duration NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the north leg, plus bicycles riding in the crosswalk area across the west leg"
+        - id: n_appr_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), that enter the intersection from the north leg (approach), over the count duration
+        - id: e_appr_vehicle
+          type: int
+          info:
+            notes: Volume of vehicles that enter the intersection from the east leg (approach), over the count duration
+        - id: e_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the east leg (approach), over the count duration NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the east leg, plus bicycles riding in the crosswalk area across the north leg"
+        - id: e_appr_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), that enter the intersection from the east leg (approach), over the count duration
+        - id: s_appr_vehicle
+          type: int
+          info:
+            notes: Volume of vehicles that enter the intersection from the south leg (approach), over the count duration
+        - id: s_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the south leg (approach), over the count duration NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the south leg, plus bicycles riding in the crosswalk area across the east leg"
+        - id: s_appr_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), that enter the intersection from the south leg (approach), over the count duration
+        - id: w_appr_vehicle
+          type: int
+          info:
+            notes: Volume of vehicles that enter the intersection from the west leg (approach), over the count duration
+        - id: w_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the west leg (approach), over the count duration NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the west leg, plus bicycles riding in the crosswalk area across the south leg"
+        - id: w_appr_heavy_pct
+          type: float
+          info:
+            notes: Percentage of motor vehicle volume considered heavy vehicles (truck/bus), that enter the intersection from the west leg (approach), over the count duration
+    tmc_raw_data_1980_1989:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmc_raw_1980_1989.csv
+      attributes:
+        - id: count_id
+          type: int
+          info:
+            notes: Unique identifier for each count. Join to tmc_summary_data or tmc_most_recent_summary_data for rollup statistics.
+        - id: count_date
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date the count was conducted. For Turning Movement Counts, studies are conducted on one day only.
+        - id: location_name
+          type: text
+          info:
+            notes: Human-readable name of the location where the count was conducted (e.g. Bloor Street / Yonge Street)
+        - id: longitude
+          type: float
+          info:
+            notes: Longitude GPS coordinate
+        - id: latitude
+          type: float
+          info:
+            notes: Latitude GPS coordinate
+        - id: centreline_type
+          type: text
+          info:
+            notes: Intersection node or Midblock segment. Spatial geometry can be found by using centreline_type and centreline_id to lookup spatial information in the Toronto Centreline and Intersection File datasets. If the centreline_type is Intersection, cross-reference centreline_id with INTERSECTION_ID in the Intersection File dataset (https://open.toronto.ca/dataset/intersection-file-city-of-toronto/). If the centreline_type is Midblock, cross-reference centreline_id with CENTRELINE_ID in the  Toronto Centreline dataset (https://open.toronto.ca/dataset/toronto-centreline-tcl/).
+        - id: centreline_id
+          type: int
+          info:
+            notes: Unique location identifier that corresponds to the Toronto Centreline or Intersection File datasets. Join to the Toronto Centreline dataset for segments. Join to the Intersection File dataset for nodes.
+        - id: px
+          type: int
+          info:
+            notes: If there is a traffic control signal at the location, this is the unique identifier for the signal. Join to Traffic Signals Tabular (https://open.toronto.ca/dataset/traffic-signals-tabular/).
+        - id: start_time
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: Start time of the 15-minute interval
+        - id: end_time
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: End time of the 15-minute interval
+        - id: n_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the north leg (approach) of the intersection.
+        - id: s_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the south leg (approach) of the intersection.
+        - id: e_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the east leg (approach) of the intersection.
+        - id: w_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the west leg (approach) of the intersection.
+        - id: n_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the north leg, i.e. in a southbound direction, plus bicycles riding in the crosswalk area across the west leg."
+        - id: s_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the south leg, i.e. in a northbound direction, plus bicycles riding in the crosswalk area across the east leg."
+        - id: e_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the east leg, i.e. in a westbound direction, plus bicycles riding in the crosswalk area across the north leg."
+        - id: w_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the west leg, i.e. in a eastbound direction, plus bicycles riding in the crosswalk area across the south leg."
+    tmc_raw_data_1990_1999:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmc_raw_1990_1999.csv
+      attributes:
+        - id: count_id
+          type: int
+          info:
+            notes: Unique identifier for each count. Join to tmc_summary_data or tmc_most_recent_summary_data for rollup statistics.
+        - id: count_date
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date the count was conducted. For Turning Movement Counts, studies are conducted on one day only.
+        - id: location_name
+          type: text
+          info:
+            notes: Human-readable name of the location where the count was conducted (e.g. Bloor Street / Yonge Street)
+        - id: longitude
+          type: float
+          info:
+            notes: Longitude GPS coordinate
+        - id: latitude
+          type: float
+          info:
+            notes: Latitude GPS coordinate
+        - id: centreline_type
+          type: text
+          info:
+            notes: Intersection node or Midblock segment. Spatial geometry can be found by using centreline_type and centreline_id to lookup spatial information in the Toronto Centreline and Intersection File datasets. If the centreline_type is Intersection, cross-reference centreline_id with INTERSECTION_ID in the Intersection File dataset (https://open.toronto.ca/dataset/intersection-file-city-of-toronto/). If the centreline_type is Midblock, cross-reference centreline_id with CENTRELINE_ID in the  Toronto Centreline dataset (https://open.toronto.ca/dataset/toronto-centreline-tcl/).
+        - id: centreline_id
+          type: int
+          info:
+            notes: Unique location identifier that corresponds to the Toronto Centreline or Intersection File datasets. Join to the Toronto Centreline dataset for segments. Join to the Intersection File dataset for nodes.
+        - id: px
+          type: int
+          info:
+            notes: If there is a traffic control signal at the location, this is the unique identifier for the signal. Join to Traffic Signals Tabular (https://open.toronto.ca/dataset/traffic-signals-tabular/).
+        - id: start_time
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: Start time of the 15-minute interval
+        - id: end_time
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: End time of the 15-minute interval
+        - id: n_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the north leg (approach) of the intersection.
+        - id: s_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the south leg (approach) of the intersection.
+        - id: e_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the east leg (approach) of the intersection.
+        - id: w_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the west leg (approach) of the intersection.
+        - id: n_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the north leg, i.e. in a southbound direction, plus bicycles riding in the crosswalk area across the west leg."
+        - id: s_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the south leg, i.e. in a northbound direction, plus bicycles riding in the crosswalk area across the east leg."
+        - id: e_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the east leg, i.e. in a westbound direction, plus bicycles riding in the crosswalk area across the north leg."
+        - id: w_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the west leg, i.e. in a eastbound direction, plus bicycles riding in the crosswalk area across the south leg."
+    tmc_raw_data_2000_2009:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmc_raw_2000_2009.csv
+      attributes:
+        - id: count_id
+          type: int
+          info:
+            notes: Unique identifier for each count. Join to tmc_summary_data or tmc_most_recent_summary_data for rollup statistics.
+        - id: count_date
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date the count was conducted. For Turning Movement Counts, studies are conducted on one day only.
+        - id: location_name
+          type: text
+          info:
+            notes: Human-readable name of the location where the count was conducted (e.g. Bloor Street / Yonge Street)
+        - id: longitude
+          type: float
+          info:
+            notes: Longitude GPS coordinate
+        - id: latitude
+          type: float
+          info:
+            notes: Latitude GPS coordinate
+        - id: centreline_type
+          type: text
+          info:
+            notes: Intersection node or Midblock segment. Spatial geometry can be found by using centreline_type and centreline_id to lookup spatial information in the Toronto Centreline and Intersection File datasets. If the centreline_type is Intersection, cross-reference centreline_id with INTERSECTION_ID in the Intersection File dataset (https://open.toronto.ca/dataset/intersection-file-city-of-toronto/). If the centreline_type is Midblock, cross-reference centreline_id with CENTRELINE_ID in the  Toronto Centreline dataset (https://open.toronto.ca/dataset/toronto-centreline-tcl/).
+        - id: centreline_id
+          type: int
+          info:
+            notes: Unique location identifier that corresponds to the Toronto Centreline or Intersection File datasets. Join to the Toronto Centreline dataset for segments. Join to the Intersection File dataset for nodes.
+        - id: px
+          type: int
+          info:
+            notes: If there is a traffic control signal at the location, this is the unique identifier for the signal. Join to Traffic Signals Tabular (https://open.toronto.ca/dataset/traffic-signals-tabular/).
+        - id: start_time
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: Start time of the 15-minute interval
+        - id: end_time
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: End time of the 15-minute interval
+        - id: n_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the north leg (approach) of the intersection.
+        - id: s_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the south leg (approach) of the intersection.
+        - id: e_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the east leg (approach) of the intersection.
+        - id: w_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the west leg (approach) of the intersection.
+        - id: n_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the north leg, i.e. in a southbound direction, plus bicycles riding in the crosswalk area across the west leg."
+        - id: s_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the south leg, i.e. in a northbound direction, plus bicycles riding in the crosswalk area across the east leg."
+        - id: e_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the east leg, i.e. in a westbound direction, plus bicycles riding in the crosswalk area across the north leg."
+        - id: w_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the west leg, i.e. in a eastbound direction, plus bicycles riding in the crosswalk area across the south leg."
+    tmc_raw_data_2010_2019:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmc_raw_2010_2019.csv
+      attributes:
+        - id: count_id
+          type: int
+          info:
+            notes: Unique identifier for each count. Join to tmc_summary_data or tmc_most_recent_summary_data for rollup statistics.
+        - id: count_date
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date the count was conducted. For Turning Movement Counts, studies are conducted on one day only.
+        - id: location_name
+          type: text
+          info:
+            notes: Human-readable name of the location where the count was conducted (e.g. Bloor Street / Yonge Street)
+        - id: longitude
+          type: float
+          info:
+            notes: Longitude GPS coordinate
+        - id: latitude
+          type: float
+          info:
+            notes: Latitude GPS coordinate
+        - id: centreline_type
+          type: text
+          info:
+            notes: Intersection node or Midblock segment. Spatial geometry can be found by using centreline_type and centreline_id to lookup spatial information in the Toronto Centreline and Intersection File datasets. If the centreline_type is Intersection, cross-reference centreline_id with INTERSECTION_ID in the Intersection File dataset (https://open.toronto.ca/dataset/intersection-file-city-of-toronto/). If the centreline_type is Midblock, cross-reference centreline_id with CENTRELINE_ID in the  Toronto Centreline dataset (https://open.toronto.ca/dataset/toronto-centreline-tcl/).
+        - id: centreline_id
+          type: int
+          info:
+            notes: Unique location identifier that corresponds to the Toronto Centreline or Intersection File datasets. Join to the Toronto Centreline dataset for segments. Join to the Intersection File dataset for nodes.
+        - id: px
+          type: int
+          info:
+            notes: If there is a traffic control signal at the location, this is the unique identifier for the signal. Join to Traffic Signals Tabular (https://open.toronto.ca/dataset/traffic-signals-tabular/).
+        - id: start_time
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: Start time of the 15-minute interval
+        - id: end_time
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: End time of the 15-minute interval
+        - id: n_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the north leg (approach) of the intersection.
+        - id: s_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the south leg (approach) of the intersection.
+        - id: e_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the east leg (approach) of the intersection.
+        - id: w_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the west leg (approach) of the intersection.
+        - id: n_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the north leg, i.e. in a southbound direction, plus bicycles riding in the crosswalk area across the west leg."
+        - id: s_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the south leg, i.e. in a northbound direction, plus bicycles riding in the crosswalk area across the east leg."
+        - id: e_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the east leg, i.e. in a westbound direction, plus bicycles riding in the crosswalk area across the north leg."
+        - id: w_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the west leg, i.e. in a eastbound direction, plus bicycles riding in the crosswalk area across the south leg."
+    tmc_raw_data_2020-2029:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmc_raw_2020_2029.csv
+      attributes:
+        - id: count_id
+          type: int
+          info:
+            notes: Unique identifier for each count. Join to tmc_summary_data or tmc_most_recent_summary_data for rollup statistics.
+        - id: count_date
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date the count was conducted. For Turning Movement Counts, studies are conducted on one day only.
+        - id: location_name
+          type: text
+          info:
+            notes: Human-readable name of the location where the count was conducted (e.g. Bloor Street / Yonge Street)
+        - id: longitude
+          type: float
+          info:
+            notes: Longitude GPS coordinate
+        - id: latitude
+          type: float
+          info:
+            notes: Latitude GPS coordinate
+        - id: centreline_type
+          type: text
+          info:
+            notes: Intersection node or Midblock segment. Spatial geometry can be found by using centreline_type and centreline_id to lookup spatial information in the Toronto Centreline and Intersection File datasets. If the centreline_type is Intersection, cross-reference centreline_id with INTERSECTION_ID in the Intersection File dataset (https://open.toronto.ca/dataset/intersection-file-city-of-toronto/). If the centreline_type is Midblock, cross-reference centreline_id with CENTRELINE_ID in the  Toronto Centreline dataset (https://open.toronto.ca/dataset/toronto-centreline-tcl/).
+        - id: centreline_id
+          type: int
+          info:
+            notes: Unique location identifier that corresponds to the Toronto Centreline or Intersection File datasets. Join to the Toronto Centreline dataset for segments. Join to the Intersection File dataset for nodes.
+        - id: px
+          type: int
+          info:
+            notes: If there is a traffic control signal at the location, this is the unique identifier for the signal. Join to Traffic Signals Tabular (https://open.toronto.ca/dataset/traffic-signals-tabular/).
+        - id: start_time
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: Start time of the 15-minute interval
+        - id: end_time
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes: End time of the 15-minute interval
+        - id: n_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_cars_r
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_cars_t
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_cars_l
+          type: int
+          info:
+            notes: Volume of cars that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_truck_r
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_truck_t
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_truck_l
+          type: int
+          info:
+            notes: Volume of trucks that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a right turn.
+        - id: n_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and continue through.
+        - id: n_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the north leg (approach), in a southbound direction of travel, and make a left turn.
+        - id: s_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a right turn.
+        - id: s_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and continue through.
+        - id: s_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the south leg (approach), in a northbound direction of travel, and make a left turn.
+        - id: e_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a right turn.
+        - id: e_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and continue through.
+        - id: e_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the east leg (approach), in a westbound direction of travel, and make a left turn.
+        - id: w_appr_bus_r
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a right turn.
+        - id: w_appr_bus_t
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and continue through.
+        - id: w_appr_bus_l
+          type: int
+          info:
+            notes: Volume of buses that enter the intersection from the west leg (approach), in a eastbound direction of travel, and make a left turn.
+        - id: n_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the north leg (approach) of the intersection.
+        - id: s_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the south leg (approach) of the intersection.
+        - id: e_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the east leg (approach) of the intersection.
+        - id: w_appr_peds
+          type: int
+          info:
+            notes: Volume of pedestrians that cross the west leg (approach) of the intersection.
+        - id: n_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the north leg, i.e. in a southbound direction, plus bicycles riding in the crosswalk area across the west leg."
+        - id: s_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the south leg, i.e. in a northbound direction, plus bicycles riding in the crosswalk area across the east leg."
+        - id: e_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the east leg, i.e. in a westbound direction, plus bicycles riding in the crosswalk area across the north leg."
+        - id: w_appr_bike
+          type: int
+          info:
+            notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the west leg, i.e. in a eastbound direction, plus bicycles riding in the crosswalk area across the south leg."
