@@ -170,7 +170,7 @@ def parse_geometry_from_row(source_row):
     made of that rows geometric contents'''
 
     latitude_attributes = ["lat", "latitude", "y", "y coordinate", "point_y"]
-    longitude_attributes = ["long", "longitude", "x", "x coordinate", "point_x"]
+    longitude_attributes = ["long", "lng", "longitude", "x", "x coordinate", "point_x"]
     
     for attr in source_row:
         if attr.lower() in latitude_attributes:

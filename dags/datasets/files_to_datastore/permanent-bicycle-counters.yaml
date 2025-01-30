@@ -1,0 +1,195 @@
+# package name
+permanent-bicycle-counters:
+  # DAG info
+  schedule: "0 20 * * 2"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Permanent Bicycle Counters"
+  date_published: "2024-12-04 14:13:46.660574"
+  refresh_rate: Monthly
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Transportation Services
+  owner_section: Policy, Data & Strategic Initiatives
+  owner_unit: Data & Analytics
+  owner_email: VolumeCollision_Requests@toronto.ca
+
+  civic_issues: 
+    - Mobility
+  topics: 
+    - Transportation
+  tags: 
+    - name: bike
+      vocabulary_id: null
+    - name: biking
+      vocabulary_id: null
+    - name: cycling
+      vocabulary_id: null
+    - name: micromobility
+      vocabulary_id: null
+    - name: multimodal
+      vocabulary_id: null
+    - name: activeto
+      vocabulary_id: null 
+    
+  information_url: null
+  excerpt: This dataset contains bicycle and micromobility volumes from permanent bicycle detectors installed on Toronto streets and multi-use paths.
+  limitations: |
+    * The total counts are made up of bicycles and other micromobility devices including e-bikes, scooters, and e-scooters.
+
+    * Only bicycles and other micromobility devices passing in the detection zone within the designated bicycle lane are counted. The volumes exclude riders on the sidewalk, in motor-vehicle lanes, or in painted buffer zones.
+
+    * Detectors in operation since 2022 have been calibrated based on manual counts. Checks are done periodically to verify calibration. Data from older detectors that have since been replaced have been validated using historic data where available.
+
+    * Many detectors were not active from 2019 to 2022 and have since been replaced.
+  
+  notes: |
+    This dataset contains counts of bicycles from permanent detectors installed on Toronto streets and multi-use paths. The City uses the data to monitor trends in people cycling and the seasonal use of bicycle lanes. Additional new count stations are being added to the system and the data will be brought online when data validation is completed.
+
+    The following files showing different views of the data are available:
+
+    * **Detector Locations (cycling\_permanent\_counts\_locations)**: Location and metadata of each detector. This table references the [City of Toronto's Street Centreline](https://open.toronto.ca/dataset/toronto-centreline-tcl/) dataset.
+
+    * **Daily Counts (cycling\_permanent\_counts\_daily)**: Total daily counts by location and direction
+
+    * **15-minute Counts (cycling\_permanent\_counts\_15min)**: 15-minute counts by direction and location. 1-hour counts are provided if 15-minute counts are not available.
+
+    * **Readme and Data Dictionary (cycling\_permanent\_counts\_readme)**: Provides a detailed definition of each data table and it's corresponding columns.
+    
+  resources:
+    # resource name
+    cycling_permanent_counts_locations:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/permanent-bike-counters/cycling_permanent_counts_locations.csv
+      attributes:
+        - id: location_dir_id         
+          type: text
+          info:
+            notes: Unique ID for location and direction for joining to data tables.
+        - id: location_name          
+          type: text
+          info:
+            notes: Short description of sensor location.
+        - id: direction          
+          type: text
+          info:
+            notes: Closest cardinal direction of bike flow.
+        - id: linear_name_full          
+          type: text
+          info:
+            notes: Linear name full from Toronto Centreline (TCL)
+        - id: side_street          
+          type: text
+          info:
+            notes: Nearest side street to sensor flow.
+        - id: longitude          
+          type: float
+          info:
+            notes: Approximate longitude of sensor.
+        - id: latitude          
+          type: float
+          info:
+            notes: Approximate latitude of sensor.
+        - id: centreline_id          
+          type: int
+          info:
+            notes: centreline_id corresponding to Toronto Centreline (TCL)
+        - id: bin_size          
+          type: text
+          info:
+            notes: Size of smallest datetime bin recorded by sensor.
+        - id: latest_calibration_study          
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date of latest calibration study.
+        - id: first_active          
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: The earliest date the sensor produced data.
+        - id: last_active          
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: The most recent date of available data produced by the sensor.
+        - id: date_decommissioned          
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date decommissioned.
+        - id: technology          
+          type: text
+          info:
+            notes: Technology of permanent sensor.
+    cycling_permanent_counts_daily:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/permanent-bike-counters/cycling_permanent_counts_daily.csv
+      attributes:
+        - id: location_dir_id         
+          type: text
+          info:
+            notes: Unique ID for location and direction for joining to data tables.
+        - id: location_name          
+          type: text
+          info:
+            notes: Short description of sensor location.
+        - id: direction          
+          type: text
+          info:
+            notes: Closest cardinal direction of bike flow.
+        - id: linear_name_full          
+          type: text
+          info:
+            notes: Full street location name
+        - id: side_street          
+          type: text
+          info:
+            notes: Name of associated side street
+        - id: dt          
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date of count.
+        - id: daily_volume          
+          type: int
+          info:
+            notes: Count of users on date dt.
+    cycling_permanent_counts_15min_1994_2024:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/permanent-bike-counters/cycling_permanent_counts_15min_1994_2024.csv
+      attributes:
+        - id: location_dir_id         
+          type: text
+          info:
+            notes: Unique ID for location and direction for joining to data tables.        
+        - id: datetime_bin          
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes:  The date-time at which the record begins. See bin_size in sites table for size of bin.
+        - id: bin_volume          
+          type: int
+          info:
+            notes: Count of users.
+    cycling_permanent_counts_15min_2024_2025:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/permanent-bike-counters/cycling_permanent_counts_15min_2024_2025.csv
+      attributes:
+        - id: location_dir_id         
+          type: text
+          info:
+            notes: Unique ID for location and direction for joining to data tables.        
+        - id: datetime_bin          
+          type: timestamp
+          format: "%Y-%m-%d %H:%M:%S"
+          info:
+            notes:  The date-time at which the record begins. See bin_size in sites table for size of bin.
+        - id: bin_volume          
+          type: int
+          info:
+            notes: Count of users.
+    
