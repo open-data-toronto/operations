@@ -1252,7 +1252,7 @@ traffic-volumes-at-intersections-for-all-modes:
           type: int
           info:
             notes: "Volume of bicycles that enter the intersection from the north leg (approach). NOTE: For counts conducted September 2023 and after, this includes bicycles on the road riding into the intersection from the west leg, i.e. in a eastbound direction, plus bicycles riding in the crosswalk area across the south leg."
-    tmc_raw_data_2020-2029:
+    tmc_raw_data_2020_2029:
       format: csv
       url: https://opendata.toronto.ca/transportation.services/traffic-volumes-at-intersections-for-all-modes/tmc_raw_2020_2029.csv
       attributes:
