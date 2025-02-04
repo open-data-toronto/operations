@@ -47,9 +47,9 @@ city-vehicle-availability:
     
   resources:
     'City Vehicle Availability ':
-      format: 'xlsx'
-      sheet: Sheet1
-      url: https://opendata.toronto.ca/fleet.services/vehicle-availability/OpenData SRPT078 - YTD Fleet Availability Metrics.xlsm
+      format: csv
+      encoding: 'utf-8'
+      url: https://opendata.toronto.ca/fleet.services/vehicle-availability/OpenData SRPT078 - YTD Fleet Availability Metrics.csv
       attributes:
       - id: UNIT_NO
         type: text
@@ -91,7 +91,7 @@ city-vehicle-availability:
           notes: A high level description of the units category grouping
       - id: IN_SERV_DT
         type: date
-        format: "%Y/%m/%d %H:%M:%S"
+        format: "%Y-%m-%d" 
         info:
           notes: The date the unit was brought into service/use
       - id: STATUS_DESC
