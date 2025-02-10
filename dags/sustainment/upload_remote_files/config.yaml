@@ -563,6 +563,9 @@ neighbourhood-improvement-areas:
   311 Service Requests 2024:
     format: zip
     url: https://www.toronto.ca/data/311/opendata/servicerequest/SR2024.zip
+  311 Service Requests 2025:
+    format: zip
+    url: https://www.toronto.ca/data/311/opendata/servicerequest/SR2025.zip
 
 parking-tickets:
   parking-tickets-2022:
