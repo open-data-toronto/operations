@@ -17,6 +17,10 @@ heritage-register:
   Heritage Register Data:
     format: zip
     url: https://opendata.toronto.ca/city.planning/heritage-register/Heritage_Register_Address_Points_WGS84.zip
+heritage-formerly-listed:
+  Heritage Formerly Listed Properties:
+    format: zip
+    url: https://opendata.toronto.ca/city.planning/heritage-formerly-listed/Heritage_Formerly_Listed_Properties.zip
 monthly-communicable-disease-surveillance-data:
   Communicable disease surveillance data 2024:
     format: xlsx
