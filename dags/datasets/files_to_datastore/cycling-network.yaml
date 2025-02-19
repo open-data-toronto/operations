@@ -64,10 +64,6 @@ cycling-network:
       agol: true
       url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CYCLING_INFRASTRUCTURE/FeatureServer/0
       attributes:
-      - id: OBJECTID
-        type: int
-        info:
-          notes: ''
       - id: SEGMENT_ID
         type: int
         info:
@@ -131,56 +127,6 @@ cycling-network:
             - Cycle Track
 
             As an example, on a contra-flow route with sharrows on one side, and contra-flow bike lane on the other side, the lowest classified cycling infrastructure type on this street would be the "Sharrows". If the street only has one type of cycling infrastructure on both sides, then the input would be the same for both "INFRA\_LOWO" and "INFRA\_HIGH".  
-
-      - id: SEPA_LOWORDER
-        type: text
-        info:
-          notes: ''
-      - id: SEPB_LOWORDER
-        type: text
-        info:
-          notes: ''
-      - id: ORIG_LOWORDER_INFRA
-        type: text
-        info:
-          notes: ''
-      - id: DIR_HIGHORDER
-        type: text
-        info:
-          notes: ''
-      - id: INFRA_HIGHORDER
-        type: text
-        info:
-          notes: 'Refers to the highest classified cycling infrastructure type installed on this segment, as outlined above. '
-      - id: SEPA_HIGHORDER
-        type: text
-        info:
-          notes: ''
-      - id: SEPB_HIGHORDER
-        type: text
-        info:
-          notes: ''
-      - id: ORIG_HIGHORDER
-        type: text
-        info:
-          notes: ''
-      - id: BYLAWED
-        type: text
-        info:
-          notes: ''
-      - id: EDITOR
-        type: text
-        info:
-          notes: ''
-      - id: LAST_EDIT_DATE
-        type: timestamp
-        format: epoch
-        info:
-          notes: ''
-      - id: UPGRADE_DESCRIPTION
-        type: text
-        info:
-          notes: ''
       - id: CONVERTED
         type: text
         info:
