@@ -1,0 +1,118 @@
+road-resurfacing-program:
+  schedule: '50 14 * * 4'
+  dag_owner_name: Yanan Zhang
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Road Resurfacing Program
+  date_published: '2025-02-19 10:23:04.633126'
+  dataset_category: Map
+  refresh_rate: As available
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: Asset Management
+  owner_email: roadsogr@toronto.ca
+  civic_issues: null
+  topics:
+  - Development and infrastructure
+  - Transportation
+  tags:
+  - name: road resurfacing
+    vocabulary_id: null
+  information_url: https://map.toronto.ca/toinview/
+  excerpt: Road resurfacing consists of removing the top layer of asphalt and replacing that with new material.
+  limitations: This data is meant to be used for planning purposes; it doesn't guarantee that the work is going to proceed.
+  notes: |
+    This data shows the currently active, planned, or completed road resurfacing projects.
+
+    Road resurfacing consists of the replacement of old asphalt surface with new asphalt surface, including repairs of any damaged sidewalks and curbs. 
+    Work may include the closure of individual lanes or the entire road. These replacements happen after damage has occurred on curbs and sidewalks; it is not necessarily the recreation of an entire sidewalk but rather they are state of good repair replacements. 
+  resources:
+    Road Resurfacing Program:
+      agol: True
+      query_params: "inv_display_program ='TS_Road_Resurfacing'"
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_TOINVIEW_PROGRAM_LINE/FeatureServer/0
+      attributes:
+      - id: OBJECTID
+        type: int
+        info:
+          notes: 'Unique row identifier'
+      - id: PROJ_NUM
+        type: text
+        info:
+          notes: ''
+      - id: LAST_UPDATED_DATE
+        type: date
+        format: epoch
+        info:
+          notes: 'The most recent date on which the project information was revised or updated'
+      - source_name: INV_PROJECT
+        target_name: PROJECT
+        type: text
+        info:
+          notes: 'Road Resurfacing'
+      - source_name: INV_LOCATION
+        target_name: LOCATION
+        type: text
+        info:
+          notes: 'The name, beginning and end of the street where the road resurfacing project is located'
+      - source_name: INV_DETAIL
+        target_name: DETAILS
+        type: text
+        info:
+          notes: 'Project scope summary'
+      - source_name: INV_DURATION_PUBLIC
+        target_name: DURATION/ Construction Timeline
+        type: text
+        info:
+          notes: 'The year in which the project begins and ends'
+      - source_name: INV_STATUS
+        target_name: STATUS
+        type: text
+        info:
+          notes: 'The status of the project'
+      - id: INV_PRIORITY
+        type: text
+        info:
+          notes: ''
+      - source_name: INV_OWNER
+        target_name: OWNER
+        type: text
+        info:
+          notes: 'Owner of all road resurfacing projects is Transportation Services'
+      - source_name: INV_PUBLIC_CONTACT_NAME
+        target_name: CONTACT_NAME
+        type: text
+        info:
+          notes: 'Contact person information'
+      - source_name: INV_PUBLIC_CONTACT_EMAIL
+        target_name: CONTACT_EMAIL
+        type: text
+        info:
+          notes: 'Contact email address'
+      - id: INV_WEB_SITE
+        type: text
+        info:
+          notes: ''
+      - id: INV_DISPLAY_PROGRAM
+        type: text
+        info:
+          notes: ''
+      - id: INV_DISPLAY_SYMBOL
+        type: text
+        info:
+          notes: ''
+      - source_name: INV_START_YEAR
+        target_name: START_YEAR
+        type: text
+        info:
+          notes: 'The year in which the project begins'
+      - id: CONTR_NUMBER
+        type: text
+        info:
+          notes: ''
+      - id: "geometry"
+        type: text
+        info:
+          notes: ''
+        
+
