@@ -1,0 +1,210 @@
+fire-incidents:
+  schedule: '@once'
+  dag_owner_name: 'Yanan'
+  dag_owner_email: 'yanan.zhang@toronto.ca'
+  title: Fire Incidents
+  date_published: '2019-07-23 17:07:48.369015'
+  refresh_rate: Annually
+  dataset_category: Table
+  owner_division: Fire Services
+  owner_section: null
+  owner_unit: null
+  owner_email: kevin.ku@toronto.ca
+  civic_issues: null
+  topics:
+  - Locations and mapping
+  - Community services
+  - Public safety
+  tags: []
+  information_url: null
+  excerpt: 'This dataset provides information similar to what is sent to the Ontario
+    Fire Marshal (OFM) relating to only fire Incidents to which Toronto Fire responds. '
+  limitations: null
+  notes: "This dataset includes only fire incidents as defined by the Ontario Fire\
+    \ Marshal (OFM) up to December 31, 2023.\r\n\r\n**Refresh date displayed is not\
+    \ representative of the vintage of this dataset.**\r\n\r\n\r\n\r\nThis dataset\
+    \ provides more detail than the basic incidents dataset provides for only fire\
+    \ Incidents to which Toronto Fire Service(TFS) responds to. The format is similar\
+    \ to the reporting data sent by TFS to the OFM.\r\n\r\nFor privacy purposes personal\
+    \ information is not provided and exact address have been aggregated to the nearest\
+    \ major or minor intersection. Some incidents have been excluded pursuant to exemptions\
+    \ under Section 8 of Municipal Freedom of Information and Protection of Privacy\
+    \ Act (MFIPPA).\r\n\r\nIncidents with incomplete data may be under investigation\
+    \ or is classified as a no loss outdoor fire."
+  resources:
+    # resource name
+    Fire Incidents Data:
+      format: csv
+      url: https://opendata.toronto.ca/fire.services/fire-incidents/fire-incidents.csv
+      attributes:
+        - id: Incident_Number
+          type: text
+          info:
+            notes: "TFS incident number"
+        - id: Initial_CAD_Event_Type
+          type: text
+          info:
+            notes: "First event type in CAD system of this incident"
+        - id: Final_Incident_Type
+          type: text
+          info:
+            notes: "Final incident type"
+        - id: Exposures
+          type: text
+          info:
+            notes: "Number of exposure fires associated with this fire"
+        - id: Incident_Station_Area
+          type: text
+          info:
+            notes: "TFS Station area where the incident occurred"
+        - id: Incident_Ward
+          type: text
+          info:
+            notes: "Ward where the incident occurred, when available"
+        - id: Intersection
+          type: text
+          info:
+            notes: "Nearest major or minor intersection in the ward of the incident"
+        - id: Latitude
+          type: text
+          info:
+            notes: "Latitude of nearest major or minor intersection in the ward of the incident"
+        - id: Longitude
+          type: text
+          info:
+            notes: "Longitude of nearest major or minor intersection in the ward of the incident"
+        - id: Property_Use
+          type: text
+          info:
+            notes: "OFM Property use code and description"
+        - id: Building_Status
+          type: text
+          info:
+            notes: "OFM Building status code and description"
+        - id: TFS_Alarm_Time
+          type: text
+          info:
+            notes: "Timestamp of when TFS was notified of the incident"
+        - id: TFS_Arrival_Time
+          type: text
+          info:
+            notes: "Timestamp of first arriving unit to incident"
+        - id: Ext_agent_app_or_defer_time
+          type: text
+          info:
+            notes: "Timestamp of agent first applied or decision to defer"
+        - id: Fire_Under_Control_Time
+          type: text
+          info:
+            notes: "Timestamp of fire under control"
+        - id: Last_TFS_Unit_Clear_Time
+          type: text
+          info:
+            notes: "Timestamp of last unit cleared from incident"
+        - id: Number_of_responding_apparatus
+          type: int
+          info:
+            notes: "Number of TFS responding apparatus"
+        - id: Number_of_responding_personnel
+          type: int
+          info:
+            notes: "Number of TFS responding personnel"
+        - id: Count_of_Persons_Rescued
+          type: int
+          info:
+            notes: "Number of persons rescued"
+        - id: TFS_Firefighter_Casualties
+          type: int
+          info:
+            notes: "Count of TFS casualties. A causality can be a fire related injury or fire related fatality."
+        - id: Civilian_Casualties
+          type: int
+          info:
+            notes: "Count of civilian casualties. A causality can be a fire related injury or fire related fatality."
+        - id: Estimated_Number_Of_Persons_Displaced
+          type: int
+          info:
+            notes: "Estimated Number Of Persons Displaced"
+        - id: Estimated_Dollar_Loss
+          type: text
+          info:
+            notes: "Estimated Dollar Loss"
+        - id: Business_Impact
+          type: text
+          info:
+            notes: "OFM Business Impact code and description"
+        - id: Status_of_Fire_On_Arrival
+          type: text
+          info:
+            notes: "OFM Status of Fire On Arrival code and description"
+        - id: Method_Of_Fire_Control
+          type: text
+          info:
+            notes: "OFM Method Of Fire Control code and description"
+        - id: Area_of_Origin
+          type: text
+          info:
+            notes: "OFM Area of Origin code and description"
+        - id: Level_Of_Origin
+          type: text
+          info:
+            notes: "OFM Level Of Origin code and description"
+        - id: Extent_Of_Fire
+          type: text
+          info:
+            notes: "OFM Extent Of Fire code and description"
+        - id: Smoke_Spread
+          type: text
+          info:
+            notes: "OFM Smoke Spread code and description"
+        - id: Ignition_Source
+          type: text
+          info:
+            notes: "OFM Ignition Source code and description"
+        - id: Material_First_Ignited
+          type: text
+          info:
+            notes: "OFM Material First Ignited code and description"
+        - id: Possible_Cause
+          type: text
+          info:
+            notes: "OFM Possible Cause code and description"
+        - id: Smoke_Alarm_at_Fire_Origin
+          type: text
+          info:
+            notes: "OFM Smoke Alarm at Fire Origin code and description"
+        - id: Smoke_Alarm_at_Fire_Origin_Alarm_Failure
+          type: text
+          info:
+            notes: "OFM Smoke Alarm at Fire Origin Alarm Failure code and description"
+        - id: Smoke_Alarm_at_Fire_Origin_Alarm_Type
+          type: text
+          info:
+            notes: "OFM Smoke Alarm at Fire Origin Alarm Type code and description"
+        - id: Smoke_Alarm_Impact_on_Persons_Evacuating_Impact_on_Evacuation
+          type: text
+          info:
+            notes: "OFM Smoke Alarm Impact on Persons Evacuating Impact on Evacuation code and description"
+        - id: Fire_Alarm_System_Presence
+          type: text
+          info:
+            notes: "OFM Fire Alarm System Presence code and description"
+        - id: Fire_Alarm_System_Operation
+          type: text
+          info:
+            notes: "OFM Fire Alarm System Operation code and description"
+        - id: Fire_Alarm_System_Impact_on_Evacuation
+          type: text
+          info:
+            notes: "OFM Fire Alarm System Impact on Evacuation code and description"
+        - id: Sprinkler_System_Presence
+          type: text
+          info:
+            notes: "OFM Sprinkler System Presence code and description"
+        - id: Sprinkler_System_Operation
+          type: text
+          info:
+            notes: "OFM Sprinkler System Operation code and description"
+        
+
+
