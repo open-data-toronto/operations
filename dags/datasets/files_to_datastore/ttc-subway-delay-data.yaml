@@ -23,7 +23,7 @@ ttc-subway-delay-data:
   schedule: '45 12 * * 1'
   resources: 
     # resource name
-    TTC Subway Delay Data:
+    TTC Subway Delay Data since 2025:
       format: xlsx
       sheet: Subway
       url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/ttc-subway-delay.xlsx
