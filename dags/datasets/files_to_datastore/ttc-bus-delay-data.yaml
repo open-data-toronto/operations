@@ -1,0 +1,73 @@
+ttc-bus-delay-data:
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: TTC Bus Delay Data
+  date_published: '2019-07-23 18:10:36.791844'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: Toronto Transit Commission
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@ttc.ca
+  civic_issues: 
+    - Mobility
+  topics:
+    - Transportation
+  tags: 
+    - name: tardiness
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: TTC Bus Delay Data
+  limitations: null
+  notes: "TTC Bus Delay Data"
+  schedule: '25 12 * * 1'
+  resources: 
+    # resource name
+    TTC Bus Delay Data:
+      format: xlsx
+      sheet: Bus
+      url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/ttc-bus-delay.xlsx
+      attributes:
+        - id: "Date"
+          type: "timestamp"
+          format: "%Y/%m/%d %H:%M:%S"
+          info:
+            notes: "Date of the delay"
+        - id: "Route"          
+          type: text
+          info:
+            notes: "Route the delay was on"
+        - id: "Time"          
+          type: text
+          info:
+            notes: "Time of the delay"
+        - id: "Day"          
+          type: text
+          info:
+            notes: "Weekday of the delay"
+        - id: "Station"
+          type: "text"          
+          info:
+            notes: "Location/station where the delay occurred"
+        - id: "Incident"
+          type: "text"          
+          info:
+            notes: "The category of incident that caused the delay"
+        - id: "Min Delay"
+          type: "text"          
+          info:
+            notes: "The length, in minutes, of the delay"
+        - id: "Min Gap"
+          type: "text"          
+          info:
+            notes: ""
+        - id: "Bound"
+          type: "text"          
+          info:
+            notes: "Direction of the vehicle during the delay"
+        - id: "Vehicle"
+          type: "text"          
+          info:
+            notes: "ID of the vehicle"
+        
