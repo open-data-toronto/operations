@@ -21,7 +21,11 @@ heritage-formerly-listed:
   Heritage Formerly Listed Properties:
     format: zip
     url: https://opendata.toronto.ca/city.planning/heritage-formerly-listed/Heritage_Formerly_Listed_Properties.zip
+
 monthly-communicable-disease-surveillance-data:
+  Communicable disease surveillance data 2025:
+    format: xlsx
+    url: https://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2025_Monthly_Report_AODA.xlsx
   Communicable disease surveillance data 2024:
     format: xlsx
     url: https://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/2024_Monthly_Report_AODA.xlsx
