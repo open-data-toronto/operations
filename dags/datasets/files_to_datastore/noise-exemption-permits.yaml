@@ -55,7 +55,7 @@ noise-exemption-permits:
   resources:
     Noise Exemption Permits:
       format: 'csv'
-      url: http://opendata.toronto.ca/municipal.licensing.standards/noise-exemption-permits/noise-exemption-permits.csv
+      url: https://opendata.toronto.ca/municipal.licensing.standards/noise-exemption-permits/noise-exemption-permits.csv
       attributes:         
       - id: Licence Number
         type: text

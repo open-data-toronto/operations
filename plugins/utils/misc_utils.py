@@ -151,8 +151,10 @@ def clean_date_format(input, input_format=None):
 
 
 def validate_url(source_url):
+    logging.info("Start validating url...")
     try:
         req = requests.get(source_url)
+        logging.info(req.status_code)
         assert str(req.status_code).startswith("2"), \
             "Input URL {} returned {}".format(source_url, req.status_code)
         return source_url

@@ -138,7 +138,7 @@ def open_data_portal_usage():
         ).announce()
 
     # ----------------- Init Tasks -------------------------------
-    create_tmp_dir = create_tmp_dir(package_name, dir_path)
+    create_tmp_dir = create_tmp_dir("open-data-portal-usage", dir_path)
     get_or_create_package = get_or_create_package(package_name, package_metadata)
     latest_period_loaded = determine_latest_period_loaded()
     periods_to_load = calculate_periods_to_load()

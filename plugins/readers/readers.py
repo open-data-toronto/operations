@@ -38,6 +38,7 @@ class Reader(ABC):
         ):
 
         if source_url:
+            logging.info(f"Pulling from {source_url}")
             self.source_url = misc_utils.validate_url(source_url)
         self.schema = schema
 
