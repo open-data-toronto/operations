@@ -18,7 +18,7 @@ fire-station-locations:
   tags:
   - name: fire stations
     vocabulary_id: null
-  information_url: http://www.toronto.ca/fire/stations/
+  information_url: https://www.toronto.ca/community-people/public-safety-alerts/
   excerpt: The file contains the location of all fire stations and station numbers within the City of Toronto.
   limitations: null
   notes: The file contains the location of all fire stations and station numbers within the City of Toronto. The locations are identified by XY (latitude and longitude) coordinates.

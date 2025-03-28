@@ -31,7 +31,7 @@ non-regulated-lead-sample:
     - name: water testing
       vocabulary_id: null
     
-  information_url: http://www.toronto.ca/leadpipes
+  information_url: https://www.toronto.ca/services-payments/water-environment/tap-water-in-toronto/lead-drinking-water/
   excerpt: Non Regulated Lead sample results reported to the client during a specified date range.
   limitations: null
   notes: |

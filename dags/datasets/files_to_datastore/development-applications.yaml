@@ -15,7 +15,7 @@ development-applications:
   tags: 
   - name: development
     vocabulary_id: null
-  information_url: http://app.toronto.ca/DevelopmentApplications/mapSearchSetup.do?action=init
+  information_url: https://www.toronto.ca/city-government/planning-development/application-information-centre/?action=init#location=&lat=&lng=&zoom=
   excerpt: This data set on Planning applications is shared with the public through
     the City of Toronto's Application Information Centre.
   limitations: 'Visualization restriction: the visualization tool is not compatible

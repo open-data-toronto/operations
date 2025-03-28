@@ -18,7 +18,7 @@ members-of-toronto-city-council-meeting-attendance:
     vocabulary_id: null
   - name: council meeting attendance
     vocabulary_id: null
-  information_url: http://www.toronto.ca/council
+  information_url: https://www.toronto.ca/city-government/council/council-committee-meetings/
   excerpt: Access Attendance Reporting data for Members of Toronto City Council.
   limitations: null
   notes: "This dataset includes the legislative meeting attendance data for Members\

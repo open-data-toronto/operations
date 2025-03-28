@@ -26,7 +26,7 @@ library-card-registrations:
   - name: tpl
     vocabulary_id: null
 
-  information_url: https://www.torontopubliclibrary.ca/opendata
+  information_url: https://www.torontopubliclibrary.ca/opendata/
   excerpt: This dataset shows the annual library card registrations at Toronto Public Library branches
   limitations: null   
   notes: This dataset shows the annual library card registrations at Toronto Public Library branches. A registration is defined as an individual initially signing up for a TPL card (it does not include card renewals). Starting in 2020, individuals could register online for a digital access card (which provides access to TPL’s electronic resources), and these transactions are also included in the totals. The VIR (Virtual Library) branch code is used to represent digital access card registrations.

@@ -23,7 +23,7 @@ councillors-constituency-services-office-expense-reporting:
     vocabulary_id: null
   - name: council spending
     vocabulary_id: null
-  information_url: http://app.toronto.ca/tcer_web
+  information_url: https://www.toronto.ca/city-government/council/budgets-and-expense-reports/constituency-services-and-office-budget/
   excerpt: Constituency services and office expense records by expenditure category
     for Members of Council beginning in 2008.
   limitations: null
@@ -81,7 +81,7 @@ councillors-constituency-services-office-expense-reporting:
   resources:
     Council Office Expenses:
       format: csv
-      url: http://opendata.toronto.ca/city.clerks.office/councillors-constituency-services-office-expense-reporting/CSOB Open Data.csv
+      url: https://opendata.toronto.ca/city.clerks.office/councillors-constituency-services-office-expense-reporting/CSOB Open Data.csv
       attributes:
         - id: "Year"
           type: "text"

@@ -20,7 +20,7 @@ building-permits-active-permits:
     vocabulary_id: null
   - name: building permit
     vocabulary_id: null
-  information_url: http://www.toronto.ca/building/building_permits.htm
+  information_url: https://www.toronto.ca/services-payments/building-construction/
   excerpt: Provides information on currently active Building Applications and Permits.
     Data collected from permit applications and updates made by City Staff when reviewing
     the application and inspecting the work on the issued permit.

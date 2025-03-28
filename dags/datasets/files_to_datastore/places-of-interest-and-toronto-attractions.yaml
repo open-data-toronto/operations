@@ -60,7 +60,7 @@ places-of-interest-and-toronto-attractions:
     Places of Interest and Attractions:
       format: xlsx
       sheet: POI
-      url: http://opendata.toronto.ca/economic.development.culture/places-of-interest-and-toronto-attractions/POI.xlsx
+      url: https://opendata.toronto.ca/economic.development.culture/places-of-interest-and-toronto-attractions/POI.xlsx
       attributes:
         - id: ADDRESS_INFO
           type: "text"

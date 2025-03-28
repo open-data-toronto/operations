@@ -27,7 +27,7 @@ library-branch-general-information:
   - name: tpl
     vocabulary_id: null
 
-  information_url: https://www.torontopubliclibrary.ca/opendata
+  information_url: https://www.torontopubliclibrary.ca/opendata/
   excerpt: This dataset shows the current characteristics of Toronto Public Library branches, such as location, size, and the availability of specific features (e.g. parking, KidsStops, Digital Innovation Hubs, etc.)
   limitations:   
   notes: This dataset shows the current characteristics of Toronto Public Library branches, such as location, size, and the availability of specific features (e.g. parking, KidsStops, Digital Innovation Hubs, etc.). Additionally, this dataset provides details on other TPL services & collections (e.g. Answerline, bookmobiles, Home Library Service, Merril Collection, Sunnybrook Hospital, etc.).

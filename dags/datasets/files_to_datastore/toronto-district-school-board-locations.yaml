@@ -32,7 +32,7 @@ toronto-district-school-board-locations:
       vocabulary_id: null
     
 
-  information_url: "http://www.tdsb.on.ca/MOSS/asp_apps/find_your_school/landing.asp"
+  information_url: https://www.tdsb.on.ca/find-your/school
   excerpt: "This data set contains the location of the Toronto District Schools. The data is collected and maintained by the Planning Division of the Toronto District School Board."
   limitations: null
   notes: The data is collected and maintained by the Planning Division of the Toronto District School Board in order to support daily operations at the Board. This point file is best used when it is overlaid with the City of Toronto's street and address coverage.

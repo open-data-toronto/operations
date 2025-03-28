@@ -23,7 +23,7 @@ automated-speed-enforcement-locations:
     vocabulary_id: null
   - name: speed
     vocabulary_id: null
-  information_url: http://www.toronto.ca/ASE
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/road-safety/vision-zero/safety-initiatives/automated-speed-enforcement/
   excerpt: This dataset includes the active and planned locations of the City of Toronto's
     Automated Speed Enforcement systems by latitude and longitude.
   limitations: null

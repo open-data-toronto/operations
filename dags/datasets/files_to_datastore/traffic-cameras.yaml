@@ -17,7 +17,7 @@ traffic-cameras:
   tags:
   - name: traffic camera
     vocabulary_id: null
-  information_url: http://www.toronto.ca/rescu/index.htm
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/road-restrictions-closures/restrictions-map/?camera=true
   excerpt: This dataset contains all the locations (latitude, longitude) of the traffic
     cameras within the City of Toronto. Associated/Reference URLs are also included
     with this dataset.

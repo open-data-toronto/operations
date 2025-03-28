@@ -24,7 +24,7 @@ cultural-hotspot-points-of-interest:
     vocabulary_id: null
   - name: points of interest
     vocabulary_id: null
-  information_url: http://toronto.ca/culturalhotspot
+  information_url: https://www.toronto.ca/explore-enjoy/festivals-events/cultural-hotspot/
   excerpt: This dataset contains information relating to Arts & Culture Services'
     Cultural Hotspot, featuring public art, green space, arts and cultural centres,
     libraries, restaurants and more.

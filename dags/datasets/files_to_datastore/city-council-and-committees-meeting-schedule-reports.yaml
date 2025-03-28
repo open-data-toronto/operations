@@ -20,7 +20,7 @@ city-council-and-committees-meeting-schedule-reports:
     vocabulary_id: null
   - name: council schedule
     vocabulary_id: null
-  information_url: http://www.toronto.ca/council
+  information_url: https://www.toronto.ca/city-government/council/council-committee-meetings/
   excerpt: This dataset contains the City Council and committee meeting schedules
     as is published on http://www.toronto.ca/council
   limitations: null

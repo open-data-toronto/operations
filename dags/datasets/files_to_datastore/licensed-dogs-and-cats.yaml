@@ -19,7 +19,7 @@ licensed-dogs-and-cats:
     vocabulary_id: null
   - name: licences
     vocabulary_id: null
-  information_url: http://www.toronto.ca/animalservices
+  information_url: https://www.toronto.ca/community-people/animals-pets/
   excerpt: The reports include data on licensed dogs and cats residing in Toronto after year 2023, including primary breed, Forward Sortation Area (FSA), and year of licensing.
   limitations: null
   notes: |

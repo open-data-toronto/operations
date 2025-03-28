@@ -29,7 +29,7 @@ street-tree-data:
       vocabulary_id: null
     
 
-  information_url: http://www.toronto.ca/trees/city_trees.htm
+  information_url: https://www.toronto.ca/services-payments/water-environment/trees/
   excerpt: This data set contains the common and botanical name as well as diameter size, street address and general location reference information for street trees within Toronto.
   limitations: null
   notes: |

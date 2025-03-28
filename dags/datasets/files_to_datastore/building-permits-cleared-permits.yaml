@@ -19,7 +19,7 @@ building-permits-cleared-permits:
     vocabulary_id: null
   - name: cleared permit
     vocabulary_id: null
-  information_url: http://www.toronto.ca/building/building_permits.htm
+  information_url: https://www.toronto.ca/services-payments/building-construction/
   excerpt: Provides information on Building Permits completed/closed. Data is collected
     from permit applications and updates made by City Staff when reviewing the application
     and Inspecting the work on the issued permit.

@@ -25,7 +25,7 @@ on-street-permit-parking-area-maps:
     vocabulary_id: null
   - name: permit
     vocabulary_id: null
-  information_url: http://www.toronto.ca/transportation/onstreet/
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/
   excerpt: Polygons are used to define the boundaries of permit parking areas so permit
     parking holders can visually identify where their parking permit will authorize
     them to park.

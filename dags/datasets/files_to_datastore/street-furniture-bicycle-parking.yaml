@@ -16,7 +16,7 @@ street-furniture-bicycle-parking:
     - Transportation
     - Health
   tags: []
-  information_url: http://gis.toronto.ca/arcgis/rest/services/primary/cot_geospatial2_mtm/MapServer/27
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/cycling-in-toronto/bicycle-parking/
   excerpt: "Bike Parking location and asset type data maintained by the City of Toronto's\
     \ Bike Parking Program.\r\n"
   limitations: null

@@ -32,7 +32,7 @@ bicycle-parking-bike-stations-indoor:
     - name: cycling
       vocabulary_id: null
 
-  information_url: http://www.toronto.ca/cycling
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/cycling-in-toronto/
   excerpt: Geospatial data that shows where all the indoor bike station facilities are located in Toronto
   limitations: null
   notes: |

@@ -21,7 +21,7 @@ toronto-animal-services-service-requests-complaints:
     vocabulary_id: null
   - name: requests
     vocabulary_id: null
-  information_url: http://www.toronto.ca/animalservices
+  information_url: https://www.toronto.ca/community-people/animals-pets/
   excerpt: The data includes requests for service regarding live and dead animals
     and complaints regarding public safety and bylaw infractions.
   limitations: null

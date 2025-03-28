@@ -42,7 +42,7 @@ council-business-travel-expenses:
     # resource name
     Council Business Travel Expenses - Current:
       format: csv
-      url: http://opendata.toronto.ca/city.clerks.office/council-business-travel-expenses/Council Business Travel Expenses.csv
+      url: https://opendata.toronto.ca/city.clerks.office/council-business-travel-expenses/Council Business Travel Expenses.csv
       attributes:
         - id: "Year"
           type: "int"

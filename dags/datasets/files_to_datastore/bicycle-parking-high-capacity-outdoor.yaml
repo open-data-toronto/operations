@@ -25,7 +25,7 @@ bicycle-parking-high-capacity-outdoor:
     vocabulary_id: null
   - name: cycling
     vocabulary_id: null
-  information_url: http://www.toronto.ca/cycling
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/cycling-in-toronto/
   excerpt: A geospatial file that shows where all of the High Capacity Outdoor Bicycle
     Parking locations in the City of Toronto.
   limitations: null

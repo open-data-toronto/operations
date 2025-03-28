@@ -26,7 +26,7 @@ library-circulation-by-cardholder-type:
   - name: tpl
     vocabulary_id: null
 
-  information_url: https://www.torontopubliclibrary.ca/opendata
+  information_url: https://www.torontopubliclibrary.ca/opendata/
   excerpt: This dataset shows the annual circulation of materials by cardholder type at Toronto Public Library branches.
   limitations: null   
   notes: This dataset shows the annual circulation of materials by cardholder type at Toronto Public Library branches. Cardholder Type, is also known as the customer age category. Circulation is defined as a combination of first-time checkouts (i.e. when items are initially borrowed) and renewals (i.e. transactions that extend the due dates of borrowed items). This data covers the circulation of physical materials (e.g. books, CDs, DVDs, etc.) and electronic resources (e.g. ebooks, streaming content, etc.). The branch associated with a circulation total is the library from which the transactions were processed. For online renewals of physical materials, the circulation is associated with the home branch of the renewing customer. The VIR (Virtual Library) branch code is used to represent all electronic circulation totals.

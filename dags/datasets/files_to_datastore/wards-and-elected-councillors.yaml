@@ -26,7 +26,7 @@ wards-and-elected-councillors:
     - name: councillors
       vocabulary_id: null
 
-  information_url: "http://www.toronto.ca/councillors"
+  information_url: https://www.toronto.ca/city-government/council/members-of-council/
   excerpt: "This dataset contains contact information, by ward, for councillors elected to City of Toronto Council."
   limitations: null
   notes: This dataset contains contact information, by ward, for councillors elected to City of Toronto Council.

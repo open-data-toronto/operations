@@ -29,7 +29,7 @@ bridge-structure:
     - name: bridges
       vocabulary_id: null
       
-  information_url: http://www.toronto.ca/bridges
+  information_url: https://www.toronto.ca/services-payments/building-construction/infrastructure-city-construction/bridge-and-structure-condition/
   excerpt: The dataset contains bridges, elevated roadways, and culverts information and their location information. The dataset is limited to the City of Toronto geographical boundary.
   limitations: null
   notes: |

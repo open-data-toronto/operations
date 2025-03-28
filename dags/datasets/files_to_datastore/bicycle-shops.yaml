@@ -25,7 +25,7 @@ bicycle-shops:
     vocabulary_id: null
   - name: cycling
     vocabulary_id: null
-  information_url: http://www.toronto.ca/cycling
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/cycling-in-toronto/
   excerpt: "This dataset has been retired. Transportation is no longer promoting and\
     \ updating the bike shop listings.\r\nA geospatial file that shows where bicycle\
     \ shops are located in Toronto. "

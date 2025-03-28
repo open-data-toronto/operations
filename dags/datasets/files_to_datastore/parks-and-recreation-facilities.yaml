@@ -21,7 +21,7 @@ parks-and-recreation-facilities:
     vocabulary_id: null
   - name: rec facility
     vocabulary_id: null
-  information_url: http://www.toronto.ca/parks/facilities/index.htm
+  information_url: https://www.toronto.ca/explore-enjoy/parks-recreation/
   excerpt: This dataset provides information on the recreation facilities administered
     by Toronto's Parks, Forestry and Recreation Division.
   limitations: null

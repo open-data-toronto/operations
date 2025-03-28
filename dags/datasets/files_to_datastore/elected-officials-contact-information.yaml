@@ -27,7 +27,7 @@ elected-officials-contact-information:
       vocabulary_id: null
     
 
-  information_url: "http://www.toronto.ca/councillors"
+  information_url: https://www.toronto.ca/city-government/council/members-of-council/
   excerpt: "This dataset contains the contact information of the Mayor and the 25 Councillors elected to City of Toronto Council (2018 - 2022 term)."
   limitations: null
   notes: This dataset contains contact information of the Mayor and the 25 Councillors elected to City of Toronto Council (2018-2022 term). The information includes the elected official's name, electoral area (e.g. ward for Councillors, City of Toronto for Mayor), phone number, address, email address, fax number, photo (URL) and web address.

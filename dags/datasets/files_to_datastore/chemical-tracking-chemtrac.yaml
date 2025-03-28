@@ -24,7 +24,7 @@ chemical-tracking-chemtrac:
       vocabulary_id: null
     - name: priority substance 
       vocabulary_id: null
-  information_url: http://www.toronto.ca/health/chemtrac/index.htm
+  information_url: https://www.toronto.ca/community-people/health-wellness-care/health-programs-advice/chemtrac/
   excerpt: This dataset report information each year about the use and release of
     25 'priority substances' as contaminants in Toronto's environment and of concern
     for health.

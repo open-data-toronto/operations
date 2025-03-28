@@ -30,7 +30,7 @@ members-of-toronto-city-council-voting-record:
     - name: voting record
       vocabulary_id: null
 
-  information_url: http://www.toronto.ca/council
+  information_url: https://www.toronto.ca/city-government/council/council-committee-meetings/
   excerpt: Access Voting-Record Reporting data for Members of Toronto City Council.
   limitations: null
   notes: |

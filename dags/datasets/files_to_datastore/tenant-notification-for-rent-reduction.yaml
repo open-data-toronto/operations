@@ -28,7 +28,7 @@ tenant-notification-for-rent-reduction:
     vocabulary_id: null
   - name: tenants
     vocabulary_id: null
-  information_url: http://www.toronto.ca/taxes/rent_reduction
+  information_url: https://www.toronto.ca/services-payments/property-taxes-utilities/property-tax/rent-reduction/
   excerpt: This dataset is a list of addresses that may be eligible to receive a rent
     decrease due to a property tax decrease of 2.5% or more between two consecutive
     years.

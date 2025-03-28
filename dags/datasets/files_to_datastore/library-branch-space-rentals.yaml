@@ -26,7 +26,7 @@ library-branch-space-rentals:
   - name: tpl
     vocabulary_id: null
 
-  information_url: https://www.torontopubliclibrary.ca/opendata
+  information_url: https://www.torontopubliclibrary.ca/opendata/
   excerpt: This dataset lists Toronto Public Library spaces that are available for the public to rent including the size of the spaces and seating capacity.
   limitations: null
   notes: |
