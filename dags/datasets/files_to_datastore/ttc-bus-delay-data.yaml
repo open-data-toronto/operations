@@ -70,4 +70,17 @@ ttc-bus-delay-data:
           type: "text"          
           info:
             notes: "ID of the vehicle"
+    Code Descriptions:
+      format: xlsx
+      sheet: Bus Code Description
+      url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/ttc-bus-delay.xlsx
+      attributes:
+        - id: "CODE"
+          type: "text"
+          info:
+            notes: "The actual code"
+        - id: "DESCRIPTION"
+          type: text
+          info:
+            notes: Plain English description of what the code is
         
