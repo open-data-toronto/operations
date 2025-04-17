@@ -38,40 +38,40 @@ development-applications:
         - id: "APPLICATION_TYPE"
           type: "text"
           info:
-            notes: ""
+            notes: "2-letter code used to identify the type of application."
         - id: "APPLICATION#"
           type: "text"
           info:
-            notes: ""
+            notes: "The application number provided to applicants to identify their application."
         - id: "STREET_NUM"
           type: "text"
           info:
-            notes: ""
+            notes: "Street address number of the primary address for the application."
         - id: "STREET_NAME"
           type: "text"
           info:
-            notes: ""
+            notes: "Street address name of the primary address for the application."
         - id: "STREET_TYPE"
           type: "text"
           info:
-            notes: ""
+            notes: "Street type of the primary address of the application."
         - id: "STREET_DIRECTION"
           type: "text"
           info:
-            notes: ""
+            notes: "Street direction of the primary address of the application."
         - id: "POSTAL"
           type: "text"
           info:
-            notes: ""
+            notes: "First 3 characters of the postal code of the primary address of the application."
         - id: "DATE_SUBMITTED"
           type: "timestamp"
           format: "%Y-%m-%dT%H:%M:%S"
           info:
-            notes: ""
+            notes: "The submission date of the application."
         - id: "STATUS"
           type: "text"
           info:
-            notes: ""
+            notes: "The internal status of the application in the review process."
         - id: "HEARING_DATE"
           type: "text"
           info:
@@ -79,62 +79,62 @@ development-applications:
         - id: "X"
           type: "text"
           info:
-            notes: ""
+            notes: "The NAD27 x coordinate of the primary address of the application."
         - id: "Y"
           type: "text"
           info:
-            notes: ""
+            notes: "The NAD27 y coordinate of the primary address of the application."
         - id: "DESCRIPTION"
           type: "text"
           info:
-            notes: ""
+            notes: "The written description of the application."
         - id: "REFERENCE_FILE#"
           type: "text"
           info:
-            notes: ""
+            notes: "The reference file number of the application."
         - id: "FOLDERRSN"
           type: "text"
           info:
-            notes: ""
+            notes: "The internal database identifier for the application."
         - id: "WARD_NUMBER"
           type: "text"
           info:
-            notes: ""
+            notes: "The ward number of the primary address of the application."
         - id: "WARD_NAME"
           type: "text"
           info:
-            notes: ""
+            notes: "The name of the ward of the primary address of the application."
         - id: "COMMUNITY_MEETING_DATE"
           type: "timestamp"
           format: "%b %d, %Y"
           info:
-            notes: ""
+            notes: "The date of the community consultation meeting for the application."
         - id: "COMMUNITY_MEETING_TIME"
           type: "text"
           info:
-            notes: ""
+            notes: "The time of the community consultation meeting for the application."
         - id: "COMMUNITY_MEETING_LOCATION"
           type: "text"
           info:
-            notes: ""
+            notes: "The location of the community consultation meeting for the application."
         - id: "APPLICATION_URL"
           type: "text"
           info:
-            notes: ""
+            notes: "The web URL for the AIC application details page for the application."
         - id: "CONTACT_NAME"
           type: "text"
           info:
-            notes: ""
+            notes: "The name of the planner assigned to the application."
         - id: "CONTACT_PHONE"
           type: "text"
           info:
-            notes: ""
+            notes: "The phone number of the planner assigned to the application."
         - id: "CONTACT_EMAIL"
           type: "text"
           info:
-            notes: ""
+            notes: "The email address of the planner assigned to the application."
         - id: "PARENT_FOLDER_NUMBER"
           type: "text"
           info:
-            notes: ""
+            notes: "The application number of the higher-level application associated with this application (if one exists)."
         
