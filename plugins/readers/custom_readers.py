@@ -313,6 +313,7 @@ def tobids_awarded_contracts():
     ]
 
     awarded_supplier_fields = ["Successful_Bidder", "Award_Amount", "Date_Awarded"]
+    awarded_supplier_address = ["street", "city", "province", "postalCode", "country"]
 
     for record in total_records:
         clean_record = {}
@@ -337,6 +338,16 @@ def tobids_awarded_contracts():
             for field in awarded_supplier_fields:
                 clean_record[field] = entry[field] if field in entry.keys() else None
 
+            full_address_list = []
+            for item in awarded_supplier_address:
+                addr = entry[item] if item in entry.keys() else ""
+                if addr:
+                    full_address_list.append(addr)
+
+            clean_record["Supplier Address"] = (
+                ";".join(full_address_list) if full_address_list else ""
+            )
+
             yield {
                 "unique_id": clean_record["id"] + "_" + str(counter),
                 "Document Number": "Doc" + clean_record["Solicitation_Document_Number"],
@@ -352,6 +363,7 @@ def tobids_awarded_contracts():
                 "Solicitation Document Description": clean_record[
                     "Solicitation_Document_Description"
                 ],
+                "Supplier Address": clean_record["Supplier Address"],
             }
 
 def tobids_non_competitive_contracts():
@@ -404,6 +416,17 @@ def tobids_non_competitive_contracts():
         ]
         clean_record["Award_Amount"] = record["Awarded_Suppliers"][0]["Award_Amount"]
 
+        awarded_supplier_address = ["street", "city", "province", "postalCode", "country"]
+        full_address_list = []
+        for item in awarded_supplier_address:
+            addr = record["Awarded_Suppliers"][0][item] if item in record["Awarded_Suppliers"][0].keys() else ""
+            if addr:
+                full_address_list.append(addr)
+
+        clean_record["Supplier Address"] = (
+            ";".join(full_address_list) if full_address_list else ""
+        )
+
         yield {
             "unique_id": clean_record["id"],
             "Workspace Number": clean_record["Non_Competitive_Reference_Number"],
@@ -412,6 +435,7 @@ def tobids_non_competitive_contracts():
             "Supplier Name": clean_record["Successful_Bidder"],
             "Contract Amount": clean_record["Award_Amount"],
             "Division": clean_record["Client_Division"],
+            "Supplier Address": clean_record["Supplier Address"]
         }
 
 def washroom_facilities():

@@ -93,3 +93,7 @@ tobids-awarded-contracts:
           type: text
           info:
             notes: 'A description or summary of the solicitation.'
+        - id: "Supplier Address"
+          type: text
+          info:
+            notes: 'The address of the Supplier that has been awarded the contract.'

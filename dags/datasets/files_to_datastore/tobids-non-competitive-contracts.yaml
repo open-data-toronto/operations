@@ -66,3 +66,7 @@ tobids-non-competitive-contracts:
           type: text
           info:
             notes: 'The name of the City Division requesting the solicitation. The final contract will be between this Supplier and this Division.'
+        - id: "Supplier Address"
+          type: text
+          info:
+            notes: 'Address of the contracted supplier providing goods and services to the City.'
