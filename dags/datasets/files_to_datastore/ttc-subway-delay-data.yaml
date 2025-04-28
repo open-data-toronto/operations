@@ -25,7 +25,7 @@ ttc-subway-delay-data:
     # resource name
     TTC Subway Delay Data since 2025:
       format: xlsx
-      sheet: Subway Log Incidents
+      sheet: Subway
       url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/ttc-subway-delay.xlsx
       attributes:
         - id: "Date"

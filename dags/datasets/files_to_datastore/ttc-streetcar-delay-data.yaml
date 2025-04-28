@@ -25,7 +25,7 @@ ttc-streetcar-delay-data:
     # resource name
     TTC Streetcar Delay Data since 2025:
       format: xlsx
-      sheet: Streetcar Log Incidents
+      sheet: Streetcar
       url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/ttc-streetcar-delay.xlsx
       attributes:
         - id: "Date"
