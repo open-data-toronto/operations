@@ -92,6 +92,7 @@ def create_dag(package_name, config, schedule, default_args):
             "excerpt",
             "limitations",
             "notes",
+            "collection_method",
         ]
         # package metadata attributes, where available
         package_metadata = {}
