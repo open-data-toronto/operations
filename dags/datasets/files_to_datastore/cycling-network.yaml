@@ -127,6 +127,11 @@ cycling-network:
             - Cycle Track
 
             As an example, on a contra-flow route with sharrows on one side, and contra-flow bike lane on the other side, the lowest classified cycling infrastructure type on this street would be the "Sharrows". If the street only has one type of cycling infrastructure on both sides, then the input would be the same for both "INFRA\_LOWO" and "INFRA\_HIGH".  
+
+      - id: INFRA_HIGHORDER
+        type: text
+        info:
+          notes: Refers to the highest classified cycling infrastructure type installed on this segment, as outlined above.
       - id: CONVERTED
         type: text
         info:
