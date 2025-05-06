@@ -72,10 +72,6 @@ development-applications:
           type: "text"
           info:
             notes: "The internal status of the application in the review process."
-        - id: "HEARING_DATE"
-          type: "text"
-          info:
-            notes: ""
         - id: "X"
           type: "text"
           info:
