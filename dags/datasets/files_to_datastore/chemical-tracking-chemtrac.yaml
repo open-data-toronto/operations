@@ -1,5 +1,5 @@
 chemical-tracking-chemtrac:
-  schedule: '5 3 * * *'
+  schedule: '@once'
   dag_owner_name: Yanan
   dag_owner_email: yanan.zhang@toronto.ca
   title: Chemical Tracking (ChemTrac)
@@ -68,3 +68,975 @@ chemical-tracking-chemtrac:
         type: text
         info:
           notes: 'Detail description of the chemical and its effect to environment, human, animals and etc.'
+    Chemtrac Data 2018:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2018 - chemtrac_data.csv
+      attributes:
+      - id: FACILITY_ID
+        type: int
+        info:
+          notes: ''
+      - id: FACILITY_NAME
+        type: text
+        info:
+          notes: ''
+      - id: FA_ADDRESS_GIVEN
+        type: text
+        info:
+          notes: ''
+      - id: FA_POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: FA_LAT
+        type: text
+        info:
+          notes: ''
+      - id: FA_LON
+        type: text
+        info:
+          notes: ''
+      - id: NAICS_CODE_6
+        type: int
+        info:
+          notes: ''
+      - id: NAICS_CODE_6_DESC_ENG
+        type: text
+        info:
+          notes: ''
+      - id: EMPLOYEE_COUNT
+        type: int
+        info:
+          notes: ''
+      - id: WEB_SITE
+        type: text
+        info:
+          notes: ''
+      - id: PC_FULL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_JOB_TITLE
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO_EXT
+        type: text
+        info:
+          notes: ''
+      - id: PC_FAX_NO
+        type: text
+        info:
+          notes: ''
+      - id: CHEMICAL_ID
+        type: int
+        info:
+          notes: ''
+      - id: CHEMICAL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: USE_MANUFACTURED
+        type: int
+        info:
+          notes: ''
+      - id: USE_PROCESSED
+        type: int
+        info:
+          notes: ''
+      - id: USE_OTHER_USE
+        type: int
+        info:
+          notes: ''
+      - id: REL_AIR
+        type: float
+        info:
+          notes: ''
+      - id: REL_LAND
+        type: int
+        info:
+          notes: ''
+      - id: REL_WATER
+        type: int
+        info:
+          notes: ''
+      - id: REL_DISPOSAL
+        type: int
+        info:
+          notes: ''
+      - id: REL_RECYCLING
+        type: int
+        info:
+          notes: ''
+    Chemtrac Data 2017:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2017 - chemtrac_data.csv
+      attributes:
+      - id: FACILITY_ID
+        type: int
+        info:
+          notes: ''
+      - id: FACILITY_NAME
+        type: text
+        info:
+          notes: ''
+      - id: FA_ADDRESS_GIVEN
+        type: text
+        info:
+          notes: ''
+      - id: FA_POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: FA_LAT
+        type: text
+        info:
+          notes: ''
+      - id: FA_LON
+        type: text
+        info:
+          notes: ''
+      - id: NAICS_CODE_6
+        type: int
+        info:
+          notes: ''
+      - id: NAICS_CODE_6_DESC_ENG
+        type: text
+        info:
+          notes: ''
+      - id: EMPLOYEE_COUNT
+        type: int
+        info:
+          notes: ''
+      - id: WEB_SITE
+        type: text
+        info:
+          notes: ''
+      - id: PC_FULL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_JOB_TITLE
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO_EXT
+        type: text
+        info:
+          notes: ''
+      - id: PC_FAX_NO
+        type: text
+        info:
+          notes: ''
+      - id: CHEMICAL_ID
+        type: int
+        info:
+          notes: ''
+      - id: CHEMICAL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: USE_MANUFACTURED
+        type: float
+        info:
+          notes: ''
+      - id: USE_PROCESSED
+        type: float
+        info:
+          notes: ''
+      - id: USE_OTHER_USE
+        type: float
+        info:
+          notes: ''
+      - id: REL_AIR
+        type: float
+        info:
+          notes: ''
+      - id: REL_LAND
+        type: int
+        info:
+          notes: ''
+      - id: REL_WATER
+        type: int
+        info:
+          notes: ''
+      - id: REL_DISPOSAL
+        type: int
+        info:
+          notes: ''
+      - id: REL_RECYCLING
+        type: int
+        info:
+          notes: ''
+    Chemtrac Data 2016:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2016 - chemtrac_data.csv
+      attributes:
+      - id: FACILITY_ID
+        type: int
+        info:
+          notes: ''
+      - id: FACILITY_NAME
+        type: text
+        info:
+          notes: ''
+      - id: FA_ADDRESS_GIVEN
+        type: text
+        info:
+          notes: ''
+      - id: FA_POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: FA_LAT
+        type: text
+        info:
+          notes: ''
+      - id: FA_LON
+        type: text
+        info:
+          notes: ''
+      - id: NAICS_CODE_6
+        type: int
+        info:
+          notes: ''
+      - id: NAICS_CODE_6_DESC_ENG
+        type: text
+        info:
+          notes: ''
+      - id: EMPLOYEE_COUNT
+        type: int
+        info:
+          notes: ''
+      - id: WEB_SITE
+        type: text
+        info:
+          notes: ''
+      - id: PC_FULL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_JOB_TITLE
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO_EXT
+        type: text
+        info:
+          notes: ''
+      - id: PC_FAX_NO
+        type: text
+        info:
+          notes: ''
+      - id: CHEMICAL_ID
+        type: int
+        info:
+          notes: ''
+      - id: CHEMICAL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: USE_MANUFACTURED
+        type: int
+        info:
+          notes: ''
+      - id: USE_PROCESSED
+        type: int
+        info:
+          notes: ''
+      - id: USE_OTHER_USE
+        type: int
+        info:
+          notes: ''
+      - id: REL_AIR
+        type: float
+        info:
+          notes: ''
+      - id: REL_LAND
+        type: int
+        info:
+          notes: ''
+      - id: REL_WATER
+        type: int
+        info:
+          notes: ''
+      - id: REL_DISPOSAL
+        type: int
+        info:
+          notes: ''
+      - id: REL_RECYCLING
+        type: int
+        info:
+          notes: ''
+    Chemtrac Data 2015:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2015 - chemtrac_data.csv
+      attributes:
+      - id: FACILITY_ID
+        type: int
+        info:
+          notes: ''
+      - id: FACILITY_NAME
+        type: text
+        info:
+          notes: ''
+      - id: FA_ADDRESS_GIVEN
+        type: text
+        info:
+          notes: ''
+      - id: FA_POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: FA_LAT
+        type: text
+        info:
+          notes: ''
+      - id: FA_LON
+        type: text
+        info:
+          notes: ''
+      - id: NAICS_CODE_6
+        type: int
+        info:
+          notes: ''
+      - id: NAICS_CODE_6_DESC_ENG
+        type: text
+        info:
+          notes: ''
+      - id: EMPLOYEE_COUNT
+        type: int
+        info:
+          notes: ''
+      - id: WEB_SITE
+        type: text
+        info:
+          notes: ''
+      - id: PC_FULL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_JOB_TITLE
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO_EXT
+        type: text
+        info:
+          notes: ''
+      - id: PC_FAX_NO
+        type: text
+        info:
+          notes: ''
+      - id: CHEMICAL_ID
+        type: int
+        info:
+          notes: ''
+      - id: CHEMICAL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: USE_MANUFACTURED
+        type: int
+        info:
+          notes: ''
+      - id: USE_PROCESSED
+        type: int
+        info:
+          notes: ''
+      - id: USE_OTHER_USE
+        type: int
+        info:
+          notes: ''
+      - id: REL_AIR
+        type: float
+        info:
+          notes: ''
+      - id: REL_LAND
+        type: int
+        info:
+          notes: ''
+      - id: REL_WATER
+        type: int
+        info:
+          notes: ''
+      - id: REL_DISPOSAL
+        type: int
+        info:
+          notes: ''
+      - id: REL_RECYCLING
+        type: int
+        info:
+          notes: ''
+    Chemtrac Data 2014:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2014 - chemtrac_data.csv
+      attributes:
+      - id: FACILITY_ID
+        type: int
+        info:
+          notes: ''
+      - id: FACILITY_NAME
+        type: text
+        info:
+          notes: ''
+      - id: FA_ADDRESS_GIVEN
+        type: text
+        info:
+          notes: ''
+      - id: FA_POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: FA_LAT
+        type: text
+        info:
+          notes: ''
+      - id: FA_LON
+        type: text
+        info:
+          notes: ''
+      - id: NAICS_CODE_6
+        type: int
+        info:
+          notes: ''
+      - id: NAICS_CODE_6_DESC_ENG
+        type: text
+        info:
+          notes: ''
+      - id: EMPLOYEE_COUNT
+        type: int
+        info:
+          notes: ''
+      - id: WEB_SITE
+        type: text
+        info:
+          notes: ''
+      - id: PC_FULL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_JOB_TITLE
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO_EXT
+        type: text
+        info:
+          notes: ''
+      - id: PC_FAX_NO
+        type: text
+        info:
+          notes: ''
+      - id: CHEMICAL_ID
+        type: int
+        info:
+          notes: ''
+      - id: CHEMICAL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: USE_MANUFACTURED
+        type: int
+        info:
+          notes: ''
+      - id: USE_PROCESSED
+        type: int
+        info:
+          notes: ''
+      - id: USE_OTHER_USE
+        type: int
+        info:
+          notes: ''
+      - id: REL_AIR
+        type: float
+        info:
+          notes: ''
+      - id: REL_LAND
+        type: int
+        info:
+          notes: ''
+      - id: REL_WATER
+        type: int
+        info:
+          notes: ''
+      - id: REL_DISPOSAL
+        type: int
+        info:
+          notes: ''
+      - id: REL_RECYCLING
+        type: int
+        info:
+          notes: ''
+    Chemtrac Data 2013:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2013 - chemtrac_data.csv
+      attributes:
+      - id: FACILITY_ID
+        type: int
+        info:
+          notes: ''
+      - id: FACILITY_NAME
+        type: text
+        info:
+          notes: ''
+      - id: FA_ADDRESS_GIVEN
+        type: text
+        info:
+          notes: ''
+      - id: FA_POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: FA_LAT
+        type: text
+        info:
+          notes: ''
+      - id: FA_LON
+        type: text
+        info:
+          notes: ''
+      - id: NAICS_CODE_6
+        type: int
+        info:
+          notes: ''
+      - id: NAICS_CODE_6_DESC_ENG
+        type: text
+        info:
+          notes: ''
+      - id: EMPLOYEE_COUNT
+        type: int
+        info:
+          notes: ''
+      - id: WEB_SITE
+        type: text
+        info:
+          notes: ''
+      - id: PC_FULL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_JOB_TITLE
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO_EXT
+        type: text
+        info:
+          notes: ''
+      - id: PC_FAX_NO
+        type: text
+        info:
+          notes: ''
+      - id: CHEMICAL_ID
+        type: int
+        info:
+          notes: ''
+      - id: CHEMICAL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: USE_MANUFACTURED
+        type: int
+        info:
+          notes: ''
+      - id: USE_PROCESSED
+        type: int
+        info:
+          notes: ''
+      - id: USE_OTHER_USE
+        type: int
+        info:
+          notes: ''
+      - id: REL_AIR
+        type: float
+        info:
+          notes: ''
+      - id: REL_LAND
+        type: int
+        info:
+          notes: ''
+      - id: REL_WATER
+        type: int
+        info:
+          notes: ''
+      - id: REL_DISPOSAL
+        type: int
+        info:
+          notes: ''
+      - id: REL_RECYCLING
+        type: int
+        info:
+          notes: ''
+    Chemtrac Data 2012:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2012 - chemtrac_data.csv
+      attributes:
+      - id: FACILITY_ID
+        type: int
+        info:
+          notes: ''
+      - id: FACILITY_NAME
+        type: text
+        info:
+          notes: ''
+      - id: FA_ADDRESS_GIVEN
+        type: text
+        info:
+          notes: ''
+      - id: FA_POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: FA_LAT
+        type: text
+        info:
+          notes: ''
+      - id: FA_LON
+        type: text
+        info:
+          notes: ''
+      - id: NAICS_CODE_6
+        type: int
+        info:
+          notes: ''
+      - id: NAICS_CODE_6_DESC_ENG
+        type: text
+        info:
+          notes: ''
+      - id: EMPLOYEE_COUNT
+        type: int
+        info:
+          notes: ''
+      - id: WEB_SITE
+        type: text
+        info:
+          notes: ''
+      - id: PC_FULL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_JOB_TITLE
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO_EXT
+        type: text
+        info:
+          notes: ''
+      - id: PC_FAX_NO
+        type: text
+        info:
+          notes: ''
+      - id: CHEMICAL_ID
+        type: int
+        info:
+          notes: ''
+      - id: CHEMICAL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: USE_MANUFACTURED
+        type: int
+        info:
+          notes: ''
+      - id: USE_PROCESSED
+        type: int
+        info:
+          notes: ''
+      - id: USE_OTHER_USE
+        type: int
+        info:
+          notes: ''
+      - id: REL_AIR
+        type: float
+        info:
+          notes: ''
+      - id: REL_LAND
+        type: int
+        info:
+          notes: ''
+      - id: REL_WATER
+        type: int
+        info:
+          notes: ''
+      - id: REL_DISPOSAL
+        type: int
+        info:
+          notes: ''
+      - id: REL_RECYCLING
+        type: int
+        info:
+          notes: ''
+    Chemtrac Data 2011:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2011 - chemtrac_data.csv
+      attributes:
+      - id: FACILITY_ID
+        type: int
+        info:
+          notes: ''
+      - id: FACILITY_NAME
+        type: text
+        info:
+          notes: ''
+      - id: FA_ADDRESS_GIVEN
+        type: text
+        info:
+          notes: ''
+      - id: FA_POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: FA_LAT
+        type: text
+        info:
+          notes: ''
+      - id: FA_LON
+        type: text
+        info:
+          notes: ''
+      - id: NAICS_CODE_6
+        type: int
+        info:
+          notes: ''
+      - id: NAICS_CODE_6_DESC_ENG
+        type: text
+        info:
+          notes: ''
+      - id: EMPLOYEE_COUNT
+        type: int
+        info:
+          notes: ''
+      - id: WEB_SITE
+        type: text
+        info:
+          notes: ''
+      - id: PC_FULL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_JOB_TITLE
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO_EXT
+        type: text
+        info:
+          notes: ''
+      - id: PC_FAX_NO
+        type: text
+        info:
+          notes: ''
+      - id: CHEMICAL_ID
+        type: int
+        info:
+          notes: ''
+      - id: CHEMICAL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: USE_MANUFACTURED
+        type: int
+        info:
+          notes: ''
+      - id: USE_PROCESSED
+        type: int
+        info:
+          notes: ''
+      - id: USE_OTHER_USE
+        type: int
+        info:
+          notes: ''
+      - id: REL_AIR
+        type: float
+        info:
+          notes: ''
+      - id: REL_LAND
+        type: int
+        info:
+          notes: ''
+      - id: REL_WATER
+        type: int
+        info:
+          notes: ''
+      - id: REL_DISPOSAL
+        type: int
+        info:
+          notes: ''
+      - id: REL_RECYCLING
+        type: int
+        info:
+          notes: ''
+    Chemtrac Data 2010:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2010 - chemtrac_data.csv
+      attributes:
+      - id: FACILITY_ID
+        type: int
+        info:
+          notes: ''
+      - id: FACILITY_NAME
+        type: text
+        info:
+          notes: ''
+      - id: FA_ADDRESS_GIVEN
+        type: text
+        info:
+          notes: ''
+      - id: FA_POSTAL_CODE
+        type: text
+        info:
+          notes: ''
+      - id: FA_LAT
+        type: text
+        info:
+          notes: ''
+      - id: FA_LON
+        type: text
+        info:
+          notes: ''
+      - id: NAICS_CODE_6
+        type: int
+        info:
+          notes: ''
+      - id: NAICS_CODE_6_DESC_ENG
+        type: text
+        info:
+          notes: ''
+      - id: EMPLOYEE_COUNT
+        type: int
+        info:
+          notes: ''
+      - id: WEB_SITE
+        type: text
+        info:
+          notes: ''
+      - id: PC_FULL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_JOB_TITLE
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO
+        type: text
+        info:
+          notes: ''
+      - id: PC_PHONE_NO_EXT
+        type: text
+        info:
+          notes: ''
+      - id: PC_FAX_NO
+        type: text
+        info:
+          notes: ''
+      - id: CHEMICAL_ID
+        type: int
+        info:
+          notes: ''
+      - id: CHEMICAL_NAME
+        type: text
+        info:
+          notes: ''
+      - id: USE_MANUFACTURED
+        type: int
+        info:
+          notes: ''
+      - id: USE_PROCESSED
+        type: int
+        info:
+          notes: ''
+      - id: USE_OTHER_USE
+        type: int
+        info:
+          notes: ''
+      - id: REL_AIR
+        type: float
+        info:
+          notes: ''
+      - id: REL_LAND
+        type: int
+        info:
+          notes: ''
+      - id: REL_WATER
+        type: int
+        info:
+          notes: ''
+      - id: REL_DISPOSAL
+        type: int
+        info:
+          notes: ''
+      - id: REL_RECYCLING
+        type: int
+        info:
+          notes: ''
