@@ -76,7 +76,7 @@ sewer-junctions:
         target_name: Sewer Junction Flow Type 
         type: text
         info:
-          notes: Type of medium flowing through junction (e.g. storm, sanitary, combined storm and sanitary)
+          notes: Type of medium flowing through the junction (SAN - Sanitary, Storm - Stormwater, Combined - Combined, CSO - Combined Sewer Overflow, SCSO - Storm Plus CSO, EO - Emergency Overflow, FD - Foundation Drain)
       - id: geometry
         type: text
         info:

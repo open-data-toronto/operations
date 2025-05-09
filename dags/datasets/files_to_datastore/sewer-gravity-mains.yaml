@@ -81,7 +81,7 @@ sewer-gravity-mains:
         target_name: Sewer Gravity Flow Type
         type: text
         info:
-          notes: Type of medium flowing in sewer (e.g. storm, sanitary, combined storm and sanitary)
+          notes: Type of medium flowing in the sewer (SAN - Sanitary, Storm - Stormwater, Combined - Combined, CSO - Combined Sewer Overflow, SCSO - Storm Plus CSO, EO - Emergency Overflow, FD - Foundation Drain)
       - source_name: STRUC_TYPE
         target_name: Sewer Gravity Structure Type
         type: text

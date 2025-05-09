@@ -66,7 +66,7 @@ sewer-outfalls:
         target_name: Sewer Outfall Flow Type
         type: text
         info:
-          notes: Type of medium flowing through junction (e.g. storm, sanitary, combined storm and sanitary overflow)
+          notes: Type of medium flowing through the outfall (Storm - Stormwater, CSO - Combined Sewer Overflow, SCSO - Storm Plus CSO, EO - Emergency Overflow)
       - id: geometry
         type: text
         info:
