@@ -40,9 +40,7 @@ upcoming-and-recently-completed-affordable-housing-units:
   excerpt: This section contains data on upcoming affordable rental homes that are in development and have received an approval from City Council either as initial approval for financial incentives through a City housing program
   limitations: null
   notes: |
-    This section contains data on upcoming affordable rental homes that are in development and have received an approval from City Council either as initial approval for financial incentives through a City housing program (for example, Open Door, Housing Now, etc.) or as part of a development application (for example, through the former Section 37 density bonusing regulation, Community Benefits Charge, etc.), since January 1, 2017. The data highlights affordable rental homes that are still in the pre-construction stage of the development process, homes that are currently under construction, and homes that have been recently completed.
-    These affordable rental homes meet the City's current definition of affordable rental housing, with rent, including utilities, at or below 100 per cent of Average Market Rent (AMR).
-
+    This dataset tracks rent-controlled market homes, affordable rental homes, and Rent-Geared-to-Income (RGI) homes approved in Toronto. These units contribute to the City's goal of creating 65,000 rent-controlled homes by 2030 as part of the HousingTO 2020-2030 Action Plan. This data is updated quarterly.
   resources: 
     Affordable Rental Housing Pipeline:
       format: csv
@@ -69,11 +67,14 @@ upcoming-and-recently-completed-affordable-housing-units:
         info:
           notes: |
             The status of the project in the development process.
-              - Pre-Planning: project has been approved for financial incentives, but does not yet have its first planning approval
-              - Under Review: project is under review by City Planning and has its first planning approval
-              - Final Planning Approval: project has received it’s final planning approval
-              - Under Construction: project is under construction
-              - Occupied: project has begun to occupy units
+              - Pre-Planning: Project is approved for financial incentives through the City, but does not yet have a planning application under review.
+              - Planning Application Under Review: Project has an open planning application under review.
+              - Approved OPAs and Zoning By-Law Amendments: Project has either an approved Official Plan or Zoning By-Law Amendment.
+              - Approved Site Plan Application: Project has an approved Site Plan Application.
+              - Building Permit Application: Project has applied for a Building Permit.
+              - Issued Building Permit: Project has been issued a Building Permit.
+              - Started Construction: Toronto Building has done a final inspection, which triggers the Project to begin construction.
+              - Occupied: Project has an Occupancy Permit issued for affordable units.
       - source_name: WARD_NUMBER
         target_name: Ward Number
         type: "text"
@@ -84,16 +85,11 @@ upcoming-and-recently-completed-affordable-housing-units:
         type: "text"
         info:
           notes: "Ward Name of project"
-      - source_name: AFFORDABLE_HOMES_APPROVED_2017_TO_PRESENT
-        target_name: "Affordable Homes Approved (2017 - Present)"
+      - source_name: AFFORDABLE_HOMES_APPROVED
+        target_name: "Affordable Homes Approved"
         type: "text"
         info:
-          notes: "Affordable homes counted towards the City's HousingTO Target of 41,000 affordable homes (2020 approval onward)"
-      - source_name: TOTAL_AFFORDABLE_HOMES_APPROVED_2017_TO_PRESENT
-        target_name: "Total ARH Approved (2017 - Present)"
-        type: "text"
-        info:
-          notes: "The total number of affordable homes approved for the project, dating back to January 1 2017 to present."
+          notes: "The total number of affordable rental homes approved counted towards the City’s HousingTO Action Plan Target of 41,000 affordable rental homes."
       - source_name: RENT_CONTROLLED_MARKET_UNITS_APPROVED
         target_name: "Rent-Controlled Market Units Approved"
         type: "text"
