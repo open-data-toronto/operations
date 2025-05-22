@@ -4,7 +4,7 @@ chemical-tracking-chemtrac:
   dag_owner_email: yanan.zhang@toronto.ca
   title: Chemical Tracking (ChemTrac)
   date_published: '2019-07-23 16:46:12.27667'
-  refresh_rate: Daily
+  refresh_rate: As available
   dataset_category: Table
   owner_division: Toronto Public Health
   owner_section: null
@@ -75,107 +75,107 @@ chemical-tracking-chemtrac:
       - id: FACILITY_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the facility"
       - id: FACILITY_NAME
         type: text
         info:
-          notes: ''
+          notes: "The facility name"
       - id: FA_ADDRESS_GIVEN
         type: text
         info:
-          notes: ''
+          notes: "The address of the facility"
       - id: FA_POSTAL_CODE
         type: text
         info:
-          notes: ''
+          notes: "The facility postal code"
       - id: FA_LAT
         type: text
         info:
-          notes: ''
+          notes: "The facility's location latitude"
       - id: FA_LON
         type: text
         info:
-          notes: ''
+          notes: "The facility's location longitude"
       - id: NAICS_CODE_6
         type: int
         info:
-          notes: ''
+          notes: "The NAICS 6-digit code"
       - id: NAICS_CODE_6_DESC_ENG
         type: text
         info:
-          notes: ''
+          notes: "The NAICS code description"
       - id: EMPLOYEE_COUNT
         type: int
         info:
-          notes: ''
+          notes: "The employee count at the facility location"
       - id: WEB_SITE
         type: text
         info:
-          notes: ''
+          notes: "The facility's web site"
       - id: PC_FULL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The full name of the facility's primary contact"
       - id: PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's phone number"
       - id: PC_JOB_TITLE
         type: text
         info:
-          notes: ''
+          notes: "The title of the facility's primary contact"
       - id: PC_PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The phone number of the facility's primary contact"
       - id: PC_PHONE_NO_EXT
         type: text
         info:
-          notes: ''
+          notes: "The extension number for the phone number of the facility's primary contact"
       - id: PC_FAX_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's fax number"
       - id: CHEMICAL_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the chemical"
       - id: CHEMICAL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The name of chemical being reported on"
       - id: USE_MANUFACTURED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical used at the facility; expressed in kg"
       - id: USE_PROCESSED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical processed at the facility; expressed in kg"
       - id: USE_OTHER_USE
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical involved in other uses at the facility; expressed in kg"
       - id: REL_AIR
         type: float
         info:
-          notes: ''
+          notes: "The amount of the chemical released to air; expressed in kg"
       - id: REL_LAND
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to land; expressed in kg"
       - id: REL_WATER
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to water; expressed in kg"
       - id: REL_DISPOSAL
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a disposal facility; expressed in kg"
       - id: REL_RECYCLING
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a recycling facility; expressed in kg"
     Chemtrac Data 2017:
       format: csv
       url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2017 - chemtrac_data.csv
@@ -183,107 +183,107 @@ chemical-tracking-chemtrac:
       - id: FACILITY_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the facility"
       - id: FACILITY_NAME
         type: text
         info:
-          notes: ''
+          notes: "The facility name"
       - id: FA_ADDRESS_GIVEN
         type: text
         info:
-          notes: ''
+          notes: "The address of the facility"
       - id: FA_POSTAL_CODE
         type: text
         info:
-          notes: ''
+          notes: "The facility postal code"
       - id: FA_LAT
         type: text
         info:
-          notes: ''
+          notes: "The facility's location latitude"
       - id: FA_LON
         type: text
         info:
-          notes: ''
+          notes: "The facility's location longitude"
       - id: NAICS_CODE_6
         type: int
         info:
-          notes: ''
+          notes: "The NAICS 6-digit code"
       - id: NAICS_CODE_6_DESC_ENG
         type: text
         info:
-          notes: ''
+          notes: "The NAICS code description"
       - id: EMPLOYEE_COUNT
         type: int
         info:
-          notes: ''
+          notes: "The employee count at the facility location"
       - id: WEB_SITE
         type: text
         info:
-          notes: ''
+          notes: "The facility's web site"
       - id: PC_FULL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The full name of the facility's primary contact"
       - id: PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's phone number"
       - id: PC_JOB_TITLE
         type: text
         info:
-          notes: ''
+          notes: "The title of the facility's primary contact"
       - id: PC_PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The phone number of the facility's primary contact"
       - id: PC_PHONE_NO_EXT
         type: text
         info:
-          notes: ''
+          notes: "The extension number for the phone number of the facility's primary contact"
       - id: PC_FAX_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's fax number"
       - id: CHEMICAL_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the chemical"
       - id: CHEMICAL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The name of chemical being reported on"
       - id: USE_MANUFACTURED
         type: float
         info:
-          notes: ''
+          notes: "The amount of the chemical used at the facility; expressed in kg"
       - id: USE_PROCESSED
         type: float
         info:
-          notes: ''
+          notes: "The amount of the chemical processed at the facility; expressed in kg"
       - id: USE_OTHER_USE
         type: float
         info:
-          notes: ''
+          notes: "The amount of the chemical involved in other uses at the facility; expressed in kg"
       - id: REL_AIR
         type: float
         info:
-          notes: ''
+          notes: "The amount of the chemical released to air; expressed in kg"
       - id: REL_LAND
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to land; expressed in kg"
       - id: REL_WATER
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to water; expressed in kg"
       - id: REL_DISPOSAL
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a disposal facility; expressed in kg"
       - id: REL_RECYCLING
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a recycling facility; expressed in kg"
     Chemtrac Data 2016:
       format: csv
       url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2016 - chemtrac_data.csv
@@ -291,107 +291,107 @@ chemical-tracking-chemtrac:
       - id: FACILITY_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the facility"
       - id: FACILITY_NAME
         type: text
         info:
-          notes: ''
+          notes: "The facility name"
       - id: FA_ADDRESS_GIVEN
         type: text
         info:
-          notes: ''
+          notes: "The address of the facility"
       - id: FA_POSTAL_CODE
         type: text
         info:
-          notes: ''
+          notes: "The facility postal code"
       - id: FA_LAT
         type: text
         info:
-          notes: ''
+          notes: "The facility's location latitude"
       - id: FA_LON
         type: text
         info:
-          notes: ''
+          notes: "The facility's location longitude"
       - id: NAICS_CODE_6
         type: int
         info:
-          notes: ''
+          notes: "The NAICS 6-digit code"
       - id: NAICS_CODE_6_DESC_ENG
         type: text
         info:
-          notes: ''
+          notes: "The NAICS code description"
       - id: EMPLOYEE_COUNT
         type: int
         info:
-          notes: ''
+          notes: "The employee count at the facility location"
       - id: WEB_SITE
         type: text
         info:
-          notes: ''
+          notes: "The facility's web site"
       - id: PC_FULL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The full name of the facility's primary contact"
       - id: PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's phone number"
       - id: PC_JOB_TITLE
         type: text
         info:
-          notes: ''
+          notes: "The title of the facility's primary contact"
       - id: PC_PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The phone number of the facility's primary contact"
       - id: PC_PHONE_NO_EXT
         type: text
         info:
-          notes: ''
+          notes: "The extension number for the phone number of the facility's primary contact"
       - id: PC_FAX_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's fax number"
       - id: CHEMICAL_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the chemical"
       - id: CHEMICAL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The name of chemical being reported on"
       - id: USE_MANUFACTURED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical used at the facility; expressed in kg"
       - id: USE_PROCESSED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical processed at the facility; expressed in kg"
       - id: USE_OTHER_USE
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical involved in other uses at the facility; expressed in kg"
       - id: REL_AIR
         type: float
         info:
-          notes: ''
+          notes: "The amount of the chemical released to air; expressed in kg"
       - id: REL_LAND
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to land; expressed in kg"
       - id: REL_WATER
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to water; expressed in kg"
       - id: REL_DISPOSAL
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a disposal facility; expressed in kg"
       - id: REL_RECYCLING
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a recycling facility; expressed in kg"
     Chemtrac Data 2015:
       format: csv
       url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2015 - chemtrac_data.csv
@@ -399,107 +399,107 @@ chemical-tracking-chemtrac:
       - id: FACILITY_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the facility"
       - id: FACILITY_NAME
         type: text
         info:
-          notes: ''
+          notes: "The facility name"
       - id: FA_ADDRESS_GIVEN
         type: text
         info:
-          notes: ''
+          notes: "The address of the facility"
       - id: FA_POSTAL_CODE
         type: text
         info:
-          notes: ''
+          notes: "The facility postal code"
       - id: FA_LAT
         type: text
         info:
-          notes: ''
+          notes: "The facility's location latitude"
       - id: FA_LON
         type: text
         info:
-          notes: ''
+          notes: "The facility's location longitude"
       - id: NAICS_CODE_6
         type: int
         info:
-          notes: ''
+          notes: "The NAICS 6-digit code"
       - id: NAICS_CODE_6_DESC_ENG
         type: text
         info:
-          notes: ''
+          notes: "The NAICS code description"
       - id: EMPLOYEE_COUNT
         type: int
         info:
-          notes: ''
+          notes: "The employee count at the facility location"
       - id: WEB_SITE
         type: text
         info:
-          notes: ''
+          notes: "The facility's web site"
       - id: PC_FULL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The full name of the facility's primary contact"
       - id: PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's phone number"
       - id: PC_JOB_TITLE
         type: text
         info:
-          notes: ''
+          notes: "The title of the facility's primary contact"
       - id: PC_PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The phone number of the facility's primary contact"
       - id: PC_PHONE_NO_EXT
         type: text
         info:
-          notes: ''
+          notes: "The extension number for the phone number of the facility's primary contact"
       - id: PC_FAX_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's fax number"
       - id: CHEMICAL_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the chemical"
       - id: CHEMICAL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The name of chemical being reported on"
       - id: USE_MANUFACTURED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical used at the facility; expressed in kg"
       - id: USE_PROCESSED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical processed at the facility; expressed in kg"
       - id: USE_OTHER_USE
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical involved in other uses at the facility; expressed in kg"
       - id: REL_AIR
         type: float
         info:
-          notes: ''
+          notes: "The amount of the chemical released to air; expressed in kg"
       - id: REL_LAND
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to land; expressed in kg"
       - id: REL_WATER
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to water; expressed in kg"
       - id: REL_DISPOSAL
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a disposal facility; expressed in kg"
       - id: REL_RECYCLING
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a recycling facility; expressed in kg"
     Chemtrac Data 2014:
       format: csv
       url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2014 - chemtrac_data.csv
@@ -507,107 +507,107 @@ chemical-tracking-chemtrac:
       - id: FACILITY_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the facility"
       - id: FACILITY_NAME
         type: text
         info:
-          notes: ''
+          notes: "The facility name"
       - id: FA_ADDRESS_GIVEN
         type: text
         info:
-          notes: ''
+          notes: "The address of the facility"
       - id: FA_POSTAL_CODE
         type: text
         info:
-          notes: ''
+          notes: "The facility postal code"
       - id: FA_LAT
         type: text
         info:
-          notes: ''
+          notes: "The facility's location latitude"
       - id: FA_LON
         type: text
         info:
-          notes: ''
+          notes: "The facility's location longitude"
       - id: NAICS_CODE_6
         type: int
         info:
-          notes: ''
+          notes: "The NAICS 6-digit code"
       - id: NAICS_CODE_6_DESC_ENG
         type: text
         info:
-          notes: ''
+          notes: "The NAICS code description"
       - id: EMPLOYEE_COUNT
         type: int
         info:
-          notes: ''
+          notes: "The employee count at the facility location"
       - id: WEB_SITE
         type: text
         info:
-          notes: ''
+          notes: "The facility's web site"
       - id: PC_FULL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The full name of the facility's primary contact"
       - id: PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's phone number"
       - id: PC_JOB_TITLE
         type: text
         info:
-          notes: ''
+          notes: "The title of the facility's primary contact"
       - id: PC_PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The phone number of the facility's primary contact"
       - id: PC_PHONE_NO_EXT
         type: text
         info:
-          notes: ''
+          notes: "The extension number for the phone number of the facility's primary contact"
       - id: PC_FAX_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's fax number"
       - id: CHEMICAL_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the chemical"
       - id: CHEMICAL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The name of chemical being reported on"
       - id: USE_MANUFACTURED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical used at the facility; expressed in kg"
       - id: USE_PROCESSED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical processed at the facility; expressed in kg"
       - id: USE_OTHER_USE
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical involved in other uses at the facility; expressed in kg"
       - id: REL_AIR
         type: float
         info:
-          notes: ''
+          notes: "The amount of the chemical released to air; expressed in kg"
       - id: REL_LAND
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to land; expressed in kg"
       - id: REL_WATER
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to water; expressed in kg"
       - id: REL_DISPOSAL
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a disposal facility; expressed in kg"
       - id: REL_RECYCLING
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a recycling facility; expressed in kg"
     Chemtrac Data 2013:
       format: csv
       url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2013 - chemtrac_data.csv
@@ -615,107 +615,107 @@ chemical-tracking-chemtrac:
       - id: FACILITY_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the facility"
       - id: FACILITY_NAME
         type: text
         info:
-          notes: ''
+          notes: "The facility name"
       - id: FA_ADDRESS_GIVEN
         type: text
         info:
-          notes: ''
+          notes: "The address of the facility"
       - id: FA_POSTAL_CODE
         type: text
         info:
-          notes: ''
+          notes: "The facility postal code"
       - id: FA_LAT
         type: text
         info:
-          notes: ''
+          notes: "The facility's location latitude"
       - id: FA_LON
         type: text
         info:
-          notes: ''
+          notes: "The facility's location longitude"
       - id: NAICS_CODE_6
         type: int
         info:
-          notes: ''
+          notes: "The NAICS 6-digit code"
       - id: NAICS_CODE_6_DESC_ENG
         type: text
         info:
-          notes: ''
+          notes: "The NAICS code description"
       - id: EMPLOYEE_COUNT
         type: int
         info:
-          notes: ''
+          notes: "The employee count at the facility location"
       - id: WEB_SITE
         type: text
         info:
-          notes: ''
+          notes: "The facility's web site"
       - id: PC_FULL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The full name of the facility's primary contact"
       - id: PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's phone number"
       - id: PC_JOB_TITLE
         type: text
         info:
-          notes: ''
+          notes: "The title of the facility's primary contact"
       - id: PC_PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The phone number of the facility's primary contact"
       - id: PC_PHONE_NO_EXT
         type: text
         info:
-          notes: ''
+          notes: "The extension number for the phone number of the facility's primary contact"
       - id: PC_FAX_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's fax number"
       - id: CHEMICAL_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the chemical"
       - id: CHEMICAL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The name of chemical being reported on"
       - id: USE_MANUFACTURED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical used at the facility; expressed in kg"
       - id: USE_PROCESSED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical processed at the facility; expressed in kg"
       - id: USE_OTHER_USE
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical involved in other uses at the facility; expressed in kg"
       - id: REL_AIR
         type: float
         info:
-          notes: ''
+          notes: "The amount of the chemical released to air; expressed in kg"
       - id: REL_LAND
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to land; expressed in kg"
       - id: REL_WATER
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to water; expressed in kg"
       - id: REL_DISPOSAL
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a disposal facility; expressed in kg"
       - id: REL_RECYCLING
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a recycling facility; expressed in kg"
     Chemtrac Data 2012:
       format: csv
       url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2012 - chemtrac_data.csv
@@ -723,107 +723,107 @@ chemical-tracking-chemtrac:
       - id: FACILITY_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the facility"
       - id: FACILITY_NAME
         type: text
         info:
-          notes: ''
+          notes: "The facility name"
       - id: FA_ADDRESS_GIVEN
         type: text
         info:
-          notes: ''
+          notes: "The address of the facility"
       - id: FA_POSTAL_CODE
         type: text
         info:
-          notes: ''
+          notes: "The facility postal code"
       - id: FA_LAT
         type: text
         info:
-          notes: ''
+          notes: "The facility's location latitude"
       - id: FA_LON
         type: text
         info:
-          notes: ''
+          notes: "The facility's location longitude"
       - id: NAICS_CODE_6
         type: int
         info:
-          notes: ''
+          notes: "The NAICS 6-digit code"
       - id: NAICS_CODE_6_DESC_ENG
         type: text
         info:
-          notes: ''
+          notes: "The NAICS code description"
       - id: EMPLOYEE_COUNT
         type: int
         info:
-          notes: ''
+          notes: "The employee count at the facility location"
       - id: WEB_SITE
         type: text
         info:
-          notes: ''
+          notes: "The facility's web site"
       - id: PC_FULL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The full name of the facility's primary contact"
       - id: PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's phone number"
       - id: PC_JOB_TITLE
         type: text
         info:
-          notes: ''
+          notes: "The title of the facility's primary contact"
       - id: PC_PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The phone number of the facility's primary contact"
       - id: PC_PHONE_NO_EXT
         type: text
         info:
-          notes: ''
+          notes: "The extension number for the phone number of the facility's primary contact"
       - id: PC_FAX_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's fax number"
       - id: CHEMICAL_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the chemical"
       - id: CHEMICAL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The name of chemical being reported on"
       - id: USE_MANUFACTURED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical used at the facility; expressed in kg"
       - id: USE_PROCESSED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical processed at the facility; expressed in kg"
       - id: USE_OTHER_USE
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical involved in other uses at the facility; expressed in kg"
       - id: REL_AIR
         type: float
         info:
-          notes: ''
+          notes: "The amount of the chemical released to air; expressed in kg"
       - id: REL_LAND
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to land; expressed in kg"
       - id: REL_WATER
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to water; expressed in kg"
       - id: REL_DISPOSAL
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a disposal facility; expressed in kg"
       - id: REL_RECYCLING
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a recycling facility; expressed in kg"
     Chemtrac Data 2011:
       format: csv
       url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2011 - chemtrac_data.csv
@@ -831,107 +831,107 @@ chemical-tracking-chemtrac:
       - id: FACILITY_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the facility"
       - id: FACILITY_NAME
         type: text
         info:
-          notes: ''
+          notes: "The facility name"
       - id: FA_ADDRESS_GIVEN
         type: text
         info:
-          notes: ''
+          notes: "The address of the facility"
       - id: FA_POSTAL_CODE
         type: text
         info:
-          notes: ''
+          notes: "The facility postal code"
       - id: FA_LAT
         type: text
         info:
-          notes: ''
+          notes: "The facility's location latitude"
       - id: FA_LON
         type: text
         info:
-          notes: ''
+          notes: "The facility's location longitude"
       - id: NAICS_CODE_6
         type: int
         info:
-          notes: ''
+          notes: "The NAICS 6-digit code"
       - id: NAICS_CODE_6_DESC_ENG
         type: text
         info:
-          notes: ''
+          notes: "The NAICS code description"
       - id: EMPLOYEE_COUNT
         type: int
         info:
-          notes: ''
+          notes: "The employee count at the facility location"
       - id: WEB_SITE
         type: text
         info:
-          notes: ''
+          notes: "The facility's web site"
       - id: PC_FULL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The full name of the facility's primary contact"
       - id: PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's phone number"
       - id: PC_JOB_TITLE
         type: text
         info:
-          notes: ''
+          notes: "The title of the facility's primary contact"
       - id: PC_PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The phone number of the facility's primary contact"
       - id: PC_PHONE_NO_EXT
         type: text
         info:
-          notes: ''
+          notes: "The extension number for the phone number of the facility's primary contact"
       - id: PC_FAX_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's fax number"
       - id: CHEMICAL_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the chemical"
       - id: CHEMICAL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The name of chemical being reported on"
       - id: USE_MANUFACTURED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical used at the facility; expressed in kg"
       - id: USE_PROCESSED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical processed at the facility; expressed in kg"
       - id: USE_OTHER_USE
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical involved in other uses at the facility; expressed in kg"
       - id: REL_AIR
         type: float
         info:
-          notes: ''
+          notes: "The amount of the chemical released to air; expressed in kg"
       - id: REL_LAND
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to land; expressed in kg"
       - id: REL_WATER
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to water; expressed in kg"
       - id: REL_DISPOSAL
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a disposal facility; expressed in kg"
       - id: REL_RECYCLING
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a recycling facility; expressed in kg"
     Chemtrac Data 2010:
       format: csv
       url: https://opendata.toronto.ca/toronto.public.health/chemical-tracking/2010 - chemtrac_data.csv
@@ -939,104 +939,104 @@ chemical-tracking-chemtrac:
       - id: FACILITY_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the facility"
       - id: FACILITY_NAME
         type: text
         info:
-          notes: ''
+          notes: "The facility name"
       - id: FA_ADDRESS_GIVEN
         type: text
         info:
-          notes: ''
+          notes: "The address of the facility"
       - id: FA_POSTAL_CODE
         type: text
         info:
-          notes: ''
+          notes: "The facility postal code"
       - id: FA_LAT
         type: text
         info:
-          notes: ''
+          notes: "The facility's location latitude"
       - id: FA_LON
         type: text
         info:
-          notes: ''
+          notes: "The facility's location longitude"
       - id: NAICS_CODE_6
         type: int
         info:
-          notes: ''
+          notes: "The NAICS 6-digit code"
       - id: NAICS_CODE_6_DESC_ENG
         type: text
         info:
-          notes: ''
+          notes: "The NAICS code description"
       - id: EMPLOYEE_COUNT
         type: int
         info:
-          notes: ''
+          notes: "The employee count at the facility location"
       - id: WEB_SITE
         type: text
         info:
-          notes: ''
+          notes: "The facility's web site"
       - id: PC_FULL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The full name of the facility's primary contact"
       - id: PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's phone number"
       - id: PC_JOB_TITLE
         type: text
         info:
-          notes: ''
+          notes: "The title of the facility's primary contact"
       - id: PC_PHONE_NO
         type: text
         info:
-          notes: ''
+          notes: "The phone number of the facility's primary contact"
       - id: PC_PHONE_NO_EXT
         type: text
         info:
-          notes: ''
+          notes: "The extension number for the phone number of the facility's primary contact"
       - id: PC_FAX_NO
         type: text
         info:
-          notes: ''
+          notes: "The facility's fax number"
       - id: CHEMICAL_ID
         type: int
         info:
-          notes: ''
+          notes: "A unique identifier for the chemical"
       - id: CHEMICAL_NAME
         type: text
         info:
-          notes: ''
+          notes: "The name of chemical being reported on"
       - id: USE_MANUFACTURED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical used at the facility; expressed in kg"
       - id: USE_PROCESSED
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical processed at the facility; expressed in kg"
       - id: USE_OTHER_USE
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical involved in other uses at the facility; expressed in kg"
       - id: REL_AIR
         type: float
         info:
-          notes: ''
+          notes: "The amount of the chemical released to air; expressed in kg"
       - id: REL_LAND
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to land; expressed in kg"
       - id: REL_WATER
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical released to water; expressed in kg"
       - id: REL_DISPOSAL
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a disposal facility; expressed in kg"
       - id: REL_RECYCLING
         type: int
         info:
-          notes: ''
+          notes: "The amount of the chemical send to a recycling facility; expressed in kg"
