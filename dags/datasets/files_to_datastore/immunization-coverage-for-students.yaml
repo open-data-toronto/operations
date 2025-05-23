@@ -1,0 +1,153 @@
+immunization-coverage-for-students:
+  schedule: '@once'
+  dag_owner_name: Yanan Zhang
+  dag_owner_email: yanan.zhang@toronto.ca
+  title: Immunization Coverage for students
+  date_published: '2019-07-23 17:35:32.374727'
+  refresh_rate: Annually
+  dataset_category: Table
+  owner_division: Toronto Public Health
+  owner_section: null
+  owner_unit: null
+  owner_email: immunization@toronto.ca
+  civic_issues: null
+  topics:
+  - Health
+  tags:
+  - name: coverage
+    vocabulary_id: null
+  - name: exemption
+    vocabulary_id: null
+  - name: health
+    vocabulary_id: null
+  - name: schools
+    vocabulary_id: null
+  - name: vaccination
+    vocabulary_id: null
+  - name: vaccine
+    vocabulary_id: null
+  information_url: null
+  excerpt: "This data represents vaccine coverage estimates and philosophical/religious\
+    \ immunization exemptions by school, for diseases designated under the Ontario's\
+    \ Immunization of School Pupils Act (ISPA): measles, mumps and rubella (MMR),\
+    \ and diphtheria, tetanus and polio (DTP).\r\n"
+  limitations: null
+  notes: "In Ontario, the ISPA requires children who attend elementary and secondary\
+    \ school to be vaccinated or have a valid exemption provided to their local public\
+    \ health unit. As a result, each year Toronto Public Health staff work with schools\
+    \ located in the City of Toronto to assess student immunization records to ensure\
+    \ that all students are a) up-to-date with their required immunization and/or\
+    \ b) a valid exemption for philosophical or medical reasons is provided, in accordance\
+    \ with the ISPA.  \r\n\r\nThis data represents Immunization Coverage Rates and\
+    \ exemptions for School pupils (7-17 year olds) in Toronto for the 2017/2018 and\
+    \ 2018/2019 school years.\r\n\r\n \r\n\r\nFor more info, please [visit here.](https://www.toronto.ca/city-government/data-research-maps/research-reports/public-health-significant-reports/toronto-schools-immunization-coverage-rates/)\r\
+    \n"
+  resources:
+    ISPA Vaccination Rates by School for Grade 2 Students 2023 - 2024:
+      format: xlsx
+      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/ISPA Vaccination Rates by School for Grade 2 Students 2023 - 2024.xlsx"
+      sheet: ISPA Grade 2 2023-2024
+      attributes:
+      - id: School Name
+        type: text
+        info:
+          notes: ''
+      - id: Enrolled
+        type: int
+        info:
+          notes: ''
+      - id: Diphtheria, Pertussis, Tetanus and Polio Coverage (%)
+        type: float
+        info:
+          notes: ''
+      - id: Diphtheria, Pertussis, Tetanus and Polio Exemption (%)
+        type: float
+        info:
+          notes: ''
+      - id: Measles, Mumps, Rubella Coverage (%)
+        type: float
+        info:
+          notes: ''
+      - id: Measles, Mumps, Rubella Exemption (%)
+        type: float
+        info:
+          notes: ''
+    ISPA Vaccination Rates by School for Grade 12 Students 2023 - 2024:
+      format: xlsx
+      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/ISPA Vaccination Rates by School for Grade 12 Students 2023 - 2024.xlsx"
+      sheet: ISPA Grade 2 2023-2024
+      attributes:
+      - id: School Name
+        type: text
+        info:
+          notes: ''
+      - id: Enrolled
+        type: int
+        info:
+          notes: ''
+      - id: Diphtheria, Pertussis, Tetanus and Polio Coverage (%)
+        type: float
+        info:
+          notes: ''
+      - id: Diphtheria, Pertussis, Tetanus and Polio Exemption (%)
+        type: float
+        info:
+          notes: ''
+      - id: Measles, Mumps, Rubella Coverage (%)
+        type: float
+        info:
+          notes: ''
+      - id: Measles, Mumps, Rubella Exemption (%)
+        type: float
+        info:
+          notes: ''
+    SIP Vaccination Rates by School for Grade 8 Students 2023-2024:
+      format: xlsx
+      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/SIP Vaccination Rates by School for Grade 8 Students 2023-2024.xlsx"
+      sheet: SIP Grade 8 2023-2024
+      attributes:
+      - id: School Name
+        type: text
+        info:
+          notes: ''
+      - id: Enrolled
+        type: int
+        info:
+          notes: ''
+      - id: Hepatitis B Coverage (%)
+        type: float
+        info:
+          notes: ''
+      - id: Human Papillomavirus (HPV) Coverage (%)
+        type: float
+        info:
+          notes: ''
+      - id: Meningococcal Disease Coverage (%)
+        type: float
+        info:
+          notes: ''
+    SIP Vaccination Rates by School for Grade 10 - 12 Students  2023-2024:
+      format: xlsx
+      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/SIP Vaccination Rates by School for Grade 10 - 12 Students  2023-2024.xlsx"
+      sheet: SIP Grades 10-12 2023-2024
+      attributes:
+      - id: School Name
+        type: text
+        info:
+          notes: ''
+      - id: Enrolled
+        type: int
+        info:
+          notes: ''
+      - id: Hepatitis B Coverage (%)
+        type: float
+        info:
+          notes: ''
+      - id: Human Papillomavirus (HPV) Coverage (%)
+        type: float
+        info:
+          notes: ''
+      - id: Meningococcal Disease Coverage (%)
+        type: float
+        info:
+          notes: ''
