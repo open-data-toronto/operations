@@ -57,6 +57,7 @@ mapping = {
     "excerpt": "customfield_12244",
     "limitations": "customfield_12252",
     "data_url": "customfield_12279",
+    "collection_method": "customfield_12647",
 }
 
 YAML_METADATA = {  # DAG info
@@ -83,6 +84,7 @@ PACKAGE_METADATA = [
     "excerpt",
     "limitations",
     "notes",
+    "collection_method",
 ]
 
 
@@ -226,9 +228,13 @@ with DAG(
 
     def get_attributes_from_attachment(attachment_url):
         # Authentication needed to get attachment's content
-        response = requests.get(attachment_url, headers=headers)
-        with io.BytesIO(response.content) as file:
-            df = pd.io.excel.read_excel(file, sheet_name="Content")
+        logging.info("Start pulling the attachements...")
+        try:
+            response = requests.get(attachment_url, headers=headers, timeout = 15)
+            with io.BytesIO(response.content) as file:
+                df = pd.io.excel.read_excel(file, sheet_name="Content")
+        except requests.exceptions.Timeout:
+            logging.error("Having trouble reaching the attachments")
 
         # Grab columns which will be used in yaml attributes section
         columns = [
@@ -378,10 +384,12 @@ with DAG(
                 "text"
             ]
             if fields[mapping["limitations"]]
-            and (fields[mapping["limitations"]]["content"])
             else None,
             "notes": fields["description"]["content"][0]["content"][0]["text"]
             if fields["description"]
+            else None,
+            "collection_method": fields[mapping["collection_method"]]["content"][0]["content"][0]["text"]
+            if fields[mapping["collection_method"]]
             else None,
             "resources": resource,
         }
