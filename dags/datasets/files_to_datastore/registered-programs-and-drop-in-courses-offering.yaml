@@ -90,7 +90,7 @@ registered-programs-and-drop-in-courses-offering:
       - id: "Section"
         type: text
         info:
-          notes: null
+          notes: ""
       - id: "Activity Title"
         type: text
         info:
@@ -181,7 +181,7 @@ registered-programs-and-drop-in-courses-offering:
       - id: "Section"
         type: text
         info:
-          notes: null
+          notes: ""
       - id: "Age Min"
         type: text
         info:
