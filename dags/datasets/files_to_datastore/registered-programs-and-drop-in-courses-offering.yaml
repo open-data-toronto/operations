@@ -87,6 +87,10 @@ registered-programs-and-drop-in-courses-offering:
         type: int
         info:
           notes: 'Unique identifier of the location where the facility is located. Refer to Locations spreadsheet'
+      - id: "Section"
+        type: text
+        info:
+          notes: null
       - id: "Activity Title"
         type: text
         info:
@@ -95,10 +99,10 @@ registered-programs-and-drop-in-courses-offering:
         type: text
         info:
           notes: 'Title of a course. Course is an individual program instance offered by PF&R.'
-      - id: "Activity Description"
-        type: text
-        info:
-          notes: 'Description of the activity'
+      #- id: "Activity Description"
+      #  type: text
+      #  info:
+      #    notes: 'Description of the activity'
       - id: "Days of The Week"
         type: text
         info:
@@ -123,15 +127,15 @@ registered-programs-and-drop-in-courses-offering:
         type: int
         info:
           notes: 'End min'
-      - id: "Start Date"
-        type: date
-        format: "%Y-%m-%d %H:%M:%S"
-        info:
-          notes: 'Date when the course starts'
-      - id: "eFun URL"
+      #- id: "Start Date"
+      #  type: date
+      #  format: "%Y-%m-%d %H:%M:%S"
+      #  info:
+      #    notes: 'Date when the course starts'
+      - id: "Activity URL"
         type: text
         info:
-          notes: "URL to the course's program details and registration on eFUN website - PF&R Interface for registration to recreation programs."
+          notes: "URL to the course's program details and registration"
       - id: "Min Age"
         type: text
         info:
@@ -157,7 +161,6 @@ registered-programs-and-drop-in-courses-offering:
             1. If Start Date is less than present date: This course has started
             2. If Registration Date is less than present date: This course is open for registration
             3. If Registration Date is greater than present date: This course is not presently available for Internet Registration.
-
     Drop-in:
       format: xlsx
       sheet: "Drop-in"
@@ -175,6 +178,10 @@ registered-programs-and-drop-in-courses-offering:
         type: text
         info:
           notes: 'Title of a drop-in course'
+      - id: "Section"
+        type: text
+        info:
+          notes: null
       - id: "Age Min"
         type: text
         info:
@@ -183,19 +190,19 @@ registered-programs-and-drop-in-courses-offering:
         type: text
         info:
           notes: 'Maximum age limit to register for the course, maximum allowable age in months'
-      - id: "Date From"
-        type: text
-        info:
-          notes: 'First date of the Date Range when the course runs'
+      #- id: "Date From"
+      #  type: text
+      #  info:
+      #    notes: 'First date of the Date Range when the course runs'
       - id: "Date Range"
         type: text
         info:
           notes: 'Calendar range when the course runs'
-      - id: "Start Date Time"
-        type: timestamp
-        format: "%Y-%m-%d %H:%M:%S"
-        info:
-          notes: 'Start time of the course'
+      #- id: "Start Date Time"
+      #  type: timestamp
+      #  format: "%Y-%m-%d %H:%M:%S"
+      #  info:
+      #    notes: 'Start time of the course'
       - id: "Start Hour"
         type: int
         info:
@@ -212,18 +219,18 @@ registered-programs-and-drop-in-courses-offering:
         type: int
         info:
           notes: 'End min'
-      - id: "Category"
-        type: text
-        info:
-          notes: "Category of recreational program - top-level hierarchical level of programs classification. F.ex., 'Aquafit', 'Lane Swim', 'Leisure Swim: Preschool', and 'DROP-IN: Swimming - All Ages' are drop-in programs of 'Swimming' category; 'Stretch and Strength', 'Weight Room/Fitness Centre - Adult', and other drop-in fitness programs/activities belong to 'Fitness' category."
+      #- id: "Category"
+      #  type: text
+      #  info:
+      #    notes: "Category of recreational program - top-level hierarchical level of programs classification. F.ex., 'Aquafit', 'Lane Swim', 'Leisure Swim: Preschool', and 'DROP-IN: Swimming - All Ages' are drop-in programs of 'Swimming' category; 'Stretch and Strength', 'Weight Room/Fitness Centre - Adult', and other drop-in fitness programs/activities belong to 'Fitness' category."
       - id: "First Date"
         type: date
-        format: "%Y-%m-%d %H:%M:%S"
+        format: "%Y-%m-%d"
         info:
           notes: 'First date when the course runs.'
       - id: "Last Date"
         type: date
-        format: "%Y-%m-%d %H:%M:%S"
+        format: "%Y-%m-%d"
         info:
           notes: 'Last date of the course'
     Locations:
