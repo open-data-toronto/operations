@@ -37,7 +37,7 @@ dogs-issued-dangerous-dog-orders:
       format: csv
       url: https://opendata.toronto.ca/municipal.licensing.standards/dogs-issued-dangerous-dog-orders/dogs-issued-dangerous-dog-orders.csv
       attributes: 
-      - id: Forward_Sortation_Area
+      - id: FSAPostalCombined
         type: text
         info:
           notes: 'FSA of occurrence'
