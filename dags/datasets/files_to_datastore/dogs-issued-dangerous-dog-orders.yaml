@@ -40,7 +40,7 @@ dogs-issued-dangerous-dog-orders:
       - id: FSAPostalCombined
         type: text
         info:
-          notes: 'FSA of occurrence'
+          notes: 'FSA or a full postal code for severe and very severe bites'
       - id: Name_of_Dog
         type: text
         info:
