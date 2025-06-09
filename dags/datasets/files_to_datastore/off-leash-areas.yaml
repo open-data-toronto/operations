@@ -1,0 +1,144 @@
+off-leash-areas:
+  jira_issue_id: DIA-513
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/292437
+  schedule: '@once'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Off Leash Areas
+  date_published: '2025-06-09 21:09:26.268193'
+  dataset_category: Map
+  refresh_rate: As available
+  owner_division: Parks, Forestry & Recreation
+  owner_section: null
+  owner_unit: null
+  owner_email: parks@toronto.ca
+  civic_issues: null
+  topics:
+  - Locations and mapping
+  - Parks and recreation
+  - Permits and licenses
+  tags:
+  - name: commercial
+    vocabulary_id: null
+  - name: dogs
+    vocabulary_id: null
+  - name: off-leash
+    vocabulary_id: null
+  - name: walker
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/animals-pets/pets-in-the-city/dog-off-leash-areas/
+  excerpt: This dataset provides information on the off leash areas administered by
+    Toronto's Parks and Recreation Division.
+  limitations: null
+  notes: This data set, for each of the City of Toronto's off leash areas, provides
+    location information and a select list of attributions that could be found at
+    each location. Attributions include Hours, Area (Sqm), commercial dog walker use,
+    fenced area, small dog area, drinking water, lights, surface material, and other
+    features.
+  collection_method: null
+  resources:
+    Off Leash Areas:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/Off_Leash_Area_VIEW/FeatureServer/0/
+      attributes:
+      - id: objectid
+        type: int
+        info:
+          notes: 'Unique system id'
+      - id: locationid
+        type: int
+        info:
+          notes: 'Unique park id'
+      - id: asset_id
+        type: int
+        info:
+          notes: 'Unique asset id from Parks Asset Repository'
+      - id: location_name
+        type: text
+        info:
+          notes: 'Name of park'
+      - id: address
+        type: text
+        info:
+          notes: 'Address of park'
+      - id: hours
+        type: text
+        info:
+          notes: 'Indicates the hours of the dog park and any restrictions'
+      - id: url
+        type: text
+        info:
+          notes: 'URL to toronto.ca '
+      - id: comm_dog_walkers_allowed
+        type: text
+        info:
+          notes: 'Indicates if Commercial Dog Walkers are permitted to use the off leash area'
+      - id: fenced_perimeter
+        type: text
+        info:
+          notes: 'Indicates if the off leash are is full, partially or not enclosed'
+      - id: lit_area
+        type: text
+        info:
+          notes: 'Indicates if the off leash area has lighting'
+      - id: small_dog_area
+        type: text
+        info:
+          notes: 'Indicates if there is an enclosed area for smaller dog breeds'
+      - id: surface_material
+        type: text
+        info:
+          notes: 'Indicates the surface material used in the off leash area'
+      - id: nearby_drinking_water_source
+        type: text
+        info:
+          notes: 'Indicates if there is a drinking water soruce within 25m of the off leash area'
+      - id: nearby_drinking_water_source_ty
+        type: text
+        info:
+          notes: 'Indicates the type of drinking water source drinking fountain, dog fountain, water bottle filler'
+#      - id: dws_asset_id
+#        type: int
+#        info:
+#          notes: ''
+#      - id: dws_distance
+#        type: int
+#        info:
+#          notes: ''
+#      - id: globalid
+#        type: int
+#        info:
+#          notes: ''
+#      - id: created_date
+#        type: timestamp
+#        info:
+#          notes: ''
+#      - id: created_user
+#        type: text
+#        info:
+#          notes: ''
+#      - id: last_edited_date
+#        type: timestamp
+#        info:
+#          notes: ''
+#      - id: last_edited_user
+#        type: text
+#        info:
+#          notes: ''
+      - id: hours_of_operation
+        type: text
+        info:
+          notes: 'Indicates the hours of the dog park and any restrictions'
+      - id: area_sqm
+        type: float
+        info:
+          notes: 'Area in square meters of the off leash area'
+      - id: features
+        type: text
+        info:
+          notes: 'Additional features of the offleash are such as splash pad '
+      - id: geometry
+        type: text
+        info:
+          notes: ''
