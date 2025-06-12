@@ -48,7 +48,7 @@ def file_to_md5(filepath):
     return sig.hexdigest()
 
 
-def csv_to_generator(filepath, fieldnames, encoding="latin1"):
+def csv_to_generator(filepath, fieldnames, encoding):
     '''input csv filepath and fieldnames, output stream of rows as json'''
     with open(filepath, mode="r", encoding=encoding) as f:
         reader = csv.DictReader(f, fieldnames=fieldnames)

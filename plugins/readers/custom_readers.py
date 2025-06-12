@@ -3,6 +3,8 @@
 import json
 import requests
 import logging
+import csv
+import io
 from datetime import datetime
 from airflow.models import Variable
 from utils import misc_utils
@@ -476,7 +478,6 @@ def parks_drinking_fountains():
 
 def dinesafe():
     from io import StringIO
-    import csv
     import hashlib
     url = "https://secure.toronto.ca/opendata/ds/od_csv/v1?format=csv"
     with requests.get(url, stream=True) as r:   
@@ -535,3 +536,14 @@ def tennis_courts_facilities():
                 {"type": "Point", "coordinates": [lng, lat]}
             )
         }
+
+def members_of_toronto_city_council_voting_record():
+    url = "https://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_VOTE_2022_2026.csv"
+
+    content = requests.get(url).text
+    csv_file = io.StringIO(content)
+    csvreader = csv.DictReader(csv_file)
+    for row in list(csvreader):
+        row["Agenda Item Title"] = row["Agenda Item Title"].replace("\x92", "'")
+        
+        yield row

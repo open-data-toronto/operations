@@ -1157,7 +1157,7 @@ def stream_to_datastore(
     file_path: str,
     attributes: Dict,
     primary_key: None,
-    encoding: str = "latin1",
+    encoding: str = "utf-8",
     batch_size: int = 20000,
     do_not_cache: bool = False,
     **kwargs,

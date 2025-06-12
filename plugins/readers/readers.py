@@ -70,7 +70,7 @@ class Reader(ABC):
         Writes to local csv'''
         csv.field_size_limit(sys.maxsize)
 
-        with open(self.path, "w") as f:
+        with open(self.path, "w", encoding="utf-8") as f:
             writer = csv.DictWriter(f, self.fieldnames, extrasaction='ignore')
             writer.writeheader()
             writer.writerows(self.clean_lines())
@@ -108,12 +108,13 @@ class CSVReader(Reader):
 
     def __init__(
             self,
-            encoding: str = "latin1",
+            encoding: str = "utf-8",
             **kwargs
         ):        
 
         super().__init__(**kwargs)
         self.encoding = encoding
+        logging.info(f"Encoding: {self.encoding}")
 
     def read(self):
         '''Return generator yielding csv rows as dicts'''

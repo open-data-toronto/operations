@@ -53,6 +53,7 @@ demolition-and-replacement-of-rental-housing-units:
     Rental Demolition and Replacement:
       format: csv
       url: https://opendata.toronto.ca/city.planning/demolition-and-replacement-of-rental-housing-units/Rental Demolition and Replacement.csv
+      encoding: "latin1"
       attributes:
         - id: IBMS Address
           type: "text"

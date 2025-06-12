@@ -38,6 +38,7 @@ licensed-child-care-centres:
     Child care centres:
       format: csv
       url: https://opendata.toronto.ca/childrens.services/licensed-child-care-centres/child-care.csv
+      encoding: "latin1"
       attributes:
         - id: "LOC_ID"
           type: "int"

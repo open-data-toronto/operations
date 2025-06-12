@@ -158,23 +158,23 @@ permanent-bicycle-counters:
           type: int
           info:
             notes: Count of users on date dt.
-    cycling_permanent_counts_15min_1994_2024:
-      format: csv
-      url: https://opendata.toronto.ca/transportation.services/permanent-bike-counters/cycling_permanent_counts_15min_1994_2024.csv
-      attributes:
-        - id: location_dir_id         
-          type: text
-          info:
-            notes: Unique ID for location and direction for joining to data tables.        
-        - id: datetime_bin          
-          type: timestamp
-          format: "%Y-%m-%d %H:%M:%S"
-          info:
-            notes:  The date-time at which the record begins. See bin_size in sites table for size of bin.
-        - id: bin_volume          
-          type: int
-          info:
-            notes: Count of users.
+    # cycling_permanent_counts_15min_1994_2024:
+    #   format: csv
+    #   url: https://opendata.toronto.ca/transportation.services/permanent-bike-counters/cycling_permanent_counts_15min_1994_2024.csv
+    #   attributes:
+    #     - id: location_dir_id         
+    #       type: text
+    #       info:
+    #         notes: Unique ID for location and direction for joining to data tables.        
+    #     - id: datetime_bin          
+    #       type: timestamp
+    #       format: "%Y-%m-%d %H:%M:%S"
+    #       info:
+    #         notes:  The date-time at which the record begins. See bin_size in sites table for size of bin.
+    #     - id: bin_volume          
+    #       type: int
+    #       info:
+    #         notes: Count of users.
     cycling_permanent_counts_15min_2024_2025:
       format: csv
       url: https://opendata.toronto.ca/transportation.services/permanent-bike-counters/cycling_permanent_counts_15min_2024_2025.csv
