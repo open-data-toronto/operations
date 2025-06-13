@@ -51,27 +51,27 @@ immunization-coverage-for-students:
       - id: School Name
         type: text
         info:
-          notes: ''
+          notes: "Identifies the school in one of the four publically funded boards included in this report (Toronto District School Board, Toronto Catholic District School Board, Conseil scholaire Viamonde, and Conseil scolaire catholique MonAvenir)."
       - id: Enrolled
         type: int
         info:
-          notes: ''
+          notes: "Number of students enrolled in each school for the given school year."
       - id: Diphtheria, Pertussis, Tetanus and Polio Coverage (%)
         type: float
         info:
-          notes: ''
+          notes: "Diphtheria, Pertussis, Tetanus, Polio coverage rate is expressed as a proportion of students who were assessed as being complete for age for diphtheria, pertussis, tetanus and polio antigens amongst all those enrolled in the relevant age group for the given school year."
       - id: Diphtheria, Pertussis, Tetanus and Polio Exemption (%)
         type: float
         info:
-          notes: ''
+          notes: "Students with valid exemptions for philosophical/religious/administrative reasons for diphtheria, pertussis, tetanus and polio antigens for the given school year. It is expressed as a proportion of students with valid exemptions for diphtheria, pertussis, tetanus and polio amongst all those enrolled in the relevant age group for the given school year."
       - id: Measles, Mumps, Rubella Coverage (%)
         type: float
         info:
-          notes: ''
+          notes: "MMR coverage rate is expressed as a proportion of students who were assessed as being complete for age for measles, mumps and rubella vaccine amongst all those enrolled in the relevant age group for the given school year."
       - id: Measles, Mumps, Rubella Exemption (%)
         type: float
         info:
-          notes: ''
+          notes: "Students with valid exemptions for philosophical/religious/administrative reasons for measles, mumps and rubella vaccine for the given school year. It is expressed as a proportion of students with valid exemptions for measles, mumps and rubella amongst all those enrolled in the relevant age group for the given school year."
     ISPA Vaccination Rates by School for Grade 12 Students 2023 - 2024:
       format: xlsx
       url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/ISPA Vaccination Rates by School for Grade 12 Students 2023 - 2024.xlsx"
@@ -80,27 +80,27 @@ immunization-coverage-for-students:
       - id: School Name
         type: text
         info:
-          notes: ''
+          notes: "Identifies the school in one of the four publically funded boards included in this report (Toronto District School Board, Toronto Catholic District School Board, Conseil scholaire Viamonde, and Conseil scolaire catholique MonAvenir)."
       - id: Enrolled
         type: int
         info:
-          notes: ''
+          notes: "Number of students enrolled in each school for the given school year."
       - id: Diphtheria, Pertussis, Tetanus and Polio Coverage (%)
         type: float
         info:
-          notes: ''
+          notes: "Diphtheria, Pertussis, Tetanus, Polio coverage rate is expressed as a proportion of students who were assessed as being complete for age for diphtheria, pertussis, tetanus and polio antigens amongst all those enrolled in the relevant age group for the given school year."
       - id: Diphtheria, Pertussis, Tetanus and Polio Exemption (%)
         type: float
         info:
-          notes: ''
+          notes: "Students with valid exemptions for philosophical/religious/administrative reasons for diphtheria, pertussis, tetanus and polio antigens for the given school year. It is expressed as a proportion of students with valid exemptions for diphtheria, pertussis, tetanus and polio amongst all those enrolled in the relevant age group for the given school year."
       - id: Measles, Mumps, Rubella Coverage (%)
         type: float
         info:
-          notes: ''
+          notes: "MMR coverage rate is expressed as a proportion of students who were assessed as being complete for age for measles, mumps and rubella vaccine amongst all those enrolled in the relevant age group for the given school year."
       - id: Measles, Mumps, Rubella Exemption (%)
         type: float
         info:
-          notes: ''
+          notes: "Students with valid exemptions for philosophical/religious/administrative reasons for measles, mumps and rubella vaccine for the given school year. It is expressed as a proportion of students with valid exemptions for measles, mumps and rubella amongst all those enrolled in the relevant age group for the given school year."
     SIP Vaccination Rates by School for Grade 8 Students 2023-2024:
       format: xlsx
       url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/SIP Vaccination Rates by School for Grade 8 Students 2023-2024.xlsx"
@@ -109,23 +109,23 @@ immunization-coverage-for-students:
       - id: School Name
         type: text
         info:
-          notes: ''
+          notes: "Identifies the school in one of the four publically funded boards included in this report (Toronto District School Board, Toronto Catholic District School Board, Conseil scholaire Viamonde, and Conseil scolaire catholique MonAvenir)."
       - id: Enrolled
         type: int
         info:
-          notes: ''
+          notes: "Number of students enrolled in each school for the given school year."
       - id: Hepatitis B Coverage (%)
         type: float
         info:
-          notes: ''
+          notes: "Hepatitis B coverage rate is expressed as a proportion of students who were assessed as being complete for age for hepatitis B amongst all those enrolled in the relevant age group for the given school year."
       - id: Human Papillomavirus (HPV) Coverage (%)
         type: float
         info:
-          notes: ''
+          notes: "Human papillomavirus (HPV) coverage rate is expressed as a proportion of students who were assessed as being complete for age for HPV amongst all those enrolled in the relevant age group for the given school year."
       - id: Meningococcal Disease Coverage (%)
         type: float
         info:
-          notes: ''
+          notes: "Meningococcal disease coverage rate is expressed as a proportion of students who were assessed as being complete for age for meningococcal disease amongst all those enrolled in the relevant age group for the given school year."
     SIP Vaccination Rates by School for Grade 10 - 12 Students  2023-2024:
       format: xlsx
       url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/SIP Vaccination Rates by School for Grade 10 - 12 Students  2023-2024.xlsx"
@@ -134,20 +134,20 @@ immunization-coverage-for-students:
       - id: School Name
         type: text
         info:
-          notes: ''
+          notes: "Identifies the school in one of the four publically funded boards included in this report (Toronto District School Board, Toronto Catholic District School Board, Conseil scholaire Viamonde, and Conseil scolaire catholique MonAvenir)."
       - id: Enrolled
         type: int
         info:
-          notes: ''
+          notes: "Number of students enrolled in each school for the given school year."
       - id: Hepatitis B Coverage (%)
         type: float
         info:
-          notes: ''
+          notes: "Hepatitis B coverage rate is expressed as a proportion of students who were assessed as being complete for age for hepatitis B amongst all those enrolled in the relevant age group for the given school year."
       - id: Human Papillomavirus (HPV) Coverage (%)
         type: float
         info:
-          notes: ''
+          notes: "Human papillomavirus (HPV) coverage rate is expressed as a proportion of students who were assessed as being complete for age for HPV amongst all those enrolled in the relevant age group for the given school year."
       - id: Meningococcal Disease Coverage (%)
         type: float
         info:
-          notes: ''
+          notes: "Meningococcal disease coverage rate is expressed as a proportion of students who were assessed as being complete for age for meningococcal disease amongst all those enrolled in the relevant age group for the given school year."
