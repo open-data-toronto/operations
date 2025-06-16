@@ -51,6 +51,7 @@ fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system:
     # resource name
     suspected-opioid-overdoses-in-shelters:
       format: csv
+      encoding: latin1
       url: https://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/suspected-opioid-overdoses-in-shelters.csv
       attributes:
         - id: "location_name"
@@ -75,6 +76,7 @@ fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system:
             notes: ""
     summary-suspected-opioid-overdoses-in-shelters:
       format: csv
+      encoding: latin1
       url: https://opendata.toronto.ca/shelter.support.housing.administration/fatal-and-non-fatal-suspected-opioid-overdoses-in-the-shelter-system/summary-suspected-opioid-overdoses-in-shelters.csv
       attributes:
         - id: "year"
