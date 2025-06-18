@@ -319,7 +319,7 @@ class GetOrCreatePackage:
                 owner_org = "city-of-toronto",
                 # Optional; Overwrite auto-generated hash-like id with the actual package name.
                 # As a result, the package name and id would be the same.
-                id=self.package_name,
+                #id=self.package_name,
                 # Use license_id(str): id of the dataset’s license, see ckan.logic.action.get.license_list 
                 license_url="https://open.toronto.ca/open-data-license/",
                 **self.package_metadata,
