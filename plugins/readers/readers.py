@@ -326,7 +326,8 @@ class ExcelReader(Reader):
 
         for row in self.worksheet.iter_rows(min_row=2):
             output_row = {
-                source_headers[i]: str(row[i].value).strip() if row[i].value else None
+                # convert everything to a string (for now) except empty cells
+                source_headers[i]: str(row[i].value).strip() if row[i].value != None else None
                 for i in range(len(row))
             }
 
