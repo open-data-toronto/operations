@@ -687,6 +687,9 @@ traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts:
   svc_raw_data_speed_2020_2024:
     format: csv
     url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_speed_2020_2024.csv 
+  svc_raw_data_speed_2025_2029:
+    format: csv
+    url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_speed_2025_2029.csv 
   svc_raw_data_volume_2020_2024:
     format: csv
     url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_volume_2020_2024.csv
