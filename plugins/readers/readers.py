@@ -326,8 +326,10 @@ class ExcelReader(Reader):
 
         for row in self.worksheet.iter_rows(min_row=2):
             output_row = {
-                # convert everything to a string (for now) except empty cells
-                source_headers[i]: str(row[i].value).strip() if row[i].value != None else None
+                # convert everything to a string except empty cells
+                # openpyxl has more data types than we store in CKAN
+                # we convert from string to a CKAN-friendly datatype later
+                source_headers[i]: str(row[i].value).strip() if row[i].value is not None else None
                 for i in range(len(row))
             }
 
