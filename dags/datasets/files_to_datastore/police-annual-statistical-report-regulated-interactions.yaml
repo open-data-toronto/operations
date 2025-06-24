@@ -25,22 +25,22 @@ police-annual-statistical-report-regulated-interactions:
     Regulated Interactions:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Regulated_Interactions/FeatureServer/0
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Regulated_Interactions_(ASR_RI_TBL_001)/FeatureServer/0
       attributes:
-      - source_name: Index_
+      - source_name: INDEX_
         target_name: Index
         type: int
         info:
           notes: Unique identifier
-      - id: Year
+      - id: YEAR
         type: int
         info:
           notes: Year was reported
-      - id: Category
+      - id: CATEGORY
         type: text
         info:
           notes: Mandated collection category
-      - source_name: Count_
+      - source_name: COUNT_
         target_name: Count
         type: text
         info:

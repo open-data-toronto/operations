@@ -39,7 +39,11 @@ police-annual-statistical-report-arrested-and-charged-persons:
       agol: True
       format: json
       url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Arrested_and_Charged_Persons_(ASR_ENF_TBL_001)/FeatureServer/0
-      attributes:        
+      attributes:   
+        - id: INDEX_
+          type: "text"
+          info:
+            notes: "Index"     
         - id: "ARREST_YEAR"
           type: "int"
           info:

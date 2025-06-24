@@ -39,10 +39,10 @@ police-annual-statistical-report-calls-for-service-attended:
       format: json
       url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Calls_for_Service_Attended_(ASR_CS_TBL_003)/FeatureServer/0
       attributes:
-        #- id: "ObjectId"
-        #  type: "int"
-        #  info:
-        #    notes: "Unique identifier from the source system"
+        - id: INDEX_
+          type: "text"
+          info:
+            notes: "Index"
         - id: "EVENT_YEAR"
           type: "int"
           info:

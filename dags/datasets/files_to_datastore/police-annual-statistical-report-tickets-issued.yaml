@@ -40,6 +40,10 @@ police-annual-statistical-report-tickets-issued:
       format: json
       url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Tickets_Issued_(ASR_ENF_TBL_002)/FeatureServer/0
       attributes:        
+        - id: INDEX_
+          type: "text"
+          info:
+            notes: "Index"
         - id: OFFENCE_YEAR
           type: "int"
           info:
