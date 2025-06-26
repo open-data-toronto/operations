@@ -1,0 +1,153 @@
+air-conditioned-and-cool-spaces-heat-relief-network:
+  dag_owner_name: 'mnichol4'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Air Conditioned and Cool Spaces (Heat Relief Network)
+  date_published: '2019-09-30 14:58:24.150844'
+  dataset_category: Table
+  refresh_rate: Daily
+  owner_division: Toronto Public Health
+  owner_section: Healthy Public Policy
+  owner_unit: null
+  owner_email: Lindsay.McCallum@toronto.ca
+  civic_issues:
+  - Affordable housing
+  - Poverty reduction
+  topics:
+  - Community services
+  - Health
+  - Environment
+  tags: []
+  information_url: 'https://www.toronto.ca/community-people/health-wellness-care/health-programs-advice/hot-weather/cool-spaces-near-you/ '
+  excerpt: "The City of Toronto coordinates a Heat Relief Network throughout the summer\
+    \ season from May 15 \u2013 September 30, which includes air conditioned and cool\
+    \ spaces where the public can seek relief from the heat."
+  limitations: 'The dataset may not include all Heat Relief Network locations. '
+  notes: "The City of Toronto coordinates a Heat Relief Network throughout the summer\
+    \ season from May 15 \u2013 September 30, which includes air conditioned and cool\
+    \ spaces. The public can access cool spaces across the City, including libraries,\
+    \ community centres, pools, splash pads, some Civic Centres and City facilities,\
+    \ drop-ins and several private and non-profit organizations, including shopping\
+    \ malls and YMCA locations. These cool spaces are open to the public during their\
+    \ regular business hours. This dataset includes information on the participating\
+    \ Heat Relief Network locations. The dataset compiles information from a variety\
+    \ of sources."
+  schedule: '11 11 * * *'
+  resources: 
+    Air Conditioned and Cool Spaces:
+        format: geojson
+        agol: true
+        url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/TPH_Cooling_Centres_View/FeatureServer/0
+        attributes:
+        - id: "locationId"
+          type: "int"
+          info:
+            notes: "Unique identifier"
+        - id: "locationTypeCode"
+          type: "text"
+          info:
+            notes: "Type Code"
+        - id: "locationTypeDesc"
+          type: "text"
+          info:
+            notes: "Location Type Description"
+        - id: "locationCode"
+          type: "text"
+          info:
+            notes: "Location Code"
+        - id: "locationDesc"
+          type: "text"
+          info:
+            notes: "Location Description"
+        - id: "locationName"
+          type: "text"
+          info:
+            notes: "Name of heat relief network location"
+        - id: "address"
+          type: "text"
+          info:
+            notes: "Address of heat relief network location"
+        - id: "phone"
+          type:  "text"
+          info:
+            notes: "Phone number of heat relief network location"
+        - id: "url"
+          type:  "text"
+          info:
+            notes: "Website of heat relief network location"
+        - id: "imageUrl"
+          type: "text"
+          info:
+            notes: "Picture of heat relief network location"
+        - id: "monOpen"
+          type: "text"
+          info:
+            notes: "Day and opening hours"
+        - id: "monClose"
+          type: "text"
+          info:
+            notes: "Day and closing hours"
+        - id: "tueOpen"
+          type: "text"
+          info:
+            notes: "Day and opening hours"
+        - id: "tueClose"
+          type: "text"
+          info:
+            notes: "Day and closing hours"
+        - id: "wedOpen"
+          type: "text"
+          info:
+            notes: "Day and opening hours"
+        - id: "wedClose"
+          type: "text"
+          info:
+            notes: "Day and closing hours"
+        - id: "thuOpen"
+          type: "text"
+          info:
+            notes: "Day and opening hours"
+        - id: "thuClose"
+          type: "text"
+          info:
+            notes: "Day and closing hours"
+        - id: "friOpen"
+          type: "text"
+          info:
+            notes: "Day and opening hours"
+        - id: "friClose"
+          type: "text"
+          info:
+            notes: "Day and closing hours"
+        - id: "satOpen"
+          type: "text"
+          info:
+            notes: "Day and opening hours"
+        - id: "satClose"
+          type: "text"
+          info:
+            notes: "Day and closing hours"
+        - id: "sunOpen"
+          type: "text"
+          info:
+            notes: "Day and opening hours"
+        - id: "sunClose"
+          type: "text"
+          info:
+            notes: "Day and closing hours"
+        - id: "amenities"
+          type: "text"
+          info:
+            notes: "Amenities on-site (e.g. accessible, water fountain)"
+        - id: "notes"
+          type:  "text"
+          info:
+            notes: ""
+        - id: "eligibility"
+          type: "text"
+          info:
+            notes: "Client group. This applies to drop-ins, shelters and respite sites only"
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+        
