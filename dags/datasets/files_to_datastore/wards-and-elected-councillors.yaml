@@ -40,17 +40,7 @@ wards-and-elected-councillors:
         - id: "AREA_ID"
           type: "float"
           info:
-            notes: ""
-        - id: "DATE_EFFECTIVE"
-          type: date
-          format: epoch
-          info:
-            notes: ""
-        - id: "DATE_EXPIRY"
-          type: date
-          format: epoch
-          info:
-            notes: ""
+            notes: ""        
         - id: "AREA_ATTR_ID"
           type: "float"
           info:
@@ -133,5 +123,15 @@ wards-and-elected-councillors:
             notes: ""
         - id: "geometry"
           type: "text"
+          info:
+            notes: ""
+        - id: "DATE_EFFECTIVE"
+          type: date
+          format: epoch
+          info:
+            notes: ""
+        - id: "DATE_EXPIRY"
+          type: date
+          format: epoch
           info:
             notes: ""
