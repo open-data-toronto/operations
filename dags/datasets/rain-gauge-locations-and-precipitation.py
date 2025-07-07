@@ -163,7 +163,11 @@ with DAG(
 
         records_to_load = []
         for site in rain_gauge_sites:
-            records_to_load.extend(get_datapoints(site=site))
+            try:
+                records_to_load.extend(get_datapoints(site=site))
+            except AssertionError as e:
+                logging.warning(f"Unable to load records for site {site}")
+                logging.warning(e)
             time.sleep(20)
 
         pd.DataFrame(records_to_load).to_csv(filepath, index=False)
