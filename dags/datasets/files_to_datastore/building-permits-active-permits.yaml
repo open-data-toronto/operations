@@ -90,17 +90,17 @@ building-permits-active-permits:
             notes: ""
         - id: APPLICATION_DATE
           type: date
-          format: "%Y%m%d%H%M%S"
+          format: "%Y-%m-%dT%H:%M:%S"
           info:
             notes: Date that the application was received and entered into the city's permit application management system (IBMS)
         - id: ISSUED_DATE
           type: date
-          format: "%Y%m%d%H%M%S"
+          format: "%Y-%m-%dT%H:%M:%S"
           info:
             notes: Date that the permit was issued.
         - id: COMPLETED_DATE
           type: date
-          format: "%Y%m%d%H%M%S"
+          format: "%Y-%m-%dT%H:%M:%S"
           info:
             notes: Date work is complete and permit is cleared
         - id: STATUS
