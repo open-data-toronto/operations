@@ -37,7 +37,7 @@ committee-of-adjustment-applications:
     # resource name
     Closed Applications since 2017:
       format: csv
-      url: https://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/committee-of-adjustment-applications.csv
+      url: https://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/cleared-committee-of-adjustment-applications.csv
       attributes:
         - id: "SYS_ID"
           type: "text"
@@ -195,6 +195,128 @@ committee-of-adjustment-applications:
           info:
             notes: ""
         - id: "CONTACT_EMAIL"
+          type: "text"
+          info:
+            notes: ""
+    Active Applications:
+      format: csv
+      url: https://opendata.toronto.ca/city.planning/committee-of-adjustment-applications/active-committee-of-adjustment-applications.csv
+      attributes:
+        - id: "SYS_ID"
+          type: "text"
+          info:
+            notes: ""
+        - id: "APPLICATION_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "IN_DATE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "PLANNING_DISTRICT"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WARD"
+          type: "int"
+          info:
+            notes: ""
+        - id: "STREET_NUM"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STREET_NAME"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STREET_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STREET_DIRECTION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "POSTAL"
+          type: "text"
+          info:
+            notes: ""
+        - id: "REFERENCE_FILE#"
+          type: "text"
+          info:
+            notes: ""
+        - id: "SUB_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "WORK_TYPE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZONING_REVIEW"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ZONING_DESIGNATION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "COMMUNITY"
+          type: "text"
+          info:
+            notes: ""
+        - id: "EMPLOYMENT_DISTRICT"
+          type: "text"
+          info:
+            notes: ""
+        - id: "DESCRIPTION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "HEARING_DATE"
+          type: "date"
+          format: "%b %d, %Y"
+          info:
+            notes: ""
+        - id: "TIME_OF_MEETING"
+          type: "text"
+          info:
+            notes: ""
+        - id: "MEETING_LOCATION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "C_OF_A_DESCISION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "ANYONE_OBJECT_AT_MEETING"
+          type: "text"
+          info:
+            notes: ""
+        - id: "APPEAL_EXPIRY_DATE"
+          type: "date"
+          format: "%b %d, %Y"
+          info:
+            notes: ""
+        - id: "OMB_ORDER_DATE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "OMB_DESCISION"
+          type: "text"
+          info:
+            notes: ""
+        - id: "NUMBER_OF_LOTS_CREATED"
+          type: "text"
+          info:
+            notes: ""
+        - id: "CONDITION_EXPIRY_DATE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "STATUSDESC"
           type: "text"
           info:
             notes: ""
