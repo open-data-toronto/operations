@@ -219,7 +219,7 @@ committee-of-adjustment-applications:
           info:
             notes: ""
         - id: "WARD"
-          type: "int"
+          type: "text"
           info:
             notes: ""
         - id: "STREET_NUM"
