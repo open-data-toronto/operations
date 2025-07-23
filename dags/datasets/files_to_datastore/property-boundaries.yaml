@@ -58,54 +58,54 @@ property-boundaries:
         format: epoch
         info:
           notes:  System generated
-      - id: PLANID
-        type: int
-        info:
-          notes:  Internal unique ID of the plan
-      - id: PLAN_DESCRIPTION
-        type: text
-        info:
-          notes:  Description from plan [if available]
-      - id: PLAN_NAME
-        type: text
-        info:
-          notes:  Plan name [if available]
-      - id: PLAN_TYPE
-        type: text
-        info:
-          notes:  Type of plan [if available]
+      #- id: PLANID
+      #  type: int
+      #  info:
+      #    notes:  Internal unique ID of the plan
+      #- id: PLAN_DESCRIPTION
+      #  type: text
+      #  info:
+      #    notes:  Description from plan [if available]
+      #- id: PLAN_NAME
+      #  type: text
+      #  info:
+      #    notes:  Plan name [if available]
+      #- id: PLAN_TYPE
+      #  type: text
+      #  info:
+      #    notes:  Type of plan [if available]
       - id: STATEDAREA
         type: text
         info:
           notes:  Area of parcel as stated by plan [if available]
-      - id: SOURCE_ID
-        type: int
-        info:
-          notes:  Internal source ID
-      - id: ADDRESS_POINT_ID
-        type: int
-        info:
-          notes:  Unique ID of the main address point related to the parcel
+      #- id: SOURCE_ID
+      #  type: int
+      #  info:
+      #    notes:  Internal source ID
+      #- id: ADDRESS_POINT_ID
+      #  type: int
+      #  info:
+      #    notes:  Unique ID of the main address point related to the parcel
       - id: ADDRESS_NUMBER
         type: text
         info:
           notes:  Address number
-      - id: LINEAR_NAME_ID
-        type: int
-        info:
-          notes:  Unique ID of the street name
+      #- id: LINEAR_NAME_ID
+      #  type: int
+      #  info:
+      #    notes:  Unique ID of the street name
       - id: LINEAR_NAME_FULL
         type: text
         info:
           notes:  Street name
-      - id: AROLL_SOURCE_DESC
-        type: text
-        info:
-          notes:  Source of parcel info
-      - id: ADDRESS_ID
-        type: int
-        info:
-          notes:  Unique ID of the address
+      #- id: AROLL_SOURCE_DESC
+      #  type: text
+      #  info:
+      #    notes:  Source of parcel info
+      #- id: ADDRESS_ID
+      #  type: int
+      #  info:
+      #    notes:  Unique ID of the address
       - id: OBJECTID
         type: text
         info:
