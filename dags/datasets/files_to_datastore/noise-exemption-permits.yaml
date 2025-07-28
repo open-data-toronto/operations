@@ -53,7 +53,7 @@ noise-exemption-permits:
     Note: This dataset is refreshed daily between 12:00 p.m. and 1 p.m.
      
   resources:
-    Noise Exemption Permits - May 20, 2025 to current:
+    Noise Exemption Permits - May 20 2025 to current:
       format: 'csv'
       url: https://opendata.toronto.ca/municipal.licensing.standards/noise-exemption-permits/noise-exemption-permits-may20-to-current.csv
       attributes:         
@@ -66,13 +66,13 @@ noise-exemption-permits:
         info:
           notes: Type of permit issued (e.g., Construction, Amplified Sound).
       - id: StartDateTime
-        type: datetime
-        format: "%Y-%m-%dT%H:%M%:S"
+        type: timestamp
+        format: "%Y-%m-%dT%H:%M:%S"
         info:
           notes: Start date and time of the permitted activity.
       - id: EndDateTime
-        type: datetime
-        format: "%Y-%m-%dT%H:%M%:S"
+        type: timestamp
+        format: "%Y-%m-%dT%H:%M:%S"
         info:
           notes: End date and time of the permitted activity.
       - id: Corporation/Partnership
@@ -120,7 +120,7 @@ noise-exemption-permits:
         info:
           notes: Scheduled time for dismantling or cleaning up after the event.
       
-    Noise Exemption Permits - January 1, 2024 to May 20, 2025:
+    Noise Exemption Permits - January 1 2024 to May 20 2025:
       format: 'csv'
       url: https://opendata.toronto.ca/municipal.licensing.standards/noise-exemption-permits/noise-exemption-permits.csv
       attributes:         
