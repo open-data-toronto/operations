@@ -53,7 +53,74 @@ noise-exemption-permits:
     Note: This dataset is refreshed daily between 12:00 p.m. and 1 p.m.
      
   resources:
-    Noise Exemption Permits:
+    Noise Exemption Permits - May 20, 2025 to current:
+      format: 'csv'
+      url: https://opendata.toronto.ca/municipal.licensing.standards/noise-exemption-permits/noise-exemption-permits-may20-to-current.csv
+      attributes:         
+      - id: PermitNumber
+        type: text
+        info:
+          notes: Unique identifier for each permit issued.
+      - id: PermitType
+        type: text
+        info:
+          notes: Type of permit issued (e.g., Construction, Amplified Sound).
+      - id: StartDateTime
+        type: datetime
+        format: "%Y-%m-%dT%H:%M%:S"
+        info:
+          notes: Start date and time of the permitted activity.
+      - id: EndDateTime
+        type: datetime
+        format: "%Y-%m-%dT%H:%M%:S"
+        info:
+          notes: End date and time of the permitted activity.
+      - id: Corporation/Partnership
+        type: text
+        info:
+          notes: Name of the corporation or partnership applying for the permit.
+      - id: ApplicationType
+        type: text
+        info:
+          notes: Indicates whether the application is on behalf of an organization or an individual.
+      - id: Address
+        type: text
+        info:
+          notes: Address where the permitted activity will take place.
+      - id: Ward
+        type: text
+        info:
+          notes: Municipal ward number where the activity is located.
+      - id: LocationName
+        type: text
+        info:
+          notes: Name of the location or venue for the activity.
+      - id: Event/Project/Activity Name
+        type: text
+        info:
+          notes: Name or title of the event, project, or activity.
+      - id: ParkName
+        type: text
+        info:
+          notes: Name of the park where the activity is taking place, if applicable.
+      - id: Condition
+        type: text
+        info:
+          notes: Conditions or restrictions associated with the permit.
+      - id: Setup
+        type: text
+        info:
+          notes: Scheduled time for setting up the event or activity.
+      - id: Event/Activity
+        type: text
+        info:
+          notes: Scheduled time for the main event or activity.
+      - id: Tear Down
+        type: text
+        info:
+          notes: Scheduled time for dismantling or cleaning up after the event.
+      
+    Noise Exemption Permits - January 1, 2024 to May 20, 2025:
       format: 'csv'
       url: https://opendata.toronto.ca/municipal.licensing.standards/noise-exemption-permits/noise-exemption-permits.csv
       attributes:         
