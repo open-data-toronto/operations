@@ -128,7 +128,7 @@ sewer-gravity-mains:
         type: text
         info:
           notes: The approximate elevation of the sewer at the upstream maintenance hole (metres)
-      - source_name: DNELEV
+      - source_name: DOWNELEV
         target_name: Downstream Elevation 
         type: text
         info:
