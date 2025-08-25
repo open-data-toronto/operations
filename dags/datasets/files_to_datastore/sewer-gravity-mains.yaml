@@ -123,16 +123,16 @@ sewer-gravity-mains:
         type: text
         info:
           notes: Pipe cross-sectional shape (e.g. circular, egg etc.)
-      #- source_name: INVERT_UP
-      #  target_name: Sewer Gravity Invert Upstream
-      #  type: text
-      #  info:
-      #    notes: Upstream invert elevation (metres)
-      #- source_name: INVERT_DN
-      #  target_name: Sewer Gravity Invert Downstream
-      #  type: text
-      #  info:
-      #    notes: Downstream invert elevation (metres)
+      - source_name: UPELEV
+        target_name:  Upstream Elevation
+        type: text
+        info:
+          notes: The approximate elevation of the sewer at the upstream maintenance hole (metres)
+      - source_name: INVERT_DN
+        target_name: Downstream Elevation 
+        type: text
+        info:
+          notes: The approximate elevation of the sewer at the downstream maintenance hole (metres)
       - source_name: MEASUREDLENGTH
         target_name: Sewer Gravity Measured Length
         type: float
