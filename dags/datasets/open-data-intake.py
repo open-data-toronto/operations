@@ -130,6 +130,8 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                 # Inquiry Source (city council, public, etc)
                 if fields["customfield_12376"]:
                     inquiry_source = fields["customfield_12376"].get("value", None)
+                else:
+                    inquiry_source = None
 
                 # ticket name
                 ticket_name = fields["summary"]
