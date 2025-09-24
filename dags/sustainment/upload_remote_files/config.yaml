@@ -698,8 +698,3 @@ permanent-bicycle-counters:
   cycling_permanent_counts_locations_geojson:
     format: geojson
     url: https://opendata.toronto.ca/transportation.services/permanent-bike-counters/cycling_permanent_counts_locations.geojson
-
-festivals-events:
-  Festivals and events json feed:
-    format: json
-    url: https://secure.toronto.ca/c3api_data/v2/DataAccess.svc/festivals_events/events?$format=application/json;odata.metadata=none&$skip=0&$top=5000
