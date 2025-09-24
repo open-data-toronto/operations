@@ -18,7 +18,7 @@ from utils import ckan_utils
 
 job_settings = {
     "description": "Uploads files from opendata.toronto.ca to respective CKAN resource",
-    "schedule": "0,15,30,45 * * * *",
+    "schedule": "15 * * * *",
     "start_date": datetime(2020, 11, 10, 0, 30, 0),
 }
 
