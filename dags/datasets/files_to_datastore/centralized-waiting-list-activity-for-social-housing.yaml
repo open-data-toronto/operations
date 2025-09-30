@@ -59,10 +59,10 @@ centralized-waiting-list-activity-for-social-housing:
           type: text
           info:
             notes: "these applicants have been housed from the Centralized Waiting List for RGI housing and will no longer be active in the next quarter."
-        - id: "Inactive/cancelled"
-          type: text
-          info:
-            notes: "these applications from the Centralized Waiting List for RGI housing are no longer active and will be removed in the next quarter."
+        #- id: "Inactive/cancelled"
+        #  type: text
+        #  info:
+        #    notes: "these applications from the Centralized Waiting List for RGI housing are no longer active and will be removed in the next quarter."
         - id: "Total active waiting list"
           type: text
           info:
