@@ -1,0 +1,90 @@
+# package name
+presto-card-access:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Presto Card Access"
+  date_published: "2025-08-25a 14:18:24.389728"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Social Development, Finance & Administration
+  owner_section: null
+  owner_unit: null
+  owner_email: temp@toronto.ca 
+
+  civic_issues: null
+  topics: 
+    - Locations and mapping
+  tags: 
+    - name: transit
+      vocabulary_id: null
+    
+
+  information_url: null
+  excerpt: Where a Toronto resident can acquire a PRESTO card, either for free or at a cost.
+  limitations: null
+  notes: |
+    This is placeholder text! We'll need to update this before we publish
+  resources:
+    # resource name
+    Presto Card Access:
+      agol: True
+      format: geojson
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/presto_locations_QA/FeatureServer/0
+      attributes:
+        - id: "ID"
+          type:  int
+          info:
+            notes: ""
+        - id: "LOCATION"
+          type:  text
+          info:
+            notes: ""
+        - id: "ADDRESS"
+          type:  text
+          info:
+            notes: ""
+        - id: "WEBSITE"
+          type:  text
+          info:
+            notes: ""
+        - id: "WARD"
+          type:  text
+          info:
+            notes: ""
+        - id: "WARD_NUMBER"
+          type:  int
+          info:
+            notes: ""
+        - id: "WARD_COUNCILLOR"
+          type:  text
+          info:
+            notes: ""
+        - id: "BUILDING_TYPE"
+          type:  text
+          info:
+            notes: ""
+        - id: "IN_PERSON_SUPPORT"
+          type:  text
+          info:
+            notes: ""
+        - id: "ACTIVE"
+          type:  text
+          info:
+            notes: ""
+        - id: "COST_OR_NO_COST"
+          type:  text
+          info:
+            notes: ""
+        
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+        
+        
