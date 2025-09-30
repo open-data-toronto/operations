@@ -233,6 +233,11 @@ registered-programs-and-drop-in-courses-offering:
         format: "%Y-%m-%d"
         info:
           notes: 'Last date of the course'
+      - id: "DayOftheWeek"
+        type: text
+        info:
+          notes: 'Week day of the course'
+      
     Locations:
       format: xlsx
       sheet: "Locations"
