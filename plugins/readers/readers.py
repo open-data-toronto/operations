@@ -282,7 +282,7 @@ class CustomReader(Reader):
         logging.info(">>>>> CustomReader <<<<<<")
         module = importlib.import_module(self.full_module_name)
         if self.func_name not in dir(module):
-            raise ValueError("Function name must be valid.")
+            raise ValueError(f"Function name must be valid; this error can be caused by syntax errors in the {self.full_module_name} file")
         else:
             for attribute_name in dir(module):
                 attribute = getattr(module, attribute_name)

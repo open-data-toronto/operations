@@ -1,0 +1,104 @@
+building-permits-green-roofs:
+  schedule: '0 10 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mnichol4@toronto.ca'
+  title: Building Permits - Green Roofs
+  date_published: '2019-07-23 16:43:02.720844'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: Toronto Building
+  owner_section: null
+  owner_unit: null
+  owner_email: Ryan.Persaud@toronto.ca
+  civic_issues: 
+    - Affordable housing
+  topics: 
+    - Development and infrastructure
+    - Permits and licenses
+  tags:
+  - name: eco
+  information_url: https://www.toronto.ca/services-payments/building-construction/
+  excerpt: Green Roof-related building permit applications.
+  limitations: null
+  notes: |
+    The Green Roof By-law was adopted by Toronto City Council May 2009 under the authority of section 108 of the City of Toronto Act. Toronto is the first city in North America to have a by-law requiring and governing the construction of green roofs. The bylaw applies to new commercial, institutional and many residential development applications and to certain developments not completed before the bylaw came into effect on Jan 31, 2010
+
+  resources:
+    Building Permits - Green Roofs Data:
+      format: csv
+      custom_reader: building_permits_green_roofs
+      url: https://opendata.toronto.ca/toronto.building/building-permits-green-roofs/greenroofs.csv
+      attributes:
+        - id: PERMIT_NUM
+          type: text
+          info:
+            notes: Last two digits of calendar year, plus IBMS-generated sequence
+        - id: REVISION_NUM
+          type: text
+          info:
+            notes: Two digit number identifying revisions to permit application made after permit issuance 
+        - id: PERMIT_TYPE
+          type: text
+          info:
+            notes: | 
+              Text field describing the type of permit. 
+        - id: STRUCTURE_TYPE
+          type: text
+          info:
+            notes: Identifies that type of structure the application relates to.
+        - id: STREET_NUM
+          type: text
+          info:
+            notes: Address - street number
+        - id: STREET_NAME
+          type: text
+          info:
+            notes: Address - street name
+        - id: STREET_TYPE
+          type: text
+          info:
+            notes: Address - street type
+        - id: STREET_DIRECTION
+          type: text
+          info:
+            notes: Address - street direction
+        - id: POSTAL
+          type: text
+          info:
+            notes: First 3 digits of postal code                
+        - id: APPLICATION_DATE
+          type: date
+          format: "%Y-%m-%dT%H:%M:%S"
+          info:
+            notes: Date that the application was received and entered into the city's permit application management system (IBMS)
+        - id: ISSUED_DATE
+          type: date
+          format: "%Y-%m-%dT%H:%M:%S"
+          info:
+            notes: Date that the permit was issued.
+        - id: COMPLETED_DATE
+          type: date
+          format: "%Y-%m-%dT%H:%M:%S"
+          info:
+            notes: Date work is complete and permit is cleared
+        - id: STATUS
+          type: text
+          info:
+            notes: Current status of application / permit
+        - id: DESCRIPTION
+          type: text
+          info:
+            notes: Description of work proposed in application
+        - id: GREEN_ROOF_AREA 
+          type: text
+          info:
+            notes: null
+        - id: GREEN_ROOF_VARIATION_AREA
+          type: text
+          info:
+            notes: null
+        - id: ECO_ROOF
+          type: text
+          info:
+            notes: Whether this permit is associated with the city's eco roof program
+        

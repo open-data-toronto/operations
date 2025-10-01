@@ -8,6 +8,8 @@ import io
 from datetime import datetime
 from airflow.models import Variable
 from utils import misc_utils
+import openpyxl
+
 
 
 
@@ -459,7 +461,6 @@ def washroom_facilities():
 
 
 def parks_drinking_fountains():
-    
     # get source data
     locations_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_PFR_washroom_drinking_water_source/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token="
     locations = json.loads(requests.get(locations_url).text)["features"]
@@ -537,6 +538,7 @@ def tennis_courts_facilities():
             )
         }
 
+
 def members_of_toronto_city_council_voting_record():
     url = "https://opendata.toronto.ca/city.clerks.office/tmmis/VW_OPEN_VOTE_2022_2026.csv"
 
@@ -547,3 +549,23 @@ def members_of_toronto_city_council_voting_record():
         row["Agenda Item Title"] = row["Agenda Item Title"].replace("\x92", "'")
         
         yield row
+
+
+def building_permits_green_roofs():
+    ibms_data_file = requests.get("https://opendata.toronto.ca/toronto.building/building-permits-green-roofs/greenroofs.csv").text
+    headers = "PERMIT_NUM","REVISION_NUM","PERMIT_TYPE","STRUCTURE_TYPE","STREET_NUM","STREET_NAME","STREET_TYPE","STREET_DIRECTION","POSTAL","APPLICATION_DATE","ISSUED_DATE","COMPLETED_DATE","STATUS","DESCRIPTION","GREEN_ROOF_AREA","GREEN_ROOF_VARIATION_AREA",
+    ibms_data = csv.DictReader(io.StringIO(ibms_data_file), fieldnames = headers) 
+    next(ibms_data)
+
+    eco_roofs_file = requests.get("https://opendata.toronto.ca/toronto.building/building-permits-green-roofs/Green Roof Permit Info_Open Data.xlsx").content
+    eco_roofs_data = openpyxl.load_workbook(filename = io.BytesIO(eco_roofs_file))["Sheet1"]
+        
+    for ibms_row in ibms_data:
+        ibms_row["ECO_ROOF"] = False
+        for eco_roof in eco_roofs_data:
+            if ibms_row["PERMIT_NUM"] == eco_roof[2].value[:9]:
+                ibms_row["ECO_ROOF"] = True
+
+        yield ibms_row
+                    
+                    
