@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Dict, List
 
 import requests
+import urllib.parse
 from airflow.decorators import dag, task
 from airflow.models import Variable
 from airflow.operators.python import PythonOperator
@@ -76,23 +77,28 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
 
         return str(dir_with_dag_name)
 
-    @task(
-        params={
-            # "jira_url": "https://toronto.atlassian.net/rest/api/3/search?jql=type=11468&expand=changelog"
-            "jira_url": """https://toronto.atlassian.net/rest/api/3/search?jql="Customer%20Request%20Type"%20in%20("Publish%20New%20Open%20Dataset%20Page"%2C%20"Update%20Existing%20Open%20Dataset%20Page"%2C%20"Make%20Open%20Data%20Inquiry")&expand=changelog"""
-        }
-    )
-    def get_jira_queue(tmp_dir: str, **context) -> str:
+    @task
+    def get_jira_queue(tmp_dir: str) -> str:
         # headers for authenticate jira api calls
         jira_api_key = Variable.get("jira_apikey")
         headers = {"Authorization": jira_api_key}
+
+
+        # customer request types taken from airflow variables
+        raw_request_types = Variable.get("jira_intake_customer_request_types")
+        jira_url = f'https://toronto.atlassian.net/rest/api/3/search?jql=%22Customer%20Request%20Type%22%20in%20({urllib.parse.quote(raw_request_types)})&expand=changelog'
+
+        # ensure the request works as expected on the target url
+        test_response = requests.get(jira_url, headers=headers)
+        if test_response.status_code == 400:
+            raise ValueError("Something went wrong when sending an HTTP request to jira." + json.loads(test_response.text)["errorMessages"][0])
 
         # Since jira api calls have maxResults, we need use pagination and get results in chunks
         has_more = True
         jira_queue = []
         offset = 0
         while has_more:
-            jira_call = context["params"]["jira_url"] + "&startAt=" + str(offset)
+            jira_call = jira_url + "&startAt=" + str(offset)
             result = json.loads(requests.get(jira_call, headers=headers).content)
 
             jira_queue += result["issues"]
@@ -128,20 +134,34 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                 fields = ast.literal_eval(ticket["fields"])
 
                 # Inquiry Source (city council, public, etc)
-                if fields["customfield_12376"]:
-                    inquiry_source = fields["customfield_12376"].get("value", None)
+                if fields.get("customfield_13002", None):
+                    if len(fields["customfield_13002"]) > 1:
+                        inquiry_source = ", ".join([div["value"].strip() for div in fields["customfield_13002"]])
+                    else:
+                        inquiry_source = fields["customfield_13002"][0]["value"]
                 else:
                     inquiry_source = None
 
                 # ticket name
-                ticket_name = fields["summary"]
+                ticket_name = fields["summary"].strip()
+                
+                # ticket resolution state
+                if fields["resolution"]:
+                    resolution = True
+                else:
+                    resolution = False
 
                 # owner division
-                owner_division = (
-                    fields["customfield_11827"][0]["value"]
-                    if fields["customfield_11827"]
-                    else None
-                )
+                # TODO: grab owner division from ckan for update type tickets?
+                if fields.get("customfield_11827", False):
+                    if len(fields["customfield_11827"]) > 1:
+                        owner_division = ", ".join([div["value"].strip() for div in fields["customfield_11827"]])
+                    else:
+                        owner_division = fields["customfield_11827"][0]["value"].strip()
+                else:
+                    owner_division = None
+
+            
 
                 # get ticket request type
                 # some tickets have this value empty
@@ -193,7 +213,31 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                     for changelog in ast.literal_eval(ticket["changelog"])["histories"]
                     if changelog["items"][0]["field"] == "status"
                 ]
-                status_log = []
+
+                # Initiate the status log with an entry for when the ticket was created
+                # We do this because this isnt saved in the Jira changelog API
+                status_log = [
+                        {
+                            "Ticket Id": ticket_id,
+                            "Ticket Name": ticket_name,
+                            "Inquiry Source": inquiry_source,
+                            "Division": owner_division,
+                            "Public Description": public_description,
+                            "Request Type": request_type,
+                            "Created": created_time[:-9],
+                            "First Response": (
+                                first_response_time[:-9]
+                                if first_response_time
+                                else None
+                            ),
+                            "Ticket Resolved?": resolution,
+                            "From Status": None,
+                            "To Status": "Created",
+                            "Status Timestamp": created_time[:-9],
+                            "Linked Ticket Id": inward_issue,
+                        }
+                    ]
+
                 if changelog_histories:
                     for changelog in reversed(changelog_histories):
                         from_status = changelog["items"][0]["fromString"]
@@ -215,33 +259,11 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                                 ),
                                 "From Status": from_status,
                                 "To Status": to_status,
+                                "Ticket Resolved?": resolution,
                                 "Status Timestamp": timestamp,
                                 "Linked Ticket Id": inward_issue,
                             }
-                        )
-
-                # if no status change history, record as None
-                else:
-                    status_log = [
-                        {
-                            "Ticket Id": ticket_id,
-                            "Ticket Name": ticket_name,
-                            "Inquiry Source": inquiry_source,
-                            "Division": owner_division,
-                            "Public Description": public_description,
-                            "Request Type": request_type,
-                            "Created": created_time[:-9],
-                            "First Response": (
-                                first_response_time[:-9]
-                                if first_response_time
-                                else None
-                            ),
-                            "From Status": None,
-                            "To Status": None,
-                            "Status Timestamp": None,
-                            "Linked Ticket Id": inward_issue,
-                        }
-                    ]
+                        )                    
 
                 # Check if last changelog status match final ticket status; if not append final status.
                 final_ticket_status = fields["customfield_10502"]["currentStatus"][
@@ -272,6 +294,7 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                                 if first_response_time
                                 else None
                             ),
+                            "Ticket Resolved?": resolution,
                             "From Status": status_log[-1]["To Status"],
                             "To Status": final_ticket_status,
                             "Status Timestamp": final_status_timestamp[:-9],
@@ -280,8 +303,6 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
                     )
 
                 records.extend(status_log)
-
-        logging.info(records[5])
 
         # sort records by key, status date, and created date
         sorted_records = sorted(
@@ -305,6 +326,7 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
             "Request Type": "**Open Data Inquiry** is where most intake starts; it's where Open Data staff investigate the existance of a requested dataset and feasibility of publishing it. From there, it can become a **Publish New Open Dataset Page**, which is the process of connecting to city systems containing data to be published, and reviewing the content and context on an open dataset page before it's published. **Update Existing Open Dataset Page** tickets are the process of making and validating changes to the schema, source system or metadata of an existing page. Some of these values are 'Unknown' because these statuses were introduced after these tickets were made.",
             "Created": "The ticket's original creation time",
             "First Response": "When open data team first replied to this ticket",
+            "Ticket Resolved?": "Whether the ticket is considered 'finished' by the Open Data team",
             "From Status": "Ticket's status before its current status, if any",
             "To Status": "Ticket's current status",
             "Status Timestamp": "When the ticket changed to this record's status",
