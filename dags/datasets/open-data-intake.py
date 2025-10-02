@@ -83,10 +83,9 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
         jira_api_key = Variable.get("jira_apikey")
         headers = {"Authorization": jira_api_key}
 
-
         # customer request types taken from airflow variables
         raw_request_types = Variable.get("jira_intake_customer_request_types")
-        jira_url = f'https://toronto.atlassian.net/rest/api/3/search/jql?jql=%22Customer%20Request%20Type%22%20in%20({urllib.parse.quote(raw_request_types)})&expand=changelog&maxResults=5000&fields=*all'
+        jira_url = f'https://toronto.atlassian.net/rest/api/3/search/jql?jql=%22Customer%20Request%20Type%22%20in%20({urllib.parse.quote(raw_request_types)})&expand=changelog&fields=*all'
 
         # ensure the request works as expected on the target url
         test_response = requests.get(jira_url, headers=headers)
@@ -96,16 +95,17 @@ The creation of this data is to support council motion [2023.EX10.18](https://se
         # Since jira api calls have maxResults, we need use pagination and get results in chunks
         has_more = True
         jira_queue = []
-        offset = 0
+        nextPageToken = ""
         while has_more:
-            jira_call = jira_url + "&startAt=" + str(offset)
+
+            jira_call = jira_url + "&nextPageToken=" + nextPageToken
             result = json.loads(requests.get(jira_call, headers=headers).content)
 
             jira_queue += result["issues"]
             has_more = not result["isLast"]
+            nextPageToken = result.get("nextPageToken", "")
 
-            logging.info(f"Processing in batch, start from {offset}")
-            offset += 50
+            logging.info(f"Processing in batch, hitting next page")
 
         ticket_pool = [ticket["key"] for ticket in jira_queue]
         logging.info(f"Getting tickets from {jira_call}")
