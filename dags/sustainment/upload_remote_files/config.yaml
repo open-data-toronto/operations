@@ -690,7 +690,7 @@ traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts:
   svc_raw_data_volume_2020_2024:
     format: csv
     url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_volume_2020_2024.csv
-festival-events:
+festivals-events:
   Festivals and events json feed:
     format: json
     url: https://opendata.toronto.ca/economic.development.culture/festivals-events/file.json
