@@ -603,9 +603,6 @@ parking-tickets:
   parking-tickets-2014:
     format: zip
     url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2014.zip
-  parking-tickets-2014:
-    format: zip
-    url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2014.zip
   parking-tickets-2013:
     format: zip
     url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2013.zip
@@ -693,13 +690,11 @@ traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts:
   svc_raw_data_volume_2020_2024:
     format: csv
     url: https://opendata.toronto.ca/transportation.services/traffic-volumes-midblock-vehicle-speed-volume-and-classification-counts/svc_raw_data_volume_2020_2024.csv
-
-permanent-bicycle-counters:
-  cycling_permanent_counts_locations_geojson:
-    format: geojson
-    url: https://opendata.toronto.ca/transportation.services/permanent-bike-counters/cycling_permanent_counts_locations.geojson
-
 festival-events:
   Festivals and events json feed:
     format: json
     url: https://opendata.toronto.ca/economic.development.culture/festivals-events/file.json
+permanent-bicycle-counters:
+  cycling_permanent_counts_locations_geojson:
+    format: geojson
+    url: https://opendata.toronto.ca/transportation.services/permanent-bike-counters/cycling_permanent_counts_locations.geojson
