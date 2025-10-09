@@ -77,7 +77,7 @@ sewer-manholes:
         target_name: Top Elevation information 
         type: float
         info:
-          notes: ''
+          notes: 'The top edge (rim) elevation of manholes in meters'
       - id: geometry
         type: text
         info:
