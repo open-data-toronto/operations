@@ -1,0 +1,58 @@
+parking-occupancy:
+  jira_issue_id: DIA-646
+  jira_issue_url: https://toronto.atlassian.net/browse/DIA-646
+  schedule: '0 2 1 * *'
+  dag_owner_name: Mackenzie.Nichols4
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Parking Occupancy
+  date_published: '2025-10-03 00:37:16.207118'
+  dataset_category: Table
+  refresh_rate: Quarterly
+  owner_division: Toronto Parking Authority
+  owner_section: null
+  owner_unit: null
+  owner_email: customerservice@greenp.com
+  civic_issues: 
+    - Mobility
+  topics:
+  - Transportation
+  tags:
+  - name: lots
+    vocabulary_id: null
+  
+  information_url: null
+  excerpt: Utilization data from Toronto Parking Authority's City-owned off-street parking facilities
+  limitations: 2024 data is not aggregated by quarter but by the entire year.
+  notes: |
+    The Toronto Parking Authority (TPA) operates a portfolio of several City-owned off-street parking facilities. This data is the utilization data from these assets, which is a critical input for evidence-based decision-making to support real estate planning, transportation management, economic development, and smart city initiatives.
+
+  resources: 
+    Parking Occupancy:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.parking.authority/parking-occupancy/TPA Owned Car Parks.csv
+      attributes:
+        - id: Car Park Number
+          type: "text"
+          info:
+            notes: "Unique identifier for each parking facility."
+        - id: Car Park Location
+          type: "text"
+          info:
+            notes: "Address of the car park."
+        - id: Total Available Spaces
+          type: "text"
+          info:
+            notes: "Count of spaces available for parking."
+        - id: Average Daily Peak Occupancy %
+          type: "text"
+          info:
+            notes: "Average daily peak occupancy is the primary utilization metric employed by TPA. It is derived from paid parking transactions and calculated by taking the highest number of transactions recorded each day, dividing by location capacity to get a daily peak percentage, then averaging these percentages over the total number of days in the reported period (e.g., 90 days for a quarterly report)."
+        - id: Year
+          type: "text"
+          info:
+            notes: "Year of this record"
+        - id: Quarter
+          type: "text"
+          info:
+            notes: "Quarter of this record"
+        
