@@ -73,6 +73,11 @@ sewer-manholes:
         format: epoch
         info:
           notes: 'Approximate construction date'
+      - source_name: RIMELEV
+        target_name: Top Elevation information 
+        type: float
+        info:
+          notes: ''
       - id: geometry
         type: text
         info:
