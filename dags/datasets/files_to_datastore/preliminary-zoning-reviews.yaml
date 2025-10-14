@@ -1,0 +1,96 @@
+preliminary-zoning-reviews:
+  schedule: '0 10 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mnichol4@toronto.ca'
+  title: Preliminary Zoning Reviews
+  date_published: '2025-10-14 16:43:02.720844'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: Toronto Building
+  owner_section: null
+  owner_unit: null
+  owner_email: Ryan.Persaud@toronto.ca
+  civic_issues: null
+  topics: 
+    - Development and infrastructure
+    - Permits and licenses
+  tags:
+  - name: building application
+    vocabulary_id: null
+  - name: building permit
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/building-construction/
+  excerpt: "This data considers 4 different programs supported by Toronto Building: Business Licenses, Liquor Licenses, Zoning use, Zoning Certificates, and preliminary Zoning Reviews for Signs."
+  limitations: null
+  notes: |
+    
+    This data considers 4 different programs supported by Toronto Building: Business Licenses, Liquor Licenses, Zoning use, Zoning Certificates, and preliminary Zoning Reviews for Signs.
+
+    **Zoning Certificates**: Preliminary review of the submitted plans to confirm zoning and applicable law compliance, allowing a complete application for a building permit.
+
+    **Zoning Use**: Provides an assessment of whether the following uses are permitted for a specific location
+
+    **Business Licenses**: Required to confirm compliance with the City's Zoning By-law(s) when applying for business license approval.
+
+    **Liquor Licenses**: To serve or sell alcohol in Toronto, you need a liquor licence
+  
+  resources:
+    Preliminary Zoning Reviews:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.building/preliminary-zoning-reviews/preliminary-zoning-reviews.csv
+      attributes:
+        - id: PERMIT_NUM
+          type: text
+          info:
+            notes: Last two digits of calendar year, plus IBMS-generated sequence
+        - id: REVISION_NUM
+          type: text
+          info:
+            notes: Two digit number identifying revisions to permit application made after permit issuance 
+        - id: STREET_NUM
+          type: text
+          info:
+            notes: Address - street number
+        - id: STREET_NAME
+          type: text
+          info:
+            notes: Address - street name
+        - id: STREET_TYPE
+          type: text
+          info:
+            notes: Address - street type
+        - id: STREET_DIRECTION
+          type: text
+          info:
+            notes: Address - street direction
+        - id: POSTAL
+          type: text
+          info:
+            notes: First 3 digits of postal code
+        - id: GEO_ID
+          type: text
+          info:
+            notes: City-defined, unique identifier for Property Address
+        - id: WARD_GRID
+          type: text
+          info:
+            notes: "Ward information"
+        - id: APPLICATION_DATE
+          type: date
+          format: "%Y-%m-%dT%H:%M:%S"
+          info:
+            notes: Date that the application was received and entered into the city's permit application management system (IBMS)
+        - id: ISSUED_DATE
+          type: date
+          format: "%Y-%m-%dT%H:%M:%S"
+          info:
+            notes: Date that the permit was issued.
+        - id: COMPLETED_DATE
+          type: date
+          format: "%Y-%m-%dT%H:%M:%S"
+          info:
+            notes: Date work is complete and permit is cleared
+        - id: STATUS
+          type: text
+          info:
+            notes: Current status of application / permit        
