@@ -698,3 +698,7 @@ permanent-bicycle-counters:
   cycling_permanent_counts_locations_geojson:
     format: geojson
     url: https://opendata.toronto.ca/transportation.services/permanent-bike-counters/cycling_permanent_counts_locations.geojson
+merged-gtfs-ttc-routes-and-schedules:
+  Complete GTFS:
+    format: zip
+    url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/CompleteGTFS.zip
