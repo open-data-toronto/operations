@@ -144,6 +144,10 @@ shootings-firearm-discharges:
           type: float
           info:
             notes: Latitude coordinate
+        - id: EVENT_TYPE
+          type: text
+          info:
+            notes: Distinguishes Shooting Occurrences and Firearm Discharge Occurrences
         - id: "geometry"
           type: "text"
           info:

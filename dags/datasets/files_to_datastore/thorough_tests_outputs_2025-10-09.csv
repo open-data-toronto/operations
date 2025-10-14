@@ -1,0 +1,4 @@
+dag_id,test_create_success,test_data_loaded,test_no_update_success,test_update_success,timestamp
+ambulance-station-locations,True,True,True,True,2025-10-09 16:08:07.401976+00:00
+daily-shelter-overnight-service-occupancy-capacity,True,True,True,True,2025-10-09 16:08:07.401976+00:00
+police-boundaries,True,True,True,True,2025-10-09 16:08:07.401976+00:00
