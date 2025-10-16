@@ -1,0 +1,207 @@
+downsview-secondary-plan:
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Update Downsview
+  date_published: '2025-10-06 00:47:43.599698'
+  refresh_rate: Will not be Refreshed
+  dataset_category: Map
+  owner_division: City Planning
+  owner_section: Policy and Analysis 
+  owner_unit: Strategic Initiatives 
+  owner_email: Kate.Macmillan@toronto.ca
+  civic_issues: null
+  topics: 
+    - City government
+    - Locations and mapping
+    - Development and infrastructure
+  tags:
+  - name: planning
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/planning-development/planning-studies-initiatives/update-downsview/
+  excerpt: This dataset contains the future districts, major parks, major streets, and community recreation centre in the Downsview Secondary Plan Area. 
+  limitations: The dataset shows information about proposed and planned development in the Downsview Secondary Plan Area. At the time of this data's publication, it did not show any existing features. 
+  notes: |
+    The Update Downsview Study established a comprehensive planning framework for the Downsview area to help guide the development of resilient, sustainable and equitable complete communities over the next 30 years. Adopted by City Council in 2024, it includes the Downsview Secondary Plan, Community Development Plan, Urban Design Guidelines, Zoning By-law for Meanwhile Uses, and Master Environmental Servicing Plan.
+    
+    This dataset includes information about: 
+
+    * Downsview Districts - The boundaries of the 15 districts and the status of the district plans and associated development applications.
+
+    * Downsview Parks - The conceptual location of future parks in each district. 
+
+    * Downsview Major Streets and Green Spine - The future major streets that are part of the Downsview Major Streets Environmental Assessment. 
+
+    * Downsview Community Recreation Centre - The future Downsview Community Recreation Centre at the intersection of Keele Street and Sheppard Avenue West.
+    
+  resources:
+    Downsview Districts:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_Downsview_Districts/FeatureServer/0
+      attributes:
+      - source_name: Name
+        target_name: District Name
+        type: text
+        info:
+          notes: 'The 15 districts in Downsview, as per Map 7-5 in the Downsview Secondary Plan'
+      #- source_name: link_url
+      #  target_name: 
+      #  type: text
+      #  info:
+      #    notes: ''
+      - source_name: description
+        target_name: Population Phasing
+        type: text
+        info:
+          notes: 'The phase of planned re-development, as per Appendix 2 in the Downsview Secondary Plan'
+      - source_name: item_1
+        target_name: Hyperlink Text 1
+        type: text
+        info:
+          notes: The text that describes the link to a related webpage 
+      - source_name: item_1_url
+        target_name: Link 1
+        type: text
+        info:
+          notes: The link to a related webpage with more information about the district plan and associated development applications and approvals 
+      - source_name: item_2
+        target_name: Hyperlink Text 2
+        type: text
+        info:
+          notes: The text that describes the link to a second related webpage 
+      - source_name: item_2_url
+        target_name: Link 2
+        type: text
+        info:
+          notes: The link to a second related webpage with more information about the district plan and associated development applications and approvals 
+      #- source_name: park_text
+      #  target_name: 
+      #  type: text
+      #  info:
+      #    notes: ''
+      #- source_name: park_url
+      #  target_name: 
+      #  type: text
+      #  info:
+      #    notes: ''
+      - source_name: ITEM_3
+        target_name: Hyperlink Text 3
+        type: text
+        info:
+          notes: The text that describes the link to a third related webpage 
+      - source_name: ITEM_3_URL
+        target_name: Link 3
+        type: text
+        info:
+          notes: The link to a third related webpage with more information about the district plan and associated development applications and approvals 
+      - id: geometry
+        type: text
+        info:
+          notes: ''
+
+    Downsview Major Streets and Green Spine:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_Downsview_MajorStreets/FeatureServer/0
+      attributes:
+      - source_name: StreetName
+        target_name: Name
+        type:  text
+        info:
+          notes: The name of the future Major Street or Green Spine, as per Map 7-4 in the Downsview Secondary Plan 
+      - source_name: layer
+        target_name: Mobility Network Component
+        type:  text
+        info:
+          notes: 'The type of mobility network component: Major Street or Green Spine, as per Map 7-4 in the Downsview Secondary Plan'
+      - source_name: Details
+        target_name: Descriptive Text
+        type:  text
+        info:
+          notes: The text that appears in the pop-up textbox
+      - source_name: LinkText
+        target_name: Hyperlink Text
+        type:  text
+        info:
+          notes: The text that describes the link to a related webpage 
+      - source_name: LinkURL
+        target_name: Link
+        type:  text
+        info:
+          notes: The link to a related webpage with more information about the Major Streets or Green Spine 
+      - id: geometry
+        type: text
+        info:
+          notes: ''
+
+    Downsview Parks:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_Downsview_Parks/FeatureServer/0
+      attributes:
+      - source_name: TYPE
+        target_name: Park Type
+        type: text
+        info:
+          notes: 'The type of future park, as per Map 7-2 in the Downsview Secondary Plan'
+      - source_name: Label
+        target_name: Major Parks
+        type: text
+        info:
+          notes: 'Major parks that will be a minimum of 1.0 hectares, as per Map 7-2 in the Downsview Secondary Plan'
+      - source_name: Group_
+        target_name: District Name
+        type: text
+        info:
+          notes: 'The district where each park will be located, as per Map 7-5 in the Downsview Secondary Plan '
+      - source_name: DESC_TEXT
+        target_name: Descriptive Text
+        type: text
+        info:
+          notes: 'The text that appears in the pop-up textbox'
+      - source_name: PARK_TEXT
+        target_name: Hyperlink Text
+        type: text
+        info:
+          notes: 'The text that describes the link to a related webpage '
+      - source_name: PARK_URL
+        target_name: Link
+        type: text
+        info:
+          notes: 'The link to a related webpage with more information about the future parks'
+      - id: geometry
+        type: text
+        info:
+          notes: ''
+  
+    Downsview Community Recreation Centre:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_Downsview_Community_Recreation_Centre/FeatureServer/0
+      attributes:
+      - source_name: Name
+        target_name: Name
+        type: text
+        info:
+          notes: The current name of the future Downsview Community Recreation Centre 
+      - source_name: ADDRESS
+        target_name: Address
+        type: text
+        info:
+          notes: The current address of the future community recreation centre
+      - source_name: ASSET_URL
+        target_name: Link
+        type: text
+        info:
+          notes: The link to the related webpage with more information about the Downsview Community Recreation Centre
+      - source_name: ASSET_DESC
+        target_name: Descriptive Text
+        type: text
+        info:
+          notes: The text that appears in the pop-up textbox
+      - id: geometry
+        type: text
+        info:
+          notes: ''
+    
