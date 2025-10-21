@@ -1,7 +1,7 @@
 water-hydrants:
   jira_issue_id: DTSD-7763
   jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/216514
-  schedule: '15 15 * * 1'
+  schedule: '15 15 * * *'
   dag_owner_name: Mackenzie Nichols
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: 'Water Hydrants'
