@@ -28,27 +28,23 @@ secondary-plans:
   limitations: null
   notes: "Secondary Plans are more detailed local development policies to guide growth\r\nand change in a defined area of the City.\r\n\r\n"
   resources:
-    Secondary Plans Data 2017:
+    Secondary Plans Data:
       format: geojson
       agol: true
-      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CP_SECONDARY_PLAN/FeatureServer/0
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/44
       attributes:
-      - id: OBJECTID
-        type: int
-        info:
-          notes: ''
       - id: SECONDARY_PLAN_NUMBER
         type: text
         info:
-          notes: ''
+          notes: "Secondary plan's number"
       - id: SECONDARY_PLAN_NAME
         type: text
         info:
-          notes: ''
+          notes: "Secondary plan's name"
       - id: STATUS
         type: text
         info:
-          notes: ''
+          notes: 'Status, when available, for a secondary plan'
       - id: geometry
         type: text
         info:

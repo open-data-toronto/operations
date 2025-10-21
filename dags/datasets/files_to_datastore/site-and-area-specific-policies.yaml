@@ -45,40 +45,12 @@ site-and-area-specific-policies:
     Site and Area Specific Policies Data:
       format: geojson
       agol: true
-      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CP_SITE_AREA_SPEC_POLICIES//FeatureServer/0
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/46
       attributes:
-      - id: OBJECTID
-        type: int
-        info:
-          notes: ''
       - id: SASP_NO
         type: text
         info:
-          notes: ''
-      - id: OPA_NO
-        type: text
-        info:
-          notes: ''
-      - id: MODIFICATION_NO
-        type: text
-        info:
-          notes: ''
-      - id: APPLICATION_NO
-        type: text
-        info:
-          notes: ''
-      - id: LOCATION
-        type: text
-        info:
-          notes: ''
-      - id: EFFECTIVE_YEAR
-        type: text
-        info:
-          notes: ''
-      - id: NOTES
-        type: text
-        info:
-          notes: ''
+          notes: 'Site and area specific policy number'
       - id: geometry
         type: text
         info:
