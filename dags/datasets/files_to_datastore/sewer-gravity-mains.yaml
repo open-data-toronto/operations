@@ -1,7 +1,7 @@
 sewer-gravity-mains:
   jira_issue_id: DIA-62
   jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/216513
-  schedule: '21 20 * * *'
+  schedule: '20 16 * * *'
   dag_owner_name: Mackenzie Nichols
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: 'Sewer Gravity Mains'
