@@ -32,21 +32,17 @@ immunization-coverage-for-students:
     \ Immunization of School Pupils Act (ISPA): measles, mumps and rubella (MMR),\
     \ and diphtheria, tetanus and polio (DTP).\r\n"
   limitations: null
-  notes: "In Ontario, the ISPA requires children who attend elementary and secondary\
-    \ school to be vaccinated or have a valid exemption provided to their local public\
-    \ health unit. As a result, each year Toronto Public Health staff work with schools\
-    \ located in the City of Toronto to assess student immunization records to ensure\
-    \ that all students are a) up-to-date with their required immunization and/or\
-    \ b) a valid exemption for philosophical or medical reasons is provided, in accordance\
-    \ with the ISPA.  \r\n\r\nThis data represents Immunization Coverage Rates and\
-    \ exemptions for School pupils (7-17 year olds) in Toronto for the 2017/2018 and\
-    \ 2018/2019 school years.\r\n\r\n \r\n\r\nFor more info, please [visit here.](https://www.toronto.ca/city-government/data-research-maps/research-reports/public-health-significant-reports/toronto-schools-immunization-coverage-rates/)\r\
-    \n"
+  notes: |
+    Ontario's Immunization of School Pupils Act (ISPA) requires that students who attend elementary and secondary school be vaccinated against nine designated diseases or have a valid medical, religious or conscience exemption provided to their local public health unit to avoid suspension from school. This includes vaccinations for measles, mumps, rubella, diphtheria, tetanus, polio, pertussis (whooping cough), meningococcal and varicella (chicken pox). As a result, each year Toronto Public Health staff work with schools located in the City of Toronto to assess student immunization records to ensure that all students are a) up-to-date with their required immunization and/or b) a valid exemption for philosophical or medical reasons is provided, in accordance with the ISPA. Toronto Public Health also offers hepatitis B, human papillomavirus (HPV) and meningococcal vaccines to grade 7 and 8 students at school clinics through the School Immunization Program (SIP).
+
+    This data represents Immunization Coverage Rates and exemptions for School pupils (7-17 year olds) in Toronto for the 2017/2018 and 2018/2019 school years. For the 2023/2024 school year, this data represents the immunization coverage rates and exemptions for ISPA vaccines for school pupils in grade 2 and grade 12 and the immunization coverage rates for SIP vaccines for school pupils in grade 8 and grades 10-12. For the 2024/2025 school year, this data represents the immunization coverage rates and exemptions for ISPA vaccine for school pupils in grade 3 and grade 11 and the immunization coverage rates for SIP vaccines for school pupils in grade 8 and grades 9-12. 
+
+    For more info, please [visit here](https://www.toronto.ca/city-government/data-research-maps/research-reports/public-health-significant-reports/toronto-schools-immunization-coverage-rates/).
   resources:
     ISPA Vaccination Rates by School for Grade 2 Students 2023 - 2024:
       format: xlsx
-      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/ISPA Vaccination Rates by School for Grade 2 Students 2023 - 2024.xlsx"
-      sheet: ISPA Grade 2 2023-2024
+      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/2023-2024 School Year ISPA TPH Website DPTaP and MMR - Grade 2 Students.xlsx"
+      sheet: DPTaP MMR 2016
       attributes:
       - id: School Name
         type: text
@@ -74,8 +70,8 @@ immunization-coverage-for-students:
           notes: "Students with valid exemptions for philosophical/religious/administrative reasons for measles, mumps and rubella vaccine for the given school year. It is expressed as a proportion of students with valid exemptions for measles, mumps and rubella amongst all those enrolled in the relevant age group for the given school year."
     ISPA Vaccination Rates by School for Grade 12 Students 2023 - 2024:
       format: xlsx
-      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/ISPA Vaccination Rates by School for Grade 12 Students 2023 - 2024.xlsx"
-      sheet: ISPA Grade 2 2023-2024
+      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/2023-2024 School Year ISPA TPH Website DPTaP and MMR - Grade 12 Students.xlsx"
+      sheet: DPTaP MMR 2006
       attributes:
       - id: School Name
         type: text
@@ -103,7 +99,7 @@ immunization-coverage-for-students:
           notes: "Students with valid exemptions for philosophical/religious/administrative reasons for measles, mumps and rubella vaccine for the given school year. It is expressed as a proportion of students with valid exemptions for measles, mumps and rubella amongst all those enrolled in the relevant age group for the given school year."
     SIP Vaccination Rates by School for Grade 8 Students 2023-2024:
       format: xlsx
-      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/SIP Vaccination Rates by School for Grade 8 Students 2023-2024.xlsx"
+      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/SIP Vaccination Rates by School for Grade 8 Students 2023-2024 - archived.xlsx"
       sheet: SIP Grade 8 2023-2024
       attributes:
       - id: School Name
@@ -128,7 +124,7 @@ immunization-coverage-for-students:
           notes: "Meningococcal disease coverage rate is expressed as a proportion of students who were assessed as being complete for age for meningococcal disease amongst all those enrolled in the relevant age group for the given school year."
     SIP Vaccination Rates by School for Grade 10 - 12 Students  2023-2024:
       format: xlsx
-      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/SIP Vaccination Rates by School for Grade 10 - 12 Students  2023-2024.xlsx"
+      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/SIP Vaccination Rates by School for Grade 10 - 12 Students  2023-2024 - archived.xlsx"
       sheet: SIP Grades 10-12 2023-2024
       attributes:
       - id: School Name
@@ -151,3 +147,113 @@ immunization-coverage-for-students:
         type: float
         info:
           notes: "Meningococcal disease coverage rate is expressed as a proportion of students who were assessed as being complete for age for meningococcal disease amongst all those enrolled in the relevant age group for the given school year."
+
+    SIP Vaccination Rates by School for Grade 8 Students 2024-2025:
+      format: xlsx
+      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/SIP Vaccination Coverage by School for Grade 8 Students - 2024-2025 School Year.xlsx"
+      sheet: SIP 2011
+      attributes:
+      - id: School Name
+        type: text
+        info:
+          notes: "Identifies the school in one of the four publically funded boards included in this report (Toronto District School Board, Toronto Catholic District School Board, Conseil scholaire Viamonde, and Conseil scolaire catholique MonAvenir)."
+      - id: Enrolled
+        type: int
+        info:
+          notes: "Number of students enrolled in each school for the given school year."
+      - id: Hepatitis B Coverage (%)
+        type: float
+        info:
+          notes: "Hepatitis B coverage rate is expressed as a proportion of students who were assessed as being complete for age for hepatitis B amongst all those enrolled in the relevant age group for the given school year."
+      - id: HPV Coverage (%)
+        type: float
+        info:
+          notes: "Human papillomavirus (HPV) coverage rate is expressed as a proportion of students who were assessed as being complete for age for HPV amongst all those enrolled in the relevant age group for the given school year."
+      - id: Meningococcal Disease Coverage (%)
+        type: float
+        info:
+          notes: "Meningococcal disease coverage rate is expressed as a proportion of students who were assessed as being complete for age for meningococcal disease amongst all those enrolled in the relevant age group for the given school year."
+    SIP Vaccination Rates by School for Grade 9 - 12 Students 2024-2025:
+      format: xlsx
+      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/SIP Vaccination Coverage by School for Grade 9-12 Students - 2024-2025 School Year.xlsx"
+      sheet: SIP 2007 to 2010
+      attributes:
+      - id: School Name
+        type: text
+        info:
+          notes: "Identifies the school in one of the four publically funded boards included in this report (Toronto District School Board, Toronto Catholic District School Board, Conseil scholaire Viamonde, and Conseil scolaire catholique MonAvenir)."
+      - id: Enrolled
+        type: int
+        info:
+          notes: "Number of students enrolled in each school for the given school year."
+      - id: Hepatitis B Coverage (%)
+        type: float
+        info:
+          notes: "Hepatitis B coverage rate is expressed as a proportion of students who were assessed as being complete for age for hepatitis B amongst all those enrolled in the relevant age group for the given school year."
+      - id: HPV Coverage (%)
+        type: float
+        info:
+          notes: "Human papillomavirus (HPV) coverage rate is expressed as a proportion of students who were assessed as being complete for age for HPV amongst all those enrolled in the relevant age group for the given school year."
+      - id: Meningococcal Disease Coverage (%)
+        type: float
+        info:
+          notes: "Meningococcal disease coverage rate is expressed as a proportion of students who were assessed as being complete for age for meningococcal disease amongst all those enrolled in the relevant age group for the given school year."
+
+    ISPA Vaccination Rates by School for Grade 3 Students 2024 - 2025:
+      format: xlsx
+      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/ISPA Vaccination Coverage by School for Grade 3 Students - 2024-2025 School Year.xlsx"
+      sheet: DPTaP MMR 2016
+      attributes:
+      - id: School Name
+        type: text
+        info:
+          notes: "Identifies the school in one of the four publically funded boards included in this report (Toronto District School Board, Toronto Catholic District School Board, Conseil scholaire Viamonde, and Conseil scolaire catholique MonAvenir)."
+      - id: Enrolled
+        type: int
+        info:
+          notes: "Number of students enrolled in each school for the given school year."
+      - id: Diphtheria, Pertussis, Tetanus and Polio Coverage (%)
+        type: float
+        info:
+          notes: "Diphtheria, Pertussis, Tetanus, Polio coverage rate is expressed as a proportion of students who were assessed as being complete for age for diphtheria, pertussis, tetanus and polio antigens amongst all those enrolled in the relevant age group for the given school year."
+      - id: Diphtheria, Pertussis, Tetanus and Polio Exemption (%)
+        type: float
+        info:
+          notes: "Students with valid exemptions for philosophical/religious/administrative reasons for diphtheria, pertussis, tetanus and polio antigens for the given school year. It is expressed as a proportion of students with valid exemptions for diphtheria, pertussis, tetanus and polio amongst all those enrolled in the relevant age group for the given school year."
+      - id: Measles, Mumps, Rubella Coverage (%)
+        type: float
+        info:
+          notes: "MMR coverage rate is expressed as a proportion of students who were assessed as being complete for age for measles, mumps and rubella vaccine amongst all those enrolled in the relevant age group for the given school year."
+      - id: Measles, Mumps, Rubella Exemption (%)
+        type: float
+        info:
+          notes: "Students with valid exemptions for philosophical/religious/administrative reasons for measles, mumps and rubella vaccine for the given school year. It is expressed as a proportion of students with valid exemptions for measles, mumps and rubella amongst all those enrolled in the relevant age group for the given school year."
+    ISPA Vaccination Rates by School for Grade 11 Students 2024 - 2025:
+      format: xlsx
+      url: "https://opendata.toronto.ca/toronto.public.health/immunization-coverage-for-students/ISPA Vaccination Coverage by School for Grade 11 Students - 2024-2025 School Year.xlsx"
+      sheet: DPTaP MMR 2008
+      attributes:
+      - id: School Name
+        type: text
+        info:
+          notes: "Identifies the school in one of the four publically funded boards included in this report (Toronto District School Board, Toronto Catholic District School Board, Conseil scholaire Viamonde, and Conseil scolaire catholique MonAvenir)."
+      - id: Enrolled
+        type: int
+        info:
+          notes: "Number of students enrolled in each school for the given school year."
+      - id: Diphtheria, Pertussis, Tetanus and Polio Coverage (%)
+        type: float
+        info:
+          notes: "Diphtheria, Pertussis, Tetanus, Polio coverage rate is expressed as a proportion of students who were assessed as being complete for age for diphtheria, pertussis, tetanus and polio antigens amongst all those enrolled in the relevant age group for the given school year."
+      - id: Diphtheria, Pertussis, Tetanus and Polio Exemption (%)
+        type: float
+        info:
+          notes: "Students with valid exemptions for philosophical/religious/administrative reasons for diphtheria, pertussis, tetanus and polio antigens for the given school year. It is expressed as a proportion of students with valid exemptions for diphtheria, pertussis, tetanus and polio amongst all those enrolled in the relevant age group for the given school year."
+      - id: Measles, Mumps, Rubella Coverage (%)
+        type: float
+        info:
+          notes: "MMR coverage rate is expressed as a proportion of students who were assessed as being complete for age for measles, mumps and rubella vaccine amongst all those enrolled in the relevant age group for the given school year."
+      - id: Measles, Mumps, Rubella Exemption (%)
+        type: float
+        info:
+          notes: "Students with valid exemptions for philosophical/religious/administrative reasons for measles, mumps and rubella vaccine for the given school year. It is expressed as a proportion of students with valid exemptions for measles, mumps and rubella amongst all those enrolled in the relevant age group for the given school year."
