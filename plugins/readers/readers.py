@@ -48,7 +48,7 @@ class Reader(ABC):
             "float": misc_utils.clean_float,
             "timestamp": misc_utils.clean_date_format,
             "date": misc_utils.clean_date_format,
-            "json": json.loads
+            "json": misc_utils.clean_json,
         } 
 
         # where the data will be saved

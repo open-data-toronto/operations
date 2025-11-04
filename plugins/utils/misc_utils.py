@@ -61,6 +61,12 @@ def csv_to_generator(filepath, fieldnames, encoding):
             yield(row)
 
 
+def clean_json(input):
+    if isinstance(input, str):
+        return json.loads(input)
+    elif isinstance(input, dict) or isinstance(input, list):
+        return input
+
 def clean_string(input):
     '''converts data to fit in CKAN datastore text column'''
     if input is None:

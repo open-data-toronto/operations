@@ -1,0 +1,83 @@
+traffic-and-parking-by-law-schedules:
+  jira_issue_id: DIA-648
+  schedule: '0 2 * * 1'
+  dag_owner_name: Mackenzie.Nichols4
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Traffic and Parking By-law Schedules
+  date_published: '2019-07-23 13:37:16.207118'
+  dataset_category: Table
+  refresh_rate: Quarterly
+  owner_division: Transpotation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: 
+    - Mobility
+  topics: null
+  tags:
+  - name: law
+    vocabulary_id: null
+  information_url: null
+  excerpt: City of Toronto Municipal Code Chapter 950, Schedules, Traffic and Parking By-law Data
+  limitations: null
+  notes: |
+    Traffic and parking by-law data from 44 Schedules to City of Toronto Municipal Code Chapter 950, Traffic and Parking, including "No Parking", "No Stopping", "No Standing", "Parking for Restricted Periods", "Reserved Lanes for Designated Classes of Vehicles", "Prohibited Turns", "Speed Limits", etc.
+
+  resources: 
+    Traffic and parking by-law schedules data:
+      format: json
+      is_geojson: false
+      jsonpath: $.value
+      url: https://opendata.toronto.ca/DummyDatasets/file.json ## TODO
+      attributes:
+        - id: byLawDetailFields
+          type: "json"
+          info:
+            notes: ""
+        - id: description
+          type: "text"
+          info:
+            notes: ""
+        - id: displayName
+          type: "text"
+          info:
+            notes: ""
+        - id: latestRegulationActionByLaw
+          type: "text"
+          info:
+            notes: ""
+        - id: latestRegulationActionByStatus
+          type: "text"
+          info:
+            notes: ""
+        - id: latestRegulationActionCouncilDate
+          type: "date"
+          format: "%Y-%m-%d"
+          info:
+            notes: ""
+        - id: latestRegulationActionEffectiveDate
+          type: "date"
+          format: "%Y-%m-%d"
+          info:
+            notes: ""
+        - id: parsedTableData
+          type: "json"
+          info:
+            notes: ""
+        - id: regulationActions
+          type: "json"
+          info:
+            notes: ""
+        - id: regulationActionsSummary
+          type: "text"
+          info:
+            notes: ""
+        - id: scheduleName
+          type: "text"
+          info:
+            notes: ""
+        - id: tableData
+          type: "json"
+          info:
+            notes: ""
+                
