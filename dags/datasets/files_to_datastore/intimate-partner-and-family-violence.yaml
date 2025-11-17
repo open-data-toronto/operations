@@ -1,0 +1,151 @@
+intimate-partner-and-family-violence:
+  jira_issue_id: DTSD-1707
+  jira_issue_url: https://toronto.atlassian.net/rest/api/3/issue/158889
+  schedule: '@once'
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Intimate Partner and Family Violence
+  date_published: '2025-11-17 03:11:39.512288'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Toronto Police Services
+  owner_section: null
+  owner_unit: Analytics & Innovation
+  owner_email: Analytics.Innovation@torontopolice.on.ca
+  civic_issues: null
+  topics:
+    - Public safety
+  tags:
+  - name: domestic
+    vocabulary_id: null
+  - name: abuse
+    vocabulary_id: null
+  information_url: https://data.torontopolice.on.ca/pages/intimate-partner-and-family-violence
+  excerpt: Intimate Partner and Family Violence occurrences by reported year.
+  limitations: |
+    This data only includes confirmed Intimate Partner Violence crimes. This data does not include occurrences that have been deemed unfounded. The definition of unfounded according to Statistics Canada is: “It has been determined through police investigation that the offence reported did not occur, nor was it attempted” (Statistics Canada, 2020).^**^
+
+    The dataset is intended to provide communities with information regarding public safety and awareness. The location of Intimate Partner Violence occurrences have been grouped to the fields in the dataset to protect the privacy of the parties involved in the occurrence. 
+
+    By accessing these datasets, the user agrees to full acknowledgement of the [Open Government Licence - Ontario](https://www.ontario.ca/page/open-government-licence-ontario)
+
+    In accordance with the Municipal Freedom of Information and Protection of Privacy Act, the Toronto Police Service has taken the necessary measures to protect the privacy of individuals involved in the reported occurrences. No personal information related to any of the parties involved in the occurrence will be released as open data.
+
+    ** Statistics Canada. 2020. Uniform Crime Reporting Manual. Surveys and Statistical Programs. Canadian Centre for Justice Statistics.
+
+    Note: Fields have been included for both the old 140 City of Toronto Neighbourhoods structure as well as the new 158 City of Toronto Neighbourhoods structure
+  
+  notes: |
+    This data set includes all verified Intimate Partner Violence occurrences investigated by Toronto Police Service by reported date since 2014. The Intimate Partner Violence categories include Family, Intimate Partner, and Unclassified. Count is an aggregated count of Intimate Partner Violence by fields listed in the dataset.
+
+    [Intimate Partner Violence Dashboard](https://app.fabric.microsoft.com/view?r=eyJrIjoiZDJmMWY2MDEtNTEwYi00Yzc1LWFkNGUtMmY2NDlkMmEzZmJmIiwidCI6Ijg1MjljMjI1LWFjNDMtNDc0Yy04ZmI0LTBmNDA5NWFlOGQ1ZCJ9)
+
+    [Download Documentation](https://torontops.maps.arcgis.com/sharing/rest/content/items/c0b17f1888544078bf650f3b8b04d35d/data)
+
+    Definitions:
+
+    **Family**
+
+    Familial relationships such as parents, siblings, or any other family members.
+
+    **Intimate Partner**
+
+    The TPS IPV Procedure defines an Intimate Relationship as "marriage, domestic partnership, engagement, casual or serious romantic involvement, and dating, whether in a current or former relationship. Intimate Partner Violence can occur between persons of any sex, sexual orientation, gender, gender identity, or gender expression, and it can occur in any type of intimate relationship including monogamous, non- committed, and relationships involving more than two partners.
+
+    **Intimate Relationship - Dating**
+
+    Intimate Relationship - Dating means marriage, domestic partnership, engagement, casual or serious romantic involvement, and dating, whether in a current or former relationship. Intimate Partner Violence can occur between persons of any sex, sexual orientation, gender, gender identity, or gender expression, and it can occur in any type of intimate relationship including monogamous, non-committed, and relationships involving more than two partners.
+
+    **Intimate Partner Violence**
+
+    Intimate Partner Violence means any physical, sexual or psychological harm caused, or attempted, between persons involved in an intimate relationship including: 
+
+    * assault;
+
+    * murder;
+
+    * sexual assault;
+
+    * threatening;
+
+    * harassment;
+
+    * intimidation;
+
+    * unlawful interference with personal liberty;
+
+    * any other criminal offence;
+
+    * offences under other statutes, such as the Family Law Act, Children's Law Reform Act, etc.;
+
+    but does not include child abuse investigations.
+
+    **Unclassified**
+
+    The relationship between the victim and the accused in the occurrence is not identified or indicated but the investigating officers have identified this as an intimate partner related incident.
+
+  resources: 
+    Intimate Partner and Family Violence:
+      agol: True
+      format: json
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Intimate_Partner_and_Family_Violence_open_data/FeatureServer/0/
+      attributes:
+        - id: INDEX_
+          type: "text"
+          info:
+            notes: TPS Unique Identifier
+        - id: REPORT_YEAR
+          type: "text"
+          info:
+            notes: Year Occurrence was Reported
+        - id: REPORT_MONTH
+          type: "text"
+          info:
+            notes: Month Occurrence was Reported
+        - id: REPORT_DOW
+          type: "text"
+          info:
+            notes: Day of the Week Offence was Reported
+        - id: HISTORICAL
+          type: "text"
+          info:
+            notes: Calculated flag defining Historical (ReportingDelayDays >= 365) and Non-Historical (ReportingDelayDays < 365) incidents
+        - id: FAMILY_VIOLENCE_FLAG
+          type: "text"
+          info:
+            notes: Indicator to presence and nature of Family Violence
+        - id: FAMILY_VIOLENCE_RELATION
+          type: "text"
+          info:
+            notes: Identifies relation of parties involved in family violence incident
+        - id: DIVISION
+          type: "text"
+          info:
+            notes: Police Division where of Occurrence
+        - id: PREMISES_TYPE
+          type: "text"
+          info:
+            notes: Premises Type of Offence
+        - id: HOOD_158
+          type: "text"
+          info:
+            notes: Identifier of Neighbourhood using City of Toronto's new 158 neighbourhood structure 
+        - id: NEIGHBOURHOOD_158
+          type: "text"
+          info:
+            notes: Name of Neighbourhood using City of Toronto's new 158 neighbourhood structure 
+        - id: HOOD_140
+          type: "text"
+          info:
+            notes: Identifier of Neighbourhood using City of Toronto's old 140 neighbourhood structure 
+        - id: NEIGHBOURHOOD_140
+          type: "text"
+          info:
+            notes: Name of Neighbourhood using City of Toronto's old 140 neighbourhood structure 
+        - id: COUNT_
+          type: "int"
+          info:
+            notes: Aggregated count of Intimate Partner Violence data that is grouped by all preceding fields
+            
+        
+
