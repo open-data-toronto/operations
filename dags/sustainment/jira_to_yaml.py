@@ -34,9 +34,8 @@ CKAN = CKAN_CREDS["prod"]["address"]
 
 # jira api call default return 50 results,
 # manually expand to 100 to expand active jira ticket pool
-JIRA_URL = (
-    "https://toronto.atlassian.net/rest/api/3/search?jql=type=11468&maxResults=100"
-)
+JIRA_URL = "https://toronto.atlassian.net/rest/api/3/issue/"
+
 JIRA_API_KEY = Variable.get("jira_apikey")
 
 # headers for authenticate jira api calls
@@ -55,9 +54,9 @@ mapping = {
     "tags": "customfield_12249",
     "information_url": "customfield_11861",
     "excerpt": "customfield_12244",
-    "limitations": "customfield_12252",
-    "data_url": "customfield_12279",
-    "collection_method": "customfield_12647",
+    "limitations": "customfield_12252", # TODO - FORMAT TEXT HERE
+    "data_url": "customfield_12279",    # TODO - ERROR HANDLING
+    "collection_method": "customfield_12647", #TODO - FORMAT TEXT HERE
 }
 
 YAML_METADATA = {  # DAG info
@@ -91,14 +90,14 @@ PACKAGE_METADATA = [
 # init DAG
 default_args = airflow_utils.get_default_args(
     {
-        "owner": "Yanan",
+        "owner": "Mac",
         "depends_on_past": False,
         "email_on_failure": False,
         "email_on_retry": False,
         "retries": 1,
         "retry_delay": 3,
         "on_failure_callback": task_failure_slack_alert,
-        "start_date": datetime(2023, 2, 6, 0, 0, 0),
+        "start_date": datetime(2025, 2, 6, 0, 0, 0),
         "tags": ["sustainment"],
     }
 )
@@ -110,6 +109,7 @@ with DAG(
     catchup=False,
 ) as dag:
     # write some DAG-level documentation to be visible on the Airflow UI
+    # TODO - fix this summary of how the DAG works
     dag.doc_md = """
     ### Summary
     This DAG creates a yaml config file for CoT OD Airflow ETL from an OD Jira Ticket,
@@ -141,6 +141,9 @@ with DAG(
 
     def get_jira_ticket_id(**kwargs):
         # get jira ticket ids from airflow dag configuration
+        # TODO:
+        #   add input here for existing packages
+        #   add additional detail here to read a schema from an existing URL
         if "jira_ticket_id" in kwargs["dag_run"].conf.keys():
             jira_ticket_id = kwargs["dag_run"].conf["jira_ticket_id"]
 
@@ -153,19 +156,22 @@ with DAG(
 
     def validate_jira_ticket(**kwargs):
         # make sure input jira ticket id exists
+
+        output = []
+
         input_ticket_ids = kwargs.pop("ti").xcom_pull(task_ids="get_jira_ticket_id")[
             "jira_ticket_id"
         ]
 
-        issues = json.loads(requests.get(JIRA_URL, headers=headers).content)["issues"]
-        ticket_pool = [issue["key"] for issue in issues]
-        logging.info(f"Jira Ticket Pool: {json.dumps(ticket_pool)}")
+        for ticket_id in input_ticket_ids:
+            resp = requests.get(JIRA_URL + ticket_id, headers=headers)
+            assert resp.status_code == 200, f"Failed to get {ticket_id}: {json.loads(resp.text)['errorMessages']}"
+            output.append({
+                "jira_ticket_id": ticket_id,
+                "jira_ticket_content": json.loads(resp.text)
+            })
 
-        for ticket in input_ticket_ids:
-            if ticket not in ticket_pool:
-                message = f"Jira Ticket {ticket} is not valid. Please double check."
-                raise Exception(message)
-        return ticket_pool
+        return output
 
     # Scrape attributes from GCC managed ArcGIS Online Endpoint, city arcgis only
     def scrape_content_from_arcgis(url):
@@ -385,7 +391,7 @@ with DAG(
             ]
             if fields[mapping["limitations"]]
             else None,
-            "notes": fields["description"]["content"][0]["content"][0]["text"]
+            "notes": fields["description"]["content"][0]["content"][0]["text"] # TODO: FORMAT TEXT HERE
             if fields["description"]
             else None,
             "collection_method": fields[mapping["collection_method"]]["content"][0]["content"][0]["text"]
@@ -411,7 +417,11 @@ with DAG(
             raise Exception(message)
         return {"filename": filename}
 
-    def process_ticket(jira_issue_id):
+    def process_ticket(jira_issue_id): 
+        # TODO
+        # consider removing status transition
+        # create YAML, run DAG, comment on jira issue w success or failure
+
         # Create a mapping between jira issue transition name and id
         jira_issue_transitions_mapping = {
             "In Progress": "11",
@@ -465,55 +475,53 @@ with DAG(
     def get_all_jira_issues(**kwargs):
         """Generate all yamls for "Publish New Open Dataset Page" Jira issues"""
         ti = kwargs.pop("ti")
-        input_ticket_ids = ti.xcom_pull(task_ids="get_jira_ticket_id")["jira_ticket_id"]
-        logging.info(f"Input Jira Ticket Ids: {input_ticket_ids}")
+        tickets = ti.xcom_pull(task_ids="validate_jira_ticket")
 
         # get jira issues and request type
-        jira_issue_pool = ti.xcom_pull(task_ids="validate_jira_ticket")
         output_list = {}
 
-        for jira_issue_id in jira_issue_pool:
-            if jira_issue_id in input_ticket_ids:
-                # get issue content
-                url = "https://toronto.atlassian.net/rest/api/3/issue/" + jira_issue_id
+        for ticket in tickets:
+            # get issue content
+            print(ticket)
+            jira_ticket_id = ticket["jira_ticket_id"]
+            issue = ticket["jira_ticket_content"]
+            
+            request_type = issue["fields"]["customfield_10502"]["requestType"][
+                "name"
+            ]
+            logging.info(
+                f"Jira Ticket Id: {jira_ticket_id} has Request Type: '{request_type}'"
+            )
 
-                issue = json.loads(requests.get(url, headers=headers).content)
-                request_type = issue["fields"]["customfield_10502"]["requestType"][
-                    "name"
-                ]
-                logging.info(
-                    f"Jira Ticket Id: {jira_issue_id} and Request Type: {request_type}"
+            if request_type == "I’m ready to publish a new dataset":
+                issue_content = grab_issue_content(issue)
+                filename = "".join(list(issue_content.keys())) + ".yaml"
+                # write data to yaml file
+                write_to_yaml(issue_content, filename)
+                # process current ticket
+                # process_ticket(issue["key"]) #TODO: refactor this
+                output_list[issue["key"]] = (
+                    "Publish Dataset :done_green:" + filename
                 )
 
-                if request_type == "Publish New Open Dataset Page":
-                    issue_content = grab_issue_content(issue)
-                    filename = "".join(list(issue_content.keys())) + ".yaml"
-                    # write data to yaml file
-                    write_to_yaml(issue_content, filename)
-                    # process current ticket
-                    process_ticket(issue["key"])
-                    output_list[issue["key"]] = (
-                        "Publish Dataset :done_green:" + filename
-                    )
-                if request_type == "Update Existing Open Dataset Page":
-                    package_name = (
-                        issue["fields"]["summary"].split("/dataset/")[1].strip("//")
-                    )
-                    logging.info(package_name)
-                    ckan_url = CKAN + "api/3/action/package_show?id=" + package_name
+            if request_type == "I’d like to update an existing dataset or page":
+                package_name = (
+                    issue["fields"]["summary"].split("/dataset/")[1].strip("//")
+                )
+                logging.info(package_name)
+                ckan_url = CKAN + "api/3/action/package_show?id=" + package_name
 
-                    # grab metadata
-                    metadata = metadata_generator(
-                        ckan_url, YAML_METADATA, PACKAGE_METADATA
-                    )
-                    filename = package_name + ".yaml"
-                    # write data to yaml file
-                    write_to_yaml(metadata, filename)
-                    # process current ticket
-                    process_ticket(issue["key"])
-                    output_list[issue["key"]] = "Update Dataset :done_green:" + filename
-            else:
-                continue
+                # grab metadata
+                metadata = metadata_generator(
+                    ckan_url, YAML_METADATA, PACKAGE_METADATA
+                )
+                filename = package_name + ".yaml"
+                # write data to yaml file
+                write_to_yaml(metadata, filename)
+                # process current ticket
+                # process_ticket(issue["key"]) #TODO: refactor this
+                output_list[issue["key"]] = "Update Dataset :done_green:" + filename
+        
 
         return {"generated-yaml-list": output_list}
 
