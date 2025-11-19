@@ -7,6 +7,7 @@
 """
 
 import requests
+import urllib.parse
 import json
 import logging
 import yaml
@@ -105,7 +106,7 @@ default_args = airflow_utils.get_default_args(
 with DAG(
     "jira_to_yaml",
     default_args=default_args,
-    schedule_interval="@once",
+    schedule_interval="35 20 * * 1-5",
     catchup=False,
 ) as dag:
     # write some DAG-level documentation to be visible on the Airflow UI
@@ -125,11 +126,11 @@ with DAG(
 
     - Please make sure AUTHENTICATED before sending Jira API calls.
 
-    - For "Publish New Open Dataset Page" request, generate a yaml file based on
+    - For "Publish New" requests, generate a yaml file based on
     Jira Ticket Input, if agol endpoint or data dictionary attachment provided,
     attributes section will also be generated.
 
-    - For "Update Existing Open Dataset Page" request, generate a yaml based on
+    - For "Update" requesta, generate a yaml based on
     existing package's metadata.
 
     - Please note currently dag can only generate attributes based on Data Dictionary
@@ -139,36 +140,22 @@ with DAG(
     jira-to-yaml automation inquiries should go to Yanan.Zhang@toronto.ca
     """
 
-    def get_jira_ticket_id(**kwargs):
-        # get jira ticket ids from airflow dag configuration
-        # TODO:
-        #   add input here for existing packages
-        #   add additional detail here to read a schema from an existing URL
-        if "jira_ticket_id" in kwargs["dag_run"].conf.keys():
-            jira_ticket_id = kwargs["dag_run"].conf["jira_ticket_id"]
-
-            assert isinstance(jira_ticket_id, list), (
-                "Input 'jira_ticket_ids' object needs to be a list of "
-                + "jira tickets you want to run"
-            )
-
-        return {"jira_ticket_id": jira_ticket_id}
-
-    def validate_jira_ticket(**kwargs):
-        # make sure input jira ticket id exists
-
+    def get_jira_issues(**kwargs):
+        # get jira ticket ids from active jira tickets
         output = []
+        
+        # customer request types taken from airflow variables
+        raw_request_types = Variable.get("jira_intake_customer_request_types")
+        jira_url = f'https://toronto.atlassian.net/rest/api/3/search/jql?jql=%22Customer%20Request%20Type%22%20in%20({urllib.parse.quote(raw_request_types)})%20AND%20status%20%3D%20"In%20Development"%20&fields=*all&expand=names'
 
-        input_ticket_ids = kwargs.pop("ti").xcom_pull(task_ids="get_jira_ticket_id")[
-            "jira_ticket_id"
-        ]
+        resp = requests.get(jira_url, headers=headers)
 
-        for ticket_id in input_ticket_ids:
-            resp = requests.get(JIRA_URL + ticket_id, headers=headers)
-            assert resp.status_code == 200, f"Failed to get {ticket_id}: {json.loads(resp.text)['errorMessages']}"
+        assert resp.status_code == 200, f"Failed to get {ticket_id}: {json.loads(resp.text)['errorMessages']}"
+        tickets = json.loads(resp.text)["issues"]
+        for ticket in tickets:
             output.append({
-                "jira_ticket_id": ticket_id,
-                "jira_ticket_content": json.loads(resp.text)
+                "jira_ticket_id": ticket["key"],
+                "jira_ticket_content": ticket,
             })
 
         return output
@@ -286,6 +273,7 @@ with DAG(
         fields = issue["fields"]
 
         # location where data stored, could be an AGOL or NAS endpoint
+        # TODO: actually read schema from this link (if its just a link) into resources section of YAML
         data_url = None
         if fields[mapping["data_url"]]:
             if len(fields[mapping["data_url"]]["content"]) > 0:
@@ -472,10 +460,10 @@ with DAG(
         metadata = {ckan_metadata_content["name"]: yaml_metadata}
         return metadata
 
-    def get_all_jira_issues(**kwargs):
+    def make_yaml_configs(**kwargs):
         """Generate all yamls for "Publish New Open Dataset Page" Jira issues"""
         ti = kwargs.pop("ti")
-        tickets = ti.xcom_pull(task_ids="validate_jira_ticket")
+        tickets = ti.xcom_pull(task_ids="get_jira_issues")
 
         # get jira issues and request type
         output_list = {}
@@ -525,35 +513,28 @@ with DAG(
 
         return {"generated-yaml-list": output_list}
 
-    get_jira_ticket_id = PythonOperator(
-        task_id="get_jira_ticket_id",
-        python_callable=get_jira_ticket_id,
+    get_jira_issues = PythonOperator(
+        task_id="get_jira_issues",
+        python_callable=get_jira_issues,
         provide_context=True,
     )
 
-    validate_jira_ticket = PythonOperator(
-        task_id="validate_jira_ticket",
-        python_callable=validate_jira_ticket,
-        provide_context=True,
-    )
-
-    get_all_jira_issues = PythonOperator(
-        task_id="get_all_jira_issues",
-        python_callable=get_all_jira_issues,
+    make_yaml_configs = PythonOperator(
+        task_id="make_yaml_configs",
+        python_callable=make_yaml_configs,
         provide_context=True,
     )
 
     slack_notification = GenericSlackOperator(
         task_id="slack_notification",
         message_header=(" Task Succeeded, Successfully Generated :yaml: !"),
-        message_content_task_id="get_all_jira_issues",
+        message_content_task_id="make_yaml_configs",
         message_content_task_key="generated-yaml-list",
         message_body="",
     )
 
     (
-        get_jira_ticket_id
-        >> validate_jira_ticket
-        >> get_all_jira_issues
+        get_jira_issues
+        >> make_yaml_configs
         >> slack_notification
     )
