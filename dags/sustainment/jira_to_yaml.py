@@ -12,21 +12,13 @@ import json
 import logging
 import yaml
 import os
-import pandas as pd
 import io
 from datetime import datetime
 from pathlib import Path
 from bs4 import BeautifulSoup
 
-from airflow import DAG
+from airflow.decorators import dag, task
 from airflow.models import Variable
-
-from utils import airflow_utils
-from utils_operators.slack_operators import (
-    GenericSlackOperator,
-    task_failure_slack_alert,
-)
-from airflow.operators.python import PythonOperator
 
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
 
@@ -60,6 +52,10 @@ mapping = {
     "collection_method": "customfield_12647", #TODO - FORMAT TEXT HERE
 }
 
+DIR_PATH = Path(os.path.dirname(os.path.realpath(__file__))).parent
+
+YAML_DIR_PATH = DIR_PATH / "datasets" / "files_to_datastore"
+
 YAML_METADATA = {  # DAG info
     "schedule": "@once",
     "dag_owner_name": "",  # dag owner name
@@ -88,30 +84,16 @@ PACKAGE_METADATA = [
 ]
 
 
-# init DAG
-default_args = airflow_utils.get_default_args(
-    {
-        "owner": "Mac",
-        "depends_on_past": False,
-        "email_on_failure": False,
-        "email_on_retry": False,
-        "retries": 1,
-        "retry_delay": 3,
-        "on_failure_callback": task_failure_slack_alert,
-        "start_date": datetime(2025, 2, 6, 0, 0, 0),
-        "tags": ["sustainment"],
-    }
-)
-
-with DAG(
-    "jira_to_yaml",
-    default_args=default_args,
-    schedule_interval="35 20 * * 1-5",
+@dag(
+    schedule="35 20 * * 1-5",
     catchup=False,
-) as dag:
+    start_date=datetime(2025, 2, 22, 0, 0, 0),
+
+)
+def jira_to_yaml():
     # write some DAG-level documentation to be visible on the Airflow UI
     # TODO - fix this summary of how the DAG works
-    dag.doc_md = """
+    """
     ### Summary
     This DAG creates a yaml config file for CoT OD Airflow ETL from an OD Jira Ticket,
     enables automation from client requests intake to create data pipelines, finally
@@ -136,11 +118,9 @@ with DAG(
     - Please note currently dag can only generate attributes based on Data Dictionary
     Attachment, e.g."ATPF-v4.xlsx". And the sheet name has to be "Content"
 
-    ### Contact
-    jira-to-yaml automation inquiries should go to Yanan.Zhang@toronto.ca
     """
-
-    def get_jira_issues(**kwargs):
+    @task
+    def get_jira_issues():
         # get jira ticket ids from active jira tickets
         output = []
         
@@ -393,12 +373,11 @@ with DAG(
 
     def write_to_yaml(content, filename):
         """Receives a json input and writes it to a YAML file"""
-        dir_path = Path(os.path.dirname(os.path.realpath(__file__))).parent
-        yaml_dir_path = dir_path / "datasets" / "files_to_datastore"
+        
 
         logging.info(f"Generating yaml file: {filename}")
         try:
-            with open(yaml_dir_path / filename, "w") as file:
+            with open(YAML_DIR_PATH / filename, "w") as file:
                 yaml.dump(content, file, sort_keys=False)
         except PermissionError:
             message = "Note: yaml file already exist, please double check!"
@@ -460,17 +439,16 @@ with DAG(
         metadata = {ckan_metadata_content["name"]: yaml_metadata}
         return metadata
 
-    def make_yaml_configs(**kwargs):
+    @task
+    def make_yaml_configs(tickets):
         """Generate all yamls for "Publish New Open Dataset Page" Jira issues"""
-        ti = kwargs.pop("ti")
-        tickets = ti.xcom_pull(task_ids="get_jira_issues")
+
+        # prep output of new dag ids
+        items = []
 
         # get jira issues and request type
-        output_list = {}
-
         for ticket in tickets:
             # get issue content
-            print(ticket)
             jira_ticket_id = ticket["jira_ticket_id"]
             issue = ticket["jira_ticket_content"]
             
@@ -483,20 +461,22 @@ with DAG(
 
             if request_type == "I’m ready to publish a new dataset":
                 issue_content = grab_issue_content(issue)
+                items.append({
+                    "dag_id": list(issue_content.keys())[0],
+                    "jira_ticket_id": jira_ticket_id,
+                    })
                 filename = "".join(list(issue_content.keys())) + ".yaml"
                 # write data to yaml file
                 write_to_yaml(issue_content, filename)
-                # process current ticket
-                # process_ticket(issue["key"]) #TODO: refactor this
-                output_list[issue["key"]] = (
-                    "Publish Dataset :done_green:" + filename
-                )
 
             if request_type == "I’d like to update an existing dataset or page":
                 package_name = (
                     issue["fields"]["summary"].split("/dataset/")[1].strip("//")
                 )
-                logging.info(package_name)
+                items.append({
+                    "dag_id":package_name,
+                    "jira_ticket_id": jira_ticket_id
+                })
                 ckan_url = CKAN + "api/3/action/package_show?id=" + package_name
 
                 # grab metadata
@@ -506,35 +486,137 @@ with DAG(
                 filename = package_name + ".yaml"
                 # write data to yaml file
                 write_to_yaml(metadata, filename)
-                # process current ticket
-                # process_ticket(issue["key"]) #TODO: refactor this
-                output_list[issue["key"]] = "Update Dataset :done_green:" + filename
+
+        return items
+
+    
+    @task
+    def validate_dags(items):
+        # basic validation of new dag(s) (including running the new dag(s)), return the results
+        output = {}
+        print(items)
+
+        for item in items:
+            print(f"Checking {item}")
+            dag_id = item["dag_id"]
+            jira_ticket_id = item["jira_ticket_id"]
+            these_issues = []
+            # read new yaml
+            filename = item["dag_id"] + ".yaml"
+
+            with open(YAML_DIR_PATH / filename, "r") as f:
+                config = yaml.load(f, yaml.SafeLoader)[dag_id]
+
+                # does yaml have a populated 'resources' section?
+                if len(config.get("resources", "")) > 0:
+                    for k,v in config["resources"].items():
+                        # format is populated
+                        if v.get("format", "") == "":
+                           these_issues.append(f"{k} has no associated format")
+
+                        # url is an accessible url
+                        try:
+                            if requests.get(v.get("url", "")).status_code != 200:
+                                these_issues.append(f"{k} has an invalid data source")
+                        except requests.exceptions.MissingSchema:
+                            these_issues.append(f"{k} has an invalid data source")
+
+                        # attributes is populated
+                        if len(v.get("attributes", [])) == 0:
+                            these_issues.append(f"{k} has an no attributes populated")
+
+                else:
+                   these_issues.append("No resources identified on this dataset")
+            
+            if len(these_issues) == 0:
+                these_issues = ["No issues found"]
+            output[jira_ticket_id] = these_issues
+
+        print(output)
+        return output
+
+    @task
+    def message_jira(ticket_issues):
+        # summarize issues associated with each YAML in associated JIRA ticket comments
         
+        for ticket_id, issues in ticket_issues.items():
+            message = []
 
-        return {"generated-yaml-list": output_list}
+            for issue in issues:
+                message.append({
+                    "type": "listItem",
+                    "content": [
+                        {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                            "type": "text",
+                            "text": issue
+                            }
+                        ]
+                        }
+                    ]
+                })
+            print(message)
+            body = {
+                "version": 1,
+                "type": "doc",
+                "content": [
+                    {
+                    "type": "paragraph",
+                    "content": [
+                        {
+                            "type": "emoji",
+                            "attrs": {
+                                "shortName": ":robot:",
+                                "id": "1f916",
+                                "text": "🤖"
+                            },
+                        },
+                        {
+                            "type": "text",
+                            "text": " Airflow Config Checker Report",
+                        },
+                        {
+                        "type": "text",
+                        "text": " "
+                        }
+                    ]
+                    },
+                    {
+                    "type": "bulletList",
+                    "content": message
+                    }
+                ]
+                }
 
-    get_jira_issues = PythonOperator(
-        task_id="get_jira_issues",
-        python_callable=get_jira_issues,
-        provide_context=True,
-    )
+            print(body)
+            
+            payload = json.dumps({
+                "body": body,
+                "visibility": {
+                    "type": "role",
+                    "value": "Administrators"
+                    }
+                
+            })
 
-    make_yaml_configs = PythonOperator(
-        task_id="make_yaml_configs",
-        python_callable=make_yaml_configs,
-        provide_context=True,
-    )
+            print(payload)
 
-    slack_notification = GenericSlackOperator(
-        task_id="slack_notification",
-        message_header=(" Task Succeeded, Successfully Generated :yaml: !"),
-        message_content_task_id="make_yaml_configs",
-        message_content_task_key="generated-yaml-list",
-        message_body="",
-    )
+            url = (
+                "https://toronto.atlassian.net/rest/api/3/issue/"
+                + ticket_id
+                + "/comment"
+            )
+            headers = {"Authorization": JIRA_API_KEY, "Content-Type": "application/json"}
 
-    (
-        get_jira_issues
-        >> make_yaml_configs
-        >> slack_notification
-    )
+            response = requests.request("POST", url, headers=headers, data=payload)
+            
+            logging.info(f"Status: {response.status_code} - {response.text}")
+
+    
+    dag_ids = make_yaml_configs(get_jira_issues())
+    results = validate_dags(dag_ids)
+    message_jira(results)
+
+jira_to_yaml()
