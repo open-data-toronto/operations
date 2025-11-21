@@ -85,7 +85,7 @@ PACKAGE_METADATA = [
 
 
 @dag(
-    schedule="35 20 * * 1-5",
+    schedule="35 20 * * 2",
     catchup=False,
     start_date=datetime(2025, 2, 22, 0, 0, 0),
 
@@ -494,10 +494,8 @@ def jira_to_yaml():
     def validate_dags(items):
         # basic validation of new dag(s) (including running the new dag(s)), return the results
         output = {}
-        print(items)
 
         for item in items:
-            print(f"Checking {item}")
             dag_id = item["dag_id"]
             jira_ticket_id = item["jira_ticket_id"]
             these_issues = []
@@ -532,7 +530,6 @@ def jira_to_yaml():
                 these_issues = ["No issues found"]
             output[jira_ticket_id] = these_issues
 
-        print(output)
         return output
 
     @task
@@ -557,7 +554,6 @@ def jira_to_yaml():
                         }
                     ]
                 })
-            print(message)
             body = {
                 "version": 1,
                 "type": "doc",
@@ -589,8 +585,6 @@ def jira_to_yaml():
                     }
                 ]
                 }
-
-            print(body)
             
             payload = json.dumps({
                 "body": body,
@@ -600,8 +594,6 @@ def jira_to_yaml():
                     }
                 
             })
-
-            print(payload)
 
             url = (
                 "https://toronto.atlassian.net/rest/api/3/issue/"
