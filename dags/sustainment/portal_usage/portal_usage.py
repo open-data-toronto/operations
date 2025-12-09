@@ -251,25 +251,44 @@ def open_data_portal_usage():
                     reader = csv.DictReader(f)
                     records = list(reader)
 
-                    for item in records:
-                        item.update({"Month": ym})
+                    for record in records:
+                        record.update({"Month": ym})
 
-                try:
-                    ckan.action.datastore_create(
-                        id=resource["id"],
-                        records=records,
-                        fields=attributes,
-                        force=True,
-                        do_not_cache=True,
-                    )
-                    logging.info(f"{len(records)} records inserted for period {ym}...")
-                except Exception as e:
-                    # If failed to load records to datastore, delete the temp folder for that period
-                    logging.exception(e)
-                    logging.warning(
-                        "Records failed to be inserted, cleaning temp folder.."
-                    )
-                    shutil.rmtree(dir_path + "/" + ym)
+                    # unique behavior for File URL Clicks dataset
+                    if report_name == "File URL Clicks":
+                        packages = ckan.action.package_search(rows=999)
+                        print(packages)
+                        packages = packages["results"]
+                        package_id_dict = {p["id"]:p["name"] for p in packages}
+
+                        for record in records:
+                            if record["Link Tracking -URL Clicked"].startswith("ckan0.cf.opendata.inter."):
+                                parts = record["Link Tracking -URL Clicked"].split("/")
+                                package_id = parts[2]
+                                file = parts[-1]
+                                try:
+                                    package_name = package_id_dict[package_id]
+                                    record.update({"Package Name": package_name})
+                                except:
+                                    print(f"Failed to find {package_id}")
+                                record.update({"File Name": file})
+
+                    try:
+                        ckan.action.datastore_create(
+                            id=resource["id"],
+                            records=records,
+                            fields=attributes,
+                            force=True,
+                            do_not_cache=True,
+                        )
+                        logging.info(f"{len(records)} records inserted for period {ym}...")
+                    except Exception as e:
+                        # If failed to load records to datastore, delete the temp folder for that period
+                        logging.exception(e)
+                        logging.warning(
+                            "Records failed to be inserted, cleaning temp folder.."
+                        )
+                        shutil.rmtree(dir_path + "/" + ym)
 
         @task(
             task_id="datastore_cache_" + report_label,
