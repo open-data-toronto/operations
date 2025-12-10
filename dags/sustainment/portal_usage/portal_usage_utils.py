@@ -97,6 +97,7 @@ def generate_usage_report(
         "suppressErrorCodes": "true",
         "autoDownload": "true",
         "download": "false",
+        "limit": "5000"
     }
 
     qs = "&".join(["{}={}".format(k, v) for k, v in report_args.items()])
