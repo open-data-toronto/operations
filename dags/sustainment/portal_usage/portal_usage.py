@@ -223,6 +223,8 @@ def open_data_portal_usage():
                     "Link Tracking -URL Clicked": "Download url the user used to download a file from the dataset page. The url belongs to Toronto Open Data's middleware, CKAN, and is composed of ids for a dataset page (which CKAN calls a package) and a download on that page (which CKAN calls a resource).",
                     "Clicks": "Number of times users clicked to download a file.",
                     "Month": "The month and year of user activity.",
+                    "Package Name": "Name of the CKAN package this file was associated at download, if any.",
+                    "File Name": "The name of the file that was downloaded, if any, from CKAN",
                 },
             }
 
@@ -240,7 +242,6 @@ def open_data_portal_usage():
                         "info": {"notes": data_fields_descr[report_name][x]},
                     }
                 )
-            logging.info(attributes)
 
             for period in periods_to_load:
                 ym = period["begin"][:7].replace("/", "")
@@ -257,7 +258,6 @@ def open_data_portal_usage():
                     # unique behavior for File URL Clicks dataset
                     if report_name == "File URL Clicks":
                         packages = ckan.action.package_search(rows=999)
-                        print(packages)
                         packages = packages["results"]
                         package_id_dict = {p["id"]:p["name"] for p in packages}
 
@@ -270,7 +270,7 @@ def open_data_portal_usage():
                                     package_name = package_id_dict[package_id]
                                     record.update({"Package Name": package_name})
                                 except:
-                                    print(f"Failed to find {package_id}")
+                                    logging.warning(f"Failed to find {package_id}")
                                 record.update({"File Name": file})
 
                     try:
