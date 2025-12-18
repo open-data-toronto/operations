@@ -5,7 +5,7 @@ development-pipeline:
   title: Development Pipeline
   date_published: '2025-12-16 13:57:18.929311'
   refresh_rate: Quarterly
-  dataset_category: Map
+  dataset_category: Table
   owner_division: City Planning
   owner_section: Planning Research and Analytics
   owner_unit: SIPA
@@ -13,13 +13,12 @@ development-pipeline:
   civic_issues: null
   topics: 
   - Development and infrastructure
-  - Locations and mapping
   tags: 
   - name: construction
     vocabulary_id: null
   information_url: null
   excerpt: Shows anticipated housing starts in the city
-  limitations: null
+  limitations: The process to associate these records with coordinates has not been completed. While geocoding addresses in this dataset will work, we plan to add coordinates to this dataset in the future.
   notes: The Development Pipeline examines how and where the city has grown over the past five years and provides insight on how it will continue to develop in the near future. The Development Pipeline enables City Planning to track urban growth, monitor development trends, and measure progress towards municipal and provincial housing targets. The Development Pipeline bulletin is published annually and the dashboard is updated quarterly. A subset of the Development Pipeline data is used to create this dashboard.
   resources:
     # resource name
@@ -83,8 +82,8 @@ development-pipeline:
           type: text
           info:
             notes: When available, provides a link to the development applications on the Application Information Center.
-        - id: geometry
-          type: "text"
-          info:
-            notes: null
+        #- id: geometry
+        #  type: "text"
+        #  info:
+        #    notes: null
         
