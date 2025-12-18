@@ -18,8 +18,8 @@ development-pipeline:
     vocabulary_id: null
   information_url: null
   excerpt: Shows anticipated housing starts in the city
-  limitations: The process to associate these records with coordinates has not been completed. While geocoding addresses in this dataset will work, we plan to add coordinates to this dataset in the future.
-  notes: The Development Pipeline examines how and where the city has grown over the past five years and provides insight on how it will continue to develop in the near future. The Development Pipeline enables City Planning to track urban growth, monitor development trends, and measure progress towards municipal and provincial housing targets. The Development Pipeline bulletin is published annually and the dashboard is updated quarterly. A subset of the Development Pipeline data is used to create this dashboard.
+  limitations: The process to associate these records with geospatial coordinates is underway. The dataset can be geocoded using its addresses. We are working to add geospatial coordinates to this dataset in the future.
+  notes: The Development Pipeline examines how and where the city has grown over the past five years and provides insight on how it will continue to develop in the near future. The Development Pipeline enables City Planning to track urban growth, monitor development trends, and measure progress towards municipal and provincial housing targets. The Development Pipeline bulletin is published annually and the dashboard is updated quarterly on a best-effort basis. A subset of the Development Pipeline information is used to create this dashboard. 
   resources:
     # resource name
     Development Pipeline:
