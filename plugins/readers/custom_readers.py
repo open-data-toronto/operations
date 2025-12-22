@@ -480,8 +480,16 @@ def parks_drinking_fountains():
 def dinesafe():
     from io import StringIO
     import hashlib
-    url = "https://secure.toronto.ca/opendata/ds/od_csv/v1?format=csv"
-    with requests.get(url, stream=True) as r:   
+    url = "https://secure.toronto.ca/opendata/ds_od/inspections/v1?format=csv"
+    user_key = Variable.get("secure_toronto_opendata_USER_KEY")
+    srv_key = Variable.get("dinesafe_secure_toronto_opendata_SRV_KEY")
+
+    headers = {
+        "SRV-KEY": srv_key,
+        "USER-KEY": user_key,
+    }
+    
+    with requests.post(url, headers=headers, stream=True) as r:   
             
         iterator = (line.decode("latin1") for line in r.iter_lines())
 
