@@ -130,4 +130,16 @@ demolition-and-replacement-of-rental-housing-units:
           type: "text"
           info:
             notes: "the number of replaced housing where the total monthly shelter costs exceed Mid-Range Rents"
-        
+        - id: Date the Rental Demolition Permit was Issued
+          type: "text"
+          info:
+            notes: "The date a rental housing demolition and conversion permit has been issued under Chapter 667 of the Municipal Code or the date a residential demolition permit was issued under Chapter 363 of the Municipal Code."
+        - id: Date the 2nd Rental Demolition Permit was Issued
+          type: "text"
+          info:
+            notes: "The second date a rental housing demolition and conversion permit has been issued under Chapter 667 of the Municipal Code or the second date a Residential Demolition permit was issued under Chapter 363 of the Municipal Code for applications that had phased rental demolitions."
+        - id: Rental Homes Subject to Rental Demolition Permit(s)
+          type: "text"
+          info:
+            notes: "The total number of rental units that are included in the rental demolition permit(s)."
+      
