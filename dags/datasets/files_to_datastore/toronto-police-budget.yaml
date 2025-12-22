@@ -37,10 +37,10 @@ toronto-police-budget:
 
     For more information on the TPS Budget, please visit https://www.torontopolice.on.ca/budget/ .
   resources:
-    TPS Budget 2025:
+    TPS Budget 2026:
       format: 'json'
       agol: true
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_2025/FeatureServer/0
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_2026/FeatureServer/0/
       attributes:
       - id: Fiscal_Year
         type: int
@@ -87,205 +87,255 @@ toronto-police-budget:
         info:
           notes: "Budget amount"
 
-    TPS Budget 2024:
-      format: 'json'
-      agol: true
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_2024/FeatureServer/0
-      attributes:
-      - id: Fiscal_Year
-        type: int
-        info:
-          notes: "Fiscal Year"
-      - id: Budget_Type
-        type: text
-        info:
-          notes: "Approved or Proposed Budget"
-      - id: Organization_Entity
-        type: text
-        info:
-          notes: "Organization within TPS"
-      - id: Command_Name
-        type: text
-        info:
-          notes: "Name of Command"
-      - id: Pillar_Name
-        type: text
-        info:
-          notes: "Name of Pillar"
-      - id: District_Name
-        type: text
-        info:
-          notes: "Name of district"
-      - id: Unit_Name
-        type: text
-        info:
-          notes: ""
-      - id: Feature_Category
-        type: text
-        info:
-          notes: ""
-      - id: Cost_Element
-        type: text
-        info:
-          notes: "Cost Element number"
-      - id: Cost_Element_Long_Name
-        type: text
-        info:
-          notes: "Cost Element name"
-      - id: Amount
-        type: text
-        info:
-          notes: "Budget amount"
-      
-    TPS Budget 2023:
-      format: 'json'
-      agol: true
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_2023/FeatureServer/0
-      attributes:
-      - id: Fiscal_Year
-        type: int
-        info:
-          notes: "Fiscal Year"
-      - id: Budget_Type
-        type: text
-        info:
-          notes: "Approved or Proposed Budget"
-      - id: Organization_Entity
-        type: text
-        info:
-          notes: "Organization within TPS"
-      - id: Command_Name
-        type: text
-        info:
-          notes: "Name of Command"
-      - id: Pillar_Name
-        type: text
-        info:
-          notes: "Name of Pillar"
-      - id: District_Name
-        type: text
-        info:
-          notes: "Name of district"
-      - id: Unit_Name
-        type: text
-        info:
-          notes: ""
-      - id: Feature_Category
-        type: text
-        info:
-          notes: ""
-      - id: Cost_Element
-        type: text
-        info:
-          notes: "Cost Element number"
-      - id: Cost_Element_Long_Name
-        type: text
-        info:
-          notes: "Cost Element name"
-      - id: Amount
-        type: text
-        info:
-          notes: "Budget amount"
-      
-    TPS Budget 2022:
-      format: 'json'
-      agol: true
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_2022/FeatureServer/0
-      attributes:
-      - id: Fiscal_Year
-        type: int
-        info:
-          notes: "Fiscal Year"
-      - id: Budget_Type
-        type: text
-        info:
-          notes: "Approved or Proposed Budget"
-      - id: Organization_Entity
-        type: text
-        info:
-          notes: "Organization within TPS"
-      - id: Command_Name
-        type: text
-        info:
-          notes: "Name of Command"
-      - id: Pillar_Name
-        type: text
-        info:
-          notes: "Name of Pillar"
-      - id: District_Name
-        type: text
-        info:
-          notes: "Name of district"
-      - id: Unit_Name
-        type: text
-        info:
-          notes: ""
-      - id: Feature_Category
-        type: text
-        info:
-          notes: ""
-      - id: Cost_Element
-        type: text
-        info:
-          notes: "Cost Element number"
-      - id: Cost_Element_Long_Name
-        type: text
-        info:
-          notes: "Cost Element name"
-      - id: Amount
-        type: text
-        info:
-          notes: "Budget amount"
-      
-    TPS Budget 2021:
-      format: 'json'
-      agol: true
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_2021/FeatureServer/0
-      attributes:
-      - id: Fiscal_Year
-        type: int
-        info:
-          notes: "Fiscal Year"
-      - id: Budget_Type
-        type: text
-        info:
-          notes: "Approved or Proposed Budget"
-      - id: Organization_Entity
-        type: text
-        info:
-          notes: "Organization within TPS"
-      - id: Command_Name
-        type: text
-        info:
-          notes: "Name of Command"
-      - id: Pillar_Name
-        type: text
-        info:
-          notes: "Name of Pillar"
-      - id: District_Name
-        type: text
-        info:
-          notes: "Name of district"
-      - id: Unit_Name
-        type: text
-        info:
-          notes: ""
-      - id: Feature_Category
-        type: text
-        info:
-          notes: ""
-      - id: Cost_Element
-        type: text
-        info:
-          notes: "Cost Element number"
-      - id: Cost_Element_Long_Name
-        type: text
-        info:
-          notes: "Cost Element name"
-      - id: Amount
-        type: text
-        info:
-          notes: "Budget amount"
-      
-      
-      
+  #  TPS Budget 2025:
+  #    format: 'json'
+  #    agol: true
+  #    url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_2025/FeatureServer/0
+  #    attributes:
+  #    - id: Fiscal_Year
+  #      type: int
+  #      info:
+  #        notes: "Fiscal Year"
+  #    - id: Budget_Type
+  #      type: text
+  #      info:
+  #        notes: "Approved or Proposed Budget"
+  #    - id: Organizational_Entity
+  #      type: text
+  #      info:
+  #        notes: "Organization within TPS"
+  #    - id: Command_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of Command"
+  #    - id: Pillar_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of Pillar"
+  #    - id: District_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of district"
+  #    - id: Unit_Name
+  #      type: text
+  #      info:
+  #        notes: ""
+  #    - id: Feature_Category
+  #      type: text
+  #      info:
+  #        notes: ""
+  #    - id: Cost_Element
+  #      type: text
+  #      info:
+  #        notes: "Cost Element number"
+  #    - id: Cost_Element_Long_Name
+  #      type: text
+  #      info:
+  #        notes: "Cost Element name"
+  #    - id: Amount
+  #      type: text
+  #      info:
+  #        notes: "Budget amount"
+#
+  #  TPS Budget 2024:
+  #    format: 'json'
+  #    agol: true
+  #    url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_2024/FeatureServer/0
+  #    attributes:
+  #    - id: Fiscal_Year
+  #      type: int
+  #      info:
+  #        notes: "Fiscal Year"
+  #    - id: Budget_Type
+  #      type: text
+  #      info:
+  #        notes: "Approved or Proposed Budget"
+  #    - id: Organization_Entity
+  #      type: text
+  #      info:
+  #        notes: "Organization within TPS"
+  #    - id: Command_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of Command"
+  #    - id: Pillar_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of Pillar"
+  #    - id: District_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of district"
+  #    - id: Unit_Name
+  #      type: text
+  #      info:
+  #        notes: ""
+  #    - id: Feature_Category
+  #      type: text
+  #      info:
+  #        notes: ""
+  #    - id: Cost_Element
+  #      type: text
+  #      info:
+  #        notes: "Cost Element number"
+  #    - id: Cost_Element_Long_Name
+  #      type: text
+  #      info:
+  #        notes: "Cost Element name"
+  #    - id: Amount
+  #      type: text
+  #      info:
+  #        notes: "Budget amount"
+  #    
+  #  TPS Budget 2023:
+  #    format: 'json'
+  #    agol: true
+  #    url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_2023/FeatureServer/0
+  #    attributes:
+  #    - id: Fiscal_Year
+  #      type: int
+  #      info:
+  #        notes: "Fiscal Year"
+  #    - id: Budget_Type
+  #      type: text
+  #      info:
+  #        notes: "Approved or Proposed Budget"
+  #    - id: Organization_Entity
+  #      type: text
+  #      info:
+  #        notes: "Organization within TPS"
+  #    - id: Command_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of Command"
+  #    - id: Pillar_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of Pillar"
+  #    - id: District_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of district"
+  #    - id: Unit_Name
+  #      type: text
+  #      info:
+  #        notes: ""
+  #    - id: Feature_Category
+  #      type: text
+  #      info:
+  #        notes: ""
+  #    - id: Cost_Element
+  #      type: text
+  #      info:
+  #        notes: "Cost Element number"
+  #    - id: Cost_Element_Long_Name
+  #      type: text
+  #      info:
+  #        notes: "Cost Element name"
+  #    - id: Amount
+  #      type: text
+  #      info:
+  #        notes: "Budget amount"
+  #    
+  #  TPS Budget 2022:
+  #    format: 'json'
+  #    agol: true
+  #    url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_2022/FeatureServer/0
+  #    attributes:
+  #    - id: Fiscal_Year
+  #      type: int
+  #      info:
+  #        notes: "Fiscal Year"
+  #    - id: Budget_Type
+  #      type: text
+  #      info:
+  #        notes: "Approved or Proposed Budget"
+  #    - id: Organization_Entity
+  #      type: text
+  #      info:
+  #        notes: "Organization within TPS"
+  #    - id: Command_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of Command"
+  #    - id: Pillar_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of Pillar"
+  #    - id: District_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of district"
+  #    - id: Unit_Name
+  #      type: text
+  #      info:
+  #        notes: ""
+  #    - id: Feature_Category
+  #      type: text
+  #      info:
+  #        notes: ""
+  #    - id: Cost_Element
+  #      type: text
+  #      info:
+  #        notes: "Cost Element number"
+  #    - id: Cost_Element_Long_Name
+  #      type: text
+  #      info:
+  #        notes: "Cost Element name"
+  #    - id: Amount
+  #      type: text
+  #      info:
+  #        notes: "Budget amount"
+  #    
+  #  TPS Budget 2021:
+  #    format: 'json'
+  #    agol: true
+  #    url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Budget_2021/FeatureServer/0
+  #    attributes:
+  #    - id: Fiscal_Year
+  #      type: int
+  #      info:
+  #        notes: "Fiscal Year"
+  #    - id: Budget_Type
+  #      type: text
+  #      info:
+  #        notes: "Approved or Proposed Budget"
+  #    - id: Organization_Entity
+  #      type: text
+  #      info:
+  #        notes: "Organization within TPS"
+  #    - id: Command_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of Command"
+  #    - id: Pillar_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of Pillar"
+  #    - id: District_Name
+  #      type: text
+  #      info:
+  #        notes: "Name of district"
+  #    - id: Unit_Name
+  #      type: text
+  #      info:
+  #        notes: ""
+  #    - id: Feature_Category
+  #      type: text
+  #      info:
+  #        notes: ""
+  #    - id: Cost_Element
+  #      type: text
+  #      info:
+  #        notes: "Cost Element number"
+  #    - id: Cost_Element_Long_Name
+  #      type: text
+  #      info:
+  #        notes: "Cost Element name"
+  #    - id: Amount
+  #      type: text
+  #      info:
+  #        notes: "Budget amount"
+  #    
+  #    
+  #    
