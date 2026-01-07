@@ -42,15 +42,15 @@ tobids-all-open-solicitations:
     # resource name
     All Solicitations:
       format: json
-      custom_reader: tobids_all_solicitations
-      datastore_upsert:
-        primary_key: unique_id
+      custom_reader: tobids_all_open_solicitations
+      #datastore_upsert:
+      #  primary_key: unique_id
       url: https://secure.toronto.ca/c3api_data/v2/DataAccess.svc/pmmd_solicitations/feis_solicitation?$format=application/json;odata.metadata=none&$count=true&$skip=0&$filter=Ready_For_Posting%20eq%20%27Yes%27%20and%20Status%20eq%20%27Open%27%20and%20Closing_Date%20ge%202024-04-30&$orderby=Closing_Date%20desc,Issue_Date%20desc
       attributes:
-        - id: "unique_id"
-          type: text
-          info:
-            notes: 'uuid for record.'
+        #- id: "unique_id"
+        #  type: text
+        #  info:
+        #    notes: 'uuid for record.'
         - id: "Document Number"
           type: text
           info:
@@ -99,3 +99,7 @@ tobids-all-open-solicitations:
           type: text
           info:
             notes: 'The phone number of the buyer.'
+        - id: "Wards"
+          type: text
+          info:
+            notes: 'The associated ward(s) within the City of Toronto are associated with the solicitation and will be listed in the TO Bids record. There are twenty five possible ward selections that may apply. Learn more about Wards at the City by visiting [Ward Profiles - City of Toronto](https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/ward-profiles/)'

@@ -35,13 +35,13 @@ tobids-non-competitive-contracts:
       format: json
       custom_reader: tobids_non_competitive_contracts
       url: https://secure.toronto.ca/c3api_data/v2/DataAccess.svc/pmmd_solicitations/feis_non_competitive?$format=application/json;odata.metadata=none&$count=true&$skip=0&$filter=Ready_For_Posting%20eq%20%27Yes%27%20and%20Status%20eq%20%27Awarded%27%20and%20Awarded_Cancelled%20eq%20%27No%27%20and%20Latest_Date_Awarded%20gt%202022-10-30&$orderby=Latest_Date_Awarded%20desc
-      datastore_upsert:
-        primary_key: unique_id
+      #datastore_upsert:
+      #  primary_key: unique_id
       attributes:
-        - id: "unique_id"
-          type: text
-          info:
-            notes: 'uuid for record.'
+        #- id: "unique_id"
+        #  type: text
+        #  info:
+        #    notes: 'uuid for record.'
         - id: "Workspace Number"
           type: text
           info:
@@ -70,3 +70,7 @@ tobids-non-competitive-contracts:
           type: text
           info:
             notes: 'Address of the contracted supplier providing goods and services to the City.'
+        - id: "Wards"
+          type: text
+          info:
+            notes: 'Wards associated with the bid'

@@ -41,13 +41,13 @@ tobids-awarded-contracts:
       format: json
       custom_reader: tobids_awarded_contracts
       url: https://secure.toronto.ca/c3api_data/v2/DataAccess.svc/pmmd_solicitations/feis_solicitation?$format=application/json;odata.metadata=none&$count=true&$skip=0&$filter=Ready_For_Posting%20eq%20%27Yes%27%20and%20((Solicitation_Form_Type%20eq%20%27Awarded%20Contracts%27%20and%20Awarded_Cancelled%20eq%20%27No%27%20and%20Latest_Date_Awarded%20gt%202022-10-11)%20or%20(Solicitation_Form_Type%20eq%20%27Awarded%20Contracts%27%20and%20Awarded_Cancelled%20eq%20%27Yes%27%20and%20Cancellation_Date%20gt%20%272022-10-11%27))&$orderby=Purchasing_Group,High_Level_Category,Solicitation_Document_Number,Posting_Title%20desc
-      datastore_upsert:
-        primary_key: unique_id
+      #datastore_upsert:
+      #  primary_key: unique_id
       attributes:
-        - id: "unique_id"
-          type: text
-          info:
-            notes: 'unique composite key.'
+        #- id: "unique_id"
+        #  type: text
+        #  info:
+        #    notes: 'unique composite key.'
         - id: "Document Number"
           type: text
           info:
@@ -64,15 +64,15 @@ tobids-awarded-contracts:
           type: text
           info:
             notes: "The name of the Supplier that has been awarded the contract."
-        - id: "Awarded Amount"
+        - id: "Award"
           type: text
           info:
-            notes: 'The total dollar amount that has been awarded to a Successful Supplier for a contract.'
-        - id: "Award Date"
+            notes: 'Prior to October 2025, this captured the total dollar amount that has been awarded to a Successful Supplier for a contract. This field now captures the initial contract value(s) for contracts awarded to a Supplier. To view the total awarded dollar amounts for new Awarded Contracts, please view the associated PDF attachment in the record.'
+        - id: "Award Authority Obtained Date"
           type: date
           format: "%Y-%m-%d"
           info:
-            notes: 'The date that a contract between the City and a Successful Supplier has been signed.'
+            notes: 'Prior to October 2025, this captured the date the contract was executed. This field now captures the date the solicitation was successfully awarded.'
         - id: "Division"
           type: text
           info:
@@ -97,3 +97,7 @@ tobids-awarded-contracts:
           type: text
           info:
             notes: 'The address of the Supplier that has been awarded the contract.'
+        - id: "Wards"
+          type: text
+          info:
+            notes: 'The associated ward(s) within the City of Toronto are associated with the solicitation and will be listed in the TO Bids record. There are twenty five possible ward selections that may apply. Learn more about Wards at the City by visiting [Ward Profiles - City of Toronto](https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/ward-profiles/)'

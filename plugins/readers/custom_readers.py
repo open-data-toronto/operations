@@ -211,169 +211,136 @@ def toronto_beaches_observations():
             "turbidity": item["turbidity"],
         }
 
-def tobids_all_solicitations():
+
+def _tobids_get_records(entity, filters):
+    # input list of dicts containing raw records from tobids, output formatted records
+    chunk_size = 1000
+
     has_more = True
     offset = 0
-    total_records = []
-    curr_date = datetime.today().strftime('%Y-%m-%d')
+    all_raw = []
 
     while has_more:
         url = (
-                "https://secure.toronto.ca/c3api_data/v2/DataAccess.svc/pmmd_solicitations/feis_solicitation?$format=application/json;odata.metadata=none&$count=true&$skip="
-                + str(offset)
-                + "0&$filter=Ready_For_Posting%20eq%20%27Yes%27%20and%20Status%20eq%20%27Open%27%20and%20Closing_Date%20ge%20" + curr_date + "&$orderby=Closing_Date%20desc,Issue_Date%20desc"
+            f"https://secure.toronto.ca/c3api_data/v2/DataAccess.svc/pmmd_solicitations/{entity}"
+            + f"?$format=application/json;odata.metadata=none&$count=true&$top={chunk_size}&$skip={offset}"
+            + f"&$filter={filters}"
         )
         logging.info(f"Requesting data from {url}")
         records = json.loads(requests.get(url).content)
-        total_records += records["value"]
+        all_raw += records["value"]
         
         logging.info(f"Processing in batch, start from {offset}")
-        has_more = len(total_records) < records["@odata.count"]
-        offset += 100
+        has_more = len(all_raw) < records["@odata.count"]
+        offset += chunk_size
 
-    logging.info(f"A total of {len(total_records)} records.")
+    return all_raw
 
-    fields = ['id',
-              'Solicitation_Document_Number',
-              'Solicitation_Document_Type',  
-              'High_Level_Category',
-              'Solicitation_Form_Type',
-              'Issue_Date', 
-              'Closing_Date',
-              'Publish_Date',
-              'Buyer_Name',
-              'Buyer_Email',
-              'Buyer_Phone_Number',
-              'Client_Division',
-              'Solicitation_Document_Description']
-
-    for record in total_records:
+def _tobids_parse_records(records, field_mapping, awarded_field=None):
+    # input list of dicts containing raw records from tobids, output formatted records
+    for record in records:
         clean_record = {}
-        for field in fields:
-            if field in record.keys():
-                clean_record[field] = record[field]
+        for in_field, out_field in field_mapping.items():
+            if in_field in record.keys():
+                if isinstance(record[in_field], list):
+                    clean_record[out_field] = ",".join(record[in_field])
+                else:
+                    clean_record[out_field] = record[in_field].replace("\n", " ")
             else:
-                clean_record[field] = None
+                clean_record[out_field] = None
         
-        # clean text before insert into ckan datastore
-        clean_record["Client_Division"] = ",".join(clean_record["Client_Division"])
-        clean_record["Solicitation_Document_Description"] = clean_record["Solicitation_Document_Description"].replace("\n", "")
+        if awarded_field:
+            counter = 0
+            for entry in record[awarded_field]:
+            # Use counter to create unique key for each record
+                counter += 1
         
-        yield {
-                'unique_id': clean_record['id'],
-                'Document Number': 'Doc' + clean_record['Solicitation_Document_Number'],
-                'RFx (Solicitation) Type': clean_record['Solicitation_Document_Type'],
-                'NOIP (Notice of Intended Procurement) Type': clean_record['Solicitation_Form_Type'],
-                'Issue Date': clean_record['Issue_Date'], 
-                'Submission Deadline': clean_record['Closing_Date'],
-                'High Level Category': clean_record['High_Level_Category'],
-                'Solicitation Document Description': clean_record['Solicitation_Document_Description'],
-                'Division': clean_record['Client_Division'],
-                'Buyer Name': clean_record['Buyer_Name'],
-                'Buyer Email': clean_record['Buyer_Email'],
-                'Buyer Phone Number': clean_record['Buyer_Phone_Number'],
-        }
+                # address
+                address_pieces = []
+                for address_piece in ["street", "city", "province", "country", "postalCode"]:
+                    if record.get(address_piece, False):
+                        address_pieces.append(record[address_piece])
+                clean_record["Supplier Address"] = ", ".join(address_pieces)
+
+                for in_field, out_field in field_mapping.items():
+                    if in_field in entry.keys():
+                        clean_record[out_field] = entry[in_field]
+
+                yield clean_record
+
+
+        elif not awarded_field:
+            yield clean_record
+
+
+def tobids_all_open_solicitations():
+    entity = "feis_solicitation_published"
+    filters = "Ready_For_Posting%20eq%20%27Yes%27%20and%20Status%20eq%20%27Open%27%20"
+    raw = _tobids_get_records(entity, filters)
+
+    field_mapping = {
+        'Solicitation_Document_Number': 'Document Number',
+        'Solicitation_Document_Type': 'RFx (Solicitation) Type',
+        'Solicitation_Form_Type': 'NOIP (Notice of Intended Procurement) Type',
+        'Issue_Date': 'Issue Date',
+        'Closing_Date': 'Submission Deadline',
+        'High_Level_Category': 'High Level Category',
+        'Solicitation_Document_Description': 'Solicitation Document Description',
+        'Client_Division': 'Division',
+        'Buyer_Name': 'Buyer Name',
+        'Buyer_Email': 'Buyer Email',
+        'Buyer_Phone_Number': 'Buyer Phone Number',
+        "Wards": 'Wards',
+    }
+
+    yield from _tobids_parse_records(raw, field_mapping)
+
 
 def tobids_awarded_contracts():
-    from datetime import date
-    from dateutil.relativedelta import relativedelta
 
-    has_more = True
-    offset = 0
-    total_records = []
-    # filter only keep 18 months data
-    cut_date = str(date.today() + relativedelta(months=-18))
+    entity = "feis_solicitation_published"
+    filters = "Ready_For_Posting%20eq%20%27Yes%27%20and%20Status%20eq%20%27Awarded%27%20"
+    raw = _tobids_get_records(entity, filters)
 
-    while has_more:
-        url = (
-            "https://secure.toronto.ca/c3api_data/v2/DataAccess.svc/pmmd_solicitations/feis_solicitation?$format=application/json;odata.metadata=none&$count=true&$skip="
-            + str(offset)
-            + "&$filter=Ready_For_Posting%20eq%20%27Yes%27%20and%20((Solicitation_Form_Type%20eq%20%27Awarded%20Contracts%27%20and%20Awarded_Cancelled%20eq%20%27No%27%20and%20Latest_Date_Awarded%20gt%20"
-            + cut_date
-            + ")%20or%20(Solicitation_Form_Type%20eq%20%27Awarded%20Contracts%27%20and%20Awarded_Cancelled%20eq%20%27Yes%27%20and%20Cancellation_Date%20gt%20%27"
-            + cut_date
-            + "%27))&$orderby=Purchasing_Group,High_Level_Category,Solicitation_Document_Number,Posting_Title%20desc"
-        )
-        logging.info(f"Requesting data from {url}")
-        records = json.loads(requests.get(url).content)
-        total_records += records["value"]
+    field_mapping = {
+        "Solicitation_Document_Number": "Document Number",
+        "Solicitation_Document_Type": "RFx (Solicitation) Type",
+        "High_Level_Category": "High Level Category",
+        "Successful_Bidder": "Successful Supplier",
+        "Award_Amount": "Award",
+        "Date_Awarded": "Award Authority Obtained Date",
+        "Client_Division": "Division",
+        "Buyer_Name": "Buyer Name",
+        "Buyer_Email": "Buyer Email",
+        "Buyer_Phone_Number": "Buyer Phone Number",
+        "Solicitation_Document_Description": "Solicitation Document Description",
+        "Wards": "Wards",
+    }
         
-        logging.info(f"Processing in batch, start from {offset}")
-        has_more = len(total_records) < records["@odata.count"]
-        offset += 100
+    yield from _tobids_parse_records(raw, field_mapping, "Awarded_Suppliers")
 
-    logging.info(f"A total of {len(total_records)} records.")
 
-    fields = [
-        "id",
-        "Solicitation_Document_Number",
-        "Solicitation_Document_Type",
-        "High_Level_Category",
-        "Client_Division",
-        "Buyer_Name",
-        "Buyer_Email",
-        "Buyer_Phone_Number",
-        "Solicitation_Document_Description",
-    ]
-
-    awarded_supplier_fields = ["Successful_Bidder", "Award_Amount", "Date_Awarded"]
-    awarded_supplier_address = ["street", "city", "province", "postalCode", "country"]
-
-    for record in total_records:
-        clean_record = {}
-        for field in fields:
-            if field in record.keys():
-                clean_record[field] = record[field]
-            else:
-                clean_record[field] = None
-
-        # clean text before insert into ckan datastore
-        clean_record["Client_Division"] = ",".join(clean_record["Client_Division"])
-        clean_record["Solicitation_Document_Description"] = clean_record[
-            "Solicitation_Document_Description"
-        ].replace("\n", "")
-
-        awarded_supplier_info = record["Awarded_Suppliers"]
-
-        counter = 0
-        for entry in awarded_supplier_info:
-            # Use counter to create unique key for each record
-            counter += 1
-            for field in awarded_supplier_fields:
-                clean_record[field] = entry[field] if field in entry.keys() else None
-
-            full_address_list = []
-            for item in awarded_supplier_address:
-                addr = entry[item] if item in entry.keys() else ""
-                if addr:
-                    full_address_list.append(addr)
-
-            clean_record["Supplier Address"] = (
-                ";".join(full_address_list) if full_address_list else ""
-            )
-
-            yield {
-                "unique_id": clean_record["id"] + "_" + str(counter),
-                "Document Number": "Doc" + clean_record["Solicitation_Document_Number"],
-                "RFx (Solicitation) Type": clean_record["Solicitation_Document_Type"],
-                "High Level Category": clean_record["High_Level_Category"],
-                "Successful Supplier": clean_record["Successful_Bidder"],
-                "Awarded Amount": clean_record["Award_Amount"],
-                "Award Date": clean_record["Date_Awarded"],
-                "Division": clean_record["Client_Division"],
-                "Buyer Name": clean_record["Buyer_Name"],
-                "Buyer Email": clean_record["Buyer_Email"],
-                "Buyer Phone Number": clean_record["Buyer_Phone_Number"],
-                "Solicitation Document Description": clean_record[
-                    "Solicitation_Document_Description"
-                ],
-                "Supplier Address": clean_record["Supplier Address"],
-            }
 
 def tobids_non_competitive_contracts():
-    from datetime import date
-    from dateutil.relativedelta import relativedelta
 
+    entity = "feis_non_competitive_published"
+    filters = "Ready_For_Posting%20eq%20%27Yes%27%20and%20Status%20eq%20%27Awarded%27%20"
+    raw = _tobids_get_records(entity, filters)
+
+    field_mapping = {
+        "Non_Competitive_Reference_Number":"Workspace Number",
+        "Non_Competitive_Reason":"Reason",
+        "Latest_Date_Awarded":"Contract Date",
+        "Successful_Bidder":"Supplier Name",
+        "Award_Amount":"Contract Amount",
+        "Client_Division":"Division",
+        "Supplier Address":"Supplier Address",
+        "Wards": "Wards"
+    }
+
+    yield from _tobids_parse_records(raw, field_mapping, "Awarded_Suppliers")
+
+    """
     has_more = True
     offset = 0
     total_records = []
@@ -382,10 +349,12 @@ def tobids_non_competitive_contracts():
     
     while has_more:
         url = (
-            "https://secure.toronto.ca/c3api_data/v2/DataAccess.svc/pmmd_solicitations/feis_non_competitive?$format=application/json;odata.metadata=none&$count=true&$skip="
+            "https://secure.toronto.ca/c3api_data/v2/DataAccess.svc/pmmd_solicitations/feis_non_competitive_published?$format=application/json;odata.metadata=none&$count=true&$skiptoken="
             + str(offset)
-            + "&$filter=Ready_For_Posting%20eq%20%27Yes%27%20and%20Status%20eq%20%27Awarded%27%20and%20Awarded_Cancelled%20eq%20%27No%27%20and%20Latest_Date_Awarded%20gt%20"
-            + cut_date
+            + "&$filter=Ready_For_Posting%20eq%20%27Yes%27%20
+            #and%20Status%20eq%20%27Awarded%27%20
+            + "and%20Awarded_Cancelled%20eq%20%27No%27%20"#and%20Latest_Date_Awarded%20gt%20"
+            #+ cut_date
             + "&$orderby=Latest_Date_Awarded%20desc"
         )
         logging.info(f"Requesting data from {url}")
@@ -393,7 +362,7 @@ def tobids_non_competitive_contracts():
         total_records += records["value"]
         
         logging.info(f"Processing in batch, start from {offset}")
-        has_more = len(total_records) < records["@odata.count"]
+        has_more = has_more = records.get("@odata.nextLink", False) #len(total_records) < records["@odata.count"]
         offset += 100
     
     logging.info(f"A total of {len(total_records)} records.")
@@ -441,6 +410,7 @@ def tobids_non_competitive_contracts():
             "Division": clean_record["Client_Division"],
             "Supplier Address": clean_record["Supplier Address"]
         }
+"""
 
 def washroom_facilities():
     
