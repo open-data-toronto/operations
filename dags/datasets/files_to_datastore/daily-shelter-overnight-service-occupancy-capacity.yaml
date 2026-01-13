@@ -194,6 +194,7 @@ daily-shelter-overnight-service-occupancy-capacity:
           info:
             notes: "The proportion of actual room capacity that is occupied for the reporting date. Calculated as OCCUPIED_ROOMS divided by CAPACITY_ACTUAL_ROOM."
     daily-shelter-overnight-service-occupancy-capacity-2025:
+      encoding: utf-8-sig
       format: csv
       url: https://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-2025.csv
       attributes:
