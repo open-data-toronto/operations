@@ -1,0 +1,84 @@
+ttc-lrt-delay-data:
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: TTC LRT Delay Data
+  date_published: '2019-07-23 18:12:13.621158'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: Toronto Transit Commission
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@ttc.ca
+  civic_issues: 
+    - Mobility
+  topics:
+    - Transportation
+  tags: 
+    - name: tardiness
+      vocabulary_id: null
+  information_url: null
+  excerpt: TTC LRT Delay Data
+  limitations: null
+  notes: "TTC LRT Delay Data"
+  schedule: '15 12 * * 1'
+  resources: 
+    # resource name
+    TTC LRT Delays:
+      format: xlsx
+      sheet: LRT
+      url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/ttc-lrt-delay.xlsx
+      attributes:
+        - id: "Date"
+          type: "date"
+          format: "%Y/%m/%d %H:%M:%S"
+          info:
+            notes: "Date of the delay"
+        - id: "Line"          
+          type: text
+          info:
+            notes: "Line the delay was on"
+        - id: "Time"          
+          type: text
+          info:
+            notes: "Time of the delay"
+        - id: "Day"          
+          type: text
+          info:
+            notes: "Weekday of the delay"
+        - id: "Station"
+          type: "text"          
+          info:
+            notes: "Location/station where the delay occurred"
+        - id: "Code"
+          type: "text"          
+          info:
+            notes: "The category of incident that caused the delay"
+        - id: "Min Delay"
+          type: "text"          
+          info:
+            notes: "The length, in minutes, of the delay"
+        - id: "Min Gap"
+          type: "text"          
+          info:
+            notes: ""
+        - id: "Bound"
+          type: "text"          
+          info:
+            notes: "Direction of the vehicle during the delay"
+        - id: "Vehicle"
+          type: "text"          
+          info:
+            notes: "ID of the vehicle"
+    Code Descriptions:
+      format: xlsx
+      sheet: LRT Code Description
+      url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/ttc-streetcar-delay.xlsx
+      attributes:
+        - id: "CODE"
+          type: "text"
+          info:
+            notes: "The actual code"
+        - id: "DESCRIPTION"
+          type: text
+          info:
+            notes: Plain English description of what the code is
