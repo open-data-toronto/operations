@@ -72,7 +72,7 @@ ttc-lrt-delay-data:
     Code Descriptions:
       format: xlsx
       sheet: LRT Code Description
-      url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/ttc-streetcar-delay.xlsx
+      url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/ttc-lrt-delay.xlsx
       attributes:
         - id: "CODE"
           type: "text"
