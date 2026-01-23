@@ -1,15 +1,15 @@
 # package name
 traffic-calming-database:
   # DAG info
-  schedule: "@once"
+  schedule: "20 3 * * 0"
   dag_owner_name: Mackenzie
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
   # mandatory package attributes
   title: Traffic Calming Database
   date_published: "2023-05-11 14:33:07.070323"
-  refresh_rate: Semi-annually
-  dataset_category: Map
+  refresh_rate: As available
+  dataset_category: Table
 
   # optional package attributes
   owner_division: Transportation Services
@@ -28,49 +28,80 @@ traffic-calming-database:
   information_url: null
   excerpt: Vision Zero Project Unit uses this data to track and to visualize the location of traffic calming measurements such as traffic islands, speed cushion and speed humps.
   limitations: null
-  notes: Vision Zero Project Unit uses this data to track and to visualize the location of traffic calming measurements such as traffic islands, speed cushion and speed humps. Currently Vision Zero Project Unit has this shown in our public Vision Zero dashboard.
+  notes: |
+    The Vision Zero Project Unit within Transportation Services maintains a database that tracks existing locations with installed traffic calming measures. These measures are traffic islands, speed cushions and speed humps. The descriptions of these traffic calming measures can be found [here](https://www.toronto.ca/services-payments/streets-parking-transportation/traffic-management/traffic-calming/).
+
+    Our traffic calming database refreshes at the end of each week to ensure the latest updates are available for public access and review.
+
+    The Vision Zero Projects Unit also maintains a spatial version of this dataset, which is also displayed on the public [Vision Zero mapping tool](https://www.toronto.ca/services-payments/streets-parking-transportation/road-safety/vision-zero/safety-measures-and-mapping/). This spatial data is maintained and updated on a separate schedule.
+
     
   resources:
     # resource name
     Traffic Calming Database:
-      #agol: False
-      format: geojson
-      url: "https://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.geojson"
+      jsonpath: $.value
+      format: json
+      url: https://opendata.toronto.ca/transportation.services/traffic-calming-database/response.json
       attributes:
-        - id: calm_id
-          type: int
-          info:
-            notes: Unique identifier that corresponds to each location that contains traffic calming implementations
-        - id: street
+        - id: streetName
           type: text
           info:
-            notes: Street name and segment that contains traffic calming implementations
-        - id: intersecti
+            notes: Roadway name of installation
+        - id: streetNameId
           type: text
           info:
-            notes: Cross street name that intersects with the street that contains traffic calming implementations
-        - id: intersec_1
+            notes: This can be connected to the Toronto Centreline dataset (https://open.toronto.ca/dataset/toronto-centreline-tcl/) LINEAR_NAME_ID field
+        - id: district
           type: text
           info:
-            notes: Cross street name that intersects with the street that contains traffic calming implementations 
-        - id: spd_hump
-          type: int
-          info:
-            notes: Speed humps that have been installed on the street segment
-        - id: traf_islan
-          type: int
-          info:
-            notes: Traffic Islands that have been installed on the street segment
-        - id: spd_cush
-          type: int
-          info:
-            notes: Speed Cushions that have been installed on the street segment
-        - id: Installed
-          type: int
-          info:
-            notes: The latest year that the traffic calming implementation was installed
-        - id: geometry
+            notes: District area within city
+        - id: ward
           type: text
           info:
-            notes: ""
+            notes: City ward number
+        - id: initialInstallationDate
+          type: text
+          info:
+            notes: Initial installation date
+        - id: intersection1
+          type: text
+          info:
+            notes: First intersection where installation begins or ends along the main roadway.
+        - id: intersection1Id
+          type: text
+          info:
+            notes: This can be connected to the Toronto Centreline dataset (https://open.toronto.ca/dataset/toronto-centreline-tcl/) INTERSECTION_ID fields
+        - id: intersection2
+          type: text
+          info:
+            notes: Second intersection where installation begins or ends along the main roadway.
+        - id: intersection2Id
+          type: text
+          info:
+            notes: This can be connected to the Toronto Centreline dataset (https://open.toronto.ca/dataset/toronto-centreline-tcl/) INTERSECTION_ID fields
+        - id: numIslands
+          type: text
+          info:
+            notes: Number of traffic islands
+        - id: numSpeedBumps
+          type: text
+          info:
+            notes: Number of speed bumps
+        - id: numSpeedCushions
+          type: text
+          info:
+            notes: Number of speed cushions
+        - id: numSpeedHumps
+          type: text
+          info:
+            notes: Number of speed humps
+        - id: roadType
+          type: text
+          info:
+            notes: Roadway Classification
+        - id: status
+          type: text
+          info:
+            notes: Status of traffic calming installation        
+        
         
