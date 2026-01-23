@@ -621,10 +621,10 @@ parking-tickets:
   parking-tickets-2008:
     format: zip
     url: https://opendata.toronto.ca/revenue.services/parking-tickets/parking_tickets_2008.zip
-traffic-calming-database:
-  Traffic Calming Database:
-    format: shp
-    url: https://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.zip
+#traffic-calming-database:
+#  Traffic Calming Database:
+#    format: shp
+#    url: https://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.zip
 
 housing-to-action-plan:
   HousingTO Open Data:
