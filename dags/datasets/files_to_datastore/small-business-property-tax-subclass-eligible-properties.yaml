@@ -1,0 +1,41 @@
+small-business-property-tax-subclass-eligible-properties:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: 'Small Business Property Tax Subclass: Eligible Properties'
+  date_published: '2022-04-04 09:02:18.013467'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Revenue Services
+  owner_section: Operational Support
+  owner_unit: Policy & Planning
+  owner_email: RSPolicy@toronto.ca
+  civic_issues: null
+  topics: null
+  tags: []
+  information_url: null
+  excerpt: This dataset includes all eligible properties in the small business property
+    tax subclass from 2022 and beyond.
+  limitations: null
+  notes: 'On November 9, 2021, City Council approved a 15 per cent reduction in the
+    tax rate for small businesses who meet the eligibility criteria for the new small
+    business property tax subclass. This dataset includes all eligible properties
+    in the small business property tax subclass from 2022 and beyond. The list of
+    properties was determined in accordance with City of Toronto By-law 924-2021. '
+  schedule: '5 5 * * 1'
+  resources:
+    Small Business Subclass Report - since 2026:
+      format: csv
+      url: https://opendata.toronto.ca/revenue.services/small-business-property-tax-subclass-eligible-properties/Small Business Eligible Property Listing.csv
+      attributes:
+        - id: Roll Number
+          type: "text"
+          info:
+            notes: "An assessment roll number; a unique identification number to identify a specific property on the official assessment roll."
+        - id: Municipal Address
+          type: "text"
+          info:
+            notes: "The property’s municipal address as recorded on the assessment roll and associated with the assessment roll number."
+        - id: Year
+          type: "text"
+          info:
+            notes: "The year of the data"
