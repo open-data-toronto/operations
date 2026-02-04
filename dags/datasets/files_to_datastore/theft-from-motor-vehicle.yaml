@@ -35,7 +35,7 @@ theft-from-motor-vehicle:
     
     This data does not include occurrences that have been deemed unfounded. The definition of unfounded according to Statistics Canada is: “It has been determined through police investigation that the offence reported did not occur, nor was it attempted” (Statistics Canada, 2020). 
     
-    This data includes all MCI occurrences reported to the Toronto Police Service, including those where the location has not been able to be verified. As a result, coordinate fields may appear blank. Likewise, this includes occurrences where the coordinate location is outside the City of Toronto.
+    This data includes all CSI occurrences reported to the Toronto Police Service, including those where the location has not been able to be verified. As a result, coordinate fields may appear blank. Likewise, this includes occurrences where the coordinate location is outside the City of Toronto.
     
     Note: Fields have been included for both the old 140 City of Toronto Neighbourhoods structure as well as the new 158 City of Toronto Neighbourhoods structure
     
@@ -132,10 +132,10 @@ theft-from-motor-vehicle:
           type: text
           info:
             notes: Title of Offence
-        - id: "MCI_CATEGORY"
+        - id: "CSI_CATEGORY"
           type: text
           info:
-            notes: MCI Category of Occurrence
+            notes: CSI Category of Occurrence
         - id: "HOOD_158"
           type: text
           info:

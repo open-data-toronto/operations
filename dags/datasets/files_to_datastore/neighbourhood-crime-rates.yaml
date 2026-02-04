@@ -106,6 +106,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of assaults for 2024
+        - id: ASSAULT_2025
+          type: int
+          info:
+            notes: Count of assaults for 2025
         - id: ASSAULT_RATE_2014
           type: float
           info:
@@ -150,6 +154,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of assaults per 100,000 population for 2024 calculated using the 2024 population projection provided by EA
+        - id: ASSAULT_RATE_2025
+          type: float
+          info:
+            notes: Rate of assaults per 100,000 population for 2025 calculated using the 2025 population projection provided by E5
         - id: AUTOTHEFT_2014
           type: int
           info:
@@ -194,6 +202,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of auto thefts for 2024
+        - id: AUTOTHEFT_2025
+          type: int
+          info:
+            notes: Count of auto thefts for 2025
         - id: AUTOTHEFT_RATE_2014
           type: float
           info:
@@ -238,6 +250,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of auto thefts per 100,000 population for 2024 calculated using the 2024 population projection provided by EA
+        - id: AUTOTHEFT_RATE_2025
+          type: float
+          info:
+            notes: Rate of auto thefts per 100,000 population for 2025 calculated using the 2025 population projection provided by E5
         - id: BIKETHEFT_2014
           type: int
           info:
@@ -282,6 +298,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of bike thefts for 2024
+        - id: BIKETHEFT_2025
+          type: int
+          info:
+            notes: Count of bike thefts for 2025
         - id: BIKETHEFT_RATE_2014
           type: float
           info:
@@ -326,6 +346,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of bike thefts per 100,000 population for 2024 calculated using the 2024 population projection provided by EA
+        - id: BIKETHEFT_RATE_2025
+          type: float
+          info:
+            notes: Rate of bike thefts per 100,000 population for 2025 calculated using the 2025 population projection provided by E5
         - id: BREAKENTER_2014
           type: int
           info:
@@ -370,6 +394,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of break and enters for 2024
+        - id: BREAKENTER_2025
+          type: int
+          info:
+            notes: Count of break and enters for 2025
         - id: BREAKENTER_RATE_2014
           type: float
           info:
@@ -414,6 +442,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of break and enters per 100,000 population for 2024 calculated using the 2024 population projection provided by EA
+        - id: BREAKENTER_RATE_2025
+          type: float
+          info:
+            notes: Rate of break and enters per 100,000 population for 2025 calculated using the 2025 population projection provided by E5
         - id: HOMICIDE_2014
           type: int
           info:
@@ -458,6 +490,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of homicides for 2024
+        - id: HOMICIDE_2025
+          type: int
+          info:
+            notes: Count of homicides for 2025
         - id: HOMICIDE_RATE_2014
           type: float
           info:
@@ -502,6 +538,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of homicides per 100,000 population for 2024 calculated using the 2024 population projection provided by EA
+        - id: HOMICIDE_RATE_2025
+          type: float
+          info:
+            notes: Rate of homicides per 100,000 population for 2025 calculated using the 2025 population projection provided by E5
         - id: ROBBERY_2014
           type: int
           info:
@@ -546,6 +586,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of robberies for 2024
+        - id: ROBBERY_2025
+          type: int
+          info:
+            notes: Count of robberies for 2025
         - id: ROBBERY_RATE_2014
           type: float
           info:
@@ -590,6 +634,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of robberies per 100,000 population for 2024 calculated using the 2024 population projection provided by EA
+        - id: ROBBERY_RATE_2025
+          type: float
+          info:
+            notes: Rate of robberies per 100,000 population for 2025 calculated using the 2025 population projection provided by E5
         - id: SHOOTING_2014
           type: int
           info:
@@ -634,6 +682,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of shooting and firearm discharges for 2024
+        - id: SHOOTING_2025
+          type: int
+          info:
+            notes: Count of shooting and firearm discharges for 2025
         - id: SHOOTING_RATE_2014
           type: float
           info:
@@ -678,6 +730,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of shooting and firearm discharges per 100,000 population for 2024 calculated using the 2024 population projection provided by EA
+        - id: SHOOTING_RATE_2025
+          type: float
+          info:
+            notes: Rate of shooting and firearm discharges per 100,000 population for 2025 calculated using the 2025 population projection provided by E5
         - id: THEFTFROMMV_2014
           type: int
           info:
@@ -722,6 +778,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of theft from motor vehicles for 2024
+        - id: THEFTFROMMV_2025
+          type: int
+          info:
+            notes: Count of theft from motor vehicles for 2025
         - id: THEFTFROMMV_RATE_2014
           type: float
           info:
@@ -766,6 +826,10 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of theft from motor vehicles per 100,000 population for 2024 calculated using the 2024 population projection provided by EA
+        - id: THEFTFROMMV_RATE_2025
+          type: float
+          info:
+            notes: Rate of theft from motor vehicles per 100,000 population for 2025 calculated using the 2025 population projection provided by E5
         - id: THEFTOVER_2014
           type: int
           info:
@@ -810,6 +874,10 @@ neighbourhood-crime-rates:
           type: int
           info:
             notes: Count of theft over for 2024
+        - id: THEFTOVER_2025
+          type: int
+          info:
+            notes: Count of theft over for 2025
         - id: THEFTOVER_RATE_2014
           type: float
           info:
@@ -854,10 +922,14 @@ neighbourhood-crime-rates:
           type: float
           info:
             notes: Rate of theft over per 100,000 population for 2024 calculated using the 2024 population projection provided by EA
-        - id: POPULATION_2024
+        - id: THEFTOVER_RATE_2025
+          type: float
+          info:
+            notes: Rate of theft over per 100,000 population for 2025 calculated using the 2025 population projection provided by E5        
+        - id: POPULATION_2025
           type: int
           info:
-            notes: 2024 Population
+            notes: 2025 Population
         - id: "geometry"
           type: "text"
           info:

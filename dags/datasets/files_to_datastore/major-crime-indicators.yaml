@@ -6,7 +6,7 @@ major-crime-indicators:
   dag_owner_email: mackenzie.nichols4@toronto.ca
 
   # mandatory package attributes
-  title: "Major Crime Indicators"
+  title: "Community Safety Indicators "
   date_published: "2020-08-18 14:18:24.389728"
   refresh_rate: Quarterly
   dataset_category: Table
@@ -25,23 +25,23 @@ major-crime-indicators:
       vocabulary_id: null
 
   information_url: https://data.torontopolice.on.ca/maps/major-crime-indicators-open-data
-  excerpt: This dataset includes all Major Crime Indicator offences by reported date.
+  excerpt: This dataset includes selected Community Safety Indicators (CSI) occurrences by reported date and related offences since 2014
   limitations: null
   notes: |
-    This dataset includes all Major Crime Indicators (MCI) occurrences by reported date. The Major Crime Indicators categories are Assault, Break and Enter, Auto Theft, Robbery and Theft Over (Excludes Sexual Assaults). This data is provided at the offence and/or victim level, therefore one occurrence number may have several rows of data associated to the various MCIs used to categorize the occurrence. 
+    This dataset includes all Community Safety Indicators (CSI) occurrences by reported date. The Community Safety Indicators categories are Assault, Break and Enter, Auto Theft, Robbery and Theft Over (Excludes Sexual Assaults). This data is provided at the offence and/or victim level, therefore one occurrence number may have several rows of data associated to the various CSIs used to categorize the occurrence. 
     
     This data does not include occurrences that have been deemed unfounded. The definition of unfounded according to Statistics Canada is: “It has been determined through police investigation that the offence reported did not occur, nor was it attempted” (Statistics Canada, 2020). 
     
-    This data includes all MCI occurrences reported to the Toronto Police Service, including those where the location has not been able to be verified. As a result, coordinate fields may appear blank. Likewise, this includes occurrences where the coordinate location is outside the City of Toronto.
+    This data includes all CSI occurrences reported to the Toronto Police Service, including those where the location has not been able to be verified. As a result, coordinate fields may appear blank. Likewise, this includes occurrences where the coordinate location is outside the City of Toronto.
     
     Note: Fields have been included for both the old 140 City of Toronto Neighbourhoods structure as well as the new 158 City of Toronto Neighbourhoods structure
 
   resources:
     # resource name
-    major-crime-indicators:
+    Community Safety Indicators:
       agol: True
       format: json
-      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/ArcGIS/rest/services/Major_Crime_Indicators_Open_Data/FeatureServer/0
+      url: https://services.arcgis.com/S9th0jAJ7bqgIRjw/arcgis/rest/services/Major_Crime_Indicators_Open_Data/FeatureServer/0/
       attributes:
         - id: EVENT_UNIQUE_ID
           type: text
@@ -129,10 +129,10 @@ major-crime-indicators:
           type: text
           info:
             notes: Title of Offence
-        - id: MCI_CATEGORY
+        - id: CSI_CATEGORY 
           type: text
           info:
-            notes: MCI Category of Occurrence
+            notes: CSI Category of Occurrence
         - id: HOOD_158
           type: text
           info:
