@@ -8,7 +8,7 @@ toronto-island-ferry-ticket-counts:
   date_published: '2024-03-06 12:39:40.281513'
   dataset_category: Table
   refresh_rate: Real-time
-  owner_division: Parks, Forestry & Recreation
+  owner_division: Fleet Services
   owner_section: null
   owner_unit: null
   owner_email: pfr.researchanalytics@toronto.ca
@@ -33,7 +33,7 @@ toronto-island-ferry-ticket-counts:
   resources:
     Toronto Island Ferry Ticket Counts:
       format: csv
-      url: https://opendata.toronto.ca/parks.forestry.recreation/ferry-ticket-volumes/Toronto_Ferry_Ticket_Volumes (PRD).csv
+      url: https://opendata.toronto.ca/fleet.services/ferry-ticket-volumes/Toronto_Ferry_Ticket_Volumes.csv
       attributes:
         #- source_name: "ï»¿Sort_Order"
         #  target_name: Sort Order
