@@ -546,4 +546,37 @@ def building_permits_green_roofs():
 
         yield ibms_row
                     
-                    
+
+def library_branch_programs_and_events_feed():
+    raw = requests.get("https://opendatasstg.blob.core.windows.net/events-feed/tpl-events-feed.json?sp=r&st=2023-06-19T19:56:33Z&se=2031-01-01T04:59:59Z&spr=https&sv=2022-11-02&sr=b&sig=rpZYPwSIa4zXJIt45WztzvkJZL%2BnF3YIAIuZ%2Bq%2Fl2uI%3D").text
+    expected_fields = [
+        "EventID",
+        "Title",
+        "StartTime",
+        "EndTime",
+        "StartDateLocal",
+        "LocationName",
+        "Audiences",
+        "Languages",
+        "EventTypes",
+        "IsRecurring",
+        "IsFull",
+        "RegistrationClosed",
+        "Status",
+        "RegistrationIsFull",
+        "FeaturedImageUrl",
+        "LastUpdatedOn",
+    ]
+
+    for line in raw.split("\n"):
+        try:
+            row = json.loads(line)
+            for f in expected_fields:
+                if f not in row.keys():
+                    row[f] = None
+
+            yield row
+        except Exception as e:
+            print(e)
+
+

@@ -34,111 +34,74 @@ library-branch-programs-and-events-feed:
     tpl-events-feed:
       format: json
       url: https://opendatasstg.blob.core.windows.net/events-feed/tpl-events-feed.json?sp=r&st=2023-06-19T19:56:33Z&se=2031-01-01T04:59:59Z&spr=https&sv=2022-11-02&sr=b&sig=rpZYPwSIa4zXJIt45WztzvkJZL%2BnF3YIAIuZ%2Bq%2Fl2uI%3D
+      custom_reader: library_branch_programs_and_events_feed
       attributes:
-        - id: title
+        - id: EventID
           type: text
           info:
-            notes: The name of the event.
-        - id: startdate
+            notes: Event Unique ID
+        - id: Title
+          type: text
+          info:
+            notes: The name of the event
+        - id: StartTime
+          type: timestamp
+          format: "%Y-%m-%dT%H:%M:%S.%fZ"
+          info:
+            notes: Start date and time of event
+        - id: EndTime
+          type: timestamp
+          format: "%Y-%m-%dT%H:%M:%S.%fZ"
+          info:
+            notes: End date and time of event
+        - id: StartDateLocal
           type: date
           format: "%Y-%m-%d"
           info:
-            notes: The start date of the event in YYYY-MM-DD format.
-        - id: enddate
-          type: date
-          format: "%Y-%m-%d"
-          info:
-            notes: The end date of the event in YYYY-MM-DD format. This field will be null if the event is scheduled for a single day
-        - id: starttime
+            notes: Start date of the event
+        - id: LocationName
           type: text
           info:
-            notes: The start time of the event in HH:MM AM/PM format. For events happening over the course of an entire day, this field may be set to “All Day”. This field may be null.
-        - id: endtime
+            notes: The name of the location of the event
+        - id: Audiences
           type: text
           info:
-            notes: The end time of the event in HH:MM AM/PM format. For events happening over the course of an entire day, this field may be set to “All Day”. This field may be null.
-        #- id: length
-        #  type: int
-        #  info:
-        #    notes: The duration of the event in minutes. This field may be set to 0 if an event duration has not been defined.
-        - id: library
+            notes: Audiences intended for the event
+        - id: Languages
           type: text
           info:
-            notes: The library branch hosting the event
-        - id: location
+            notes: Languages the event will be made accessible for
+        - id: EventTypes
           type: text
           info:
-            notes: The specific room or space where the event will be hosted.
-        - id: description
+            notes: Categories this event falls into
+        - id: IsRecurring
           type: text
           info:
-            notes: A description of the event with HTML text formatting.
-        - id: pagelink
+            notes: Whether this event will be repeated
+        - id: IsFull
           type: text
           info:
-            notes: A link to the event page.
-        - id: id
+            notes: Whether the event is full
+        - id: RegistrationClosed
           type: text
           info:
-            notes: The ID for the event.
-        - id: rcid
+            notes: Whether the event's registration is closed
+        - id: Status
           type: text
           info:
-            notes: The ID for the associated series of recurring events. This field will be set to 0 for one-time events.
-        - id: eventtype1
+            notes: The status of the event
+        - id: RegistrationIsFull
           type: text
           info:
-            notes: A category associated with the event.
-        - id: eventtype2
+            notes: Whether registration for the event is full
+        - id: FeaturedImageUrl
           type: text
           info:
-            notes: A category associated with the event. This field may be null.
-        - id: eventtype3
-          type: text
+            notes: URL of the image associated with the event
+        - id: LastUpdatedOn
+          type: timestamp
+          format: "%Y-%m-%dT%H:%M:%S.%fZ"
           info:
-            notes: A category associated with the event. This field may be null.
-        - id: agegroup1
-          type: text
-          info:
-            notes: An age group for the audience of the event.
-        - id: agegroup2
-          type: text
-          info:
-            notes: An age group for the audience of the event. This field may be null.
-        - id: agegroup3
-          type: text
-          info:
-            notes: An age group for the audience of the event. This field may be null.
-        - id: supportlink
-          type: text
-          info:
-            notes: A link to information related to the event. This field may be null.
-        - id: supportlinktext
-          type: text
-          info:
-            notes: The text for the related link. This field may be null.
-        - id: imagepath
-          type: text
-          info:
-            notes: A link to an image for the event. This field may be null.
-        - id: imagetext
-          type: text
-          info:
-            notes: Descriptive text for the image link. This field may be null.
-        - id: imageheight
-          type: text
-          info:
-            notes: The height of the image in pixels. This field may be null.
-        - id: imagewidth
-          type: text
-          info:
-            notes: The width of the image in pixels. This field may be null.
-        - id: otherinfo
-          type: text
-          info:
-            notes: Miscellaneous information for the event. Often populated by data for image links. This field may be null.
-        - id: lastupdated
-          type: text
-          info:
-            notes: A timestamp for when the event information was last updated.
+            notes: Date this event record was last updated
      
