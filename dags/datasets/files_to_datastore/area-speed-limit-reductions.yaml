@@ -1,0 +1,63 @@
+# package name
+area-speed-limit-reductions:
+  # DAG info
+  schedule: "20 3 1 * *"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: Area Speed Limit Reductions
+  date_published: "2026-02-12 10:33:07.070323"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Transportation Services
+  owner_section: Project Design and Management
+  owner_unit: null
+  owner_email: visionzeroto@toronto.ca
+
+  civic_issues: null
+  topics: 
+    - Transportation
+    - Environment
+  tags: 
+    - name: traffic
+      vocabulary_id: null
+
+  information_url: null
+  excerpt: Area speed limit reductions to 30 km/h on local roads and laneways.
+  limitations: This dataset will not store historic statuses of speed reductions, nor trace when statuses changed.
+  notes: |
+    The City of Toronto is currently reducing speed limits to curb speeding on  roads. This is part of a holistic Speed Management Strategy as outlined in the City’s [Vision Zero Road Safety Plan](https://www.toronto.ca/services-payments/streets-parking-transportation/road-safety/vision-zero/).
+    
+    This dataset shows, for each ward, the status of speed limits being reduced to 30 km/h on local roads and laneways
+    
+  resources:
+    # resource name
+    Traffic Calming Database:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_Local_Road_Speed_Limit_By_Ward/FeatureServer/0
+      attributes:
+        - id: WARD_NUMBER
+          type: text
+          info:
+            notes: Ward Number
+        - id: WARD_NAME
+          type: text
+          info:
+            notes: Ward name
+        - id: STATUS
+          type: text
+          info:
+            notes: Status of reducing speed of local roads and laneways
+        - id: STATUS_DETAILS
+          type: text
+          info:
+            notes: Details of the ward's status regarding speed reductions
+        - id: geometry
+          type: text
+          info:
+            notes: null
+        
