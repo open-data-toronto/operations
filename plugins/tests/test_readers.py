@@ -4,13 +4,13 @@ import pytest
 import csv
 import os
 import yaml
-from readers.readers import (
-    Reader,
+from readers import (
     CSVReader,
     AGOLReader,
     CustomReader,
     ExcelReader,
     JSONReader,
+    MultiReader,
     select_reader,
 )
 
@@ -30,7 +30,7 @@ def test_csv_reader():
 
     return CSVReader(
         source_url=test_source_url,
-        schema=test_schema,
+        attributes=test_schema,
         out_dir=this_dir,
         filename=test_filename,
     )
@@ -49,7 +49,7 @@ def test_agol_reader():
 
     return AGOLReader(
         source_url=test_source_url,
-        schema=test_schema,
+        attributes=test_schema,
         out_dir=this_dir,
         filename=test_filename,
     )
@@ -71,7 +71,7 @@ def test_agol_reader_with_query_params():
 
     return AGOLReader(
         source_url=test_source_url,
-        schema=test_schema,
+        attributes=test_schema,
         out_dir=this_dir,
         filename=test_filename,
         query_params=test_query_params,
@@ -94,7 +94,7 @@ def test_excel_reader():
 
     return ExcelReader(
         source_url=test_source_url,
-        schema=test_schema,
+        attributes=test_schema,
         out_dir=this_dir,
         filename=test_filename,
         sheet=sheet,
@@ -116,7 +116,7 @@ def test_csv_reader_special_chars():
 
     return CSVReader(
         source_url=test_source_url,
-        schema=test_schema,
+        attributes=test_schema,
         out_dir=this_dir,
         filename=test_filename,
     )
@@ -127,7 +127,7 @@ def test_geojson_reader():
     """Inits csv reader with a source with special chars for testing"""
     test_source_url = "https://opendata.toronto.ca/transportation.services/traffic-calming-database/Traffic Calming Database.geojson"
     with open(
-        "/data/operations/plugins/readers/test_fixtures/test_geojson_schema.yaml", "r"
+        "/data/operations/plugins/tests/test_fixtures/test_geojson_schema.yaml", "r"
     ) as f:
         config = yaml.load(f, yaml.SafeLoader)
     test_schema = config["traffic-calming-database"]["resources"][
@@ -137,7 +137,7 @@ def test_geojson_reader():
 
     return JSONReader(
         source_url=test_source_url,
-        schema=test_schema,
+        attributes=test_schema,
         out_dir=this_dir,
         filename=test_filename,
         is_geojson=True,
@@ -149,7 +149,7 @@ def test_json_reader():
     """Inits csv reader with a source with special chars for testing"""
     test_source_url = "https://opendata.toronto.ca/childrens.services/child-family-programs/earlyOnLocations_prod.json"
     with open(
-        "/data/operations/plugins/readers/test_fixtures/test_json_schema.yaml", "r"
+        "/data/operations/plugins/tests/test_fixtures/test_json_schema.yaml", "r"
     ) as f:
         config = yaml.load(f, yaml.SafeLoader)
     test_schema = config["earlyon-child-and-family-centres"]["resources"][
@@ -159,7 +159,7 @@ def test_json_reader():
 
     return JSONReader(
         source_url=test_source_url,
-        schema=test_schema,
+        attributes=test_schema,
         out_dir=this_dir,
         filename=test_filename,
     )
@@ -172,7 +172,7 @@ def test_json_reader_jsonpath():
         "https://opendata.toronto.ca/DummyDatasets/tpl-events-feed_mod3.json"
     )
     with open(
-        "/data/operations/plugins/readers/test_fixtures/test_json_schema_jsonpath.yaml",
+        "/data/operations/plugins/tests/test_fixtures/test_json_schema_jsonpath.yaml",
         "r",
     ) as f:
         config = yaml.load(f, yaml.SafeLoader)
@@ -184,7 +184,7 @@ def test_json_reader_jsonpath():
 
     return JSONReader(
         source_url=test_source_url,
-        schema=test_schema,
+        attributes=test_schema,
         out_dir=this_dir,
         filename=test_filename,
         jsonpath=test_jsonpath,
@@ -281,3 +281,46 @@ def test_select_reader():
             assert (
                 type(reader) == reader_class
             ), f"{test_format} needs {reader_class}, not {type(reader)}"
+
+
+def test_multireader_read():
+    # input filepath strings, makes sure correct outputs are made
+
+    test_source_url = "https://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-yyyy.csv"
+    with open(this_dir + "/test_fixtures/test_csv_schema.yaml", "r") as f:
+        config = yaml.load(f, yaml.SafeLoader)
+    test_schema = config["upcoming-and-recently-completed-affordable-housing-units"][
+        "resources"
+    ]["Affordable Rental Housing Pipeline"]["attributes"]
+    test_filename = "/test_fixtures/test_csv_output.csv"
+
+    reader = MultiReader(
+        source_url=test_source_url,
+        attributes=test_schema,
+        out_dir=this_dir,
+        filename=test_filename,
+        format = test_filename.split(".")[-1]
+    )
+
+    assert reader.read()
+
+def test_multireader_parse_filepaths():
+    # input filepath strings, makes sure correct outputs are made
+
+    test_source_url = "https://opendata.toronto.ca/shelter.support.housing.administration/daily-shelter-and-overnight-occupancy-and-capacity/daily-shelter-overnight-service-occupancy-capacity-yyyy.csv"
+    with open(this_dir + "/test_fixtures/test_csv_schema.yaml", "r") as f:
+        config = yaml.load(f, yaml.SafeLoader)
+    test_schema = config["upcoming-and-recently-completed-affordable-housing-units"][
+        "resources"
+    ]["Affordable Rental Housing Pipeline"]["attributes"]
+    test_filename = "/test_fixtures/test_csv_output.csv"
+
+    reader = MultiReader(
+        source_url=test_source_url,
+        attributes=test_schema,
+        out_dir=this_dir,
+        filename=test_filename,
+        format = test_filename.split(".")[-1]
+    )
+
+    assert len(reader.parse_possible_filepaths()) > 1

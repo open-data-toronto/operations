@@ -380,3 +380,46 @@ def check_data_consistency(package_name, tmp_dir, ckan):
         data_equals.append(file_equal)
 
     return all(data_equals)
+
+def parse_possible_filepaths(source_url):
+
+        output = []
+        # TODO:
+        # - loose numeric ranges/date ranges
+        # - loops through them until it doesnt exist
+        # - stops
+
+        # TODO:
+        # parameterize input value limits (ex: start year)
+        
+        if "yyyy" in source_url:
+            for year in range(2000, 2100):
+                this_year_input = source_url
+                this_year_input = this_year_input.replace("yyyy", str(year))
+                
+                if "mm" in this_year_input:
+                    for month in range(1,13):
+                        this_month_input = this_year_input
+                        if len(str(month)) == 1:
+                            month = "0" + str(month)
+                        this_month_input = this_month_input.replace("mm", str(month))                        
+                        if requests.get(this_month_input, allow_redirects = False).status_code == 200:
+                            output.append(this_month_input)
+                        
+                elif "qq" in this_year_input:
+                    for quarter in range(1,5):
+                        this_quarter_input = this_year_input
+                        if len(str(quarter)) == 1:
+                            quarter = "0" + str(quarter)
+                        this_quarter_input = this_quarter_input.replace("qq", f"q{str(quarter)}")                        
+                        if requests.get(this_quarter_input, allow_redirects = False).status_code == 200:
+                            output.append(this_quarter_input)
+                        
+                else:
+                    if requests.get(this_year_input, allow_redirects = False).status_code == 200:
+                        output.append(this_year_input)                    
+
+        else:
+            output.append(source_url)            
+
+        return output

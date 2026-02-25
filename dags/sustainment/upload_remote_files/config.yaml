@@ -1,3 +1,4 @@
+
 #2021/12/08, Gary
 earlyon-child-and-family-centres:
   EarlyON Child and Family Centres Locations - JSON:
@@ -705,3 +706,16 @@ merged-gtfs-ttc-routes-and-schedules:
   Complete GTFS:
     format: zip
     url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/CompleteGTFS.zip
+
+#private-transportation-companies-supply-and-demand:
+#  operating_hours_2025:
+#    format: zip
+#    link: true
+#    url: https://opendata.toronto.ca/transportation.services/private-transportation-company-dev/operating_hours_2025.zip
+
+
+bike-share-toronto-ridership-data:
+  bikeshare-ridership-yyyy:
+    format: zip
+    link: true
+    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-yyyy.zip

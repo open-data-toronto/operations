@@ -12,17 +12,18 @@ import types
 from utils import misc_utils
 from abc import ABC, abstractmethod
 from io import StringIO
+from itertools import chain
 
 
 class Reader(ABC):
     '''Base class for airflow downloading data from an external source
 
-    This class always expects an input YAML schema and always writes to a
-    local CSV. It will validate the schema of the source data based on the
-    YAML schema provided.
+    This class always expects an input YAML attributes and always writes to a
+    local CSV. It will validate the attributes of the source data based on the
+    YAML attributes provided.
     
     source_url - url of the data to download
-    schema - path to yaml containing the download's data dictionary
+    attributes - path to yaml containing the download's data dictionary
     out_dir - path to where the file will be written as a csv
     filename - name of output csv file
     
@@ -31,7 +32,7 @@ class Reader(ABC):
     def __init__(
             self, 
             source_url: str = None,
-            schema: list = None, 
+            attributes: list = None, 
             out_dir: str = "",
             filename: str = None,
             **kwargs,
@@ -40,7 +41,7 @@ class Reader(ABC):
         if source_url:
             logging.info(f"Pulling from {source_url}")
             self.source_url = misc_utils.validate_url(source_url)
-        self.schema = schema
+        self.attributes = attributes
 
         self.cleaners = {
             "text": str,
@@ -52,9 +53,11 @@ class Reader(ABC):
         } 
 
         # where the data will be saved
+        self.out_dir = out_dir
+        self.filename = filename
         self.path = out_dir + "/" + filename
         # names intended to be written out to saved file
-        self.fieldnames = [attr["id"] if "id" in attr.keys() else attr["target_name"] for attr in self.schema]
+        self.fieldnames = [attr["id"] if "id" in attr.keys() else attr["target_name"] for attr in self.attributes]
 
         logging.info(f"Reader prepping to save the following fields: {self.fieldnames}")
         
@@ -65,12 +68,12 @@ class Reader(ABC):
         raise NotImplementedError("Reader's 'read' method must be overridden")
 
 
-    def write_to_csv(self):
-        '''Input stream or list of dicts with the same schema.
+    def write_to_csv(self, mode="w"):
+        '''Input stream or list of dicts with the same attributes.
         Writes to local csv'''
         csv.field_size_limit(sys.maxsize)
 
-        with open(self.path, "w", encoding="utf-8") as f:
+        with open(self.path, mode, encoding="utf-8") as f:
             writer = csv.DictWriter(f, self.fieldnames, extrasaction='ignore')
             writer.writeheader()
             writer.writerows(self.clean_lines())
@@ -83,7 +86,7 @@ class Reader(ABC):
         Raises error if data format issue is found'''
         output = {}
         for line in self.read():
-            for attr in self.schema:
+            for attr in self.attributes:
 
                 # consider remapped column names when parsing data
                 if "id" not in attr.keys():
@@ -140,7 +143,7 @@ class CSVReader(Reader):
                     source_row = misc_utils.parse_geometry_from_row(source_row)
                 
                 # add source data to out row
-                for attr in self.schema:
+                for attr in self.attributes:
                     # remap column names if in config file
                     if "source_name" in attr.keys() and "target_name" in attr.keys():                        
                         out[attr["target_name"]] = source_row[attr["source_name"]]
@@ -223,7 +226,7 @@ class AGOLReader(Reader):
                     # Logging the empty records
                     logging.warning(f"Empty Geometry: {object}")
                 
-                for attr in self.schema:
+                for attr in self.attributes:
                     # remap column names if in config file
                     if "source_name" in attr.keys() and "target_name" in attr.keys():                        
                         this_record[attr["target_name"]] = this_record[attr["source_name"]]
@@ -414,11 +417,65 @@ class JSONReader(Reader):
             return self.parse_jsonpath(input=res)
 
 
+class MultiReader(Reader):
+    '''Reads multiple files of the same attributes, writes to a single CSV
+    Input includes a dict of filepath of the locations of files to read
+    and the format the files will be in
+
+    ex: {/file/path/data_yyyy_mm.csv: format}
+    '''
+
+    def __init__(
+        self,
+        format,    
+        **kwargs
+    ):
+        super().__init__(**kwargs)    
+        self.format = format
+
+        # other possible inputs from YAMLs
+        self.encoding = kwargs.get('encoding', None)
+        self.jsonpath = kwargs.get('jsonpath', None)
+        self.custom_reader = kwargs.get('custom_reader', None)
+
+    def parse_possible_filepaths(self):
+        return misc_utils.parse_possible_filepaths(self.source_url)
+
+
+    def read(self):
+        logging.info(">>>>> MultiReader <<<<<<")
+
+        generators = []
+        # loop through possible filepaths
+        for filepath in self.parse_possible_filepaths():        
+            this_format = filepath.split(".")[-1]
+
+            config = {
+                "source_url": filepath,
+                "attributes": self.attributes,
+                "out_dir": self.out_dir,
+                "filename": self.filename,
+                "format": self.format,  
+                "encoding": self.encoding,
+                "jsonpath": self.jsonpath,
+            }            
+            if self.custom_reader:
+                config["custom_reader"] = self.custom_reader
+            reader = select_reader(
+                "",
+                "",
+                config,
+            )
+
+            generators = chain(generators, reader.read())
+        
+        return generators
+
+
 def select_reader(package_name, resource_name, resource_config):
     '''input CKAN resource config, returns correctReader instance'''
 
     out_dir_basepath = "/data/tmp/"
-
 
     readers = {
         "csv": CSVReader,
@@ -427,32 +484,37 @@ def select_reader(package_name, resource_name, resource_config):
         "agol": AGOLReader,
         "xls": ExcelReader,
         "xlsx": ExcelReader,
+        "multi": MultiReader,
     }
 
     # make sure config has minimum keys we'll need
     assert isinstance(resource_config, dict), f"Input must be dict! Got {type(resource_config)}"
     
-    assert "url" in resource_config.keys(), "Resource config missing URL!"
+    assert "url" in resource_config.keys() or "source_url" in resource_config.keys(), "Resource config missing URL!"
     assert "format" in resource_config.keys(), "Resource config missing format!"
 
     # parse attributes from config for Readers
-    resource_config["source_url"] = resource_config["url"]
-    resource_config["schema"] = resource_config["attributes"]
-    resource_config["out_dir"] = out_dir_basepath + package_name
-    resource_config["filename"] = resource_name + ".csv"
+    resource_config["source_url"] = resource_config.get("source_url") or resource_config.get("url")
+    #resource_config["attributes"] = resource_config["attributes"]
+    if not resource_config.get("out_dir"):
+        resource_config["out_dir"] = out_dir_basepath + package_name
+    if not resource_config.get("filename"):
+        resource_config["filename"] = resource_name + ".csv"
 
     # add attribute to differentiate json and geojson for jsonReader
     if resource_config["format"] == "geojson":
         resource_config["is_geojson"] = True
 
-    # TODO: How do we mark custom readers in YAMLs?
-    # TODO: How do we mark custom reader inputs in YAMLs?
+    # check if this comes from a custom reader
     if "custom_reader" in resource_config.keys():
         return CustomReader(**resource_config)
 
     # if file is AGOL, return AGOLReader
     elif resource_config.get("agol", None):
         return AGOLReader(**resource_config) 
+
+    if resource_config.get("multi", False):
+        return MultiReader(**resource_config)
 
     # return reader
     else:

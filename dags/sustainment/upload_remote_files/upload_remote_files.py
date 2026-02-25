@@ -15,6 +15,7 @@ from urllib.parse import urljoin
 
 from utils import airflow_utils
 from utils import ckan_utils
+from utils import misc_utils
 
 job_settings = {
     "description": "Uploads files from opendata.toronto.ca to respective CKAN resource",
@@ -80,88 +81,113 @@ def upload_remote_files(**kwargs):
 
         package_upload_results = []
         for name, details in files.items():
-            logging.info(f"Attempting: {name} | {details['url']}")
-            resource = [r for r in resources if r["name"] == name]
-
-            assert (
-                len(resource) <= 1
-            ), f"Expected 0 or 1 resource named {name}. Found {len(resource)}."
-
-            should_upload = False
-
-            head = requests.head(details["url"])
-
-            assert (
-                head.status_code == 200
-            ), f"Request response is {head.status_code}, not 200. Validate file URL."
-
-            file_last_modified = parser.parse(head.headers["Last-Modified"])
-
-            if len(resource) == 0:
-                metadata = {
-                    "package_id": package["id"],
-                    "name": name,
-                    "format": details["format"],
-                    "is_preview": False,
-                    "extract_job": f"Airflow: {kwargs['dag'].dag_id}",
-                }
-
-                api_func = "resource_create"
-                should_upload = True
-
+            # check if we have many urls to parse for this entry
+            if "yyyy" in name and "yyyy" in details["url"]:
+                urls = misc_utils.parse_possible_filepaths(details["url"])
+                names = [url.split("/")[-1] for url in urls]
             else:
-                r = resource[0]
-                metadata = {"id": r["id"]}
-                api_func = "resource_patch"
+                names = [name]
+                urls = [details["url"]]
 
-                if r["last_modified"]:
-                    resource_last_modified = parser.parse(r["last_modified"] + " UTC")
-                else:
-                    logging.info(f"{r['name']}: No last_modified, using created.")
-                    resource_last_modified = parser.parse(r["created"] + " UTC")
+            for i in range(len(names)):
+                name = names[i]
+                details["url"] = urls[i]
+                logging.info(f"Attempting: {name} | {details['url']}")
+                resource = [r for r in resources if r["name"] == name]
 
-                difference_in_seconds = (
-                    file_last_modified.timestamp() - resource_last_modified.timestamp()
-                )
+                assert (
+                    len(resource) <= 1
+                ), f"Expected 0 or 1 resource named {name}. Found {len(resource)}."
 
-                if difference_in_seconds == 0:
-                    logging.info(f"{r['name']}: up to date, nothing to upload")
-                    should_upload = False
+                should_upload = False
 
-                else:
+                head = requests.head(details["url"])
+
+                assert (
+                    head.status_code == 200
+                ), f"Request response is {head.status_code}, not 200. Validate file URL."
+
+                file_last_modified = parser.parse(head.headers["Last-Modified"])
+
+                if len(resource) == 0:
+                    metadata = {
+                        "package_id": package["id"],
+                        "name": name,
+                        "format": details["format"],
+                        "is_preview": False,
+                        "extract_job": f"Airflow: {kwargs['dag'].dag_id}",
+                    }
+
+                    api_func = "resource_create"
                     should_upload = True
 
-            if should_upload:
-                res = requests.post(
-                    urljoin(ckan.address, f"api/3/action/{api_func}"),
-                    data=metadata,
-                    headers={"Authorization": ckan.apikey},
-                    files={
-                        "upload": (
-                            Path(details["url"]).name,
-                            requests.get(details["url"]).content,
-                        )
-                    },
-                ).json()["result"]
+                else:
+                    r = resource[0]
+                    metadata = {"id": r["id"]}
+                    api_func = "resource_patch"
 
-                ckan_utils.update_resource_last_modified(
-                    ckan=ckan,
-                    resource_id=res["id"],
-                    new_last_modified=file_last_modified,
-                )
+                    if r["last_modified"]:
+                        resource_last_modified = parser.parse(r["last_modified"] + " UTC")
+                    else:
+                        logging.info(f"{r['name']}: No last_modified, using created.")
+                        resource_last_modified = parser.parse(r["created"] + " UTC")
 
-                record = {
-                    "package_name": package["name"],
-                    "resource_name": res["name"],
-                    "resource_id": res["id"],
-                    "file": details["url"],
-                    "last_modified": file_last_modified.strftime("%Y-%m-%d %H:%M"),
-                    "size_mb": round(
-                        float(head.headers["Content-Length"]) / (1024 * 1024), 1
-                    ),
-                }
+                    difference_in_seconds = (
+                        file_last_modified.timestamp() - resource_last_modified.timestamp()
+                    )
 
-                package_upload_results.append({**record, "result": "uploaded"})
+                    if difference_in_seconds == 0:
+                        logging.info(f"{r['name']}: up to date, nothing to upload")
+                        should_upload = False
+
+                    else:
+                        should_upload = True
+
+                if should_upload:
+                    logging.info(f"{name}: starting upload...")
+                    # If config has "link", it means data will not be uploaded to ckan
+                    # data will be accessed by users through a link
+                    if details.get("link", False):
+                        # manage resource metadata
+                        metadata["size"] = head.headers["Content-Length"]
+                        metadata["url"] = details["url"]
+                                        
+                        res = requests.post(
+                            urljoin(ckan.address, f"api/3/action/{api_func}"),
+                            data=metadata,
+                            headers={"Authorization": ckan.apikey},                        
+                        ).json()["result"]
+                    else:
+                        res = requests.post(
+                            urljoin(ckan.address, f"api/3/action/{api_func}"),
+                            data=metadata,
+                            headers={"Authorization": ckan.apikey},
+                            files={
+                                "upload": (
+                                    Path(details["url"]).name,
+                                    requests.get(details["url"]).content,
+                                )
+                            },
+                        ).json()["result"]
+
+                    ckan_utils.update_resource_last_modified(
+                        ckan=ckan,
+                        resource_id=res["id"],
+                        new_last_modified=file_last_modified,
+                    )
+
+                    record = {
+                        "package_name": package["name"],
+                        "resource_name": res["name"],
+                        "resource_id": res["id"],
+                        "file": details["url"],
+                        "last_modified": file_last_modified.strftime("%Y-%m-%d %H:%M"),
+                        "size_mb": round(
+                            float(head.headers["Content-Length"]) / (1024 * 1024), 1
+                        ),
+                    }
+
+                    package_upload_results.append({**record, "result": "uploaded"})
 
         return package_upload_results
 

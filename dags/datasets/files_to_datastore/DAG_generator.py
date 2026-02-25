@@ -45,7 +45,7 @@ from ckan_operators.datastore_operator import (
     DeleteDatastoreResource,
     stream_to_datastore,
 )
-from readers.readers import select_reader
+import readers
 from utils import misc_utils
 from utils_operators.slack_operators import task_failure_slack_alert, SlackWriter
 
@@ -258,7 +258,7 @@ def create_dag(package_name, config, schedule, default_args):
                 """
 
                 # find and instantiate the approoriate reader for the resource based on its file format.
-                reader = select_reader(
+                reader = readers.select_reader(
                     package_name=package_name,
                     resource_name=resource_name,
                     resource_config=resource_config,
