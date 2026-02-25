@@ -390,40 +390,40 @@ ttc-subway-delay-data:
   ttc-subway-delay-data-2024:
     format: xlsx
     url: https://opendata.toronto.ca/toronto.transit.commission/ttc-subway-delay-data/ttc-subway-delay-2024.xlsx
-bike-share-toronto-ridership-data:
-  bikeshare-ridership-readme:
-    format: xlsx
-    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-readme.xlsx
-  bikeshare-ridership-2014-2015:
-    format: xlsx
-    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2014-2015.xlsx
-  bikeshare-ridership-2016:
-    format: xlsx
-    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2016.xlsx
-  bikeshare-ridership-2017:
-    format: zip
-    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2017.zip
-  bikeshare-ridership-2018:
-    format: zip
-    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2018.zip
-  bikeshare-ridership-2019:
-    format: zip
-    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2019.zip
-  bikeshare-ridership-2020:
-    format: zip
-    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2020.zip
-  bikeshare-ridership-2021:
-    format: zip
-    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2021.zip
-  bikeshare-ridership-2022:
-    format: zip
-    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2022.zip
-  bikeshare-ridership-2023:
-    format: zip
-    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2023.zip
-  bikeshare-ridership-2024:
-    format: zip
-    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2024.zip
+#bike-share-toronto-ridership-data:
+#  bikeshare-ridership-readme:
+#    format: xlsx
+#    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-readme.xlsx
+#  bikeshare-ridership-2014-2015:
+#    format: xlsx
+#    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2014-2015.xlsx
+#  bikeshare-ridership-2016:
+#    format: xlsx
+#    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2016.xlsx
+#  bikeshare-ridership-2017:
+#    format: zip
+#    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2017.zip
+#  bikeshare-ridership-2018:
+#    format: zip
+#    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2018.zip
+#  bikeshare-ridership-2019:
+#    format: zip
+#    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2019.zip
+#  bikeshare-ridership-2020:
+#    format: zip
+#    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2020.zip
+#  bikeshare-ridership-2021:
+#    format: zip
+#    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2021.zip
+#  bikeshare-ridership-2022:
+#    format: zip
+#    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2022.zip
+#  bikeshare-ridership-2023:
+#    format: zip
+#    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2023.zip
+#  bikeshare-ridership-2024:
+#    format: zip
+#    url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-2024.zip
 annual-energy-consumption:
   annual-energy-consumption-readme:
     format: xlsx
