@@ -39,12 +39,12 @@ building-construction-demolition-violations:
             notes: ""
         - id: BRINDATE
           type: date
-          format: "%Y-%m-%dT%H:%M:%S"
+          format: "%Y%m%d%H%M%S"
           info:
             notes: ""
         - id: BRFINALDATE
           type: date
-          format: "%Y-%m-%dT%H:%M:%S"
+          format: "%Y%m%d%H%M%S"
           info:
             notes: ""
         - id: BRSTATUSDESC
@@ -81,17 +81,17 @@ building-construction-demolition-violations:
             notes: ""
         - id: INDATE
           type: date
-          format: "%Y-%m-%dT%H:%M:%S"
+          format: "%Y%m%d%H%M%S"
           info:
             notes: ""
         - id: ISSUEDATE
           type: date
-          format: "%Y-%m-%dT%H:%M:%S"
+          format: "%Y%m%d%H%M%S"
           info:
             notes: ""
         - id: FINALDATE
           type: date
-          format: "%Y-%m-%dT%H:%M:%S"
+          format: "%Y%m%d%H%M%S"
           info:
             notes: ""
         - id: SITEADDRESS
