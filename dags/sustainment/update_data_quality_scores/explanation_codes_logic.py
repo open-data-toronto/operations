@@ -51,8 +51,9 @@ def metadata_explanation_code(package, metadata_fields, columns=None):
             missing_fields.append(field)
         elif field == "owner_email" and "opendata@toronto.ca" in package[field]:
             email_message = "~owner_is_opendata"
-        elif field == "information_url":
-            url_message = dqs_utils.information_url_checker(package[field])
+        # TODO: remove this rule or address the networking concerns with this rule
+        #elif field == "information_url":
+        #    url_message = dqs_utils.information_url_checker(package[field])
 
     missing_fields_message = (
         f"~metadata_missing:{','.join(missing_fields)}" if missing_fields else ""
