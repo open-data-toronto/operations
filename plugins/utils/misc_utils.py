@@ -194,13 +194,16 @@ def parse_geometry_from_row(source_row):
                 float(source_row[longitude_attribute]),
                 float(source_row[latitude_attribute]),
             ]
-    else:
-        coordinates = [None, None]
 
-    source_row["geometry"] = json.dumps({
-        "type": "Point",
-        "coordinates": coordinates,
-    })
+        source_row["geometry"] = json.dumps({
+            "type": "Point",
+            "coordinates": coordinates,
+        })
+
+    else:
+        source_row["geometry"] = None
+
+    
 
     return source_row
 
