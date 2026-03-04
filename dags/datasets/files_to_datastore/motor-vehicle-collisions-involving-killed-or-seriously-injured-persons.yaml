@@ -27,20 +27,19 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
     \ either Killed or Seriously Injured (KSI) since 2006"
   limitations: |
     Data are only provided for fatal or serious injury (KSI) collisions that occur in the City of Toronto’s right-of-way and involve at least one motor vehicle:
-
-    * Collisions that occurred on private property, or on provincially-owned highways (e.g. 400-series highways), or outside of the City of Toronto boundary, are not included.
+    
+    * Collisions that occurred on private property, or on provincial highways (e.g. 400-series highways), or outside of the City of Toronto boundary, are not included.
     
     * Only collisions that involve at least one motor vehicle or streetcar are included. Dooring collisions involving cyclists or other micromobility users are also included starting in 2023.
 
-    There can be a delay of several months to more than a year between when a collision occurred and when the record is finalized and provided to the City by the TPS. Typically, the City receives data for about 90% - 95% of collisions within 6 months of the collision occurring.
+    There can be an interval of up to several months to more than a year between the time a collision takes place and when the finalized record is provided to the City by TPS.
 
-    The City and Toronto Police Service have established practices for reviewing KSI collision data to correct any errors. As a result, records may be modified after being first reported. We strive for a high degree of quality, however we cannot guarantee the accuracy or completeness of the dataset.
+    The City has established practices for reviewing KSI collision data to correct any errors. As a result, records may be modified after being first reported. We endeavour to provide data of the highest quality possible; however, absolute accuracy or completeness cannot be guaranteed.
 
   notes: |
     The City of Toronto’s Transportation Services Division receives collision data from the Toronto Police Service (TPS) for motor vehicle collisions that occur in the City of Toronto’s right-of-way and involve a serious injury or fatality.
 
-    This dataset includes collision data for all people involved in motor vehicle collisions where at least one person was killed or seriously injured (KSI), since 2006. The collision data provided include several fields that describe the collision event and actions of people involved (described in detail in the Dictionary). Each record (row) in the table corresponds to one involved person.
-
+    This dataset includes collision data for all people involved in motor vehicle collisions where at least one person was killed or seriously injured (KSI), since 2006. Each record (row) in the table corresponds to one involved person. The collision data provided include several fields that describe the collision event and actions of people involved. Each data field is either relevant to the collision event and is consistent across all people involved in the collision, or is specific to the person involved. Data fields are described in detail in the data dictionary.
 
   resources:
     Motor Vehicle Collisions with KSI Data:
@@ -50,92 +49,92 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
         - id: collision_id
           type: text
           info:
-            notes: "Unique collision identifier"
+            notes: Identifier unique to each collision event. All people involved in the collision will have the same 
         - id: accdate
           type: timestamp
           format: "%Y-%m-%dT%H:%M:%S"
           info:
-            notes: "Date and time of the collision"
+            notes: Date and time of the collision.
         - id: stname1
           type: text
           info:
-            notes: "Primary street name"
+            notes: Primary street name where the collision occurred.
         - id: stname2
           type: text
           info:
-            notes: "Secondary (cross) street name"
+            notes: Secondary (cross) street name where the collision occurred.
         - id: stname3
           type: text
           info:
-            notes: "Additional location information or offset (in metres) from secondary (cross) street"
+            notes: Additional information about the collision location or offset (in metres) from secondary (cross) street.
         - id: per_inv
           type: int
           info:
-            notes: "Number of people involved in the collision"
+            notes: Number of people involved in the collision.
         - id: acclass
           type: text
           info:
-            notes: "Classification of the collision by highest level of injury sustained as a result of the collision"
+            notes: Classification of the collision by highest level of injury sustained as a result of the collision.
         - id: accloc
           type: text
           info:
-            notes: "Type of location where the collision occurred (e.g. midblock, intersection)"
+            notes: Type of location where the collision occurred (e.g. midblock, intersection).
         - id: traffictl
           type: text
           info:
-            notes: "Type of traffic control at the collision location"
+            notes: Type of traffic control at the collision location.
         - id: impactype
           type: text
           info:
-            notes: "Type of impact describing the initial collision event"
+            notes: Type of impact describing the initial collision event.
         - id: visible
           type: text
           info:
-            notes: "Environment conditions (weather) at the time of the collision"
+            notes: Environment conditions (weather) at the time of the collision.
         - id: light
           type: text
           info:
-            notes: "Lighting conditions at the time of the collision"
+            notes: Lighting conditions at the time of the collision.
         - id: rdsfcond
           type: text
           info:
-            notes: "Condition of the road surface at the time of the collision"
+            notes: Condition of the road surface at the time of the collision.
         - id: road_class
           type: text
           info:
-            notes: "Highest classification of the roadway(s) where the collision occurred"
+            notes: Highest classification of the roadway(s) where the collision occurred.
         - id: failtorem
           type: text
           info:
-            notes: "Flag indicating that one or more people involved in the collision failed to remain on scene"
+            notes: Flag indicating that one or more people involved in the collision failed to remain on scene.
         - id: longitude
           type: float
           info:
-            notes: "Longitude value corresponding to the collision location"
+            notes: Longitude value corresponding to the collision location.
         - id: latitude
           type: float
           info:
-            notes: "Latitude value corresponding to the collision location"
+            notes: Latitude value corresponding to the collision location.
         - id: veh_no
           type: int
           info:
-            notes: "Number assigned to each vehicle involved in the collision"
+            notes: Number assigned to each vehicle involved in the collision (unique within each collision event).
         - id: vehtype
           type: text
           info:
-            notes: "Type of vehicle associated with the person involved in the collision"
+            notes: Type of vehicle associated with the person involved in the collision.
         - id: initdir
           type: text
           info:
-            notes: "Direction of travel on initial impact of the involved vehicle"
+            notes: Direction of travel on initial impact of the involved vehicle.
         - id: per_no
           type: int
           info:
-            notes: "Number assigned to each person involved in the collision"
+            notes: Number assigned to each person involved in the collision (unique within each collision event).
         - id: invage
           type: int
           info:
-            notes: "Age of person involved"
+            notes: Age of person involved.
         - id: injury
           type: text
           info:
@@ -149,103 +148,103 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
         - id: safequip
           type: text
           info:
-            notes: "Safety equipment in use by the person involved in the collision"
+            notes: Safety equipment in use by the person involved in the collision.
         - id: drivact
           type: text
           info:
-            notes: "Probable behaviour of the involved driver leading up to the collision"
+            notes: Probable behaviour of the involved driver leading up to the collision.
         - id: drivcond
           type: text
           info:
-            notes: "Condition the driver was in at the time of the collision"
+            notes: Condition the driver was in at the time of the collision.
         - id: pedact
           type: text
           info:
-            notes: "Probable behaviour of the involved pedestrian leading up to the collision"
+            notes: Probable behaviour of the involved pedestrian leading up to the collision.
         - id: pedcond
           type: text
           info:
-            notes: "Condition the pedestrian was in at the time of the collision"
+            notes: Condition the pedestrian was in at the time of the collision.
         - id: manoeuvre
           type: text
           info:
-            notes: "Manoeuvre of the involved vehicle at the time of the collision"
+            notes: Manoeuvre of the involved vehicle at the time of the collision.
         - id: pedtype
           type: text
           info:
-            notes: "Description of collision if a pedestrian was involved"
+            notes: Description of collision if a pedestrian was involved.
         - id: cyclistype
           type: text
           info:
-            notes: "Description of collision if a cyclist was involved"
+            notes: Description of collision if a cyclist was involved.
         - id: cycact
           type: text
           info:
-            notes: "Probable behaviour of the involved cyclist leading up to the collision"
+            notes: Probable behaviour of the involved cyclist leading up to the collision.
         - id: cyccond
           type: text
           info:
-            notes: "Condition the cyclist was in at the time of the collision"
+            notes: Condition the cyclist was in at the time of the collision.
         - id: road_user
           type: text
           info:
-            notes: "Role of the involved person"
+            notes: Role of the involved person.
         - id: fatal_no
           type: int
           info:
-            notes: "Number assigned to each fatality in a given year. The numbering is reset to 1 with the first fatality in a new year."
+            notes: Number assigned to each fatality in a given year. The numbering is reset to 1 with the first fatality in 
         - id: wardname
           type: text
           info:
-            notes: "City of Toronto Ward where the collision occurred"
+            notes: City of Toronto Ward where the collision occurred.
         - id: division
           type: text
           info:
-            notes: "Toronto Police Division where the collision occurred"
+            notes: Toronto Police Division where the collision occurred.
         - id: neighbourhood
           type: text
           info:
-            notes: "City of Toronto Neighbourhood where the collision occurred"
+            notes: City of Toronto Neighbourhood where the collision occurred.
         - id: aggressive
           type: text
           info:
-            notes: "Flag indicating one or more people involved in the collision were driving aggressively (following too closely, exceeding the speed limit, driving too fast for conditions, disobeying a traffic control, failing to yield the right-of-way, or passing improperly)."
+            notes: Flag indicating one or more people involved in the collision were driving aggressively (following too 
         - id: distracted
           type: text
           info:
-            notes: "Flag indicating one or more people involved in the collision were inattentive while driving"
+            notes: Flag indicating one or more people involved in the collision were inattentive. This field is derived 
         - id: cyclist
           type: text
           info:
-            notes: "Flag indicating one or more cyclists or e-cyclists were involved in the collision"
+            notes: Flag indicating one or more cyclists or e-cyclists were involved in the collision.
         - id: motorcyclist
           type: text
           info:
-            notes: "Flag indicating one or more motorcyclists were involved in the collision"
+            notes: Flag indicating one or more motorcyclists or moped drivers were involved in the collision.
         - id: other_micromobility
           type: text
           info:
-            notes: "Flag indicating one or more other micromobility users (e.g. e-scooters) were involved in the collision"
+            notes: Flag indicating one or more other micromobility users (e.g. e-scooters) were involved in the collision.
         - id: older_adult
           type: text
           info:
-            notes: "Flag indicating one or more people aged 65 or over were involved in the collision"
+            notes: Flag indicating one or more people aged 65 or over were involved in the collision.
         - id: pedestrian
           type: text
           info:
-            notes: "Flag indicating one or more pedestrians were involved in the collision"
+            notes: Flag indicating one or more pedestrians were involved in the collision.
         - id: red_light
           type: text
           info:
-            notes: "Flag indicating one or more people involved in the collision disobeyed a red signal"
+            notes: Flag indicating one or more people involved in the collision disobeyed a red signal. This field is 
         - id: school_child
           type: text
           info:
-            notes: "Flag indicating one or more people aged 4-19 were involved in the collision"
+            notes: Flag indicating one or more people aged 4-19 were involved in the collision.
         - id: heavy_truck
           type: text
           info:
-            notes: "Flag indicating one or more heavy vehicles (large trucks, buses, etc. were involved in the collision"
+            notes: Flag indicating one or more heavy vehicles (large trucks, tow trucks, buses, etc., excluding pickup 
         - id: "geometry"
           type: text
           info:
