@@ -192,7 +192,7 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
         - id: fatal_no
           type: int
           info:
-            notes: Number assigned to each fatality in a given year. The numbering is reset to 1 with the first fatality in 
+            notes: Number assigned to each fatality in a given year. The numbering is reset to 1 with the first fatality in a new year
         - id: wardname
           type: text
           info:
@@ -208,11 +208,11 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
         - id: aggressive
           type: text
           info:
-            notes: Flag indicating one or more people involved in the collision were driving aggressively (following too 
+            notes: Flag indicating one or more people involved in the collision were driving aggressively (following too closely, exceeding the speed limit, driving too fast for conditions, disobeying a traffic control, failing to yield the right-of-way, or passing improperly). This field is dervied from the drivact field.
         - id: distracted
           type: text
           info:
-            notes: Flag indicating one or more people involved in the collision were inattentive. This field is derived 
+            notes: Flag indicating one or more people involved in the collision were inattentive. This field is derived from the drivcond, cyccond, and pedcond fields.
         - id: cyclist
           type: text
           info:
@@ -236,7 +236,7 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
         - id: red_light
           type: text
           info:
-            notes: Flag indicating one or more people involved in the collision disobeyed a red signal. This field is 
+            notes: Flag indicating one or more people involved in the collision disobeyed a red signal. This field is dervied from the drivact and traffictl fields.
         - id: school_child
           type: text
           info:
@@ -244,7 +244,7 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
         - id: heavy_truck
           type: text
           info:
-            notes: Flag indicating one or more heavy vehicles (large trucks, tow trucks, buses, etc., excluding pickup 
+            notes: Flag indicating one or more heavy vehicles (large trucks, tow trucks, buses, etc., excluding pickup trucks) were involved in the collision.
         - id: "geometry"
           type: text
           info:
