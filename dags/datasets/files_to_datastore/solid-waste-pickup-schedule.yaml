@@ -60,6 +60,10 @@ solid-waste-pickup-schedule:
           type: "text"
           info:
             notes: "[Garbage](https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/what-goes-in-my-garbage-bin/) is collected every other week, alternating with recycling."
+        - id: "Recycling"
+          type: "text"
+          info:
+            notes: "Recycling is collected every other week, alternating with garbage."
         - id: "YardWaste"
           type: "text"
           info:
