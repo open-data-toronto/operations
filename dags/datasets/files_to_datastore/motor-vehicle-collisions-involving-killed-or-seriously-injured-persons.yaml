@@ -49,202 +49,196 @@ motor-vehicle-collisions-involving-killed-or-seriously-injured-persons:
         - id: collision_id
           type: text
           info:
-            notes: Identifier unique to each collision event. All people involved in the collision will have the same 
+            notes: "Event-level field. Identifier unique to each collision event. All people involved in the collision will have the same collision_id."
         - id: accdate
           type: timestamp
           format: "%Y-%m-%dT%H:%M:%S"
           info:
-            notes: Date and time of the collision.
+            notes: "Event-level field. Date and time of the collision."
         - id: stname1
           type: text
           info:
-            notes: Primary street name where the collision occurred.
+            notes: "Event-level field. Primary street name where the collision occurred."
         - id: stname2
           type: text
           info:
-            notes: Secondary (cross) street name where the collision occurred.
+            notes: "Event-level field. Secondary (cross) street name where the collision occurred."
         - id: stname3
           type: text
           info:
-            notes: Additional information about the collision location or offset (in metres) from secondary (cross) street.
+            notes: "Event-level field. Additional information about the collision location or offset (in metres) from secondary (cross) street."
         - id: per_inv
           type: int
           info:
-            notes: Number of people involved in the collision.
+            notes: "Event-level field. Number of people involved in the collision."
         - id: acclass
           type: text
           info:
-            notes: Classification of the collision by highest level of injury sustained as a result of the collision.
+            notes: "Event-level field. Classification of the collision by highest level of injury sustained as a result of the collision."
         - id: accloc
           type: text
           info:
-            notes: Type of location where the collision occurred (e.g. midblock, intersection).
+            notes: "Event-level field. Type of location where the collision occurred (e.g. midblock, intersection)."
         - id: traffictl
           type: text
           info:
-            notes: Type of traffic control at the collision location.
+            notes: "Event-level field. Type of traffic control at the collision location."
         - id: impactype
           type: text
           info:
-            notes: Type of impact describing the initial collision event.
+            notes: "Event-level field. Type of impact describing the initial collision event."
         - id: visible
           type: text
           info:
-            notes: Environment conditions (weather) at the time of the collision.
+            notes: "Event-level field. Environment conditions (weather) at the time of the collision."
         - id: light
           type: text
           info:
-            notes: Lighting conditions at the time of the collision.
+            notes: "Event-level field. Lighting conditions at the time of the collision."
         - id: rdsfcond
           type: text
           info:
-            notes: Condition of the road surface at the time of the collision.
+            notes: "Event-level field. Condition of the road surface at the time of the collision."
         - id: road_class
           type: text
           info:
-            notes: Highest classification of the roadway(s) where the collision occurred.
+            notes: "Event-level field. Highest classification of the roadway(s) where the collision occurred."
         - id: failtorem
           type: text
           info:
-            notes: Flag indicating that one or more people involved in the collision failed to remain on scene.
+            notes: "Event-level field. Flag indicating that one or more people involved in the collision failed to remain on scene."
         - id: longitude
           type: float
           info:
-            notes: Longitude value corresponding to the collision location.
+            notes: "Event-level field. Longitude value corresponding to the collision location."
         - id: latitude
           type: float
           info:
-            notes: Latitude value corresponding to the collision location.
+            notes: "Event-level field. Latitude value corresponding to the collision location."
         - id: veh_no
           type: int
           info:
-            notes: Number assigned to each vehicle involved in the collision (unique within each collision event).
+            notes: "Involved-level field. Number assigned to each vehicle involved in the collision (unique within each collision event)."
         - id: vehtype
           type: text
           info:
-            notes: Type of vehicle associated with the person involved in the collision.
+            notes: "Involved-level field. Type of vehicle associated with the person involved in the collision."
         - id: initdir
           type: text
           info:
-            notes: Direction of travel on initial impact of the involved vehicle.
+            notes: "Involved-level field. Direction of travel on initial impact of the involved vehicle."
         - id: per_no
           type: int
           info:
-            notes: Number assigned to each person involved in the collision (unique within each collision event).
+            notes: "Involved-level field. Number assigned to each person involved in the collision (unique within each collision event)."
         - id: invage
           type: int
           info:
-            notes: Age of person involved.
+            notes: "Involved-level field. Age of person involved."
         - id: injury
           type: text
           info:
-            notes: |
-              Severity of injury sustained by the involved person as a result of the collision:
-              0 = None = Uninjured person
-              1 = Minimal = Person did not go to hospital when leaving the scene of the collision. Includes minor abrasions, bruises and complaints of pain.
-              2 = Minor = Person went to hospital and was treated in the emergency room, but not admitted.
-              3 = Major = Person admitted to hospital. Includes person admitted for observation. This could be either life threatening or non-life threatening.
-              4 = Fatal = Person killed immediately or within 30 days of the motor vehicle collision.
+            notes: "Involved-level field. Severity of injury sustained by the involved person as a result of the collision: 0 = None (Uninjured person). 1 = Minimal (Person did not go to hospital when leaving the scene of the collision. Includes minor abrasions, bruises and complaints of pain). 2 = Minor (Person went to hospital and was treated in the emergency room, but not admitted). 3 = Major (Person admitted to hospital. Includes person admitted for observation. This could be either life threatening or non-life threatening). 4 = Fatal (Person killed immediately or within 30 days of the motor vehicle collision)."
         - id: safequip
           type: text
           info:
-            notes: Safety equipment in use by the person involved in the collision.
+            notes: "Involved-level field. Safety equipment in use by the person involved in the collision."
         - id: drivact
           type: text
           info:
-            notes: Probable behaviour of the involved driver leading up to the collision.
+            notes: "Involved-level field. Probable behaviour of the involved driver leading up to the collision."
         - id: drivcond
           type: text
           info:
-            notes: Condition the driver was in at the time of the collision.
+            notes: "Involved-level field. Condition the driver was in at the time of the collision."
         - id: pedact
           type: text
           info:
-            notes: Probable behaviour of the involved pedestrian leading up to the collision.
+            notes: "Involved-level field. Probable behaviour of the involved pedestrian leading up to the collision."
         - id: pedcond
           type: text
           info:
-            notes: Condition the pedestrian was in at the time of the collision.
+            notes: "Involved-level field. Condition the pedestrian was in at the time of the collision."
         - id: manoeuvre
           type: text
           info:
-            notes: Manoeuvre of the involved vehicle at the time of the collision.
+            notes: "Involved-level field. Manoeuvre of the involved vehicle at the time of the collision."
         - id: pedtype
           type: text
           info:
-            notes: Description of collision if a pedestrian was involved.
+            notes: "Involved-level field. Description of collision if a pedestrian was involved."
         - id: cyclistype
           type: text
           info:
-            notes: Description of collision if a cyclist was involved.
+            notes: "Involved-level field. Description of collision if a cyclist was involved."
         - id: cycact
           type: text
           info:
-            notes: Probable behaviour of the involved cyclist leading up to the collision.
+            notes: "Involved-level field. Probable behaviour of the involved cyclist leading up to the collision."
         - id: cyccond
           type: text
           info:
-            notes: Condition the cyclist was in at the time of the collision.
+            notes: "Involved-level field. Condition the cyclist was in at the time of the collision."
         - id: road_user
           type: text
           info:
-            notes: Role of the involved person.
+            notes: "Involved-level field. Role of the involved person."
         - id: fatal_no
           type: int
           info:
-            notes: Number assigned to each fatality in a given year. The numbering is reset to 1 with the first fatality in a new year
+            notes: "Involved-level field. Number assigned to each fatality in a given year. The numbering is reset to 1 with the first fatality in a new year."
         - id: wardname
           type: text
           info:
-            notes: City of Toronto Ward where the collision occurred.
+            notes: "Event-level field. City of Toronto Ward where the collision occurred."
         - id: division
           type: text
           info:
-            notes: Toronto Police Division where the collision occurred.
+            notes: "Event-level field. Toronto Police Division where the collision occurred."
         - id: neighbourhood
           type: text
           info:
-            notes: City of Toronto Neighbourhood where the collision occurred.
+            notes: "Event-level field. City of Toronto Neighbourhood where the collision occurred."
         - id: aggressive
           type: text
           info:
-            notes: Flag indicating one or more people involved in the collision were driving aggressively (following too closely, exceeding the speed limit, driving too fast for conditions, disobeying a traffic control, failing to yield the right-of-way, or passing improperly). This field is dervied from the drivact field.
+            notes: "Event-level field. Flag indicating one or more people involved in the collision were driving aggressively (following too closely, exceeding the speed limit, driving too fast for conditions, disobeying a traffic control, failing to yield the right-of-way, or passing improperly). This field is dervied from the drivact field."
         - id: distracted
           type: text
           info:
-            notes: Flag indicating one or more people involved in the collision were inattentive. This field is derived from the drivcond, cyccond, and pedcond fields.
+            notes: "Event-level field. Flag indicating one or more people involved in the collision were inattentive. This field is derived from the drivcond, cyccond, and pedcond fields."
         - id: cyclist
           type: text
           info:
-            notes: Flag indicating one or more cyclists or e-cyclists were involved in the collision.
+            notes: "Event-level field. Flag indicating one or more cyclists or e-cyclists were involved in the collision."
         - id: motorcyclist
           type: text
           info:
-            notes: Flag indicating one or more motorcyclists or moped drivers were involved in the collision.
+            notes: "Event-level field. Flag indicating one or more motorcyclists or moped drivers were involved in the collision."
         - id: other_micromobility
           type: text
           info:
-            notes: Flag indicating one or more other micromobility users (e.g. e-scooters) were involved in the collision.
+            notes: "Event-level field. Flag indicating one or more other micromobility users (e.g. e-scooters) were involved in the collision."
         - id: older_adult
           type: text
           info:
-            notes: Flag indicating one or more people aged 65 or over were involved in the collision.
+            notes: "Event-level field. Flag indicating one or more people aged 65 or over were involved in the collision."
         - id: pedestrian
           type: text
           info:
-            notes: Flag indicating one or more pedestrians were involved in the collision.
+            notes: "Event-level field. Flag indicating one or more pedestrians were involved in the collision."
         - id: red_light
           type: text
           info:
-            notes: Flag indicating one or more people involved in the collision disobeyed a red signal. This field is dervied from the drivact and traffictl fields.
+            notes: "Event-level field. Flag indicating one or more people involved in the collision disobeyed a red signal. This field is dervied from the drivact and traffictl fields."
         - id: school_child
           type: text
           info:
-            notes: Flag indicating one or more people aged 4-19 were involved in the collision.
+            notes: "Event-level field. Flag indicating one or more people aged 4-19 were involved in the collision."
         - id: heavy_truck
           type: text
           info:
-            notes: Flag indicating one or more heavy vehicles (large trucks, tow trucks, buses, etc., excluding pickup trucks) were involved in the collision.
+            notes: "Event-level field. Flag indicating one or more heavy vehicles (large trucks, tow trucks, buses, etc., excluding pickup trucks) were involved in the collision."
         - id: "geometry"
           type: text
           info:
