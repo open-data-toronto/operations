@@ -1,0 +1,53 @@
+licensed-dog-and-cat-names:
+  dag_owner_name: 'mnichol4'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Licensed Dog and Cat Names
+  date_published: '2024-11-07 16:35:28.527043'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Municipal Licensing & Standards
+  owner_section: null
+  owner_unit: null
+  owner_email: animalservices@toronto.ca
+  civic_issues: null
+  topics:
+  - Community services
+  tags:
+  - name: animals
+    vocabulary_id: null
+  - name: pets
+    vocabulary_id: null
+  - name: licences
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/animals-pets/
+  excerpt: This dataset contains the most popular names of dogs and cats licensed by the City of Toronto's Animal Services.
+  limitations: null
+  notes: This dataset contains the most popular names of licensed dogs and cats living in the City of Toronto.
+
+  schedule: '10 15 1 * *'
+  resources: 
+    Licensed Dog and Cat Names Since 2020:
+        format: csv
+        url: https://opendata.toronto.ca/municipal.licensing.standards/licensed-dog-and-cat-names/licensed-dog-and-cat-names-since-2020.csv
+        attributes:
+          - id: "ANIMAL_TYPE"
+            type: text
+            info:
+              notes: "The animal type associated with the record: Cat or Dog."
+          - id: "Year"
+            type: text
+            info:
+              notes: The calendar year for the record. Data is available from 2020 onward.
+          - id: "Rank"
+            type: text
+            info:
+              notes: The rank of the pet name within the same animal type for that year, based on the number of distinct animals using that name.
+          - id: "ANIMAL_NAME"
+            type: text
+            info:
+              notes: The name of the animal.
+          - id: "AnimalCnt"
+            type: int
+            info:
+              notes: The number of distinct animals of the same animal type that share the same name in the given year.
+          
