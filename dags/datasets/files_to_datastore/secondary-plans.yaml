@@ -26,7 +26,7 @@ secondary-plans:
   information_url: https://www.toronto.ca/city-government/planning-development/official-plan-guidelines/
   excerpt: Secondary Plans current as of the 2015 Plan Consolidation
   limitations: null
-  notes: "Secondary Plans are more detailed local development policies to guide growth\r\nand change in a defined area of the City.\r\n\r\n"
+  notes: "Secondary Plans are more detailed local development policies to guide growth and change in a defined area of the City."
   resources:
     Secondary Plans Data:
       format: geojson

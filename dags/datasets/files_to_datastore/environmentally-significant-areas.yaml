@@ -1,0 +1,50 @@
+environmentally-significant-areas:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Environmentally Significant Areas
+  date_published: '2020-04-03 23:32:10.420117'
+  dataset_category: Table
+  refresh_rate: As available
+  owner_division: City Planning
+  owner_section: Strategic Initiatives, Policy and Analysis
+  owner_unit: null
+  owner_email: sustainablecity@toronto.ca
+  civic_issues: null
+  topics:
+  - Locations and mapping
+  - Environment
+  tags:
+  - name: land use
+    vocabulary_id: null
+  - name: offical plan
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/public-notices-bylaws/bylaws-municipal-code/bylaw-status-registry/search-bylaw-status-registry/#blsrDetails/185534
+  excerpt: "The City's Environmentally Significant Areas are shown on Map 12A of the\
+    \ Official Plan. \r\n\r\n"
+  limitations: null
+  notes: Areas of land or water within the natural heritage system with characteristics as defined in section 3.4 of the Official Plan and which are particularly sensitive and require additional protection to preserve their environmentally significant qualities.  There are 89 environmentally significant areas identified on Map 12A of the [Official Plan](https://www.toronto.ca/city-government/planning-development/official-plan-guidelines/official-plan/).  The number of ESAs was last updated in 2025 through OPA 583. For more information about ESAs, please visit the [Environmentally Significant Areas information page](https://contrib.wp.intra.prod-toronto.ca/wp-content/uploads/2017/09/8fd2-accessible-esa_report_volume1_sept2012-appendix2.pdf).
+  schedule: '@once'
+  resources: 
+    Environmentally Significant Areas:
+      format: geojson
+      agol: true
+      url: https://gis.toronto.ca/arcgis/rest/services/cot_geospatial11/FeatureServer/50
+      attributes:
+      - id: ESA_NAME
+        type: text
+        info:
+          notes: ""
+      - id: ESA_NUM
+        type: text
+        info:
+          notes: ""
+      - id: LINK
+        type: text
+        info:
+          notes: ""
+      - id: geometry
+        type: text
+        info:
+          notes: ""
+      
+
