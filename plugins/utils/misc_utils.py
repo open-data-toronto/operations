@@ -386,7 +386,8 @@ def check_data_consistency(package_name, tmp_dir, ckan):
 
 def parse_possible_filepaths(source_url):
 
-        output = []
+        output_filepaths = []
+        output_datestrings = []
         # TODO:
         # - loose numeric ranges/date ranges
         # - loops through them until it doesnt exist
@@ -407,7 +408,7 @@ def parse_possible_filepaths(source_url):
                             month = "0" + str(month)
                         this_month_input = this_month_input.replace("mm", str(month))                        
                         if requests.get(this_month_input, allow_redirects = False).status_code == 200:
-                            output.append(this_month_input)
+                            output_filepaths.append(this_month_input)
                         
                 elif "qq" in this_year_input:
                     for quarter in range(1,5):
@@ -416,13 +417,13 @@ def parse_possible_filepaths(source_url):
                             quarter = "0" + str(quarter)
                         this_quarter_input = this_quarter_input.replace("qq", f"q{str(quarter)}")                        
                         if requests.get(this_quarter_input, allow_redirects = False).status_code == 200:
-                            output.append(this_quarter_input)
+                            output_filepaths.append(this_quarter_input)
                         
                 else:
                     if requests.get(this_year_input, allow_redirects = False).status_code == 200:
-                        output.append(this_year_input)                    
+                        output_filepaths.append(this_year_input)                    
 
         else:
-            output.append(source_url)            
+            output_filepaths.append(source_url)            
 
-        return output
+        return output_filepaths

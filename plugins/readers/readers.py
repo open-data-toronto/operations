@@ -450,6 +450,13 @@ class MultiReader(Reader):
         for filepath in self.parse_possible_filepaths():        
             this_format = filepath.split(".")[-1]
 
+            # TODO
+            # make a "add in year?" parameter in the YAML
+            # if set to true, it adds a 'date' attribute to self.attributes
+            # and it populates that attribute with the date found in parse_possible_filepaths
+            # TODO
+            # refactor parse_possible_filepaths() to output date associated with filepath
+
             config = {
                 "source_url": filepath,
                 "attributes": self.attributes,
