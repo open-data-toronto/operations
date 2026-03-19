@@ -384,46 +384,60 @@ def check_data_consistency(package_name, tmp_dir, ckan):
 
     return all(data_equals)
 
+
 def parse_possible_filepaths(source_url):
+    ''' input a url that may contain date notations, like yyyy
+    output all urls using those possible dates
 
-        output_filepaths = []
-        output_datestrings = []
-        # TODO:
-        # - loose numeric ranges/date ranges
-        # - loops through them until it doesnt exist
-        # - stops
+    ex: 
+        input: 
+            this_file_yyyy.zip
+        output: [ 
+            [2000, this_file_2000.zip],
+            [2001, this_file_2001.zip],
+            [2002, this_file_2002.zip],
+            [2003, this_file_2003.zip],
+            ... 
+            ]
+    '''
+    output = []
+    # TODO:
+    # - loose numeric ranges/date ranges
+    # - loops through them until it doesnt exist
+    # - stops
 
-        # TODO:
-        # parameterize input value limits (ex: start year)
-        
-        if "yyyy" in source_url:
-            for year in range(2000, 2100):
-                this_year_input = source_url
-                this_year_input = this_year_input.replace("yyyy", str(year))
-                
-                if "mm" in this_year_input:
-                    for month in range(1,13):
-                        this_month_input = this_year_input
-                        if len(str(month)) == 1:
-                            month = "0" + str(month)
-                        this_month_input = this_month_input.replace("mm", str(month))                        
-                        if requests.get(this_month_input, allow_redirects = False).status_code == 200:
-                            output_filepaths.append(this_month_input)
-                        
-                elif "qq" in this_year_input:
-                    for quarter in range(1,5):
-                        this_quarter_input = this_year_input
-                        if len(str(quarter)) == 1:
-                            quarter = "0" + str(quarter)
-                        this_quarter_input = this_quarter_input.replace("qq", f"q{str(quarter)}")                        
-                        if requests.get(this_quarter_input, allow_redirects = False).status_code == 200:
-                            output_filepaths.append(this_quarter_input)
-                        
-                else:
-                    if requests.get(this_year_input, allow_redirects = False).status_code == 200:
-                        output_filepaths.append(this_year_input)                    
+    # TODO:
+    # parameterize input value limits (ex: start year)
+    if "%yyyy" in source_url:
+        for year in range(2000, 2100):
+            this_date = str(year)
+            this_year_input = source_url
+            this_year_input = this_year_input.replace("%yyyy", str(year))
+            
+            if "%mm" in this_year_input:
+                for month in range(1,13):
+                    this_month_input = this_year_input
+                    if len(str(month)) == 1:
+                        month =  f"0{str(month)}" if month < 10 else str(month)
+                    this_month_input = this_month_input.replace("%mm", str(month))                        
+                    if requests.get(this_month_input, allow_redirects = False).status_code == 200:
+                        this_date += f"-{month}"
+                        output.append([this_date, this_month_input])
+                    
+            elif "%qq" in this_year_input:
+                for quarter in range(1,5):
+                    this_quarter_input = this_year_input                    
+                    this_quarter_input = this_quarter_input.replace("%qq", f"q{str(quarter)}")                        
+                    if requests.get(this_quarter_input, allow_redirects = False).status_code == 200:
+                        this_date += f"-{quarter}"
+                        output.append([this_date, this_quarter_input])
+                    
+            else:
+                if requests.get(this_year_input, allow_redirects = False).status_code == 200:
+                    output.append([this_date, this_year_input])                    
 
-        else:
-            output_filepaths.append(source_url)            
+    else:
+        output.append([None, source_url])
 
-        return output_filepaths
+    logging.info(f"Parsed {len(output)} valid filepaths")
+    return output

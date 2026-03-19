@@ -35,6 +35,7 @@ class Reader(ABC):
             attributes: list = None, 
             out_dir: str = "",
             filename: str = None,
+            date_from_filename: str = None,
             **kwargs,
         ):
 
@@ -56,11 +57,14 @@ class Reader(ABC):
         self.out_dir = out_dir
         self.filename = filename
         self.path = out_dir + "/" + filename
+        
         # names intended to be written out to saved file
         self.fieldnames = [attr["id"] if "id" in attr.keys() else attr["target_name"] for attr in self.attributes]
-
         logging.info(f"Reader prepping to save the following fields: {self.fieldnames}")
-        
+
+        # init optional input date_from_filename value if reader is multireader
+        self.date_from_filename = date_from_filename
+        print(f"--- found the following date from filename: {self.date_from_filename}")  
 
     @abstractmethod
     def read(self):
@@ -87,9 +91,14 @@ class Reader(ABC):
         output = {}
         for line in self.read():
             for attr in self.attributes:
-
+                # if we have a date inserted from a multireader, then insert the value
+                if attr.get("id", None) == "date_from_filename":
+                    output["date_from_filename"] = self.date_from_filename
+                    print(f"Added {self.date_from_filename}. See it in the output below:")
+                    print(output)
+                    continue
                 # consider remapped column names when parsing data
-                if "id" not in attr.keys():
+                elif "id" not in attr.keys():
                     attr["id"] = attr["target_name"]
             
                 cleaner = self.cleaners[attr["type"]]
@@ -100,6 +109,7 @@ class Reader(ABC):
                 else:                    
                     output[attr["id"]] = cleaner(value)
             
+            print(f"output is {output}")
             yield output
 
 
@@ -437,7 +447,8 @@ class MultiReader(Reader):
         self.encoding = kwargs.get('encoding', None)
         self.jsonpath = kwargs.get('jsonpath', None)
         self.custom_reader = kwargs.get('custom_reader', None)
-
+        self.multi_insert_date = kwargs.get('multi_insert_date', None)
+        self.sheet = kwargs.get('sheet', None)
     def parse_possible_filepaths(self):
         return misc_utils.parse_possible_filepaths(self.source_url)
 
@@ -446,16 +457,28 @@ class MultiReader(Reader):
         logging.info(">>>>> MultiReader <<<<<<")
 
         generators = []
-        # loop through possible filepaths
-        for filepath in self.parse_possible_filepaths():        
-            this_format = filepath.split(".")[-1]
 
-            # TODO
-            # make a "add in year?" parameter in the YAML
-            # if set to true, it adds a 'date' attribute to self.attributes
-            # and it populates that attribute with the date found in parse_possible_filepaths
-            # TODO
-            # refactor parse_possible_filepaths() to output date associated with filepath
+        # check a "add in year?" parameter in the YAML config
+        if self.multi_insert_date:
+            self.attributes.append({
+                "id": "date_from_filename",
+                "type": "text",
+                "info": {
+                    "notes": "Date associated with the record"
+                }
+            })
+        
+        # loop through possible filepaths
+        for item in self.parse_possible_filepaths(): 
+            if self.multi_insert_date:
+                # if there's a date parsed from a filepath, assign it
+                if item[0]:
+                    date_from_filename = item[0]                
+                else:
+                    date_from_filename = None
+            
+            filepath = item[1]
+            this_format = filepath.split(".")[-1]
 
             config = {
                 "source_url": filepath,
@@ -465,14 +488,22 @@ class MultiReader(Reader):
                 "format": self.format,  
                 "encoding": self.encoding,
                 "jsonpath": self.jsonpath,
-            }            
+                "sheet": self.sheet,
+                "date_from_filename": date_from_filename,
+            }
+
             if self.custom_reader:
                 config["custom_reader"] = self.custom_reader
+            
             reader = select_reader(
                 "",
                 "",
                 config,
             )
+
+            print("Some details on this reader...")
+            print(f"--- date from filename is {reader.date_from_filename}")
+            print(f"--- attributes are{reader.attributes}")
 
             generators = chain(generators, reader.read())
         
