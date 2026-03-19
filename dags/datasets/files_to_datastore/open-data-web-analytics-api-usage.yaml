@@ -1,0 +1,49 @@
+open-data-web-analytics:
+  schedule: '0 3 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Open Data Portal Usage 
+  date_published: '2023-01-13 17:04:01.187902'
+  refresh_rate: Daily
+  dataset_category: Table
+  owner_division: Information & Technology
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: null
+  tags:
+  - name: use
+    vocabulary_id: null
+  information_url: https://open.toronto.ca/towards-an-updated-data-quality-score-in-open-data/
+  excerpt: This dataset measures usership of the City of Toronto Open Data Portal.
+
+  limitations: null
+  notes: This dataset measures usership of the City of Toronto Open Data Portal.
+
+  resources:
+    # resource name
+    API Usage:
+      format: csv
+      custom: true
+      url: https://secure.toronto.ca/opendata/ds/od_csv/v1?format=csv
+      custom_reader: ckan_api_usage
+      attributes:
+        - id: uri
+          type: text
+          info:
+            notes: API endpoint being counted
+        - id: count
+          type: int
+          info:
+            notes: Number of requests made to an endpoint on a given date
+        - id: date
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date that requests were made
+        - id: id
+          type: text
+          info:
+            notes: ID of package or resource in the call
+        

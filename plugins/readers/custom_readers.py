@@ -5,7 +5,7 @@ import requests
 import logging
 import csv
 import io
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from airflow.models import Variable
 from utils import misc_utils
 import openpyxl
@@ -580,3 +580,97 @@ def library_branch_programs_and_events_feed():
             print(e)
 
 
+def ckan_api_usage():
+    import boto3
+    from botocore.exceptions import ClientError
+    import sys
+    sys.path.insert(0, "/home/apache-airflow")
+    import cot_env_lambda
+
+    FunctionName=cot_env_lambda.FunctionName
+    Region=cot_env_lambda.Region
+
+    """
+    Invokes Cloud Services' Athena query Lambda function and returns the parsed JSON result.
+    How this Lambda works:
+    1. Someone hits the API 
+    2. CloudFront put the log to S3 buckets (takes within one hour or longer)
+    3. Step Functions / Lambda functions run regularly (per hour for QA, per 15 minutes for Prod) 
+       to copy the data and perform partition to an Athena table
+    """
+
+    client = boto3.client("lambda", region_name= Region)
+    
+    # This gives us one day's data per call
+    # Let's determine which days of data we need
+    dates = []
+    output = []
+    # Get yesterday's date object
+    yesterday = date.today() - timedelta(days=1)
+
+    # prepare to check CKAN data
+    import ckanapi
+    active_env = Variable.get("active_env")
+    ckan_creds = Variable.get("ckan_credentials_secret", deserialize_json=True)
+    ckan_address = ckan_creds[active_env]["address"]
+    ckan_apikey = ckan_creds[active_env]["apikey"]
+
+    ckan = ckanapi.RemoteCKAN(**ckan_creds[active_env])
+
+    package = ckan.action.package_show(id="open-data-web-analytics")
+    resource = [r for r in package.get("resources") if r["name"] == "API Usage"]
+
+    # If the resource doesn't exist...
+    if len(resource) == 0:
+        # Grab all data from Jan 1 2026 to yesterday
+        this_date = date(2026, 1, 1)
+
+    # If resource exists, determine it's latest date of data
+    elif len(resource) > 0:
+        data = ckan.action.datastore_search(id=resource[0]["id"], sort="date desc")
+        this_date = datetime.strptime(data["records"][0]["date"], "%Y-%m-%d").date()
+    
+    # grab all days from that day to yesterday
+    while this_date != yesterday:
+        dates.append(this_date.strftime("%Y-%m-%d"))
+        this_date = this_date + timedelta(days=1)
+    
+    logging.info(f"Preparing to load data for {len(dates)} date(s)")
+    for date_string in dates:
+        print(date_string)
+        payload = {
+            "date": date_string
+        }
+
+        response = client.invoke(
+            FunctionName=FunctionName,
+            InvocationType="RequestResponse",
+            Payload=json.dumps(payload).encode("utf-8")
+        )
+
+        # Read and parse response payload
+        raw_payload = response["Payload"].read()
+        decoded = json.loads(raw_payload.decode("utf-8"))
+        results = json.loads(decoded["body"])["results"]
+        
+        # add the date to the result
+        if len(results) > 0:
+            result_with_date = []
+            for result in results:
+                # parse data for each different kind of id
+                for this_id in ["pid", "rid", "id"]:
+                    if len(result.get(f"{this_id}s", [])) > 0:
+                        for item in result[f"{this_id}s"]:
+                            yield {
+                                "date": date_string,
+                                "uri": result["uri"],
+                                "id": item[this_id],
+                                "count": item["cnt"]
+                            }
+                if len(result.keys()) == 2:
+                    yield {
+                            "date": date_string,
+                            "uri": result["uri"],
+                            "id": None,
+                            "count": result["cnt"]
+                        }

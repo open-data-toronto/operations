@@ -79,7 +79,7 @@ package_metadata = {
 }
 
 with DAG(
-    "open-data-web-analytics",
+    "open-data-web-analytics-traffic",
     default_args={
         "owner": "Yanan",
         "depends_on_past": False,
