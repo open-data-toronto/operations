@@ -63,8 +63,7 @@ class Reader(ABC):
         logging.info(f"Reader prepping to save the following fields: {self.fieldnames}")
 
         # init optional input date_from_filename value if reader is multireader
-        self.date_from_filename = date_from_filename
-        print(f"--- found the following date from filename: {self.date_from_filename}")  
+        self.date_from_filename = date_from_filename        
 
     @abstractmethod
     def read(self):
@@ -93,9 +92,7 @@ class Reader(ABC):
             for attr in self.attributes:
                 # if we have a date inserted from a multireader, then insert the value
                 if attr.get("id", None) == "date_from_filename":
-                    output["date_from_filename"] = self.date_from_filename
-                    print(f"Added {self.date_from_filename}. See it in the output below:")
-                    print(output)
+                    output["date_from_filename"] = self.date_from_filename                                        
                     continue
                 # consider remapped column names when parsing data
                 elif "id" not in attr.keys():
@@ -108,8 +105,7 @@ class Reader(ABC):
                     output[attr["id"]] = cleaner(value, attr["format"])
                 else:                    
                     output[attr["id"]] = cleaner(value)
-            
-            print(f"output is {output}")
+                        
             yield output
 
 
@@ -500,10 +496,7 @@ class MultiReader(Reader):
                 "",
                 config,
             )
-
-            print("Some details on this reader...")
-            print(f"--- date from filename is {reader.date_from_filename}")
-            print(f"--- attributes are{reader.attributes}")
+                                    
 
             generators = chain(generators, reader.read())
         
