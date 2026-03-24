@@ -9,7 +9,7 @@ library-branch-general-information:
   title: Library Branch General Information
   date_published: "2023-06-28T00:00:00.000000"
   refresh_rate: Annually
-  dataset_category: Table
+  dataset_category: Map
 
   # optional package attributes
   owner_division: Toronto Public Library
@@ -33,9 +33,9 @@ library-branch-general-information:
   notes: This dataset shows the current characteristics of Toronto Public Library branches, such as location, size, and the availability of specific features (e.g. parking, KidsStops, Digital Innovation Hubs, etc.). Additionally, this dataset provides details on other TPL services & collections (e.g. Answerline, bookmobiles, Home Library Service, Merril Collection, Sunnybrook Hospital, etc.).
   resources:
     # resource name
-    tpl-branch-general-information-2023:
+    tpl-branch-general-information:
       format: csv
-      url: https://opendata.toronto.ca/toronto.public.library/tpl-branch-general-information-2023.csv
+      url: https://opendata.toronto.ca/toronto.public.library/tpl-branch-general-information-2026.csv
       attributes:
         - id: BranchCode
           type: text
@@ -101,11 +101,11 @@ library-branch-general-information:
           type: int
           info:
             notes: This field denotes the presence of the Adult Literacy Program service (1 for present, 0 for not present). The Adult Literacy Program offers free, one-on-one tutoring in basic reading, writing, and math for English-speaking adults 19 years or older (exceptions may apply)
-        - id: Workstations
-          type: int
-          info:
-            notes: A count of computers with internet access available for public use in the branch.
-        - id: ServiceTier
+        #- id: Workstations
+        #  type: int
+        #  info:
+        #    notes: A count of computers with internet access available for public use in the branch.
+        - id: Service Tier
           type: text
           info:
             notes: |
@@ -139,7 +139,7 @@ library-branch-general-information:
           info:
             notes: The name of a neighbourhood.
         - id: TPLNIA
-          type: int
+          type: text
           info:
             notes: This field denotes whether the branch serves a neighbourhood improvement area (1 for yes, 0 for no). A branch serving a NIA may be located inside its boundaries or nearby. NIAs are designated by the City of Toronto. For more details, please refer to this [website](https://www.toronto.ca/city-government/accountability-operations-customer-service/long-term-vision-plans-and-strategies/toronto-strong-neighbourhoods-strategy-2020)
         - id: WardNo
@@ -154,3 +154,11 @@ library-branch-general-information:
           type: int
           info:
             notes: The year that the present location of the branch was officially opened to the general public.
+        - id: PublicWashroom
+          type: text
+          info:
+            notes: Libraries with publicly accessible washrooms are marked with a "1" here
+        - id: geometry
+          type: text
+          info:
+            notes: null
