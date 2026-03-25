@@ -67,6 +67,7 @@ def clean_json(input):
     elif isinstance(input, dict) or isinstance(input, list):
         return input
 
+
 def clean_string(input):
     '''converts data to fit in CKAN datastore text column'''
     if input is None:

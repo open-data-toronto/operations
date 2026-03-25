@@ -393,8 +393,18 @@ class JSONReader(Reader):
                     step = int(step)
                 input = input[step]
 
-        for row in input:
-            yield row
+        for source_row in input:
+            out = {}
+            
+            # add source data to out row
+            for attr in self.schema:
+                # remap column names if in config file
+                if "source_name" in attr.keys() and "target_name" in attr.keys():                        
+                    out[attr["target_name"]] = source_row[attr["source_name"]]
+                elif "id" in attr.keys():
+                    out[attr["id"]] = source_row[attr["id"]]
+
+            yield out
 
     def parse_geojson(self, input):
         output = []
