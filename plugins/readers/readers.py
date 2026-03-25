@@ -397,7 +397,7 @@ class JSONReader(Reader):
             out = {}
             
             # add source data to out row
-            for attr in self.schema:
+            for attr in self.attributes:
                 # remap column names if in config file
                 if "source_name" in attr.keys() and "target_name" in attr.keys():                        
                     out[attr["target_name"]] = source_row[attr["source_name"]]
