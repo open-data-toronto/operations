@@ -6,11 +6,11 @@ traffic-and-parking-by-law-schedules:
   title: Traffic and Parking By-law Schedules
   date_published: '2019-07-23 13:37:16.207118'
   dataset_category: Table
-  refresh_rate: Quarterly
-  owner_division: Transpotation Services
+  refresh_rate: As available
+  owner_division: Transportation Services
   owner_section: null
   owner_unit: null
-  owner_email: opendata@toronto.ca
+  owner_email: TS-OPIBylaws@toronto.ca
   civic_issues: 
     - Mobility
   topics: null
@@ -28,56 +28,80 @@ traffic-and-parking-by-law-schedules:
       format: json
       is_geojson: false
       jsonpath: $.value
-      url: https://opendata.toronto.ca/DummyDatasets/file.json ## TODO
+      url: https://opendata.toronto.ca/transportation.services/traffic-and-parking-by-law-schedules/files.json
       attributes:
-        - id: byLawDetailFields
-          type: "json"
-          info:
-            notes: ""
-        - id: description
-          type: "text"
-          info:
-            notes: ""
-        - id: displayName
-          type: "text"
-          info:
-            notes: ""
-        - id: latestRegulationActionByLaw
-          type: "text"
-          info:
-            notes: ""
-        - id: latestRegulationActionByStatus
-          type: "text"
-          info:
-            notes: ""
-        - id: latestRegulationActionCouncilDate
-          type: "date"
-          format: "%Y-%m-%d"
-          info:
-            notes: ""
-        - id: latestRegulationActionEffectiveDate
-          type: "date"
-          format: "%Y-%m-%d"
-          info:
-            notes: ""
-        - id: parsedTableData
-          type: "json"
-          info:
-            notes: ""
-        - id: regulationActions
-          type: "json"
-          info:
-            notes: ""
-        - id: regulationActionsSummary
-          type: "text"
-          info:
-            notes: ""
-        - id: scheduleName
-          type: "text"
-          info:
-            notes: ""
-        - id: tableData
-          type: "json"
-          info:
-            notes: ""
+      - id: byLawDetailFields
+        type: "json"
+        info:
+          notes: ""
+      - source_name: description
+        target_name: Bylaw_Description
+        type: "text"
+        info:
+          notes: ""
+      - source_name: displayName
+        target_name: Shedule_Name
+        type: "text"
+        info:
+          notes: ""
+      - source_name: latestRegulationActionByLaw
+        target_name: Latest_Action_ByLaw_Number
+        type: "text"
+        info:
+          notes: ""
+      - source_name: latestRegulationActionByStatus
+        target_name: Latest_Action
+        type: "text"
+        info:
+          notes: ""
+      - source_name: latestRegulationActionCouncilDate
+        target_name: Latest_Action_Date
+        type: "date"
+        format: "%Y-%m-%d"
+        info:
+          notes: ""
+      #- id: latestRegulationActionEffectiveDate
+      #  type: "date"
+      #  format: "%Y-%m-%d"
+      #  info:
+      #    notes: ""
+      #- id: parsedTableData
+      #  type: "json"
+      #  info:
+      #    notes: ""
+      - id: regulationActions
+        type: "json"
+        info:
+          notes: ""
+      - source_name: regulationActionsSummary
+        target_name: ByLaw_Actions_Summary
+        type: "text"
+        info:
+          notes: ""
+      - id: scheduleName
+        type: "text"
+        info:
+          notes: ""
+      - source_name: tableData
+        target_name: ByLaw_Table
+        type: "json"
+        info:
+          notes: ""
+      #- id: Times and/or Days
+      #  type: "text"
+      #  info:
+      #    notes: ""
+      #- id: Location
+      #  type: "text"
+      #  info:
+      #    notes: ""
+      #- id: Side
+      #  type: "text"
+      #  info:
+      #    notes: ""
+      #- id: Highway
+      #  type: "text"
+      #  info:
+      #    notes: ""
+        
                 
