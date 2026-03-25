@@ -28,10 +28,10 @@ monthly-communicable-disease-surveillance-data:
     format: xlsx
     url: https://opendata.toronto.ca/toronto.public.health/monthly-communicable-disease-surveillance-data/yyyy_Monthly_Report_AODA.xlsx
 # 2021/05/06, Gary
-traffic-and-parking-by-law-schedules:
-  Traffic and parking by-law schedules:
-    format: zip
-    url: https://opendata.toronto.ca/transportation.services/traffic-and-parking-by-law-schedules/chapter950.zip
+#traffic-and-parking-by-law-schedules:
+#  Traffic and parking by-law schedules:
+#    format: zip
+#    url: https://opendata.toronto.ca/transportation.services/traffic-and-parking-by-law-schedules/chapter950.zip
 toronto-economic-bulletin:
   Toronto economic bulletin data:
     format: xlsx
