@@ -1,4 +1,3 @@
-
 #2021/12/08, Gary
 earlyon-child-and-family-centres:
   EarlyON Child and Family Centres Locations - JSON:
@@ -692,12 +691,23 @@ merged-gtfs-ttc-routes-and-schedules:
     format: zip
     url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/CompleteGTFS.zip
 
-#private-transportation-companies-supply-and-demand:
-#  operating_hours_2025:
-#    format: zip
-#    link: true
-#    url: https://opendata.toronto.ca/transportation.services/private-transportation-company-dev/operating_hours_2025.zip
+private-transportation-companies-vehicle-operating-data:
+  operating_hours_yyyy:
+    format: zip
+    link: true
+    url: https://opendata.toronto.ca/transportation.services/private-transportation-company-dev/operating_hours/operating_hours_yyyy.zip
+  operating_hours_readme:
+    format: PDF
+    url: https://opendata.toronto.ca/transportation.services/private-transportation-company-dev/operating_hours/operating_hours_readme.pdf
 
+private-transportation-companies-summary-and-trip-data:
+  trips_yyyy:
+    format: zip
+    link: true
+    url: https://opendata.toronto.ca/transportation.services/private-transportation-company-dev/trips/trips_yyyy.zip
+  trips_and_summary_readme:
+    format: PDF
+    url: https://opendata.toronto.ca/transportation.services/private-transportation-company-dev/trips/trips_and_summary_readme.pdf
 
 bike-share-toronto-ridership-data:
   bikeshare-ridership-yyyy:

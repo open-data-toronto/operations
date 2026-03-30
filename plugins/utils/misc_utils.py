@@ -407,7 +407,7 @@ def parse_possible_filepaths(source_url):
                         if len(str(month)) == 1:
                             month = "0" + str(month)
                         this_month_input = this_month_input.replace("mm", str(month))                        
-                        if requests.get(this_month_input, allow_redirects = False).status_code == 200:
+                        if requests.head(this_month_input, allow_redirects = False).status_code == 200:
                             output.append(this_month_input)
                         
                 elif "qq" in this_year_input:
@@ -416,11 +416,11 @@ def parse_possible_filepaths(source_url):
                         if len(str(quarter)) == 1:
                             quarter = "0" + str(quarter)
                         this_quarter_input = this_quarter_input.replace("qq", f"q{str(quarter)}")                        
-                        if requests.get(this_quarter_input, allow_redirects = False).status_code == 200:
+                        if requests.head(this_quarter_input, allow_redirects = False).status_code == 200:
                             output.append(this_quarter_input)
                         
                 else:
-                    if requests.get(this_year_input, allow_redirects = False).status_code == 200:
+                    if requests.head(this_year_input, allow_redirects = False).status_code == 200:                        
                         output.append(this_year_input)                    
 
         else:

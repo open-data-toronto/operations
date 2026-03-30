@@ -83,7 +83,9 @@ def upload_remote_files(**kwargs):
         for name, details in files.items():
             # check if we have many urls to parse for this entry
             if "yyyy" in name and "yyyy" in details["url"]:
+                logging.info("Several possible resource names detected; scanning for all possibilities...")
                 urls = misc_utils.parse_possible_filepaths(details["url"])
+                logging.info(f"Found {len(urls)} urls")
                 names = [url.split("/")[-1] for url in urls]
             else:
                 names = [name]

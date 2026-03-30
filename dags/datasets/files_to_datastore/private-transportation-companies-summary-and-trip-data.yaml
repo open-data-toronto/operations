@@ -1,0 +1,298 @@
+private-transportation-companies-summary-and-trip-data:
+  jira_issue_id: DIA-711
+  schedule: 30 4 1 * *
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Private Transportation Companies - Summary and Trip Data 
+  date_published: '2026-03-04 14:08:37.958534'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: Transportation Services
+  owner_section: Policy, Data & Strategic Initiatives (PDSI)
+  owner_unit: Transportation Data & Analytics
+  owner_email: vfhopendata@toronto.ca
+  civic_issues:
+  - Mobility
+  topics:
+  - Transportation
+  - Permits and licenses
+  tags:
+  - name: ridehail
+    vocabulary_id: null
+  - name: Private Transportation Companies
+    vocabulary_id: null
+  - name: PTC
+    vocabulary_id: null
+  - name: rideshare
+    vocabulary_id: null
+  
+    vocabulary_id: null
+  information_url: null
+  excerpt: This dataset includes detailed trip data from Private Transportation Companies operating in the City, as well as a daily summary of trip and vehicle operating statistics.
+  limitations: |
+    * Data collected by the City include only passenger trips that start or end in Toronto and portions of vehicle activity occurring within Toronto. Delivery activity, even if conducted on a platform owned by a PTC, is not included.
+
+    * Fare data reflect the amount paid by the customer before discounts and tips and do not represent driver earnings.
+
+    * The City combines data from all PTCs and applies a deduplication process to remove overlapping vehicle activity across platforms. This ensures that time and distance are not counted multiple times when drivers are active on multiple apps.
+
+    * Distance travelled during periods when not engaged with a customer is estimated by routing between the start and end points of each availability period. Routing is based on the fastest travel-time path and may not reflect the actual path taken while drivers are searching for customers. The estimation method does not capture circulating without a destination and may therefore underestimate distance in such cases.
+
+    * Although the City’s deduplication process accounts for trips fulfilled on multiple platforms, drivers may still be travelling for other reasons (e.g. fulfilling food deliveries which are not reported here, commuting) while available.
+
+    * Please consult the Technical Documentation for detailed descriptions of the data processes discussed above. The document also includes dates with missing data and any changes made to the datasets since publishing.
+
+    * Files other than the **summary\_stats** and **trips\_sample** files below exceed one million rows and are not suitable for Excel. We recommend using Python or R for analysis. If using Excel, you may use "Data > Get Data > From File" to safely import data from an external file into a pivot table.
+
+  notes: |
+    The City of Toronto collects trip and vehicle operating data from Private Transportation Companies (PTCs). This page contains two datasets:
+    
+    * Summary Data
+
+    * Trip Data
+
+    ### Summary Data (From 2018-01-01 onwards except otherwise stated)
+
+    The summary table provides daily, high-level metrics designed for quick interpretation of PTC activity across the City. It includes:
+    
+    **Trip summary statistics**
+    
+    * Total completed and cancelled trips by different service types
+
+    * Average trip distance
+
+    **Vehicle operating summary statistics (Only available from 2020-01-01 onwards)**
+
+    * Total active vehicles
+
+    * Average wait time
+
+    * Time and distance (percentage and absolute values) in various stages of a PTC driver shift
+
+    Refer to the **summary_data** file below
+
+
+    
+    ### Trip Data (From 2018-01-01 onwards)
+
+    This dataset summarizes completed trips, organized by Toronto pick-up and drop-off ward and by hour. Key metrics include:
+    
+    * Total completed trips
+
+    * Average fare
+
+    * Average distance travelled
+
+    * Average trip time duration
+
+    These data can be accessed by downloading a year of data using the **trip\_yyyy.zip** links below, which contain 12 months of data for the year **yyyy**. Once unzipped, there is one file per month. 
+    
+    ## Other PTC data
+
+    [Vehicle operating data is also available.](https://open.toronto.ca/dataset/private-transportation-companies-vehicle-operating-data)
+    
+    ## Technical Documentation
+
+    Technical Documentation, including a detailed Data Dictionary, can be found in the **trips\_and\_summary\_readme** below.
+
+
+  collection_method: |
+    Private Transportation Companies submit Trip and Driver Availability Records as a condition of operating in the City of Toronto under [Regulation 546-116](https://www.toronto.ca/legdocs/municode/toronto-code-546.pdf).
+    
+    * Trip records 
+
+      * These records include pickup and drop-off locations, along with timestamps for key points in the journey such as the request time, acceptance time, driver arrival time, pickup time, and drop-off time
+
+      * Additional information is provided: 
+
+        * For completed trips, records include the fare paid before fees and taxes, as well as the reported distance travelled
+
+        * For cancelled trips, the driver or passenger must provide a cancellation reason
+
+    * Driver availability records 
+
+      * These records capture the periods when a vehicle is available to accept customer trips
+
+      * They include the time and location marking the start and end of a vehicle shift
+
+  resources:
+    summary_stats:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/private-transportation-company-dev/trips/summary_stats.csv
+      attributes: 
+        - id: dt
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date to which the summary metrics pertain
+        - id: reported_trips_started
+          type: float
+          info:
+            notes: Count of completed trips that started on the specified date
+        - id: trips_started_wav
+          type: float
+          info:
+            notes: Count of completed wheelchair accessible vehicle trips that started on the specified date
+        - id: trips_started_nonwav
+          type: float
+          info:
+            notes: Count of completed non-wheelchair accessible vehicle trips that started on the specified date
+        - id: trips_started_pooled
+          type: float
+          info:
+            notes: Count of completed pooled trips that started on the specified date
+        - id: trips_cancelled_driver_wav
+          type: float
+          info:
+            notes: Count of wheelchair accessible vehicle trips cancelled by the driver that were requested on the specified date
+        - id: trips_cancelled_driver_nonwav
+          type: float
+          info:
+            notes: Count of non-wheelchair accessible vehicle trips cancelled by the driver that were requested on the specified date
+        - id: trips_cancelled_passenger_wav
+          type: float
+          info:
+            notes: Count of wheelchair accessible vehicle trips cancelled by the passenger that were requested on the specified date
+        - id: trips_cancelled_passenger_nonwav
+          type: float
+          info:
+            notes: Count of non-wheelchair accessible vehicle trips cancelled by the passenger that were requested on the specified date
+        - id: dist_avg
+          type: float
+          info:
+            notes: Average distance per trip in kilometres
+        - id: fare_avg
+          type: float
+          info:
+            notes: Average fare per trip in Canadian dollars
+        - id: waittime_wav_avg
+          type: float
+          info:
+            notes: Average wait time for completed WAV trips in minutes
+        - id: waittime_nonwav_avg
+          type: float
+          info:
+            notes: Average wait time for completed non-WAV trips in minutes
+        - id: active_vehicles
+          type: float
+          info:
+            notes: Total count of unique vehicles that were active on a PTC platform
+        - id: time_available
+          type: float
+          info:
+            notes: Minutes vehicles spent available and not carrying customers, whether inside or outside the City of Toronto
+        - id: time_enroute
+          type: float
+          info:
+            notes: Minutes vehicles spent en route to a passenger pick-up point, whether inside or outside the City of Toronto
+        - id: time_waiting
+          type: float
+          info:
+            notes: Minutes vehicles spent waiting for a passenger at the pick-up point, whether inside or outside the City of Toronto
+        - id: time_ontrip
+          type: float
+          info:
+            notes: Minutes vehicles spent on trips during the specified date, whether inside our outside the City of Toronto
+        - id: dist_available_routed
+          type: float
+          info:
+            notes: Routed kilometres vehicles travelled while available and not carrying customers within the City of Toronto
+        - id: dist_enroute_routed
+          type: float
+          info:
+            notes: Routed kilometres vehicles travelled within the City of Toronto en route to the passenger pick-up point
+        - id: dist_ontrip_routed
+          type: float
+          info:
+            notes: Routed kilometres vehicles travelled within the City of Toronto while completing trips
+        - id: dist_ontrip_reported
+          type: float
+          info:
+            notes: Kilometres vehicles travelled while on trips as reported by PTCs
+        - id: percent_time_available
+          type: float
+          info:
+            notes: Percent of time spent available and not engaged with a passenger, whether inside or outside the City of Toronto
+        - id: percent_time_enroute
+          type: float
+          info:
+            notes: Percent of time spent en route to the passenger pick-up point, whether inside or outside the City of Toronto
+        - id: percent_time_waiting
+          type: float
+          info:
+            notes: Percent of time spent waiting for the passenger at the pick-up point, whether inside or outside the City of Toronto
+        - id: percent_time_ontrip
+          type: float
+          info:
+            notes: Percent of time spent on trips, whether inside or outside the City of Toronto
+        - id: percent_dist_available_routed
+          type: float
+          info:
+            notes: Percent of routed distance travelled while available and not carrying passengers within the City of Toronto
+        - id: percent_dist_enroute_routed
+          type: float
+          info:
+            notes: Percent of routed distance travelled while en route to the passenger pick-up point within the City of Toronto
+        - id: percent_dist_ontrip_routed
+          type: float
+          info:
+            notes: Percent of routed distance travelled while on trips within the City of Toronto
+        
+    trips_sample:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/private-transportation-company-dev/trips/trips_sample.csv
+      attributes: 
+        - id: dt
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: Date of passenger pick-up
+        - id: pickup_hr
+          type: text
+          info:
+            notes: Date and hour of passenger pick-up
+        - id: pickup_municipality
+          type: text
+          info:
+            notes: Municipality name at the passenger pick-up point
+        - id: pickup_community_council
+          type: text
+          info:
+            notes: Community council district name at the passenger pick-up point (if in Toronto)
+        - id: pickup_ward
+          type: text
+          info:
+            notes: Toronto ward at the passenger pick-up point (if in Toronto)
+        - id: dropoff_municipality
+          type: text
+          info:
+            notes: Municipality name at the passenger drop-off point
+        - id: dropoff_community_council
+          type: text
+          info:
+            notes: Community council district name at the passenger drop-off point (if in Toronto)
+        - id: dropoff_ward
+          type: text
+          info:
+            notes: Toronto ward at passenger the drop-off point (if in Toronto)
+        - id: trips_total
+          type: text
+          info:
+            notes: Count of completed trips
+        - id: fare_avg
+          type: text
+          info:
+            notes: Average fare
+        - id: waittime_avg
+          type: text
+          info:
+            notes: Average distance travelled in kilometres (from pick-up to drop-off)
+        - id: distance_avg
+          type: text
+          info:
+            notes: Average wait time in minutes (time elapsed from passenger request to driver arrival)
+        - id: duration_avg
+          type: text
+          info:
+            notes: Average trip duration in minutes (from pick-up to drop-off)
+        
