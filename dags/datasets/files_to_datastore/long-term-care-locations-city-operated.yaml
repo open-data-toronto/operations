@@ -1,0 +1,97 @@
+long-term-care-locations-city-operated:
+  dag_owner_name: 'Mac'
+  dag_owner_email: ''
+  title: Long-Term Care Locations, City Operated
+  date_published: '2012-03-23 00:00:00'
+  dataset_category: Table
+  refresh_rate: As available
+  owner_division: Seniors Services & Long-Term Care
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics:
+  - City government
+  - Locations and mapping
+  tags:
+  - name: long term care
+    vocabulary_id: null
+  - name: senior home
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/housing-shelter/rental-housing-tenant-information/finding-housing/long-term-care-homes/
+  excerpt: This data set contains the locations of City operated long-term care homes
+    within Toronto.
+  limitations: null
+  notes: "The data was obtained from the Long-Term Care Homes and Services Division in a list format. Data is used for business operation to support Long-Term Care staff at each of these facilities. The data set is updated as a new facility is created or one is no longer in use. Statistical data may be updated as it is made available. The dataset is a City-wide GIS point file and is best utilized when overlaid with City's Street Centreline file."
+  schedule: '@once'
+  resources: 
+    Long term care locations:
+        agol: True
+        format: json
+        url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_LONGTERM_CARE/FeatureServer/0
+        attributes:
+          - id: ADDRESS_POINT_ID
+            type: text
+            info:
+              notes: Feature ID
+          - id: ADDRESS_FULL
+            type: text
+            info:
+              notes: Feature type e.g. point
+          - id: POSTAL_CODE
+            type: text
+            info:
+              notes: Postal code
+          - id: MUNICIPALITY
+            type: text
+            info:
+              notes: Former city of Toronto Municipality
+          - id: CITY
+            type: text
+            info:
+              notes: Toronto
+          - id: OBJECTID
+            type: text
+            info:
+              notes: Object identifier 
+          - id: ID
+            type: text
+            info:
+              notes: System number
+          - id: NAME
+            type: text
+            info:
+              notes: Name of Long-Term Care home
+          - id: BEDS
+            type: text
+            info:
+              notes: Number of beds
+          - id: RESPITE
+            type: text
+            info:
+              notes: Number of respite beds
+          - id: CONVALESCE
+            type: text
+            info:
+              notes: Number of convalescent care beds
+          - id: SMOKING
+            type: text
+            info:
+              notes: Smoking room available; [Yes/No]
+          - id: CITY_OP
+            type: text
+            info:
+              notes: City operates; [Y/N]
+          - id: TELEPHONE
+            type: text
+            info:
+              notes: Telephone number
+          - id: ADULT_DAY_PROGRAM
+            type: text
+            info:
+              notes: Adult day care available; [Yes/No]
+          - id: geometry
+            type: text
+            info:
+              notes: null
+          
