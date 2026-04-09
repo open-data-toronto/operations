@@ -90,12 +90,7 @@ class Reader(ABC):
         output = {}
         for line in self.read():
             for attr in self.attributes:
-                # if we have a date inserted from a multireader, then insert the value
-                if attr.get("id", None) == "date_from_filename":
-                    output["date_from_filename"] = self.date_from_filename                                        
-                    continue
-                # consider remapped column names when parsing data
-                elif "id" not in attr.keys():
+                if "id" not in attr.keys():
                     attr["id"] = attr["target_name"]
             
                 cleaner = self.cleaners[attr["type"]]
@@ -105,7 +100,7 @@ class Reader(ABC):
                     output[attr["id"]] = cleaner(value, attr["format"])
                 else:                    
                     output[attr["id"]] = cleaner(value)
-                        
+
             yield output
 
 
@@ -445,25 +440,20 @@ class MultiReader(Reader):
         self.custom_reader = kwargs.get('custom_reader', None)
         self.multi_insert_date = kwargs.get('multi_insert_date', None)
         self.sheet = kwargs.get('sheet', None)
+    
     def parse_possible_filepaths(self):
         return misc_utils.parse_possible_filepaths(self.source_url)
 
+    def add_dates_into_generators(self, input_generator, date):
+        for i in input_generator:
+            i["date_from_filename"] = date
+            yield i
 
     def read(self):
         logging.info(">>>>> MultiReader <<<<<<")
 
         generators = []
 
-        # check a "add in year?" parameter in the YAML config
-        if self.multi_insert_date:
-            self.attributes.append({
-                "id": "date_from_filename",
-                "type": "text",
-                "info": {
-                    "notes": "Date associated with the record"
-                }
-            })
-        
         # loop through possible filepaths
         for item in self.parse_possible_filepaths(): 
             if self.multi_insert_date:
@@ -497,8 +487,12 @@ class MultiReader(Reader):
                 config,
             )
                                     
+            # the above creates an excel reader object and returns the generator from its read() method
+            # it is sent below to the base reader class, which knows nothing about the source file
+            # nor the excel readers' input vars
+            # TLDR: child.read() -> base.clean_lines
 
-            generators = chain(generators, reader.read())
+            generators = chain(generators, self.add_dates_into_generators(reader.read(), reader.date_from_filename))
         
         return generators
 

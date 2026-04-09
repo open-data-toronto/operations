@@ -67,5 +67,10 @@ community-grants-allocations:
             type: text
             info:
               notes: "City division that the funding is associated with"
+          - source_name: date_from_filename
+            target_name: Year
+            type: text
+            info:
+              notes: "Date associated with this record"
           
 
