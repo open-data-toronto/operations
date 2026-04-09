@@ -35,18 +35,18 @@ dinesafe:
   resources:
     # resource name
     Dinesafe:
-      format: csv
-      url: https://secure.toronto.ca/opendata/ds/od_csv/v1?format=csv
+      format: json
+      url: https://secure.toronto.ca/opendata/ds_od/inpections/v2?format=json
       custom_reader: dinesafe
       datastore_upsert:
         primary_key: "unique_id"
       attributes:
         - id: Establishment ID
-          type: int
+          type: text
           info:
             notes: Unique identifier for an establishment
         - id: Inspection ID
-          type: int
+          type: text
           info:
             notes: Unique ID for an inspection
         - id: Establishment Name
@@ -61,18 +61,22 @@ dinesafe:
           type: text
           info:
             notes: Municipal address of the establishment
-        - id: Establishment Status
-          type: text
-          info:
-            notes: Pass, Conditional Pass, Closed
-        - id: Min. Inspections Per Year
-          type: text
-          info:
-            notes: Every eating and drinking establishment in the City of Toronto receives a minimum of 1, 2, or 3 inspections each year depending on the specific type of establishment, the food preparation processes, volume and type of food served and other related criteria. Low risk premises that offer for sale only pre-packaged non-hazardous food shall be inspected once every two years. The inspection frequency for these low risk premises is shown as "O" (Other) on the report and in the data set
+        #- id: Establishment Status
+        #  type: text
+        #  info:
+        #    notes: Pass, Conditional Pass, Closed
+        #- id: Min. Inspections Per Year
+        #  type: text
+        #  info:
+        #    notes: Every eating and drinking establishment in the City of Toronto receives a minimum of 1, 2, or 3 inspections each year depending on the specific type of establishment, the food preparation processes, volume and type of food served and other related criteria. Low risk premises that offer for sale only pre-packaged non-hazardous food shall be inspected once every two years. The inspection frequency for these low risk premises is shown as "O" (Other) on the report and in the data set
         - id: Infraction Details
           type: text
           info:
             notes: Description of the Infraction
+        - id: Inspection Observation
+          type: text
+          info:
+            notes: Details observed associated with the Infraction
         - id: Inspection Date
           type: date
           format: "%Y-%m-%d"
@@ -90,10 +94,15 @@ dinesafe:
           type: text
           info:
             notes: The registered court decision resulting from the issuance of a ticket or summons for outstanding infractions to the Health Protection and Promotion Act
+        - id: Outcome Date
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: The date of the court outcome
         - id: Amount Fined
           type: float
           info:
-            notes: Fine determined in a court outcome
+            notes: Fine determined in the court outcome
         - id: Latitude
           type: float
           info:

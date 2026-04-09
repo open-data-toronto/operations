@@ -450,7 +450,7 @@ def parks_drinking_fountains():
 def dinesafe():
     from io import StringIO
     import hashlib
-    url = "https://secure.toronto.ca/opendata/ds_od/inspections/v1?format=csv"
+    url = "https://secure.toronto.ca/opendata/ds_od/inpections/v2?format=json"
     user_key = Variable.get("secure_toronto_opendata_USER_KEY")
     srv_key = Variable.get("dinesafe_secure_toronto_opendata_SRV_KEY")
 
@@ -459,34 +459,107 @@ def dinesafe():
         "USER-KEY": user_key,
     }
     
-    with requests.post(url, headers=headers, stream=True) as r:   
+    with requests.get(url, headers=headers) as r:   
+
+        data = json.loads(r.text)
+
+        for establishment in data:
+            # initialize establishment data in output
+            output = {
+                "Establishment ID": establishment["estId"],
+                "Establishment Name": establishment["estName"],
+                "Establishment Type": establishment["estType"],
+                "Establishment Address": f'{establishment["address"]} {establishment.get("unit", None)} {establishment["postal"]}',
+                #"Establishment Status": establishment["estType"],
+                #"Min. Inspections Per Year": None,                
+                "Inspection ID": None,
+                "Inspection Status": None,
+                "Inspection Observation": None,
+                "Inspection Date": None,
+                "Infraction Details": None,
+                "Severity": None,
+                "Action": None,
+                "Outcome": None,
+                "Outcome Date": None,
+                "Amount Fined": None,
+                "Latitude": establishment["latitude"],
+                "Longitude": establishment["longitude"],
+            }
             
-        iterator = (line.decode("latin1") for line in r.iter_lines())
+            if establishment["inspections"] is None:
+                continue
+                
+            # for each inspection, add inspection data in output
+            elif establishment["inspections"] is not None:
+                for inspection in establishment["inspections"]:
+                    # if there are no infractions
+                    output["Inspection Date"] = inspection["inspectionDate"]
+                    output["Inspection Status"] = inspection["inspectionStatus"]
+                    output["Inspection Observation"] = inspection["observation"]
+                    
+                    # add a unique primary key as required by datastore_upsert
+                    # return output with empty infraction data
+                    if inspection["infractions"] is None:
 
-        header_reader = csv.reader(StringIO(next(iterator)))
-        for line in header_reader:
-            headers = line
-    
-        reader = csv.DictReader(iterator, fieldnames = headers)
-        
-        for row in reader:
-            # add a unique primary key as required by datastore_upsert
-            unique_composite_key = (
-                row["Establishment ID"]
-                + "_"
-                + row["Inspection ID"]
-                + "_"
-                + row["Infraction Details"]
-            ).encode("utf-8")
-            
-            # create hash value
-            hash_value = hashlib.md5(unique_composite_key)
-            row["unique_id"] = hash_value.hexdigest()
+                        unique_composite_key = (
+                            output["Establishment ID"]
+                            + "_"
+                            + output["Inspection Date"]
+                        ).encode("utf-8")
+                        # create hash value
+                        hash_value = hashlib.md5(unique_composite_key)
+                        output["unique_id"] = hash_value.hexdigest()
 
-            # remove old key
-            row.pop("Rec #")
+                # if there are infractions, add infractions data for each
+                    elif inspection["infractions"] is not None: 
+                        for infraction in inspection["infractions"]:
+                            output["Infraction Details"] = infraction["typeDesc"]
+                            output["Deficiency Details"] = infraction["deficiencyDesc"]
+                            output["Severity"] = infraction["severity"]
+                            output["Action"] = infraction["actionDesc"]
+                            
+                            if infraction["prosecutions"] is None:
+                                # add a unique primary key as required by datastore_upsert
+                                unique_composite_key = (
+                                    output["Establishment ID"]
+                                    + "_"
+                                    + output["Inspection Date"]
+                                    + "_"
+                                    + output["Infraction Details"]
+                                ).encode("utf-8")
+                                # create hash value
+                                hash_value = hashlib.md5(unique_composite_key)
+                                output["unique_id"] = hash_value.hexdigest()
 
-            yield row
+                            ## TODO
+                            # FOR ANYTHING PAST HERE TO WORK WITH THE UPSERT PARADIGM
+                            # we need a static identifier (like a date) for prosecutions
+                            # right now, there are PENDING prosecutions with empty dates
+                            # I worry those may change ... and we wont be able to associate 
+                            # them with their od record since all their attribute may change
+
+                            elif infraction["prosecutions"] is not None:
+                                for prosecution in infraction["prosecutions"]:
+                                    if prosecution["outcomeDate"]:
+                                        output["Outcome Date"] = prosecution["outcomeDate"]
+                                        output["Outcome"] = prosecution["outcomeDesc"]
+                                        output["Amount Fined"] = prosecution["amountFined"]
+                                        
+                                        # add a unique primary key as required by datastore_upsert
+                                        unique_composite_key = (
+                                            output["Establishment ID"]
+                                            + "_"
+                                            + output["Inspection Date"]
+                                            + "_"
+                                            + output["Infraction Details"]
+                                            + "_"
+                                            + output["Outcome Date"]
+                                        ).encode("utf-8")
+                                    # create hash value
+                                    hash_value = hashlib.md5(unique_composite_key)
+                                    output["unique_id"] = hash_value.hexdigest()
+            yield output
+
 
 
 def tennis_courts_facilities():
