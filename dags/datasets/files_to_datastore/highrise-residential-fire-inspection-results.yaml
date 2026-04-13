@@ -1,0 +1,81 @@
+highrise-residential-fire-inspection-results:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Highrise Residential Fire Inspection Results
+  date_published: '2019-07-23 17:33:37.549189'
+  dataset_category: Table
+  refresh_rate: Daily
+  owner_division: Fire Services
+  owner_section: null
+  owner_unit: null
+  owner_email: FireAnalytics@toronto.ca
+  civic_issues: null
+  topics:
+  - Locations and mapping
+  - Community services
+  - Public safety
+  - Development and infrastructure
+  tags: null
+  information_url: https://www.toronto.ca/city-government/accountability-operations-customer-service/access-city-information-or-records/fire-prevention-inspection-results-for-high-rise-residential-buildings/
+  excerpt: Listing of Fire Prevention inspection results for highrise residential
+    properties as of January 1, 2017.
+  limitations: null
+  notes: "Indicates properties where violations have been found by an Inspector which\
+    \ are required to be fixed for compliance at the time with the Ontario Fire Code\
+    \ as well as properties with no observable violations. This dataset only includes\
+    \ 'Closed' Cases indicating that the inspection process has ended. \r\n\r\nInspections\
+    \ that have commenced and are ongoing will not be available in the dataset until\
+    \ all related processes have ended. Any buildings that have an immediate threat\
+    \ to occupant or firefighter safety are required to implement temporary measures\
+    \ until Fire Code violations are corrected.\r\n"
+  schedule: '12 12 * * *'
+  resources: 
+    inspection-results:
+      format: csv
+      url: https://opendata.toronto.ca/fire.services/highrise-residential-fire-inspection-results/inspection-results.csv
+      attributes:
+      - id: Enforcement_Proceedings
+        type: text
+        info:
+          notes: Flag to denote if there are ongoing enforcement proceedings, or if enforcement proceedings resulted in a conviction
+      - id: INSPECTIONS_CLOSEDDATE
+        type: text
+        info:
+          notes: Date TFS closed inspection file or date or date enforcement proceedings ended (whichever is later)
+      - id: INSPECTIONS_OPENDATE
+        type: text
+        info:
+          notes: Date TFS opened inspection file
+      - id: InspectionThread
+        type: text
+        info:
+          notes: Unique identifier for the inspection
+      - id: propertyAddress
+        type: text
+        info:
+          notes: Address of inspected property
+      - id: propertyType
+        type: text
+        info:
+          notes: Occupancy type code of the property where the inspection took place
+      - id: propertyWard
+        type: text
+        info:
+          notes: Ward of inspected property based on 2019 boundaries
+      - id: VIOLATION_DESCRIPTION
+        type: text
+        info:
+          notes: Description of fire code under which violation was noted
+      - id: VIOLATION_FIRE_CODE
+        type: text
+        info:
+          notes: Fire code under which violation was noted
+      - id: VIOLATIONS_ITEM_NUMBER
+        type: text
+        info:
+          notes: The order number of violations by code.  0 if no violations observed
+      - id: GEOID
+        type: text
+        info:
+          notes: GEOID of address
+      
