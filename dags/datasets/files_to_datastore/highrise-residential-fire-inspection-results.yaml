@@ -3,7 +3,7 @@ highrise-residential-fire-inspection-results:
   dag_owner_email: ''
   title: Highrise Residential Fire Inspection Results
   date_published: '2019-07-23 17:33:37.549189'
-  dataset_category: Table
+  dataset_category: Map
   refresh_rate: Daily
   owner_division: Fire Services
   owner_section: null
@@ -50,11 +50,11 @@ highrise-residential-fire-inspection-results:
         type: text
         info:
           notes: Unique identifier for the inspection
-      - id: propertyAddress
+      - id: PropertyAddress
         type: text
         info:
           notes: Address of inspected property
-      - id: propertyType
+      - id: PropertyType
         type: text
         info:
           notes: Occupancy type code of the property where the inspection took place
@@ -74,8 +74,12 @@ highrise-residential-fire-inspection-results:
         type: text
         info:
           notes: The order number of violations by code.  0 if no violations observed
-      - id: GEOID
+      - id: geoid
         type: text
         info:
           notes: GEOID of address
+      - id: geometry
+        type: text
+        info:
+          notes: 
       
