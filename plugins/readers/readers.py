@@ -44,7 +44,7 @@ class Reader(ABC):
         self.attributes = attributes
 
         self.cleaners = {
-            "text": str,
+            "text": misc_utils.clean_string,
             "int": misc_utils.clean_int,
             "float": misc_utils.clean_float,
             "timestamp": misc_utils.clean_date_format,
