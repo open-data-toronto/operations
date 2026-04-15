@@ -37,7 +37,7 @@ community-grants-allocations:
         sheet: Grants Allocations
         multi: true
         multi_insert_date: true
-        url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/community-grants-allocations-%yyyy.xlsx
+        url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/community-grants-allocations-yyyy.xlsx
         attributes:
           - id: Organization
             type: text
