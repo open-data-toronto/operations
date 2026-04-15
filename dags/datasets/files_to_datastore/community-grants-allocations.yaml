@@ -1,0 +1,93 @@
+community-grants-allocations:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Community Grants Allocations
+  date_published: '2019-07-23 16:49:22.574393'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Social Development, Finance & Administration
+  owner_section: null
+  owner_unit: null
+  owner_email: 'communityfunding@toronto.ca '
+  civic_issues:
+  - Fiscal responsibility
+  topics:
+  - City government
+  - Community services
+  - Finance
+  - Culture and tourism
+  - Business
+  tags:
+  - name: community partnership
+    vocabulary_id: null
+  - name: grants
+    vocabulary_id: null
+  information_url: https://open.toronto.ca/dataset/community-grants-allocations/
+  excerpt: This dataset contains information about grants approved by City Council
+    through the Community Partnership and Investment Program. These grants are administered
+    by several different division areas across the City.
+  limitations: null
+  notes: This dataset contains information about grants approved by City Council through
+    the Community Partnership and Investment Program. These grants are administered
+    by several different division areas across the City.
+  schedule: '7 7 1 * *'
+  resources: 
+    Community Grants Allocations since 2022:
+        format: xlsx
+        sheet: Grants Allocations
+        multi: true
+        multi_insert_date: true
+        url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/community-grants-allocations-%yyyy.xlsx
+        attributes:
+          - id: Organization
+            type: text
+            info:
+              notes: "Organization given the grant"
+          - id: Total Number of Grants
+            type: text
+            info:
+              notes: "Number of grants given to the organization"
+          - id: Ward
+            type: text
+            info:
+              notes: "Ward associated with the grant or organization"
+          - id: Service Area
+            type: text
+            info:
+              notes: "Service Area of the organization. Values include City-wide (Organization's services are provided across the City of Toronto), Local (Organization's services are provided regionally/within a couple of neighbourhoods), and Neighbourhood (Organization's services are provided within one neighbourhood)"
+          - id: Total Funding Amount 
+            type: text
+            info:
+              notes: "Funding associated with the grant"
+          - id: Funding Program
+            type: text
+            info:
+              notes: "Program that the funding comes from"
+          - id: Division
+            type: text
+            info:
+              notes: "City division that the funding is associated with"
+          - id: date_from_filename            
+            type: text
+            info:
+              notes: "Date associated with this record"
+    Community Grants Programs since 2022:
+        format: xlsx
+        sheet: Legend
+        multi: true
+        multi_insert_date: true
+        url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/community-grants-allocations-%yyyy.xlsx
+        attributes:
+          - id: Field Name / Item / Column name
+            type: text
+            info:
+              notes: "Program acronym"
+          - id: Description / Definition
+            type: text
+            info:
+              notes: "Full program name"
+          - id: Comments / Examples
+            type: text
+            info:
+              notes: "Additional notes"
+          

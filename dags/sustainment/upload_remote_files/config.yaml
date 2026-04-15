@@ -488,17 +488,17 @@ freedom-of-information-requests-summary:
     url: https://opendata.toronto.ca/city.clerks.office/foi/foi-request-summary-2023.xlsx
   Glossary of Short Forms:
     format: doc
-    url: https://opendata.toronto.ca/city.clerks.office/foi/Glossary of Short Forms.docx
-community-grants-allocations:
-  community-grants-allocations-2020:
-    format: xlsx
-    url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/community-grants-allocations-2020.xlsx
-  community-grants-allocations-2020-additions:
-    format: xlsx
-    url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/MISSING 2020 EED Community Grants Allocations.xlsx
-  community-grants-allocations-2021:
-    format: xlsx
-    url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/2021 Community Grants Allocation - Final 3.xlsx
+    url: https://opendata.toronto.ca/city.clerks.office/foi/Glossary of Short Forms updated January 5 2024.docx
+#community-grants-allocations:
+#  community-grants-allocations-2020:
+#    format: xlsx
+#    url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/community-grants-allocations-2020.xlsx
+#  community-grants-allocations-2020-additions:
+#    format: xlsx
+#    url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/MISSING 2020 EED Community Grants Allocations.xlsx
+#  community-grants-allocations-2021:
+#    format: xlsx
+#    url: https://opendata.toronto.ca/social.development.finance.administration/community-grants/2021 Community Grants Allocation - Final 3.xlsx
 report-request-log-city-council-and-its-committees: 
   Report Request Log 2022-2026:
     format: xlsx

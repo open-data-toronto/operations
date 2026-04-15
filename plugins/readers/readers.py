@@ -35,6 +35,7 @@ class Reader(ABC):
             attributes: list = None, 
             out_dir: str = "",
             filename: str = None,
+            date_from_filename: str = None,
             **kwargs,
         ):
 
@@ -56,11 +57,13 @@ class Reader(ABC):
         self.out_dir = out_dir
         self.filename = filename
         self.path = out_dir + "/" + filename
+        
         # names intended to be written out to saved file
         self.fieldnames = [attr["id"] if "id" in attr.keys() else attr["target_name"] for attr in self.attributes]
-
         logging.info(f"Reader prepping to save the following fields: {self.fieldnames}")
-        
+
+        # init optional input date_from_filename value if reader is multireader
+        self.date_from_filename = date_from_filename        
 
     @abstractmethod
     def read(self):
@@ -87,8 +90,6 @@ class Reader(ABC):
         output = {}
         for line in self.read():
             for attr in self.attributes:
-
-                # consider remapped column names when parsing data
                 if "id" not in attr.keys():
                     attr["id"] = attr["target_name"]
             
@@ -99,7 +100,7 @@ class Reader(ABC):
                     output[attr["id"]] = cleaner(value, attr["format"])
                 else:                    
                     output[attr["id"]] = cleaner(value)
-            
+
             yield output
 
 
@@ -447,17 +448,32 @@ class MultiReader(Reader):
         self.encoding = kwargs.get('encoding', None)
         self.jsonpath = kwargs.get('jsonpath', None)
         self.custom_reader = kwargs.get('custom_reader', None)
-
+        self.multi_insert_date = kwargs.get('multi_insert_date', None)
+        self.sheet = kwargs.get('sheet', None)
+    
     def parse_possible_filepaths(self):
         return misc_utils.parse_possible_filepaths(self.source_url)
 
+    def add_dates_into_generators(self, input_generator, date):
+        for i in input_generator:
+            i["date_from_filename"] = date
+            yield i
 
     def read(self):
         logging.info(">>>>> MultiReader <<<<<<")
 
         generators = []
+
         # loop through possible filepaths
-        for filepath in self.parse_possible_filepaths():        
+        for item in self.parse_possible_filepaths(): 
+            if self.multi_insert_date:
+                # if there's a date parsed from a filepath, assign it
+                if item[0]:
+                    date_from_filename = item[0]                
+                else:
+                    date_from_filename = None
+            
+            filepath = item[1]
             this_format = filepath.split(".")[-1]
 
             config = {
@@ -468,16 +484,25 @@ class MultiReader(Reader):
                 "format": self.format,  
                 "encoding": self.encoding,
                 "jsonpath": self.jsonpath,
-            }            
+                "sheet": self.sheet,
+                "date_from_filename": date_from_filename,
+            }
+
             if self.custom_reader:
                 config["custom_reader"] = self.custom_reader
+            
             reader = select_reader(
                 "",
                 "",
                 config,
             )
+                                    
+            # the above creates an excel reader object and returns the generator from its read() method
+            # it is sent below to the base reader class, which knows nothing about the source file
+            # nor the excel readers' input vars
+            # TLDR: child.read() -> base.clean_lines
 
-            generators = chain(generators, reader.read())
+            generators = chain(generators, self.add_dates_into_generators(reader.read(), reader.date_from_filename))
         
         return generators
 
