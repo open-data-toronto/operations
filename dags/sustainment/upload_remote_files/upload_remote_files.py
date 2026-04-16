@@ -84,9 +84,9 @@ def upload_remote_files(**kwargs):
             # check if we have many urls to parse for this entry
             if "yyyy" in name and "yyyy" in details["url"]:
                 logging.info("Several possible resource names detected; scanning for all possibilities...")
-                urls = misc_utils.parse_possible_filepaths(details["url"])
+                urls = [url[1] for url in misc_utils.parse_possible_filepaths(details["url"])]
                 logging.info(f"Found {len(urls)} urls")
-                names = [url[1].split("/")[-1] for url in urls]
+                names = [url.split("/")[-1] for url in urls]
             else:
                 names = [name]
                 urls = [details["url"]]
@@ -103,7 +103,7 @@ def upload_remote_files(**kwargs):
 
                 should_upload = False
 
-                head = requests.head(details["url"][1])
+                head = requests.head(details["url"])
 
                 assert (
                     head.status_code == 200
@@ -152,7 +152,7 @@ def upload_remote_files(**kwargs):
                     if details.get("link", False):
                         # manage resource metadata
                         metadata["size"] = head.headers["Content-Length"]
-                        metadata["url"] = details["url"][1]
+                        metadata["url"] = details["url"]
                                         
                         res = requests.post(
                             urljoin(ckan.address, f"api/3/action/{api_func}"),
