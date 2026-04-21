@@ -45,7 +45,7 @@ class Reader(ABC):
         self.attributes = attributes
 
         self.cleaners = {
-            "text": str,
+            "text": str,#misc_utils.clean_string,
             "int": misc_utils.clean_int,
             "float": misc_utils.clean_float,
             "timestamp": misc_utils.clean_date_format,
@@ -98,9 +98,11 @@ class Reader(ABC):
                 if attr["type"] in ["date", "timestamp"]:
                     assert "format" in attr.keys(), f"{attr['id']} doesn't have a {attr['type']} format"
                     output[attr["id"]] = cleaner(value, attr["format"])
+                elif attr["type"] == "text":
+                    output[attr["id"]] = cleaner(value).replace("\x00", " ")
                 else:                    
                     output[attr["id"]] = cleaner(value)
-
+                        
             yield output
 
 

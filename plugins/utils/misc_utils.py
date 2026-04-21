@@ -72,10 +72,8 @@ def clean_string(input):
     '''converts data to fit in CKAN datastore text column'''
     if input is None:
         return ""
-    if not isinstance(input, str):
-        return str(input).replace("\x00", "")
-    else:
-        return str(input).strip().replace("\x00", "")
+    working = str(input)
+    return working#.replace("\x00", " ")
 
 def clean_int(input):
     '''converts data to fit in CKAN datastore int column'''
