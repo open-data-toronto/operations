@@ -422,11 +422,12 @@ def parse_possible_filepaths(source_url):
                     
             if "qq" in this_year_input:
                 for quarter in range(1,5):
-                    this_quarter_input = this_year_input                    
-                    this_quarter_input = this_quarter_input.replace("qq", f"q{str(quarter)}")                        
-                    if requests.get(this_quarter_input, allow_redirects = False).status_code == 200:
-                        this_date += f"-{quarter}"
-                        output.append([this_date, this_quarter_input])
+                    for q in ["q", "Q"]:
+                        this_quarter_input = this_year_input                    
+                        this_quarter_input = this_quarter_input.replace("qq", f"{q+str(quarter)}")    
+                        if requests.get(this_quarter_input, allow_redirects = False).status_code == 200:
+                            this_date += f"-{quarter}"
+                            output.append([this_date, this_quarter_input])
                     
             else:
                 if requests.get(this_year_input, allow_redirects = False).status_code == 200:

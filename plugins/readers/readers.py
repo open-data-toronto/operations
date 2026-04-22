@@ -447,7 +447,7 @@ class MultiReader(Reader):
         self.format = format
 
         # other possible inputs from YAMLs
-        self.encoding = kwargs.get('encoding', None)
+        self.encoding = kwargs.get('encoding', "utf-8")
         self.jsonpath = kwargs.get('jsonpath', None)
         self.custom_reader = kwargs.get('custom_reader', None)
         self.multi_insert_date = kwargs.get('multi_insert_date', None)
