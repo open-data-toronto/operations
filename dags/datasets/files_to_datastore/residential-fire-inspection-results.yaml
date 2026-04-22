@@ -15,7 +15,9 @@ residential-fire-inspection-results:
   - Community services
   - Public safety
   - Development and infrastructure
-  tags: null
+  tags: 
+  - name: inspect
+    vocabulary_id: null
   information_url: https://www.toronto.ca/city-government/accountability-operations-customer-service/access-city-information-or-records/fire-prevention-inspection-results-for-high-rise-residential-buildings/
   excerpt: Listing of Fire Prevention inspection results for highrise residential
     properties as of January 1, 2017.
