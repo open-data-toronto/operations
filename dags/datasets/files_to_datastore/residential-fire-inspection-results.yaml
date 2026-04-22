@@ -1,7 +1,7 @@
-highrise-residential-fire-inspection-results:
+residential-fire-inspection-results:
   dag_owner_name: ''
   dag_owner_email: ''
-  title: Highrise Residential Fire Inspection Results
+  title: Residential Fire Inspection Results
   date_published: '2019-07-23 17:33:37.549189'
   dataset_category: Map
   refresh_rate: Daily
