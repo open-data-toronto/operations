@@ -27,7 +27,7 @@ parking-occupancy:
     The Toronto Parking Authority (TPA) operates a portfolio of several City-owned off-street parking facilities. This data is the utilization data from these assets, which is a critical input for evidence-based decision-making to support real estate planning, transportation management, economic development, and smart city initiatives.
 
   resources: 
-    Parking Occupancy qq yyyy:
+    Parking Occupancy:
       format: csv
       url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/Parking_Occupancy_yyyy_qq.csv
       multi: true
