@@ -41,94 +41,240 @@ public-art:
       format: geojson
       url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_PUBLICART/FeatureServer/0/
       attributes:
-        - id: Source
+        - id: FID
           type: "text"
           info:
-            notes: ""
-        - id: Source_ID
+            notes: "Unique Asset Identifier Number"
+        - id: PROGRAM
           type: "text"
           info:
-            notes: ""
-        - id: Location
+            notes: "Name of program or art collection"
+        - id: ADDRESS
           type: "text"
           info:
-            notes: ""
-        - id: Artist
+            notes: "Address location of artwork"
+        - id: LATITUDE
           type: "text"
           info:
-            notes: ""
-        - id: Title
+            notes: "Latitude map coordinate"
+        - id: LONGITUDE
           type: "text"
           info:
-            notes: ""
-        - id: Medium
+            notes: "Longitude map coordinate"
+        - id: DESCRIPTION
           type: "text"
           info:
-            notes: ""
-        - id: ArtForm
+            notes: "A description of the artwork"
+        - id: ARTIST
           type: "text"
           info:
-            notes: ""
-        - id: Status
+            notes: "The artist(s) that created the artwork"
+        - id: ARTIST_WEBSITE
           type: "text"
           info:
-            notes: ""
-        - id: ImageName
+            notes: "Artist's website link"
+        - id: ARTIST_WEBSITE_LINK_TEXT
           type: "text"
           info:
-            notes: ""
-        - id: ImageURL
+            notes: "The label text that the artist's website link is embedded under"
+        - id: TITLE
           type: "text"
           info:
-            notes: ""
-        - id: ThumbURL
+            notes: "The title of the artwork"
+        - id: ARTWORK_TYPE
           type: "text"
           info:
-            notes: ""
-        - id: ImageAltText
+            notes: "The artwork type (Architecture/Landscape, Audio/Video, Digital, Light Installation, Multidisciplinary, Mural/Painting, Photography, Sculpture)"
+        - id: MEDIUM
           type: "text"
           info:
-            notes: ""
+            notes: "The medium (materials) used to create the artwork"
+        - id: YEAR
+          type: "text"
+          info:
+            notes: "The year the artwork was created or installed"
+        - id: PHOTO_CREDIT
+          type: "text"
+          info:
+            notes: "The person or organization that owns that took or owns the photograph"
+        - id: THUMB_URL
+          type: "text"
+          info:
+            notes: "The file name for the thumbnail image"
+        - id: IMAGE_URL
+          type: "text"
+          info:
+            notes: "The file name for the primary image"
+        - id: IMAGE_ALT_TEXT
+          type: "text"
+          info:
+            notes: "The alternative text for the primary image"
+        - id: IMAGE1
+          type: "text"
+          info:
+            notes: "The file name for the second image is located"
+        - id: IMAGE1_ALT_TEXT
+          type: "text"
+          info:
+            notes: "The alternative text for the second image"
+        - id: IMAGE2
+          type: "text"
+          info:
+            notes: "The file name for the third image is located"
+        - id: IMAGE2_ALT_TEXT
+          type: "text"
+          info:
+            notes: "The alternative text for the third image"
+        - id: IMAGE3
+          type: "text"
+          info:
+            notes: "The file name for the fourth image is located"
+        - id: IMAGE3_ALT_TEXT
+          type: "text"
+          info:
+            notes: "The alternative text for the fourth image"
+        - id: IMAGE4
+          type: "text"
+          info:
+            notes: "The file name for the fifth image is located"
+        - id: IMAGE4_ALT_TEXT
+          type: "text"
+          info:
+            notes: "The alternative text for the fifth image"
+        - id: IMAGE5
+          type: "text"
+          info:
+            notes: "The file name for the sixth image is located"
+        - id: IMAGE5_ALT_TEXT
+          type: "text"
+          info:
+            notes: "The alternative text for the sixth image"
+        - id: IMAGE6
+          type: "text"
+          info:
+            notes: "The file name for the seventh image is located"
+        - id: IMAGE6_ALT_TEXT
+          type: "text"
+          info:
+            notes: "The alternative text for the seventh image"
+        - id: IMAGE7
+          type: "text"
+          info:
+            notes: "The file name for the eighth image is located"
+        - id: IMAGE7_ALT_TEXT
+          type: "text"
+          info:
+            notes: "The alternative text for the eighth image"
+        - id: IMAGE8
+          type: "text"
+          info:
+            notes: "The file name for the ninth image is located"
+        - id: IMAGE8_ALT_TEXT
+          type: "text"
+          info:
+            notes: "The alternative text for the ninth image"
+        - id: IMAGE9
+          type: "text"
+          info:
+            notes: "The file name for the tenth image is located"
+        - id: IMAGE9_ALT_TEXT
+          type: "text"
+          info:
+            notes: "The alternative text for the tenth image"
+        - id: IMAGE10
+          type: "text"
+          info:
+            notes: "The file name for the eleventh image is located"
+        - id: IMAGE10_ALT_TEXT
+          type: "text"
+          info:
+            notes: "The alternative text for the eleventh image"
+        - id: EXTERNAL_LINK
+          type: "text"
+          info:
+            notes: "Link to website where more information about the artwork can be found"
+        - id: EXTERNAL_LINK_TEXT
+          type: "text"
+          info:
+            notes: "The label text that the external website link is embedded under"
+        - id: OWNEDBY
+          type: "text"
+          info:
+            notes: "The owner of the artwork"
+        - id: COMMISSIONEDBY
+          type: "text"
+          info:
+            notes: "The person or organization that commissioned the artwork"
+        - id: MULTIMEDIA_LINK_1
+          type: "text"
+          info:
+            notes: "A link to an online resource where more images or videos about the artwork or artist can be found"
+        - id: MULTIMEDIA_LINK_LABEL_1
+          type: "text"
+          info:
+            notes: "The label text that the multimedia website link is embedded under"
+        - id: MULTIMEDIA_LINK_2
+          type: "text"
+          info:
+            notes: "A link to a second online resource where more images or videos about the artwork or artist can be found"
+        - id: MULTIMEDIA_LINK_ LABEL_2
+          type: "text"
+          info:
+            notes: "The label text that the second multimedia website link is embedded under"
+        - id: MULTIMEDIA_LINK_3
+          type: "text"
+          info:
+            notes: "A link to a third online resource where more images or videos about the artwork or artist can be found"
+        - id: MULTIMEDIA_LINK_LABEL_3
+          type: "text"
+          info:
+            notes: "The label text that the third multimedia website link is embedded under"
+        - id: MULTIMEDIA_LINK_4
+          type: "text"
+          info:
+            notes: "A link to a fourth online resource where more images or videos about the artwork or artist can be found"
+        - id: MULTIMEDIA_LINK_LABEL_4
+          type: "text"
+          info:
+            notes: "The label text that the fourth multimedia website link is embedded under"
+        - id: MULTIMEDIA_LINK_5
+          type: "text"
+          info:
+            notes: "A link to a fifth online resource where more images or videos about the artwork or artist can be found"
+        - id: MULTIMEDIA_LINK_LABEL_5
+          type: "text"
+          info:
+            notes: "The label text that the fifth multimedia website link is embedded under"
+        - id: MULTIMEDIA_LINK_6
+          type: "text"
+          info:
+            notes: "A link to a sixth online resource where more images or videos about the artwork or artist can be found"
+        - id: MULTIMEDIA_LINK_LABEL_6
+          type: "text"
+          info:
+            notes: "The label text that the sixth multimedia website link is embedded under"
+        - id: MULTIMEDIA_LINK_7
+          type: "text"
+          info:
+            notes: "A link to a seventh online resource where more images or videos about the artwork or artist can be found"
+        - id: MULTIMEDIA_LINK_LABEL_7
+          type: "text"
+          info:
+            notes: "The label text that the seventh multimedia website link is embedded under"
+        - id: SOURCE_ID
+          type: "text"
+          info:
+            notes: "Unique Asset Identifier Number from original data source"
         - id: WARD
-          type: "int"
+          type: "text"
           info:
-            notes: ""
+            notes: "The City of Toronto Ward number that the location of the artwork can be found in "
         - id: WARD_FULLNAME
           type: "text"
           info:
-            notes: ""
-        - id: YEAR_INSTALLED
-          type: "text"
-          info:
-            notes: ""
-        - id: Description
-          type: "text"
-          info:
-            notes: ""
-        - id: OwnedBy
-          type: "text"
-          info:
-            notes: ""
-        - id: CommissionedBy
-          type: "text"
-          info:
-            notes: ""
-        - id: PublicArtConsultant
-          type: "text"
-          info:
-            notes: ""
-        - id: ImageOrientation
-          type: "text"
-          info:
-            notes: ""
-        - id: ExternalLink
-          type: "text"
-          info:
-            notes: ""
-        - id: ExternalLinkText
-          type: "text"
-          info:
-            notes: ""
+            notes: "The City of Toronto Ward name that the location of the artwork can be found in "
+        
+        
         - id: geometry
           type: "text"
           info:

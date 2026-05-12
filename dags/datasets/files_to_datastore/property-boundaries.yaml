@@ -34,7 +34,7 @@ property-boundaries:
     Property Boundaries:
       format: geojson
       agol: true
-      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_MUN_PARCEL/FeatureServer/0
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_MUN_PARCEL_ALTER/FeatureServer/0
       attributes:
       - id: PARCELID
         type: int
@@ -48,16 +48,16 @@ property-boundaries:
             * Corridor - Describes a section of legal Right-of-Way. 
             * Reserve - A unit of land of varying width (usually 0.3 metres (1 foot) wide) used to restrict access to private/public properties, such as access to adjoining public highways. 
             * Common - A municipal parcel that is not designated as Corridor, Reserve or Condominium. A subdivision lot is a typical Common parcel.
-      - id: DATE_EFFECTIVE
-        type: date
-        format: epoch
-        info:
-          notes:  System generated
-      - id: DATE_EXPIRY
-        type: date
-        format: epoch
-        info:
-          notes:  System generated
+      #- id: DATE_EFFECTIVE
+      #  type: date
+      #  format: epoch
+      #  info:
+      #    notes:  System generated
+      #- id: DATE_EXPIRY
+      #  type: date
+      #  format: epoch
+      #  info:
+      #    notes:  System generated
       #- id: PLANID
       #  type: int
       #  info:
@@ -86,18 +86,18 @@ property-boundaries:
       #  type: int
       #  info:
       #    notes:  Unique ID of the main address point related to the parcel
-      - id: ADDRESS_NUMBER
-        type: text
-        info:
-          notes:  Address number
+      #- id: ADDRESS_NUMBER
+      #  type: text
+      #  info:
+      #    notes:  Address number
       #- id: LINEAR_NAME_ID
       #  type: int
       #  info:
       #    notes:  Unique ID of the street name
-      - id: LINEAR_NAME_FULL
-        type: text
-        info:
-          notes:  Street name
+      #- id: LINEAR_NAME_FULL
+      #  type: text
+      #  info:
+      #    notes:  Street name
       #- id: AROLL_SOURCE_DESC
       #  type: text
       #  info:
@@ -110,14 +110,14 @@ property-boundaries:
         type: text
         info:
           notes:  System generated
-      - id: TRANS_ID_CREATE
-        type: float
-        info:
-          notes:  System generated
-      - id: TRANS_ID_EXPIRE
-        type: float
-        info:
-          notes:  System generated
+      #- id: TRANS_ID_CREATE
+      #  type: float
+      #  info:
+      #    notes:  System generated
+      #- id: TRANS_ID_EXPIRE
+      #  type: float
+      #  info:
+      #    notes:  System generated
       - id: geometry
         type: text
         info:
