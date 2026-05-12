@@ -217,7 +217,7 @@ public-art:
           type: "text"
           info:
             notes: "A link to a second online resource where more images or videos about the artwork or artist can be found"
-        - id: MULTIMEDIA_LINK_ LABEL_2
+        - id: MULTIMEDIA_LINK_LABEL_2
           type: "text"
           info:
             notes: "The label text that the second multimedia website link is embedded under"
