@@ -479,6 +479,7 @@ def dinesafe():
                 # create hash value
                 hash_value = hashlib.md5(unique_composite_key)
                 
+                # skip duplicates if they exist
                 if hash_value.hexdigest() in indices:
                     continue
                 indices.append(hash_value.hexdigest())
@@ -500,8 +501,8 @@ def dinesafe():
                         {
                             "type": "Point",
                             "coordinates": [
-                                item["longitude"],
-                                item["latitude"],
+                                float(item["longitude"]),
+                                float(item["latitude"]),
                             ],
                         }
                     ),
@@ -521,6 +522,7 @@ def dinesafe():
                 # create hash value
                 hash_value = hashlib.md5(unique_composite_key)
                 
+                # skip duplicates if they exist
                 if hash_value.hexdigest() in indices:
                     continue
                 indices.append(hash_value.hexdigest())
@@ -545,8 +547,8 @@ def dinesafe():
                             {
                                 "type": "Point",
                                 "coordinates": [
-                                    item["longitude"],
-                                    item["latitude"],
+                                    float(item["longitude"]),
+                                    float(item["latitude"]),
                                 ],
                             }
                         ),
@@ -573,8 +575,8 @@ def dinesafe():
                             {
                                 "type": "Point",
                                 "coordinates": [
-                                    item["longitude"],
-                                    item["latitude"],
+                                    float(item["longitude"]),
+                                    float(item["latitude"]),
                                 ],
                             }
                         ),
