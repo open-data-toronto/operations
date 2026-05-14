@@ -458,108 +458,127 @@ def dinesafe():
         "SRV-KEY": srv_key,
         "USER-KEY": user_key,
     }
-    
-    with requests.get(url, headers=headers) as r:   
 
-        data = json.loads(r.text)
+    raw_input = json.loads(requests.get(url, headers=headers).text)
 
-        for establishment in data:
-            # initialize establishment data in output
-            output = {
-                "Establishment ID": establishment["estId"],
-                "Establishment Name": establishment["estName"],
-                "Establishment Type": establishment["estType"],
-                "Establishment Address": f'{establishment["address"]} {establishment.get("unit", None)} {establishment["postal"]}',
-                #"Establishment Status": establishment["estType"],
-                #"Min. Inspections Per Year": None,                
-                "Inspection ID": None,
-                "Inspection Status": None,
-                "Inspection Observation": None,
-                "Inspection Date": None,
-                "Infraction Details": None,
-                "Severity": None,
-                "Action": None,
-                "Outcome": None,
-                "Outcome Date": None,
-                "Amount Fined": None,
-                "Latitude": establishment["latitude"],
-                "Longitude": establishment["longitude"],
-            }
-            
-            if establishment["inspections"] is None:
-                continue
+    # TODO: REMOVE THIS
+    indices = []
+
+    for item in raw_input:
+        
+        for inspection in item.get("inspections", None) or []:
+            # if theres no infractions, append the data to the output
+            if not inspection.get("infractions", None):
+
+                unique_composite_key = (
+                    item["estId"]
+                    + "_"
+                    + inspection["inspectionDate"]
+                ).encode("utf-8")
+
+                # create hash value
+                hash_value = hashlib.md5(unique_composite_key)
                 
-            # for each inspection, add inspection data in output
-            elif establishment["inspections"] is not None:
-                for inspection in establishment["inspections"]:
-                    # if there are no infractions
-                    output["Inspection Date"] = inspection["inspectionDate"]
-                    output["Inspection Status"] = inspection["inspectionStatus"]
-                    output["Inspection Observation"] = inspection["observation"]
+                if hash_value.hexdigest() in indices:
+                    continue
+                indices.append(hash_value.hexdigest())
                     
+                yield {
+                    "unique_id": hash_value.hexdigest(),
+                    "estId": item["estId"],
+                    "estName": item["estName"],
+                    "address": f'{item["address"]} {item["unit"]} {item["postal"]}',
+                    "inspectionStatus": inspection["inspectionStatus"],
+                    "inspectionDate": inspection["inspectionDate"],                    
+                    "typeDesc": None,
+                    "deficiencyDesc": None,
+                    "actionDesc": None,
+                    "OutcomeDate": None,
+                    "OutcomeDesc": None,
+                    "amountFined": None,
+                    "geometry": json.dumps(
+                        {
+                            "type": "Point",
+                            "coordinates": [
+                                item["longitude"],
+                                item["latitude"],
+                            ],
+                        }
+                    ),
+                }
+
+            for infraction in inspection.get("infractions", None) or []:
+                # append infraction detail info, as available, to the output
+                # add a unique primary key as required by datastore_upsert
+                unique_composite_key = (
+                    item["estId"]
+                    + "_"
+                    + inspection["inspectionDate"]
+                    + "_"
+                    + infraction["typeDesc"]
+                ).encode("utf-8")
+                                
+                # create hash value
+                hash_value = hashlib.md5(unique_composite_key)
+                
+                if hash_value.hexdigest() in indices:
+                    continue
+                indices.append(hash_value.hexdigest())
+                
+                # if theres no infractions details, append the data to the output
+                if not infraction.get("prosecutions", None):
+                                 
+                    yield {
+                        "unique_id": hash_value.hexdigest(),
+                        "estId": item["estId"],
+                        "estName": item["estName"],
+                        "address": f'{item["address"]} {item["unit"]} {item["postal"]}',
+                        "inspectionStatus": inspection["inspectionStatus"],
+                        "inspectionDate": inspection["inspectionDate"],                        
+                        "typeDesc": infraction["typeDesc"],
+                        "deficiencyDesc": None,
+                        "actionDesc": None,
+                        "OutcomeDate": None,
+                        "OutcomeDesc": None,
+                        "amountFined": None,
+                        "geometry": json.dumps(
+                            {
+                                "type": "Point",
+                                "coordinates": [
+                                    item["longitude"],
+                                    item["latitude"],
+                                ],
+                            }
+                        ),
+                    }
+
+                for prosecution in infraction.get("prosecutions", None) or []:
+                    # append infraction prosecution info, as available, to the output
                     # add a unique primary key as required by datastore_upsert
-                    # return output with empty infraction data
-                    if inspection["infractions"] is None:
-
-                        unique_composite_key = (
-                            output["Establishment ID"]
-                            + "_"
-                            + output["Inspection Date"]
-                        ).encode("utf-8")
-                        # create hash value
-                        hash_value = hashlib.md5(unique_composite_key)
-                        output["unique_id"] = hash_value.hexdigest()
-
-                # if there are infractions, add infractions data for each
-                    elif inspection["infractions"] is not None: 
-                        for infraction in inspection["infractions"]:
-                            output["Infraction Details"] = infraction["typeDesc"]
-                            output["Deficiency Details"] = infraction["deficiencyDesc"]
-                            output["Severity"] = infraction["severity"]
-                            output["Action"] = infraction["actionDesc"]
-                            
-                            if infraction["prosecutions"] is None:
-                                # add a unique primary key as required by datastore_upsert
-                                unique_composite_key = (
-                                    output["Establishment ID"]
-                                    + "_"
-                                    + output["Inspection Date"]
-                                    + "_"
-                                    + output["Infraction Details"]
-                                ).encode("utf-8")
-                                # create hash value
-                                hash_value = hashlib.md5(unique_composite_key)
-                                output["unique_id"] = hash_value.hexdigest()
-
-                            ## TODO
-                            # FOR ANYTHING PAST HERE TO WORK WITH THE UPSERT PARADIGM
-                            # we need a static identifier (like a date) for prosecutions
-                            # right now, there are PENDING prosecutions with empty dates
-                            # I worry those may change ... and we wont be able to associate 
-                            # them with their od record since all their attribute may change
-
-                            elif infraction["prosecutions"] is not None:
-                                for prosecution in infraction["prosecutions"]:
-                                    if prosecution["outcomeDate"]:
-                                        output["Outcome Date"] = prosecution["outcomeDate"]
-                                        output["Outcome"] = prosecution["outcomeDesc"]
-                                        output["Amount Fined"] = prosecution["amountFined"]
-                                        
-                                        # add a unique primary key as required by datastore_upsert
-                                        unique_composite_key = (
-                                            output["Establishment ID"]
-                                            + "_"
-                                            + output["Inspection Date"]
-                                            + "_"
-                                            + output["Infraction Details"]
-                                            + "_"
-                                            + output["Outcome Date"]
-                                        ).encode("utf-8")
-                                    # create hash value
-                                    hash_value = hashlib.md5(unique_composite_key)
-                                    output["unique_id"] = hash_value.hexdigest()
-            yield output
-
+                    
+                    yield {
+                        "unique_id": hash_value.hexdigest(),
+                        "estId": item["estId"],
+                        "estName": item["estName"],
+                        "address": f'{item["address"]} {item["unit"]} {item["postal"]}',
+                        "inspectionStatus": inspection["inspectionStatus"],
+                        "inspectionDate": inspection["inspectionDate"],                        
+                        "typeDesc": infraction["typeDesc"],
+                        "deficiencyDesc": prosecution.get("deficiencyDesc", None),
+                        "actionDesc": prosecution.get("actionDesc", None),
+                        "OutcomeDate": prosecution.get("outcomeDate", None),
+                        "OutcomeDesc": prosecution.get("outcomeDesc", None),
+                        "amountFined": prosecution.get("amountFined", None),
+                        "geometry": json.dumps(
+                            {
+                                "type": "Point",
+                                "coordinates": [
+                                    item["longitude"],
+                                    item["latitude"],
+                                ],
+                            }
+                        ),
+                    }
 
 
 def tennis_courts_facilities():
