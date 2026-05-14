@@ -461,7 +461,6 @@ def dinesafe():
 
     raw_input = json.loads(requests.get(url, headers=headers).text)
 
-    # TODO: REMOVE THIS
     indices = []
 
     for item in raw_input:
