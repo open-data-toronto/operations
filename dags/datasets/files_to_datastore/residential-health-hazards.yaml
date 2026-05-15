@@ -1,0 +1,98 @@
+residential-health-hazards:
+  schedule: '0 2 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Highrise Residential Health Hazards
+  date_published: '2019-07-23 17:04:01.187902'
+  refresh_rate: As available
+  dataset_category: Table
+  owner_division: Toronto Public Health
+  owner_section: Environmental Health
+  owner_unit: null
+  owner_email: PublicHealth@toronto.ca
+  collection_method: Data was collected through inspections and investigations initiated by routine operations or by complaints received.
+  civic_issues: null
+  topics: 
+    - Public safety
+    - Health
+  tags:
+  - name: inspection
+    vocabulary_id: null
+  - name: apartment
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/health-wellness-care/health-programs-advice/food-safety/dinesafe/
+  excerpt: Snapshot of the information to the public concerning the Toronto Public Health’s Health Hazard investigations. The data set is as current as the date of the extraction.
+  limitations: null
+  notes: Snapshot of the information to the public concerning the Toronto Public Health’s Health Hazard investigations. The data set is as current as the date of the extraction.
+  resources:
+    # resource name
+    Residential Health Inspections:
+      format: json
+      url: https://secure.toronto.ca/opendata/eh/properties/v1?format=json
+      custom_reader: residential_health_hazards
+      custom_headers:
+        SRV-KEY: healthhazards_secure_toronto_opendata_SRV_KEY
+        USER-KEY: secure_toronto_opendata_USER_KEY
+      datastore_upsert:
+        primary_key: "unique_id"
+      attributes:
+        - id: unique_id
+          type: text
+          info:
+            notes: "Unique id for this record, used for internal technical purposes"
+        - id: case_id
+          type: text
+          info:
+            notes: "Unique id for this case"
+        - id: case_type
+          type: text
+          info:
+            notes: "Type of case"
+        - id: address
+          type: text
+          info:
+            notes: "Address related to the record"
+        - id: geo_id
+          type: text
+          info:
+            notes: "Unique identifier for the address"        
+        - id: investigation_type
+          type: text
+          info:
+            notes: "Investigation category for record."
+        - id: investigation_date
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: "Start date of investigation."
+        - id: last_updated_date
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: "Date of most recent investigation update."
+        - id: info_code
+          type: text
+          info:
+            notes: "Investigation Sub-Category code."
+        - id: hazard_type
+          type: text
+          info:
+            notes: "Investigation Sub-Category."
+        - id: violation
+          type: text
+          info:
+            notes: "Type of complaint under investigation."
+        - id: status_desc
+          type: text
+          info:
+            notes: "Status if the investigation."
+        - id: file_extract_date
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: "Date of file extract."
+        - id: geometry
+          type: text
+          info:
+            notes: ""
+        

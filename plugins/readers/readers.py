@@ -10,6 +10,7 @@ import importlib
 import types
 
 from utils import misc_utils
+from airflow.models import Variable
 from abc import ABC, abstractmethod
 from io import StringIO
 from itertools import chain
@@ -36,6 +37,7 @@ class Reader(ABC):
             out_dir: str = "",
             filename: str = None,
             date_from_filename: str = None,
+            custom_headers: dict = {},
             **kwargs,
         ):
 
@@ -63,7 +65,16 @@ class Reader(ABC):
         logging.info(f"Reader prepping to save the following fields: {self.fieldnames}")
 
         # init optional input date_from_filename value if reader is multireader
-        self.date_from_filename = date_from_filename        
+        self.date_from_filename = date_from_filename
+
+        # init custom request headers 
+        self.custom_headers = {}       
+        for k,v in custom_headers.items():
+            try:
+                self.custom_headers[k] = Variable.get(v)
+            except Exception as e:
+                print(e)
+                self.custom_headers[k] = v
 
     @abstractmethod
     def read(self):
@@ -273,14 +284,12 @@ class CustomReader(Reader):
             #func_name: str,
             #resource_config: dict = {},
             custom_reader: str,
-            custom_headers: dict = {},
             **kwargs
         ):
 
         super().__init__(**kwargs)
         self.full_module_name = "custom_readers"
         self.func_name = custom_reader
-        #self.custom_headers = custom_headers
 
 
     def read(self):
@@ -401,10 +410,16 @@ class JSONReader(Reader):
             
             # add source data to out row
             for attr in self.attributes:
+                print(out)
+                print(attr)
+                print(source_row)
+                # parse lat long columns into geometry object
+                if attr["id"] == "geometry" and "geometry" not in source_row.keys():
+                    source_row = misc_utils.parse_geometry_from_row(source_row)
                 # remap column names if in config file
                 if "source_name" in attr.keys() and "target_name" in attr.keys():                        
                     out[attr["target_name"]] = source_row[attr["source_name"]]
-                elif "id" in attr.keys():
+                elif "id" in attr.keys():                    
                     out[attr["id"]] = source_row[attr["id"]]
 
             yield out
@@ -421,7 +436,10 @@ class JSONReader(Reader):
 
     def read(self):
         logging.info(">>>>> JSONReader <<<<<<")
-        res = json.loads(requests.get(self.source_url).text)
+        print(self.custom_headers)
+        print(self.source_url)
+        res = json.loads(requests.get(self.source_url, headers=self.custom_headers).text)
+        print(res)
 
         if self.is_geojson:
             return self.parse_geojson(input=res)

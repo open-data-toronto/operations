@@ -181,6 +181,53 @@ def toronto_beaches_water_quality():
         }
 
 
+def residential_health_hazards():
+    import hashlib
+
+    url = "https://secure.toronto.ca/opendata/eh/properties/v1?format=json"
+    user_key = Variable.get("secure_toronto_opendata_USER_KEY")
+    srv_key = Variable.get("healthhazards_secure_toronto_opendata_SRV_KEY")
+
+    headers = {
+        "SRV-KEY": srv_key,
+        "USER-KEY": user_key,
+    }
+
+    raw_input = json.loads(requests.get(url, headers=headers).text)
+
+    for item in raw_input:
+        # add a unique primary key as required by datastore_upsert
+        unique_composite_key = (
+            str(item["case_id"])
+            + "_"
+            + item["investigation_date"]
+            + "_"
+            + item["hazard_type"]
+        ).encode("utf-8")
+                        
+        # create hash value
+        hash_value = hashlib.md5(unique_composite_key)
+                
+        yield {
+            "unique_id": hash_value.hexdigest(),
+            "case_id": item["case_id"],
+            "case_type": item["case_type"],
+            "address": item["address"],
+            "geo_id": item["geo_id"],
+            "investigation_type": item["investigation_type"],
+            "investigation_date": item["investigation_date"],
+            "last_updated_date": item["last_updated_date"],
+            "info_code": item["info_code"],
+            "hazard_type": item["hazard_type"],
+            "violation": item["violation"],
+            "status_desc": item["status_desc"],
+            "file_extract_date": item["file_extract_date"],
+            "geometry": json.dumps(
+                {"type": "Point", "coordinates": [float(item["lon"]), float(item["lat"])]}
+            ),
+        }
+
+
 def toronto_beaches_observations():
     url = "https://secure.toronto.ca/opendata/adv_od/route_observations/v1?format=json"
     user_key = Variable.get("secure_toronto_opendata_USER_KEY")
