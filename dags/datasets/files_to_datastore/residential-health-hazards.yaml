@@ -91,7 +91,11 @@ residential-health-hazards:
           format: "%Y-%m-%d"
           info:
             notes: "Date of file extract."
-        - id: geometry
+        - id: lat
+          type: text
+          info:
+            notes: ""
+        - id: lon
           type: text
           info:
             notes: ""

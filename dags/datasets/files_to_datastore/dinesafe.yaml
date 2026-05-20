@@ -91,7 +91,11 @@ dinesafe:
           type: float
           info:
             notes: "Dollar amount of fine given"
-        - id: geometry
+        - id: latitude
+          type: text
+          info:
+            notes: ""
+        - id: longitude
           type: text
           info:
             notes: ""
