@@ -735,9 +735,8 @@ def residential_health_hazards():
             "violation": item["violation"],
             "status_desc": item["status_desc"],
             "file_extract_date": item["file_extract_date"],
-            "geometry": json.dumps(
-                {"type": "Point", "coordinates": [float(item["lon"]), float(item["lat"])]}
-            ),
+            "lon": item["lon"],
+            "lat": item["lat"],
         }
 
 
