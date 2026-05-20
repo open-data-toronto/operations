@@ -495,15 +495,9 @@ def dinesafe():
                     "OutcomeDate": None,
                     "OutcomeDesc": None,
                     "amountFined": None,
-                    "geometry": json.dumps(
-                        {
-                            "type": "Point",
-                            "coordinates": [
-                                float(item["longitude"]),
-                                float(item["latitude"]),
-                            ],
-                        }
-                    ),
+                    "latitude": item["latitude"],
+                    "longitude": item["longitude"],
+
                 }
 
             for infraction in inspection.get("infractions", None) or []:
@@ -540,16 +534,9 @@ def dinesafe():
                         "actionDesc": None,
                         "OutcomeDate": None,
                         "OutcomeDesc": None,
-                        "amountFined": None,
-                        "geometry": json.dumps(
-                            {
-                                "type": "Point",
-                                "coordinates": [
-                                    float(item["longitude"]),
-                                    float(item["latitude"]),
-                                ],
-                            }
-                        ),
+                        "amountFined": None,                        
+                        "latitude": item["latitude"],
+                        "longitude": item["longitude"],
                     }
 
                 for prosecution in infraction.get("prosecutions", None) or []:
@@ -568,16 +555,9 @@ def dinesafe():
                         "actionDesc": prosecution.get("actionDesc", None),
                         "OutcomeDate": prosecution.get("outcomeDate", None),
                         "OutcomeDesc": prosecution.get("outcomeDesc", None),
-                        "amountFined": prosecution.get("amountFined", None),
-                        "geometry": json.dumps(
-                            {
-                                "type": "Point",
-                                "coordinates": [
-                                    float(item["longitude"]),
-                                    float(item["latitude"]),
-                                ],
-                            }
-                        ),
+                        "amountFined": prosecution.get("amountFined", None),                        
+                        "latitude": item["latitude"],
+                        "longitude": item["longitude"],
                     }
 
 
