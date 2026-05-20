@@ -20,7 +20,7 @@ residential-health-hazards:
     vocabulary_id: null
   - name: apartment
     vocabulary_id: null
-  information_url: https://www.toronto.ca/community-people/health-wellness-care/health-programs-advice/food-safety/dinesafe/
+  information_url: null
   excerpt: Snapshot of the information to the public concerning the Toronto Public Health’s Health Hazard investigations. The data set is as current as the date of the extraction.
   limitations: null
   notes: Snapshot of the information to the public concerning the Toronto Public Health’s Health Hazard investigations. The data set is as current as the date of the extraction.
