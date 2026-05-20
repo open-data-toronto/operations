@@ -1,0 +1,100 @@
+swimsafe:
+  schedule: '0 2 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Swimsafe
+  date_published: '2026-05-19 17:04:01.187902'
+  refresh_rate: Daily
+  dataset_category: Map
+  owner_division: Toronto Public Health
+  owner_section: Health Protection
+  owner_unit: null
+  owner_email: PublicHealth@toronto.ca
+  civic_issues: null
+  topics: 
+    - Water
+    - Health
+    - Parks and recreation
+  tags:
+  - name: pool
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/community-people/health-wellness-care/health-inspections-monitoring/swimsafe/
+  excerpt: The SwimSafe dataset provides detailed health inspection results for Toronto’s public recreational water facilities, including swimming pools, wading pools, spas, and splash pads.
+  collection_method: Toronto Public Health (TPH) collects recreational water inspection data through a standardized process of on-site inspections and investigations by certified Public Health Inspectors, as outlined by the Health Protection and Promotion Act and Ontario Regulation 565.
+  limitations: This open data allows researchers, developers, and residents to track the performance of specific facilities, monitor seasonal water trends, and build applications that may help the public make informed decisions about where it is safe to swim.
+  notes: |
+    The City of Toronto’s SwimSafe dataset offers a comprehensive look at the health and safety standards maintained across the city's diverse aquatic environments. Managed by Toronto Public Health, the data serves as a vital public resource for ensuring that recreational water facilities and natural swimming areas meet provincial health regulations.
+
+    Recreational Water Facility Inspections:
+
+    * Covers all public-access swimming pools, wading pools, spas (hot tubs), and splash pads.
+    
+    * Provides time-stamped results of health inspections, including pass/fail statuses, specific infractions found, and any corrective actions required to address safety or hygiene concerns.
+
+  resources:
+    # resource name
+    Swimsafe:
+      format: json
+      url: https://secure.toronto.ca/opendata/ds_od/inpections/v2?format=json
+      custom_reader: swimsafe
+      datastore_upsert:
+        primary_key: "unique_id"
+      attributes:
+        - id: unique_id
+          type: text
+          info:
+            notes: "Unique id for this record connected to source data"
+        - id: facilityName
+          type: text
+          info:
+            notes: "Name of a facility. A facility contains one or many establishments"
+        - id: address
+          type: text
+          info:
+            notes: "Address of facility"
+        #- id: estId
+        #  type: text
+        #  info:
+        #    notes: "Establishment ID for a particular pool, spa, etc"
+        - id: estName
+          type: text
+          info:
+            notes: "Establishment Name; an establishment is a specific pool, spa, etc"
+        - id: type
+          type: text
+          info:
+            notes: "Category of establishment"
+        - id: insStatus
+          type: text
+          info:
+            notes: "Status of the inspection (ex: Pass)"
+        - id: insDate
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: "Date of inspection"
+        - id: observation
+          type: text          
+          info:
+            notes: "Observation made during inspection "
+        - id: infCategory
+          type: text          
+          info:
+            notes: "Category of infraction"
+        - id: defDesc
+          type: text          
+          info:
+            notes: "Description of one detail of an infraction"
+        - id: infType
+          type: text          
+          info:
+            notes: "Category of detail of infraction"
+        - id: actionDesc
+          type: text          
+          info:
+            notes: "Action taken based on infraction"
+        
+        - id: geometry
+          type: text
+          info:
+            notes: ""

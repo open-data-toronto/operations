@@ -12,7 +12,6 @@ import openpyxl
 
 
 
-
 def test_reader():
     data = [
         {"row1": 1, "row2": "text", "row3": 2.11},
@@ -181,53 +180,6 @@ def toronto_beaches_water_quality():
         }
 
 
-def residential_health_hazards():
-    import hashlib
-
-    url = "https://secure.toronto.ca/opendata/eh/properties/v1?format=json"
-    user_key = Variable.get("secure_toronto_opendata_USER_KEY")
-    srv_key = Variable.get("healthhazards_secure_toronto_opendata_SRV_KEY")
-
-    headers = {
-        "SRV-KEY": srv_key,
-        "USER-KEY": user_key,
-    }
-
-    raw_input = json.loads(requests.get(url, headers=headers).text)
-
-    for item in raw_input:
-        # add a unique primary key as required by datastore_upsert
-        unique_composite_key = (
-            str(item["case_id"])
-            + "_"
-            + item["investigation_date"]
-            + "_"
-            + item["hazard_type"]
-        ).encode("utf-8")
-                        
-        # create hash value
-        hash_value = hashlib.md5(unique_composite_key)
-                
-        yield {
-            "unique_id": hash_value.hexdigest(),
-            "case_id": item["case_id"],
-            "case_type": item["case_type"],
-            "address": item["address"],
-            "geo_id": item["geo_id"],
-            "investigation_type": item["investigation_type"],
-            "investigation_date": item["investigation_date"],
-            "last_updated_date": item["last_updated_date"],
-            "info_code": item["info_code"],
-            "hazard_type": item["hazard_type"],
-            "violation": item["violation"],
-            "status_desc": item["status_desc"],
-            "file_extract_date": item["file_extract_date"],
-            "geometry": json.dumps(
-                {"type": "Point", "coordinates": [float(item["lon"]), float(item["lat"])]}
-            ),
-        }
-
-
 def toronto_beaches_observations():
     url = "https://secure.toronto.ca/opendata/adv_od/route_observations/v1?format=json"
     user_key = Variable.get("secure_toronto_opendata_USER_KEY")
@@ -282,6 +234,7 @@ def _tobids_get_records(entity, filters):
         offset += chunk_size
 
     return all_raw
+
 
 def _tobids_parse_records(records, field_mapping, awarded_field=None):
     # input list of dicts containing raw records from tobids, output formatted records
@@ -365,7 +318,6 @@ def tobids_awarded_contracts():
     }
         
     yield from _tobids_parse_records(raw, field_mapping, "Awarded_Suppliers")
-
 
 
 def tobids_non_competitive_contracts():
@@ -627,6 +579,166 @@ def dinesafe():
                             }
                         ),
                     }
+
+
+def swimsafe():
+    from io import StringIO
+    import hashlib
+    url = "https://secure.toronto.ca/opendata/ss_od/full_list/v1?format=json"
+    user_key = Variable.get("secure_toronto_opendata_USER_KEY")
+    srv_key = Variable.get("swimsafe_secure_toronto_opendata_SRV_KEY")
+
+    headers = {
+        "SRV-KEY": srv_key,
+        "USER-KEY": user_key,
+    }
+
+    raw_input = json.loads(requests.get(url, headers=headers).text)
+
+    indices = []
+
+    for json_item in raw_input:
+        facility = json_item["json"]
+        for establishment in facility.get("establishments", None) or []:
+            for inspection in establishment.get("inspections", None) or []:
+                # if theres no infractions, append the data to the output
+                if not inspection.get("infractions", None):
+
+                    unique_composite_key = (
+                        establishment["estName"]
+                        + "_"
+                        + inspection["insDate"]
+                    ).encode("utf-8")
+
+                    # create hash value
+                    hash_value = hashlib.md5(unique_composite_key)
+                    
+                    # skip duplicates if they exist
+                    if hash_value.hexdigest() in indices:
+                        continue
+                    indices.append(hash_value.hexdigest())
+                        
+                    yield {
+                        "unique_id": hash_value.hexdigest(),
+                        #"estId": facility["estId"],
+                        "facilityName": facility["facilityName"],
+                        "address": facility["addrFull"],
+                        "estName": establishment["estName"],
+                        "accessType": establishment["accessType"],
+                        "type": establishment["type"],
+                        "insStatus": inspection["insStatus"],
+                        "insDate": inspection["insDate"],                    
+                        "observation": inspection["observation"],
+                        "infCategory": None,
+                        "defDesc": None,
+                        "infType": None,
+                        "actionDesc": None,
+                        "geometry": json.dumps(
+                            {
+                                "type": "Point",
+                                "coordinates": [
+                                    float(facility["lon"]),
+                                    float(facility["lat"]),
+                                ],
+                            }
+                        ),
+                    }
+
+                for infraction in inspection.get("infractions", None) or []:
+                    # append infraction detail info, as available, to the output
+                    # add a unique primary key as required by datastore_upsert
+
+                    for detail in infraction.get("infDtl", None) or []:
+                        # append infraction detail info, as available, to the output
+                        # add a unique primary key as required by datastore_upsert
+                        unique_composite_key = (
+                            establishment["estName"]
+                            + "_"
+                            + inspection["insDate"]
+                            + "_"
+                            + detail["defDesc"]
+                        ).encode("utf-8")
+                                        
+                        # create hash value
+                        hash_value = hashlib.md5(unique_composite_key)
+                        
+                        # skip duplicates if they exist
+                        if hash_value.hexdigest() in indices:
+                            continue
+                        indices.append(hash_value.hexdigest())
+                        
+                        yield {
+                            "unique_id": hash_value.hexdigest(),
+                            #"estId": facility["estId"],
+                            "facilityName": facility["facilityName"],
+                            "address": facility["addrFull"],
+                            "estName": establishment["estName"],
+                            "accessType": establishment["accessType"],
+                            "type": establishment["type"],
+                            "insStatus": inspection["insStatus"],
+                            "insDate": inspection["insDate"],                        
+                            "observation": inspection["observation"],
+                            "infCategory": infraction["infCategory"],
+                            "defDesc": detail.get("defDesc", None),
+                            "infType": detail.get("infType", None),
+                            "actionDesc": detail.get("actionDesc", None),
+                            "geometry": json.dumps(
+                                {
+                                    "type": "Point",
+                                    "coordinates": [
+                                        float(facility["lon"]),
+                                        float(facility["lat"]),
+                                    ],
+                                }
+                            ),
+                        }
+
+
+def residential_health_hazards():
+    import hashlib
+
+    url = "https://secure.toronto.ca/opendata/eh/properties/v1?format=json"
+    user_key = Variable.get("secure_toronto_opendata_USER_KEY")
+    srv_key = Variable.get("healthhazards_secure_toronto_opendata_SRV_KEY")
+
+    headers = {
+        "SRV-KEY": srv_key,
+        "USER-KEY": user_key,
+    }
+
+    raw_input = json.loads(requests.get(url, headers=headers).text)
+
+    for item in raw_input:
+        # add a unique primary key as required by datastore_upsert
+        unique_composite_key = (
+            str(item["case_id"])
+            + "_"
+            + item["investigation_date"]
+            + "_"
+            + item["hazard_type"]
+        ).encode("utf-8")
+                        
+        # create hash value
+        hash_value = hashlib.md5(unique_composite_key)
+                
+        yield {
+            "unique_id": hash_value.hexdigest(),
+            "case_id": item["case_id"],
+            "case_type": item["case_type"],
+            "address": item["address"],
+            "geo_id": item["geo_id"],
+            "investigation_type": item["investigation_type"],
+            "investigation_date": item["investigation_date"],
+            "last_updated_date": item["last_updated_date"],
+            "info_code": item["info_code"],
+            "hazard_type": item["hazard_type"],
+            "violation": item["violation"],
+            "status_desc": item["status_desc"],
+            "file_extract_date": item["file_extract_date"],
+            "geometry": json.dumps(
+                {"type": "Point", "coordinates": [float(item["lon"]), float(item["lat"])]}
+            ),
+        }
 
 
 def tennis_courts_facilities():
