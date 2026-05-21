@@ -69,15 +69,7 @@ dinesafe:
         - id: typeDesc
           type: text
           info:
-            notes: "Category of infraction"
-        - id: deficiencyDesc
-          type: text
-          info:
-            notes: "Description of infraction deficiency"
-        - id: actionDesc
-          type: text
-          info:
-            notes: "Description of action taken"
+            notes: "Category of infraction"        
         - id: OutcomeDate
           type: date
           format: "%Y-%m-%d"
