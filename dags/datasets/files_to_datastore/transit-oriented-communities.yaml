@@ -1,0 +1,117 @@
+transit-oriented-communities:
+  schedule: '20 7 1 * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Transit Oriented Communities
+  date_published: '2026-05-20 13:57:18.929311'
+  refresh_rate: As available
+  dataset_category: Map
+  owner_division: City Planning
+  owner_section: Transportation Planning - Transit Implementation Unit
+  owner_unit: null
+  owner_email: mailto:transitcommunities@toronto.ca
+  civic_issues: 
+  - Affordable housing
+  - Climate change
+  - Mobility
+  topics: 
+  - Development and infrastructure
+  - Transportation
+  tags: 
+  - name: development
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/planning-development/transit-oriented-communities/
+  excerpt: This map identifies Transit‑Oriented Community sites across Toronto, showing the location of publicly owned lands near major transit stations planned for mixed‑use, higher‑density development.
+  collection_method: |
+    This dataset was created using information from submissions related to Transit‑Oriented Communities. Sites included in the map are undergoing review by City Planning’s Transit Implementation Unit.
+
+    City staff identified and mapped these sites using  geographic data. The information is updated as projects move through planning and design and may change as new details become available.
+  limitations: |
+    This dataset is provided for informational and planning purposes only. Transit‑Oriented Community site locations shown on the map are indicative and may not reflect final boundaries, land use permissions, or development outcomes.
+
+    The dataset does not represent approved planning applications, zoning permissions, or construction timelines. Site status, attributes, and spatial accuracy may change as projects evolve through planning, design, and approval processes.
+
+    Users should not rely on this dataset as a sole source for decision‑making. It should be used in conjunction with other City planning documents, policies, and datasets, as well as consultation with the City of Toronto where appropriate.
+
+    The City of Toronto makes no representations or warranties regarding the completeness or accuracy of the data and assumes no responsibility for errors, omissions, or interpretations derived from its use.
+  
+  notes: |
+    This dataset provides a spatial representation of Transit‑Oriented Community (TOC) sites across the City of Toronto. The map identifies publicly owned lands located near existing or planned rapid transit stations that are being considered or advanced for higher‑density, mixed‑use development.
+
+    Transit‑Oriented Communities support the efficient use of transit infrastructure by integrating residential, employment, institutional, and community uses within walking distance of transit stations. The mapped TOC sites are intended to help accommodate population and employment growth while supporting transit ridership, complete communities, and city‑building objectives.
+
+    The dataset is intended to support planning analysis, public transparency, and engagement by illustrating where TOC initiatives are located city‑wide. It may be used by City staff, other public agencies, researchers, and the public to better understand the geographic distribution and context of Transit‑Oriented Community sites.
+
+  resources:
+    # resource name
+    Stations:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_TOC_Stations/FeatureServer/0
+      attributes:
+        - id: "OBJECTID"
+          type: "text"
+          info:
+            notes: "Unique id from the source system"
+        - id: "ACTIVE"
+          type: "text"
+          info:
+            notes: "Whether a station is active"
+        - id: "DESCRIPTION"
+          type: "text"
+          info:
+            notes: "Plain text description of location"
+        - id: "STATION_NAME"
+          type: "text"
+          info:
+            notes: "Name of the station"
+        - id: "MANAGEDBY"
+          type: "text"
+          info:
+            notes: ""
+        - id: "TRANSIT_LINE"
+          type: "text"
+          info:
+            notes: "Name of associated transit line"
+        - id: "STATION_URL"
+          type: "text"
+          info:
+            notes: "A url for people to learn more about the station"
+        - id: "ADDITIONAL_URL"
+          type: "text"
+          info:
+            notes: "Optional additional related url"        
+        - id: geometry
+          type: "text"
+          info:
+            notes: ""
+    Areas:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_TOC_Areas/FeatureServer/0
+      attributes:
+        - id: "OBJECTID"
+          type: "text"
+          info:
+            notes: "Unique id from the source system"
+        - id: "NAME"
+          type: "text"
+          info:
+            notes: "Name of location"
+        - id: "DESCRIPTIO"
+          type: "text"
+          info:
+            notes: "Plain text description of location"
+        - id: "MANAGEDBY"
+          type: "text"
+          info:
+            notes: ""
+        - id: "TRANSIT_LI"
+          type: "text"
+          info:
+            notes: "Name of associated transit line"          
+        - id: geometry
+          type: "text"
+          info:
+            notes: ""
+        
