@@ -119,6 +119,7 @@ def clean_date_format(input, input_format=None):
         "%b %d, %Y": "%Y-%m-%d",
         "%Y-%m-%d %H:%M %p": "%Y-%m-%dT%H:%M:%S",
         '%m-%d-%Y %I:%M:%S %p': "%Y-%m-%dT%H:%M:%S",
+        "%Y%m%d":"%Y-%m-%d",
     }
 
     if input_format:

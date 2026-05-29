@@ -24,13 +24,12 @@ ttc-lrt-delay-data:
   resources: 
     # resource name
     TTC LRT Delays:
-      format: xlsx
-      sheet: LRT
-      url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/ttc-lrt-delay.xlsx
+      format: csv
+      url: https://opendata.toronto.ca/toronto.transit.commission/ttc-routes-and-schedules/ttc-lrt-delay.csv
       attributes:
         - id: "Date"
           type: "date"
-          format: "%Y/%m/%d %H:%M:%S"
+          format: "%Y%m%d"
           info:
             notes: "Date of the delay"
         - id: "Line"          
