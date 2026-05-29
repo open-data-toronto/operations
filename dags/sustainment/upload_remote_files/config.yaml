@@ -719,3 +719,11 @@ bike-share-toronto-ridership-data:
     format: zip
     link: true
     url: https://opendata.toronto.ca/toronto.parking.authority/bike-share-toronto-ridership-data/bikeshare-ridership-yyyy.zip
+
+capital-project-pipeline:
+  Capital Project Pipeline Excel:
+    format: xlsx
+    url: https://opendata.toronto.ca/purchasing.and.materials.management/procurement-pipeline/ECCD Capital Project Pipeline.xlsx
+  Capital Project Pipeline PDF:
+    format: pdf
+    url: https://opendata.toronto.ca/purchasing.and.materials.management/procurement-pipeline/ECCD Upcoming Capital Projects.pdf

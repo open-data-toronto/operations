@@ -1,0 +1,81 @@
+capital-project-pipeline:
+  schedule: '0 16 * * *'
+  dag_owner_name: 'Mac'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Capital Projects Pipeline
+  date_published: '2026-05-14 10:45:52.182112'
+  refresh_rate: As available
+  dataset_category: Table
+  owner_division: Purchasing & Materials Management
+  owner_section: null
+  owner_unit: null
+  owner_email: supplychain@toronto.ca
+  civic_issues: null
+  topics: 
+    - Business
+  tags: []
+  information_url: https://www.toronto.ca/business-economy/doing-business-with-the-city/
+  excerpt: Provides advance visibility into capital projects planned to be issued for competitive procurement, helping industry plan capacity and resources.
+  limitations: This capital project pipeline is intended to provide advance notice of potential upcoming opportunities. Timing and details are preliminary and may change. Projects listed may be issued earlier than anticipated, postponed, revised, or withdrawn entirely. Vendors are encouraged to monitor official procurement postings for confirmed solicitations. Inclusion in this pipeline does not guarantee that a solicitation will be issued.
+  notes: |
+    *This page provides advance visibility into capital projects planned to be issued for competitive procurement, helping industry plan capacity and resources.*
+    
+    A capital project is the full scope of City-led work undertaken to create, acquire, improve, refurbish, or extend the life of tangible assets, including land, buildings, engineered structures, water and wastewater infrastructure, parks and public realm assets, equipment, vehicles, and technology systems, that support service delivery, enable growth, or fulfill legislated requirements over multiple years. These projects result in long-term municipal assets that provide benefits beyond one fiscal year and require Council-approved funding through the capital budget process.
+
+    The City of Toronto’s capital projects are implemented based on the current approved [10-year Capital Budget](https://www.toronto.ca/city-government/budget-finances/city-budget/).
+
+    This list focuses on projects to be tendered by **four divisions within Infrastructure Services: Engineering & Construction Services (ECS)**, the City’s primary capital delivery agent, and its three primary asset owner clients: **Toronto Water (TW), Transportation Services (TS)**, and **Solid Waste Management Services (SWMS)**.
+
+    For more information on active procurement opportunities related to these capital projects, refer to the City’s procurement page, where competitive bidding opportunities are posted as they become available and where suppliers can register to do business with the City.
+  resources:
+    # resource name
+    Capital Project Pipeline:
+      format: xlsx
+      sheet: Upcoming Capital Projects
+      url: https://opendata.toronto.ca/purchasing.and.materials.management/procurement-pipeline/ECCD Upcoming Capital Projects.xlsx
+      attributes:
+        - id: "No."
+          type: text
+          info:
+            notes: 'Unique identifier'
+        - id: "Name and Construction Contract Number"
+          type: text
+          info:
+            notes: 'Name and contract number of the project'
+        - id: "Type of Work"
+          type: text
+          info:
+            notes: 'Category of the work involved'
+        - id: "Scope of Work: Detailed Description"
+          type: text
+          info:
+            notes: Additional details for the project's statement of work
+        - id: "Delivery Division"
+          type: text
+          info:
+            notes: 'City division associated with delivering the project'
+        - id: "Project Owner (Division)"
+          type: text
+          info:
+            notes: 'City division associated with owning the project'
+        - id: "Target Sourcing Year"
+          type: text
+          info:
+            notes: 'Target year for sourcing'
+        - id: "Target Award Year"
+          type: text
+          info:
+            notes: 'Target year to award a contract'
+        - id: "Sourcing Type"
+          type: text
+          info:
+            notes: 'Type of sourcing. Values include RFP, RFT, and RFSQ'       
+        - id: "Estimated Range"
+          type: text
+          info:
+            notes: 'Estimated range of award associated with the contract'
+        - id: "Estimated Contract Term (Months)"
+          type: text
+          info:
+            notes: 'Estimated number of months of duration of the contract'
+        
