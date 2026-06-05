@@ -1,0 +1,75 @@
+accelerators-incubators-coworking-spaces:
+  schedule: '0 19 2 2 *'
+  dag_owner_name: Mackenzie Nichols
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Accelerators, Incubators & Coworking Spaces
+  date_published: '2026-06-05 06:04:12.166811'
+  dataset_category: Map
+  refresh_rate: Annually
+  owner_division: Economic Development & Culture
+  owner_section: Economic Development
+  owner_unit: null
+  owner_email: null
+  civic_issues: null
+  topics:
+    - Business
+    - Community services
+    - Development and infrastructure
+    - Locations and mapping
+  tags:
+  - name: startup
+    vocabulary_id: null
+  - name: startups
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/business-economy/new-businesses-startups/coworking-spaces/
+  excerpt: A list of Toronto-based accelerators, incubators and coworking spaces, including location and service details. The dataset helps entrepreneurs, startups and small businesses find spaces and supports across the city.
+  limitations: |
+    This dataset is intended to provide a helpful reference of accelerators, incubators and coworking spaces in Toronto, but it may not be comprehensive. Inclusion in the dataset does not represent an endorsement by the City of Toronto.
+
+    Information about organizations, services, availability, pricing, eligibility and contact details may change over time. Users should confirm details directly with each organization before making decisions based on the dataset.
+
+    The dataset reflects information available at the time of publication or most recent update and may not capture temporary closures, new locations, discontinued services or other recent changes.
+  collection_method: |
+    This dataset was compiled by the City of Toronto using publicly available information and direct engagement with organizations that operate accelerators, incubators and coworking spaces in Toronto.
+
+    Information may be collected or verified through organization websites, public directories, online research, direct outreach, stakeholder referrals and updates provided by listed organizations. The dataset is reviewed periodically and updated as new information becomes available.
+  notes: |
+    This dataset contains information on accelerators, incubators and coworking spaces located in Toronto. These spaces provide entrepreneurs, startups, small businesses and innovation focused organizations with access to shared workspace, business support, mentorship, networking opportunities and sector specific resources.
+
+    The dataset supports the City of Toronto’s public map of coworking spaces and helps users identify locations across the city that may meet their business, startup or innovation needs. Records may include information such as organization name, address, contact details, website, type of space, services offered, industry focus and other descriptive information.
+
+    This dataset can be used by entrepreneurs looking for workspace or business support, ecosystem partners seeking to understand the distribution of innovation spaces in Toronto, and researchers or organizations interested in the city’s startup and small business support infrastructure.
+  resources:
+    Locations:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_Coworking_Spaces/FeatureServer/0
+      attributes:
+      - id: address
+        type: text
+        info:
+          notes: Physical address
+      - id: clients
+        type: text
+        info:
+          notes: Intended users
+      - id: industry
+        type: text
+        info:
+          notes: Industry area served
+      - id: services
+        type: text
+        info:
+          notes: Services offered
+      - id: description
+        type: text
+        info:
+          notes: Description of organization
+      - id: url
+        type: text
+        info:
+          notes: Website link to organization   
+      - id: geometry
+        type: text
+        info:
+          notes: ''
