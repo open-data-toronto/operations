@@ -45,6 +45,10 @@ accelerators-incubators-coworking-spaces:
       agol: true
       url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_Coworking_Spaces/FeatureServer/0
       attributes:
+      - id: title
+        type: text
+        info:
+          notes: Name of organization
       - id: address
         type: text
         info:
