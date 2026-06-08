@@ -1,0 +1,47 @@
+contributing-areas:
+  schedule: '20 7 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Contributing Areas
+  date_published: '2026-06-08 13:57:18.929311'
+  refresh_rate: As available
+  dataset_category: Map
+  owner_division: City Planning
+  owner_section: SIPA
+  owner_unit: null
+  owner_email: cityplanning@toronto.ca
+  civic_issues: 
+  - Climate change
+  topics: 
+  - Development and infrastructure
+  - Environment
+  - Locations and mapping
+  - Water
+  tags: 
+  - name: development
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/planning-development/application-information-centre/?action=init#location=&lat=&lng=&zoom=
+  excerpt: Contributing Areas are illustrated on Map 9A and described in a sidebar in chapter 3.4 of the Official Plan. These are areas where efforts should be made to protect and enhance ecological function and biodiversity. 
+  limitations: This information is provided for illustrative purposes only.
+  collection_method: Contributing areas are identified using field research and modelling, and will continue to be refined in consultation with the TRCA. 
+  notes:  Contributing Areas are illustrated on Map 9A and described in a sidebar in chapter 3.4 of the [Official Plan](https://www.toronto.ca/city-government/planning-development/official-plan-guidelines/official-plan/). Contributing Areas are not part of the natural heritage system. Contributing areas support Toronto’s ecosystems and natural heritage features and functions. They provide opportunities for habitat connectivity and natural linkages across the city; they include habitat areas that are highly suitable for birds; and/or they contribute to groundwater systems that support sensitive areas like wetlands and cold water streams. These are areas where efforts should be made to protect and enhance ecological function and biodiversity by maintaining and enhancing existing tree canopy and soft landscaping, and encouraging other green infrastructure measures. 
+  resources:
+    # resource name
+    Contributing Areas:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COTGEO_CP_CONTRIBUTING_AREA/FeatureServer/0
+      attributes:
+      - id: WATERSHED
+        type: text
+        info:
+          notes: 'Main watershed name'
+      - id: SUBSHED
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''
+        
