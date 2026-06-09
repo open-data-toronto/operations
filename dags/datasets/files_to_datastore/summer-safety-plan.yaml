@@ -1,0 +1,91 @@
+# package name
+summer-safety-plan:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: "Summer Safety Plan"
+  date_published: "2026-06-03 05:18:24.389728"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Social Development, Finance & Administration
+  owner_section: Social Police and Research & Community Safety and Wellbeing
+  owner_unit: null
+  owner_email: null
+
+  civic_issues: null
+  topics: 
+    - Locations and mapping
+  tags: 
+    - name: kids
+      vocabulary_id: null
+    
+
+  information_url: https://www.toronto.ca/community-people/public-safety-alerts/community-safety-wellbeing-programs/summer-safety-plan/
+  excerpt: Programming available for youths and caregivers during the summer months to assist with violence prevention.
+  limitations: null
+  notes: The [Summer Safety Plan](https://contrib.wp.intra.prod-toronto.ca/wp-content/uploads/2026/05/8fd0-Final-DraftSummer-Safety-Plan.pdf) includes a wide range of programs and services focused on prevention, intervention, response, and community well-being. This includes summer camps, sports and recreation, arts and leadership programs, job and training opportunities, mental health and well-being supports, community events, and extended youth programming across Toronto. This dataset includes all the summer safety program currently available. Some programs may operate in multiple locations. Only programs that provided exact location information have address information shown. 
+  resources:
+    # resource name
+    Program List:
+      format: csv
+      url: https://opendata.toronto.ca/social.development.finance.administration/summer-safety-plan/SSP Open Data.csv
+      attributes:
+        - id: ACTIVITY_NAME
+          type:  text
+          info:
+            notes: "Name of program or event"
+        - id: LEAD_ORGANIZATION
+          type:  text
+          info:
+            notes: "Who is leading the event/program"
+        - id: ACTIVITY_TYPE
+          type:  text
+          info:
+            notes: "Whether this is a program or an event"
+        - id: DESCRIPTION
+          type:  text
+          info:
+            notes: "Description of the event/program"
+        - id: ACTIVITY_DATE
+          type:  text
+          info:
+            notes: "When the program/event occurs"
+        - id: REGISTRATION_REQ
+          type:  text
+          info:
+            notes: "Whether registration is required"
+        - id: TARGET_GROUP
+          type:  text
+          info:
+            notes: "Who the program/event is meant for. Categories include Youth, Parents & Caregivers or both groups."
+        - id: ADDRESS_FULL
+          type:  text
+          info:
+            notes: 'Location of the program/event. "Not Listed" indicates that that no location is available is available for this program/event.'
+        - id: CONTACT
+          type:  text
+          info:
+            notes: "Contact information of the program/event. The contact information can include a phone number and/or email address."
+        - id: WEBSITE
+          type:  text
+          info:
+            notes: "Website  (if available)"
+        - id: INSTAGRAM
+          type:  text
+          info:
+            notes: "Instragram (if available)"
+        - id: TAGS
+          type:  text
+          info:
+            notes: "Keywords that are descriptive of the program. Keywords include: arts, mental health, violence prevention, leadership, community, leadership, sports, family support, safe space, education, recreation, life skills."
+        - id: "geometry"
+          type: "text"
+          info:
+            notes: ""
+        
+        
