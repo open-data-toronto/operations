@@ -7,9 +7,9 @@ summer-safety-plan:
 
   # mandatory package attributes
   title: "Summer Safety Plan"
-  date_published: "2026-06-03 05:18:24.389728"
+  date_published: "2026-06-09 05:18:24.389728"
   refresh_rate: As available
-  dataset_category: Map
+  dataset_category: Table
 
   # optional package attributes
   owner_division: Social Development, Finance & Administration
@@ -19,7 +19,9 @@ summer-safety-plan:
 
   civic_issues: null
   topics: 
-    - Locations and mapping
+    - Community services
+    - Public safety
+    - Parks and recreation
   tags: 
     - name: kids
       vocabulary_id: null
@@ -83,7 +85,11 @@ summer-safety-plan:
           type:  text
           info:
             notes: "Keywords that are descriptive of the program. Keywords include: arts, mental health, violence prevention, leadership, community, leadership, sports, family support, safe space, education, recreation, life skills."
-        - id: "geometry"
+        - id: "LATITUDE"
+          type: "text"
+          info:
+            notes: ""
+        - id: "LONGITUDE"
           type: "text"
           info:
             notes: ""
