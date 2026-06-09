@@ -35,7 +35,7 @@ library-branch-general-information:
     # resource name
     tpl-branch-general-information:
       format: csv
-      url: https://opendata.toronto.ca/toronto.public.library/tpl-branch-general-information-2026.csv
+      url: https://opendata.toronto.ca/toronto.public.library/TPL Branch With Hours - Original.csv
       attributes:
         - id: BranchCode
           type: text
@@ -158,6 +158,10 @@ library-branch-general-information:
           type: text
           info:
             notes: Libraries with publicly accessible washrooms are marked with a "1" here
+        - id: Hours
+          type: text
+          info:
+            notes: Hours of operation
         - id: geometry
           type: text
           info:
