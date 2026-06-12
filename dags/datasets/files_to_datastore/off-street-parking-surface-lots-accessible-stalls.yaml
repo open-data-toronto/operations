@@ -1,0 +1,57 @@
+off-street-parking-surface-lots-accessible-stalls:
+  schedule: '0 2 1 7 *'
+  dag_owner_name: Mackenzie.Nichols4
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Off-Street Parking – Surface Lots – Accessible Stalls
+  date_published: '2026-6-11 00:37:16.207118'
+  dataset_category: Map
+  refresh_rate: Annually
+  owner_division: Toronto Parking Authority
+  owner_section: null
+  owner_unit: null
+  owner_email: gis@greenpmobility.com
+  civic_issues: 
+    - Mobility
+  topics:
+  - Transportation
+  tags:
+  - name: lots
+    vocabulary_id: null
+  
+  information_url: https://parking.greenp.com/
+  excerpt: Accessible stall locations at off street parking facilities owned or managed by the Toronto Parking Authority.
+  limitations: Accessible Type A and Type B spaces estimated based on size and configuration from aerial imagery. Data does not reflect a full technical ground survey.
+  notes: Accessible stall locations at off street parking facilities owned or managed by the Toronto Parking Authority. Includes active and inactive facilities.
+  resources: 
+    Accessible Stalls:
+      format: geojson
+      url: https://services5.arcgis.com/UM5d08UVAsJVg3zk/ArcGIS/rest/services/Off-Street_Parking_-_Surface_Lots_-_Accessible_Stalls_view/FeatureServer/0
+      agol: true
+      attributes:
+        - id: CP_ID_TEXT 
+          type: "text"
+          info:
+            notes: "TPA Off-Street Car Park ID number – text format
+"
+        - id: CP_ID_NUM 
+          type: "int"
+          info:
+            notes: "TPA Off-Street Car Park ID number – numeric format"
+        - id: AODA_TYPE 
+          type: "text"
+          info:
+            notes: "Estimated accessible parking stall type. Typically encoded as Type A (Van Accessible) or Type B (Standard)"
+        - id: SOURCE 
+          type: "text"
+          info:
+            notes: "Most commonly City of Toronto Aerial orthophotography with year of imagery capture"
+        - id: NOTES 
+          type: "text"
+          info:
+            notes: "Notes, exceptions, and comments on evaluation of stalls. Reflects information that can be inferred from remote desktop analysis."
+        - id: geometry
+          type: "text"
+          info:
+            notes: ""
+        
+        
