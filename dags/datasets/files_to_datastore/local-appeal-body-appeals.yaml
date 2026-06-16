@@ -1,0 +1,59 @@
+local-appeals-body-appeals:
+  schedule: '30 9 * * 4'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Local Appeals Body Appeals
+  date_published: '2025-11-27 01:17:05.131285'
+  refresh_rate: Monthly
+  dataset_category: Table
+  owner_division: Court Services
+  owner_section: null
+  owner_unit: null
+  owner_email: tlab@toronto.ca
+  civic_issues: null
+  topics: 
+    - Permits and licenses
+  tags: 
+  - name: tlab
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/planning-development/committee-of-adjustment/appeals/
+  excerpt: This dataset includes information about appeals to the Toronto Appeal Body for decisions of the Committee of Adjustment on minor variances to zoning by laws and consents
+  limitations: null
+  notes: |
+    This dataset includes information about appeals submitted to the Toronto Appeal Body for decisions of the committee of Adjustments on minor variances to zoning by-laws and consents.
+
+    In 2017, City Council passed [Toronto Municipal Code Chapter 142](https://www.toronto.ca/legdocs/municode/toronto-code-142.pdf) and created the Toronto Local Appeal Body (TLAB). The TLAB has Council appointed members who will make decisions about local planning matters affecting Toronto Neighbourhoods in a fair, consistent, fact-based and informed manner. Appeal hearings are public.
+  resources:
+    Local Appeal Body Appeals:
+      format: csv
+      url: https://opendata.toronto.ca/court.services/toronto-local-appeal-body-appeals/tlab_appeals.csv
+      attributes:
+      - id: TLABFOLDER
+        type: text
+        info:
+          notes: null
+      - id: FOLDERNUMBER
+        type: text
+        info:
+          notes: null
+      - id: INDATE
+        type: text
+        info:
+          notes: null
+      - id: FINALDATE
+        type: text
+        info:
+          notes: null
+      - id: STATUS
+        type: text
+        info:
+          notes: null
+      - id: FOLDERNAME
+        type: text
+        info:
+          notes: null
+      - id: DISTRICT
+        type: text
+        info:
+          notes: null
+      
