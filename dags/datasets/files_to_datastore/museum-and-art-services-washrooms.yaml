@@ -1,0 +1,58 @@
+museums-and-cultural-centres:
+  schedule: '@once'
+  dag_owner_name: Mac
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Museum and Cultural Centres
+  date_published: '2026-06-16 10:04:41.381535'
+  refresh_rate: As available
+  dataset_category: Table
+  owner_division: Economic Development & Culture
+  owner_section: Museums and Heritage Services
+  owner_unit: null
+  owner_email: tohistorymuseums@toronto.ca
+  civic_issues: null
+  topics: 
+    - Locations and mapping
+  tags:
+  - name: bathrooms
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/explore-enjoy/history-art-culture/museums/
+  excerpt: Information and locations of Toronto History Museum Sites and Cultural Centres, including public washroom details.
+
+  limitations: null
+  notes: Information and locations of Toronto History Museum Sites and Cultural Centres, including public washroom details. Washroom details include accessibility and presence of gender neutral options.
+  resources:
+    #resource name
+    Facilities:
+      format: csv
+      url: https://opendata.toronto.ca/economic.development.culture/washrooms-edc/cultural-center-washrooms.csv
+      encoding: "latin-1"
+      attributes:
+        - id: Museums and Cultural Centres
+          type: text
+          info:
+            notes: Name of the facility
+        - id: Washroom?
+          type: text
+          info:
+            notes: Whether or not facility has a washroom
+        - id: Address
+          type: text
+          info:
+            notes: Facility address
+        - id: Hours
+          type: text
+          info:
+            notes: Facility open hours
+        - id: Accessible?
+          type: text
+          info:
+            notes: Whether there are accessibility measures at the facility
+        - id: Gender Inclusive?
+          type: text
+          info:
+            notes: Whether the washrooms in question are gender inclusive
+        - id: Notes
+          type: text
+          info:
+            notes: 'Additional notes'
