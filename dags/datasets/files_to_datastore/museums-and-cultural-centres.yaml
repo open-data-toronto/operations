@@ -2,7 +2,7 @@ museums-and-cultural-centres:
   schedule: '@once'
   dag_owner_name: Mac
   dag_owner_email: mackenzie.nichols4@toronto.ca
-  title: Museum and Cultural Centres
+  title: Museums and Cultural Centres
   date_published: '2026-06-16 10:04:41.381535'
   refresh_rate: As available
   dataset_category: Table
