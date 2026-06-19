@@ -31,29 +31,29 @@ local-appeals-body-appeals:
       - id: TLABFOLDER
         type: text
         info:
-          notes: null
+          notes: Associated IBMS (internal city system) Folder ID
       - id: FOLDERNUMBER
         type: text
         info:
-          notes: null
+          notes: Associated detailed IBMS (internal city system) Folder ID
       - id: INDATE
         type: text
         info:
-          notes: null
+          notes: Date the appeal was brought in
       - id: FINALDATE
         type: text
         info:
-          notes: null
+          notes: Last date the appeal was updated
       - id: STATUS
         type: text
         info:
-          notes: null
+          notes: Status of the appeal
       - id: FOLDERNAME
         type: text
         info:
-          notes: null
+          notes: Name of the folder - often related to an address
       - id: DISTRICT
         type: text
         info:
-          notes: null
+          notes: Former municipality name associated with the appeal 
       
