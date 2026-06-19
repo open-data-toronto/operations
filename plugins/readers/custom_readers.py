@@ -463,13 +463,15 @@ def dinesafe():
     indices = []
 
     for item in raw_input:
+
+        address = f'{item["address"]} {item["unit"]} {item["postal"]}'
         
         for inspection in item.get("inspections", None) or []:
             # if theres no infractions, append the data to the output
             if not inspection.get("infractions", None):
 
                 unique_composite_key = (
-                    item["estId"]
+                    address
                     + "_"
                     + inspection["inspectionDate"]
                 ).encode("utf-8")
@@ -485,11 +487,16 @@ def dinesafe():
                 yield {
                     "unique_id": hash_value.hexdigest(),
                     "estId": item["estId"],
+                    "oldEstId": item["oldEstId"],
                     "estName": item["estName"],
-                    "address": f'{item["address"]} {item["unit"]} {item["postal"]}',
+                    "address": address,
+                    "phone": item["phone"],
                     "inspectionStatus": inspection["inspectionStatus"],
-                    "inspectionDate": inspection["inspectionDate"],                    
-                    "typeDesc": None,                                        
+                    "inspectionDate": inspection["inspectionDate"],
+                    "observation": inspection["observation"],                    
+                    "typeDesc": None,
+                    "deficiencyDesc": None,
+                    "severity": None,
                     "OutcomeDate": None,
                     "OutcomeDesc": None,
                     "amountFined": None,
@@ -502,7 +509,7 @@ def dinesafe():
                 # append infraction detail info, as available, to the output
                 # add a unique primary key as required by datastore_upsert
                 unique_composite_key = (
-                    item["estId"]
+                    address
                     + "_"
                     + inspection["inspectionDate"]
                     + "_"
@@ -523,11 +530,16 @@ def dinesafe():
                     yield {
                         "unique_id": hash_value.hexdigest(),
                         "estId": item["estId"],
+                        "oldEstId": item["oldEstId"],
                         "estName": item["estName"],
-                        "address": f'{item["address"]} {item["unit"]} {item["postal"]}',
+                        "address": address,
+                        "phone": item["phone"],
                         "inspectionStatus": inspection["inspectionStatus"],
-                        "inspectionDate": inspection["inspectionDate"],                        
-                        "typeDesc": infraction["typeDesc"],                                                
+                        "inspectionDate": inspection["inspectionDate"],
+                        "observation": inspection["observation"],                        
+                        "typeDesc": infraction["typeDesc"],
+                        "deficiencyDesc": infraction["deficiencyDesc"],
+                        "severity": infraction["severity"],
                         "OutcomeDate": None,
                         "OutcomeDesc": None,
                         "amountFined": None,                        
@@ -542,11 +554,16 @@ def dinesafe():
                     yield {
                         "unique_id": hash_value.hexdigest(),
                         "estId": item["estId"],
+                        "oldEstId": item["oldEstId"],
                         "estName": item["estName"],
-                        "address": f'{item["address"]} {item["unit"]} {item["postal"]}',
+                        "address": address,
+                        "phone": item["phone"],
                         "inspectionStatus": inspection["inspectionStatus"],
-                        "inspectionDate": inspection["inspectionDate"],                        
-                        "typeDesc": infraction["typeDesc"],                                                
+                        "inspectionDate": inspection["inspectionDate"],   
+                        "observation": inspection["observation"],                                         
+                        "typeDesc": infraction["typeDesc"],
+                        "deficiencyDesc": infraction["deficiencyDesc"],
+                        "severity": infraction["severity"],                                              
                         "OutcomeDate": prosecution.get("outcomeDate", None),
                         "OutcomeDesc": prosecution.get("outcomeDesc", None),
                         "amountFined": prosecution.get("amountFined", None),                        

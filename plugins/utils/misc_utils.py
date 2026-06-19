@@ -85,7 +85,7 @@ def clean_int(input):
 def clean_float(input):
     '''converts data to fit in CKAN datastore float column'''
     if input:
-        return float(input)
+        return float(str(input).replace(",", ""))
     else:
         return None
 

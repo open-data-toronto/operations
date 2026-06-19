@@ -27,7 +27,7 @@ dinesafe:
   excerpt: Snapshot of the information to the public concerning the Toronto Public
     Health Food Premises Inspection and Disclosure system. The data set is as current
     as the date of the extraction.
-  limitations: null
+  limitations: Since November 2025, establishments inspected are given a new unique id. Establishments inspected before and after November will have both kinds of ids. Establishments only inspected before will only have one kind of ID.
   notes: "DineSafe is Toronto Public Health\u2019s food safety program that inspects\
     \ all establishments serving and preparing food. Each inspection results in a\
     \ pass, a conditional pass or a closed notice."
@@ -48,7 +48,11 @@ dinesafe:
         - id: estId
           type: text
           info:
-            notes: "Establishment ID"
+            notes: "Establishment ID - this will contain either a legacy id or a new one, depending on the system this data currently lives in."
+        - id: oldEstId
+          type: text
+          info:
+            notes: "Legacy establishment ID"
         - id: estName
           type: text
           info:
@@ -61,24 +65,40 @@ dinesafe:
           type: text
           info:
             notes: "Status of the inspection (ex: Pass)"
+        - id: phone 
+          type: text
+          info:
+            notes: "Establishment phone number"      
         - id: inspectionDate
           type: date
           format: "%Y-%m-%d"
           info:
             notes: "Date of inspection"
+        - id: observation
+          type: text          
+          info:
+            notes: "Observation made during inspection"
         - id: typeDesc
           type: text
           info:
-            notes: "Category of infraction"        
+            notes: "Category of infraction"
+        - id: deficiencyDesc
+          type: text          
+          info:
+            notes: "Details of infraction"
+        - id: severity
+          type: text          
+          info:
+            notes: "Severity of infraction"          
         - id: OutcomeDate
           type: date
           format: "%Y-%m-%d"
           info:
-            notes: "Date of outcome"
+            notes: "Date of outcome of prosecution, if there was one"
         - id: OutcomeDesc
           type: text
           info:
-            notes: "Description of outcome"
+            notes: "Description of outcome, if there was one - this can be 'pending' if an outcome is being processed"
         - id: amountFined
           type: float
           info:
