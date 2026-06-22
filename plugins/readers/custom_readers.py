@@ -463,7 +463,7 @@ def dinesafe():
     indices = []
 
     for item in raw_input:
-
+        
         address = f'{item["address"]} {item["unit"]} {item["postal"]}'
         
         for inspection in item.get("inspections", None) or []:
@@ -492,9 +492,9 @@ def dinesafe():
                     "address": address,
                     "phone": item["phone"],
                     "inspectionStatus": inspection["inspectionStatus"],
-                    "inspectionDate": inspection["inspectionDate"],
+                    "inspectionDate": inspection["inspectionDate"],                    
                     "observation": inspection["observation"],                    
-                    "typeDesc": None,
+                    "typeDesc": None,                                        
                     "deficiencyDesc": None,
                     "severity": None,
                     "OutcomeDate": None,
@@ -535,9 +535,9 @@ def dinesafe():
                         "address": address,
                         "phone": item["phone"],
                         "inspectionStatus": inspection["inspectionStatus"],
-                        "inspectionDate": inspection["inspectionDate"],
+                        "inspectionDate": inspection["inspectionDate"],                        
                         "observation": inspection["observation"],                        
-                        "typeDesc": infraction["typeDesc"],
+                        "typeDesc": infraction["typeDesc"],                                                
                         "deficiencyDesc": infraction["deficiencyDesc"],
                         "severity": infraction["severity"],
                         "OutcomeDate": None,
@@ -559,9 +559,9 @@ def dinesafe():
                         "address": address,
                         "phone": item["phone"],
                         "inspectionStatus": inspection["inspectionStatus"],
-                        "inspectionDate": inspection["inspectionDate"],   
+                        "inspectionDate": inspection["inspectionDate"],                        
                         "observation": inspection["observation"],                                         
-                        "typeDesc": infraction["typeDesc"],
+                        "typeDesc": infraction["typeDesc"],                                                
                         "deficiencyDesc": infraction["deficiencyDesc"],
                         "severity": infraction["severity"],                                              
                         "OutcomeDate": prosecution.get("outcomeDate", None),
@@ -916,3 +916,38 @@ def ckan_api_usage():
                             "id": None,
                             "count": result["cnt"]
                         }
+
+
+def pcard_expenditures():
+    import gc
+
+    print("=============================")
+
+    base_url = "https://opendata.toronto.ca/accounting.services/pcard-expenditures/expenditures/PCardExpenses_yyyymmm.xls"
+    filepaths = misc_utils.parse_possible_filepaths(base_url)
+
+    for item in filepaths:
+        date = item[0]
+        filepath = item[1]
+        print(filepath)
+        file = requests.get(filepath).content
+        wb = openpyxl.load_workbook(filename = io.BytesIO(file))
+        ws = wb.worksheets[0]
+
+        del file
+        gc.collect()
+
+        for row in ws.iter_rows(min_row=2):
+            if row[0]:
+                row = {
+                    # convert everything to a string except empty cells
+                    # openpyxl has more data types than we store in CKAN
+                    # we convert from string to a CKAN-friendly datatype later
+                    source_headers[i]: str(row[i].value).strip() if row[i].value is not None else None
+                    for i in range(len(row))
+                }
+                print(row)
+                return row
+
+if __name__ == "__main__":
+    pcard_expenditures()

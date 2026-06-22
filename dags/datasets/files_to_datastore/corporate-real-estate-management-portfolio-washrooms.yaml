@@ -1,0 +1,92 @@
+corporate-real-estate-management-portfolio-washrooms:
+  schedule: '@once'
+  dag_owner_name: Mackenzie.Nichols4
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Corporate Real Estate Management Portfolio Washrooms
+  date_published: '2026-06-22 10:37:16.873122'
+  dataset_category: Map
+  refresh_rate: As available
+  owner_division: Corporate Real Estate Management
+  owner_section: null
+  owner_unit: null
+  owner_email: realestate@toronto.ca
+  civic_issues: 
+    - Mobility
+  topics:
+    - Locations and mapping
+  tags:
+  - name: bathrooms
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/accountability-operations-customer-service/city-administration/staff-directory-divisions-and-customer-service/corporate-real-estate-management/
+  excerpt: Public washroom locations and data on accessibility and gender neutral options in buildings operated by the City of Toronto's Corporate Real Estate Management division
+  limitations: null
+  notes: Public washroom locations and data on accessibility and gender neutral options in buildings operated by the City of Toronto's Corporate Real Estate Management division
+  resources:   
+    CREM Public Washrooms:
+      format: csv
+      url: https://opendata.toronto.ca/corporate.real.estate.management/city.operated.washrooms/CREM Public Washrooms.csv
+      attributes:
+        - source_name: FLOC_ID
+          target_name: FLOC_ID
+          type: text
+          info:
+            notes: "Unique identifier for the building"
+        - source_name: Building_Description
+          target_name: Building Description
+          type: text
+          info:
+            notes: "Name of the building"
+        - id: Address          
+          type: text
+          info:
+            notes: "Building address"        
+        - source_name: Ward_Name
+          target_name: Ward Name
+          type: text
+          info:
+            notes: "Ward name of the building"
+        - id: District          
+          type: text
+          info:
+            notes: "District of the building"
+        - source_name: Building_Type
+          target_name: Building Type
+          type: text
+          info:
+            notes: "The type of building"
+        - source_name: Washroom_Info
+          target_name: Washroom Info
+          type: text
+          info:
+            notes: "Information about the bathroom, including gender and accessibility"
+        - source_name: Gender_Inclusive__Yes_No_
+          target_name: Gender Inclusive
+          type: text
+          info:
+            notes: "Yes/No is the bathroom gender inclusive"
+        - source_name: Accessible_Washroom__Yes_No_
+          target_name: Accessible Washroom
+          type: text
+          info:
+            notes: "Yes/No does the bathroom have accessibility features"
+        - source_name: Hours_Available
+          target_name: Hours Available
+          type: text
+          info:
+            notes: "The hours the bathroom is available"
+        - source_name: Location_Details
+          target_name: Location Details
+          type: text
+          info:
+            notes: "How to find the bathroom"
+        - source_name: Washroom_Status
+          target_name: Washroom Status
+          type: text
+          info:
+            notes: "Whether the bathroom is available for use"
+        
+        - id: "geometry"
+          type: text
+          info:
+            notes: ""
+        

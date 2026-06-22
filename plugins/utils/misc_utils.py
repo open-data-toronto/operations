@@ -411,15 +411,15 @@ def parse_possible_filepaths(source_url):
             this_year_input = source_url
             this_year_input = this_year_input.replace("yyyy", str(year))
             
-            #if "mm" in this_year_input:
-            #    for month in range(1,13):
-            #        this_month_input = this_year_input
-            #        if len(str(month)) == 1:
-            #            month =  f"0{str(month)}" if month < 10 else str(month)
-            #        this_month_input = this_month_input.replace("mm", str(month))                        
-            #        if requests.get(this_month_input, allow_redirects = False).status_code == 200:
-            #            this_date += f"-{month}"
-            #            output.append([this_date, this_month_input])
+            if "mmm" in this_year_input:
+                for month in range(1,13):
+                    this_month_input = this_year_input
+                    if len(str(month)) == 1:
+                        month =  f"0{str(month)}" if month < 10 else str(month)
+                    this_month_input = this_month_input.replace("mmm", str(month))                        
+                    if requests.get(this_month_input, allow_redirects = False).status_code == 200:
+                        this_date += f"-{month}"
+                        output.append([this_date, this_month_input])
                     
             if "qq" in this_year_input:
                 for quarter in range(1,5):
