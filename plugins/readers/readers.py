@@ -410,9 +410,6 @@ class JSONReader(Reader):
             
             # add source data to out row
             for attr in self.attributes:
-                print(out)
-                print(attr)
-                print(source_row)
                 # parse lat long columns into geometry object
                 if attr["id"] == "geometry" and "geometry" not in source_row.keys():
                     source_row = misc_utils.parse_geometry_from_row(source_row)
@@ -436,10 +433,8 @@ class JSONReader(Reader):
 
     def read(self):
         logging.info(">>>>> JSONReader <<<<<<")
-        print(self.custom_headers)
-        print(self.source_url)
         res = json.loads(requests.get(self.source_url, headers=self.custom_headers).text)
-        print(res)
+        logging.info(f"Response received from {self.source_url}")
 
         if self.is_geojson:
             return self.parse_geojson(input=res)
