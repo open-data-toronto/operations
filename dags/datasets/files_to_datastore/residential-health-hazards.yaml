@@ -1,5 +1,5 @@
 residential-health-hazards:
-  schedule: '0 2 * * *'
+  schedule: '0 10 * * *'
   dag_owner_name: 'Mackenzie'
   dag_owner_email: 'mackenzie.nichols4@toronto.ca'
   title: Highrise Residential Health Hazards

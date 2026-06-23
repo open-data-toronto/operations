@@ -1,6 +1,6 @@
 traffic-and-parking-by-law-schedules:
   jira_issue_id: DIA-648
-  schedule: '0 2 * * 1'
+  schedule: '0 7 * * 2'
   dag_owner_name: Mackenzie.Nichols4
   dag_owner_email: mackenzie.nichols4@toronto.ca
   title: Traffic and Parking By-law Schedules
