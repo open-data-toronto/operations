@@ -34,7 +34,7 @@ library-circulation-by-cardholder-type:
     # resource name
     library-circulation-by-cardholder-type:
       format: csv
-      url: https://opendata.toronto.ca/toronto.public.library/tpl-circulation-by-cardholder-type-annual-by-branch-2022-2023.csv
+      url: https://opendata.toronto.ca/toronto.public.library/tpl-circulation-by-cardholder-type-annual-by-branch-2022-2024.csv
       attributes:
         - id: Year
           type: int
