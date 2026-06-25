@@ -166,10 +166,10 @@ parking-ticket-trials:
   parking-ticket-trial-data:
     format: zip
     url: https://opendata.toronto.ca/revenue/parking/trial/Parking_Ticket_Trials.zip
-pcard-expenditures:
-  pcard-expenses:
-    format: zip
-    url: https://opendata.toronto.ca/accounting.services/pcard-expenditures/expenditures.zip
+#pcard-expenditures:
+#  pcard-expenses:
+#    format: zip
+#    url: https://opendata.toronto.ca/accounting.services/pcard-expenditures/expenditures.zip
 property-boundaries:
   Property Boundaries (wgs84) - geojson:
     format: zip
