@@ -919,35 +919,188 @@ def ckan_api_usage():
 
 
 def pcard_expenditures():
+    '''Custom logic for parsing a folder in the NAS full of excel files into a single schema
+    
+    There are over a hundred files split into xls and xlsx formats. While they all are meant to contain the same attributes...
+    - Many attributes have different names in each file
+    - Some attributes are missing or duplicated
+    '''
     import gc
+    import xlrd
+    import time
 
-    print("=============================")
+    correct_headers = ["Division", "Batch-Transaction ID", "Transaction Date", "Card Posting Dt", "Merchant Name", "Transaction Amt.", "Transaction Currency", "Original Amount", "Original Currency", "G/L Account", "G/L Account Description", "Cost Centre / WBS Element / Order Number", "Cost Centre / WBS Element / Order Number Description", "Merchant Type", "Merchant Type Description", "Purpose"]
+
+    correct_headers_map = {
+        'Divison': 'Division',
+        'Batch Transaction Id': "Batch-Transaction ID",
+        'Batch Transaction ID': "Batch-Transaction ID",
+        "Batch-Transaction Id": "Batch-Transaction ID",
+        'Card Posting Dt': 'Card Posting Dt',
+        'Card Posting Date': 'Card Posting Dt',
+        'Transaction Amount': 'Transaction Amt.',
+        'Transaction Currency': "Transaction Currency",
+        'Trx. Currency': "Transaction Currency",
+        'Tr Currency': "Transaction Currency",
+        'Trx Currency': "Transaction Currency",
+        'Trx.Currency': "Transaction Currency",
+        #'Original Currency': "Transaction Currency",
+        'Cost Centre / Wbs Element': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre / WBS Element / Order': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre / WBS element / Order': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre / WBS Element / Order Description': "Cost Centre / WBS Element / Order Number Description",
+        'G/L Account Description': "G/L Account Description",
+        'Cost Centre/Wbs Element Description ': "G/L Account Description",
+        'Long Text': "G/L Account Description",
+        "G/L Account": "G/L Account",
+        'G/L Account Discription': "G/L Account Description",        
+        'G/L Expense Description': "G/L Account Description",
+        #'Expense Type': "G/L Account Description",
+        'Cost Centre / Wbs Element': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre /Wbs Element': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre/Wbs Element': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre / WBS element / Order Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre / WBS Element / Order Description': "Cost Centre / WBS Element / Order Number Description",
+        #'G/L Account': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre/Wbs\nElement': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre/ \nWbs Element': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre / Wbs\n Element': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre/\nWbs Element': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre / Wbs Elelment': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre /  Wbs Element': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre/ Wbs Element / Order': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre / Wbs Element / Work Order Number': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre / Wbs Element / Order #': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre / Wbs Element / Order': "Cost Centre / WBS Element / Order Number",
+        "Cost Centre / WBS Element": "Cost Centre / WBS Element / Order Number",
+        "Cost Centre / WBS Element / Order": "Cost Centre / WBS Element / Order Number",
+        'Cost Centre / WBS Element / Order Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre /  WBS Element / Order No.': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre /  WBS Element / Order No. Decription': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre / Wbs Element / Order Description': "Cost Centre / WBS Element / Order Number Description",
+        "Cost Centre / WBS Element Description": "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre / Wbs Element Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre /Wbs Element Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre/Wbs Element Discriprion': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre/Wbs Element Description': "Cost Centre / WBS Element / Order Number Description",
+        #'G/L Account Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre /  WBS Element / Order No. Decription': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre / Wbs Element Descrption': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre/ Wbs Element Descrption': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre / Wbs Elelment Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre /  Wbs Element Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre/ Wbs Element / Order Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre/Wbs Element/Work Order Number Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre / Wbs Element / Order # Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre / Wbs Element / Order # Decription': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre / Wbs Element /Order Description': "Cost Centre / WBS Element / Order Number Description",
+        'Funds Center': "Cost Centre / WBS Element / Order Number",
+        'Merchant Type (MCC)': 'Merchant Type',
+        'Cost Centre/WbsElement': "Cost Centre / WBS Element / Order Number",
+        'Cost Centre/WbsElement Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre/ Wbs Element':"Cost Centre / WBS Element / Order Number", 
+        'Cost Centre/Wbs Element Description': "Cost Centre / WBS Element / Order Number Description",
+        #'Merchant Name': "Merchant Type Description",
+        'Cost Centre / WBS Element / Order No': "Cost Centre / WBS Element / Order Number", 
+        'Cost Centre / WBS Element / Order No.': "Cost Centre / WBS Element / Order Number", 
+        'Cost Centre /  WBS Element / Order No.': "Cost Centre / WBS Element / Order Number", 
+        'Cost Centre / WBS Element / Order ': "Cost Centre / WBS Element / Order Number", 
+        'Cost Centre/ WBS Element / Order': "Cost Centre / WBS Element / Order Number", 
+        'Cost Centre /WBS Element / Order': "Cost Centre / WBS Element / Order Number", 
+        'Cost Center / WBS Element / Order': "Cost Centre / WBS Element / Order Number", 
+        'Cost Center / WBS Element / Order #': "Cost Centre / WBS Element / Order Number", 
+        'Cost Centre / WBS Element / Order No. Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre /  WBS Element / Order No. Decription': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre/ WBS Element / Order Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre /WBS Element / Order Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Center / WBS Element / Order Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Center / WBLS Element / Order Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Center / WBS Element / Order # Description': "Cost Centre / WBS Element / Order Number Description",
+        'Cost Centre /  WBS Element / Order No.': 'Cost Centre / WBS Element / Order Number',
+        'Cost Centre /  WBS Element / Order No. Decription': 'Cost Centre / WBS Element Description',
+        'Cost Centre / WBS Element / Order Description': 'Cost Centre / WBS Element Description',
+        'Cost Centre / WBS element / Order': 'Cost Centre / WBS Element / Order Number',
+        'Cost Centre / WBS Element / Order': 'Cost Centre / WBS Element / Order Number',
+        'Cost Desc': 'Cost Centre / WBS Element / Order Number Description',        
+        'Exp Type Desc': "G/L Account Description",
+        "G/L  Description": "G/L Account Description",
+    }
 
     base_url = "https://opendata.toronto.ca/accounting.services/pcard-expenditures/expenditures/PCardExpenses_yyyymmm.xls"
     filepaths = misc_utils.parse_possible_filepaths(base_url)
+    # collect filepaths again for .xlsx files, too
+    base_url += "x"
+    filepaths += misc_utils.parse_possible_filepaths(base_url)
 
     for item in filepaths:
         date = item[0]
         filepath = item[1]
-        print(filepath)
+        unclear_cols = set()
+        logging.info(f"Reading file for {date}")
+        logging.info(f"Reading file {filepath}")
         file = requests.get(filepath).content
-        wb = openpyxl.load_workbook(filename = io.BytesIO(file))
-        ws = wb.worksheets[0]
+    
+        if filepath.endswith(".xls"):
+            wb = xlrd.open_workbook(file_contents = file)
+            ws = wb.sheet_by_index(0)
+            
+            for rownum in range(ws.nrows):
+                if rownum == 0:
+                    source_headers = [ws.cell_value(0, colnum).title().strip().replace("\n", "") for colnum in range(ws.ncols)]
+                    fixed_source_headers = []
+                    # clean up any inconsistent header names
+                    for i in range(len(source_headers)):
+                        fixed_source_headers.append(correct_headers_map.get(source_headers[i], source_headers[i]))
 
+                    
+                else:
+                    row = ws.row(rownum)
+                    if row[0].value and row[1].value:
+            
+                        out_row = {
+                            # convert everything to a string except empty cells
+                            # openpyxl has more data types than we store in CKAN
+                            # we convert from string to a CKAN-friendly datatype later
+                            fixed_source_headers[i]: str(row[i].value).strip() if row[i].value is not None else None
+                            for i in range(len(row))
+                        }
+                        for correct_header in correct_headers:
+                            if correct_header not in out_row.keys():
+                                out_row[correct_header] = None
+                                unclear_cols.add(correct_header)
+
+                        out_row["Transaction Date"] = xlrd.xldate_as_datetime(int(float(out_row["Transaction Date"])), wb.datemode)
+                        out_row["Card Posting Dt"] = xlrd.xldate_as_datetime(int(float(out_row["Card Posting Dt"])), wb.datemode)
+
+                        yield out_row
+
+        elif filepath.endswith(".xlsx"):
+            wb = openpyxl.load_workbook(filename = io.BytesIO(file))
+            ws = wb.worksheets[0]
+            source_headers = [col.value.strip().replace("\n", "") if col.value is not None else None for col in ws[1] ]
+            fixed_source_headers = []
+            # clean up any inconsistent header names
+            for i in range(len(source_headers)):
+                fixed_source_headers.append(correct_headers_map.get(source_headers[i], source_headers[i]))
+           
+            for row in ws.iter_rows(min_row=2):    
+                if row[0].value:
+                    out_row = {
+                        # convert everything to a string except empty cells
+                        # openpyxl has more data types than we store in CKAN
+                        # we convert from string to a CKAN-friendly datatype later
+                        fixed_source_headers[i]: str(row[i].value).strip() if row[i].value is not None else None
+                        for i in range(len(row))
+                    }
+                    for correct_header in correct_headers:
+                        if correct_header not in out_row.keys():
+                            out_row[correct_header] = None
+                            unclear_cols.add(correct_header)                                            
+                    
+                    yield out_row
+        
+        if len(unclear_cols):
+            logging.warning(f"{unclear_cols} attributes are missing from this file. This file's attributes were: {source_headers}")
         del file
         gc.collect()
 
-        for row in ws.iter_rows(min_row=2):
-            if row[0]:
-                row = {
-                    # convert everything to a string except empty cells
-                    # openpyxl has more data types than we store in CKAN
-                    # we convert from string to a CKAN-friendly datatype later
-                    source_headers[i]: str(row[i].value).strip() if row[i].value is not None else None
-                    for i in range(len(row))
-                }
-                print(row)
-                return row
-
-if __name__ == "__main__":
-    pcard_expenditures()

@@ -106,6 +106,7 @@ class Reader(ABC):
             
                 cleaner = self.cleaners[attr["type"]]
                 value = line[attr["id"]]
+
                 if attr["type"] in ["date", "timestamp"]:
                     assert "format" in attr.keys(), f"{attr['id']} doesn't have a {attr['type']} format"
                     output[attr["id"]] = cleaner(value, attr["format"])
