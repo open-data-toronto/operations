@@ -23,7 +23,7 @@ museums-and-cultural-centres:
   notes: Information and locations of Toronto History Museum Sites and Cultural Centres, including public washroom details. Washroom details include accessibility and presence of gender neutral options.
   resources:
     #resource name
-    Facilities:
+    Museums and Cultural Centres:
       format: csv
       url: https://opendata.toronto.ca/economic.development.culture/washrooms-edc/cultural-center-washrooms.csv
       encoding: "latin-1"
