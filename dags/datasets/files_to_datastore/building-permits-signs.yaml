@@ -1,0 +1,96 @@
+building-permits-signs:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Building Permits - Signs
+  date_published: '2019-07-23 16:44:42.319929'
+  dataset_category: Table
+  refresh_rate: Weekly
+  owner_division: Toronto Building
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics:
+  - Permits and licenses
+  - Development and infrastructure
+  tags:
+  - name: building permit
+    vocabulary_id: null
+  - name: sign application
+    vocabulary_id: null
+  - name: signs
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/building-construction/
+  excerpt: This Dataset contains information on all Sign Permit applications received
+    on or after September 7th, 2010, including geographical locations of signs and
+    attributes and status of applications.
+  limitations: null
+  notes: "Dataset contains information on all Sign Permit applications received on\
+    \ or\r\nafter September 7th, 2010, including geographical locations of signs and\r\
+    \nattributes and status of applications.\r\n\r\n\r\n\r\nData does not contain\
+    \ non-permanent signs or signs that are on public right-\r\nof-way.\r\n\r\n"
+  schedule: '@once'
+  resources:
+    Building Permits - Signs:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.building/building-permits-signs/building-permits-signs.csv
+      attributes:
+      - id: PERMIT_NUMBER
+        type: text
+        info:
+          notes: null
+      - id: TYPE
+        type: text
+        info:
+          notes: null
+      - id: STREET_NUMBER
+        type: text
+        info:
+          notes: null
+      - id: STREET_NAME
+        type: text
+        info:
+          notes: null
+      - id: STREET_TYPE
+        type: text
+        info:
+          notes: null
+      - id: STREET_DIRECTION
+        type: text
+        info:
+          notes: null
+      - id: POSTAL
+        type: text
+        info:
+          notes: null
+      - id: APPLICATION_DATE
+        type: timestamp
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: ISSUED_DATE
+        type: timestamp
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: COMPLETED_DATE
+        type: timestamp
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: STATUS
+        type: text
+        info:
+          notes: null
+      - id: CURRENT_USE
+        type: text
+        info:
+          notes: null
+      - id: PROPOSED_USE
+        type: text
+        info:
+          notes: null
+      - id: TOTAL_NUMBER_FACES
+        type: text
+        info:
+          notes: null

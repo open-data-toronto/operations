@@ -1,0 +1,106 @@
+school-safety-zone-watch-your-speed-program-locations:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: "School Safety Zone Watch Your Speed Program \u2013 Locations"
+  date_published: '2020-02-21 21:31:17.968137'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: Transportation Services
+  owner_section: Policy & Innovation
+  owner_unit: Data & Analytics
+  owner_email: Raphael.Dumas@toronto.ca
+  civic_issues:
+  - Mobility
+  topics:
+  - Transportation
+  - Public safety
+  tags:
+  - name: LED
+    vocabulary_id: null
+  - name: Vision zero
+    vocabulary_id: null
+  - name: driver
+    vocabulary_id: null
+  - name: radar
+    vocabulary_id: null
+  - name: saftey
+    vocabulary_id: null
+  - name: speed
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/road-safety/vision-zero/safety-initiatives/watch-your-speed-program/
+  excerpt: The locations and operating parameters for each location where a permanent
+    Watch Your Speed Program Sign was installed.
+  limitations: "-\tSign addresses have not been verified. They may represent the address\
+    \ of the property adjacent to the sign, which may not be on the same street as\
+    \ the sign. \r\n-\tThe speed limit column is reflective of the most recent operating\
+    \ parameter and does not necessarily the current or previous speed limit at that\
+    \ location\r\n\r\n"
+  notes: "The WYSP uses devices called speed display signs or driver feedback signs\
+    \ which contain a radar device and an LED display. These signs are installed on\
+    \ a dedicated wooden pole. The radar measures the speeds of oncoming vehicles\
+    \ and the LED sign displays their speeds to the passing motorists, thereby reminding\
+    \ them to check their speeds and to obey speed limits. The City\u2019s permanent\
+    \ units are installed in Safety Zones. This dataset contains the locations and\
+    \ operating parameters for installed signs. See [Detailed Speed Counts](https://open.toronto.ca/dataset/school-safety-zone-watch-your-speed-program-detailed-speed-counts/)\
+    \ for hourly speed counts recorded by these signs and [Monthly Summary Data](https://open.toronto.ca/dataset/safety-zone-watch-your-speed-program-monthly-summary/)\
+    \ for a monthly summary of these speed data\r\n\r\nSee here for more: https://www.toronto.ca/services-payments/streets-parking-transportation/road-safety/vision-zero/safety-initiatives/safety-zones/"
+  schedule: '@once'
+  resources:
+    School Safety Zone Watch Your Speed Program - Locations:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/school-safety-zone-watch-your-speed-program-locations/school-safety-zone-watch-your-speed-program-locations.csv
+      attributes:
+      - id: address
+        type: text
+        info:
+          notes: null
+      - id: dir
+        type: text
+        info:
+          notes: null
+      - id: end_date
+        type: timestamp
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: flash_speed
+        type: text
+        info:
+          notes: null
+      - id: geometry
+        type: text
+        info:
+          notes: null
+      - id: min_speed
+        type: text
+        info:
+          notes: null
+      - id: schedule
+        type: text
+        info:
+          notes: null
+      - id: sign_id
+        type: text
+        info:
+          notes: null
+      - id: sign_name
+        type: text
+        info:
+          notes: null
+      - id: speed_limit
+        type: text
+        info:
+          notes: null
+      - id: start_date
+        type: timestamp
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: strobe_speed
+        type: text
+        info:
+          notes: null
+      - id: ward_no
+        type: text
+        info:
+          notes: null

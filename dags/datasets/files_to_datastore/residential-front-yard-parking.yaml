@@ -1,0 +1,58 @@
+residential-front-yard-parking:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Residential Front Yard Parking
+  date_published: '2011-07-04 00:00:00'
+  dataset_category: Table
+  refresh_rate: Weekly
+  owner_division: Transportation Services
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues:
+  - Climate change
+  - Mobility
+  topics:
+  - Locations and mapping
+  - Transportation
+  - Permits and licenses
+  tags:
+  - name: front yard parking
+    vocabulary_id: null
+  - name: parking spot
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/
+  excerpt: Legally licensed front yard parking pad locations
+  limitations: null
+  notes: "**Address -** Number and street\r\n\r\n**Licensed Spaces -** Number of parking\
+    \ spots\r\n\r\n**Parking Type -** Type of Permit e.g. Front-Yard Parking, Widened\
+    \ Driveway\r\netc\r\n\r\n**Ward -** Electoral ward\r\n\r\nApplies only to residential\
+    \ addresses within boundaries of City of Toronto\r\n\r\n\r\n\r\n**Note:** The\
+    \ license for that space is not transferable to the new owners\r\n(unless they\
+    \ also have a valid permit issued by the MTO)\r\n\r\n"
+  schedule: '@once'
+  resources:
+    Residential Front Yard Parking:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/residential-front-yard-parking/residential-front-yard-parking.csv
+      attributes:
+      - id: LICENSED_SPACES
+        type: int
+        info:
+          notes: null
+      - id: PARKING_TYPE
+        type: text
+        info:
+          notes: null
+      - id: STREETNAME
+        type: text
+        info:
+          notes: null
+      - id: STREETNO
+        type: text
+        info:
+          notes: null
+      - id: WARD
+        type: text
+        info:
+          notes: null

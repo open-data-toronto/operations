@@ -1,0 +1,210 @@
+safety-zone-watch-your-speed-program-monthly-summary:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: "Safety Zone Watch Your Speed Program \u2013 Monthly Summary"
+  date_published: '2020-04-09 19:24:43.009509'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: Transportation Services
+  owner_section: Policy & Innovation
+  owner_unit: Data & Analytics
+  owner_email: Raphael.Dumas@toronto.ca
+  civic_issues:
+  - Mobility
+  topics:
+  - Transportation
+  - Public safety
+  tags: []
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/road-safety/vision-zero/safety-initiatives/watch-your-speed-program/
+  excerpt: A summary of observed speeds for each location where a Safety Zone Watch
+    Your Speed Program Sign was installed.
+  limitations: "-\tThe count of number of vehicles is not equivalent to a traffic\
+    \ volume count.\r\n-\tSpeed accuracy is \xB1 1 km/hr\r\n"
+  notes: "The WYSP uses devices called speed display signs or driver feedback signs\
+    \ which contain a radar device and an LED display. These signs are installed against\
+    \ an existing hydro pole or streetlight. The radar measures the speeds of oncoming\
+    \ vehicles and the LED sign displays their speeds to the passing motorists, thereby\
+    \ reminding them to check their speeds and to obey speed limits. The City\u2019\
+    s permanent units are installed in Safety Zones. This dataset contains the monthly\
+    \ summary of observed speeds for these signs. See [Detailed Speed Counts](https://open.toronto.ca/dataset/school-safety-zone-watch-your-speed-program-detailed-speed-counts/)\
+    \ for hourly speed counts recorded by these signs and [Location Data](https://open.toronto.ca/dataset/school-safety-zone-watch-your-speed-program-locations/)\
+    \ for details on where and when signs were installed."
+  schedule: '@once'
+  resources:
+    Safety Zone Watch Your Speed Program - Monthly Summary:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-monthly-summary/safety-zone-watch-your-speed-program-monthly-summary.csv
+      attributes:
+      - id: sign_id
+        type: text
+        info:
+          notes: null
+      - id: month
+        type: date
+        format: "%Y-%m-%d"
+        info:
+          notes: null
+      - id: pct_05
+        type: text
+        info:
+          notes: null
+      - id: pct_10
+        type: text
+        info:
+          notes: null
+      - id: pct_15
+        type: text
+        info:
+          notes: null
+      - id: pct_20
+        type: text
+        info:
+          notes: null
+      - id: pct_25
+        type: text
+        info:
+          notes: null
+      - id: pct_30
+        type: text
+        info:
+          notes: null
+      - id: pct_35
+        type: text
+        info:
+          notes: null
+      - id: pct_40
+        type: text
+        info:
+          notes: null
+      - id: pct_45
+        type: text
+        info:
+          notes: null
+      - id: pct_50
+        type: text
+        info:
+          notes: null
+      - id: pct_55
+        type: text
+        info:
+          notes: null
+      - id: pct_60
+        type: text
+        info:
+          notes: null
+      - id: pct_65
+        type: text
+        info:
+          notes: null
+      - id: pct_70
+        type: text
+        info:
+          notes: null
+      - id: pct_75
+        type: text
+        info:
+          notes: null
+      - id: pct_80
+        type: text
+        info:
+          notes: null
+      - id: pct_85
+        type: text
+        info:
+          notes: null
+      - id: pct_90
+        type: text
+        info:
+          notes: null
+      - id: pct_95
+        type: text
+        info:
+          notes: null
+      - id: spd_00
+        type: text
+        info:
+          notes: null
+      - id: spd_05
+        type: text
+        info:
+          notes: null
+      - id: spd_10
+        type: text
+        info:
+          notes: null
+      - id: spd_15
+        type: text
+        info:
+          notes: null
+      - id: spd_20
+        type: text
+        info:
+          notes: null
+      - id: spd_25
+        type: text
+        info:
+          notes: null
+      - id: spd_30
+        type: text
+        info:
+          notes: null
+      - id: spd_35
+        type: text
+        info:
+          notes: null
+      - id: spd_40
+        type: text
+        info:
+          notes: null
+      - id: spd_45
+        type: text
+        info:
+          notes: null
+      - id: spd_50
+        type: text
+        info:
+          notes: null
+      - id: spd_55
+        type: text
+        info:
+          notes: null
+      - id: spd_60
+        type: text
+        info:
+          notes: null
+      - id: spd_65
+        type: text
+        info:
+          notes: null
+      - id: spd_70
+        type: text
+        info:
+          notes: null
+      - id: spd_75
+        type: text
+        info:
+          notes: null
+      - id: spd_80
+        type: text
+        info:
+          notes: null
+      - id: spd_85
+        type: text
+        info:
+          notes: null
+      - id: spd_90
+        type: text
+        info:
+          notes: null
+      - id: spd_95
+        type: text
+        info:
+          notes: null
+      - id: spd_100_and_above
+        type: text
+        info:
+          notes: null
+      - id: volume
+        type: text
+        info:
+          notes: null

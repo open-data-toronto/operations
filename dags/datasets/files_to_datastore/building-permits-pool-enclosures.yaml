@@ -1,0 +1,100 @@
+building-permits-pool-enclosures:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Building Permits - Pool Enclosures
+  date_published: '2019-07-23 16:44:25.377108'
+  dataset_category: Table
+  refresh_rate: Weekly
+  owner_division: Toronto Building
+  owner_section: null
+  owner_unit: null
+  owner_email: Ryan.Persaud@toronto.ca
+  civic_issues: null
+  topics:
+  - Permits and licenses
+  - Development and infrastructure
+  tags:
+  - name: building permit
+    vocabulary_id: null
+  - name: pool
+    vocabulary_id: null
+  - name: pool enclosure
+    vocabulary_id: null
+  - name: pool permit
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/building-construction/#swimming
+  excerpt: Permits issued within the past 10 years (from date of dataset generation/refresh)
+    dealing with pools. Target is permits with specific 'Work Type' of 'Pool Fence
+    Enclosure', and others that contain 'pool' in the description.
+  limitations: null
+  notes: "See Toronto Building - Pool Permits readme.xls\r\n\r\nDataset may not be\
+    \ complete because of limitations of selection criteria.\r\n\r\n"
+  schedule: '@once'
+  resources:
+    Building Permits - Pool Enclosures:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.building/building-permits-pool-enclosures/building-permits-pool-enclosures.csv
+      attributes:
+      - id: APPLICATION_DATE
+        type: date
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: COMPLETED_DATE
+        type: date
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: DESCRIPTION
+        type: text
+        info:
+          notes: null
+      - id: ISSUED_DATE
+        type: date
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: PERMIT_NUM
+        type: text
+        info:
+          notes: null
+      - id: PERMIT_TYPE
+        type: text
+        info:
+          notes: null
+      - id: POSTAL
+        type: text
+        info:
+          notes: null
+      - id: REVISION_NUM
+        type: text
+        info:
+          notes: null
+      - id: STATUS
+        type: text
+        info:
+          notes: null
+      - id: STREET_DIRECTION
+        type: text
+        info:
+          notes: null
+      - id: STREET_NAME
+        type: text
+        info:
+          notes: null
+      - id: STREET_NUM
+        type: text
+        info:
+          notes: null
+      - id: STREET_TYPE
+        type: text
+        info:
+          notes: null
+      - id: STRUCTURE_TYPE
+        type: text
+        info:
+          notes: null
+      - id: WORK
+        type: text
+        info:
+          notes: null

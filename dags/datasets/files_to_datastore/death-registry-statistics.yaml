@@ -1,0 +1,56 @@
+death-registry-statistics:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Death Registry Statistics
+  date_published: '2013-06-04 00:00:00'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: eric.fan@toronto.ca
+  civic_issues: null
+  topics:
+  - Health
+  tags:
+  - name: death registry
+    vocabulary_id: null
+  information_url: null
+  excerpt: Statistical information about death registrations documented by staff of
+    the City Clerk's Office (Registry Services) of the City of Toronto.
+  limitations: null
+  notes: "This dataset includes information relating to the registration of deaths\r\
+    \ndocumented by Registry Services staff located in four of the civic centres\r\
+    \n(Scarborough, North York, Toronto and Etobicoke). Registration of death data\r\
+    \nis entered into the Registry Services Tracking System (RSTS), from which\r\n\
+    aggregate statistical information is generated to create the dataset. The\r\n\
+    dataset resides in an Oracle database in the City's environment.\r\n\r\nThe dataset\
+    \ is created in support of the Vital Statistics Act, which is a\r\nProvincial\
+    \ legislation. The dataset also supports the City's operational\r\nrequirements\
+    \ and business functions.\r\n\r\nSee readme file\r\n\r\n"
+  schedule: '@once'
+  resources:
+    Death Registry Statistics:
+      format: csv
+      url: https://opendata.toronto.ca/City Clerk's Office/death-registry-statistics/death-registry-statistics.csv
+      attributes:
+      - id: _id
+        type: int
+        info:
+          notes: null
+      - id: CIVIC_CENTRE
+        type: text
+        info:
+          notes: null
+      - id: DEATH_LICENSES
+        type: numeric
+        info:
+          notes: null
+      - id: PLACE_OF_DEATH
+        type: text
+        info:
+          notes: null
+      - id: TIME_PERIOD
+        type: text
+        info:
+          notes: null

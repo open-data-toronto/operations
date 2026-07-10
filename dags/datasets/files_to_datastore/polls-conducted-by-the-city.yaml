@@ -1,0 +1,137 @@
+polls-conducted-by-the-city:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Polls conducted by the City
+  date_published: '2019-07-23 17:53:27.345526'
+  dataset_category: Table
+  refresh_rate: Daily
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics:
+  - City government
+  tags:
+  - name: city polls
+    vocabulary_id: null
+  - name: opinions
+    vocabulary_id: null
+  - name: polling
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/planning-development/polls-regarding-changes-in-a-neighbourhood/
+  excerpt: Polls are conducted to establish the opinions of residents and businesses
+    on various topics covered by a City by-law.  Data set will capture and record
+    the results of polls for statistical purposes.
+  limitations: null
+  notes: " The City Clerk's Office is responsible for conducting polls on behalf of\
+    \ City\r\ndivisions. Polls are conducted to establish the opinions of residents\
+    \ and\r\nbusinesses on various topics covered by a City by-law (Chp190) .\r\n\r\
+    \nPoll engagement is the primary data provided in this set. Daily data updates\r\
+    \noccur upon the closing and certification of each poll. The collection of data\r\
+    \nstarts from April 1, 2015.\r\n\r\n\r\n\r\n\r\n\r\n"
+  schedule: '@once'
+  resources:
+    Polls conducted by the City:
+      format: csv
+      url: https://opendata.toronto.ca/city.clerks.office/polls-conducted-by-the-city/polls-conducted-by-the-city.csv
+      attributes:
+      - id: ADDRESS
+        type: text
+        info:
+          notes: null
+      - id: APPLICATION_FOR
+        type: text
+        info:
+          notes: null
+      - id: BALLOTS_BLANK
+        type: text
+        info:
+          notes: null
+      - id: BALLOTS_CAST
+        type: int
+        info:
+          notes: null
+      - id: BALLOTS_DISTRIBUTED
+        type: int
+        info:
+          notes: null
+      - id: BALLOTS_IN_FAVOUR
+        type: text
+        info:
+          notes: null
+      - id: BALLOTS_NEEDED_TO_PROCEED
+        type: int
+        info:
+          notes: null
+      - id: BALLOTS_NEEDED_TO_PROCEED_LBL
+        type: text
+        info:
+          notes: null
+      - id: BALLOTS_OPPOSED
+        type: text
+        info:
+          notes: null
+      - id: BALLOTS_RECEIVED_BY_VOTERS
+        type: int
+        info:
+          notes: null
+      - id: BALLOTS_RETURNED_TO_SENDER
+        type: int
+        info:
+          notes: null
+      - id: BALLOTS_SPOILED
+        type: text
+        info:
+          notes: null
+      - id: CLOSE_DATE
+        type: date
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: DECLARATIONS_ADDED
+        type: int
+        info:
+          notes: null
+      - id: FINAL_VOTER_COUNT
+        type: int
+        info:
+          notes: null
+      - id: MORATORIUM_DATE
+        type: date
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: OPEN_DATE
+        type: date
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: PASS_RATE
+        type: text
+        info:
+          notes: null
+      - id: PASS_RATE_LABEL
+        type: text
+        info:
+          notes: null
+      - id: POLL_CD
+        type: text
+        info:
+          notes: null
+      - id: POLL_ID
+        type: int
+        info:
+          notes: null
+      - id: POLL_RESULT
+        type: text
+        info:
+          notes: null
+      - id: POTENTIAL_VOTERS
+        type: int
+        info:
+          notes: null
+      - id: RESPONSE_RATE_MET
+        type: text
+        info:
+          notes: null

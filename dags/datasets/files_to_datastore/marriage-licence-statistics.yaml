@@ -1,0 +1,43 @@
+marriage-licence-statistics:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Marriage Licence Statistics
+  date_published: '2013-06-04 00:00:00'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics:
+  - Permits and licenses
+  tags:
+  - name: marriage licence
+    vocabulary_id: null
+  information_url: null
+  excerpt: This dataset captures statistical information about marriage licences issued
+    by the City of Toronto.
+  limitations: null
+  notes: "The dataset is created in support of the Marriage Act and the Vital Statistics\r\
+    \nAct, both of which are Provincial legislations. The dataset also supports the\r\
+    \nCity's operational requirements and business functions.\r\n\r\nSee readme file\r\
+    \n\r\n\r\n\r\n"
+  schedule: '@once'
+  resources:
+    Marriage Licence Statistics:
+      format: csv
+      url: https://opendata.toronto.ca/city.clerks.office/marriage-licence-statistics/marriage-licence-statistics.csv
+      attributes:
+      - id: CIVIC_CENTRE
+        type: text
+        info:
+          notes: null
+      - id: MARRIAGE_LICENSES
+        type: int
+        info:
+          notes: null
+      - id: TIME_PERIOD
+        type: text
+        info:
+          notes: null

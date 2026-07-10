@@ -1,0 +1,100 @@
+building-permits-solar-hot-water-heaters:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Building Permits - Solar Hot Water Heaters
+  date_published: '2019-07-23 16:45:23.648269'
+  dataset_category: Table
+  refresh_rate: Weekly
+  owner_division: Toronto Building
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues:
+  - Climate change
+  topics:
+  - Permits and licenses
+  - Water
+  tags:
+  - name: permits
+    vocabulary_id: null
+  - name: solar
+    vocabulary_id: null
+  - name: water heater
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/building-construction/
+  excerpt: Permit applications received since May 1, 2009 dealing with Solar Water
+    Heaters.
+  limitations: null
+  notes: "See Solar Water Heater Permits readme.xls\r\n\r\nAbility to specifically\
+    \ identify this type of application was introduced on\r\nMay 1, 2009. Earlier\
+    \ applications might also fit into this category, but are\r\ndifficult to identify.\r\
+    \n\r\n"
+  schedule: '@once'
+  resources:
+    Building Permits - Solar Hot Water Heaters:
+      format: csv
+      url: https://opendata.toronto.ca/toronto.building/building-permits-solar-hot-water-heaters/building-permits-solar-hot-water-heaters.csv
+      attributes:
+      - id: APPLICATION_DATE
+        type: date
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: COMPLETED_DATE
+        type: date
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: DESCRIPTION
+        type: text
+        info:
+          notes: null
+      - id: ISSUED_DATE
+        type: date
+        format: "%Y-%m-%dT%H:%M:%S"
+        info:
+          notes: null
+      - id: PERMIT_NUM
+        type: text
+        info:
+          notes: null
+      - id: PERMIT_TYPE
+        type: text
+        info:
+          notes: null
+      - id: POSTAL
+        type: text
+        info:
+          notes: null
+      - id: REVISION_NUM
+        type: text
+        info:
+          notes: null
+      - id: STATUS
+        type: text
+        info:
+          notes: null
+      - id: STREET_DIRECTION
+        type: text
+        info:
+          notes: null
+      - id: STREET_NAME
+        type: text
+        info:
+          notes: null
+      - id: STREET_NUM
+        type: text
+        info:
+          notes: null
+      - id: STREET_TYPE
+        type: text
+        info:
+          notes: null
+      - id: STRUCTURE_TYPE
+        type: text
+        info:
+          notes: null
+      - id: WORK
+        type: text
+        info:
+          notes: null

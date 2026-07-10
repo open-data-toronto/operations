@@ -1,0 +1,49 @@
+stillbirth-registration-statistics:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Stillbirth Registration Statistics
+  date_published: '2013-06-04 00:00:00'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics:
+  - Health
+  tags:
+  - name: stillbirth registrations
+    vocabulary_id: null
+  - name: stillborn
+    vocabulary_id: null
+  information_url: null
+  excerpt: This dataset captures statistical information about stillbirth registration
+    information collected  by the City of Toronto.
+  limitations: null
+  notes: "This dataset includes information about registration of stillbirths documented\r\
+    \nby Registry Services at the Etobicoke Civic Centre. Registration of\r\nstillbirths\
+    \ is entered into the Registry Services Tracking System (RSTS), from\r\nwhich\
+    \ aggregate statistical information is generated to create the dataset.\r\nThe\
+    \ dataset resides in an Oracle database in the City's environment.\r\n\r\nThe\
+    \ dataset is created in support of the Vital Statistics Act, which is\r\nProvincial\
+    \ legislation. The dataset also supports the City's operational\r\nrequirements\
+    \ and business functions.\r\n\r\nSee readme file\r\n\r\n"
+  schedule: '@once'
+  resources:
+    Stillbirth Registration Statistics:
+      format: csv
+      url: https://opendata.toronto.ca/city.clerks.office/stillbirth-registration-statistics/stillbirth-registration-statistics.csv
+      attributes:
+      - id: CIVIC_CENTRE
+        type: text
+        info:
+          notes: null
+      - id: STILLBIRTH_LICENSES
+        type: int
+        info:
+          notes: null
+      - id: TIME_PERIOD
+        type: text
+        info:
+          notes: null

@@ -1,0 +1,318 @@
+apartment-building-registration:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Apartment Building Registration
+  date_published: '2019-07-23 16:32:27.841775'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: Municipal Licensing & Standards
+  owner_section: Policy & Strategic Support
+  owner_unit: null
+  owner_email: RentSafeTO@toronto.ca
+  civic_issues:
+  - Affordable housing
+  - Poverty reduction
+  topics:
+  - City government
+  - Locations and mapping
+  - Business
+  - Development and infrastructure
+  tags: []
+  information_url: https://www.toronto.ca/community-people/housing-shelter/rental-housing-standards/apartment-building-standards/
+  excerpt: 'This dataset contains building information for rental buildings that are
+    registered in the City''s RentSafeTO: Apartment Building Standards program.'
+  limitations: null
+  notes: "The Apartment Building Standard (ABS) program is based on a new bylaw Chapter\
+    \ 354, which defines formal criteria to identify all rental apartment buildings\
+    \ in the city with 3 or more storeys and 10 or more units.  The ABS program is\
+    \ part of RentSafeTO which is a multi-residential inspection program that establishes\
+    \ standards on how building owners operate their building(s) and communicate with\
+    \ their tenants, in addition to establishing a schedule for continuous building\
+    \ evaluation, audit and enforcement of these standards.\r\n\r\nThis dataset contains\
+    \ building information for the buildings that are registered in the ABS program.\
+    \ This information was collected from building owners/managers during the initial\
+    \ registration process, and is updated on an annual basis as part of the registration\
+    \ renewal process.  \r\n\r\n[Read more on the RentSafe Program] (https://www.toronto.ca/311/knowledgebase/kb/docs/articles/municipal-licensing-and-standards/investigation-services/mrab/rentsafeto-apartment-building-standards-program.html)\r\
+    \n"
+  schedule: '@once'
+  resources:
+    Apartment Building Registration:
+      format: csv
+      url: https://opendata.toronto.ca/municipal.licensing.standards/apartment-building-registration/apartment-building-registration.csv
+      attributes:
+      - id: AIR_CONDITIONING_TYPE
+        type: text
+        info:
+          notes: null
+      - id: AMENITIES_AVAILABLE
+        type: text
+        info:
+          notes: null
+      - id: ANNUAL_FIRE_ALARM_TEST_RECORDS
+        type: text
+        info:
+          notes: null
+      - id: ANNUAL_FIRE_PUMP_FLOW_TEST_RECORDS
+        type: text
+        info:
+          notes: null
+      - id: APPROVED_FIRE_SAFETY_PLAN
+        type: text
+        info:
+          notes: null
+      - id: BALCONIES
+        type: text
+        info:
+          notes: null
+      - id: BARRIER_FREE_ACCESSIBILTY_ENTR
+        type: text
+        info:
+          notes: null
+      - id: BIKE_PARKING
+        type: text
+        info:
+          notes: null
+      - id: CONFIRMED_STOREYS
+        type: numeric
+        info:
+          notes: null
+      - id: CONFIRMED_UNITS
+        type: numeric
+        info:
+          notes: null
+      - id: DATE_OF_LAST_INSPECTION_BY_TSSA
+        type: text
+        info:
+          notes: null
+      - id: DESCRIPTION_OF_CHILD_PLAY_AREA
+        type: text
+        info:
+          notes: null
+      - id: DESCRIPTION_OF_INDOOR_EXERCISE_ROOM
+        type: text
+        info:
+          notes: null
+      - id: DESCRIPTION_OF_OUTDOOR_REC_FACILITIES
+        type: text
+        info:
+          notes: null
+      - id: ELEVATOR_PARTS_REPLACED
+        type: text
+        info:
+          notes: null
+      - id: ELEVATOR_STATUS
+        type: text
+        info:
+          notes: null
+      - id: EMERG_POWER_SUPPLY_TEST_RECORDS
+        type: text
+        info:
+          notes: null
+      - id: EXTERIOR_FIRE_ESCAPE
+        type: text
+        info:
+          notes: null
+      - id: FACILITIES_AVAILABLE
+        type: text
+        info:
+          notes: null
+      - id: FIRE_ALARM
+        type: text
+        info:
+          notes: null
+      - id: GARBAGE_CHUTES
+        type: text
+        info:
+          notes: null
+      - id: GREEN_BIN_LOCATION
+        type: text
+        info:
+          notes: null
+      - id: HEATING_EQUIPMENT_STATUS
+        type: text
+        info:
+          notes: null
+      - id: HEATING_EQUIPMENT_YEAR_INSTALLED
+        type: text
+        info:
+          notes: null
+      - id: HEATING_TYPE
+        type: text
+        info:
+          notes: null
+      - id: INDOOR_GARBAGE_STORAGE_AREA
+        type: text
+        info:
+          notes: null
+      - id: INTERCOM
+        type: text
+        info:
+          notes: null
+      - id: IS_THERE_A_COOLING_ROOM
+        type: text
+        info:
+          notes: null
+      - id: IS_THERE_EMERGENCY_POWER
+        type: text
+        info:
+          notes: null
+      - id: LAUNDRY_ROOM
+        type: text
+        info:
+          notes: null
+      - id: LAUNDRY_ROOM_HOURS_OF_OPERATION
+        type: text
+        info:
+          notes: null
+      - id: LAUNDRY_ROOM_LOCATION
+        type: text
+        info:
+          notes: null
+      - id: LOCKER_OR_STORAGE_ROOM
+        type: text
+        info:
+          notes: null
+      - id: NO_BARRIER_FREE_ACCESSBLE_UNITS
+        type: text
+        info:
+          notes: null
+      - id: NO_OF_ACCESSIBLE_PARKING_SPACES
+        type: text
+        info:
+          notes: null
+      - id: NO_OF_ELEVATORS
+        type: text
+        info:
+          notes: null
+      - id: NO_OF_LAUNDRY_ROOM_MACHINES
+        type: text
+        info:
+          notes: null
+      - id: NON_SMOKING_BUILDING
+        type: text
+        info:
+          notes: null
+      - id: OUTDOOR_GARBAGE_STORAGE_AREA
+        type: text
+        info:
+          notes: null
+      - id: PARKING_TYPE
+        type: text
+        info:
+          notes: null
+      - id: PCODE
+        type: text
+        info:
+          notes: null
+      - id: PET_RESTRICTIONS
+        type: text
+        info:
+          notes: null
+      - id: PETS_ALLOWED
+        type: text
+        info:
+          notes: null
+      - id: PROP_MANAGEMENT_COMPANY_NAME
+        type: text
+        info:
+          notes: null
+      - id: PROPERTY_TYPE
+        type: text
+        info:
+          notes: null
+      - id: RECYCLING_BINS_LOCATION
+        type: text
+        info:
+          notes: null
+      - id: RSN
+        type: numeric
+        info:
+          notes: null
+      - id: SEPARATE_GAS_METERS_EACH_UNIT
+        type: text
+        info:
+          notes: null
+      - id: SEPARATE_HYDRO_METER_EACH_UNIT
+        type: text
+        info:
+          notes: null
+      - id: SEPARATE_WATER_METERS_EA_UNIT
+        type: text
+        info:
+          notes: null
+      - id: SITE_ADDRESS
+        type: text
+        info:
+          notes: null
+      - id: SPRINKLER_SYSTEM
+        type: text
+        info:
+          notes: null
+      - id: SPRINKLER_SYSTEM_TEST_RECORD
+        type: text
+        info:
+          notes: null
+      - id: SPRINKLER_SYSTEM_YEAR_INSTALLED
+        type: text
+        info:
+          notes: null
+      - id: TSSA_TEST_RECORDS
+        type: text
+        info:
+          notes: null
+      - id: VISITOR_PARKING
+        type: text
+        info:
+          notes: null
+      - id: WARD
+        type: text
+        info:
+          notes: null
+      - id: WINDOW_TYPE
+        type: text
+        info:
+          notes: null
+      - id: YEAR_BUILT
+        type: text
+        info:
+          notes: null
+      - id: YEAR_OF_REPLACEMENT
+        type: text
+        info:
+          notes: null
+      - id: YEAR_REGISTERED
+        type: text
+        info:
+          notes: null
+      - id: NO_OF_STOREYS
+        type: int4
+        info:
+          notes: null
+      - id: IS_THERE_EMERGENCY_POWER?
+        type: text
+        info:
+          notes: null
+      - id: NON-SMOKING_BUILDING
+        type: text
+        info:
+          notes: null
+      - id: NO_OF_UNITS
+        type: int4
+        info:
+          notes: null
+      - id: NO_OF_ACCESSIBLEPARKING_SPACES
+        type: int4
+        info:
+          notes: null
+      - id: FACILITIES_AVAILABLE?
+        type: text
+        info:
+          notes: null
+      - id: IS_THERE_A_COOLING_ROOM?
+        type: text
+        info:
+          notes: null
+      - id: NO_BARRIERFREE_ACCESSBLE_UNITS
+        type: int4
+        info:
+          notes: null

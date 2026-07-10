@@ -1,0 +1,262 @@
+mobile-watch-your-speed-program-speed-summary:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: "Mobile Watch Your Speed Program \u2013 Speed Summary"
+  date_published: '2020-02-21 21:32:14.391764'
+  dataset_category: Table
+  refresh_rate: Monthly
+  owner_division: Transportation Services
+  owner_section: Policy & Innovation
+  owner_unit: Data & Analytics
+  owner_email: Raphael.Dumas@toronto.ca
+  civic_issues:
+  - Mobility
+  topics:
+  - Transportation
+  - Public safety
+  tags:
+  - name: Vision zero
+    vocabulary_id: null
+  - name: driver
+    vocabulary_id: null
+  - name: safety
+    vocabulary_id: null
+  - name: speed
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/services-payments/streets-parking-transportation/road-safety/vision-zero/safety-initiatives/watch-your-speed-program/
+  excerpt: A summary of observed speeds for each location where a Mobile Watch Your
+    Speed Program Sign was installed.
+  limitations: "-\tData is only provided where the mobile sign installation has ended.\r\
+    \n-\tThe count of number of vehicles is not equivalent to a traffic volume count.\r\
+    \n-\tSpeed accuracy is \xB1 1 km/hr"
+  notes: "The Mobile WYSP uses devices called speed display signs or driver feedback\
+    \ signs which contain a radar device and an LED display. These signs are installed\
+    \ against an existing hydro pole or streetlight. The radar measures the speeds\
+    \ of oncoming vehicles and the LED sign displays their speeds to the passing motorists,\
+    \ thereby reminding them to check their speeds and to obey speed limits. The City\u2019\
+    s portable units are rotated throughout each ward on a monthly basis throughout\
+    \ the year. This dataset contains a summary of observed speeds for each sign installation\
+    \ and the operational parameters of the sign.  See [Mobile Watch Your Speed Program\
+    \ \u2013 Detailed Speed Counts](https://open.toronto.ca/dataset/mobile-watch-your-speed-program-detailed-speed-counts/)\
+    \ for hourly speed counts.\r\n"
+  schedule: '@once'
+  resources:
+    Mobile Watch Your Speed Program - Speed Summary:
+      format: csv
+      url: https://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-speed-summary/mobile-watch-your-speed-program-speed-summary.csv
+      attributes:
+      - id: location_id
+        type: text
+        info:
+          notes: null
+      - id: ward_no
+        type: text
+        info:
+          notes: null
+      - id: location
+        type: text
+        info:
+          notes: null
+      - id: from_street
+        type: text
+        info:
+          notes: null
+      - id: to_street
+        type: text
+        info:
+          notes: null
+      - id: direction
+        type: text
+        info:
+          notes: null
+      - id: installation_date
+        type: date
+        format: "%Y-%m-%d"
+        info:
+          notes: null
+      - id: removal_date
+        type: date
+        format: "%Y-%m-%d"
+        info:
+          notes: null
+      - id: schedule
+        type: text
+        info:
+          notes: null
+      - id: min_speed
+        type: text
+        info:
+          notes: null
+      - id: pct_05
+        type: text
+        info:
+          notes: null
+      - id: pct_10
+        type: text
+        info:
+          notes: null
+      - id: pct_15
+        type: text
+        info:
+          notes: null
+      - id: pct_20
+        type: text
+        info:
+          notes: null
+      - id: pct_25
+        type: text
+        info:
+          notes: null
+      - id: pct_30
+        type: text
+        info:
+          notes: null
+      - id: pct_35
+        type: text
+        info:
+          notes: null
+      - id: pct_40
+        type: text
+        info:
+          notes: null
+      - id: pct_45
+        type: text
+        info:
+          notes: null
+      - id: pct_50
+        type: text
+        info:
+          notes: null
+      - id: pct_55
+        type: text
+        info:
+          notes: null
+      - id: pct_60
+        type: text
+        info:
+          notes: null
+      - id: pct_65
+        type: text
+        info:
+          notes: null
+      - id: pct_70
+        type: text
+        info:
+          notes: null
+      - id: pct_75
+        type: text
+        info:
+          notes: null
+      - id: pct_80
+        type: text
+        info:
+          notes: null
+      - id: pct_85
+        type: text
+        info:
+          notes: null
+      - id: pct_90
+        type: text
+        info:
+          notes: null
+      - id: pct_95
+        type: text
+        info:
+          notes: null
+      - id: spd_00
+        type: text
+        info:
+          notes: null
+      - id: spd_05
+        type: text
+        info:
+          notes: null
+      - id: spd_10
+        type: text
+        info:
+          notes: null
+      - id: spd_15
+        type: text
+        info:
+          notes: null
+      - id: spd_20
+        type: text
+        info:
+          notes: null
+      - id: spd_25
+        type: text
+        info:
+          notes: null
+      - id: spd_30
+        type: text
+        info:
+          notes: null
+      - id: spd_35
+        type: text
+        info:
+          notes: null
+      - id: spd_40
+        type: text
+        info:
+          notes: null
+      - id: spd_45
+        type: text
+        info:
+          notes: null
+      - id: spd_50
+        type: text
+        info:
+          notes: null
+      - id: spd_55
+        type: text
+        info:
+          notes: null
+      - id: spd_60
+        type: text
+        info:
+          notes: null
+      - id: spd_65
+        type: text
+        info:
+          notes: null
+      - id: spd_70
+        type: text
+        info:
+          notes: null
+      - id: spd_75
+        type: text
+        info:
+          notes: null
+      - id: spd_80
+        type: text
+        info:
+          notes: null
+      - id: spd_85
+        type: text
+        info:
+          notes: null
+      - id: spd_90
+        type: text
+        info:
+          notes: null
+      - id: spd_95
+        type: text
+        info:
+          notes: null
+      - id: spd_100_and_above
+        type: text
+        info:
+          notes: null
+      - id: volume
+        type: text
+        info:
+          notes: null
+      - id: days_with_data
+        type: int
+        info:
+          notes: null
+      - id: max_date
+        type: timestamp
+        format: "%Y-%m-%d"
+        info:
+          notes: null
