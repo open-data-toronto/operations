@@ -33,7 +33,7 @@ death-registry-statistics:
   resources:
     Death Registry Statistics:
       format: csv
-      url: https://opendata.toronto.ca/City Clerk's Office/death-registry-statistics/death-registry-statistics.csv
+      url: https://opendata.toronto.ca/city.clerks.office/death-registry-statistics/death-registry-statistics.csv
       attributes:
       - id: CIVIC_CENTRE
         type: text
