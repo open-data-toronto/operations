@@ -1,5 +1,5 @@
 safety-zone-watch-your-speed-program-monthly-summary:
-  schedule: "15 50 2 * *"
+  schedule: "15 5 2 * *"
   dag_owner_name: ''
   dag_owner_email: ''
   title: "Safety Zone Watch Your Speed Program \u2013 Monthly Summary"
