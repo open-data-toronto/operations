@@ -1,4 +1,5 @@
 residential-front-yard-parking:
+  schedule: "20 11 * * 2"
   dag_owner_name: ''
   dag_owner_email: ''
   title: Residential Front Yard Parking

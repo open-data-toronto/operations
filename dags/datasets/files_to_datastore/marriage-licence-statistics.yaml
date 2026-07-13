@@ -1,4 +1,5 @@
 marriage-licence-statistics:
+  schedule: "20 7 1 * *"
   dag_owner_name: ''
   dag_owner_email: ''
   title: Marriage Licence Statistics

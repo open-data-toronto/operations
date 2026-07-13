@@ -1,4 +1,5 @@
 building-permits-pool-enclosures:
+  schedule: "10 20 * * 3"
   dag_owner_name: ''
   dag_owner_email: ''
   title: Building Permits - Pool Enclosures

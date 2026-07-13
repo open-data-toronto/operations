@@ -1,4 +1,5 @@
 mobile-watch-your-speed-program-speed-summary:
+  schedule: "45 12 1 * *"
   dag_owner_name: ''
   dag_owner_email: ''
   title: "Mobile Watch Your Speed Program \u2013 Speed Summary"

@@ -1,4 +1,5 @@
 utility-cut-permits:
+  schedule: "30 3 * * 5"
   dag_owner_name: ''
   dag_owner_email: ''
   title: Utility Cut Permits

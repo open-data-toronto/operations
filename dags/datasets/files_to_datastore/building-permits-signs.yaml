@@ -1,4 +1,5 @@
 building-permits-signs:
+  schedule: "40 20 * * 2"
   dag_owner_name: ''
   dag_owner_email: ''
   title: Building Permits - Signs

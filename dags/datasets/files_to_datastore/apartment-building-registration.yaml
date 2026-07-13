@@ -1,4 +1,5 @@
 apartment-building-registration:
+  schedule: "20 22 8 * *"
   dag_owner_name: ''
   dag_owner_email: ''
   title: Apartment Building Registration

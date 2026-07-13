@@ -1,4 +1,5 @@
 death-registry-statistics:
+  schedule: "50 7 1 * *"
   dag_owner_name: ''
   dag_owner_email: ''
   title: Death Registry Statistics

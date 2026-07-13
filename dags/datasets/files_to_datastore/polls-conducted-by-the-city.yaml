@@ -1,4 +1,5 @@
 polls-conducted-by-the-city:
+  schedule: "20 11 * * *"
   dag_owner_name: ''
   dag_owner_email: ''
   title: Polls conducted by the City
