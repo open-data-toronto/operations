@@ -31,7 +31,6 @@ residential-front-yard-parking:
     \ addresses within boundaries of City of Toronto\r\n\r\n\r\n\r\n**Note:** The\
     \ license for that space is not transferable to the new owners\r\n(unless they\
     \ also have a valid permit issued by the MTO)\r\n\r\n"
-  schedule: '@once'
   resources:
     Residential Front Yard Parking:
       format: csv

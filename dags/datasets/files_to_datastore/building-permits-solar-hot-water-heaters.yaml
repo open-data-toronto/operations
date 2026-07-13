@@ -30,7 +30,6 @@ building-permits-solar-hot-water-heaters:
     \ identify this type of application was introduced on\r\nMay 1, 2009. Earlier\
     \ applications might also fit into this category, but are\r\ndifficult to identify.\r\
     \n\r\n"
-  schedule: '@once'
   resources:
     Building Permits - Solar Hot Water Heaters:
       format: csv

@@ -30,7 +30,6 @@ building-permits-pool-enclosures:
   limitations: null
   notes: "See Toronto Building - Pool Permits readme.xls\r\n\r\nDataset may not be\
     \ complete because of limitations of selection criteria.\r\n\r\n"
-  schedule: '@once'
   resources:
     Building Permits - Pool Enclosures:
       format: csv

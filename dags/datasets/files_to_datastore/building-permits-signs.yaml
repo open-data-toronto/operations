@@ -30,7 +30,6 @@ building-permits-signs:
     \ or\r\nafter September 7th, 2010, including geographical locations of signs and\r\
     \nattributes and status of applications.\r\n\r\n\r\n\r\nData does not contain\
     \ non-permanent signs or signs that are on public right-\r\nof-way.\r\n\r\n"
-  schedule: '@once'
   resources:
     Building Permits - Signs:
       format: csv

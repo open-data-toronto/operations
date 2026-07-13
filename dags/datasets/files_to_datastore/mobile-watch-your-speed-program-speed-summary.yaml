@@ -40,7 +40,6 @@ mobile-watch-your-speed-program-speed-summary:
     \ and the operational parameters of the sign.  See [Mobile Watch Your Speed Program\
     \ \u2013 Detailed Speed Counts](https://open.toronto.ca/dataset/mobile-watch-your-speed-program-detailed-speed-counts/)\
     \ for hourly speed counts.\r\n"
-  schedule: '@once'
   resources:
     Mobile Watch Your Speed Program - Speed Summary:
       format: csv

@@ -31,7 +31,6 @@ polls-conducted-by-the-city:
     \nPoll engagement is the primary data provided in this set. Daily data updates\r\
     \noccur upon the closing and certification of each poll. The collection of data\r\
     \nstarts from April 1, 2015.\r\n\r\n\r\n\r\n\r\n\r\n"
-  schedule: '@once'
   resources:
     Polls conducted by the City:
       format: csv

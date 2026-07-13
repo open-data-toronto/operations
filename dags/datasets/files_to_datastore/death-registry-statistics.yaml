@@ -29,7 +29,6 @@ death-registry-statistics:
     \ is created in support of the Vital Statistics Act, which is a\r\nProvincial\
     \ legislation. The dataset also supports the City's operational\r\nrequirements\
     \ and business functions.\r\n\r\nSee readme file\r\n\r\n"
-  schedule: '@once'
   resources:
     Death Registry Statistics:
       format: csv

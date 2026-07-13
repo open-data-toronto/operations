@@ -42,7 +42,6 @@ utility-cut-permits:
     \ WARRANTY/WARRANTY EXPIRED/POST WARRANTY INSPECTED/WARRANTY INSPECTION FAILED/PASSED**:\
     \ Various status of the permanent restoration work conducted by the Utility Companies\r\
     \n"
-  schedule: '@once'
   resources:
     Utility Cut Permits:
       format: csv

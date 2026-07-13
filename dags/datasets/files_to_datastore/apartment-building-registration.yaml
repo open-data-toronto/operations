@@ -35,7 +35,6 @@ apartment-building-registration:
     \ registration process, and is updated on an annual basis as part of the registration\
     \ renewal process.  \r\n\r\n[Read more on the RentSafe Program] (https://www.toronto.ca/311/knowledgebase/kb/docs/articles/municipal-licensing-and-standards/investigation-services/mrab/rentsafeto-apartment-building-standards-program.html)\r\
     \n"
-  schedule: '@once'
   resources:
     Apartment Building Registration:
       format: csv

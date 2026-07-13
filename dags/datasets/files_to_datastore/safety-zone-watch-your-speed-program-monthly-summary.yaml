@@ -30,7 +30,6 @@ safety-zone-watch-your-speed-program-monthly-summary:
     \ summary of observed speeds for these signs. See [Detailed Speed Counts](https://open.toronto.ca/dataset/school-safety-zone-watch-your-speed-program-detailed-speed-counts/)\
     \ for hourly speed counts recorded by these signs and [Location Data](https://open.toronto.ca/dataset/school-safety-zone-watch-your-speed-program-locations/)\
     \ for details on where and when signs were installed."
-  schedule: '@once'
   resources:
     Safety Zone Watch Your Speed Program - Monthly Summary:
       format: csv

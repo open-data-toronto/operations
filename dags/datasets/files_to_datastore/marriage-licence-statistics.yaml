@@ -24,7 +24,6 @@ marriage-licence-statistics:
     \nAct, both of which are Provincial legislations. The dataset also supports the\r\
     \nCity's operational requirements and business functions.\r\n\r\nSee readme file\r\
     \n\r\n\r\n\r\n"
-  schedule: '@once'
   resources:
     Marriage Licence Statistics:
       format: csv

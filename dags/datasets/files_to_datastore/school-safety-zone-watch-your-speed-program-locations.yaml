@@ -45,7 +45,6 @@ school-safety-zone-watch-your-speed-program-locations:
     \ operating parameters for installed signs. See [Detailed Speed Counts](https://open.toronto.ca/dataset/school-safety-zone-watch-your-speed-program-detailed-speed-counts/)\
     \ for hourly speed counts recorded by these signs and [Monthly Summary Data](https://open.toronto.ca/dataset/safety-zone-watch-your-speed-program-monthly-summary/)\
     \ for a monthly summary of these speed data\r\n\r\nSee here for more: https://www.toronto.ca/services-payments/streets-parking-transportation/road-safety/vision-zero/safety-initiatives/safety-zones/"
-  schedule: '@once'
   resources:
     School Safety Zone Watch Your Speed Program - Locations:
       format: csv
