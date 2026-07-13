@@ -40,7 +40,7 @@ death-registry-statistics:
         info:
           notes: null
       - id: DEATH_LICENSES
-        type: numeric
+        type: int
         info:
           notes: null
       - id: PLACE_OF_DEATH
