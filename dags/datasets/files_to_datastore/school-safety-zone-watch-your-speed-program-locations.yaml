@@ -1,5 +1,5 @@
 school-safety-zone-watch-your-speed-program-locations:
-  schedule: "15 50 3 * *"
+  schedule: "15 5 3 * *"
   dag_owner_name: ''
   dag_owner_email: ''
   title: "School Safety Zone Watch Your Speed Program \u2013 Locations"
