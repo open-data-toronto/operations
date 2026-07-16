@@ -116,7 +116,11 @@ strollto:
         type: text
         info:
           notes: null
-      - id: Main_Streets
+      - id: Title
+        type: text
+        info:
+          notes: null
+      - id: Address
         type: text
         info:
           notes: null
@@ -128,7 +132,39 @@ strollto:
         type: text
         info:
           notes: null
+      - id: Link_URL
+        type: text
+        info:
+          notes: null
+      - id: Link2_URLText
+        type: text
+        info:
+          notes: null
+      - id: Link2_URL
+        type: text
+        info:
+          notes: null
+      - id: AdditionalURLText
+        type: text
+        info:
+          notes: null
+      - id: AdditionalURL
+        type: text
+        info:
+          notes: null
       - id: BIA
+        type: text
+        info:
+          notes: null
+      - id: IMAGE_URL
+        type: text
+        info:
+          notes: null
+      - id: IMAGE_ALT_TEXT
+        type: text
+        info:
+          notes: null
+      - id: IMAGE_CREDIT
         type: text
         info:
           notes: null
