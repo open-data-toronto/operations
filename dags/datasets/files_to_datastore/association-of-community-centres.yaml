@@ -39,7 +39,7 @@ association-of-community-centres:
     The core administrative activities of the community centres are funded by the City while the program component is funded through fees, donations and grants.
   resources:
     # resource name
-    Program List:
+    Community Centres:
       format: geojson
       agol: true
       url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_AOCC/FeatureServer/0
