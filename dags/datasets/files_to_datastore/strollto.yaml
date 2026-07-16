@@ -116,10 +116,6 @@ strollto:
         type: text
         info:
           notes: null
-      - id: Title
-        type: text
-        info:
-          notes: null
       - id: Address
         type: text
         info:
