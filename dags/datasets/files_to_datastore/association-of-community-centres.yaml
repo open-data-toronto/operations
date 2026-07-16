@@ -1,0 +1,132 @@
+# package name
+association-of-community-centres:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: Association of Community Centres
+  date_published: "2026-07-16 05:18:24.389728"
+  refresh_rate: As available
+  dataset_category: Map
+
+  # optional package attributes
+  owner_division: Social Development, Finance & Administration
+  owner_section: Community Resources
+  owner_unit: null
+  owner_email: null
+
+  civic_issues: null
+  topics: 
+    - Community services
+    - City government
+  tags: 
+    - name: rec
+      vocabulary_id: null
+    
+
+  information_url: https://www.toronto.ca/city-government/accountability-operations-customer-service/city-administration/city-managers-office/agencies-corporations/agencies/association-of-community-centres/
+  excerpt: Geographical locations of all City-owned Association of Community Centres (AOCCs), listed under agency name of registered organization running community-based programming and services.
+  limitations: null
+  collection_method: This layer was created manually in ArcGIS Pro to represent the geographic locations of the Association of Community Centres (AOCCS) for the City of Toronto. Source information was obtained from publicly available municipal records and the official AOCC webpage. Each AOCC location was georeferenced using address-based input and verified through cross-referencing with Google Maps. Point features were digitized manually using the “Create Features” tool in ArcGIS Pro, with attribute fields including AOCC name, address, contact information and mandate or mission statement. This layer is intended for use in municipal planning, community engagement and analysis.
+
+  notes: |
+    The City has a number of community centres that are managed, operated and maintained by volunteer Boards of Management, which are collectively referred to as the Association of Community Centres (AOCCs).
+
+    The community centres are multi-purpose facilities that provide public space, programs and services to meet the recreation and social needs of local communities. They are committed to fostering a sense of community, promoting civic engagement and enhancing the quality of life through their community, recreational and social service programs.
+
+    The core administrative activities of the community centres are funded by the City while the program component is funded through fees, donations and grants.
+  resources:
+    # resource name
+    Program List:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COTGEO_AOCC/FeatureServer/0
+      attributes:
+        - source_name: NAME
+          target_name: Association of Community Centre Name 
+          type:  text
+          info:
+            notes: Registered agency name of organization running commnuity-based programming and services out of designated community centre
+        - source_name: ADDRESS
+          target_name: Address 
+          type:  text
+          info:
+            notes: Location of community centre 
+        - source_name: POSTAL_CODE
+          target_name: Postal Code 
+          type:  text
+          info:
+            notes: Postal code for community centre
+        - source_name: PHONE
+          target_name: Phone 
+          type:  text
+          info:
+            notes: Telephone number for community centre
+        - source_name: FAX
+          target_name: Fax 
+          type:  text
+          info:
+            notes: Fax number for community centre, if applicable
+        - source_name: EMAIL
+          target_name: Email 
+          type:  text
+          info:
+            notes: Email for general inquiries to the community centre
+        - source_name: WEBSITE
+          target_name: Website 
+          type:  text
+          info:
+            notes: Name of website for the community centre
+        - source_name: MISSION_STATEMENT
+          target_name: Mandate / Mission Statement 
+          type:  text
+          info:
+            notes: Mandate or mission statement for the community centre
+        - source_name: AOCC_ID
+          target_name: AOCC ID 
+          type:  text
+          info:
+            notes: Internal identification number for tracking purposes
+        - source_name: SOURCE
+          target_name: Source 
+          type:  text
+          info:
+            notes: Division responsible for management of community centres
+        - source_name: LAST_UPDATED
+          target_name: Currency 
+          type:  date
+          format: epoch
+          info:
+            notes: Date of most recent update to the data
+        - source_name: PUBLIC_WASHROOM
+          target_name: Public Washroom 
+          type:  text          
+          info:
+            notes: Whether the location has a public washroom
+        - source_name: ACCESSIBILITY
+          target_name: Accessible
+          type:  text          
+          info:
+            notes: Whether the facility has accessibility features
+        - source_name: ALL_GENDER
+          target_name: All Gender Washrooms 
+          type:  text          
+          info:
+            notes: Whether the facility has all gender washrooms
+        - source_name: HOURS
+          target_name: Hours 
+          type:  text          
+          info:
+            notes: Location hour of operations
+        - source_name: WASHROOM_DETAILS
+          target_name: Washroom Details 
+          type:  text          
+          info:
+            notes: Details of the washrooms at the facility
+        - id: geometry
+          type:  text
+          info:
+            notes: null
+        

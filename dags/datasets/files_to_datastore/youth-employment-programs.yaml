@@ -40,7 +40,9 @@ youth-employment-programs:
     # resource name
     Program List:
       format: csv
-      url: https://opendata.toronto.ca/social.development.finance.administration/youth-employment/Youth Jobs Inventory.csv
+      multi: true
+      multi_insert_date: true
+      url: https://opendata.toronto.ca/social.development.finance.administration/youth-employment/Youth Jobs Inventory yyyy.csv
       attributes:
         - id: City Division/Agency 
           type:  text

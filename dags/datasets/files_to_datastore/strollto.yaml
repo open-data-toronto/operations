@@ -1,0 +1,138 @@
+strollto:
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: ''
+  title: StrollTO
+  date_published: '2024-09-10 10:15:31.167559'
+  dataset_category: Table
+  refresh_rate: Annually
+  owner_division: Economic Development & Culture
+  owner_section: Film and Entertainment Industries
+  owner_unit: Visitor Economy Office
+  owner_email: strollto@toronto.ca
+  civic_issues:
+  - Mobility
+  topics:
+  - Locations and mapping
+  - Culture and tourism
+  - Parks and recreation
+  tags:
+  - name: itinerary
+    vocabulary_id: null
+  - name: self-guided
+    vocabulary_id: null
+  - name: stroll
+    vocabulary_id: null
+  - name: strollto
+    vocabulary_id: null
+  - name: tour
+    vocabulary_id: null
+  - name: walking
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/explore-enjoy/festivals-events/showloveto/local-strolls/strollto/
+  excerpt: "This dataset list points of interest associated with each of Toronto\u2019\
+    s 158 neighbourhoods as compiled by the Visitor Economy Office. The self-guided\
+    \ itineraries are built around Toronto\u2019s main streets to highlight attractions,\
+    \ public art, green spaces, historic buildings and more.  "
+  limitations: 'Please note that the list is not comprehensive as each neighbourhood
+    features a maximum of 15 points of interest. The points of interest are subject
+    to change as the itineraries are updated annually to ensure accuracy. '
+  notes: "This dataset list points of interest associated with each of Toronto\u2019\
+    s 158 neighbourhoods as compiled by the Visitor Economy Office. The self-guided\
+    \ itineraries are built around Toronto\u2019s main streets to highlight attractions,\
+    \ public art, green spaces, historic buildings and more.  \n\nTo suggest inclusion\
+    \ of additional points of interest or for any comments or update requests to existing\
+    \ comments please email stroll@toronto.ca. \n\nThe list was last updated spring\
+    \ 2024. "
+  schedule: '0 0 20 * *'
+  resources:
+    StrollTO Starting Points:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_StrollTO_starting_points/FeatureServer/0
+      attributes:
+      - id: Neighbourhood
+        type: text
+        info:
+          notes: null
+      - id: Neighbourhood_Num
+        type: text
+        info:
+          notes: null
+      - id: Ward
+        type: text
+        info:
+          notes: null
+      - id: Ward_Name
+        type: text
+        info:
+          notes: null
+      - id: Title
+        type: text
+        info:
+          notes: null
+      - id: Main_Streets
+        type: text
+        info:
+          notes: null
+      - id: Description
+        type: text
+        info:
+          notes: null
+      - id: Accessibility
+        type: text
+        info:
+          notes: null
+      - id: BIA
+        type: text
+        info:
+          notes: null
+      - id: geometry
+        type: text
+        info:
+          notes: null
+      
+    StrollTO POI Details:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_StrollTO_details/FeatureServer/0
+      attributes:
+      - id: Neighbourhood
+        type: text
+        info:
+          notes: null
+      - id: Neighbourhood_Num
+        type: text
+        info:
+          notes: null
+      - id: Ward
+        type: text
+        info:
+          notes: null
+      - id: Ward_Name
+        type: text
+        info:
+          notes: null
+      - id: Title
+        type: text
+        info:
+          notes: null
+      - id: Main_Streets
+        type: text
+        info:
+          notes: null
+      - id: Description
+        type: text
+        info:
+          notes: null
+      - id: Accessibility
+        type: text
+        info:
+          notes: null
+      - id: BIA
+        type: text
+        info:
+          notes: null
+      - id: geometry
+        type: text
+        info:
+          notes: null
