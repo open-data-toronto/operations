@@ -1,0 +1,57 @@
+musician-directory:
+  schedule: '0 19 6 * *'
+  dag_owner_name: Mac
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Musician Directory
+  date_published: '2026-07-16 10:04:41.381535'
+  refresh_rate: Quarterly
+  dataset_category: Table
+  owner_division: Economic Development & Culture
+  owner_section: Music
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: 
+    - Culture and tourism
+  collection_method: Artists fill out a form to apply, which is then vetted and manually added to the Musician Directory
+  tags:
+  - name: art
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/business-economy/industry-sector-support/music/music-talent-expertise/musician-directory/
+  excerpt: A directory of Toronto-based musicians availiable for live music events.
+
+  limitations: |
+    * This is not an exhaustive list of Toronto musicians
+    
+    * Artist names are stage names/pseudonyms, not legal names
+  notes: |
+    A directory of Toronto-based musicians available for live music events.
+
+    Genres include: afrobeat, ambient, blues, children’s music, classical, country, covers, dance/EDM, electronic, experimental, folk, funk, global, hip hop/rap, indie, instrumental, jazz, Latin, pop, punk, R&B/soul, reggae, rock, roots, singer/songwriter and vocal/acapella.
+
+    Musicians can apply to be included in the City of Toronto’s Musician Directory by visiting [Musician Opportunities](https://www.toronto.ca/business-economy/industry-sector-support/music/support-opportunities/musician-opportunities/) and completing an application form.
+  
+  resources:
+    #resource name
+    Musician Directory:
+      format: csv
+      url: https://opendata.toronto.ca/economic.development.culture/musician-directory/musician-directory.csv
+      attributes:
+        - id: Artist Name
+          type: text
+          info:
+            notes: Name of artist
+        - id: Main Genre
+          type: text
+          info:
+            notes: Main genre of music performed
+        - id: Secondary Genre
+          type: text
+          info:
+            notes: Secondary genre of music performed
+        - source_name: "Website " 
+          target_name: Website
+          type: text
+          info:
+            notes: Artist website
+        

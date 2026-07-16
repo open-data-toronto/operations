@@ -1,0 +1,67 @@
+# package name
+youth-employment-programs:
+  # DAG info
+  schedule: "@once"
+  dag_owner_name: Mackenzie
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+
+  # mandatory package attributes
+  title: City Youth Employment Programs
+  date_published: "2026-07-16 05:18:24.389728"
+  refresh_rate: Annually
+  dataset_category: Table
+
+  # optional package attributes
+  owner_division: Social Development, Finance & Administration
+  owner_section: Community Resources
+  owner_unit: null
+  owner_email: null
+
+  civic_issues: null
+  topics: 
+    - Community services
+    - City government
+  tags: 
+    - name: kids
+      vocabulary_id: null
+    
+
+  information_url: https://www.toronto.ca/community-people/employment-social-support/employment-support/youth-job-seekers/
+  excerpt: Youth employment opportunities data from all City divisions and agencies
+  limitations: Data is collected based on reporting from individual organizations, based on the best information available at the time of collection.
+  notes: |
+    Youth employment opportunities data from all City divisions and agencies.
+
+    This data was originally collected to capture the current state of youth employment opportunities at the City as part of the May 26 2026 “[Update on Reducing Barriers to Youth Employment and the Diversity Youth Fellowship Program](https://www.toronto.ca/legdocs/mmis/2026/ec/bgrd/backgroundfile-287323.pdf)” staff report. This has resulted in the creation of a Youth Employment Table (co-chaired by the City and United Way), with the aim of providing 10,000 more annual youth employment opportunities than the 2025 baseline.
+
+    Youth job seekers can find more information [here](https://www.toronto.ca/community-people/employment-social-support/employment-support/youth-job-seekers/).
+  
+  resources:
+    # resource name
+    Program List:
+      format: csv
+      url: https://opendata.toronto.ca/social.development.finance.administration/youth-employment/Youth Jobs Inventory.csv
+      attributes:
+        - id: City Division/Agency 
+          type:  text
+          info:
+            notes: The division, agency, or corporation (funded by the City of Toronto) providing the employment opportunity
+        - id: Program Or Job Source
+          type:  text
+          info:
+            notes: The department or program offering the employment opportunity
+        - source_name: "Total Youth Employed "
+          target_name: Total Youth Employed
+          type:  text
+          info:
+            notes: Number of positions offered
+        - source_name: "Reporting Year "
+          target_name: Reporting Year
+          type:  int
+          info:
+            notes: Year being reported
+        - id: Job Type
+          type:  text
+          info:
+            notes: Full Time, Part Time, Seasonal or Event-Based 
+        

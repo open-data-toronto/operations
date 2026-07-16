@@ -1,0 +1,73 @@
+music-venues-spaces-studios-stores:
+  schedule: '0 19 5 * *'
+  dag_owner_name: Mac
+  dag_owner_email: mackenzie.nichols4@toronto.ca
+  title: Music Venues, Spaces, Studios & Stores
+  date_published: '2026-07-16 10:04:41.381535'
+  refresh_rate: Quarterly
+  dataset_category: Map
+  owner_division: Economic Development & Culture
+  owner_section: Music
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: 
+    - Culture and tourism
+  tags:
+  - name: art
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/business-economy/industry-sector-support/music/music-venues-spaces-studios-stores-map
+  excerpt: Local music industry services, retailers, supporting organizations and venues.
+  collection_method: Quarterly review of spaces who have reached out to be included or removed, alongside any new spaces discovered through personal research from City staff
+  limitations: |
+    * This is not an exhaustive list of music spaces
+
+    * Music spaces opt in to being part of this dataset
+
+    * The dataset only includes venues within Toronto municipal boundaries
+  notes: Locations and details of local music industry services, retailers, supporting organizations and venues.
+  resources:
+    #resource name
+    Music Locations:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/Music_Industry_Directory_View/FeatureServer/0
+      attributes:
+        - id: CATEGORY
+          type: text
+          info:
+            notes: Classification of music space
+        - id: NAME
+          type: text
+          info:
+            notes: Name of space
+        - id: CAPACITY
+          type: text
+          info:
+            notes: Standing capacity of space
+        - id: WEBSITE
+          type: text
+          info:
+            notes: Website of space
+        - id: WARD
+          type: text
+          info:
+            notes: Ward
+        - id: ADDRESS
+          type: text
+          info:
+            notes: Street address of space
+        - id: PHONE
+          type: text
+          info:
+            notes: Phone number of space
+        - id: created_date
+          type: date
+          format: epoch
+          info:
+            notes: Date space was added to Music Spaces Directory
+        - id: geometry
+          type: text
+          info:
+            notes: null
+       
