@@ -431,7 +431,7 @@ def parse_possible_filepaths(source_url):
                             output.append([this_date, this_quarter_input])
                     
             else:
-                if requests.get(this_year_input, allow_redirects = False).status_code == 200:
+                if requests.head(this_year_input, allow_redirects = False).status_code == 200:
                     output.append([this_date, this_year_input])                      
 
     else:
@@ -439,3 +439,4 @@ def parse_possible_filepaths(source_url):
 
     logging.info(f"Parsed {len(output)} valid filepaths")
     return output
+

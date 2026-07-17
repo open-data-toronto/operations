@@ -19,7 +19,7 @@ from utils import misc_utils
 
 job_settings = {
     "description": "Uploads files from opendata.toronto.ca to respective CKAN resource",
-    "schedule": "15 * * * *",
+    "schedule": "15 */2 * * *",
     "start_date": datetime(2020, 11, 10, 0, 30, 0),
 }
 
