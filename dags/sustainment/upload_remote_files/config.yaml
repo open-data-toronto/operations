@@ -113,11 +113,13 @@ lobbyist-registry:
 mobile-watch-your-speed-program-detailed-speed-counts:
   Mobile sign detail count yyyy:
     format: csv
+    link: true
     url: https://opendata.toronto.ca/transportation.services/mobile-watch-your-speed-program-detailed-speed-counts/mobile-yyyy.csv
 school-safety-zone-watch-your-speed-program-detailed-speed-counts:  
   Stationary count detailed yyyy:
     format: csv
-    url: https://opendata.toronto.ca/transportation.services/safety-zone-watch-your-speed-program-detailed-speed-counts/stationary-yyyy.csv
+    link: true
+    url: https://opendata.toronto.ca/transportation.services/school-safety-zone-watch-your-speed-program-detailed-speed-counts/stationary-yyyy.csv
 # municipal-licensing-and-standards-business-licences-and-permits:
 #   Business licences data:
 #     format: csv
