@@ -70,10 +70,6 @@ toronto-beaches-water-quality:
           type: int
           info:
             notes: ""
-        - id: comments
-          type: text
-          info:
-            notes: ""
         - id: geometry
           type: text
           info:
