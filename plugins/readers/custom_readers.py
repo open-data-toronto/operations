@@ -173,7 +173,7 @@ def toronto_beaches_water_quality():
             "siteName": item["siteName"],
             "collectionDate": item["collectionDate"],
             "eColi": item["eColi"],
-            "comments": item["comments"],
+            #"comments": item["comments"],
             "geometry": json.dumps(
                 {"type": "Point", "coordinates": [item["lon"], item["lat"]]}
             ),
