@@ -685,6 +685,112 @@ def swimsafe():
                         }
 
 
+def childcaresafe():
+    from io import StringIO
+    import hashlib
+    url = "https://secure.toronto.ca/opendata/cc_od/full_list/v1?format=json"
+    user_key = Variable.get("secure_toronto_opendata_USER_KEY")
+    srv_key = Variable.get("childcaresafe_secure_toronto_opendata_SRV_KEY")
+
+    headers = {
+        "SRV-KEY": srv_key,
+        "USER-KEY": user_key,
+    }
+
+    raw_input = json.loads(requests.get(url, headers=headers).text)
+
+    indices = []
+
+    for json_item in raw_input:
+        establishment = json_item["json"]
+        for inspection in establishment.get("inspections", None) or []:
+            # if theres no infractions, append the data to the output
+            if not inspection.get("infractions", None):
+
+                unique_composite_key = (
+                    establishment["estName"]
+                    + "_"
+                    + inspection["insDate"]
+                ).encode("utf-8")
+
+                # create hash value
+                hash_value = hashlib.md5(unique_composite_key)
+                
+                # skip duplicates if they exist
+                if hash_value.hexdigest() in indices:
+                    continue
+                indices.append(hash_value.hexdigest())
+                    
+                yield {
+                    "unique_id": hash_value.hexdigest(),
+                    "Establishment ID": establishment["estId"],
+                    "Establishment Name": establishment["estName"],
+                    "Establishment Address": establishment["addrFull"],                    
+                    "Inspection Status": inspection["insStatus"],
+                    "Inspection Date": inspection["insDate"],                    
+                    "Observation": inspection["observation"],
+                    "Infraction Category": None,
+                    "Infraction Details": None,
+                    "Severity": None,
+                    "Action": None,
+                    "geometry": json.dumps(
+                        {
+                            "type": "Point",
+                            "coordinates": [
+                                float(establishment["lon"]),
+                                float(establishment["lat"]),
+                            ],
+                        }
+                    ),
+                }
+
+            for infraction in inspection.get("infractions", None) or []:
+                # append infraction detail info, as available, to the output
+                # add a unique primary key as required by datastore_upsert
+
+                for detail in infraction.get("infDtl", None) or []:
+                    # append infraction detail info, as available, to the output
+                    # add a unique primary key as required by datastore_upsert
+                    unique_composite_key = (
+                        establishment["estName"]
+                        + "_"
+                        + inspection["insDate"]
+                        + "_"
+                        + detail["defDesc"]
+                    ).encode("utf-8")
+                                    
+                    # create hash value
+                    hash_value = hashlib.md5(unique_composite_key)
+                    
+                    # skip duplicates if they exist
+                    if hash_value.hexdigest() in indices:
+                        continue
+                    indices.append(hash_value.hexdigest())
+                    
+                    yield {
+                        "unique_id": hash_value.hexdigest(),
+                        "Establishment ID": establishment["estId"],
+                        "Establishment Name": establishment["estName"],
+                        "Establishment Address": establishment["addrFull"],                        
+                        "Inspection Status": inspection["insStatus"],
+                        "Inspection Date": inspection["insDate"],                        
+                        "Observation": inspection["observation"],
+                        "Infraction Category": infraction["infCategory"],
+                        "Infraction Details": detail.get("defDesc", None),
+                        "Severity": detail.get("infType", None),
+                        "Action": detail.get("actionDesc", None),
+                        "geometry": json.dumps(
+                            {
+                                "type": "Point",
+                                "coordinates": [
+                                    float(establishment["lon"]),
+                                    float(establishment["lat"]),
+                                ],
+                            }
+                        ),
+                    }
+
+
 def residential_health_hazards():
     import hashlib
 

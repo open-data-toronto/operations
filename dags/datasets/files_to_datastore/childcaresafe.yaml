@@ -1,0 +1,81 @@
+childcaresafe:
+  schedule: '0 2 * * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: ChildCareSafe™ Infection Control inspection results
+  date_published: '2026-06-10 10:04:01.187902'
+  refresh_rate: Daily
+  dataset_category: Map
+  owner_division: Toronto Public Health
+  owner_section: Health Protection
+  owner_unit: null
+  owner_email: PublicHealth@toronto.ca
+  civic_issues: null
+  topics: 
+    - Health
+  tags:
+  - name: kids
+    vocabulary_id: null
+  information_url: null
+  excerpt: Lists infection control inspection results for licensed child care centres.
+  collection_method: Data is entered into THEIS by public health inspectors at the time of or shortly after an inspection.
+  limitations: null
+  notes: Lists infection control inspection results for licensed child care centres as required by the Ontario Public Health Standards Infection Prevention and Control Disclosure Protocol 
+  resources:
+    # resource name
+    Childcaresafe Inspection Results:
+      format: geojson
+      url: https://secure.toronto.ca/opendata/cc_od/inpections/v2?format=json
+      custom_reader: childcaresafe
+      datastore_upsert:
+        primary_key: "unique_id"
+      attributes:
+        - id: unique_id          
+          type: text
+          info:
+            notes: "Unique id for this record connected to source data"
+        - id: Establishment Name
+          type: text
+          info:
+            notes: "Name of inspected establishment"
+        - id: Establishment Address
+          type: text
+          info:
+            notes: "Address of inspected establishment"
+        - id: Establishment ID
+          type: text
+          info:
+            notes: "Unique id for inspected establishment"
+        - id: Inspection Status
+          type: text
+          info:
+            notes: "Status of inspection"
+        - id: Inspection Date
+          type: date
+          format: "%Y-%m-%d"
+          info:
+            notes: "Date of inspection"
+        - id: Observation
+          type: text
+          info:
+            notes: "Inspection observations"
+        - id: Infraction Category
+          type: text
+          info:
+            notes: "Category of infraction"
+        - id: Infraction Details
+          type: text
+          info:
+            notes: "Details of infraction"
+        - id: Severity
+          type: text
+          info:
+            notes: "Severity of infraction"
+        - id: Action
+          type: text
+          info:
+            notes: "Instructions from Toronto Public Health to establishment operator from inspection" 
+        - id: geometry
+          type: text
+          info:
+            notes: ""
