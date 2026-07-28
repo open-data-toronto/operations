@@ -80,6 +80,10 @@ demolition-and-replacement-of-rental-housing-units:
           type: "text"
           info:
             notes: "a hyper-link that directs you to the Council-adopted recommendations on the Rental Housing Demolition and Conversion application and associated City Planning staff report. "
+        - id: Amending Application Staff Report Link
+          type: "text"
+          info:
+            notes: "A hyper-link that directs you to the Council-adopted recommendations and associated staff recommendations on Rental Housing Demolition and Conversion applications that have been amended since approval. If the amendment resulted in a change to the number of rental units approved for demolition and replacement, these amounts have been updated."
         - id: Type
           type: "text"
           info:
