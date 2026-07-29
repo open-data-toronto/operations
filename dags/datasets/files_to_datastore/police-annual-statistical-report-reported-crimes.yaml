@@ -57,7 +57,11 @@ police-annual-statistical-report-reported-crimes:
         - id: "DIVISION"
           type: "text"
           info:
-            notes: "Geographic division where crime took place"
+            notes: "Police division associated with the occurrence"
+        - id: "NEIGHBOURHOOD"
+          type: "text"
+          info:
+            notes: "Neighbourhood where crime took place"
         - id: "CATEGORY"
           type: "text"
           info:
