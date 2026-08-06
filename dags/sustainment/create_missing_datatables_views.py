@@ -8,7 +8,7 @@ with no datatables_view if that step silently failed (e.g. res_format not covere
 by ckan.datapusher.formats, geospatial cache errors, etc.) and never gets retried
 by the ETL DAGs themselves.
 """
-import requests
+import ckanapi
 import logging
 from datetime import datetime
 
@@ -24,14 +24,13 @@ from utils import airflow_utils
 # standard arguments to be used throughout this DAG
 ACTIVE_ENV = Variable.get("active_env")
 CKAN_CREDS = Variable.get("ckan_credentials_secret", deserialize_json=True)
-CKAN_ADDRESS = CKAN_CREDS[ACTIVE_ENV]["address"]
-HEADERS = {"Authorization": CKAN_CREDS[ACTIVE_ENV]["apikey"]}
+CKAN = ckanapi.RemoteCKAN(**CKAN_CREDS[ACTIVE_ENV])
 
 DEFAULT_ARGS = airflow_utils.get_default_args(
     {
-        "owner": "Mackenzie",
+        "owner": "Brendan",
         "depends_on_past": False,
-        "email": ["mackenzie.nichols4@toronto.ca"],
+        "email": ["brendan.schell@toronto.ca"],
         "email_on_failure": False,
         "email_on_retry": False,
         "on_failure_callback": task_failure_slack_alert,
@@ -53,11 +52,12 @@ def find_missing_datatables_views(**kwargs):
             if resource.get("datastore_active") != True:
                 continue
 
-            views = requests.get(
-                CKAN_ADDRESS + "/api/3/action/resource_view_list",
-                headers=HEADERS,
-                params={"id": resource["id"]},
-            ).json()["result"]
+            # skip resources CKAN can't return a view list for (eg deleted/orphaned) rather than failing the whole task
+            try:
+                views = CKAN.action.resource_view_list(id=resource["id"])
+            except Exception:
+                logging.exception("resource_view_list failed for resource {}".format(resource["id"]))
+                continue
 
             if not any(view["view_type"] == "datatables_view" for view in views):
                 output.append(resource["id"])
@@ -67,25 +67,23 @@ def find_missing_datatables_views(**kwargs):
 
 
 def create_missing_datatables_views(**kwargs):
-    output_dict = {
-        "2": "created",
-        "4": "failed",
-        "5": "failed",
-    }
     output = {}
     resource_ids = kwargs.pop("ti").xcom_pull(task_ids="find_missing_datatables_views")["output"]
 
     for resource_id in resource_ids:
         logging.info("Creating datatables_view for " + resource_id)
-        data = {
-            "resource_id": resource_id,
-            "title": "Data Table",
-            "view_type": "datatables_view",
-            "ellipsis_length": 0,
-            "date_format": "llll",
-        }
-        response = requests.post(CKAN_ADDRESS + "/api/3/action/resource_view_create", headers=HEADERS, data=data)
-        output[resource_id] = output_dict[str(response.status_code)[0]]
+        try:
+            CKAN.action.resource_view_create(
+                resource_id=resource_id,
+                title="Data Table",
+                view_type="datatables_view",
+                ellipsis_length=0,
+                date_format="llll",
+            )
+            output[resource_id] = "created"
+        except Exception:
+            logging.exception("resource_view_create failed for resource {}".format(resource_id))
+            output[resource_id] = "failed"
 
     if len(output):
         return {"output": output}
