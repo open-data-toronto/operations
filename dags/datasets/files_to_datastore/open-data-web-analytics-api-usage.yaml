@@ -26,9 +26,15 @@ open-data-web-analytics:
     API Usage:
       format: csv
       custom: true
-      url: https://secure.toronto.ca/opendata/ds/od_csv/v1?format=csv
+      url: https://opendata.toronto.ca/
       custom_reader: ckan_api_usage
+      datastore_upsert:
+        primary_key: "record_id"
       attributes:
+        - id: record_id
+          type: text
+          info:
+            notes: unique id for the record, made from the uri, date, and id fields
         - id: uri
           type: text
           info:

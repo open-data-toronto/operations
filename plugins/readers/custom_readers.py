@@ -685,112 +685,6 @@ def swimsafe():
                         }
 
 
-def childcaresafe():
-    from io import StringIO
-    import hashlib
-    url = "https://secure.toronto.ca/opendata/cc_od/full_list/v1?format=json"
-    user_key = Variable.get("secure_toronto_opendata_USER_KEY")
-    srv_key = Variable.get("childcaresafe_secure_toronto_opendata_SRV_KEY")
-
-    headers = {
-        "SRV-KEY": srv_key,
-        "USER-KEY": user_key,
-    }
-
-    raw_input = json.loads(requests.get(url, headers=headers).text)
-
-    indices = []
-
-    for json_item in raw_input:
-        establishment = json_item["json"]
-        for inspection in establishment.get("inspections", None) or []:
-            # if theres no infractions, append the data to the output
-            if not inspection.get("infractions", None):
-
-                unique_composite_key = (
-                    establishment["estName"]
-                    + "_"
-                    + inspection["insDate"]
-                ).encode("utf-8")
-
-                # create hash value
-                hash_value = hashlib.md5(unique_composite_key)
-                
-                # skip duplicates if they exist
-                if hash_value.hexdigest() in indices:
-                    continue
-                indices.append(hash_value.hexdigest())
-                    
-                yield {
-                    "unique_id": hash_value.hexdigest(),
-                    "Establishment ID": establishment["estId"],
-                    "Establishment Name": establishment["estName"],
-                    "Establishment Address": establishment["addrFull"],                    
-                    "Inspection Status": inspection["insStatus"],
-                    "Inspection Date": inspection["insDate"],                    
-                    "Observation": inspection["observation"],
-                    "Infraction Category": None,
-                    "Infraction Details": None,
-                    "Severity": None,
-                    "Action": None,
-                    "geometry": json.dumps(
-                        {
-                            "type": "Point",
-                            "coordinates": [
-                                float(establishment["lon"]),
-                                float(establishment["lat"]),
-                            ],
-                        }
-                    ),
-                }
-
-            for infraction in inspection.get("infractions", None) or []:
-                # append infraction detail info, as available, to the output
-                # add a unique primary key as required by datastore_upsert
-
-                for detail in infraction.get("infDtl", None) or []:
-                    # append infraction detail info, as available, to the output
-                    # add a unique primary key as required by datastore_upsert
-                    unique_composite_key = (
-                        establishment["estName"]
-                        + "_"
-                        + inspection["insDate"]
-                        + "_"
-                        + detail["defDesc"]
-                    ).encode("utf-8")
-                                    
-                    # create hash value
-                    hash_value = hashlib.md5(unique_composite_key)
-                    
-                    # skip duplicates if they exist
-                    if hash_value.hexdigest() in indices:
-                        continue
-                    indices.append(hash_value.hexdigest())
-                    
-                    yield {
-                        "unique_id": hash_value.hexdigest(),
-                        "Establishment ID": establishment["estId"],
-                        "Establishment Name": establishment["estName"],
-                        "Establishment Address": establishment["addrFull"],                        
-                        "Inspection Status": inspection["insStatus"],
-                        "Inspection Date": inspection["insDate"],                        
-                        "Observation": inspection["observation"],
-                        "Infraction Category": infraction["infCategory"],
-                        "Infraction Details": detail.get("defDesc", None),
-                        "Severity": detail.get("infType", None),
-                        "Action": detail.get("actionDesc", None),
-                        "geometry": json.dumps(
-                            {
-                                "type": "Point",
-                                "coordinates": [
-                                    float(establishment["lon"]),
-                                    float(establishment["lat"]),
-                                ],
-                            }
-                        ),
-                    }
-
-
 def residential_health_hazards():
     import hashlib
 
@@ -929,6 +823,7 @@ def library_branch_programs_and_events_feed():
 
 
 def ckan_api_usage():
+    import hashlib
     import boto3
     from botocore.exceptions import ClientError
     import sys
@@ -970,8 +865,8 @@ def ckan_api_usage():
 
     # If the resource doesn't exist...
     if len(resource) == 0:
-        # Grab all data from Jan 1 2026 to yesterday
-        this_date = date(2026, 1, 1)
+        # Grab all data from April 1 2026 to yesterday
+        this_date = date(2026, 4, 1)
 
     # If resource exists, determine it's latest date of data
     elif len(resource) > 0:
@@ -985,7 +880,6 @@ def ckan_api_usage():
     
     logging.info(f"Preparing to load data for {len(dates)} date(s)")
     for date_string in dates:
-        print(date_string)
         payload = {
             "date": date_string
         }
@@ -1005,22 +899,43 @@ def ckan_api_usage():
         if len(results) > 0:
             result_with_date = []
             for result in results:
+
                 # parse data for each different kind of id
-                for this_id in ["pid", "rid", "id"]:
-                    if len(result.get(f"{this_id}s", [])) > 0:
-                        for item in result[f"{this_id}s"]:
-                            yield {
-                                "date": date_string,
-                                "uri": result["uri"],
-                                "id": item[this_id],
-                                "count": item["cnt"]
-                            }
-                if len(result.keys()) == 2:
+                ids = ["pid", "rid", "id"]
+                if any([this_id in result.keys() for this_id in ids]):
+                    for this_id in ids:
+                        if len(result.get(f"{this_id}s", [])) > 0:                    
+
+                            for item in result[f"{this_id}s"]:
+                                # create hash value
+                                # make a compound key for the record id
+                                unique_composite_key = (
+                                    date_string
+                                    + result["uri"]
+                                    + result["cnt"]
+                                    + item[this_id]
+                                )
+                                hash_value = hashlib.md5(unique_composite_key.encode("utf-8")).hexdigest()
+                                yield {
+                                    "date": date_string,
+                                    "uri": result["uri"],
+                                    "id": item[this_id],
+                                    "count": result["cnt"],
+                                    "record_id": hash_value,
+                                }
+                elif len(result.keys()) == 2:
+                    unique_composite_key = (
+                            date_string
+                            + result["uri"]
+                            + result["cnt"]
+                        )
+                    hash_value = hashlib.md5(unique_composite_key.encode("utf-8")).hexdigest()
                     yield {
                             "date": date_string,
                             "uri": result["uri"],
                             "id": None,
-                            "count": result["cnt"]
+                            "count": result["cnt"],
+                            "record_id": hash_value,
                         }
 
 
