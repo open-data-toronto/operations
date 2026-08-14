@@ -897,12 +897,10 @@ def ckan_api_usage():
         
         # add the date to the result
         if len(results) > 0:
-            result_with_date = []
-            for result in results:
-
+            for result in results:                                
                 # parse data for each different kind of id
                 ids = ["pid", "rid", "id"]
-                if any([this_id in result.keys() for this_id in ids]):
+                if any([this_id+"s" in result.keys() for this_id in ids]):
                     for this_id in ids:
                         if len(result.get(f"{this_id}s", [])) > 0:                    
 
@@ -915,7 +913,7 @@ def ckan_api_usage():
                                     + result["cnt"]
                                     + item[this_id]
                                 )
-                                hash_value = hashlib.md5(unique_composite_key.encode("utf-8")).hexdigest()
+                                hash_value = hashlib.md5(unique_composite_key.encode("utf-8")).hexdigest()                                                                
                                 yield {
                                     "date": date_string,
                                     "uri": result["uri"],
@@ -929,7 +927,7 @@ def ckan_api_usage():
                             + result["uri"]
                             + result["cnt"]
                         )
-                    hash_value = hashlib.md5(unique_composite_key.encode("utf-8")).hexdigest()
+                    hash_value = hashlib.md5(unique_composite_key.encode("utf-8")).hexdigest()                                        
                     yield {
                             "date": date_string,
                             "uri": result["uri"],

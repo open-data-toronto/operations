@@ -28,8 +28,8 @@ open-data-web-analytics:
       custom: true
       url: https://opendata.toronto.ca/
       custom_reader: ckan_api_usage
-      datastore_upsert:
-        primary_key: "record_id"
+      #datastore_upsert:
+      #  primary_key: "record_id"
       attributes:
         - id: record_id
           type: text
