@@ -1002,28 +1002,28 @@ def ckan_api_usage():
         
         # add the date to the result
         if len(results) > 0:
-            for result in results:                                
                 # parse data for each different kind of id
+            for result in results:
                 ids = ["pid", "rid", "id"]
                 if any([this_id+"s" in result.keys() for this_id in ids]):
                     for this_id in ids:
                         if len(result.get(f"{this_id}s", [])) > 0:                    
-
-                            for item in result[f"{this_id}s"]:
+                            for detail in result[f"{this_id}s"]:
                                 # create hash value
                                 # make a compound key for the record id
                                 unique_composite_key = (
                                     date_string
                                     + result["uri"]
-                                    + result["cnt"]
-                                    + item[this_id]
+                                    + detail["cnt"]
+                                    + detail[this_id]
                                 )
-                                hash_value = hashlib.md5(unique_composite_key.encode("utf-8")).hexdigest()                                                                
+                                hash_value = hashlib.md5(unique_composite_key.encode("utf-8")).hexdigest()   
+                                                                                         
                                 yield {
                                     "date": date_string,
                                     "uri": result["uri"],
-                                    "id": item[this_id],
-                                    "count": result["cnt"],
+                                    "id": detail[this_id],
+                                    "count": detail["cnt"],
                                     "record_id": hash_value,
                                 }
                 elif len(result.keys()) == 2:
