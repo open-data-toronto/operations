@@ -424,7 +424,7 @@ def washroom_facilities():
         for location in locations:
             if location["properties"]["SOURCE"] == "Parks and Recreation":
                 # if asset ids match, combine into dict and yield it
-                if status["AssetID"] == location["properties"]["asset_id"]:
+                if status["AssetID"] == location["properties"]["ASSET_ID"]:
                     location["properties"].update(status)
                     
                     yield misc_utils.parse_geometry_from_row(location["properties"])
@@ -442,7 +442,7 @@ def parks_drinking_fountains():
         for location in locations:
             if location["properties"]["SOURCE"] == "Parks and Recreation":
                 # if asset ids match, combine into dict and yield it
-                if status["AssetID"] == location["properties"]["asset_id"]:
+                if status["AssetID"] == location["properties"]["ASSET_ID"]:
                     location["properties"].update(status)
                     
                     yield misc_utils.parse_geometry_from_row(location["properties"])

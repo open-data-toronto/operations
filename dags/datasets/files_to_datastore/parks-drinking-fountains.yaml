@@ -40,35 +40,43 @@ parks-drinking-fountains:
       agol: true
       url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_PFR_washroom_drinking_water_source/FeatureServer/0
       attributes:      
-      - id: id
+      #- id: id
+      #  type: int
+      #  info:
+      #    notes: 'Parks and Recreation Unique Identifier of the parent asset'
+      - id: ASSET_ID
         type: int
         info:
-          notes: 'Parks, Forestry and Recreation Unique Identifier of the parent asset'
-      - id: asset_id
-        type: int
-        info:
-          notes: 'Parks, Forestry and Recreation Unique Identifier of the asset'
-      - id: location
+          notes: 'Parks and Recreation Unique Identifier of the asset'
+      - id: LOCATION
         type: text
         info:
           notes: 'Name of the parent asset'
-      - id: alternative_name
+      - id: ALTERNATIVE_NAME
         type: text
         info:
-          notes: 'Is comprised of the name of the parent asset and a descriptor of the location'
-      - id: type
+          notes: 'Is comprised of the name of the parent asset and a descriptor of the location  '
+      - id: TYPE
         type: text
         info:
-          notes: 'Drinking Water Fountain, Bottle Filling Station, Dog Fountain'
-      - id: location_details
+          notes: 'Ex: Washroom, Portable Toilet'
+      - id: ACCESSIBLE_FEATURES
+        type: text
+        info:
+          notes: 'Provides a list of accessible features, if available'
+      - id: HOURS
+        type: text
+        info:
+          notes: 'Hours of Operation, if outside of Park hours'
+      - id: LOCATION_DETAILS
         type: text
         info:
           notes: 'A detailed description of where to find the asset'
-      - id: url
+      - id: URL
         type: text
         info:
           notes: 'A link to the webpage of the parent asset'
-      - id: address
+      - id: ADDRESS
         type: text
         info:
           notes: 'Street address of the park, where the drinking water source is located.'
