@@ -414,7 +414,7 @@ def tobids_non_competitive_contracts():
 def washroom_facilities():
     
     # get source data
-    locations_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_PFR_washroom_drinking_water_source/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token="
+    locations_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_washroom_drinkingwater/FeatureServer/0/query?where=1%3D1&objectIds=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&outDistance=&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&collation=&orderByFields=&groupByFieldsForStatistics=&returnAggIds=false&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnTrueCurves=false&returnExceededLimitFeatures=true&returnExceededLimitGeometries=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token="
     locations = json.loads(requests.get(locations_url).text)["features"]
 
     status_url = "https://www.toronto.ca/data/parks/live/washroom_allupdates.json"
@@ -422,16 +422,17 @@ def washroom_facilities():
 
     for status in statuses:
         for location in locations:
-            # if asset ids match, combine into dict and yield it
-            if status["AssetID"] == location["properties"]["asset_id"]:
-                location["properties"].update(status)
-                
-                yield misc_utils.parse_geometry_from_row(location["properties"])
+            if location["properties"]["SOURCE"] == "Parks and Recreation":
+                # if asset ids match, combine into dict and yield it
+                if status["AssetID"] == location["properties"]["asset_id"]:
+                    location["properties"].update(status)
+                    
+                    yield misc_utils.parse_geometry_from_row(location["properties"])
 
 
 def parks_drinking_fountains():
     # get source data
-    locations_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_PFR_washroom_drinking_water_source/FeatureServer/0/query?where=1%3D1&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnExceededLimitFeatures=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token="
+    locations_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_washroom_drinkingwater/FeatureServer/0/query?where=1%3D1&objectIds=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&outDistance=&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&collation=&orderByFields=&groupByFieldsForStatistics=&returnAggIds=false&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnTrueCurves=false&returnExceededLimitFeatures=true&returnExceededLimitGeometries=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token="
     locations = json.loads(requests.get(locations_url).text)["features"]
 
     status_url = "https://www.toronto.ca/data/parks/live/dws_allupdates.json"
@@ -439,11 +440,12 @@ def parks_drinking_fountains():
 
     for status in statuses:
         for location in locations:
-            # if asset ids match, combine into dict and yield it
-            if status["AssetID"] == location["properties"]["asset_id"]:
-                location["properties"].update(status)
-                
-                yield misc_utils.parse_geometry_from_row(location["properties"])
+            if location["properties"]["SOURCE"] == "Parks and Recreation":
+                # if asset ids match, combine into dict and yield it
+                if status["AssetID"] == location["properties"]["asset_id"]:
+                    location["properties"].update(status)
+                    
+                    yield misc_utils.parse_geometry_from_row(location["properties"])
 
 
 def dinesafe():
