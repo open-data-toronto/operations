@@ -970,15 +970,9 @@ def ckan_api_usage():
     package = ckan.action.package_show(id="open-data-web-analytics")
     resource = [r for r in package.get("resources") if r["name"] == "API Usage"]
 
-    # If the resource doesn't exist...
-    if len(resource) == 0:
-        # Grab all data from April 1 2026 to yesterday
-        this_date = date(2026, 4, 1)
-
-    # If resource exists, determine it's latest date of data
-    elif len(resource) > 0:
-        data = ckan.action.datastore_search(id=resource[0]["id"], sort="date desc")
-        this_date = datetime.strptime(data["records"][0]["date"], "%Y-%m-%d").date()
+    
+    # Grab all data from April 1 2026 to yesterday
+    this_date = date(2026, 4, 1)    
     
     # grab all days from that day to yesterday
     while this_date != yesterday:
