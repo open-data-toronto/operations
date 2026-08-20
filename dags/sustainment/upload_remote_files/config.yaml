@@ -716,3 +716,7 @@ capital-project-pipeline:
   Capital Project Pipeline PDF:
     format: pdf
     url: https://opendata.toronto.ca/purchasing.and.materials.management/procurement-pipeline/ECCD Upcoming Capital Projects.pdf
+public-notices:
+  all notices:
+    format: json
+    url: http://app.toronto.ca/nm/notices.json
