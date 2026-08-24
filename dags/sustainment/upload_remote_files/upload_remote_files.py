@@ -103,7 +103,7 @@ def upload_remote_files(**kwargs):
 
                 should_upload = False
 
-                head = requests.head(details["url"], timeout=120)
+                head = requests.head(details["url"], timeout=150)
 
                 assert (
                     head.status_code == 200
@@ -167,7 +167,7 @@ def upload_remote_files(**kwargs):
                             files={
                                 "upload": (
                                     Path(details["url"]).name,
-                                    requests.get(details["url"], timeout=120).content,
+                                    requests.get(details["url"], timeout=150).content,
                                 )
                             },
                         ).json()["result"]
