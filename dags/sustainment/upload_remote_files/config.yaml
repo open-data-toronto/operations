@@ -719,4 +719,4 @@ capital-project-pipeline:
 public-notices:
   all notices:
     format: json
-    url: http://app.toronto.ca/nm/notices.json
+    url: https://secure.toronto.ca/nm/notices.json
