@@ -124,13 +124,13 @@ school-safety-zone-watch-your-speed-program-detailed-speed-counts:
 #   Business licences data:
 #     format: csv
 #     url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-business-licences-and-permits/business.licences.csv
-municipal-licensing-and-standards-investigation-activity:
-  Investigation Activities (CSV ZIP):
-    format: zip
-    url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_csv.zip
-  Investigation Activities (JSON ZIP):
-    format: zip
-    url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_json.zip
+#municipal-licensing-and-standards-investigation-activity:
+#  Investigation Activities (CSV ZIP):
+#    format: zip
+#    url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_csv.zip
+#  Investigation Activities (JSON ZIP):
+#    format: zip
+#    url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/MLS_Investigations_json.zip
 #non-regulated-lead-sample:
 #  non-regulated-lead-sample-from-2014-to-present-csv:
 #    format: zip

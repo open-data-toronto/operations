@@ -1,0 +1,139 @@
+municipal-licensing-and-standards-investigation-activity:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Municipal Licensing and Standards - Investigation Activity
+  date_published: '2011-04-21 00:00:00'
+  dataset_category: Table
+  refresh_rate: Daily
+  owner_division: Municipal Licensing & Standards
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues:
+  - Affordable housing
+  - Poverty reduction
+  topics:
+  - City government
+  - Public safety
+  - Permits and licenses
+  tags:
+  - name: by-law enforcement
+    vocabulary_id: null
+  - name: property standards
+    vocabulary_id: null
+  - name: property violation
+    vocabulary_id: null
+  information_url: https://secure.toronto.ca/InvestigationActivity/setup.do?action=init
+  excerpt: This dataset provides information related to by-law enforcement activity
+    within the City of Toronto of the Municipal Licensing and Standards Division (ML&S).
+  limitations: null
+  notes: "This dataset provides information related to by-law enforcement activity\
+    \ within the City of Toronto of the Municipal Licensing and Standards Division\
+    \ (ML&S). Details of all active investigation matters resulting from complaints/pro-active\
+    \ initiatives are available. In addition, the same details related to investigation\
+    \ matters closed within the last two years are also available.\r\n\r\nDataset\
+    \ contains addresses within the City of Toronto where ML&S officers have attended\
+    \ to determine if a by-law infraction has occurred. ML&S may act upon a complaint\
+    \ or inspect a property on a proactive initiative. Complaints are investigated\
+    \ to ensure they are valid. Complaints will not be entered until the officer has\
+    \ taken some type of action. The officer may cancel a complaint if it is not valid\
+    \ and it will not be included in the dataset. \r\n\r\nFor more information re\
+    \ attributes see GLOSSARY of TERMS: http://app.toronto.ca/InvestigationActivity/viewGlossary.do\r\
+    \n"
+  schedule: '20 20 * * *'
+  resources:
+    Investigations:
+      format: csv
+      url: https://opendata.toronto.ca/Municipal Licensing & Standards/municipal-licensing-and-standards-investigation-activity/Investigations.csv
+      attributes: 
+        - id: INVESTIGATION_ID
+          type: text
+          info:
+            notes: Can be used to link addresses and deficiency
+        - id: "INVESTIGATION#"
+          type: text
+          info:
+            notes: Investigation reference/file number
+        - id: INVESTIGATION_TYPE
+          type: text
+          info:
+            notes: Type of Investigation 
+        - id: IN_DATE
+          type: date
+          format: "%b %d, %Y"
+          info:
+            notes: Investigation start date- "In Date" (File creation date)
+        - id: NOTICE_OR_ORDER_DATE
+          type: date
+          format: "%b %d, %Y"
+          info:
+            notes: Date Notice of Violation or Order issued
+        - id: NEXT_INSPECTION
+          type: text
+          info:
+            notes: Next scheduled inspection date
+        - id: EXPIRY_DATE
+          type: text
+          info:
+            notes: Date Notice or Order will expire (by which issues noted on Order must be resolved)
+        - id: ISSUE
+          type: text
+          info:
+            notes: Issue which prompted the investigation
+        - id: CURRENT_STATUS
+          type: text
+          info:
+            notes: Description of current status of the investigation
+    Addresses:
+      format: csv
+      url: https://opendata.toronto.ca/Municipal Licensing & Standards/municipal-licensing-and-standards-investigation-activity/Addresses.csv
+      attributes: 
+        - id: INVESTIGATION_ID
+          type: text
+          info:
+            notes: "Can be used to link to activities"
+        - id: ASSESSED_OR_MAILING_ADDRESS
+          type: text
+          info:
+            notes: "Address in a single string (not including unit #)"
+        - id: PROPHOUSE
+          type: text
+          info:
+            notes: "House number portion of address"
+        - id: PROPSTREET
+          type: text
+          info:
+            notes: "Street name"
+        - id: PROPSTREETTYPE
+          type: text
+          info:
+            notes: "Street type (eg. Ave, St, Dr, ...)"
+        - id: PROPSTREETDIRECTION
+          type: text
+          info:
+            notes: "Direction (N, S, E, W)"
+    Deficiencies:
+      format: csv
+      url: https://opendata.toronto.ca/Municipal Licensing & Standards/municipal-licensing-and-standards-investigation-activity/municipal-licensing-and-standards-investigation-activity.csv
+      attributes: 
+        - id: INVESTIGATION_ID
+          type: text
+          info:
+            notes: "Can be used to link to activities"
+        - id: LOCATION
+          type: text
+          info:
+            notes: Location of the deficiency
+        - id: SUBLOCATION
+          type: text
+          info:
+            notes: Sublocation of the deficiency
+        - id: TEXT
+          type: text
+          info:
+            notes: Additional descriptive details of the deficiency
+        - id: STATUS
+          type: text
+          info:
+            notes: Indication whether deficiency is still active or not
+        
