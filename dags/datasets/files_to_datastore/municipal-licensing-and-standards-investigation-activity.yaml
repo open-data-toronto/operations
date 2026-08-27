@@ -44,7 +44,7 @@ municipal-licensing-and-standards-investigation-activity:
   resources:
     Investigations:
       format: csv
-      url: https://opendata.toronto.ca/Municipal Licensing & Standards/municipal-licensing-and-standards-investigation-activity/Investigations.csv
+      url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/Investigations.csv
       attributes: 
         - id: INVESTIGATION_ID
           type: text
@@ -59,13 +59,11 @@ municipal-licensing-and-standards-investigation-activity:
           info:
             notes: Type of Investigation 
         - id: IN_DATE
-          type: date
-          format: "%b %d, %Y"
+          type: text          
           info:
             notes: Investigation start date- "In Date" (File creation date)
         - id: NOTICE_OR_ORDER_DATE
-          type: date
-          format: "%b %d, %Y"
+          type: text          
           info:
             notes: Date Notice of Violation or Order issued
         - id: NEXT_INSPECTION
@@ -86,7 +84,7 @@ municipal-licensing-and-standards-investigation-activity:
             notes: Description of current status of the investigation
     Addresses:
       format: csv
-      url: https://opendata.toronto.ca/Municipal Licensing & Standards/municipal-licensing-and-standards-investigation-activity/Addresses.csv
+      url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/Addresses.csv
       attributes: 
         - id: INVESTIGATION_ID
           type: text
@@ -114,7 +112,7 @@ municipal-licensing-and-standards-investigation-activity:
             notes: "Direction (N, S, E, W)"
     Deficiencies:
       format: csv
-      url: https://opendata.toronto.ca/Municipal Licensing & Standards/municipal-licensing-and-standards-investigation-activity/municipal-licensing-and-standards-investigation-activity.csv
+      url: https://opendata.toronto.ca/municipal.licensing.standards/municipal-licensing-and-standards-investigation-activity/Deficiencies.csv
       attributes: 
         - id: INVESTIGATION_ID
           type: text
