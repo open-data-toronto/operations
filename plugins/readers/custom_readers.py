@@ -1224,3 +1224,26 @@ def pcard_expenditures():
         del file
         gc.collect()
 
+def public_notices():
+    url = "https://secure.toronto.ca/nm/notices.json"
+    records = json.loads(requests.get(url).text)["Records"]
+
+    for record in records:
+        yield {
+            "noticeId": record.get("noticeId", None),
+            "title": record.get("title", None),
+            "noticeDate": record.get("noticeDate", None),
+            "noticeDescription": record.get("noticeDescription", None),
+            "noticeHeadingType": record.get("noticeHeadingType", None),
+            "eventList": record.get("eventList", None),
+            "contact": record.get("contact", None),
+            "backgroundInformationList": record.get("backgroundInformationList", None),
+            "addressList": record.get("addressList", None),
+            "otherReferenceList": record.get("otherReferenceList", None),
+            "topics": record.get("topics", None),
+            "planningApplicationNumbers": record.get("planningApplicationNumbers", None),
+            "signedBy": record.get("signedBy", None),
+            "decisionBody": record.get("decisionBody", None),
+            "uniqueMapUrl": record.get("uniqueMapUrl", None),
+        }
+

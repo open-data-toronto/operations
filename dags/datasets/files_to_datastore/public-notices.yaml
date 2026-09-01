@@ -1,0 +1,101 @@
+public-notices:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Public Notices
+  date_published: '2019-07-23 17:54:53.832239'
+  dataset_category: Table
+  refresh_rate: Daily
+  owner_division: City Clerk's Office
+  owner_section: null
+  owner_unit: null
+  owner_email: clerk@toronto.ca
+  civic_issues: null
+  topics:
+  - City government
+  tags: []
+  information_url: https://www.toronto.ca/notices
+  excerpt: The Public Notice website contains open source data related to notices
+    published by the City Clerk as of January 1, 2018. This dataset is part of the
+    City of Toronto's ongoing commitment to proactive disclosure and the Open Data
+    project.
+  limitations: null
+  notes: "The Public Notice website contains data related to notices published\
+    \ by the City Clerk as of January 1, 2018. This dataset is part of the City of\
+    \ Toronto's ongoing commitment to proactive disclosure and the Open Data project.\r\
+    \n\r\nThe City gives notice to the public on a variety of different matters, such\
+    \ as fees and charges, heritage designations, renaming of roads, and sale of property.\
+    \ \r\n\r\nThe City also gives notice through the newspaper, mail, or personal\
+    \ service, depending on legislation. \r\n\r\nVisit [http://app.toronto.ca/nm/opendata.do\
+    \ ](http://app.toronto.ca/nm/opendata.do) to search for and customize your dataset.\r\
+    \n\r\nSome data fields may contain multiple entries. Some data\
+    \ fields may not contain a value as not all data fields are mandatory.
+    \n"
+  schedule: '45 8 * * *'
+  resources:
+    Public Notices:
+      format: json
+      #jsonpath: $.Records
+      custom_reader: public_notices
+      url: https://secure.toronto.ca/nm/notices.json
+      attributes: 
+        - id: noticeId
+          type: int
+          info:
+            notes: "The unique numerical identifier for each notice."
+        - id: title
+          type: text
+          info:
+            notes: "The title of the notice describing the subject of the notice and the address, if any."
+        - id: noticeDate
+          type: text
+          info:
+            notes: "The subheading is used to provide additional detail about the notice."
+        - id: noticeDescription
+          type: text
+          info:
+            notes: "The governing body with final decision-making power over the matter in the notice."
+        - id: noticeHeadingType
+          type: text
+          info:
+            notes: "The event date, time and address of any event associated with the notice. The time is in milliseconds."
+        - id: eventList
+          type: json
+          info:
+            notes: "The details of the notice, which contains HTML markup for layout/formatting.  "
+        - id: contact
+          type: json
+          info:
+            notes: "The description of accommodations available in advance of an event."
+        - id: backgroundInformationList
+          type: json
+          info:
+            notes: "The date and time the notice was published. The time is in milliseconds."
+        - id: addressList
+          type: json
+          info:
+            notes: "The municipal address related to the notice. Addresses contain map latitude/longitude for recommended map display placement."
+        - id: otherReferenceList
+          type: json
+          info:
+            notes: "The tiered classification of each notice based on the notice subject."
+        - id: topics
+          type: json
+          info:
+            notes: "The file number assigned by City Planning to a planning application."
+        - id: planningApplicationNumbers
+          type: json
+          info:
+            notes: "Additional documents attached to a notice."
+        - id: signedBy
+          type: text
+          info:
+            notes: "URLs directing web-based material associated with a notice."
+        - id: decisionBody
+          type: text
+          info:
+            notes: "The name and contact information for the key person associated with the notice."
+        - id: uniqueMapUrl
+          type: json
+          info:
+            notes: "The name of the person authorizing the notice."
+        
