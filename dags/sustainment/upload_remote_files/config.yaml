@@ -613,10 +613,10 @@ housing-to-action-plan:
     format: xlsx
     url: https://opendata.toronto.ca/housing.secretariat/housing-to-open-data.xlsx
 
-traffic-signal-timing:
-  Traffic Signal Timing:
-    format: zip
-    url: https://opendata.toronto.ca/transportation.services/traffic-signal-timing/traffic-signals-timing.zip
+#traffic-signal-timing:
+#  Traffic Signal Timing:
+#    format: zip
+#    url: https://opendata.toronto.ca/transportation.services/traffic-signal-timing/traffic-signals-timing.zip
 
 311-contact-centre-performance-metrics:
   CXD-311 Metrics:
