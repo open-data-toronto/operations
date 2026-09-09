@@ -1247,3 +1247,38 @@ def public_notices():
             "uniqueMapUrl": record.get("uniqueMapUrl", None),
         }
 
+
+def gallery_projects():
+    chunk = 50
+    page = 1
+    
+    while True:
+        url = f"https://open.toronto.ca/wp-json/wp/v2/gallery-item?per_page={chunk}&page={page}"
+        response = requests.get(url)
+        records = json.loads(response.text)
+        print("ANOTHER ONE")
+        print(response)
+        print(len(records))
+        print(url)
+        # yield data
+        for record in records:
+            print(record)
+            yield {
+                "link": record["link"],
+                "title": record["title"]["rendered"],
+                "project_description": record["acf"]["project_description"],
+                "project_creator": record["acf"]["project_creator"],
+                "project_creator_type": record["acf"]["project_creator_type"],
+                "project_creator_social_links": record["acf"]["project_creator_social_links"],
+                "platform_tags": record["acf"]["platform_tags"],
+                "project_article": record["acf"]["project_article"],
+                "info_url": record["acf"]["info_url"],
+                "info_url_text": record["acf"]["info_url_text"],
+                "related_datasets": record["acf"]["related_datasets"],
+            }
+        print("done records")
+        # is there more data?
+        if int(response.headers["X-WP-Total"]) > chunk * page:
+            page += 1
+
+    

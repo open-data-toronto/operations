@@ -1,0 +1,73 @@
+open-data-gallery-projects:
+  schedule: '0 3 1 * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Open Data Portal Usage 
+  date_published: '2026-09-09 01:04:01.187902'
+  refresh_rate: As available
+  dataset_category: Table
+  owner_division: Information & Technology
+  owner_section: null
+  owner_unit: null
+  owner_email: opendata@toronto.ca
+  civic_issues: null
+  topics: null
+  tags:
+  - name: use
+    vocabulary_id: null
+  information_url: https://open.toronto.ca/gallery/
+  excerpt: A list of websites, publications, apps, and more using Toronto Open Data.
+
+  limitations: null
+  notes: A list of websites, publications, apps, and more using Toronto Open Data. The City of Toronto does not imply approval of the listed projects, warrant the accuracy of any information set out in those projects, or endorse any opinions expressed therein or any goods or services offered thereby. All web sites listed here operate under the auspices and at the direction of their respective owners.
+
+  resources:
+    # resource name
+    Gallery Projects:
+      format: json
+      custom: true
+      url: https://open.toronto.ca/wp-json/wp/v2/gallery-item?per_page=100&page=1
+      custom_reader: gallery_projects
+      attributes:
+        - id: link
+          type: text
+          info:
+            notes: URL of this project's page on the open data portal
+        - id: title
+          type: text
+          info:
+            notes: Name of the project
+        - id: project_description
+          type: text
+          info:
+            notes: Short description of the project
+        - id: project_creator
+          type: text
+          info:
+            notes: Name of the individual(s) or group(s) that made the project
+        - id: project_creator_type
+          type: json
+          info:
+            notes: A category for the project_creator
+        - id: project_creator_social_links
+          type: json
+          info:
+            notes: Different ways to get in touch with the project owner(s)
+        - id: platform_tags
+          type: json
+          info:
+            notes: Tags the open data team adds to projects to make them findable
+        - id: project_article
+          type: text
+          info:
+            notes: Long form description of the site; text includes HTML formatting
+        - id: info_url
+          type: text
+          info:
+            notes: URL for a site where you can learn more about the project outside the open data portal
+        - id: related_datasets
+          type: json
+          info:
+            notes: list of Toronto open datasets that this project uses
+        
+        
