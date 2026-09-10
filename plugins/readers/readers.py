@@ -112,7 +112,7 @@ class Reader(ABC):
                     output[attr["id"]] = cleaner(value, attr["format"])
                 elif attr["type"] == "text":
                     output[attr["id"]] = cleaner(value).replace("\x00", " ")
-                else:                    
+                else: 
                     output[attr["id"]] = cleaner(value)
                         
             yield output

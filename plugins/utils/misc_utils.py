@@ -61,13 +61,15 @@ def csv_to_generator(filepath, fieldnames, encoding):
             yield(row)
 
 
-def clean_json(input):
+def clean_json(this_input):
     # Always return a JSON string so csv.DictWriter writes double-quoted JSON
     # rather than Python's single-quoted repr(dict).
-    if isinstance(input, str):
-        return json.dumps(json.loads(input))
-    elif isinstance(input, dict) or isinstance(input, list):
-        return json.dumps(input)
+    if this_input == None:
+        return None
+    if isinstance(this_input, str):
+        return json.dumps(json.loads(this_input))
+    elif isinstance(this_input, dict) or isinstance(this_input, list):
+        return json.dumps(this_input)
 
 
 def clean_string(input):

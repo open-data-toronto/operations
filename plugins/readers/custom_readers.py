@@ -1256,13 +1256,9 @@ def gallery_projects():
         url = f"https://open.toronto.ca/wp-json/wp/v2/gallery-item?per_page={chunk}&page={page}"
         response = requests.get(url)
         records = json.loads(response.text)
-        print("ANOTHER ONE")
-        print(response)
-        print(len(records))
-        print(url)
+
         # yield data
         for record in records:
-            print(record)
             yield {
                 "link": record["link"],
                 "title": record["title"]["rendered"],
@@ -1276,9 +1272,11 @@ def gallery_projects():
                 "info_url_text": record["acf"]["info_url_text"],
                 "related_datasets": record["acf"]["related_datasets"],
             }
-        print("done records")
         # is there more data?
         if int(response.headers["X-WP-Total"]) > chunk * page:
             page += 1
+
+        else:
+            break
 
     
