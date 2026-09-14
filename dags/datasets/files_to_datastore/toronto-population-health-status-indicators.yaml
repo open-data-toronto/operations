@@ -1,0 +1,404 @@
+toronto-population-health-status-indicators:
+  dag_owner_name: ''
+  dag_owner_email: ''
+  title: Population Health Status Indicators
+  date_published: '2025-07-09 13:45:52.928044'
+  dataset_category: Table
+  refresh_rate: As available
+  owner_division: Toronto Public Health
+  owner_section: null
+  owner_unit: Epidemiology and Data Analytics Unit
+  owner_email: edau@toronto.ca
+  civic_issues: null
+  topics:
+  - Health
+  tags: []
+  information_url: https://www.ontariohealthprofiles.ca/torontohealthstatus/index.php
+  excerpt: 'Data used to measure health outcomes and behaviours at a population level. '
+  limitations: null
+  notes: "Population Health Status Indicators (PHSIs) summarize data used to measure\
+    \ health outcomes and behaviours at a population level. They provide an overview\
+    \ of health and well-being over time and across populations.\r\n\r\nToronto Public\
+    \ Health (TPH) reports on a series of PHSIs to support its mission to reduce health\
+    \ inequities and improve the health of the whole population. These indicators\
+    \ can be searched by topic through interactive dashboards. They are analyzed over\
+    \ time, by geography, and by socio-demographic characteristics.\r\n\r\nSupporting\
+    \ data and additional supporting resources can be accessed accessed via the Download\
+    \ link/button below\r\n"
+  schedule: '20 20 1 * *'
+  resources:
+    Reproduction and Infant Indicators:
+      format: xlsx
+      url: https://docs.google.com/spreadsheets/d/1_XWtiPG9b0xkoxqnHzowIcfQo-MqtK2Z/export?format=xlsx
+      sheet: Sheet1
+      attributes: 
+      - id: Topic Area
+        type: text
+        info:
+          notes: null
+      - id: Indicator Name
+        type: text
+        info:
+          notes: null
+      - id: Measure
+        type: text
+        info:
+          notes: null
+      - id: Data Year
+        type: text
+        info:
+          notes: null
+      - id: Stratifier
+        type: text
+        info:
+          notes: null
+      - id: Subgroup
+        type: text
+        info:
+          notes: null
+      - id: Unit
+        type: text
+        info:
+          notes: null
+      - id: Value
+        type: float
+        info:
+          notes: null
+      - id: LL
+        type: float
+        info:
+          notes: null
+      - id: UL
+        type: float
+        info:
+          notes: null
+      - id: Flag
+        type: text
+        info:
+          notes: null
+      - id: Comparison
+        type: text
+        info:
+          notes: null
+    Child and Youth Indicators:
+      format: xlsx
+      url: https://docs.google.com/spreadsheets/d/1qaT5x8yVAjVeznEYX8i3S2pOt1mEKdpv/export?format=xlsx
+      sheet: sheet1
+      attributes: 
+      - id: Topic Area
+        type: text
+        info:
+          notes: null
+      - id: Indicator Name
+        type: text
+        info:
+          notes: null
+      - id: Measure
+        type: text
+        info:
+          notes: null
+      - id: Data Year
+        type: text
+        info:
+          notes: null
+      - id: Stratifier
+        type: text
+        info:
+          notes: null
+      - id: Subgroup
+        type: text
+        info:
+          notes: null
+      - id: Unit
+        type: text
+        info:
+          notes: null
+      - id: Value
+        type: float
+        info:
+          notes: null
+      - id: LL
+        type: float
+        info:
+          notes: null
+      - id: UL
+        type: float
+        info:
+          notes: null
+      - id: Flag
+        type: text
+        info:
+          notes: null
+      - id: Comparison
+        type: text
+        info:
+          notes: null
+    Mental Health and Substance Use Indicators:
+      format: xlsx
+      url: https://docs.google.com/spreadsheets/d/1Hgn9Tico9phOyTkFyrBEghQcEejXfTTq/export?format=xlsx
+      sheet: Sheet1
+      attributes: 
+      - id: Topic Area
+        type: text
+        info:
+          notes: null
+      - id: Indicator Name
+        type: text
+        info:
+          notes: null
+      - id: Measure
+        type: text
+        info:
+          notes: null
+      - id: Data Year
+        type: text
+        info:
+          notes: null
+      - id: Stratifier
+        type: text
+        info:
+          notes: null
+      - id: Subgroup
+        type: text
+        info:
+          notes: null
+      - id: Unit
+        type: text
+        info:
+          notes: null
+      - id: Value
+        type: float
+        info:
+          notes: null
+      - id: LL
+        type: float
+        info:
+          notes: null
+      - id: UL
+        type: float
+        info:
+          notes: null
+      - id: Flag
+        type: text
+        info:
+          notes: null
+      - id: Comparison
+        type: text
+        info:
+          notes: null      
+    Adult Health Behaviours Indicators:
+      format: xlsx
+      url: https://docs.google.com/spreadsheets/d/1ur0ybcTVWohjhuozrD4F0feFgi1xnWSO/export?format=xlsx
+      sheet: Sheet1
+      attributes: 
+      - id: Topic Area
+        type: text
+        info:
+          notes: null
+      - id: Indicator Name
+        type: text
+        info:
+          notes: null
+      - id: Measure
+        type: text
+        info:
+          notes: null
+      - id: Data Year
+        type: text
+        info:
+          notes: null
+      - id: Stratifier
+        type: text
+        info:
+          notes: null
+      - id: Subgroup
+        type: text
+        info:
+          notes: null
+      - id: Unit
+        type: text
+        info:
+          notes: null
+      - id: Value
+        type: float
+        info:
+          notes: null
+      - id: LL
+        type: float
+        info:
+          notes: null
+      - id: UL
+        type: float
+        info:
+          notes: null
+      - id: Flag
+        type: text
+        info:
+          notes: null
+      - id: Comparison
+        type: text
+        info:
+          notes: null      
+    Adult Chronic Conditions Indicators:
+      format: xlsx
+      url: https://docs.google.com/spreadsheets/d/1OsfUr1dH-EIqPYr7SMr1MlHLnJSfS-d4/export?format=xlsx
+      sheet: Sheet1
+      attributes: 
+      - id: Topic Area
+        type: text
+        info:
+          notes: null
+      - id: Indicator Name
+        type: text
+        info:
+          notes: null
+      - id: Measure
+        type: text
+        info:
+          notes: null
+      - id: Data Year
+        type: text
+        info:
+          notes: null
+      - id: Stratifier
+        type: text
+        info:
+          notes: null
+      - id: Subgroup
+        type: text
+        info:
+          notes: null
+      - id: Unit
+        type: text
+        info:
+          notes: null
+      - id: Value
+        type: float
+        info:
+          notes: null
+      - id: LL
+        type: float
+        info:
+          notes: null
+      - id: UL
+        type: float
+        info:
+          notes: null
+      - id: Flag
+        type: text
+        info:
+          notes: null
+      - id: Comparison
+        type: text
+        info:
+          notes: null   
+    Injury Indicators:
+      format: xlsx
+      url: https://docs.google.com/spreadsheets/d/1Ww0odH0lYyiGQzcw3k78FFfdB4JOnKhW/export?format=xlsx
+      sheet: Sheet1
+      attributes: 
+      - id: Topic Area
+        type: text
+        info:
+          notes: null
+      - id: Indicator Name
+        type: text
+        info:
+          notes: null
+      - id: Measure
+        type: text
+        info:
+          notes: null
+      - id: Data Year
+        type: text
+        info:
+          notes: null
+      - id: Stratifier
+        type: text
+        info:
+          notes: null
+      - id: Subgroup
+        type: text
+        info:
+          notes: null
+      - id: Unit
+        type: text
+        info:
+          notes: null
+      - id: Value
+        type: float
+        info:
+          notes: null
+      - id: LL
+        type: float
+        info:
+          notes: null
+      - id: UL
+        type: float
+        info:
+          notes: null
+      - id: Flag
+        type: text
+        info:
+          notes: null
+      - id: Comparison
+        type: text
+        info:
+          notes: null      
+    Oral Health Indicators:
+      format: xlsx
+      url: https://docs.google.com/spreadsheets/d/1GGQZCQAzs11SFA-jjrszqIwx_dpfGkO3/export?format=xlsx
+      sheet: Sheet1
+      attributes: 
+      - id: Topic Area
+        type: text
+        info:
+          notes: null
+      - id: Indicator Name
+        type: text
+        info:
+          notes: null
+      - id: Measure
+        type: text
+        info:
+          notes: null
+      - id: Data Year
+        type: text
+        info:
+          notes: null
+      - id: Stratifier
+        type: text
+        info:
+          notes: null
+      - id: Subgroup
+        type: text
+        info:
+          notes: null
+      - id: Unit
+        type: text
+        info:
+          notes: null
+      - id: Value
+        type: float
+        info:
+          notes: null
+      - id: LL
+        type: float
+        info:
+          notes: null
+      - id: UL
+        type: float
+        info:
+          notes: null
+      - id: Flag
+        type: text
+        info:
+          notes: null
+      - id: Comparison
+        type: text
+        info:
+          notes: null      
+
+
+
+

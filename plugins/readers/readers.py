@@ -112,7 +112,7 @@ class Reader(ABC):
                     output[attr["id"]] = cleaner(value, attr["format"])
                 elif attr["type"] == "text":
                     output[attr["id"]] = cleaner(value).replace("\x00", " ")
-                else: 
+                else:                    
                     output[attr["id"]] = cleaner(value)
                         
             yield output
@@ -327,7 +327,7 @@ class ExcelReader(Reader):
         super().__init__(**kwargs)
         self.sheet = sheet
 
-        file = requests.get(self.source_url).content
+        file = requests.get(self.source_url, allow_redirects=True).content
         wb = openpyxl.load_workbook(filename = BytesIO(file))
         self.worksheet = wb[self.sheet]
         
