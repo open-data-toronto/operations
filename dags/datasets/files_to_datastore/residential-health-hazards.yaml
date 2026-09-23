@@ -26,77 +26,51 @@ residential-health-hazards:
   notes: Snapshot of the information to the public concerning the Toronto Public Health’s Health Hazard investigations. The data set is as current as the date of the extraction.
   resources:
     # resource name
-    Residential Health Inspections:
+    Residential Health Hazard Orders:
       format: json
-      url: https://secure.toronto.ca/opendata/eh/properties/v1?format=json
-      custom_reader: residential_health_hazards
-      custom_headers:
-        SRV-KEY: healthhazards_secure_toronto_opendata_SRV_KEY
-        USER-KEY: secure_toronto_opendata_USER_KEY
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_Toronto_Public_Health_Property_Violation/FeatureServer/0      
       datastore_upsert:
-        primary_key: "unique_id"
+        primary_key: "primary_key"
+      custom_reader: residential_health_hazards
       attributes:
-        - id: unique_id
+        - id: primary_key
           type: text
           info:
-            notes: "Unique id for this record, used for internal technical purposes"
-        - id: case_id
-          type: text
-          info:
-            notes: "Unique id for this case"
-        - id: case_type
-          type: text
-          info:
-            notes: "Type of case"
-        - id: address
-          type: text
-          info:
-            notes: "Address related to the record"
-        - id: geo_id
-          type: text
-          info:
-            notes: "Unique identifier for the address"        
-        - id: investigation_type
-          type: text
-          info:
-            notes: "Investigation category for record."
-        - id: investigation_date
+            notes: "Unique id for this record, used to identify individual orders"
+        - id: ISSUED_DATE
           type: date
           format: "%Y-%m-%d"
           info:
-            notes: "Start date of investigation."
-        - id: last_updated_date
-          type: date
-          format: "%Y-%m-%d"
-          info:
-            notes: "Date of most recent investigation update."
-        - id: info_code
+            notes: Date Order was issued.
+        - id: GEO_ID
           type: text
           info:
-            notes: "Investigation Sub-Category code."
-        - id: hazard_type
+            notes: Geospatial unique identifier for address.
+        - id: LONGITUDE
+          type: float
+          info:
+            notes: Latitude of address.
+        - id: LATITUDE
+          type: float
+          info:
+            notes: Longitude of address.
+        - id: ADDRESS
           type: text
           info:
-            notes: "Investigation Sub-Category."
-        - id: violation
+            notes: Address related to the record.
+        - id: HEALTH_HAZARD
           type: text
           info:
-            notes: "Type of complaint under investigation."
-        - id: status_desc
+            notes: Health hazard description.
+        - id: CRSIR_NUMBER
           type: text
           info:
-            notes: "Status if the investigation."
-        - id: file_extract_date
-          type: date
-          format: "%Y-%m-%d"
-          info:
-            notes: "Date of file extract."
-        - id: lat
+            notes: Request for service identification number.
+        - id: PUBLIC_HEALTH_INSPECTOR
           type: text
           info:
-            notes: ""
-        - id: lon
-          type: text
-          info:
-            notes: ""
+            notes: Investigating Public Health Inspector.
+        
+        
         

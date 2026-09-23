@@ -1279,4 +1279,24 @@ def gallery_projects():
         else:
             break
 
-    
+
+def residential_health_hazards():
+    import hashlib
+    # get source data
+    records_url = "https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_Toronto_Public_Health_Property_Violation/FeatureServer/0/query?where=1%3D1&objectIds=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&resultType=none&distance=0.0&units=esriSRUnit_Meter&outDistance=&relationParam=&returnGeodetic=false&outFields=*&returnGeometry=true&featureEncoding=esriDefault&multipatchOption=xyFootprint&maxAllowableOffset=&geometryPrecision=&outSR=&defaultSR=&datumTransformation=&applyVCSProjection=false&returnIdsOnly=false&returnUniqueIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&returnQueryGeometry=false&returnDistinctValues=false&cacheHint=false&collation=&orderByFields=&groupByFieldsForStatistics=&returnAggIds=false&outStatistics=&having=&resultOffset=&resultRecordCount=&returnZ=false&returnM=false&returnTrueCurves=false&returnExceededLimitFeatures=true&returnExceededLimitGeometries=true&quantizationParameters=&sqlFormat=none&f=pgeojson&token="
+    records = json.loads(requests.get(records_url).text)["features"]
+
+    for record in records:
+        record = record["properties"]
+        pkey = record["ISSUED_DATE"] + record["GEO_ID"] + record["CRSIR_NUMBER"]
+        yield {
+            "primary_key": hashlib.md5(pkey.encode()).hexdigest(),
+            "ISSUED_DATE": record["ISSUED_DATE"],
+            "GEO_ID": record["GEO_ID"],
+            "LONGITUDE": record["LONGITUDE"],
+            "LATITUDE": record["LATITUDE"],
+            "ADDRESS": record["ADDRESS"],
+            "HEALTH_HAZARD": record["HEALTH_HAZARD"],
+            "CRSIR_NUMBER": record["CRSIR_NUMBER"],
+            "PUBLIC_HEALTH_INSPECTOR": record["PUBLIC_HEALTH_INSPECTOR"],
+        }
