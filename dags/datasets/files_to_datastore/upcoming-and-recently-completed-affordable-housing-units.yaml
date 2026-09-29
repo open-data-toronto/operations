@@ -101,6 +101,16 @@ upcoming-and-recently-completed-affordable-housing-units:
         type: "text"
         info:
           notes: "The number of rent-geared-to-income homes approved as part of a project. Note that this count is a subset of the Affordable Homes Approved (2020 – Present) column. These RGI Homes count towards the City’s HousingTO target to create 6,500 RGI Homes."
+      - source_name: SUPPORTIVE_UNITS  
+        target_name: Supportive Units
+        type: "text"
+        info:
+          notes: "The number of supportive units; Supportive housing provides an affordable rental home with individualized housing and social supports that help people to live independently and achieve housing stability"
+      - source_name: TORONTO_BUILDS_PORTFOLIO  
+        target_name: Toronto Builds Portfolio
+        type: "text"
+        info:
+          notes: "Whether these are part of the Toronto Builds Portfolio"
       - id: geometry
         type: "text"
         info:
