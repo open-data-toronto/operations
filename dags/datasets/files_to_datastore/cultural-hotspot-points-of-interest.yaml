@@ -35,11 +35,112 @@ cultural-hotspot-points-of-interest:
     \ with historic or architectural significance, green spaces, restaurants and more.\r\
     \n"
   resources:
-    points-of-interest:
+    Cultural Loop Tour Points:
       format: geojson
       agol: true
-      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/Cultural_loop/FeatureServer/0
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_Cultural_loop_tour_points/FeatureServer/0
       attributes:
+      - id: LoopTourID
+        type: text
+        info:
+          notes: ''
+      - id: LoopsGuide
+        type: text
+        info:
+          notes: ''
+      - id: Loop
+        type: int
+        info:
+          notes: ''
+      - id: TourNum
+        type: int
+        info:
+          notes: ''
+      - id: OrderNum
+        type: int
+        info:
+          notes: ''
+      - id: LoopTourName
+        type: text
+        info:
+          notes: ''
+      - id: SiteName
+        type: text
+        info:
+          notes: ''
+      - id: Neighbourhood
+        type: text
+        info:
+          notes: ''
+      - id: EntryType
+        type: text
+        info:
+          notes: ''
+      - id: Interests
+        type: text
+        info:
+          notes: ''
+      - id: Description
+        type: text
+        info:
+          notes: ''
+      - id: Address
+        type: text
+        info:
+          notes: ''
+      - id: Latitude
+        type: float
+        info:
+          notes: ''
+      - id: Longitude
+        type: float
+        info:
+          notes: ''
+      - id: ExternalLink
+        type: text
+        info:
+          notes: ''
+      - id: ImageCredit
+        type: text
+        info:
+          notes: ''
+      - id: ImageCreditExternalLink
+        type: text
+        info:
+          notes: ''
+      - id: ImageAltText
+        type: text
+        info:
+          notes: ''
+      - id: ImageURL
+        type: text
+        info:
+          notes: ''
+      - id: ThumbURL
+        type: text
+        info:
+          notes: ''
+      - id: ImageOrientation
+        type: text
+        info:
+          notes: ''
+      - id: ObjectId
+        type: text
+        info:
+          notes: ''
+      - id: geometry
+        type: text
+        info:
+          notes: ''
+    Cultural Loop Tour Starting Points:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/ArcGIS/rest/services/COT_Cultural_loop_starting_points/FeatureServer/0
+      attributes:
+      - id: LoopTourID
+        type: text
+        info:
+          notes: ''
       - id: LoopsGuide
         type: text
         info:
@@ -108,15 +209,15 @@ cultural-hotspot-points-of-interest:
         type: text
         info:
           notes: ''
-      - id: ExternalLink
-        type: text
+      - id: Latitude
+        type: float
+        info:
+          notes: ''
+      - id: Longitude
+        type: float
         info:
           notes: ''
       - id: ImageCredit
-        type: text
-        info:
-          notes: ''
-      - id: ImageCreditExternalLink
         type: text
         info:
           notes: ''
@@ -136,23 +237,12 @@ cultural-hotspot-points-of-interest:
         type: text
         info:
           notes: ''
-      - id: test1
-        type: text
-        info:
-          notes: ''
-      - id: test2
-        type: text
-        info:
-          notes: ''
-      - id: test3
-        type: text
-        info:
-          notes: ''
       - id: ObjectId
-        type: int
+        type: text
         info:
           notes: ''
       - id: geometry
         type: text
         info:
           notes: ''
+      
