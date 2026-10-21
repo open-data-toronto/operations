@@ -92,7 +92,7 @@ privately-owned-publicly-available-spaces:
           type: "text"
           info:
             notes: |
-              The location of the feature based on which community council area it is in .
+              The location of the feature based on which community council area it is in.
 
               ESC = East: Scarborough
               
