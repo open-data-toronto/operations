@@ -1,0 +1,113 @@
+privately-owned-publicly-available-spaces:
+  schedule: '20 7 10 * *'
+  dag_owner_name: 'Mackenzie'
+  dag_owner_email: 'mackenzie.nichols4@toronto.ca'
+  title: Privately-Owned Publicly Accessible Spaces (POPS)
+  date_published: '2026-10-20 13:57:18.929311'
+  refresh_rate: As available
+  dataset_category: Table
+  owner_division: City Planning
+  owner_section: Urban Design
+  owner_unit: null
+  owner_email: cityplanning@toronto.ca
+  civic_issues: null
+  topics: 
+    - Development and infrastructure
+    - Locations and mapping
+    - Parks and recreation
+  tags: 
+  - name: development
+    vocabulary_id: null
+  information_url: https://www.toronto.ca/city-government/planning-development/official-plan-guidelines/design-guidelines/privately-owned-publicly-accessible-spaces-pops/
+  excerpt: Locations and attributes of POPS, a specific type of open space which the public is welcome to enjoy but remain privately owned.
+  limitations: This data is updated on an ad-hoc, as-available basis.
+  notes: |
+    As Toronto continues to grow, there is an increasing need and demand to revitalize existing parks and open spaces as well as to create new parks and publicly-accessible open spaces. 
+
+    In order to provide this much needed open space within Toronto’s dense urban landscape, the City often negotiates with private developers to include Privately Owned Publicly-Accessible Spaces, or "POPS" for short, as part of the development application and review process. POPS are a specific type of open space which the public are invited to use, but remain privately owned and maintained. 
+
+    They are a key part of the city's public realm network, providing open space in much needed locations across the city and complementing existing and planned publicly owned parks, open spaces and natural areas. POPS are intended to complement the City's public parks, open space and natural areas, not replace them.
+  collection_method: Data is manually reviewed by the data owning team.
+  resources:
+    # resource name
+    POPS - points:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_POPS_points/FeatureServer/0
+      attributes:
+        - source_name: "location"
+          target_name: Location
+          type: "text"
+          info:
+            notes: Name of POPS
+        - source_name: "geo_address"
+          target_name: Short Address
+          type: "text"
+          info:
+            notes: Abbreviated address of POPS
+        - source_name: "description"
+          target_name: Description
+          type: "text"
+          info:
+            notes: Details about POPS origin, attributes, and size
+        - source_name: "status"
+          target_name: Status
+          type: "text"
+          info:
+            notes: Whether the POPS is secured or constructed
+        - source_name: "thumb_url"
+          target_name: Image URL
+          type: "text"
+          info:
+            notes: Image of POPS
+        - source_name: "ward"
+          target_name: Ward
+          type: "text"
+          info:
+            notes: Ward
+        - source_name: "ward_and_num"
+          target_name: Ward and Number
+          type: "text"
+          info:
+            notes: Ward and number
+        - source_name: "bylaw_link"
+          target_name: Bylaw URL
+          type: "text"
+          info:
+            notes: Link to bylaw that secured the POPS
+        - id: geometry
+          type: "text"
+          info:
+            notes: null
+    POPS - polygons:
+      format: geojson
+      agol: true
+      url: https://services3.arcgis.com/b9WvedVPoizGfvfD/arcgis/rest/services/COT_POPS_polys/FeatureServer/0
+      attributes:
+        - id: "AREA_NAME"          
+          type: "text"
+          info:
+            notes: Name of POPS
+        - id: "IBMS_DISTR"          
+          type: "text"
+          info:
+            notes: |
+              The location of the feature based on which community council area it is in .
+
+              ESC = East: Scarborough
+              
+              NNY = North: North York
+              
+              STE = South: Toronto - East York
+              
+              WET = West: Etobicoke Toronto
+
+        - id: "IBMS_YEAR" 
+          type: "text"
+          info:
+            notes: The year of the application where the POPS was first proposed. 
+        - id: geometry
+          type: "text"
+          info:
+            notes: null
+        
